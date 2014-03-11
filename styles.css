@@ -16,6 +16,7 @@
     border-radius: 5px;
     background-color: #ccc;
     position: relative;
+    margin-bottom: 10px;
 }
 .block_xp .level-progress .bar {
     background-color: green;
@@ -33,8 +34,10 @@
     left: 0;
     position: absolute;
 }
-
 .block_xp .description {
-    margin-top: 1em;
+    font-size: 0.9em;
+}
+.block_xp .course-rules-link {
+    text-align: center;
     font-size: 0.9em;
 }

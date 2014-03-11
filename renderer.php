@@ -34,6 +34,21 @@ defined('MOODLE_INTERNAL') || die();
 class block_xp_renderer extends plugin_renderer_base {
 
     /**
+     * Course rules link.
+     *
+     * @param int $courseid The course ID.
+     * @return string HTML produced.
+     */
+    public function course_rules_link($courseid) {
+        return html_writer::tag('p',
+            html_writer::link(
+                new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid)),
+                get_string('courserules', 'block_xp')),
+            array('class' => 'course-rules-link')
+        );
+    }
+
+    /**
      * Returns the current level rendered.
      *
      * @param renderable $progress The renderable object.
@@ -52,7 +67,7 @@ class block_xp_renderer extends plugin_renderer_base {
      * @return string HTML producted.
      */
     public function description($string) {
-        return html_writer::tag('div', $string, array('class' => 'description'));
+        return html_writer::tag('p', $string, array('class' => 'description'));
     }
 
     /**

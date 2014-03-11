@@ -15,19 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language file.
+ * Block XP rules.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require(__DIR__ . '/../../config.php');
 
-$string['configdescription'] = 'Description to append';
-$string['configheader'] = 'Settings';
-$string['configtitle'] = 'Title';
-$string['courserules'] = 'Course rules';
-$string['levelup'] = 'Level up!';
-$string['pluginname'] = 'XP block';
-$string['xp:addinstance'] = 'Add a new XP block';
+$courseid = required_param('courseid', PARAM_INT);
+
+require_login($courseid);
+$context = context_course::instance($courseid);
+
+// We need to be able to add this block to edit the course properties.
+require_capability('block/xp:addinstance', $context);
+
+$PAGE->set_context($context);
+$PAGE->set_pagelayout('course');
+$PAGE->set_title(get_string('courserules', 'block_xp'));
+$PAGE->set_heading($COURSE->fullname);
+$PAGE->set_url(new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid)));
+
+echo $OUTPUT->header();
+echo $OUTPUT->footer();
