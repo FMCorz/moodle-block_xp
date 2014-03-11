@@ -1,0 +1,215 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Block XP manager.
+ *
+ * @package    block_xp
+ * @copyright  2014 Frédéric Massart
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Block XP manager class.
+ *
+ * @package    block_xp
+ * @copyright  2014 Frédéric Massart
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class block_xp_manager {
+
+    /** @var int Course ID. */
+    protected $courseid = null;
+
+    /** @var array Static cache of levels and their required XP. */
+    protected static $levels;
+
+    /**
+     * Constructor
+     *
+     * @param int $courseid The course ID.
+     * @return void
+     */
+    public function __construct($courseid) {
+        $this->courseid = $courseid;
+    }
+
+    /**
+     * Capture an event.
+     *
+     * @param \core\event\base $event The event.
+     * @return void
+     */
+    public function capture_event(\core\event\base $event) {
+        global $DB;
+
+        if ($event->courseid !== $this->courseid) {
+            throw new coding_exception('Event course ID does not match event course ID');
+        }
+
+        $userid = $event->userid;
+        $points = $this->get_xp_from_event($event);
+
+        if ($DB->count_records('block_xp', array('courseid' => $this->courseid, 'userid' => $userid)) > 0) {
+            $DB->execute('UPDATE {block_xp} SET xp = xp + :xp WHERE courseid = :courseid AND userid = :userid',
+                array('xp' => $points, 'courseid' => $this->courseid, 'userid' => $userid));
+        } else {
+            $record = new stdClass();
+            $record->courseid = $this->courseid;
+            $record->userid = $userid;
+            $record->xp = $points;
+            $DB->insert_record('block_xp', $record);
+        }
+        $this->update_user_level($userid);
+    }
+
+    /**
+     * Return the level at which we are at $xp.
+     *
+     * @param int $xp XP acquired.
+     * @param int $currentlevel The level to start the search from.
+     * @return int The level.
+     */
+    public function get_level_from_xp($xp, $currentlevel = null) {
+        $levels = $this->get_levels();
+
+        if (!$currentlevel) {
+            $currentlevel = 1;
+        }
+
+        $level = $currentlevel;
+        for ($i = $currentlevel; $i <= count($levels); $i++) {
+            if ($levels[$i] <= $xp) {
+                $level = $i;
+            } else {
+                break;
+            }
+        }
+
+        return $level;
+    }
+
+    /**
+     * Get the levels and the experience points needed.
+     *
+     * @return array level => xp required.
+     */
+    public function get_levels() {
+        $base = 100;
+        if (!isset(self::$levels[$this->courseid])) {
+            $list = array();
+            for ($i = 1; $i <= 20; $i++) {
+                if ($i == 1) {
+                    $list[$i] = 0;
+                } else if ($i == 2) {
+                    $list[$i] = $base;
+                } else {
+                    $list[$i] = $base + round($list[$i - 1] * 1.2);
+                }
+            }
+            self::$levels[$this->courseid] = $list;
+        }
+        return self::$levels[$this->courseid];
+    }
+
+    /**
+     * Get progress renderable of user.
+     *
+     * @param int $userid The user ID.
+     * @return block_xp_progress The progress renderable.
+     */
+    public function get_progress_for_user($userid) {
+        global $DB;
+        $record = $DB->get_record('block_xp', array('courseid' => $this->courseid, 'userid' => $userid));
+        if (!$record) {
+            $record = new stdClass();
+            $record->xp = 0;
+            $record->lvl = 1;
+            $record->userid = $userid;
+            $record->courseid = $this->courseid;
+        }
+
+        // Manipulation.
+        unset($record->id);
+        $record->level = $record->lvl;
+        unset($record->lvl);
+        $params = (array) $record;
+
+        $params['levelxp'] = $this->get_xp_for_level($record->level);
+        $params['nextlevelxp'] = $this->get_xp_for_level($record->level + 1);
+        $progress = new block_xp_progress($params);
+
+        return $progress;
+    }
+
+    /**
+     * Get the experience points generated by an event.
+     *
+     * @param \core\event\base $event The event.
+     * @return int XP points.
+     */
+    public function get_xp_from_event(\core\event\base $event) {
+        $points = 0;
+        switch ($event->crud) {
+            case 'c':
+                $points = 80;
+                break;
+            case 'r':
+                $points = 15;
+                break;
+            case 'u':
+                $points = 10;
+                break;
+        }
+        return $points;
+    }
+
+    /**
+     * Get the amount of XP required for a level.
+     *
+     * @param int $level The level.
+     * @return int|false The amount of XP required, or false there is no such level.
+     */
+    public function get_xp_for_level($level) {
+        $levels = $this->get_levels();
+        if (isset($levels[$level])) {
+            return $levels[$level];
+        }
+        return false;
+    }
+
+    /**
+     * Update the level of a user.
+     *
+     * @param int $userid The user ID.
+     * @return void
+     */
+    public function update_user_level($userid) {
+        global $DB;
+
+        $record = $DB->get_record('block_xp', array('courseid' => $this->courseid, 'userid' => $userid), 'xp,lvl');
+        if ($record) {
+            $level = $this->get_level_from_xp($record->xp, $record->lvl);
+            if ($level > $record->lvl) {
+                // Level up!
+                $DB->set_field('block_xp', 'lvl', $level, array('courseid' => $this->courseid, 'userid' => $userid));
+            }
+        }
+    }
+
+}
