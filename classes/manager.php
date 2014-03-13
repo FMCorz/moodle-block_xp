@@ -110,16 +110,16 @@ class block_xp_manager {
      * @return array level => xp required.
      */
     public function get_levels() {
-        $base = 100;
+        $base = 120;
         if (!isset(self::$levels[$this->courseid])) {
             $list = array();
-            for ($i = 1; $i <= 20; $i++) {
+            for ($i = 1; $i <= 10; $i++) {
                 if ($i == 1) {
                     $list[$i] = 0;
                 } else if ($i == 2) {
                     $list[$i] = $base;
                 } else {
-                    $list[$i] = $base + round($list[$i - 1] * 1.2);
+                    $list[$i] = $base + round($list[$i - 1] * 1.3);
                 }
             }
             self::$levels[$this->courseid] = $list;
@@ -167,13 +167,13 @@ class block_xp_manager {
         $points = 0;
         switch ($event->crud) {
             case 'c':
-                $points = 80;
+                $points = 45;
                 break;
             case 'r':
-                $points = 15;
+                $points = 9;
                 break;
             case 'u':
-                $points = 10;
+                $points = 3;
                 break;
         }
         return $points;
