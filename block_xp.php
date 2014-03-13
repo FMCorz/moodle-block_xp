@@ -40,7 +40,7 @@ class block_xp extends block_base {
      */
     public function applicable_formats() {
         // TODO Allow course, modules and frontpage.
-        return array('course' => true);
+        return array('course' => true, 'mod' => true);
     }
 
     /**
@@ -78,8 +78,10 @@ class block_xp extends block_base {
 
         $this->content->text = $renderer->current_level($progress);
         $this->content->text .= $renderer->progress_bar($progress);
-        if (!empty($this->config->description)) {
+        if (isset($this->config->description)) {
             $this->content->text .= $renderer->description($this->config->description);
+        } else {
+            $this->content->text .= $renderer->description(get_string('participatetolevelup', 'block_xp'));
         }
 
         if (has_capability('block/xp:addinstance', $this->page->context)) {

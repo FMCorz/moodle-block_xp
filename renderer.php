@@ -67,6 +67,9 @@ class block_xp_renderer extends plugin_renderer_base {
      * @return string HTML producted.
      */
     public function description($string) {
+        if (empty($string)) {
+            return '';
+        }
         return html_writer::tag('p', $string, array('class' => 'description'));
     }
 

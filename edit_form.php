@@ -46,7 +46,7 @@ class block_xp_edit_form extends block_edit_form {
         $mform->setType('config_title', PARAM_TEXT);
 
         $mform->addElement('textarea', 'config_description', get_string('configdescription', 'block_xp'));
-        $mform->setDefault('config_description', '');
+        $mform->setDefault('config_description', get_string('participatetolevelup', 'block_xp'));
         $mform->setType('config_description', PARAM_TEXT);
     }
 

@@ -30,4 +30,5 @@ $string['configtitle'] = 'Title';
 $string['courserules'] = 'Course rules';
 $string['levelup'] = 'Level up!';
 $string['pluginname'] = 'XP block';
+$string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';
 $string['xp:addinstance'] = 'Add a new XP block';
