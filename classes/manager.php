@@ -82,18 +82,13 @@ class block_xp_manager {
      * Return the level at which we are at $xp.
      *
      * @param int $xp XP acquired.
-     * @param int $currentlevel The level to start the search from.
      * @return int The level.
      */
-    public function get_level_from_xp($xp, $currentlevel = null) {
+    public function get_level_from_xp($xp) {
         $levels = $this->get_levels();
 
-        if (!$currentlevel) {
-            $currentlevel = 1;
-        }
-
-        $level = $currentlevel;
-        for ($i = $currentlevel; $i <= count($levels); $i++) {
+        $level = 1;
+        for ($i = $level; $i <= count($levels); $i++) {
             if ($levels[$i] <= $xp) {
                 $level = $i;
             } else {
@@ -194,21 +189,47 @@ class block_xp_manager {
     }
 
     /**
-     * Update the level of a user.
+     * Recalculte the levels of all the users in the course.
      *
-     * @param int $userid The user ID.
+     * @param int $courseid The course ID.
      * @return void
      */
-    public function update_user_level($userid) {
+    public function recalculate_levels() {
+        global $DB;
+        $users = $DB->get_recordset('block_xp', array('courseid' => $this->courseid), '', 'userid, lvl, xp');
+        foreach ($users as $user) {
+            $this->update_user_level($user->userid, $user->xp, $user->lvl);
+        }
+        $users->close();
+    }
+
+    /**
+     * Update the level of a user.
+     *
+     * The option parameters are only there for a speed gain, they should be equal
+     * to the value stored in the database.
+     *
+     * @param int $userid The user ID.
+     * @param int $xp The user XP.
+     * @param int $lvl The known user level.
+     * @return void
+     */
+    public function update_user_level($userid, $xp = null, $lvl = null) {
         global $DB;
 
-        $record = $DB->get_record('block_xp', array('courseid' => $this->courseid, 'userid' => $userid), 'xp,lvl');
-        if ($record) {
-            $level = $this->get_level_from_xp($record->xp, $record->lvl);
-            if ($level > $record->lvl) {
-                // Level up!
-                $DB->set_field('block_xp', 'lvl', $level, array('courseid' => $this->courseid, 'userid' => $userid));
+        if ($xp === null || $lvl === null) {
+            $record = $DB->get_record('block_xp', array('courseid' => $this->courseid, 'userid' => $userid), 'xp,lvl');
+            if (!$record) {
+                return;
             }
+            $xp = $record->xp;
+            $lvl = $record->lvl;
+        }
+
+        $level = $this->get_level_from_xp($xp);
+        if ($level != $lvl) {
+            // Level up!
+            $DB->set_field('block_xp', 'lvl', $level, array('courseid' => $this->courseid, 'userid' => $userid));
         }
     }
 
