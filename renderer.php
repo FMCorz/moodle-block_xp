@@ -34,17 +34,21 @@ defined('MOODLE_INTERNAL') || die();
 class block_xp_renderer extends plugin_renderer_base {
 
     /**
-     * Course rules link.
+     * Administration links.
      *
      * @param int $courseid The course ID.
      * @return string HTML produced.
      */
-    public function course_rules_link($courseid) {
+    public function admin_links($courseid) {
         return html_writer::tag('p',
             html_writer::link(
+                new moodle_url('/blocks/xp/report.php', array('courseid' => $courseid)),
+                get_string('coursereport', 'block_xp'))
+            . ' - '
+            . html_writer::link(
                 new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid)),
-                get_string('courserules', 'block_xp')),
-            array('class' => 'course-rules-link')
+                get_string('courserules', 'block_xp'))
+            , array('class' => 'admin-links')
         );
     }
 
@@ -81,7 +85,7 @@ class block_xp_renderer extends plugin_renderer_base {
      */
     public function progress_bar(renderable $progress) {
         $html = '';
-        $html .= html_writer::start_tag('div', array('class' => 'level-progress'));
+        $html .= html_writer::start_tag('div', array('class' => 'block_xp-level-progress'));
         $html .= html_writer::tag('div', '', array('style' => 'width: ' . $progress->percentage . '%;', 'class' => 'bar'));
         $html .= html_writer::tag('div', $progress->xpinlevel . '/' . $progress->xpforlevel, array('class' => 'txt'));
         $html .= html_writer::end_tag('div');

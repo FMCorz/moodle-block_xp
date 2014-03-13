@@ -40,21 +40,31 @@
     background-image: url([[pix:block_xp|10]]);
 }
 
-.block_xp .level-progress {
-    width: 100%;
+.block_xp .description {
+    font-size: 0.9em;
+}
+.block_xp .admin-links {
+    text-align: center;
+    font-size: 0.9em;
+}
+
+/** Use over defined class name to re-use it through the block pages. */
+.block_xp-level-progress {
+    margin: 0 auto;
+    max-width: 200px;
     height: 25px;
     border-radius: 5px;
     background-color: #ccc;
     position: relative;
     margin-bottom: 10px;
 }
-.block_xp .level-progress .bar {
+.block_xp-level-progress .bar {
     background-color: green;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
     height: 25px;
 }
-.block_xp .level-progress .txt {
+.block_xp-level-progress .txt {
     line-height: 25px;
     text-align: center;
     color: #fff;
@@ -63,11 +73,4 @@
     top: 0;
     left: 0;
     position: absolute;
-}
-.block_xp .description {
-    font-size: 0.9em;
-}
-.block_xp .course-rules-link {
-    text-align: center;
-    font-size: 0.9em;
 }

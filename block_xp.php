@@ -85,7 +85,7 @@ class block_xp extends block_base {
         }
 
         if (has_capability('block/xp:addinstance', $this->page->context)) {
-            $this->content->text .= $renderer->course_rules_link($this->page->course->id);
+            $this->content->text .= $renderer->admin_links($this->page->course->id);
         }
 
         return $this->content;
