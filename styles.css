@@ -5,9 +5,39 @@
     height: 100px;
     width: 100px;
     color: #fff;
-    background: #44aa00;
-    border-radius: 100px;
-    line-height: 100px;
+    line-height: 110px;
+    background: url([[pix:block_xp|10]]) no-repeat;
+}
+
+.block_xp .level-1 {
+    background-image: url([[pix:block_xp|1]]);
+}
+.block_xp .level-2 {
+    background-image: url([[pix:block_xp|2]]);
+}
+.block_xp .level-3 {
+    background-image: url([[pix:block_xp|3]]);
+}
+.block_xp .level-4 {
+    background-image: url([[pix:block_xp|4]]);
+}
+.block_xp .level-5 {
+    background-image: url([[pix:block_xp|5]]);
+}
+.block_xp .level-6 {
+    background-image: url([[pix:block_xp|6]]);
+}
+.block_xp .level-7 {
+    background-image: url([[pix:block_xp|7]]);
+}
+.block_xp .level-8 {
+    background-image: url([[pix:block_xp|8]]);
+}
+.block_xp .level-9 {
+    background-image: url([[pix:block_xp|9]]);
+}
+.block_xp .level-10 {
+    background-image: url([[pix:block_xp|10]]);
 }
 
 .block_xp .level-progress {

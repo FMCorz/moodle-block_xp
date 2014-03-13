@@ -56,7 +56,7 @@ class block_xp_renderer extends plugin_renderer_base {
      */
     public function current_level(renderable $progress) {
         $html = '';
-        $html .= html_writer::tag('div', $progress->level, array('class' => 'current-level'));
+        $html .= html_writer::tag('div', $progress->level, array('class' => 'current-level level-' . $progress->level));
         return $html;
     }
 
