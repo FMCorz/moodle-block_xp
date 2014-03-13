@@ -47,6 +47,8 @@ class block_xp_helper {
             // Ignore events that are not participating.
         } else if ($event->crud === 'd') {
             // Ignore events that delete content.
+        } else if ($event->target === 'assessable' && in_array($event->action, array('submitted', 'uploaded'))) {
+            // Skip those as they duplicate other more low level actions.
         } else {
             // Keep the event, and proceed.
             $manager = new block_xp_manager($event->courseid);
