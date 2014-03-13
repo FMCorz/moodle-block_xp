@@ -39,6 +39,9 @@ class block_xp_manager {
     /** @var array Static cache of levels and their required XP. */
     protected static $levels;
 
+    /** @var bool Whether or not to trigger events, for instance when the user levels up. */
+    protected $triggereevents = true;
+
     /**
      * Constructor
      *
@@ -197,9 +200,18 @@ class block_xp_manager {
     public function recalculate_levels() {
         global $DB;
         $users = $DB->get_recordset('block_xp', array('courseid' => $this->courseid), '', 'userid, lvl, xp');
+
+        // Disable events.
+        $oldtriggerevents = $this->$triggereevents;
+        $this->$triggereevents = false;
+
         foreach ($users as $user) {
             $this->update_user_level($user->userid, $user->xp, $user->lvl);
         }
+
+        // Restore value.
+        $this->$triggereevents = $oldtriggerevents;
+
         $users->close();
     }
 
@@ -230,6 +242,17 @@ class block_xp_manager {
         if ($level != $lvl) {
             // Level up!
             $DB->set_field('block_xp', 'lvl', $level, array('courseid' => $this->courseid, 'userid' => $userid));
+            if ($this->triggereevents) {
+                $params = array(
+                    'context' => context_course::instance($this->courseid),
+                    'relateduserid' => $userid,
+                    'other' => array(
+                        'level' => $level
+                    )
+                );
+                $event = \block_xp\event\user_leveledup::create($params);
+                $event->trigger();
+            }
         }
     }
 

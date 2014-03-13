@@ -29,6 +29,7 @@ $string['configheader'] = 'Settings';
 $string['configtitle'] = 'Title';
 $string['coursereport'] = 'Course report';
 $string['courserules'] = 'Course rules';
+$string['event_user_leveledup'] = 'User leveled up';
 $string['level'] = 'Level';
 $string['levelup'] = 'Level up!';
 $string['pluginname'] = 'XP block';

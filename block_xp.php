@@ -39,8 +39,7 @@ class block_xp extends block_base {
      * @return array
      */
     public function applicable_formats() {
-        // TODO Allow course, modules and frontpage.
-        return array('course' => true, 'mod' => true);
+        return array('course' => true);
     }
 
     /**
