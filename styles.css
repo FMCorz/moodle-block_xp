@@ -60,8 +60,7 @@
 }
 .block_xp-level-progress .bar {
     background-color: green;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
+    border-radius: 5px;
     height: 25px;
 }
 .block_xp-level-progress .txt {
