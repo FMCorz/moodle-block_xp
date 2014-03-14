@@ -43,6 +43,21 @@ class block_xp extends block_base {
     }
 
     /**
+     * Cron.
+     *
+     * @return void
+     */
+    public function cron() {
+        global $DB;
+        $courseids = $DB->get_fieldset_sql('SELECT DISTINCT(courseid) FROM {block_xp}', array());
+        foreach ($courseids as $courseid) {
+            $manager = new block_xp_manager($courseid);
+            $manager->purge_log();
+        }
+        return true;
+    }
+
+    /**
      * Init.
      *
      * @return void

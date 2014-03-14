@@ -36,6 +36,16 @@ class block_xp_manager {
     /** @var int Course ID. */
     protected $courseid = null;
 
+    /** @var object Config. */
+    protected $config = null;
+
+    /** @var array Config default. */
+    protected static $configdefaults = array(
+        'levels' => 10,
+        'enablelog' => 1,
+        'keeplogs' => 3
+    );
+
     /** @var array Static cache of levels and their required XP. */
     protected static $levels;
 
@@ -84,6 +94,38 @@ class block_xp_manager {
     }
 
     /**
+     * Get the configuration.
+     *
+     * @param string $name The config to get.
+     * @return mixed Return either an object, or a value.
+     */
+    public function get_config($name = null) {
+        global $DB;
+        if (empty($this->config)) {
+            $record = $DB->get_record('block_xp_config', array('courseid' => $this->courseid));
+            if (!$record) {
+                $record = (object) self::$configdefaults;
+                $record->id = 0;
+                $record->courseid = $this->courseid;
+            }
+            $this->config = $record;
+        }
+        if ($name !== null) {
+            return $this->config->$name;
+        }
+        return $this->config;
+    }
+
+    /**
+     * Return the default configuration.
+     *
+     * @return stdClass Default config.
+     */
+    public static function get_default_config() {
+        return (object) self::$configdefaults;
+    }
+
+    /**
      * Return the level at which we are at $xp.
      *
      * @param int $xp XP acquired.
@@ -113,7 +155,7 @@ class block_xp_manager {
         $base = 120;
         if (!isset(self::$levels[$this->courseid])) {
             $list = array();
-            for ($i = 1; $i <= 10; $i++) {
+            for ($i = 1; $i <= $this->get_config('levels'); $i++) {
                 if ($i == 1) {
                     $list[$i] = 0;
                 } else if ($i == 2) {
@@ -204,17 +246,36 @@ class block_xp_manager {
     protected function log_event($eventname, $userid, $xp) {
         global $DB;
 
-        // TODO Allow logging to be disabled.
-        $record = new stdClass();
-        $record->courseid = $this->courseid;
-        $record->userid = $userid;
-        $record->eventname = $eventname;
-        $record->xp = $xp;
-        $record->time = time();
-        try {
-            $DB->insert_record('block_xp_log', $record);
-        } catch (dml_exception $e) {
-            // Ignore.
+        if ($this->get_config('enablelog')) {
+            $record = new stdClass();
+            $record->courseid = $this->courseid;
+            $record->userid = $userid;
+            $record->eventname = $eventname;
+            $record->xp = $xp;
+            $record->time = time();
+            try {
+                $DB->insert_record('block_xp_log', $record);
+            } catch (dml_exception $e) {
+                // Ignore.
+            }
+        }
+    }
+
+    /**
+     * Purge the logs according to preferences.
+     *
+     * @return void
+     */
+    public function purge_log() {
+        global $DB;
+        $keeplogs = $this->get_config('keeplogs');
+        if (!$keeplogs) {
+            continue;
+        } else {
+            // The cron is set to run only once a day, so no need to test the last time it was purged here.
+            $DB->delete_records_select('block_xp_log', 'time < :time', array(
+                'time' => time() - ($keeplogs * DAYSECS)
+            ));
         }
     }
 
@@ -251,6 +312,30 @@ class block_xp_manager {
         global $DB;
         $DB->delete_records('block_xp', array('courseid' => $this->courseid));
         $DB->delete_records('block_xp_log', array('courseid' => $this->courseid));
+    }
+
+    /**
+     * Update the configuration.
+     *
+     * @param stdClass $data An object containing the data.
+     * @return void
+     */
+    public function update_config($data) {
+        global $DB;
+        $config = $this->get_config();
+        foreach ((array) $data as $key => $value) {
+            if (in_array($key, array('id', 'courseid'))) {
+                continue;
+            } elseif (isset($config->{$key})) {
+                $config->{$key} = $value;
+            }
+        }
+        if (empty($config->id)) {
+            $config->id = $DB->insert_record('block_xp_config', $config);
+        } else {
+            $DB->update_record('block_xp_config', $config);
+        }
+        $this->config = $config;
     }
 
     /**

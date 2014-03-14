@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Block XP rules.
+ * Block XP settings.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
@@ -25,6 +25,8 @@
 require(__DIR__ . '/../../config.php');
 
 $courseid = required_param('courseid', PARAM_INT);
+$resetdata = optional_param('resetdata', 0, PARAM_INT);
+$confirm = optional_param('confirm', 0, PARAM_INT);
 
 require_login($courseid);
 $context = context_course::instance($courseid);
@@ -32,11 +34,27 @@ $context = context_course::instance($courseid);
 // We need to be able to add this block to edit the course properties.
 require_capability('block/xp:addinstance', $context);
 
+// Some stuff.
+$url = new moodle_url('/blocks/xp/settings.php', array('courseid' => $courseid));
+$strcoursesettings = get_string('coursesettings', 'block_xp');
+
+// Page info.
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('course');
-$PAGE->set_title(get_string('courserules', 'block_xp'));
+$PAGE->set_title($strcoursesettings);
 $PAGE->set_heading($COURSE->fullname);
-$PAGE->set_url(new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid)));
+$PAGE->set_url($url);
 
 echo $OUTPUT->header();
+echo $OUTPUT->heading($strcoursesettings);
+
+$manager = new block_xp_manager($courseid);
+$form = new block_xp_settings_form($url, array('defaultconfig' => block_xp_manager::get_default_config()));
+
+if ($data = $form->get_data()) {
+    $manager->update_config($data);
+}
+
+echo $form->display();
+
 echo $OUTPUT->footer();
