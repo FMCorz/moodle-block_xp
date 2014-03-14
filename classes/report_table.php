@@ -97,16 +97,6 @@ class block_xp_report_table extends table_sql {
     }
 
     /**
-     * Formats the userid column.
-     *
-     * @param stdClass $row Table row.
-     * @return string Output produced.
-     */
-    protected function col_userid($row) {
-        return fullname($row);
-    }
-
-    /**
      * Formats the column userpic.
      *
      * @param stdClass $row Table row.
