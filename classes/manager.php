@@ -243,6 +243,17 @@ class block_xp_manager {
     }
 
     /**
+     * Reset all the data.
+     *
+     * @return void
+     */
+    public function reset_data() {
+        global $DB;
+        $DB->delete_records('block_xp', array('courseid' => $this->courseid));
+        $DB->delete_records('block_xp_log', array('courseid' => $this->courseid));
+    }
+
+    /**
      * Update the level of a user.
      *
      * The option parameters are only there for a speed gain, they should be equal

@@ -38,5 +38,7 @@ $string['levelup'] = 'Level up!';
 $string['pluginname'] = 'XP block';
 $string['progress'] = 'Progress';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';
+$string['reallyresetdata'] = 'Really reset the levels and experience points of everyone in this course?';
+$string['resetcoursedata'] = 'Reset course data';
 $string['xp'] = 'Experience points';
 $string['xp:addinstance'] = 'Add a new XP block';

@@ -26,6 +26,8 @@ require(__DIR__ . '/../../config.php');
 require($CFG->libdir . '/tablelib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
+$resetdata = optional_param('resetdata', 0, PARAM_INT);
+$confirm = optional_param('confirm', 0, PARAM_INT);
 
 require_login($courseid);
 $context = context_course::instance($courseid);
@@ -44,17 +46,40 @@ $PAGE->set_title($strcoursereport);
 $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_url($url);
 
-$table = new block_xp_report_table('block_xp_report', $courseid);
-$table->define_baseurl($url);
+// Reset all the data.
+if ($resetdata && confirm_sesskey()) {
+    if ($confirm) {
+        $manager = new block_xp_manager($courseid);
+        $manager->reset_data();
+        // Redirect to put the course ID back in the URL, otherwise refresh won't work.
+        redirect($url);
+    } else {
+        // Argh... I hate duplicating code!
+        echo $OUTPUT->header();
+        echo $OUTPUT->heading($strcoursereport);
+        echo $OUTPUT->confirm(get_string('reallyresetdata', 'block_xp'),
+            new moodle_url($url, array('resetdata' => 1, 'confirm' => 1, 'sesskey' => sesskey())),
+            $url);
+        echo $OUTPUT->footer();
+        die();
+    }
+}
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strcoursereport);
+
+$table = new block_xp_report_table('block_xp_report', $courseid);
+$table->define_baseurl($url);
 
 echo $table->out(10, true);
 
 echo html_writer::tag('p',
     html_writer::link(new moodle_url('/blocks/xp/log.php', array('courseid' => $courseid)),
         get_string('courselog', 'block_xp'))
+);
+echo html_writer::tag('p',
+    html_writer::link(new moodle_url($url, array('resetdata' => 1, 'sesskey' => sesskey())),
+        get_string('resetcoursedata', 'block_xp'))
 );
 
 echo $OUTPUT->footer();
