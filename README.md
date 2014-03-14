@@ -6,7 +6,7 @@ Engage your students! A Moodle plugin to gamify your students' learning experien
 Features
 --------
 
-- Automatically captures and attribute experience points to students' actions
+- Automatically captures and attributes experience points to students' actions
 - Block that displays current level and progress towards next level
 - Report for teachers to get an overview of their students' levels
 - Experience points are earned per course
