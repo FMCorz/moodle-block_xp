@@ -290,15 +290,15 @@ class block_xp_manager {
         $users = $DB->get_recordset('block_xp', array('courseid' => $this->courseid), '', 'userid, lvl, xp');
 
         // Disable events.
-        $oldtriggerevents = $this->$triggereevents;
-        $this->$triggereevents = false;
+        $oldtriggerevents = $this->triggereevents;
+        $this->triggereevents = false;
 
         foreach ($users as $user) {
             $this->update_user_level($user->userid, $user->xp, $user->lvl);
         }
 
         // Restore value.
-        $this->$triggereevents = $oldtriggerevents;
+        $this->triggereevents = $oldtriggerevents;
 
         $users->close();
     }
