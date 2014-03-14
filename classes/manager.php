@@ -79,6 +79,8 @@ class block_xp_manager {
             $DB->insert_record('block_xp', $record);
         }
         $this->update_user_level($userid);
+
+        $this->log_event($event->eventname, $userid, $points);
     }
 
     /**
@@ -189,6 +191,31 @@ class block_xp_manager {
             return $levels[$level];
         }
         return false;
+    }
+
+    /**
+     * Log a captured event.
+     *
+     * @param string $eventname The event name.
+     * @param int $userid The user ID.
+     * @param int $xp The XP earned with that event.
+     * @return void
+     */
+    protected function log_event($eventname, $userid, $xp) {
+        global $DB;
+
+        // TODO Allow logging to be disabled.
+        $record = new stdClass();
+        $record->courseid = $this->courseid;
+        $record->userid = $userid;
+        $record->eventname = $eventname;
+        $record->xp = $xp;
+        $record->time = time();
+        try {
+            $DB->insert_record('block_xp_log', $record);
+        } catch (dml_exception $e) {
+            // Ignore.
+        }
     }
 
     /**

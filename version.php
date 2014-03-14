@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2014031102;
+$plugin->version    = 2014031104;
 $plugin->requires   = 2014022800;
 $plugin->component  = 'block_xp';
 $plugin->maturity   = MATURITY_ALPHA;

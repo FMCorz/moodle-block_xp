@@ -34,8 +34,8 @@ $context = context_course::instance($courseid);
 require_capability('block/xp:addinstance', $context);
 
 // Some stuff.
-$url = new moodle_url('/blocks/xp/report.php', array('courseid' => $courseid));
-$strcoursereport = get_string('coursereport', 'block_xp');
+$url = new moodle_url('/blocks/xp/log.php', array('courseid' => $courseid));
+$strcoursereport = get_string('courselog', 'block_xp');
 
 // Page info.
 $PAGE->set_context($context);
@@ -44,17 +44,17 @@ $PAGE->set_title($strcoursereport);
 $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_url($url);
 
-$table = new block_xp_report_table('block_xp_report', $courseid);
+$table = new block_xp_log_table('block_xp_log', $courseid);
 $table->define_baseurl($url);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strcoursereport);
 
-echo $table->out(10, true);
+echo $table->out(50, true);
 
 echo html_writer::tag('p',
-    html_writer::link(new moodle_url('/blocks/xp/log.php', array('courseid' => $courseid)),
-        get_string('courselog', 'block_xp'))
+    html_writer::link(new moodle_url('/blocks/xp/report.php', array('courseid' => $courseid)),
+        get_string('coursereport', 'block_xp'))
 );
 
 echo $OUTPUT->footer();
