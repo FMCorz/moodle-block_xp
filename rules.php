@@ -35,7 +35,7 @@ $context = context_course::instance($courseid);
 require_capability('block/xp:addinstance', $context);
 
 // Some stuff.
-$url = new moodle_url('/blocks/xp/settings.php', array('courseid' => $courseid));
+$url = new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid));
 $strcoursesettings = get_string('coursesettings', 'block_xp');
 
 // Page info.

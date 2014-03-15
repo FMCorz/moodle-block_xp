@@ -46,7 +46,7 @@ class block_xp_renderer extends plugin_renderer_base {
                 get_string('coursereport', 'block_xp'))
             . ' - '
             . html_writer::link(
-                new moodle_url('/blocks/xp/settings.php', array('courseid' => $courseid)),
+                new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid)),
                 get_string('coursesettings', 'block_xp'))
             , array('class' => 'admin-links')
         );
