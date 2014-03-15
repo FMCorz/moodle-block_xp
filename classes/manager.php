@@ -41,6 +41,7 @@ class block_xp_manager {
 
     /** @var array Config default. */
     protected static $configdefaults = array(
+        'enabled' => false,
         'levels' => 10,
         'enablelog' => 1,
         'keeplogs' => 3
@@ -73,6 +74,11 @@ class block_xp_manager {
 
         if ($event->courseid !== $this->courseid) {
             throw new coding_exception('Event course ID does not match event course ID');
+        }
+
+        // The capture has not been enabled yet.
+        if (!$this->get_config('enabled')) {
+            return;
         }
 
         $userid = $event->userid;
@@ -234,6 +240,7 @@ class block_xp_manager {
         }
         return false;
     }
+
 
     /**
      * Log a captured event.
