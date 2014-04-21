@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.1
+----
+
+- Performance improvements
+
 v1.0
 ----
 

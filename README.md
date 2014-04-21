@@ -27,6 +27,11 @@ How are experience points calculated?
 
 Thanks to the new Event system introduced in Moodle 2.5, the plugin captures the events having the educational level _participating_ and gives experience points based on whether they are _creating_, _updating_ or _reading_ content. Though due to the lack of _participating_ events in earlier versions, this plugin was developed for 2.7 or greater.
 
+How to restrict access to a module according to the user's level?
+-----------------------------------------------------------------
+
+Have a look at this availability plugin [Level](https://github.com/FMCorz/moodle-availability_xp).
+
 Todo
 ----
 
@@ -35,7 +40,6 @@ Todo
 - Add settings to customize the design of the levels
 - A 'ladder' page to see other students' levels
 - Awarding a badge when a student reaches a level (blocked by [MDL-39864](https://tracker.moodle.org/browse/MDL-39864))
-- Unlock access to activities or resources based on the student's level (blocked by [MDL-44070](https://tracker.moodle.org/browse/MDL-44070))
 
 License
 -------
