@@ -49,7 +49,7 @@ $PAGE->set_url($url);
 // Reset all the data.
 if ($resetdata && confirm_sesskey()) {
     if ($confirm) {
-        $manager = new block_xp_manager($courseid);
+        $manager = block_xp_manager::get($courseid);
         $manager->reset_data();
         // Redirect to put the course ID back in the URL, otherwise refresh won't work.
         redirect($url);

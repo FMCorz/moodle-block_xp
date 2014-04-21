@@ -33,6 +33,9 @@ defined('MOODLE_INTERNAL') || die();
  */
 class block_xp_manager {
 
+    /** @var array Array of singletons. */
+    protected static $instances;
+
     /** @var int Course ID. */
     protected $courseid = null;
 
@@ -47,8 +50,8 @@ class block_xp_manager {
         'keeplogs' => 3
     );
 
-    /** @var array Static cache of levels and their required XP. */
-    protected static $levels;
+    /** @var array Cache of levels and their required XP. */
+    protected $levels;
 
     /** @var bool Whether or not to trigger events, for instance when the user levels up. */
     protected $triggereevents = true;
@@ -59,7 +62,7 @@ class block_xp_manager {
      * @param int $courseid The course ID.
      * @return void
      */
-    public function __construct($courseid) {
+    protected function __construct($courseid) {
         $this->courseid = $courseid;
     }
 
@@ -97,6 +100,19 @@ class block_xp_manager {
         $this->update_user_level($userid);
 
         $this->log_event($event->eventname, $userid, $points);
+    }
+
+    /**
+     * Get an instance of the manager.
+     *
+     * @param  int $courseid The course ID.
+     * @return block_xp_manager The instance of the manager.
+     */
+    public static function get($courseid) {
+        if (!isset(self::$instances[$courseid])) {
+            self::$instances[$courseid] = new block_xp_manager($courseid);
+        }
+        return self::$instances[$courseid];
     }
 
     /**
@@ -168,7 +184,7 @@ class block_xp_manager {
      */
     public function get_levels() {
         $base = 120;
-        if (!isset(self::$levels[$this->courseid])) {
+        if (empty($this->levels)) {
             $list = array();
             for ($i = 1; $i <= $this->get_level_count(); $i++) {
                 if ($i == 1) {
@@ -179,9 +195,9 @@ class block_xp_manager {
                     $list[$i] = $base + round($list[$i - 1] * 1.3);
                 }
             }
-            self::$levels[$this->courseid] = $list;
+            $this->levels = $list;
         }
-        return self::$levels[$this->courseid];
+        return $this->levels;
     }
 
     /**

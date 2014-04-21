@@ -52,7 +52,7 @@ class block_xp_report_table extends table_sql {
         parent::__construct($uniqueid);
 
         // Block XP stuff.
-        $this->xpmanager = new block_xp_manager($courseid);
+        $this->xpmanager = block_xp_manager::get($courseid);
         $this->xpoutput = $PAGE->get_renderer('block_xp');
 
         // Define columns.

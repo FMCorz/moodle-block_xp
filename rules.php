@@ -48,7 +48,7 @@ $PAGE->set_url($url);
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strcoursesettings);
 
-$manager = new block_xp_manager($courseid);
+$manager = block_xp_manager::get($courseid);
 $form = new block_xp_settings_form($url, array('defaultconfig' => block_xp_manager::get_default_config()));
 
 if ($data = $form->get_data()) {

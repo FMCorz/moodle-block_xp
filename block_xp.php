@@ -51,7 +51,7 @@ class block_xp extends block_base {
         global $DB;
         $courseids = $DB->get_fieldset_sql('SELECT DISTINCT(courseid) FROM {block_xp}', array());
         foreach ($courseids as $courseid) {
-            $manager = new block_xp_manager($courseid);
+            $manager = block_xp_manager::get($courseid);
             $manager->purge_log();
         }
         return true;
@@ -77,7 +77,7 @@ class block_xp extends block_base {
      */
     public function instance_create() {
         // Enable the capture of events for that course.
-        $manager = new block_xp_manager($this->page->course->id);
+        $manager = block_xp_manager::get($this->page->course->id);
         $manager->update_config((object) array('enabled' => true));
         return true;
     }
@@ -89,7 +89,7 @@ class block_xp extends block_base {
      */
     public function instance_delete() {
         // It's bad, but here we assume there is only one block per course.
-        $manager = new block_xp_manager($this->page->course->id);
+        $manager = block_xp_manager::get($this->page->course->id);
         $manager->update_config((object) array('enabled' => false));
         return true;
     }
@@ -110,7 +110,7 @@ class block_xp extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        $manager = new block_xp_manager($this->page->course->id);
+        $manager = block_xp_manager::get($this->page->course->id);
         $progress = $manager->get_progress_for_user($USER->id);
         $renderer = $this->page->get_renderer('block_xp');
 
