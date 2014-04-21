@@ -77,7 +77,7 @@ class block_xp_manager {
         }
 
         // The capture has not been enabled yet.
-        if (!$this->get_config('enabled')) {
+        if (!$this->is_enabled()) {
             return;
         }
 
@@ -239,6 +239,15 @@ class block_xp_manager {
             return $levels[$level];
         }
         return false;
+    }
+
+    /**
+     * Is the block enabled on the course?
+     *
+     * @return boolean True if enabled.
+     */
+    public function is_enabled() {
+        return $this->get_config('enabled');
     }
 
 
