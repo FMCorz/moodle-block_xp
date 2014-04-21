@@ -132,6 +132,15 @@ class block_xp_manager {
     }
 
     /**
+     * Return the number of levels in the course.
+     *
+     * @return int Level count.
+     */
+    public function get_level_count() {
+        return $this->get_config('levels');
+    }
+
+    /**
      * Return the level at which we are at $xp.
      *
      * @param int $xp XP acquired.
@@ -161,7 +170,7 @@ class block_xp_manager {
         $base = 120;
         if (!isset(self::$levels[$this->courseid])) {
             $list = array();
-            for ($i = 1; $i <= $this->get_config('levels'); $i++) {
+            for ($i = 1; $i <= $this->get_level_count(); $i++) {
                 if ($i == 1) {
                     $list[$i] = 0;
                 } else if ($i == 2) {
