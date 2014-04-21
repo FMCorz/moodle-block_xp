@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['enablexpgain'] = 'Enable XP gain';
-$string['enablexpgain_desc'] = 'This is the on/off switch of the plugin.';
+$string['enablexpgain_help'] = 'This is the On/Off switch of the plugin in this course.';
 $string['configdescription'] = 'Description to append';
 $string['configheader'] = 'Settings';
 $string['configtitle'] = 'Title';

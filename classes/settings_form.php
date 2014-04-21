@@ -46,7 +46,7 @@ class block_xp_settings_form extends moodleform {
 
         $mform->addElement('checkbox', 'enabled', get_string('enablexpgain', 'block_xp'));
         $mform->setDefault('enabled', $defaultconfig->enabled);
-        $mform->addHelpButton('enabled', 'enablexpgain_desc', 'block_xp');
+        $mform->addHelpButton('enabled', 'enablexpgain', 'block_xp');
 
         $mform->addElement('text', 'levels', get_string('levelcount', 'block_xp'));
         $mform->setDefault('levels', $defaultconfig->levels);
