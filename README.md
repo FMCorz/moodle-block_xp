@@ -25,7 +25,7 @@ Simply install the plugin and add the block to a course page.
 How are experience points calculated?
 -------------------------------------
 
-Thanks to the new Event system introduced in Moodle 2.5, the plugin captures the events having the educational level _participating_ and gives experience points based on whether they are _creating_, _updating_ or _reading_ content. Though due to the lack of _participating_ events in earlier versions, this plugin was developed for 2.7 or greater.
+Thanks to the new Event system introduced in Moodle 2.6, the plugin captures the events having the educational level _participating_ and gives experience points based on whether they are _creating_, _updating_ or _reading_ content. Though due to the lack of _participating_ events in earlier versions, this plugin was developed for 2.7 or greater.
 
 How to restrict access to a module according to the user's level?
 -----------------------------------------------------------------
