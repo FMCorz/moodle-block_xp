@@ -23,6 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->libdir . '/tablelib.php');
 
 /**
  * Block XP log table class.

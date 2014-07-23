@@ -51,7 +51,7 @@ class block_xp extends block_base {
         global $DB;
         $courseids = $DB->get_fieldset_sql('SELECT DISTINCT(courseid) FROM {block_xp}', array());
         foreach ($courseids as $courseid) {
-            $manager = new block_xp_manager($courseid);
+            $manager = block_xp_manager::get($courseid);
             $manager->purge_log();
         }
         return true;
@@ -71,6 +71,30 @@ class block_xp extends block_base {
     }
 
     /**
+     * Callback when a block is created.
+     *
+     * @return bool
+     */
+    public function instance_create() {
+        // Enable the capture of events for that course.
+        $manager = block_xp_manager::get($this->page->course->id);
+        $manager->update_config((object) array('enabled' => true));
+        return true;
+    }
+
+    /**
+     * Callback when a block is deleted.
+     *
+     * @return bool
+     */
+    public function instance_delete() {
+        // It's bad, but here we assume there is only one block per course.
+        $manager = block_xp_manager::get($this->page->course->id);
+        $manager->update_config((object) array('enabled' => false));
+        return true;
+    }
+
+    /**
      * Get content.
      *
      * @return stdClass
@@ -86,7 +110,7 @@ class block_xp extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        $manager = new block_xp_manager($this->page->course->id);
+        $manager = block_xp_manager::get($this->page->course->id);
         $progress = $manager->get_progress_for_user($USER->id);
         $renderer = $this->page->get_renderer('block_xp');
 
@@ -100,6 +124,10 @@ class block_xp extends block_base {
 
         if (has_capability('block/xp:addinstance', $this->page->context)) {
             $this->content->text .= $renderer->admin_links($this->page->course->id);
+            if (!$manager->get_config('enabled')) {
+                $this->content->text .= html_writer::tag('p',
+                    html_writer::tag('small', get_string('xpgaindisabled', 'block_xp')), array('class' => 'alert alert-warning'));
+            }
         }
 
         return $this->content;

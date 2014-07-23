@@ -23,7 +23,6 @@
  */
 
 require(__DIR__ . '/../../config.php');
-require($CFG->libdir . '/tablelib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
 

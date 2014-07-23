@@ -55,7 +55,7 @@ class block_xp_helper {
             // Skip those as they duplicate other more low level actions.
         } else {
             // Keep the event, and proceed.
-            $manager = new block_xp_manager($event->courseid);
+            $manager = block_xp_manager::get($event->courseid);
             $manager->capture_event($event);
         }
 

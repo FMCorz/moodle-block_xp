@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['enablexpgain'] = 'Enable XP gain';
+$string['enablexpgain_help'] = 'This is the On/Off switch of the plugin in this course.';
 $string['configdescription'] = 'Description to append';
 $string['configheader'] = 'Settings';
 $string['configtitle'] = 'Title';
@@ -51,3 +53,4 @@ $string['reallyresetdata'] = 'Really reset the levels and experience points of e
 $string['resetcoursedata'] = 'Reset course data';
 $string['xp'] = 'Experience points';
 $string['xp:addinstance'] = 'Add a new XP block';
+$string['xpgaindisabled'] = 'XP gain disabled';

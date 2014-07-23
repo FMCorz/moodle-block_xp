@@ -23,7 +23,6 @@
  */
 
 require(__DIR__ . '/../../config.php');
-require($CFG->libdir . '/tablelib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
 $resetdata = optional_param('resetdata', 0, PARAM_INT);
@@ -49,7 +48,7 @@ $PAGE->set_url($url);
 // Reset all the data.
 if ($resetdata && confirm_sesskey()) {
     if ($confirm) {
-        $manager = new block_xp_manager($courseid);
+        $manager = block_xp_manager::get($courseid);
         $manager->reset_data();
         // Redirect to put the course ID back in the URL, otherwise refresh won't work.
         redirect($url);
