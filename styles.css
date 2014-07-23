@@ -72,3 +72,8 @@
     left: 0;
     position: absolute;
 }
+
+/** Using !important because of super-qualified rules to bypass. */
+.path-blocks-xp table .highlight > td{
+    background-color: #D9EDF7 !important;
+}

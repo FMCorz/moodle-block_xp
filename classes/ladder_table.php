@@ -96,6 +96,8 @@ class block_xp_ladder_table extends table_sql {
      * @return void
      */
     function build_table() {
+        global $USER;
+
         $i = 0;
         $rank = 0;
         $lastlvl = -1;
@@ -123,10 +125,10 @@ class block_xp_ladder_table extends table_sql {
                     // We do not need to do anything any more.
                     return;
                 } else if ($i > ($this->pagesize * $this->currpage)) {
-                    // Should we display those results?
+                    // We display the results for that page only.
+                    $classes = ($USER->id == $row->userid) ? 'highlight' : '';
                     $formattedrow = $this->format_row($row);
-                    $this->add_data_keyed($formattedrow,
-                            $this->get_row_class($row));
+                    $this->add_data_keyed($formattedrow, $classes);
                 }
             }
         }
