@@ -78,10 +78,10 @@ class user_leveledup extends \core\event\base {
      */
     protected function validate_data() {
         if (empty($this->relateduserid)) {
-            throw new coding_exception('The related user ID must be has.');
+            throw new \coding_exception('The related user ID must be set.');
         }
         if (!isset($this->other['level'])) {
-            throw new coding_exception('The level must be set in $other.');
+            throw new \coding_exception('The level must be set in $other.');
         }
     }
 
