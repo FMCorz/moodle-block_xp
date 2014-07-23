@@ -275,7 +275,6 @@ class block_xp_manager {
         return $this->get_config('enabled');
     }
 
-
     /**
      * Log a captured event.
      *

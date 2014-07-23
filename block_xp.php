@@ -122,10 +122,12 @@ class block_xp extends block_base {
             $this->content->text .= $renderer->description(get_string('participatetolevelup', 'block_xp'));
         }
 
+        $this->content->footer .= $renderer->student_links($this->page->course->id);
+
         if (has_capability('block/xp:addinstance', $this->page->context)) {
-            $this->content->text .= $renderer->admin_links($this->page->course->id);
+            $this->content->footer .= $renderer->admin_links($this->page->course->id);
             if (!$manager->get_config('enabled')) {
-                $this->content->text .= html_writer::tag('p',
+                $this->content->footer .= html_writer::tag('p',
                     html_writer::tag('small', get_string('xpgaindisabled', 'block_xp')), array('class' => 'alert alert-warning'));
             }
         }
