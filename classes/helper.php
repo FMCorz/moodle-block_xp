@@ -43,6 +43,8 @@ class block_xp_helper {
 
         if ($event->component === 'block_xp') {
             // Skip own events.
+        } else if (!$event->userid || isguestuser($event->userid)) {
+            // Skip non-logged in users and guests.
         } else if ($event->contextlevel !== CONTEXT_COURSE && $event->contextlevel !== CONTEXT_MODULE) {
             // Ignore events outside a course.
         } else if ($event->edulevel !== \core\event\base::LEVEL_PARTICIPATING) {
