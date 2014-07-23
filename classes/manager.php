@@ -47,7 +47,8 @@ class block_xp_manager {
         'enabled' => false,
         'levels' => 10,
         'enablelog' => 1,
-        'keeplogs' => 3
+        'keeplogs' => 3,
+        'enableladder' => true,       // Enable the ladder.
     );
 
     /** @var array Cache of levels and their required XP. */

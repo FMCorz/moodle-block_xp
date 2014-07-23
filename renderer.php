@@ -83,13 +83,17 @@ class block_xp_renderer extends plugin_renderer_base {
      * @param int $courseid The course ID.
      * @return string HTML produced.
      */
-    public function student_links($courseid) {
-        return html_writer::tag('p',
-            html_writer::link(
-                new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid)),
-                get_string('viewtheladder', 'block_xp')
-            ), array('class' => 'student-links')
-        );
+    public function student_links($courseid, $enableladder) {
+        $html = '';
+        if ($enableladder) {
+            $html .= html_writer::tag('p',
+                html_writer::link(
+                    new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid)),
+                    get_string('viewtheladder', 'block_xp')
+                ), array('class' => 'student-links')
+            );
+        }
+        return $html;
     }
 
     /**

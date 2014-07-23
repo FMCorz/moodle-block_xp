@@ -28,6 +28,12 @@ $courseid = required_param('courseid', PARAM_INT);
 
 require_login($courseid);
 $context = context_course::instance($courseid);
+$manager = block_xp_manager::get($courseid);
+
+// Check that the ladder is enabled.
+if (!$manager->get_config('enableladder')) {
+    redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
+}
 
 // Some stuff.
 $url = new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid));

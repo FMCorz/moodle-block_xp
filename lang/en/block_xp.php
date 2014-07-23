@@ -32,6 +32,7 @@ $string['configtitle'] = 'Title';
 $string['courselog'] = 'Course log';
 $string['coursereport'] = 'Course report';
 $string['coursesettings'] = 'Course settings';
+$string['enableladder'] = 'Enable the ladder';
 $string['enablelogging'] = 'Enable logging';
 $string['errorlevelsincorrect'] = 'The minimum number of levels is 2';
 $string['event_user_leveledup'] = 'User leveled up';

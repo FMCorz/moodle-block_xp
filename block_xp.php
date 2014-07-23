@@ -127,7 +127,7 @@ class block_xp extends block_base {
             $this->content->text .= $renderer->description(get_string('participatetolevelup', 'block_xp'));
         }
 
-        $this->content->footer .= $renderer->student_links($this->page->course->id);
+        $this->content->footer .= $renderer->student_links($this->page->course->id, $manager->get_config('enableladder'));
 
         if (has_capability('block/xp:addinstance', $this->page->context)) {
             $this->content->footer .= $renderer->admin_links($this->page->course->id);

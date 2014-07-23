@@ -65,6 +65,9 @@ class block_xp_settings_form extends moodleform {
         $mform->addElement('select', 'keeplogs', get_string('keeplogs', 'block_xp'), $options);
         $mform->setDefault('keeplogs', $defaultconfig->keeplogs);
 
+        $mform->addElement('selectyesno', 'enableladder', get_string('enableladder', 'block_xp'));
+        $mform->setDefault('enableladder', $defaultconfig->enableladder);
+
         $this->add_action_buttons();
     }
 
