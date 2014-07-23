@@ -43,17 +43,18 @@ $PAGE->set_title($strcoursereport);
 $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_url($url);
 
+// Some other stuff.
+$manager = block_xp_manager::get($courseid);
+$renderer = $PAGE->get_renderer('block_xp');
+
 $table = new block_xp_log_table('block_xp_log', $courseid);
 $table->define_baseurl($url);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strcoursereport);
 
-echo $table->out(50, true);
+echo $renderer->navigation($manager, 'log');
 
-echo html_writer::tag('p',
-    html_writer::link(new moodle_url('/blocks/xp/report.php', array('courseid' => $courseid)),
-        get_string('coursereport', 'block_xp'))
-);
+echo $table->out(50, true);
 
 echo $OUTPUT->footer();

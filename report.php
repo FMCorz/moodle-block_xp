@@ -45,10 +45,13 @@ $PAGE->set_title($strcoursereport);
 $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_url($url);
 
+// Some other stuff.
+$manager = block_xp_manager::get($courseid);
+$renderer = $PAGE->get_renderer('block_xp');
+
 // Reset all the data.
 if ($resetdata && confirm_sesskey()) {
     if ($confirm) {
-        $manager = block_xp_manager::get($courseid);
         $manager->reset_data();
         // Redirect to put the course ID back in the URL, otherwise refresh won't work.
         redirect($url);
@@ -67,15 +70,13 @@ if ($resetdata && confirm_sesskey()) {
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strcoursereport);
 
+echo $renderer->navigation($manager, 'report');
+
 $table = new block_xp_report_table('block_xp_report', $courseid);
 $table->define_baseurl($url);
 
 echo $table->out(10, true);
 
-echo html_writer::tag('p',
-    html_writer::link(new moodle_url('/blocks/xp/log.php', array('courseid' => $courseid)),
-        get_string('courselog', 'block_xp'))
-);
 echo html_writer::tag('p',
     html_writer::link(new moodle_url($url, array('resetdata' => 1, 'sesskey' => sesskey())),
         get_string('resetcoursedata', 'block_xp'))

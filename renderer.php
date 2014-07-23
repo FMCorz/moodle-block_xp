@@ -78,6 +78,52 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Outputs the navigation.
+     *
+     * @param block_xp_manager $manager The manager.
+     * @param string $page The page we are on.
+     * @return string The navigation.
+     */
+    public function navigation($manager, $page) {
+        $tabs = array();
+        $courseid = $manager->get_courseid();
+        $context = context_course::instance($courseid);
+
+        if ($manager->get_config('enableladder')) {
+            $tabs[] = new tabobject(
+                'ladder',
+                new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid)),
+                get_string('navladder', 'block_xp')
+            );
+        }
+
+        if (has_capability('block/xp:addinstance', $context)) {
+            $tabs[] = new tabobject(
+                'report',
+                new moodle_url('/blocks/xp/report.php', array('courseid' => $courseid)),
+                get_string('navreport', 'block_xp')
+            );
+            $tabs[] = new tabobject(
+                'log',
+                new moodle_url('/blocks/xp/log.php', array('courseid' => $courseid)),
+                get_string('navlog', 'block_xp')
+            );
+            $tabs[] = new tabobject(
+                'rules',
+                new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid)),
+                get_string('navsettings', 'block_xp')
+            );
+        }
+
+        // If there is only one page, then that is the page we are on.
+        if (count($tabs) == 1) {
+            return '';
+        }
+
+        return $this->tabtree($tabs, $page);
+    }
+
+    /**
      * Returns the links for the students.
      *
      * @param int $courseid The course ID.

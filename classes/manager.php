@@ -140,6 +140,15 @@ class block_xp_manager {
     }
 
     /**
+     * Return the current course ID.
+     *
+     * @return int The course ID.
+     */
+    public function get_courseid() {
+        return $this->courseid;
+    }
+
+    /**
      * Return the default configuration.
      *
      * @return stdClass Default config.
