@@ -110,6 +110,11 @@ class block_xp extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
+        // Hide the block to non-logged in users and guests.
+        if (!$USER->id || isguestuser()) {
+            return $this->content;
+        }
+
         $manager = block_xp_manager::get($this->page->course->id);
         $progress = $manager->get_progress_for_user($USER->id);
         $renderer = $this->page->get_renderer('block_xp');
