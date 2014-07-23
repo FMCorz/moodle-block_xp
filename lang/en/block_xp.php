@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['enablexpgain'] = 'Enable XP gain';
-$string['enablexpgain_help'] = 'This is the On/Off switch of the plugin in this course.';
+$string['enablexpgain_help'] = 'When set to \'No\', the students will no longer earn experience points in the course.';
 $string['configdescription'] = 'Description to append';
 $string['configheader'] = 'Settings';
 $string['configtitle'] = 'Title';
@@ -48,6 +48,7 @@ $string['ladder'] = 'Ladder';
 $string['level'] = 'Level';
 $string['levelcount'] = 'Level count';
 $string['levelup'] = 'Level up!';
+$string['logging'] = 'Logging';
 $string['pluginname'] = 'Level up!';
 $string['progress'] = 'Progress';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';

@@ -53,6 +53,8 @@ $form = new block_xp_settings_form($url, array('defaultconfig' => block_xp_manag
 
 if ($data = $form->get_data()) {
     $manager->update_config($data);
+} else {
+    $form->set_data((array) $manager->get_config());
 }
 
 echo $form->display();

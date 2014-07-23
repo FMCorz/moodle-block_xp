@@ -41,10 +41,11 @@ class block_xp_settings_form extends moodleform {
      */
     public function definition() {
         $mform = $this->_form;
+        $mform->setDisableShortforms(true);
 
         $defaultconfig = $this->_customdata['defaultconfig'];
 
-        $mform->addElement('checkbox', 'enabled', get_string('enablexpgain', 'block_xp'));
+        $mform->addElement('selectyesno', 'enabled', get_string('enablexpgain', 'block_xp'));
         $mform->setDefault('enabled', $defaultconfig->enabled);
         $mform->addHelpButton('enabled', 'enablexpgain', 'block_xp');
 
@@ -52,7 +53,12 @@ class block_xp_settings_form extends moodleform {
         $mform->setDefault('levels', $defaultconfig->levels);
         $mform->setType('levels', PARAM_INT);
 
-        $mform->addElement('checkbox', 'enablelog', get_string('enablelogging', 'block_xp'));
+        $mform->addElement('selectyesno', 'enableladder', get_string('enableladder', 'block_xp'));
+        $mform->setDefault('enableladder', $defaultconfig->enableladder);
+
+        $mform->addElement('header', 'hdrloggin', get_string('logging', 'block_xp'));
+
+        $mform->addElement('advcheckbox', 'enablelog', get_string('enablelogging', 'block_xp'));
         $mform->setDefault('enablelog', $defaultconfig->enablelog);
 
         $options = array(
@@ -64,9 +70,6 @@ class block_xp_settings_form extends moodleform {
         );
         $mform->addElement('select', 'keeplogs', get_string('keeplogs', 'block_xp'), $options);
         $mform->setDefault('keeplogs', $defaultconfig->keeplogs);
-
-        $mform->addElement('selectyesno', 'enableladder', get_string('enableladder', 'block_xp'));
-        $mform->setDefault('enableladder', $defaultconfig->enableladder);
 
         $this->add_action_buttons();
     }
