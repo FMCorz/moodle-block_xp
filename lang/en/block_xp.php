@@ -35,10 +35,14 @@ $string['coursesettings'] = 'Course settings';
 $string['customizelevels'] = 'Customize the levels';
 $string['description'] = 'Description';
 $string['enableinfos'] = 'Enable infos page';
+$string['enableinfos_help'] = 'When set to \'No\', students will not be able to view the infos page.';
 $string['enableladder'] = 'Enable the ladder';
+$string['enableladder_help'] = 'When set to \'No\', students will not be able to view the ladder.';
 $string['enablelogging'] = 'Enable logging';
 $string['enablexpgain'] = 'Enable XP gain';
-$string['enablexpgain_help'] = 'When set to \'No\', nobody will earn experience points in the course.';
+$string['enablexpgain_help'] = 'When set to \'No\', nobody will earn experience points in the course. This is useful to freeze the experience gained, or to enable it at a certain point in time.
+
+Please note that this can also be controlled more granularly using the capability \'block/xp:earnxp\'.';
 $string['errorformvalues'] = 'There are some issues in the form values, please fix them.';
 $string['errorlevelsincorrect'] = 'The minimum number of levels is 2';
 $string['errorxprequiredlowerthanpreviouslevel'] = 'The XP required is lower than or equal to the previous level.';
