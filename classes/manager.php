@@ -33,6 +33,12 @@ defined('MOODLE_INTERNAL') || die();
  */
 class block_xp_manager {
 
+    /** Default base for XP algo. */
+    const DEFAULT_BASE = 120;
+
+    /** Default coef for XP algo. */
+    const DEFAULT_COEF = 1.3;
+
     /** @var array Array of singletons. */
     protected static $instances;
 
@@ -49,6 +55,8 @@ class block_xp_manager {
         'enablelog' => 1,
         'keeplogs' => 3,
         'enableladder' => true,       // Enable the ladder.
+        'enableinfos' => true,        // Enable the infos page.
+        'levelsdata' => '',           // JSON encoded value of the levels data.
     );
 
     /** @var array Cache of levels and their required XP. */
@@ -106,11 +114,12 @@ class block_xp_manager {
     /**
      * Get an instance of the manager.
      *
-     * @param  int $courseid The course ID.
+     * @param int $courseid The course ID.
+     * @param bool $forcereload Force the reload of the singleton, to invalidate local cache.
      * @return block_xp_manager The instance of the manager.
      */
-    public static function get($courseid) {
-        if (!isset(self::$instances[$courseid])) {
+    public static function get($courseid, $forcereload = false) {
+        if ($forcereload || !isset(self::$instances[$courseid])) {
             self::$instances[$courseid] = new block_xp_manager($courseid);
         }
         return self::$instances[$courseid];
@@ -193,21 +202,56 @@ class block_xp_manager {
      * @return array level => xp required.
      */
     public function get_levels() {
-        $base = 120;
         if (empty($this->levels)) {
-            $list = array();
-            for ($i = 1; $i <= $this->get_level_count(); $i++) {
-                if ($i == 1) {
-                    $list[$i] = 0;
-                } else if ($i == 2) {
-                    $list[$i] = $base;
-                } else {
-                    $list[$i] = $base + round($list[$i - 1] * 1.3);
-                }
-            }
-            $this->levels = $list;
+            $eventsdata = $this->get_levels_data('levelsdata');
+            $this->levels = $eventsdata['xp'];
         }
         return $this->levels;
+    }
+
+    /**
+     * Get the levels data.
+     *
+     * @return array of levels data.
+     */
+    public function get_levels_data() {
+        $levelsdata = $this->get_config('levelsdata');
+        if ($levelsdata) {
+            $levelsdata = json_decode($levelsdata, true);
+            if ($levelsdata) {
+                return $levelsdata;
+            }
+        }
+
+        return array(
+            'usealgo' => 1,
+            'base' => block_xp_manager::DEFAULT_BASE,
+            'coef' => block_xp_manager::DEFAULT_COEF,
+            'xp' => self::get_levels_with_algo($this->get_level_count()),
+            'desc' => array()
+        );
+    }
+
+    /**
+     * Get the levels and their XP based on a simple algorithm.
+     *
+     * @param int $levelcount The number of levels.
+     * @param int $base The base XP required.
+     * @param float $coef The coefficient between levels.
+     * @return array level => xp required.
+     */
+    public static function get_levels_with_algo($levelcount, $base = self::DEFAULT_BASE, $coef = self::DEFAULT_COEF) {
+        $list = array();
+        for ($i = 1; $i <= $levelcount; $i++) {
+            if ($i == 1) {
+                $list[$i] = 0;
+            } else if ($i == 2) {
+                $list[$i] = $base;
+            } else {
+                $list[$i] = $base + round($list[$i - 1] * $coef);
+            }
+        }
+        return $list;
     }
 
     /**
@@ -376,7 +420,11 @@ class block_xp_manager {
         foreach ((array) $data as $key => $value) {
             if (in_array($key, array('id', 'courseid'))) {
                 continue;
-            } elseif (isset($config->{$key})) {
+            } elseif (property_exists($config, $key)) {
+                if (in_array($key, array('levelsdata'))) {
+                    // Some keys needs to be JSON encoded.
+                    $value = json_encode($value);
+                }
                 $config->{$key} = $value;
             }
         }

@@ -49,9 +49,8 @@ class block_xp_settings_form extends moodleform {
         $mform->setDefault('enabled', $defaultconfig->enabled);
         $mform->addHelpButton('enabled', 'enablexpgain', 'block_xp');
 
-        $mform->addElement('text', 'levels', get_string('levelcount', 'block_xp'));
-        $mform->setDefault('levels', $defaultconfig->levels);
-        $mform->setType('levels', PARAM_INT);
+        $mform->addElement('selectyesno', 'enableinfos', get_string('enableinfos', 'block_xp'));
+        $mform->setDefault('enableinfos', $defaultconfig->enableinfos);
 
         $mform->addElement('selectyesno', 'enableladder', get_string('enableladder', 'block_xp'));
         $mform->setDefault('enableladder', $defaultconfig->enableladder);
@@ -72,21 +71,6 @@ class block_xp_settings_form extends moodleform {
         $mform->setDefault('keeplogs', $defaultconfig->keeplogs);
 
         $this->add_action_buttons();
-    }
-
-    /**
-     * Data validate.
-     *
-     * @param array $data The data submitted.
-     * @param array $files The files submitted.
-     * @return array of errors.
-     */
-    public function validation($data, $files) {
-        $errors = array();
-        if ($data['levels'] < 2) {
-            $errors['levels'] = get_string('errorlevelsincorrect', 'block_xp');
-        }
-        return $errors;
     }
 
 }
