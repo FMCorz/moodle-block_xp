@@ -110,8 +110,12 @@ class block_xp extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        // Hide the block to non-logged in users and guests.
-        if (!$USER->id || isguestuser()) {
+        $context = $this->page->context;
+        $canearnxp = has_capability('block/xp:earnxp', $context);
+        $canedit = has_capability('block/xp:addinstance', $context);
+
+        // Hide the block to non-logged in users, guests and those who cannot earn XP or edit the block.
+        if (!$USER->id || isguestuser() || (!$canearnxp && !$canedit)) {
             return $this->content;
         }
 
@@ -129,7 +133,7 @@ class block_xp extends block_base {
 
         $this->content->footer .= $renderer->student_links($this->page->course->id, $manager->get_config('enableladder'));
 
-        if (has_capability('block/xp:addinstance', $this->page->context)) {
+        if (has_capability('block/xp:addinstance', $context)) {
             $this->content->footer .= $renderer->admin_links($this->page->course->id);
             if (!$manager->get_config('enabled')) {
                 $this->content->footer .= html_writer::tag('p',
