@@ -43,7 +43,7 @@ class block_xp_helper {
 
         if ($event->component === 'block_xp') {
             // Skip own events.
-        } else if (!$event->userid || isguestuser($event->userid)) {
+        } else if (!$event->userid || isguestuser($event->userid) || is_siteadmin($event->userid)) {
             // Skip non-logged in users and guests.
         } else if ($event->contextlevel !== CONTEXT_COURSE && $event->contextlevel !== CONTEXT_MODULE) {
             // Ignore events outside a course.
@@ -54,7 +54,7 @@ class block_xp_helper {
         } else if ($event->target === 'assessable' && in_array($event->action, array('submitted', 'uploaded'))) {
             // Skip those as they duplicate other more low level actions.
         } else if (!has_capability('block/xp:earnxp', $event->get_context(), $event->userid)) {
-            // Skip the events if the user does not have the capability to earn XP.
+            // Skip the events if the user does not have the capability to earn XP, or if it is the admin.
         } else {
             // Keep the event, and proceed.
             $manager = block_xp_manager::get($event->courseid);
