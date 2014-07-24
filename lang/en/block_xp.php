@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['enablexpgain'] = 'Enable XP gain';
-$string['enablexpgain_help'] = 'When set to \'No\', the students will no longer earn experience points in the course.';
+$string['enablexpgain_help'] = 'When set to \'No\', nobody will earn experience points in the course.';
 $string['configdescription'] = 'Description to append';
 $string['configheader'] = 'Settings';
 $string['configtitle'] = 'Title';
