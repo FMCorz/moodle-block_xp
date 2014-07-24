@@ -43,11 +43,11 @@ class block_xp_renderer extends plugin_renderer_base {
         return html_writer::tag('p',
             html_writer::link(
                 new moodle_url('/blocks/xp/report.php', array('courseid' => $courseid)),
-                get_string('coursereport', 'block_xp'))
+                get_string('navreport', 'block_xp'))
             . ' - '
             . html_writer::link(
                 new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid)),
-                get_string('coursesettings', 'block_xp'))
+                get_string('navsettings', 'block_xp'))
             , array('class' => 'admin-links')
         );
     }
