@@ -24,8 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['enablexpgain'] = 'Enable XP gain';
-$string['enablexpgain_help'] = 'When set to \'No\', nobody will earn experience points in the course.';
 $string['configdescription'] = 'Description to append';
 $string['configheader'] = 'Settings';
 $string['configtitle'] = 'Title';
@@ -34,6 +32,8 @@ $string['coursereport'] = 'Course report';
 $string['coursesettings'] = 'Course settings';
 $string['enableladder'] = 'Enable the ladder';
 $string['enablelogging'] = 'Enable logging';
+$string['enablexpgain'] = 'Enable XP gain';
+$string['enablexpgain_help'] = 'When set to \'No\', nobody will earn experience points in the course.';
 $string['errorlevelsincorrect'] = 'The minimum number of levels is 2';
 $string['event_user_leveledup'] = 'User leveled up';
 $string['eventname'] = 'Event name';
@@ -62,4 +62,5 @@ $string['resetcoursedata'] = 'Reset course data';
 $string['viewtheladder'] = 'View the ladder';
 $string['xp'] = 'Experience points';
 $string['xp:addinstance'] = 'Add a new XP block';
+$string['xp:earnxp'] = 'Earning experience points';
 $string['xpgaindisabled'] = 'XP gain disabled';
