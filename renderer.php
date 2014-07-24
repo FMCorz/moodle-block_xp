@@ -97,7 +97,7 @@ class block_xp_renderer extends plugin_renderer_base {
                 get_string('navinfos', 'block_xp')
             );
         }
-        if ($manager->get_config('enableladder')) {
+        if ($manager->get_config('enableladder') || $canedit) {
             $tabs[] = new tabobject(
                 'ladder',
                 new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid)),
@@ -143,22 +143,26 @@ class block_xp_renderer extends plugin_renderer_base {
      * @return string HTML produced.
      */
     public function student_links($courseid, $enableladder, $enableinfos) {
-        $html = array();
+        $html = '';
+        $links = array();
+
         if ($enableinfos) {
-            $html[] = html_writer::link(
+            $links[] = html_writer::link(
                 new moodle_url('/blocks/xp/infos.php', array('courseid' => $courseid)),
                 get_string('infos', 'block_xp')
             );
         }
         if ($enableladder) {
-            $html[] = html_writer::link(
+            $links[] = html_writer::link(
                 new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid)),
                 get_string('viewtheladder', 'block_xp')
             );
         }
-        if (!empty($html)) {
-            $html = html_writer::tag('p', implode(' - ', $html), array('class' => 'student-links'));
+
+        if (!empty($links)) {
+            $html = html_writer::tag('p', implode(' - ', $links), array('class' => 'student-links'));
         }
+
         return $html;
     }
 
