@@ -95,6 +95,21 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2014072402, 'xp');
     }
 
+    if ($oldversion < 2014072403) {
+
+        // Define index courseid (unique) to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $index = new xmldb_index('courseid', XMLDB_INDEX_UNIQUE, array('courseid'));
+
+        // Conditionally launch add index courseid.
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2014072403, 'xp');
+    }
+
     return true;
 
 }

@@ -52,6 +52,9 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="courseid" UNIQUE="true" FIELDS="courseid"/>
+      </INDEXES>
     </TABLE>
   </TABLES>
 </XMLDB>
