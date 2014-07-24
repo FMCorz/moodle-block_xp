@@ -78,8 +78,8 @@ $table->define_baseurl($url);
 echo $table->out(10, true);
 
 echo html_writer::tag('p',
-    html_writer::link(new moodle_url($url, array('resetdata' => 1, 'sesskey' => sesskey())),
-        get_string('resetcoursedata', 'block_xp'))
+    $OUTPUT->single_button(new moodle_url($url, array('resetdata' => 1, 'sesskey' => sesskey())),
+        get_string('resetcoursedata', 'block_xp'), 'get')
 );
 
 echo $OUTPUT->footer();
