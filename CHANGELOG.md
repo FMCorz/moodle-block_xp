@@ -1,6 +1,18 @@
 Changelog
 =========
 
+v1.2
+----
+
+- Events are not captured for guests and non-logged in users
+- Added a ladder page to display their rank to the students
+- New capability controlling who earns XP
+- Admin users do not earn XP any more
+- Customising the levels and the required XP
+- New info page displaying the levels, a description and the XP required
+- Ability to edit the XP of a user
+
+
 v1.1
 ----
 
