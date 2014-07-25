@@ -25,7 +25,9 @@
 require(__DIR__ . '/../../config.php');
 
 $courseid = required_param('courseid', PARAM_INT);
+$userid = optional_param('userid', null, PARAM_INT);
 $resetdata = optional_param('resetdata', 0, PARAM_INT);
+$action = optional_param('action', null, PARAM_ALPHA);
 $confirm = optional_param('confirm', 0, PARAM_INT);
 
 require_login($courseid);
@@ -36,6 +38,9 @@ require_capability('block/xp:addinstance', $context);
 
 // Some stuff.
 $url = new moodle_url('/blocks/xp/report.php', array('courseid' => $courseid));
+if ($action) {
+    $url->param('action', $action);
+}
 $strcoursereport = get_string('coursereport', 'block_xp');
 
 // Page info.
@@ -72,6 +77,23 @@ echo $OUTPUT->heading($strcoursereport);
 
 echo $renderer->navigation($manager, 'report');
 
+// Editing a user.
+if ($action == 'edit' && !empty($userid)) {
+    $user = core_user::get_user($userid);
+    echo $OUTPUT->heading(fullname($user), 3);
+
+    $progress = $manager->get_progress_for_user($userid);
+    $form = new block_xp_user_edit_form($url);
+    $form->set_data(array('userid' => $userid, 'level' => $progress->level, 'xp' => $progress->xp));
+
+    if ($data = $form->get_data()) {
+        $manager->reset_user_xp($userid, $data->xp);
+    } else {
+        $form->display();
+    }
+}
+
+// Displaying the report.
 $table = new block_xp_report_table('block_xp_report', $courseid);
 $table->define_baseurl($url);
 

@@ -409,6 +409,37 @@ class block_xp_manager {
     }
 
     /**
+     * Reset the XP of a user to something.
+     *
+     * This will automatically recalculate the user's level, but will
+     * not trigger an event in case of level up or down.
+     *
+     * @param int $userid The user ID.
+     * @param int $xp The amount of XP.
+     * @return void
+     */
+    public function reset_user_xp($userid, $xp = 0) {
+        global $DB;
+
+        if ($record = $DB->get_record('block_xp', array('courseid' => $this->courseid, 'userid' => $userid))) {
+            $record->xp = $xp;
+            $DB->update_record('block_xp', $record);
+        } else {
+            $record = new stdClass();
+            $record->courseid = $this->courseid;
+            $record->userid = $userid;
+            $record->xp = $xp;
+            $record->lvl = 1;
+            $DB->insert_record('block_xp', $record);
+        }
+
+        $oldtriggerevents = $this->triggereevents;
+        $this->triggereevents = false;
+        $this->update_user_level($userid, $record->xp, $record->lvl);
+        $this->triggereevents = $oldtriggerevents;
+    }
+
+    /**
      * Update the configuration.
      *
      * @param stdClass $data An object containing the data.

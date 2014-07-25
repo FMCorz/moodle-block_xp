@@ -62,7 +62,8 @@ class block_xp_report_table extends table_sql {
             'fullname',
             'lvl',
             'xp',
-            'progress'
+            'progress',
+            'actions'
         ));
         $this->define_headers(array(
             '',
@@ -70,6 +71,7 @@ class block_xp_report_table extends table_sql {
             get_string('level', 'block_xp'),
             get_string('xp', 'block_xp'),
             get_string('progress', 'block_xp'),
+            ''
         ));
 
         // Define SQL.
@@ -84,6 +86,22 @@ class block_xp_report_table extends table_sql {
         $this->no_sorting('userpic');
         $this->no_sorting('progress');
         $this->collapsible(false);
+    }
+
+    /**
+     * Formats the column actions.
+     *
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
+    protected function col_actions($row) {
+        global $OUTPUT;
+        $url = new moodle_url('/blocks/xp/report.php', array(
+            'courseid' => $this->xpmanager->get_courseid(),
+            'action' => 'edit',
+            'userid' => $row->userid
+        ));
+        return $OUTPUT->action_icon($url, new pix_icon('t/edit', get_string('edit')));
     }
 
     /**
