@@ -63,11 +63,6 @@ class block_xp extends block_base {
      * @return void
      */
     public function init() {
-        if (!empty($this->config->title)) {
-            $this->title = $this->config->title;
-        } else {
-            $this->title = get_string('levelup', 'block_xp');
-        }
     }
 
     /**
@@ -143,6 +138,22 @@ class block_xp extends block_base {
         }
 
         return $this->content;
+    }
+
+    /**
+     * Specialization.
+     *
+     * Happens right after the initialisation is complete.
+     *
+     * @return void
+     */
+    public function specialization() {
+        parent::specialization();
+        if (!empty($this->config->title)) {
+            $this->title = $this->config->title;
+        } else {
+            $this->title = get_string('levelup', 'block_xp');
+        }
     }
 
 }
