@@ -63,6 +63,7 @@ class block_xp extends block_base {
      * @return void
      */
     public function init() {
+        $this->title = '';
     }
 
     /**
