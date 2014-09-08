@@ -35,7 +35,7 @@ $context = context_course::instance($courseid);
 require_capability('block/xp:addinstance', $context);
 
 // Some stuff.
-$url = new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid));
+$url = new moodle_url('/blocks/xp/config.php', array('courseid' => $courseid));
 $strcoursesettings = get_string('coursesettings', 'block_xp');
 
 // Page info.
@@ -58,7 +58,7 @@ if ($data = $form->get_data()) {
     $form->set_data((array) $manager->get_config());
 }
 
-echo $renderer->navigation($manager, 'rules');
+echo $renderer->navigation($manager, 'config');
 
 echo $form->display();
 
