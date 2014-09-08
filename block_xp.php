@@ -96,7 +96,7 @@ class block_xp extends block_base {
      * @return stdClass
      */
     public function get_content() {
-        global $DB, $USER;
+        global $DB, $PAGE, $USER;
 
         if (isset($this->content)) {
             return $this->content;
@@ -136,6 +136,29 @@ class block_xp extends block_base {
                 $this->content->footer .= html_writer::tag('p',
                     html_writer::tag('small', get_string('xpgaindisabled', 'block_xp')), array('class' => 'alert alert-warning'));
             }
+        }
+
+        // We should be congratulating the user because they leveled up!
+        if (get_user_preferences($manager::USERPREF_NOTIFY, false)) {
+            $args = array(
+                'badge' => $renderer->current_level($progress),
+                'headline' => get_string('youreachedlevela', 'block_xp', $progress->level),
+                'level' => $progress->level,
+            );
+
+            $PAGE->requires->yui_module('moodle-block_xp-notification', 'Y.M.block_xp.Notification.init', array($args));
+            $PAGE->requires->strings_for_js(
+                array(
+                    'coolthanks',
+                    'congratulationsyouleveledup',
+                ),
+                'block_xp'
+            );
+
+            // Reset the value of the user preference. We could potentially do that from JS so that if
+            // the user does not stay on the page long enough they'd be notified the next time they access
+            // the course page, but that's probably an overkill for now.
+            unset_user_preference($manager::USERPREF_NOTIFY);
         }
 
         return $this->content;

@@ -39,6 +39,9 @@ class block_xp_manager {
     /** Default coef for XP algo. */
     const DEFAULT_COEF = 1.3;
 
+    /** User preference key storing if we should notify a user for his level up */
+    const USERPREF_NOTIFY = 'block_xp_notify_level_up';
+
     /** @var array Array of singletons. */
     protected static $instances;
 
@@ -506,6 +509,11 @@ class block_xp_manager {
                 $event = \block_xp\event\user_leveledup::create($params);
                 $event->trigger();
             }
+        }
+
+        if ($level > $lvl && $this->get_config('enablelevelupnotif')) {
+            // Level up, and we want to notify the user.
+            set_user_preference(self::USERPREF_NOTIFY, 1, $userid);
         }
     }
 

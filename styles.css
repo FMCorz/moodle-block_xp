@@ -77,3 +77,24 @@
 .path-blocks-xp table .highlight > td{
     background-color: #D9EDF7 !important;
 }
+
+/**
+ * Notification dialogue.
+ */
+
+.block_xp-notification-hidden {
+    display: none;
+}
+.block_xp-notification .moodle-dialogue-bd,
+.block_xp-notification .moodle-dialogue-ft {
+    text-align: center !important;
+}
+.block_xp-notification .level-headline {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+.block_xp-notification .moodle-dialogue-ft button {
+    /* Helps centering the button in the dialogue */
+    margin-left: 0;
+    margin-right: 0;
+}
