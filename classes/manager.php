@@ -57,6 +57,7 @@ class block_xp_manager {
         'enableladder' => true,       // Enable the ladder.
         'enableinfos' => true,        // Enable the infos page.
         'levelsdata' => '',           // JSON encoded value of the levels data.
+        'enablelevelupnotif' => true  // Enable the levle up notification.
     );
 
     /** @var array Cache of levels and their required XP. */

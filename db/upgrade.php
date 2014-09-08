@@ -110,6 +110,22 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2014072403, 'xp');
     }
 
+    if ($oldversion < 2014090800) {
+
+        // Define field enablelevelupnotif to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('enablelevelupnotif', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'levelsdata');
+
+        // Conditionally launch add field enablelevelupnotif.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2014090800, 'xp');
+    }
+
+
     return true;
 
 }

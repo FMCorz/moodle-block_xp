@@ -45,6 +45,8 @@ class block_xp_settings_form extends moodleform {
 
         $defaultconfig = $this->_customdata['defaultconfig'];
 
+        $mform->addElement('header', 'hdrgeneral', get_string('general'));
+
         $mform->addElement('selectyesno', 'enabled', get_string('enablexpgain', 'block_xp'));
         $mform->setDefault('enabled', $defaultconfig->enabled);
         $mform->addHelpButton('enabled', 'enablexpgain', 'block_xp');
@@ -56,6 +58,10 @@ class block_xp_settings_form extends moodleform {
         $mform->addElement('selectyesno', 'enableladder', get_string('enableladder', 'block_xp'));
         $mform->setDefault('enableladder', $defaultconfig->enableladder);
         $mform->addHelpButton('enableladder', 'enableladder', 'block_xp');
+
+        $mform->addElement('selectyesno', 'enablelevelupnotif', get_string('enablelevelupnotif', 'block_xp'));
+        $mform->setDefault('enablelevelupnotif', $defaultconfig->enablelevelupnotif);
+        $mform->addHelpButton('enablelevelupnotif', 'enablelevelupnotif', 'block_xp');
 
         $mform->addElement('header', 'hdrloggin', get_string('logging', 'block_xp'));
 

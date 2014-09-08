@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/xp/db" VERSION="20140723" COMMENT="XMLDB file for Moodle blocks/xp"
+<XMLDB PATH="blocks/xp/db" VERSION="20140907" COMMENT="XMLDB file for Moodle blocks/xp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -48,6 +48,7 @@
         <FIELD NAME="enableladder" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Enable the ladder"/>
         <FIELD NAME="enableinfos" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Enable the infos page"/>
         <FIELD NAME="levelsdata" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The data related to the levels"/>
+        <FIELD NAME="enablelevelupnotif" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Enable the notification when a user levels up."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
