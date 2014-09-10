@@ -122,6 +122,11 @@ class block_xp_renderer extends plugin_renderer_base {
                 get_string('navlevels', 'block_xp')
             );
             $tabs[] = new tabobject(
+                'rules',
+                new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid)),
+                get_string('navrules', 'block_xp')
+            );
+            $tabs[] = new tabobject(
                 'config',
                 new moodle_url('/blocks/xp/config.php', array('courseid' => $courseid)),
                 get_string('navsettings', 'block_xp')

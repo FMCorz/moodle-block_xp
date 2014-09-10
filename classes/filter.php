@@ -96,12 +96,64 @@ class block_xp_filter {
     protected function __construct() {}
 
     /**
+     * Delete the rule.
+     *
+     * @return void
+     */
+    public function delete() {
+        global $DB;
+        if (!$this->id) {
+            throw new coding_exception('ID of the filter is unknown.');
+        }
+        $DB->delete_records('block_xp_filters', array('id' => $this->id));
+    }
+
+    /**
+     * Return whether or not the filter is editable.
+     *
+     * @return boolean
+     */
+    public function is_editable() {
+        return $this->editable;
+    }
+
+    /**
+     * Return the ID.
+     *
+     * @return int
+     */
+    public function get_id() {
+        return $this->id;
+    }
+
+    /**
      * Return the points.
      *
      * @return int points.
      */
     public function get_points() {
         return $this->points;
+    }
+
+    /**
+     * Return the rule object.
+     *
+     * @return block_xp_rule
+     */
+    public function get_rule() {
+        if (!$this->rule) {
+            $this->load_rule();
+        }
+        return $this->rule;
+    }
+
+    /**
+     * Return the sortorder.
+     *
+     * @return int
+     */
+    public function get_sortorder() {
+        return $this->sortorder;
     }
 
     /**
@@ -178,6 +230,15 @@ class block_xp_filter {
     }
 
     /**
+     * Set the points.
+     *
+     * @param int $points
+     */
+    public function set_points($points) {
+        $this->points = $points;
+    }
+
+    /**
      * Overrides the rule of the filter.
      *
      * @param block_xp_rule $rule
@@ -187,4 +248,12 @@ class block_xp_filter {
         $this->ruledata = json_encode($rule->export());
     }
 
+    /**
+     * Set the sortorder.
+     *
+     * @param int $sortorder
+     */
+    public function set_sortorder($sortorder) {
+        $this->sortorder = $sortorder;
+    }
 }

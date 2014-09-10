@@ -52,12 +52,16 @@ class block_xp_filter_manager {
     /**
      * Get all the filter objects.
      *
+     * Positive indexes are user filters, negatives are static ones.
+     * Do not reorder this array, it is ordered by priority.
+     *
      * @return array of fitlers.
      */
     public function get_all_filters() {
         $filters = $this->get_user_filters();
+        $i = -1;
         foreach (self::get_static_filters() as $filter) {
-            $filters[] = $filter;
+            $filters[$i--] = $filter;
         }
         return $filters;
     }
@@ -87,15 +91,15 @@ class block_xp_filter_manager {
         $c = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
         $r = new block_xp_rule_property(block_xp_rule_base::EQ, 'r', 'crud');
         $u = new block_xp_rule_property(block_xp_rule_base::EQ, 'u', 'crud');
-        $data = array('rule' => $d, 'points' => 0, 'editable' => false);
-        $fd = block_xp_filter::load_from_data($data);
         $data = array('rule' => $c, 'points' => 45, 'editable' => false);
         $fc = block_xp_filter::load_from_data($data);
         $data = array('rule' => $r, 'points' => 9, 'editable' => false);
         $fr = block_xp_filter::load_from_data($data);
         $data = array('rule' => $u, 'points' => 3, 'editable' => false);
         $fu = block_xp_filter::load_from_data($data);
-        return array($fd, $fc, $fr, $fu);
+        $data = array('rule' => $d, 'points' => 0, 'editable' => false);
+        $fd = block_xp_filter::load_from_data($data);
+        return array($fc, $fr, $fu, $fd);
     }
 
     /**
@@ -109,7 +113,7 @@ class block_xp_filter_manager {
             'sortorder ASC, id ASC');
         $filters = array();
         foreach ($results as $key => $filter) {
-            $filters[] = block_xp_filter::load_from_data($filter);
+            $filters[$filter->id] = block_xp_filter::load_from_data($filter);
         }
         $results->close();
         return $filters;

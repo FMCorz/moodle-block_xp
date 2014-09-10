@@ -98,3 +98,26 @@
     margin-left: 0;
     margin-right: 0;
 }
+
+/**
+ * Rules pages.
+ */
+#page-blocks-xp-rules .femptylabel .fitemtitle {
+    display: none;
+}
+#page-blocks-xp-rules .femptylabel .felement {
+    margin-left: 0;
+    margin-right: 0;
+}
+#page-blocks-xp-rules .felement .sortorder,
+.dir-rtl#page-blocks-xp-rules .felement .pts {
+    margin-right: 2em;
+}
+#page-blocks-xp-rules .felement .pts,
+.dir-rtl#page-blocks-xp-rules .felement .sortorder {
+    margin-left: 2em;
+    margin-right: 0;
+}
+#page-blocks-xp-rules .felement .pts:before {
+    content: ' = ';
+}
