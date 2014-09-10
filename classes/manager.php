@@ -63,6 +63,9 @@ class block_xp_manager {
         'enablelevelupnotif' => true  // Enable the levle up notification.
     );
 
+    /** @var block_xp_filter_manager Cache of the manager. */
+    protected $filtermanager;
+
     /** @var array Cache of levels and their required XP. */
     protected $levels;
 
@@ -168,6 +171,18 @@ class block_xp_manager {
      */
     public static function get_default_config() {
         return (object) self::$configdefaults;
+    }
+
+    /**
+     * Get the filter manager.
+     *
+     * @return block_xp_filter_manager
+     */
+    public function get_filter_manager() {
+        if (!$this->filtermanager) {
+            $this->filtermanager = new block_xp_filter_manager($this);
+        }
+        return $this->filtermanager;
     }
 
     /**
@@ -295,19 +310,8 @@ class block_xp_manager {
      * @return int XP points.
      */
     public function get_xp_from_event(\core\event\base $event) {
-        $points = 0;
-        switch ($event->crud) {
-            case 'c':
-                $points = 45;
-                break;
-            case 'r':
-                $points = 9;
-                break;
-            case 'u':
-                $points = 3;
-                break;
-        }
-        return $points;
+        $fm = $this->get_filter_manager();
+        return $fm->get_points_for_event($event);
     }
 
     /**

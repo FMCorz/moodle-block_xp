@@ -125,6 +125,32 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2014090800, 'xp');
     }
 
+    if ($oldversion < 2014090900) {
+
+        // Define table block_xp_filters to be created.
+        $table = new xmldb_table('block_xp_filters');
+
+        // Adding fields to table block_xp_filters.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('ruledata', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+        $table->add_field('points', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('sortorder', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table block_xp_filters.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Adding indexes to table block_xp_filters.
+        $table->add_index('courseid', XMLDB_INDEX_NOTUNIQUE, array('courseid'));
+
+        // Conditionally launch create table for block_xp_filters.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2014090900, 'xp');
+    }
 
     return true;
 

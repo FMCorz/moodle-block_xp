@@ -15,18 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Block XP test event fixtures.
  *
- * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @package    core
+ * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\event;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2014090900;
-$plugin->requires   = 2014041500;
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '1.3-dev';
-$plugin->cron       = 84600;
+class something_happened extends \core\event\base {
+    public function init() {
+        $this->context = \context_system::instance();
+    }
+    public static function mock($properties) {
+        $event = static::create(array());
+        foreach ($properties as $key => $value) {
+            $event->data[$key] = $value;
+        }
+        return $event;
+    }
+}
+
