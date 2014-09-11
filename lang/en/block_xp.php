@@ -37,6 +37,7 @@ $string['courselog'] = 'Course log';
 $string['coursereport'] = 'Course report';
 $string['courserules'] = 'Course rules';
 $string['coursesettings'] = 'Course settings';
+$string['createnewrulefromthisevent'] = 'Create new rule from this event';
 $string['customizelevels'] = 'Customize the levels';
 $string['defaultrulesformhelp'] = 'Those are the default rules provided by the plugin, they automatically give default experience points and ignore some redundant events. Custom rules take precedence over them.';
 $string['description'] = 'Description';

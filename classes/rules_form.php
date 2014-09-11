@@ -37,23 +37,30 @@ class block_xp_rules_form extends moodleform {
     /**
      * Add a group element for the filter.
      *
+     * This helper got messy...
+     *
      * @param block_xp_filter $filter The filter to use, or null to add a filter.
+     * @param block_xp_filter $newfilter The filter to use to populate the new filter.
      * @return void
      */
-    protected function create_group($filter = null) {
+    protected function create_group($filter = null, $newfilter = null) {
         static $noneditableid = -1;
         static $newfilterid = 1;
 
         $mform = $this->_form;
         $static = false;
-        $points = 0;
-        $sortorder = 0;
+        $points = $newfilter ? $newfilter->get_points() : 0;
+        $sortorder = $newfilter ? $newfilter->get_sortorder() : 0;
         $ruledata = array(
             'property' => '',
             'compare' => 'eq',
             'value' => ''
         );
         $name = 'newfilter[' . $newfilterid++ . ']';
+
+        if (!$filter && $newfilter) {
+            $ruledata = $newfilter->get_rule()->export();
+        }
 
         if ($filter) {
             $static = !$filter->is_editable();
@@ -120,7 +127,15 @@ class block_xp_rules_form extends moodleform {
         // Add empty rule.
         $mform->addElement('header', 'newhdr', 'Add new rules');
         $mform->addElement('static', '', '', get_string('addrulesformhelp', 'block_xp'));
-        $this->create_group();
+
+        if ($this->_customdata['add']) {
+            $filteradd = block_xp_filter::load_from_data(array(
+                'rule' => new block_xp_rule_property(block_xp_rule_base::EQ, $this->_customdata['add'], 'eventname')
+            ));
+            $this->create_group(null, $filteradd);
+        } else {
+            $this->create_group();
+        }
         $this->create_group();
         $this->create_group();
 

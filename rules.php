@@ -25,6 +25,7 @@
 require(__DIR__ . '/../../config.php');
 
 $courseid = required_param('courseid', PARAM_INT);
+$add = optional_param('add', null, PARAM_RAW);
 
 require_login($courseid);
 $context = context_course::instance($courseid);
@@ -48,8 +49,14 @@ $manager = block_xp_manager::get($courseid);
 $filtermanager = $manager->get_filter_manager();
 $userfilters = $filtermanager->get_user_filters();
 
+// Check for $add.
+if ($add !== preg_replace('/[^a-z0-9_\\\\]/', '', $add)) {
+    // Invalid event.
+    $add = null;
+}
+
 $form = new block_xp_rules_form($url, array('filters' => $userfilters,
-    'staticfilters' => block_xp_filter_manager::get_static_filters()));
+    'staticfilters' => block_xp_filter_manager::get_static_filters(), 'add' => $add));
 
 if ($data = $form->get_data()) {
 
