@@ -98,10 +98,13 @@ class block_xp_filter_manager {
         $u = new block_xp_rule_property(block_xp_rule_base::EQ, 'u', 'crud');
 
         // Skip those as they duplicate other more low level actions.
+        $dsc = new block_xp_rule_property(block_xp_rule_base::EQ, '\mod_forum\event\discussion_subscription_created', 'eventname');
         $as = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_submitted', 'eventname');
         $au = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_uploaded', 'eventname');
 
         $list = array();
+        $data = array('rule' => $dsc, 'points' => 0, 'editable' => false);
+        $list[] = block_xp_filter::load_from_data($data);
         $data = array('rule' => $as, 'points' => 0, 'editable' => false);
         $list[] = block_xp_filter::load_from_data($data);
         $data = array('rule' => $au, 'points' => 0, 'editable' => false);
