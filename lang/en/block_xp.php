@@ -109,7 +109,8 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
 <p>Finally, please note that the plugin always ignores:
 <ul>
     <li>The actions performed by administrators, guests or non-logged in users.</li>
-    <li>And the events of educational level not equal to \'Participating\'.</li>
+    <li>The actions performed by users not having the capability <em>block/xp:earnxp</em>.</li>
+    <li>And the events of educational level not equal to <em>Participating</em>.</li>
 </ul>
 </p>';
 $string['value'] = 'Value';
