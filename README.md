@@ -41,6 +41,8 @@ The following events are always __ignored__:
 
 The rest is up to you. By default the plugin comes with a minimal set of rules to attribute experience points to actions, and to ignore some redundant ones. Visit the _Rules_ page in the plugin itself to view or override them.
 
+_Note_: Repeated actions within a short time interval are ignored to prevent cheating.
+
 Restricting access based on students' levels
 --------------------------------------------
 

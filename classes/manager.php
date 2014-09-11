@@ -83,6 +83,46 @@ class block_xp_manager {
     }
 
     /**
+     * Check wether or not the user can capture this event.
+     *
+     * This method is there to prevent a user from refreshing a page
+     * 200x times to get more experience points. For simplicity, and performance
+     * reason, this does not handle multiple sessions at the same time.
+     *
+     * This method has not been designed to check if the user has capabilities
+     * to capture the event or not, those checks should be done in the observer
+     * for performance reasons.
+     *
+     * @return bool True when the event is OK.
+     */
+    protected function can_capture_event(\core\event\base $event) {
+        global $SESSION;
+
+        // Init the session variable.
+        if (!isset($SESSION->block_xp_buffer)) {
+            $SESSION->block_xp_buffer = array();
+        }
+
+        // Check if the user is trying to trick the system by reloading a page.
+        $key = $event->eventname . ':' . $event->contextid;
+        if (isset($SESSION->block_xp_buffer[$key])) {
+            if ($SESSION->block_xp_buffer[$key] > time() - 30) {
+                // A very similar event occured less than 30 seconds ago, we will ignore it.
+                return false;
+            }
+            // Unset the value to re-add it at the end of the array.
+            unset($SESSION->block_xp_buffer[$key]);
+        }
+
+        // Log the time at which this event happened.
+        $SESSION->block_xp_buffer[$key] = time();
+
+        // Limit the array of events to 10, we do not want to flood the session for no reason.
+        $SESSION->block_xp_buffer = array_slice($SESSION->block_xp_buffer, -10, null, true);
+        return true;
+    }
+
+    /**
      * Capture an event.
      *
      * @param \core\event\base $event The event.
@@ -97,6 +137,11 @@ class block_xp_manager {
 
         // The capture has not been enabled yet.
         if (!$this->is_enabled()) {
+            return;
+        }
+
+        // Check if the user can capture this event, anti cheater method.
+        if (!$this->can_capture_event($event)) {
             return;
         }
 
