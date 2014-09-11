@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v1.3
+----
+
+- Notification popup when a student levels up
+- Ability to customise the XP gained with rules
+
 v1.2
 ----
 
