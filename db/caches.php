@@ -15,18 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Cache definitions.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2014091100;
-$plugin->requires   = 2014041500;
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '1.3-dev';
-$plugin->cron       = 84600;
+$definitions = array(
+    'filters' => array(
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'staticacceleration' => true
+    )
+);

@@ -58,10 +58,15 @@ class block_xp_filter_manager {
      * @return array of fitlers.
      */
     public function get_all_filters() {
-        $filters = $this->get_user_filters();
-        $i = -1;
-        foreach (self::get_static_filters() as $filter) {
-            $filters[$i--] = $filter;
+        $cache = cache::make('block_xp', 'filters');
+        $key = 'filters_' . $this->manager->get_courseid();
+        if (false === ($filters = $cache->get($key))) {
+            $filters = $this->get_user_filters();
+            $i = -1;
+            foreach (self::get_static_filters() as $filter) {
+                $filters[$i--] = $filter;
+            }
+            $cache->set($key, $filters);
         }
         return $filters;
     }
@@ -127,5 +132,15 @@ class block_xp_filter_manager {
         }
         $results->close();
         return $filters;
+    }
+
+    /**
+     * Invalidate the filters cache.
+     *
+     * @return void
+     */
+    public function invalidate_filters_cache() {
+        $cache = cache::make('block_xp', 'filters');
+        $cache->delete('filters_' . $this->manager->get_courseid());
     }
 }

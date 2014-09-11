@@ -45,9 +45,10 @@ $PAGE->set_url($url);
 
 $renderer = $PAGE->get_renderer('block_xp');
 $manager = block_xp_manager::get($courseid);
-$filters = $manager->get_filter_manager()->get_user_filters();
+$filtermanager = $manager->get_filter_manager();
+$userfilters = $filtermanager->get_user_filters();
 
-$form = new block_xp_rules_form($url, array('filters' => $filters,
+$form = new block_xp_rules_form($url, array('filters' => $userfilters,
     'staticfilters' => block_xp_filter_manager::get_static_filters()));
 
 if ($data = $form->get_data()) {
@@ -71,10 +72,10 @@ if ($data = $form->get_data()) {
     // Existing rules.
     if (isset($data->filter)) {
         foreach ($data->filter as $id => $values) {
-            if ($id < 1 || !isset($filters[$id])) {
+            if ($id < 1 || !isset($userfilters[$id])) {
                 continue;
             }
-            $filter = $filters[$id];
+            $filter = $userfilters[$id];
 
             if (empty($values['value']) && !is_numeric($values['value'])) {
                 $filter->delete();
@@ -87,6 +88,8 @@ if ($data = $form->get_data()) {
             }
         }
     }
+
+    $filtermanager->invalidate_filters_cache();
 
     redirect($url);
 }
