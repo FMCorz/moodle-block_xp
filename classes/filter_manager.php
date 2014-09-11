@@ -91,15 +91,25 @@ class block_xp_filter_manager {
         $c = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
         $r = new block_xp_rule_property(block_xp_rule_base::EQ, 'r', 'crud');
         $u = new block_xp_rule_property(block_xp_rule_base::EQ, 'u', 'crud');
+
+        // Skip those as they duplicate other more low level actions.
+        $as = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_submitted', 'eventname');
+        $au = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_uploaded', 'eventname');
+
+        $list = array();
+        $data = array('rule' => $as, 'points' => 0, 'editable' => false);
+        $list[] = block_xp_filter::load_from_data($data);
+        $data = array('rule' => $au, 'points' => 0, 'editable' => false);
+        $list[] = block_xp_filter::load_from_data($data);
         $data = array('rule' => $c, 'points' => 45, 'editable' => false);
-        $fc = block_xp_filter::load_from_data($data);
+        $list[] = block_xp_filter::load_from_data($data);
         $data = array('rule' => $r, 'points' => 9, 'editable' => false);
-        $fr = block_xp_filter::load_from_data($data);
+        $list[] = block_xp_filter::load_from_data($data);
         $data = array('rule' => $u, 'points' => 3, 'editable' => false);
-        $fu = block_xp_filter::load_from_data($data);
+        $list[] = block_xp_filter::load_from_data($data);
         $data = array('rule' => $d, 'points' => 0, 'editable' => false);
-        $fd = block_xp_filter::load_from_data($data);
-        return array($fc, $fr, $fu, $fd);
+        $list[] = block_xp_filter::load_from_data($data);
+        return $list;
     }
 
     /**

@@ -49,10 +49,6 @@ class block_xp_helper {
             // Ignore events outside a course.
         } else if ($event->edulevel !== \core\event\base::LEVEL_PARTICIPATING) {
             // Ignore events that are not participating.
-        } else if ($event->crud === 'd') {
-            // Ignore events that delete content.
-        } else if ($event->target === 'assessable' && in_array($event->action, array('submitted', 'uploaded'))) {
-            // Skip those as they duplicate other more low level actions.
         } else if (!has_capability('block/xp:earnxp', $event->get_context(), $event->userid)) {
             // Skip the events if the user does not have the capability to earn XP, or if it is the admin.
         } else {
