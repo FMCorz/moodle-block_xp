@@ -103,18 +103,22 @@ class block_xp_manager {
         $userid = $event->userid;
         $points = $this->get_xp_from_event($event);
 
-        if ($DB->count_records('block_xp', array('courseid' => $this->courseid, 'userid' => $userid)) > 0) {
-            $DB->execute('UPDATE {block_xp} SET xp = xp + :xp WHERE courseid = :courseid AND userid = :userid',
-                array('xp' => $points, 'courseid' => $this->courseid, 'userid' => $userid));
-        } else {
-            $record = new stdClass();
-            $record->courseid = $this->courseid;
-            $record->userid = $userid;
-            $record->xp = $points;
-            $DB->insert_record('block_xp', $record);
+        // No need to go through the following if the user did not gain XP.
+        if ($points > 0) {
+            if ($DB->count_records('block_xp', array('courseid' => $this->courseid, 'userid' => $userid)) > 0) {
+                $DB->execute('UPDATE {block_xp} SET xp = xp + :xp WHERE courseid = :courseid AND userid = :userid',
+                    array('xp' => $points, 'courseid' => $this->courseid, 'userid' => $userid));
+            } else {
+                $record = new stdClass();
+                $record->courseid = $this->courseid;
+                $record->userid = $userid;
+                $record->xp = $points;
+                $DB->insert_record('block_xp', $record);
+            }
+            $this->update_user_level($userid);
         }
-        $this->update_user_level($userid);
 
+        // Log the event.
         $this->log_event($event->eventname, $userid, $points);
     }
 
