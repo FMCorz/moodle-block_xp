@@ -122,6 +122,7 @@ class block_xp_levels_form extends moodleform {
             $el =& $mform->createElement('text', 'lvldesc_' . $i, get_string('leveldesc', 'block_xp'));
             $mform->insertElementBefore($el, 'insertlevelshere');
             $mform->addRule('lvldesc_' . $i, get_string('maximumchars', '', 255), 'maxlength', 255);
+            $mform->setDefault('lvldesc_' . $i, '');
             $mform->setType('lvldesc_' . $i, PARAM_NOTAGS);
         }
     }
@@ -203,7 +204,8 @@ class block_xp_levels_form extends moodleform {
         if (!isset($errors['levels'])) {
             $lastxp = 0;
             for ($i = 2; $i <= $data['levels']; $i++) {
-                $xp = (int) $data['lvlxp_' . $i];
+                $key = 'lvlxp_' . $i;
+                $xp = isset($data[$key]) ? (int) $data[$key] : -1;
                 if ($xp <= 0) {
                     $errors['lvlxp_' . $i] = get_string('invalidxp', 'block_xp');
                 } else if ($lastxp >= $xp) {
