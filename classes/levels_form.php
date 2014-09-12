@@ -34,6 +34,9 @@ require_once($CFG->libdir . '/formslib.php');
  */
 class block_xp_levels_form extends moodleform {
 
+    /** @var block_xp_manager The XP manager. */
+    protected $manager;
+
     /**
      * Form definintion.
      *
@@ -43,12 +46,18 @@ class block_xp_levels_form extends moodleform {
         global $OUTPUT;
 
         $mform = $this->_form;
+        $this->manager = $this->_customdata['manager'];
+
         $mform->setDisableShortforms(true);
         $mform->addElement('header', 'hdrgen', get_string('general', 'form'));
 
         $mform->addElement('text', 'levels', get_string('levelcount', 'block_xp'));
         $mform->addRule('levels', get_string('required'), 'required');
         $mform->setType('levels', PARAM_INT);
+
+        if ($this->manager->get_config('enablecustomlevelbadges')) {
+            $mform->addElement('static', '', '', get_string('changelevelformhelp', 'block_xp'));
+        }
 
         $mform->addElement('selectyesno', 'usealgo', get_string('usealgo', 'block_xp'));
         $mform->setDefault('usealgo', 1);

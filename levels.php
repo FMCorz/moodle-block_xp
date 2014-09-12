@@ -47,10 +47,14 @@ $renderer = $PAGE->get_renderer('block_xp');
 $manager = block_xp_manager::get($courseid);
 
 // Set form and its default (existing) values.
-$form = new block_xp_levels_form($url, array('defaultconfig' => block_xp_manager::get_default_config()));
+$form = new block_xp_levels_form($url, array('defaultconfig' => block_xp_manager::get_default_config(), 'manager' => $manager));
 $form->set_data(array('levels' => $manager->get_level_count(), 'levelsdata' => $manager->get_levels_data()));
 
 if ($data = $form->get_data()) {
+    if ($manager->get_level_count() != $data['levels']) {
+        // The number of levels have changed, we need to disable the custom badges.
+        $data['enablecustomlevelbadges'] = false;
+    }
     $manager->update_config($data);
     $manager = block_xp_manager::get($courseid, true);      // Force reload.
     $manager->recalculate_levels();
