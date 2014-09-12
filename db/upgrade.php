@@ -152,6 +152,21 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2014090900, 'xp');
     }
 
+    if ($oldversion < 2014091200) {
+
+        // Define field enablecustomlevelbadges to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('enablecustomlevelbadges', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'enablelevelupnotif');
+
+        // Conditionally launch add field enablecustomlevelbadges.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2014091200, 'xp');
+    }
+
     return true;
 
 }
