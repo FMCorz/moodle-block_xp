@@ -60,7 +60,8 @@ class block_xp_manager {
         'enableladder' => true,       // Enable the ladder.
         'enableinfos' => true,        // Enable the infos page.
         'levelsdata' => '',           // JSON encoded value of the levels data.
-        'enablelevelupnotif' => true  // Enable the levle up notification.
+        'enablelevelupnotif' => true, // Enable the level up notification.
+        'enablecustomlevelbadges' => false,  // Enable the usage of custom level badges.
     );
 
     /** @var block_xp_filter_manager Cache of the manager. */
