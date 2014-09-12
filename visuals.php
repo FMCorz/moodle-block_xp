@@ -47,12 +47,13 @@ $PAGE->set_url($url);
 $renderer = $PAGE->get_renderer('block_xp');
 $manager = block_xp_manager::get($courseid);
 
-$fmoptions = array('subdirs' => 0, 'accepted_types' => array('image'));
+$fmoptions = array('subdirs' => 0, 'accepted_types' => array('.jpg', '.png'));
 $draftitemid = file_get_submitted_draft_itemid('badges');
 file_prepare_draft_area($draftitemid, $context->id, 'block_xp', 'badges', 0, $fmoptions);
 
 $data = new stdClass();
 $data->badges = $draftitemid;
+$data->enablecustomlevelbadges = $manager->get_config('enablecustomlevelbadges');
 
 $form = new block_xp_visuals_form($url, array('manager' => $manager, 'fmoptions' => $fmoptions));
 $form->set_data($data);
