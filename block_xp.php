@@ -118,8 +118,9 @@ class block_xp extends block_base {
         $manager = block_xp_manager::get($this->page->course->id);
         $progress = $manager->get_progress_for_user($USER->id);
         $renderer = $this->page->get_renderer('block_xp');
+        $currentlevelmethod = $manager->get_config('enablecustomlevelbadges') ? 'custom_current_level' : 'current_level';
 
-        $this->content->text = $renderer->current_level($progress);
+        $this->content->text = $renderer->$currentlevelmethod($progress);
         $this->content->text .= $renderer->progress_bar($progress);
         if (isset($this->config->description)) {
             $this->content->text .= $renderer->description($this->config->description);
@@ -141,7 +142,7 @@ class block_xp extends block_base {
         // We should be congratulating the user because they leveled up!
         if (get_user_preferences($manager::USERPREF_NOTIFY, false)) {
             $args = array(
-                'badge' => $renderer->current_level($progress),
+                'badge' => $renderer->$currentlevelmethod($progress),
                 'headline' => get_string('youreachedlevela', 'block_xp', $progress->level),
                 'level' => $progress->level,
             );

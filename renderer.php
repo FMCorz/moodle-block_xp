@@ -65,6 +65,21 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Returns the current level rendered with custom badges.
+     *
+     * @param renderable $progress The renderable object.
+     * @return string HTML produced.
+     */
+    public function custom_current_level(renderable $progress) {
+        $html = '';
+        $html .= html_writer::tag('div',
+            html_writer::empty_tag('img', array('src' => $progress->levelimgsrc)),
+            array('class' => 'level-badge current-level level-' . $progress->level)
+        );
+        return $html;
+    }
+
+    /**
      * The description to display in the field.
      *
      * @param string $string The text to display.

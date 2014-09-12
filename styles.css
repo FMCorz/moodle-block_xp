@@ -40,6 +40,15 @@
     background-image: url([[pix:block_xp|10]]);
 }
 
+.block_xp .level-badge {
+    background: none;
+    height: auto;
+    width: auto;
+}
+.block_xp .level-badge img {
+    width: 100px;
+}
+
 .block_xp .description {
     font-size: 0.9em;
 }

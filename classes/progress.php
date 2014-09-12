@@ -17,7 +17,7 @@
 /**
  * Block XP progress renderable.
  *
- * @package    core
+ * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -40,6 +40,9 @@ class block_xp_progress implements renderable {
 
     /** @var int The total XP to get to the level of the user. */
     public $levelxp = null;
+
+    /** @var string The plugin file URL to the level badge. */
+    public $levelimgsrc = null;
 
     /** @var int The total XP to get to the next level. */
     public $nextlevelxp = null;
@@ -68,6 +71,7 @@ class block_xp_progress implements renderable {
      * @param array $params The fields to initialise the renderable.
      */
     public function __construct(array $params) {
+        global $OUTPUT;
 
         $diff = array_diff_key($params, array_flip(self::$required));
         if (count($diff) > 0) {
@@ -97,6 +101,10 @@ class block_xp_progress implements renderable {
             $this->xpinlevel = $this->xp;
             $this->percentage = 100;
         }
+
+        // Image URL.
+        $this->levelimgsrc = moodle_url::make_pluginfile_url(context_course::instance($this->courseid)->id, 'block_xp',
+            'badges', 0, '/', $this->level);
 
     }
 
