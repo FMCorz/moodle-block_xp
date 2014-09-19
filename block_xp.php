@@ -63,7 +63,7 @@ class block_xp extends block_base {
      * @return void
      */
     public function init() {
-        $this->title = '';
+        $this->title = get_string('pluginname', 'block_xp');
     }
 
     /**
@@ -176,8 +176,6 @@ class block_xp extends block_base {
         parent::specialization();
         if (!empty($this->config->title)) {
             $this->title = $this->config->title;
-        } else {
-            $this->title = get_string('levelup', 'block_xp');
         }
     }
 
