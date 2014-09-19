@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.4
+----
+
+- Ability to customise the appearance of the level badges
+
 v1.3
 ----
 

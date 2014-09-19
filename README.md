@@ -12,6 +12,7 @@ Features
 - Notifications to congratulate students as they level up
 - A ladder to display the ranking of the students
 - Ability to set the number of levels and the experience required to get to them
+- Images can be uploaded to customise for the appearance of the levels
 - The amount of experience points earned per event is customizable
 - Page to display the list of levels and a description
 - Experience points are earned per course
