@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 $string['addrulesformhelp'] = 'The last column defines the amount of experience points gained when the criteria is met.';
 $string['basexp'] = 'Algorithm base';
 $string['changelevelformhelp'] = 'If you change the number of levels, the custom level badges will be temporarily disabled to prevent levels without badges. If you change the level count go to the page \'Visuals\' to re-enable the custom badges once you have saved this form.';
+$string['cachedef_filters'] = 'Level filters';
 $string['coefxp'] = 'Algorithm coefficient';
 $string['comparisonrule'] = 'Comparison rule';
 $string['configdescription'] = 'Description to append';
