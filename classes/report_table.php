@@ -35,7 +35,7 @@ require_once($CFG->libdir . '/tablelib.php');
 class block_xp_report_table extends table_sql {
 
     /** @var string The key of the user ID column. */
-    public $useridfield = 'userid';
+    public $useridfield = 'id';
 
     /** @var block_xp_manager XP Manager. */
     protected $xpmanager = null;
@@ -49,12 +49,13 @@ class block_xp_report_table extends table_sql {
      * @param string $uniqueid Unique ID.
      */
     public function __construct($uniqueid, $courseid) {
-        global $PAGE;
+        global $DB, $PAGE;
         parent::__construct($uniqueid);
 
         // Block XP stuff.
         $this->xpmanager = block_xp_manager::get($courseid);
         $this->xpoutput = $PAGE->get_renderer('block_xp');
+        $context = context_course::instance($courseid);
 
         // Define columns.
         $this->define_columns(array(
@@ -74,12 +75,29 @@ class block_xp_report_table extends table_sql {
             ''
         ));
 
+        // Get the relevant user IDs, users enrolled or users with XP.
+        // This might be a performance issue at some point.
+        $ids = array();
+        $users = get_enrolled_users($context, 'block/xp:earnxp');
+        foreach ($users as $user) {
+            $ids[$user->id] = $user->id;
+        }
+        unset($users);
+        $entries = $DB->get_recordset_sql('SELECT userid FROM {block_xp} WHERE courseid = :courseid', array('courseid' => $courseid));
+        foreach ($entries as $entry) {
+            $ids[$entry->userid] = $entry->userid;
+        }
+        $entries->close();
+        list($insql, $inparams) = $DB->get_in_or_equal($ids, SQL_PARAMS_NAMED);
+
         // Define SQL.
         $this->sql = new stdClass();
-        $this->sql->fields = 'x.*, ' . user_picture::fields('u');
-        $this->sql->from = '{block_xp} x LEFT JOIN {user} u ON x.userid = u.id';
-        $this->sql->where = 'courseid = :courseid';
-        $this->sql->params = array('courseid' => $courseid);
+        $this->sql->fields = user_picture::fields('u') . ', x.lvl, x.xp';
+        $this->sql->from = "{user} u LEFT JOIN {block_xp} x ON (x.userid = u.id AND x.courseid = :courseid)";
+        $this->sql->where = "u.id $insql";
+        $this->sql->params = array_merge($inparams, array(
+            'courseid' => $courseid
+        ));
 
         // Define various table settings.
         $this->sortable(true, 'lvl', SORT_DESC);
@@ -99,9 +117,19 @@ class block_xp_report_table extends table_sql {
         $url = new moodle_url('/blocks/xp/report.php', array(
             'courseid' => $this->xpmanager->get_courseid(),
             'action' => 'edit',
-            'userid' => $row->userid
+            'userid' => $row->id
         ));
         return $OUTPUT->action_icon($url, new pix_icon('t/edit', get_string('edit')));
+    }
+
+    /**
+     * Formats the column level.
+     *
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
+    protected function col_lvl($row) {
+        return isset($row->lvl) ? $row->lvl : 1;
     }
 
     /**
@@ -111,8 +139,18 @@ class block_xp_report_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_progress($row) {
-        $progress = $this->xpmanager->get_progress_for_user($row->userid);
+        $progress = $this->xpmanager->get_progress_for_user($row->id);
         return $this->xpoutput->progress_bar($progress);
+    }
+
+    /**
+     * Formats the column XP.
+     *
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
+    protected function col_xp($row) {
+        return isset($row->xp) ? $row->xp : 0;
     }
 
     /**
