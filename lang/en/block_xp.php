@@ -28,6 +28,7 @@ $string['addrulesformhelp'] = 'The last column defines the amount of experience 
 $string['basexp'] = 'Algorithm base';
 $string['changelevelformhelp'] = 'If you change the number of levels, the custom level badges will be temporarily disabled to prevent levels without badges. If you change the level count go to the page \'Visuals\' to re-enable the custom badges once you have saved this form.';
 $string['cachedef_filters'] = 'Level filters';
+$string['cheatguard'] = 'Cheat guard';
 $string['coefxp'] = 'Algorithm coefficient';
 $string['comparisonrule'] = 'Comparison rule';
 $string['configdescription'] = 'Description to append';
@@ -84,6 +85,8 @@ $string['levelswillbereset'] = 'Warning! Saving this form will recalculate the l
 $string['levelup'] = 'Level up!';
 $string['levelx'] = 'Level #{$a}';
 $string['logging'] = 'Logging';
+$string['maxactionspertime'] = 'Max. actions in time frame';
+$string['maxactionspertime_help'] = 'The maximum number of actions that will count for XP during the time frame given. Any subsequent action will be ignored.';
 $string['navinfos'] = 'Infos';
 $string['navladder'] = 'Ladder';
 $string['navlevels'] = 'Levels';
@@ -122,6 +125,10 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
     <li>And the events of educational level not equal to <em>Participating</em>.</li>
 </ul>
 </p>';
+$string['timebetweensameactions'] = 'Time required between identical actions';
+$string['timebetweensameactions_help'] = 'In seconds, the minimum time required between identical actions. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identifical if the same post is read again.';
+$string['timeformaxactions'] = 'Time frame for max. actions';
+$string['timeformaxactions_help'] = 'The time frame (in seconds) during which the user should not exceed a maximum number of actions.';
 $string['value'] = 'Value';
 $string['valuessaved'] = 'The values have been successfully saved.';
 $string['viewtheladder'] = 'View the ladder';

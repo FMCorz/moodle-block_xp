@@ -167,6 +167,52 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2014091200, 'xp');
     }
 
+    if ($oldversion < 2015030901) {
+
+        // Define field maxactionspertime to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('maxactionspertime', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '10', 'enablecustomlevelbadges');
+
+        // Conditionally launch add field maxactionspertime.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2015030901, 'xp');
+    }
+
+    if ($oldversion < 2015030902) {
+
+        // Define field timeformaxactions to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('timeformaxactions', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '60', 'maxactionspertime');
+
+        // Conditionally launch add field timeformaxactions.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2015030902, 'xp');
+    }
+
+    if ($oldversion < 2015030903) {
+
+        // Define field timebetweensameactions to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('timebetweensameactions', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '180', 'timeformaxactions');
+
+        // Conditionally launch add field timebetweensameactions.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2015030903, 'xp');
+    }
+
+
     return true;
 
 }

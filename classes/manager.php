@@ -62,6 +62,9 @@ class block_xp_manager {
         'levelsdata' => '',           // JSON encoded value of the levels data.
         'enablelevelupnotif' => true, // Enable the level up notification.
         'enablecustomlevelbadges' => false,  // Enable the usage of custom level badges.
+        'maxactionspertime' => 10,           // Max actions during timepermaxactions.
+        'timeformaxactions' => 60,           // Time during which max actions cannot be reached.
+        'timebetweensameactions' => 180,     // Time between similar actions.
     );
 
     /** @var block_xp_filter_manager Cache of the manager. */
@@ -90,6 +93,10 @@ class block_xp_manager {
      * 200x times to get more experience points. For simplicity, and performance
      * reason, this does not handle multiple sessions at the same time.
      *
+     * It also prevents a user from opening too many pages at the same time
+     * by limiting the number of events for a given time. This might potentially lead
+     * to ignoring some events in legit situations if the user is quick.
+     *
      * This method has not been designed to check if the user has capabilities
      * to capture the event or not, those checks should be done in the observer
      * for performance reasons.
@@ -99,27 +106,47 @@ class block_xp_manager {
     protected function can_capture_event(\core\event\base $event) {
         global $SESSION;
 
+        $now = time();
+        $maxcount = 64;
+        $maxactions = $this->get_config('maxactionspertime');
+        $maxtime = $this->get_config('timeformaxactions');
+
+        $actiontime = $this->get_config('timebetweensameactions');
+        $actionkey = $event->eventname . ':' . $event->contextid . ':' . $event->objectid . ':' . $event->relateduserid;
+
         // Init the session variable.
-        if (!isset($SESSION->block_xp_buffer)) {
-            $SESSION->block_xp_buffer = array();
+        if (!isset($SESSION->block_xp_cheatguard)) {
+            $SESSION->block_xp_cheatguard = array();
         }
 
-        // Check if the user is trying to trick the system by reloading a page.
-        $key = $event->eventname . ':' . $event->contextid;
-        if (isset($SESSION->block_xp_buffer[$key])) {
-            if ($SESSION->block_xp_buffer[$key] > time() - 30) {
-                // A very similar event occured less than 30 seconds ago, we will ignore it.
+        // Actions per time.
+        if (count($SESSION->block_xp_cheatguard) > $maxactions) {
+            $actions = array_reverse($SESSION->block_xp_cheatguard, true);
+            $count = 0;
+            foreach ($actions as $action => $time) {
+                $count++;
+                if ($count > $maxactions && $time > $now - $actiontime) {
+                    // Too many actions within $actiontime.
+                    return false;
+                }
+            }
+        }
+
+        if (isset($SESSION->block_xp_cheatguard[$actionkey])) {
+            if ($SESSION->block_xp_cheatguard[$actionkey] > $now - $actiontime) {
+                // The key was found and the time has not expired, cheater spotted.
                 return false;
             }
-            // Unset the value to re-add it at the end of the array.
-            unset($SESSION->block_xp_buffer[$key]);
         }
 
-        // Log the time at which this event happened.
-        $SESSION->block_xp_buffer[$key] = time();
+        // Unset the value to re-add it at the end of the array.
+        unset($SESSION->block_xp_cheatguard[$actionkey]);
 
-        // Limit the array of events to 10, we do not want to flood the session for no reason.
-        $SESSION->block_xp_buffer = array_slice($SESSION->block_xp_buffer, -10, null, true);
+        // Log the time at which this event happened.
+        $SESSION->block_xp_cheatguard[$actionkey] = time();
+
+        // Limit the array of events to $maxcount, we do not want to flood the session for no reason.
+        $SESSION->block_xp_cheatguard = array_slice($SESSION->block_xp_cheatguard, -$maxcount, null, true);
         return true;
     }
 
