@@ -105,7 +105,7 @@ class block_xp_manager {
         }
 
         // Check if the user is trying to trick the system by reloading a page.
-        $key = $event->eventname . ':' . $event->contextid;
+        $key = $event->eventname . ':' . $event->contextid . ':' . $event->userid;
         if (isset($SESSION->block_xp_buffer[$key])) {
             if ($SESSION->block_xp_buffer[$key] > time() - 30) {
                 // A very similar event occured less than 30 seconds ago, we will ignore it.
