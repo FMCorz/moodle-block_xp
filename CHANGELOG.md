@@ -1,6 +1,15 @@
 Changelog
 =========
 
+v1.5
+----
+
+- Improving cheat guard
+- Exposing some options of the cheat guard
+- Report displays all the students, not just the ones with XP
+- Introducing backup and restore functionality
+- Removing associated data when a course is deleted
+
 v1.4
 ----
 
