@@ -25,13 +25,34 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Block XP manager class.
+ * Block XP helper class.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_xp_helper {
+
+    /**
+     * Act when a course is deleted.
+     *
+     * @param  \core\event\course_deleted $event The event.
+     * @return void
+     */
+    public static function course_deleted(\core\event\course_deleted $event) {
+        global $DB;
+
+        // Clean up the data that could be left behind.
+        $conditions = array('courseid' => $event->objectid);
+        $DB->delete_records('block_xp', $conditions);
+        $DB->delete_records('block_xp_config', $conditions);
+        $DB->delete_records('block_xp_filters', $conditions);
+        $DB->delete_records('block_xp_log', $conditions);
+
+        // Delete the files.
+        $fs = get_file_storage();
+        $fs->delete_area_files($event->contextid, 'block_xp', 'badges');
+    }
 
     /**
      * Observe the events, and dispatch them if necessary.

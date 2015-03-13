@@ -29,5 +29,9 @@ $observers = array(
         'eventname' => '*',
         'callback' => 'block_xp_helper::observer',
         'internal' => false
+    ),
+    array(
+        'eventname' => '\\core\\event\\course_deleted',
+        'callback' => 'block_xp_helper::course_deleted'
     )
 );
