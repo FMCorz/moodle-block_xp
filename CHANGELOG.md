@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.5.1
+------
+
+- Fixed a bug causing cron to fail
+
 v1.5
 ----
 
