@@ -449,7 +449,7 @@ class block_xp_manager {
         global $DB;
         $keeplogs = $this->get_config('keeplogs');
         if (!$keeplogs) {
-            continue;
+            return;
         } else {
             // The cron is set to run only once a day, so no need to test the last time it was purged here.
             $DB->delete_records_select('block_xp_log', 'time < :time', array(
