@@ -29,4 +29,4 @@ $plugin->requires   = 2014041500;
 $plugin->component  = 'block_xp';
 $plugin->maturity   = MATURITY_STABLE;
 $plugin->release    = '1.5.1';
-$plugin->cron       = 84600;
+$plugin->cron       = 86400;
