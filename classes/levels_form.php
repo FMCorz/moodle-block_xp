@@ -122,7 +122,6 @@ class block_xp_levels_form extends moodleform {
             $el =& $mform->createElement('text', 'lvldesc_' . $i, get_string('leveldesc', 'block_xp'));
             $mform->insertElementBefore($el, 'insertlevelshere');
             $mform->addRule('lvldesc_' . $i, get_string('maximumchars', '', 255), 'maxlength', 255);
-            $mform->setDefault('lvldesc_' . $i, '');
             $mform->setType('lvldesc_' . $i, PARAM_NOTAGS);
         }
     }
