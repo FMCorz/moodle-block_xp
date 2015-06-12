@@ -28,6 +28,8 @@ Installation
 
 Simply install the plugin and add the block to a course page.
 
+The plugin can be installed using [composer](https://getcomposer.org/) at [fmcorz/moodle-block_xp](https://packagist.org/packages/fmcorz/moodle-block_xp).
+
 How are experience points calculated?
 -------------------------------------
 
