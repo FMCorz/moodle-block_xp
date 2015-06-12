@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v1.5.2
+------
+
+- Plugin can be installed using composer
+- Bug fixes
+
 v1.5.1
 ------
 
