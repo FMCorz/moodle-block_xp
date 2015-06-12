@@ -88,7 +88,7 @@ class block_xp_report_table extends table_sql {
             $ids[$entry->userid] = $entry->userid;
         }
         $entries->close();
-        list($insql, $inparams) = $DB->get_in_or_equal($ids, SQL_PARAMS_NAMED);
+        list($insql, $inparams) = $DB->get_in_or_equal($ids, SQL_PARAMS_NAMED, 'param', true, null);
 
         // Define SQL.
         $this->sql = new stdClass();
