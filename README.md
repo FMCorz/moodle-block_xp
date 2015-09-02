@@ -54,8 +54,6 @@ Have a look at this availability plugin [Level](https://github.com/FMCorz/moodle
 Todo
 ----
 
-- Add settings to customize the design of the levels
-- Handling of course groups in ladder and report
 - Awarding a badge when a student reaches a level (blocked by [MDL-39864](https://tracker.moodle.org/browse/MDL-39864))
 
 License
