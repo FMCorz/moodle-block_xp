@@ -102,7 +102,7 @@ groups_print_course_menu($manager->get_course(), $url);
 $table = new block_xp_report_table('block_xp_report', $courseid, $group);
 $table->define_baseurl($url);
 
-echo $table->out(10, true);
+echo $table->out(20, true);
 
 if (empty($group)) {
     $strreset = get_string('resetcoursedata', 'block_xp');
