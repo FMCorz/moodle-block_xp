@@ -47,6 +47,9 @@ $PAGE->set_pagelayout('course');
 $PAGE->set_title($strladder);
 $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_url($url);
+
+$manager = block_xp_manager::get($courseid);
+$group = groups_get_course_group($manager->get_course(), true);
 $renderer = $PAGE->get_renderer('block_xp');
 
 echo $OUTPUT->header();
@@ -54,7 +57,9 @@ echo $OUTPUT->heading($strladder);
 
 echo $renderer->navigation($manager, 'ladder');
 
-$table = new block_xp_ladder_table('block_xp_ladder', $courseid);
+groups_print_course_menu($manager->get_course(), $url);
+
+$table = new block_xp_ladder_table('block_xp_ladder', $courseid, $group);
 $table->define_baseurl($url);
 
 echo $table->out(20, false);

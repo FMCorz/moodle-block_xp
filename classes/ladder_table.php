@@ -47,8 +47,10 @@ class block_xp_ladder_table extends table_sql {
      * Constructor.
      *
      * @param string $uniqueid Unique ID.
+     * @param int $courseid Course ID.
+     * @param int $groupid Group ID.
      */
-    public function __construct($uniqueid, $courseid) {
+    public function __construct($uniqueid, $courseid, $groupid) {
         global $PAGE;
         parent::__construct($uniqueid);
 
@@ -75,11 +77,26 @@ class block_xp_ladder_table extends table_sql {
         ));
 
         // Define SQL.
+        $sqlfrom = '';
+        $sqlparams = array();
+        if ($groupid) {
+            $sqlfrom = '{block_xp} x
+                     JOIN {groups_members} gm
+                       ON gm.groupid = :groupid
+                      AND gm.userid = x.userid
+                LEFT JOIN {user} u
+                       ON x.userid = u.id';
+            $sqlparams = array('groupid' => $groupid);
+        } else {
+            $sqlfrom = '{block_xp} x LEFT JOIN {user} u ON x.userid = u.id';
+        }
+
         $this->sql = new stdClass();
         $this->sql->fields = 'x.*, ' . user_picture::fields('u');
-        $this->sql->from = '{block_xp} x LEFT JOIN {user} u ON x.userid = u.id';
+        $this->sql->from = $sqlfrom;
         $this->sql->where = 'courseid = :courseid';
-        $this->sql->params = array('courseid' => $courseid);
+        $this->sql->params = array_merge(array('courseid' => $courseid), $sqlparams);
+
 
         // Define various table settings.
         $this->sortable(false);
