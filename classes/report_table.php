@@ -92,7 +92,7 @@ class block_xp_report_table extends table_sql {
 
         // Define SQL.
         $this->sql = new stdClass();
-        $this->sql->fields = user_picture::fields('u') . ', x.lvl, x.xp';
+        $this->sql->fields = user_picture::fields('u') . ', COALESCE(x.lvl, 1) AS lvl, x.xp';
         $this->sql->from = "{user} u LEFT JOIN {block_xp} x ON (x.userid = u.id AND x.courseid = :courseid)";
         $this->sql->where = "u.id $insql";
         $this->sql->params = array_merge($inparams, array(
