@@ -46,14 +46,17 @@ $PAGE->set_url($url);
 // Some other stuff.
 $manager = block_xp_manager::get($courseid);
 $renderer = $PAGE->get_renderer('block_xp');
+$group = groups_get_course_group($manager->get_course(), true);
 
-$table = new block_xp_log_table('block_xp_log', $courseid);
+$table = new block_xp_log_table('block_xp_log', $courseid, $group);
 $table->define_baseurl($url);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strcoursereport);
 
 echo $renderer->navigation($manager, 'log');
+
+groups_print_course_menu($manager->get_course(), $url);
 
 echo $table->out(50, true);
 
