@@ -23,6 +23,7 @@
  */
 
 require(__DIR__ . '/../../config.php');
+require_once($CFG->libdir . '/grouplib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
 $userid = optional_param('userid', null, PARAM_INT);
@@ -53,19 +54,21 @@ $PAGE->set_url($url);
 // Some other stuff.
 $manager = block_xp_manager::get($courseid);
 $renderer = $PAGE->get_renderer('block_xp');
+$group = groups_get_course_group($manager->get_course(), true);
 
 // Reset all the data.
 if ($resetdata && confirm_sesskey()) {
     if ($confirm) {
-        $manager->reset_data();
+        $manager->reset_data($group);
         // Redirect to put the course ID back in the URL, otherwise refresh won't work.
         redirect($url);
     } else {
         // Argh... I hate duplicating code!
         echo $OUTPUT->header();
         echo $OUTPUT->heading($strcoursereport);
-        echo $OUTPUT->confirm(get_string('reallyresetdata', 'block_xp'),
-            new moodle_url($url, array('resetdata' => 1, 'confirm' => 1, 'sesskey' => sesskey())),
+        $resetstr = empty($group) ? get_string('reallyresetdata', 'block_xp') : get_string('reallyresetgroupdata', 'block_xp');
+        echo $OUTPUT->confirm($resetstr,
+            new moodle_url($url, array('resetdata' => 1, 'confirm' => 1, 'sesskey' => sesskey(), 'group' => $group)),
             $url);
         echo $OUTPUT->footer();
         die();
@@ -93,15 +96,22 @@ if ($action == 'edit' && !empty($userid)) {
     }
 }
 
+groups_print_course_menu($manager->get_course(), $url);
+
 // Displaying the report.
-$table = new block_xp_report_table('block_xp_report', $courseid);
+$table = new block_xp_report_table('block_xp_report', $courseid, $group);
 $table->define_baseurl($url);
 
 echo $table->out(10, true);
 
+if (empty($group)) {
+    $strreset = get_string('resetcoursedata', 'block_xp');
+} else {
+    $strreset = get_string('resetgroupdata', 'block_xp');
+}
 echo html_writer::tag('p',
-    $OUTPUT->single_button(new moodle_url($url, array('resetdata' => 1, 'sesskey' => sesskey())),
-        get_string('resetcoursedata', 'block_xp'), 'get')
+    $OUTPUT->single_button(new moodle_url($url, array('resetdata' => 1, 'sesskey' => sesskey(), 'group' => $group)),
+        $strreset, 'get')
 );
 
 echo $OUTPUT->footer();

@@ -45,6 +45,9 @@ class block_xp_manager {
     /** @var array Array of singletons. */
     protected static $instances;
 
+    /** @var object Cached course object. */
+    protected $course = null;
+
     /** @var int Course ID. */
     protected $courseid = null;
 
@@ -230,6 +233,26 @@ class block_xp_manager {
             return $this->config->$name;
         }
         return $this->config;
+    }
+
+    /**
+     * Returns the current course object.
+     *
+     * The purpose of this is to provide an efficient way to retrieve the current course.
+     * The course object should never be modified.
+     *
+     * @return object Course record.
+     */
+    public function get_course() {
+        global $DB, $PAGE;
+        if (!isset($this->course)) {
+            if ($PAGE->course->id == $this->courseid) {
+                $this->course = $PAGE->course;
+            } else {
+                $this->course = $DB->get_record('course', array('id' => $this->courseid));
+            }
+        }
+        return $this->course;
     }
 
     /**
@@ -459,6 +482,20 @@ class block_xp_manager {
     }
 
     /**
+     * Clears the static caches of this class.
+     *
+     * Usage reserved to PHP Unit.
+     *
+     * @return void
+     */
+    public static function purge_static_caches() {
+        if (!PHPUNIT_TEST) {
+            return;
+        }
+        self::$instances = array();
+    }
+
+    /**
      * Recalculte the levels of all the users in the course.
      *
      * @param int $courseid The course ID.
@@ -485,12 +522,35 @@ class block_xp_manager {
     /**
      * Reset all the data.
      *
+     * @param int $groupid The group ID.
      * @return void
      */
-    public function reset_data() {
+    public function reset_data($groupid = 0) {
         global $DB;
-        $DB->delete_records('block_xp', array('courseid' => $this->courseid));
-        $DB->delete_records('block_xp_log', array('courseid' => $this->courseid));
+
+        // Delete XP records.
+        $sql = "DELETE FROM {block_xp} b WHERE b.courseid = :courseid";
+        $params = array('courseid' => $this->courseid);
+        if ($groupid) {
+            $sql .= " AND b.userid IN
+                  (SELECT gm.userid
+                     FROM {groups_members} gm
+                    WHERE gm.groupid = :groupid)";
+            $params['groupid'] = $groupid;
+        }
+        $DB->execute($sql, $params);
+
+        // Delete logs.
+        $sql = "DELETE FROM {block_xp_log} l WHERE l.courseid = :courseid";
+        $params = array('courseid' => $this->courseid);
+        if ($groupid) {
+            $sql .= " AND l.userid IN
+                  (SELECT gm.userid
+                     FROM {groups_members} gm
+                    WHERE gm.groupid = :groupid)";
+            $params['groupid'] = $groupid;
+        }
+        $DB->execute($sql, $params);
     }
 
     /**

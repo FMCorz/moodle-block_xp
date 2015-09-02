@@ -47,8 +47,10 @@ class block_xp_report_table extends table_sql {
      * Constructor.
      *
      * @param string $uniqueid Unique ID.
+     * @param int $courseid Course ID.
+     * @param int $groupid Group ID.
      */
-    public function __construct($uniqueid, $courseid) {
+    public function __construct($uniqueid, $courseid, $groupid) {
         global $DB, $PAGE;
         parent::__construct($uniqueid);
 
@@ -75,15 +77,30 @@ class block_xp_report_table extends table_sql {
             ''
         ));
 
-        // Get the relevant user IDs, users enrolled or users with XP.
-        // This might be a performance issue at some point.
+        // Get all the users that are enrolled and can earn XP.
         $ids = array();
-        $users = get_enrolled_users($context, 'block/xp:earnxp');
+        $users = get_enrolled_users($context, 'block/xp:earnxp', $groupid);
         foreach ($users as $user) {
             $ids[$user->id] = $user->id;
         }
         unset($users);
-        $entries = $DB->get_recordset_sql('SELECT userid FROM {block_xp} WHERE courseid = :courseid', array('courseid' => $courseid));
+
+        // Get the users which might not be enrolled or are revoked the permission, but still should
+        // be displayed in the report for the teachers' benefit. We need to filter out the users which
+        // are not a member of the group though.
+        if (empty($groupid)) {
+            $sql ='SELECT userid FROM {block_xp} WHERE courseid = :courseid';
+            $params = array('courseid' => $courseid);
+        } else {
+            $sql ='SELECT b.userid
+                     FROM {block_xp} b
+                     JOIN {groups_members} gm
+                       ON b.userid = gm.userid
+                      AND gm.groupid = :groupid
+                    WHERE courseid = :courseid';
+            $params = array('courseid' => $courseid, 'groupid' => $groupid);
+        }
+        $entries = $DB->get_recordset_sql($sql, $params);
         foreach ($entries as $entry) {
             $ids[$entry->userid] = $entry->userid;
         }
