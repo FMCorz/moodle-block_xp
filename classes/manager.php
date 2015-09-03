@@ -70,6 +70,9 @@ class block_xp_manager {
         'timebetweensameactions' => 180,     // Time between similar actions.
     );
 
+    /** @var context The context related to this manager.*/
+    protected $context;
+
     /** @var block_xp_filter_manager Cache of the manager. */
     protected $filtermanager;
 
@@ -80,12 +83,25 @@ class block_xp_manager {
     protected $triggereevents = true;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param int $courseid The course ID.
      * @return void
      */
     protected function __construct($courseid) {
+        global $CFG;
+
+        $courseid = intval($courseid);
+        if ($CFG->block_xp_context == CONTEXT_SYSTEM && $courseid != SITEID) {
+            throw new coding_exception('Unexpected course ID.');
+        }
+
+        if ($courseid == SITEID) {
+            $this->context = context_system::instance();
+        } else {
+            $this->context = context_course::instance($courseid);
+        }
+
         $this->courseid = $courseid;
     }
 
@@ -154,16 +170,59 @@ class block_xp_manager {
     }
 
     /**
+     * Returns whether or not the current user can manage.
+     *
+     * @return bool
+     */
+    public function can_manage() {
+        return has_capability('block/xp:addinstance', $this->context);
+    }
+
+    /**
+     * Returns whether or not the current user can view the block and its pages.
+     *
+     * @return bool
+     */
+    public function can_view() {
+        return has_capability('block/xp:view', $this->context) || $this->can_manage();
+    }
+
+    /**
+     * Returns whether or not the current user can view the infos page.
+     *
+     * @return bool
+     */
+    public function can_view_infos_page() {
+        if (!$this->get_config('enableinfos')) {
+            return $this->can_manage();
+        }
+        return $this->can_view();
+    }
+
+    /**
+     * Returns whether or not the current user can view the infos page.
+     *
+     * @return bool
+     */
+    public function can_view_ladder_page() {
+        if (!$this->get_config('enableladder')) {
+            return $this->can_manage();
+        }
+        return $this->can_view();
+    }
+
+
+    /**
      * Capture an event.
      *
      * @param \core\event\base $event The event.
      * @return void
      */
     public function capture_event(\core\event\base $event) {
-        global $DB;
+        global $CFG, $DB;
 
-        if ($event->courseid !== $this->courseid) {
-            throw new coding_exception('Event course ID does not match event course ID');
+        if ($CFG->block_xp_context != CONTEXT_SYSTEM && $event->courseid !== $this->courseid) {
+            throw new coding_exception('Event course ID does not match block course ID');
         }
 
         // The capture has not been enabled yet.
@@ -201,11 +260,23 @@ class block_xp_manager {
     /**
      * Get an instance of the manager.
      *
+     * The courseid parameter will be ignored when the block was set to be used on the system.
+     * It is easier to do it this way than handling the course ID paramter from everywhere we
+     * need to get the manager.
+     *
      * @param int $courseid The course ID.
      * @param bool $forcereload Force the reload of the singleton, to invalidate local cache.
      * @return block_xp_manager The instance of the manager.
      */
     public static function get($courseid, $forcereload = false) {
+        global $CFG;
+
+        // When the block was set up for the whole site we attach it to the site course.
+        if ($CFG->block_xp_context == CONTEXT_SYSTEM) {
+            $courseid = SITEID;
+        }
+
+        $courseid = intval($courseid);
         if ($forcereload || !isset(self::$instances[$courseid])) {
             self::$instances[$courseid] = new block_xp_manager($courseid);
         }
@@ -236,6 +307,25 @@ class block_xp_manager {
     }
 
     /**
+     * Get the context related to the manager.
+     *
+     * The context and course IDs here can be a bit confusing. When the plugin is set to act in
+     * courses ($CFG->block_xp_context == CONTEXT_COURSE), then the context of the manager
+     * should be the course context. However, when block_xp_progress is set to CONTEXT_SYSTEM
+     * then we have to rely on the system context, not the context of the site course. The reason
+     * behind this is that we need to get the context parent of where we are going to use the block
+     * and in this case the site/front page context is nto the right one as it's a child of the
+     * system context, and not parent of the courses.
+     *
+     * Also read the nodes of {@link self::get_courseid()}.
+     *
+     * @return context
+     */
+    public function get_context() {
+        return $this->context;
+    }
+
+    /**
      * Returns the current course object.
      *
      * The purpose of this is to provide an efficient way to retrieve the current course.
@@ -254,6 +344,13 @@ class block_xp_manager {
 
     /**
      * Return the current course ID.
+     *
+     * When the block is set to act on the whole site ($CFG->block_xp_context == CONTEXT_SYSTEM),
+     * then we will use the SITEID as course ID. We cannot use 0 because there are some logic here
+     * and there that assumes that the course exists. In any other scenario we use the course ID
+     * of the course the block was added to.
+     *
+     * Also read the nodes of {@link self::get_context()}.
      *
      * @return int The course ID.
      */
@@ -388,6 +485,7 @@ class block_xp_manager {
         }
 
         // Manipulation.
+        $record->contextid = $this->context->id;
         unset($record->id);
         $record->level = $record->lvl;
         unset($record->lvl);
@@ -638,7 +736,7 @@ class block_xp_manager {
             $DB->set_field('block_xp', 'lvl', $level, array('courseid' => $this->courseid, 'userid' => $userid));
             if ($this->triggereevents) {
                 $params = array(
-                    'context' => context_course::instance($this->courseid),
+                    'context' => $this->context,
                     'relateduserid' => $userid,
                     'other' => array(
                         'level' => $level

@@ -61,17 +61,26 @@ class block_xp_helper {
      * @return void
      */
     public static function observer(\core\event\base $event) {
+        global $CFG;
+
+        static $allowedcontexts = null;
+        if ($allowedcontexts === null) {
+            $allowedcontexts = array(CONTEXT_COURSE, CONTEXT_MODULE);
+            if ($CFG->block_xp_context == CONTEXT_SYSTEM) {
+                $allowedcontexts[] = CONTEXT_SYSTEM;
+            }
+        }
 
         if ($event->component === 'block_xp') {
             // Skip own events.
         } else if (!$event->userid || isguestuser($event->userid) || is_siteadmin($event->userid)) {
             // Skip non-logged in users and guests.
-        } else if ($event->contextlevel !== CONTEXT_COURSE && $event->contextlevel !== CONTEXT_MODULE) {
-            // Ignore events outside a course.
+        } else if (!in_array($event->contextlevel, $allowedcontexts)) {
+            // Ignore events that are not in the right context.
         } else if ($event->edulevel !== \core\event\base::LEVEL_PARTICIPATING) {
             // Ignore events that are not participating.
         } else if (!has_capability('block/xp:earnxp', $event->get_context(), $event->userid)) {
-            // Skip the events if the user does not have the capability to earn XP, or if it is the admin.
+            // Skip the events if the user does not have the capability to earn XP.
         } else {
             // Keep the event, and proceed.
             $manager = block_xp_manager::get($event->courseid);

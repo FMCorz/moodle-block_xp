@@ -27,14 +27,11 @@ require(__DIR__ . '/../../config.php');
 $courseid = required_param('courseid', PARAM_INT);
 
 require_login($courseid);
-$context = context_course::instance($courseid);
 $manager = block_xp_manager::get($courseid);
-$canedit = has_capability('block/xp:addinstance', $context);
-$enableladder = $manager->get_config('enableladder');
+$context = $manager->get_context();
 
-// Check that the ladder is enabled.
-if (!$enableladder && !$canedit) {
-    redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
+if (!$manager->can_view_ladder_page()) {
+    throw new moodle_exception('nopermissions', '', '', 'view_ladder_page');
 }
 
 // Some stuff.

@@ -27,10 +27,12 @@ require(__DIR__ . '/../../config.php');
 $courseid = required_param('courseid', PARAM_INT);
 
 require_login($courseid);
-$context = context_course::instance($courseid);
+$manager = block_xp_manager::get($courseid);
+$context = $manager->get_context();
 
-// We need to be able to add this block to edit the course properties.
-require_capability('block/xp:addinstance', $context);
+if (!$manager->can_manage()) {
+    throw new moodle_exception('nopermissions', '', '', 'can_manage');
+}
 
 // Some stuff.
 $url = new moodle_url('/blocks/xp/log.php', array('courseid' => $courseid));
@@ -44,7 +46,6 @@ $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_url($url);
 
 // Some other stuff.
-$manager = block_xp_manager::get($courseid);
 $renderer = $PAGE->get_renderer('block_xp');
 $group = groups_get_course_group($manager->get_course(), true);
 

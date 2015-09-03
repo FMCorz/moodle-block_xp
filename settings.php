@@ -15,18 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Block XP admin settings.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2015 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2015061203;
-$plugin->requires   = 2014041500;
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '1.5.2';
-$plugin->cron       = 86400;
+if ($ADMIN->fulltree) {
+
+    // Context in which the block is enabled.
+    $settings->add(new admin_setting_configselect(
+        'block_xp_context',
+        get_string('wherearexpused', 'block_xp'),
+        get_string('wherearexpused_desc', 'block_xp'),
+        CONTEXT_COURSE,
+        array(
+            CONTEXT_COURSE => get_string('incourses', 'block_xp'),
+            CONTEXT_SYSTEM => get_string('forthewholesite', 'block_xp')
+        )
+    ));
+
+}
+

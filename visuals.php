@@ -28,10 +28,12 @@ require_once($CFG->libdir . '/filelib.php');
 $courseid = required_param('courseid', PARAM_INT);
 
 require_login($courseid);
-$context = context_course::instance($courseid);
+$manager = block_xp_manager::get($courseid);
+$context = $manager->get_context();
 
-// We need to be able to add this block to edit the course properties.
-require_capability('block/xp:addinstance', $context);
+if (!$manager->can_manage()) {
+    throw new moodle_exception('nopermissions', '', '', 'can_manage');
+}
 
 // Some stuff.
 $url = new moodle_url('/blocks/xp/visuals.php', array('courseid' => $courseid));
@@ -45,7 +47,6 @@ $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_url($url);
 
 $renderer = $PAGE->get_renderer('block_xp');
-$manager = block_xp_manager::get($courseid);
 
 $fmoptions = array('subdirs' => 0, 'accepted_types' => array('.jpg', '.png'));
 $draftitemid = file_get_submitted_draft_itemid('badges');

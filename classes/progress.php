@@ -29,6 +29,9 @@ class block_xp_progress implements renderable {
     /** @var int The course ID. */
     public $courseid = null;
 
+    /** @var int The manager context ID. */
+    public $contextid = null;
+
     /** @var int The user ID. */
     public $userid = null;
 
@@ -63,7 +66,7 @@ class block_xp_progress implements renderable {
     public $xpinlevel = null;
 
     /** @var array The required fields. */
-    protected static $required = array('courseid', 'userid', 'xp', 'level', 'levelxp', 'nextlevelxp');
+    protected static $required = array('courseid', 'contextid', 'userid', 'xp', 'level', 'levelxp', 'nextlevelxp');
 
     /**
      * Constructor.
@@ -103,7 +106,7 @@ class block_xp_progress implements renderable {
         }
 
         // Image URL.
-        $this->levelimgsrc = moodle_url::make_pluginfile_url(context_course::instance($this->courseid)->id, 'block_xp',
+        $this->levelimgsrc = moodle_url::make_pluginfile_url($this->contextid, 'block_xp',
             'badges', 0, '/', $this->level);
 
     }

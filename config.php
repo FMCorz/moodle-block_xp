@@ -29,10 +29,12 @@ $resetdata = optional_param('resetdata', 0, PARAM_INT);
 $confirm = optional_param('confirm', 0, PARAM_INT);
 
 require_login($courseid);
-$context = context_course::instance($courseid);
+$manager = block_xp_manager::get($courseid);
+$context = $manager->get_context();
 
-// We need to be able to add this block to edit the course properties.
-require_capability('block/xp:addinstance', $context);
+if (!$manager->can_manage()) {
+    throw new moodle_exception('nopermissions', '', '', 'can_manage');
+}
 
 // Some stuff.
 $url = new moodle_url('/blocks/xp/config.php', array('courseid' => $courseid));
@@ -49,7 +51,6 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($strcoursesettings);
 
 $renderer = $PAGE->get_renderer('block_xp');
-$manager = block_xp_manager::get($courseid);
 
 $form = new block_xp_settings_form($url, array('defaultconfig' => block_xp_manager::get_default_config()));
 if ($data = $form->get_data()) {

@@ -102,17 +102,15 @@ class block_xp_renderer extends plugin_renderer_base {
     public function navigation($manager, $page) {
         $tabs = array();
         $courseid = $manager->get_courseid();
-        $context = context_course::instance($courseid);
-        $canedit = has_capability('block/xp:addinstance', $context);
 
-        if ($manager->get_config('enableinfos') || $canedit) {
+        if ($manager->can_view_infos_page()) {
             $tabs[] = new tabobject(
                 'infos',
                 new moodle_url('/blocks/xp/infos.php', array('courseid' => $courseid)),
                 get_string('navinfos', 'block_xp')
             );
         }
-        if ($manager->get_config('enableladder') || $canedit) {
+        if ($manager->can_view_infos_page()) {
             $tabs[] = new tabobject(
                 'ladder',
                 new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid)),
@@ -120,7 +118,7 @@ class block_xp_renderer extends plugin_renderer_base {
             );
         }
 
-        if ($canedit) {
+        if ($manager->can_manage()) {
             $tabs[] = new tabobject(
                 'report',
                 new moodle_url('/blocks/xp/report.php', array('courseid' => $courseid)),
@@ -165,19 +163,21 @@ class block_xp_renderer extends plugin_renderer_base {
      * Returns the links for the students.
      *
      * @param int $courseid The course ID.
+     * @param bool $showladder Show the ladder link
+     * @param bool $showinfos Show the infos link
      * @return string HTML produced.
      */
-    public function student_links($courseid, $enableladder, $enableinfos) {
+    public function student_links($courseid, $showladder, $showinfos) {
         $html = '';
         $links = array();
 
-        if ($enableinfos) {
+        if ($showinfos) {
             $links[] = html_writer::link(
                 new moodle_url('/blocks/xp/infos.php', array('courseid' => $courseid)),
                 get_string('infos', 'block_xp')
             );
         }
-        if ($enableladder) {
+        if ($showladder) {
             $links[] = html_writer::link(
                 new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid)),
                 get_string('viewtheladder', 'block_xp')

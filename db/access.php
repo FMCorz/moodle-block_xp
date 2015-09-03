@@ -25,6 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
+
+    // Whether or not the user can add the block.
     'block/xp:addinstance' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
@@ -34,11 +36,31 @@ $capabilities = array(
         ),
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
+
+    // Whether or not a user can earn experience point.
     'block/xp:earnxp' => array(
         'captype' => 'read',
-        'contextlevel' => CONTEXT_COURSE,
+        'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
             'student' => CAP_ALLOW
+        ),
+    ),
+
+    // Whether or not the user can add the block on their dashboard.
+    // We don't allow anyone to add it, the teacher/manager should add it
+    // to their default dashboards.
+    'block/xp:myaddinstance' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array()
+    ),
+
+    // Whether or not a user can see the block.
+    'block/xp:view' => array(
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'user' => CAP_ALLOW
         ),
     )
 );

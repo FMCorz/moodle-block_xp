@@ -28,14 +28,11 @@ require_once($CFG->libdir . '/tablelib.php');
 $courseid = required_param('courseid', PARAM_INT);
 
 require_login($courseid);
-$context = context_course::instance($courseid);
 $manager = block_xp_manager::get($courseid);
-$canedit = has_capability('block/xp:addinstance', $context);
-$enableinfos = $manager->get_config('enableinfos');
+$context = $manager->get_context();
 
-// Check that the page is enabled, except for editors.
-if (!$enableinfos && !$canedit) {
-    redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
+if (!$manager->can_view_infos_page()) {
+    throw new moodle_exception('nopermissions', '', '', 'view_infos_page');
 }
 
 // Some stuff.
@@ -65,14 +62,14 @@ $table->define_headers(array(get_string('level', 'block_xp'), get_string('xprequ
     get_string('description', 'block_xp')));
 $table->setup();
 
-for ($i = 1; $i <= $levels ; $i++) { 
+for ($i = 1; $i <= $levels ; $i++) {
     $desc = isset($levelsdata['desc'][$i]) ? $levelsdata['desc'][$i] : '';
     $table->add_data(array($i, $levelsdata['xp'][$i], $desc), 'level-' . $i);
 }
 
 $table->finish_output();
 
-if ($canedit) {
+if ($manager->can_manage()) {
     echo html_writer::tag('p',
         $OUTPUT->single_button(new moodle_url('/blocks/xp/levels.php', array('courseid' => $courseid)),
             get_string('customizelevels', 'block_xp'), 'get')

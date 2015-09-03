@@ -39,6 +39,10 @@ class block_xp extends block_base {
      * @return array
      */
     public function applicable_formats() {
+        global $CFG;
+        if ($CFG->block_xp_context == CONTEXT_SYSTEM) {
+            return array('site' => true, 'course' => true, 'my' => true);
+        }
         return array('course' => true);
     }
 
@@ -54,6 +58,15 @@ class block_xp extends block_base {
             $manager = block_xp_manager::get($courseid);
             $manager->purge_log();
         }
+        return true;
+    }
+
+    /**
+     * The plugin has a settings.php file.
+     *
+     * @return boolean True.
+     */
+    public function has_config() {
         return true;
     }
 
@@ -106,16 +119,16 @@ class block_xp extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        $context = $this->page->context;
-        $canearnxp = has_capability('block/xp:earnxp', $context);
-        $canedit = has_capability('block/xp:addinstance', $context);
+        $manager = block_xp_manager::get($this->page->course->id);
 
-        // Hide the block to non-logged in users, guests and those who cannot earn XP or edit the block.
-        if (!$USER->id || isguestuser() || (!$canearnxp && !$canedit)) {
+        $canview = $manager->can_view();
+        $canedit = $manager->can_manage();
+
+        // Hide the block to non-logged in users, guests and those who cannot view the block.
+        if (!$USER->id || isguestuser() || !$canview) {
             return $this->content;
         }
 
-        $manager = block_xp_manager::get($this->page->course->id);
         $progress = $manager->get_progress_for_user($USER->id);
         $renderer = $this->page->get_renderer('block_xp');
         $currentlevelmethod = $manager->get_config('enablecustomlevelbadges') ? 'custom_current_level' : 'current_level';
@@ -128,11 +141,11 @@ class block_xp extends block_base {
             $this->content->text .= $renderer->description(get_string('participatetolevelup', 'block_xp'));
         }
 
-        $this->content->footer .= $renderer->student_links($this->page->course->id,
-            $manager->get_config('enableladder'), $manager->get_config('enableinfos'));
+        $this->content->footer .= $renderer->student_links($manager->get_courseid(),
+            $manager->can_view_ladder_page(), $manager->can_view_infos_page());
 
-        if (has_capability('block/xp:addinstance', $context)) {
-            $this->content->footer .= $renderer->admin_links($this->page->course->id);
+        if ($canedit) {
+            $this->content->footer .= $renderer->admin_links($manager->get_courseid());
             if (!$manager->get_config('enabled')) {
                 $this->content->footer .= html_writer::tag('p',
                     html_writer::tag('small', get_string('xpgaindisabled', 'block_xp')), array('class' => 'alert alert-warning'));
