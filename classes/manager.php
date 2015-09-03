@@ -239,18 +239,15 @@ class block_xp_manager {
      * Returns the current course object.
      *
      * The purpose of this is to provide an efficient way to retrieve the current course.
-     * The course object should never be modified.
+     *
+     * /!\ The course object MUST NOT be modified!
      *
      * @return object Course record.
      */
     public function get_course() {
         global $DB, $PAGE;
         if (!isset($this->course)) {
-            if ($PAGE->course->id == $this->courseid) {
-                $this->course = $PAGE->course;
-            } else {
-                $this->course = $DB->get_record('course', array('id' => $this->courseid));
-            }
+            $this->course = get_course($this->courseid, false);
         }
         return $this->course;
     }

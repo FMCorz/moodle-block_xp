@@ -46,7 +46,6 @@ class block_xp_manager_testcase extends advanced_testcase {
 
         $c1 = $this->getDataGenerator()->create_course();
         $c2 = $this->getDataGenerator()->create_course();
-        $c3 = $this->getDataGenerator()->create_course();
 
         // Get a course that is not attached to the current page.
         $this->assertEquals(SITEID, $PAGE->course->id);
