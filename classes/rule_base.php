@@ -96,6 +96,19 @@ abstract class block_xp_rule_base extends block_xp_rule {
     }
 
     /**
+     * Return the compare select.
+     *
+     * @param string $basename
+     * @return string
+     */
+    protected function get_compare_select($basename) {
+        return html_writer::select(array(
+                block_xp_rule_base::CT => get_string('rule:' . block_xp_rule_base::CT, 'block_xp'),
+                block_xp_rule_base::EQ => get_string('rule:' . block_xp_rule_base::EQ, 'block_xp')
+            ), $basename . '[compare]', $this->compare, '', array('id' => '', 'class' => ''));
+    }
+
+    /**
      * Get the value to use during comparison.
      *
      * Override this method if your $value is a complex object.

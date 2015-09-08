@@ -50,62 +50,74 @@ $renderer = $PAGE->get_renderer('block_xp');
 $filtermanager = $manager->get_filter_manager();
 $userfilters = $filtermanager->get_user_filters();
 
-// Check for $add.
-if ($add !== preg_replace('/[^a-z0-9_\\\\]/', '', $add)) {
-    // Invalid event.
-    $add = null;
-}
+// Saving the data.
+if (!empty($_POST['save'])) {
+    require_sesskey();
 
-$form = new block_xp_rules_form($url, array('filters' => $userfilters,
-    'staticfilters' => block_xp_filter_manager::get_static_filters(), 'add' => $add));
+    // Saves all the filters.
+    $filterids = array();
+    $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
+    foreach ($filters as $filterdata) {
 
-if ($data = $form->get_data()) {
+        $data = $filterdata;
+        $data['ruledata'] = json_encode($data['rule'], true);
+        unset($data['rule']);
+        $data['courseid'] = $manager->get_courseid();
 
-    // New rules.
-    foreach ($data->newfilter as $key => $values) {
-        if (empty($values['value'])) {
-            continue;
+        if (!block_xp_filter::validate_data($data)) {
+            throw new moodle_exception('Data could not be validated');
         }
 
-        $rule = new block_xp_rule_property($values['compare'], $values['value'], $values['property']);
-        $filter = block_xp_filter::load_from_data(array(
-            'rule' => $rule,
-            'courseid' => $manager->get_courseid(),
-            'points' => $values['f_points'],
-            'sortorder' => 0,
-        ));
+        $filter = block_xp_filter::load_from_data($data);
+        if ($filter->get_id() && !array_key_exists($filter->get_id(), $userfilters)) {
+            throw new moodle_exception('Invalid filter ID');
+        }
+
         $filter->save();
+        $filterids[$filter->get_id()] = true;
     }
 
-    // Existing rules.
-    if (isset($data->filter)) {
-        foreach ($data->filter as $id => $values) {
-            if ($id < 1 || !isset($userfilters[$id])) {
-                continue;
-            }
-            $filter = $userfilters[$id];
-
-            if (empty($values['value']) && !is_numeric($values['value'])) {
-                $filter->delete();
-            } else {
-                $rule = new block_xp_rule_property($values['compare'], $values['value'], $values['property']);
-                $filter->set_rule($rule);
-                $filter->set_points($values['f_points']);
-                $filter->set_sortorder($values['f_sortorder']);
-                $filter->save();
-            }
+    // Check for filters to be deleted.
+    foreach ($userfilters as $filterid => $filter) {
+        if (!array_key_exists($filterid, $filterids)) {
+            $filter->delete();
         }
     }
 
     $filtermanager->invalidate_filters_cache();
-
-    redirect($url);
+    redirect($url, get_string('changessaved'));
 }
+
+// Preparing form.
+$dummyruleset = new block_xp_ruleset();
+$dummyfilter = block_xp_filter::load_from_data(array('rule' => $dummyruleset));
+$templatefilter = $renderer->render($dummyfilter);
+
+// Templates of rules.
+$typeruleproperty = new block_xp_rule_property();
+$typeruleset = new block_xp_ruleset();
+$templatetypes = array(
+    'block_xp_rule_property' => array(
+        'name' => get_string('ruleproperty', 'block_xp'),
+        'template' => $renderer->render($typeruleproperty, array('iseditable' => true, 'basename' => 'XXXXX')),
+    ),
+    'block_xp_ruleset' => array(
+        'name' => get_string('ruleset', 'block_xp'),
+        'template' => $renderer->render($typeruleset, array('iseditable' => true, 'basename' => 'XXXXX')),
+    ),
+);
+
+$PAGE->requires->yui_module('moodle-block_xp-filters', 'Y.M.block_xp.Filters.init', array(array(
+    'filter' => $templatefilter,
+    'rules' => $templatetypes
+)));
+$PAGE->requires->strings_for_js(array('pickaconditiontype'), 'block_xp');
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strcourserules);
 
 echo $renderer->navigation($manager, 'rules');
+
 
 $a = new stdClass();
 $a->list = (new moodle_url('/report/eventlist/index.php'))->out();
@@ -113,6 +125,37 @@ $a->log = (new moodle_url('/blocks/xp/log.php', array('courseid' => $courseid)))
 $a->doc = (new moodle_url('https://docs.moodle.org/dev/Event_2'))->out();
 echo get_string('rulesformhelp', 'block_xp', $a);
 
-echo $form->display();
+echo html_writer::start_div('block-xp-filters-wrapper');
+echo html_writer::start_tag('form', array('method' => 'POST', 'class' => 'block-xp-filters'));
+echo html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()));
+
+$addlink = html_writer::start_tag('li', array('class' => 'filter-add'));
+$addlink.= $renderer->action_link('#', get_string('addarule', 'block_xp'), null, null,
+    new pix_icon('t/add', '', '', array('class' => 'iconsmall')));
+$addlink .= html_writer::end_tag('li');
+
+echo $OUTPUT->heading(get_string('yourownrules', 'block_xp'), 3);
+
+echo html_writer::start_tag('ul', array('class' => 'filters-list'));
+echo $addlink;
+foreach ($userfilters as $filter) {
+    echo html_writer::tag('li', $renderer->render($filter), array('class' => 'filter-node'));
+    echo $addlink;
+}
+echo html_writer::end_tag('ul');
+
+echo html_writer::start_tag('p');
+echo html_writer::empty_tag('input', array('value' => get_string('savechanges'), 'type' => 'submit', 'name' => 'save'));
+echo html_writer::empty_tag('input', array('value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel'));
+echo html_writer::end_tag('p');
+echo html_writer::end_tag('form');
+
+echo $OUTPUT->heading(get_string('defaultrules', 'block_xp'), 3);
+echo html_writer::tag('p', get_string('defaultrulesformhelp', 'block_xp'));
+foreach (block_xp_filter_manager::get_static_filters() as $filter) {
+    echo $renderer->render($filter);
+}
+
+echo html_writer::end_div();
 
 echo $OUTPUT->footer();

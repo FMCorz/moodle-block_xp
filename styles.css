@@ -109,24 +109,82 @@
 }
 
 /**
- * Rules pages.
+ * Rule picker dialogue.
  */
-#page-blocks-xp-rules .femptylabel .fitemtitle {
+.block_xp-rulepicker-hidden {
     display: none;
 }
-#page-blocks-xp-rules .femptylabel .felement {
-    margin-left: 0;
-    margin-right: 0;
+.block_xp-rulepicker-content {
+    text-align: center;
 }
-#page-blocks-xp-rules .felement .sortorder,
-.dir-rtl#page-blocks-xp-rules .felement .pts {
-    margin-right: 2em;
+
+/**
+ * Rules pages.
+ */
+.block-xp-filters-wrapper ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
-#page-blocks-xp-rules .felement .pts,
-.dir-rtl#page-blocks-xp-rules .felement .sortorder {
-    margin-left: 2em;
-    margin-right: 0;
+.block-xp-filters-wrapper .filters-list {
+    margin-bottom: 10px;
 }
-#page-blocks-xp-rules .felement .pts:before {
-    content: ' = ';
+.block-xp-filters-wrapper .filter {
+    padding: 10px;
+    background-color: #e0e0e0;
+    margin: 5px 0;
+    border-color
+}
+.block-xp-filters-wrapper .filter input,
+.block-xp-filters-wrapper .filter select {
+    margin: 0;
+}
+.block-xp-filters-wrapper .filter p {
+    margin: 0;
+    padding: 2px 5px;
+}
+.block-xp-filters-wrapper .filter > p {
+    padding: 0;
+}
+.block-xp-filters-wrapper .filter ul {
+    border-left: 2px solid #fff;
+    margin-left: 3px;
+}
+.block-xp-filters-wrapper .filter li {
+    position: relative;
+}
+.block-xp-filters-wrapper .filter ul > li p::before {
+    content: "";
+    border-top: 2px solid #fff;
+    display: block;
+    width: 15px;
+    position: absolute;
+    top: 10px;
+    left: 0px;
+    z-index: 1;
+}
+.block-xp-filters-wrapper .rule-type-ruleset {
+    margin: 5px 15px;
+}
+.block-xp-filters-wrapper .rule-type-ruleset > p {
+    background-color: #ccc;
+}
+.block-xp-filters-wrapper .rule-type-ruleset > ul {
+    padding-top: 1px;
+    margin: 5px 15px;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+.block-xp-filters-wrapper .rule-type-rule p {
+    margin: 5px 15px;
+}
+.block-xp-filters-wrapper .rule-move,
+.block-xp-filters-wrapper .filter-move {
+    cursor: move;
+}
+/** Hide the delete button on the top rule. */
+.block-xp-filters-wrapper .filter > ul > li:first-child > .rule > .rule-definition .rule-delete,
+/** Hide the move button on the top rule. */
+.block-xp-filters-wrapper .filter > ul > li:first-child > .rule > .rule-definition .rule-move {
+    display: none;
 }

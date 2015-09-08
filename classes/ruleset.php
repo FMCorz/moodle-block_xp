@@ -84,21 +84,37 @@ class block_xp_ruleset extends block_xp_rule {
     }
 
     /**
-     * Import the properties.
+     * Returns a string describing the rule.
      *
-     * @param array $properties Array of properties acquired from {@link self::export()}.
-     * @return exportable
+     * @return string
      */
-    protected function import(array $properties) {
-        if (isset($properties['rules'])) {
-            $ruleslist = array();
-            foreach ($properties['rules'] as $rule) {
-                $ruleslist[] = block_xp_rule::create($rule);
-            }
-            $this->rules = $ruleslist;
-        }
-        unset($properties['rules']);
-        parent::import($properties);
+    public function get_description() {
+        return get_string('ruleset:' . $this->method, 'block_xp');
+    }
+
+    /**
+     * Returns a form element for this rule.
+     *
+     * @param string $basename The form element base name.
+     * @return string
+     */
+    public function get_form($basename) {
+        $o = parent::get_form($basename);
+        $o .= html_writer::select(array(
+            self::ALL => get_string('ruleset:all', 'block_xp'),
+            self::ANY => get_string('ruleset:any', 'block_xp'),
+            self::NONE => get_string('ruleset:none', 'block_xp'),
+        ), $basename . '[method]', $this->method, '', array('class' => '', 'id' => ''));
+        return $o;
+    }
+
+    /**
+     * Returns the rules in this set.
+     *
+     * @return block_xp_rule[]
+     */
+    public function get_rules() {
+        return $this->rules;
     }
 
     /**
@@ -114,6 +130,24 @@ class block_xp_ruleset extends block_xp_rule {
             $properties['rules'][] = $rule->export();
         }
         return $properties;
+    }
+
+    /**
+     * Import the properties.
+     *
+     * @param array $properties Array of properties acquired from {@link self::export()}.
+     * @return exportable
+     */
+    protected function import(array $properties) {
+        if (isset($properties['rules'])) {
+            $ruleslist = array();
+            foreach ($properties['rules'] as $rule) {
+                $ruleslist[] = block_xp_rule::create($rule);
+            }
+            $this->rules = $ruleslist;
+        }
+        unset($properties['rules']);
+        parent::import($properties);
     }
 
     /**

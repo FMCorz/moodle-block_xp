@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_filter {
+class block_xp_filter implements renderable {
 
     /**
      * The course ID.
@@ -174,7 +174,7 @@ class block_xp_filter {
             }
 
             if ($key == 'points' || $key == 'sortorder') {
-                $value = intval($value);
+                $value = abs(intval($value));
             }
 
             $filter->$key = $value;
@@ -256,4 +256,63 @@ class block_xp_filter {
     public function set_sortorder($sortorder) {
         $this->sortorder = $sortorder;
     }
+
+    /**
+     * Validate the data of this filter.
+     *
+     * @param array $data Data to validate.
+     * @return bool
+     */
+    public static function validate_data($data) {
+        $valid = true;
+
+        if (isset($data['courseid'])) {
+            $valid = $valid && clean_param($data['courseid'], PARAM_INT) == $data['courseid'];
+        }
+        if (isset($data['points'])) {
+            $valid = $valid && clean_param($data['points'], PARAM_INT) == $data['points'];
+        }
+        if (isset($data['sortorder'])) {
+            $valid = $valid && clean_param($data['sortorder'], PARAM_INT) == $data['sortorder'];
+        }
+        if (isset($data['id'])) {
+            $valid = $valid && clean_param($data['id'], PARAM_INT) == $data['id'];
+        }
+        if (isset($data['ruledata'])) {
+            $ruledata = json_decode($data['ruledata'], true);
+            $valid = $valid && $ruledata !== false;
+            if ($valid) {
+                $valid = $valid && self::validate_ruledata($ruledata);
+            }
+        }
+        if (isset($data['rule'])) {
+            throw new coding_exception('Validation for rule property is not implemented');
+        }
+
+        return $valid;
+    }
+
+    /**
+     * Validate the rule data.
+     *
+     * @param array $data Data to validate.
+     * @return bool
+     */
+    protected static function validate_ruledata($ruledata) {
+        $valid = true;
+        foreach ($ruledata as $key => $value) {
+            if (!$valid) {
+                break;
+            }
+
+            if ($key == '_class') {
+                $reflexion = new ReflectionClass($value);
+                $valid = $reflexion->isSubclassOf('block_xp_rule');
+            } else if (is_array($value)) {
+                $valid = block_xp_rule::validate_data($value);
+            }
+        }
+        return $valid;
+    }
+
 }

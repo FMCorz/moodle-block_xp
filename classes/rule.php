@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class block_xp_rule {
+abstract class block_xp_rule implements renderable {
 
     /**
      * Create a ruleset object from exported data.
@@ -49,6 +49,25 @@ abstract class block_xp_rule {
         unset($properties['_class']);
         $class->import($properties);
         return $class;
+    }
+
+    /**
+     * Returns a string describing the rule.
+     *
+     * @return string
+     */
+    abstract function get_description();
+
+    /**
+     * Returns a form element for this rule.
+     *
+     * This MUST be extended, and this MUST be called.
+     *
+     * @param string $basename The form element base name.
+     * @return string
+     */
+    public function get_form($basename) {
+        return html_writer::empty_tag('input', array('type' => 'hidden', 'name' => $basename . '[_class]', 'value' => get_class($this)));
     }
 
     /**
@@ -87,5 +106,30 @@ abstract class block_xp_rule {
      * @return bool Whether or not it matches.
      */
     abstract public function match($subject);
+
+    /**
+     * Validate the data.
+     *
+     * @param array $data The data to validate.
+     * @return bool
+     */
+    public static function validate_data($data) {
+        $valid = true;
+
+        foreach ($data as $key => $value) {
+            if (!$valid) {
+                break;
+            }
+
+            if ($key === '_class') {
+                $reflexion = new ReflectionClass($value);
+                $valid = $reflexion->isSubclassOf('block_xp_rule');
+            } else if (is_array($value)) {
+                $valid = block_xp_rule::validate_data($value);
+            }
+        }
+
+        return $valid;
+    }
 
 }

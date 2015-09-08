@@ -1,0 +1,10 @@
+{
+  "moodle-block_xp-filters": {
+    "requires": [
+        "base",
+        "node",
+        "moodle-core-dragdrop",
+        "moodle-block_xp-rulepicker"
+    ]
+  }
+}

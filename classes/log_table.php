@@ -56,15 +56,13 @@ class block_xp_log_table extends table_sql {
             'time',
             'fullname',
             'xp',
-            'eventname',
-            'actions'
+            'eventname'
         ));
         $this->define_headers(array(
             get_string('eventtime', 'block_xp'),
             get_string('fullname'),
             get_string('xp', 'block_xp'),
-            get_string('eventname', 'block_xp'),
-            '',
+            get_string('eventname', 'block_xp')
         ));
 
         // Define SQL.
@@ -102,19 +100,6 @@ class block_xp_log_table extends table_sql {
      */
     protected function col_time($row) {
         return userdate($row->time);
-    }
-
-    /**
-     * Formats the actions column.
-     *
-     * @param stdClass $row Table row.
-     * @return string Output produced.
-     */
-    protected function col_actions($row) {
-        global $OUTPUT;
-        return $OUTPUT->action_icon(new moodle_url('/blocks/xp/rules.php',
-                array('add' => $row->eventname, 'courseid' => $this->courseid)),
-            new pix_icon('t/add', get_string('createnewrulefromthisevent', 'block_xp')));
     }
 
 }

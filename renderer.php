@@ -160,6 +160,139 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Override render method.
+     *
+     * @return string
+     */
+    public function render(renderable $renderable, $options = array()) {
+        if ($renderable instanceof block_xp_rule_base) {
+            return $this->render_block_xp_rule($renderable, $options);
+        } else if ($renderable instanceof block_xp_ruleset) {
+            return $this->render_block_xp_ruleset($renderable, $options);
+        }
+        return parent::render($renderable);
+    }
+
+    /**
+     * Renders a block XP filter.
+     *
+     * Not very proud of the way I implement this... The HTML is tied to Javascript
+     * and to the rule objects themselves. Careful when changing something!
+     *
+     * @return string
+     */
+    public function render_block_xp_filter($filter) {
+        static $i = 0;
+        $o = '';
+        $basename = 'filters[' . $i++ . ']';
+        $o .= html_writer::start_tag('div', array('class' => 'filter', 'data-basename' => $basename));
+
+        if ($filter->is_editable()) {
+
+            $content = $this->render(new pix_icon('i/dragdrop', get_string('moverule', 'block_xp'), '',
+                array('class' => 'iconsmall filter-move')));
+            $content .= get_string('awardaxpwhen', 'block_xp',
+                html_writer::empty_tag('input', array(
+                    'type' => 'text',
+                    'value' => $filter->get_points(),
+                    'size' => 3,
+                    'name' => $basename . '[points]'))
+            );
+            $content .= $this->action_link('#', '', null, array('class' => 'filter-delete'),
+                new pix_icon('t/delete', get_string('deleterule', 'block_xp'), '', array('class' => 'iconsmall')));
+
+            $o .= html_writer::tag('p', $content);
+            $o .= html_writer::empty_tag('input', array(
+                    'type' => 'hidden',
+                    'value' => $filter->get_id(),
+                    'name' => $basename . '[id]'));
+            $o .= html_writer::empty_tag('input', array(
+                    'type' => 'hidden',
+                    'value' => $filter->get_sortorder(),
+                    'name' => $basename . '[sortorder]'));
+            $basename .= '[rule]';
+
+        } else {
+            $o .= html_writer::tag('p', get_string('awardaxpwhen', 'block_xp', $filter->get_points()));
+        }
+        $o .= html_writer::start_tag('ul', array('class' => 'filter-rules'));
+        $o .= html_writer::start_tag('li', array('class' => 'rule-top'));
+        $o .= $this->render($filter->get_rule(), array('iseditable' => $filter->is_editable(), 'basename' => $basename));
+        $o .= html_writer::end_tag('li');
+        $o .= html_writer::end_tag('ul');
+        $o .= html_writer::end_tag('div');
+        return $o;
+    }
+
+    /**
+     * Renders a block XP ruleset.
+     *
+     * @param array $options
+     * @return string
+     */
+    public function render_block_xp_rule($rule, $options) {
+        static $i = 0;
+        $iseditable = !empty($options['iseditable']);
+        $basename = isset($options['basename']) ? $options['basename'] : '';
+        if ($iseditable) {
+            $content = $this->render(new pix_icon('i/dragdrop', get_string('movecondition', 'block_xp'), '',
+                array('class' => 'iconsmall rule-move')));
+            $content .= $rule->get_form($basename);
+            $content .= $this->action_link('#', '', null, array('class' => 'rule-delete'),
+                new pix_icon('t/delete', get_string('deletecondition', 'block_xp'), '', array('class' => 'iconsmall')));
+        } else {
+            $content = s($rule->get_description());
+        }
+        $o = '';
+        $o .= html_writer::start_div('rule rule-type-rule');
+        $o .= html_writer::tag('p', $content, array('class' => 'rule-definition', 'data-basename' => $basename));
+        $o .= html_writer::end_div();
+        return $o;
+    }
+
+    /**
+     * Renders a block XP ruleset.
+     *
+     * @param array $options
+     * @return string
+     */
+    public function render_block_xp_ruleset($ruleset, $options) {
+        static $i = 0;
+        $iseditable = !empty($options['iseditable']);
+        $basename = isset($options['basename']) ? $options['basename'] : '';
+        $o = '';
+        $o .= html_writer::start_tag('div', array('class' => 'rule rule-type-ruleset'));
+        if ($iseditable) {
+            $content = $this->render(new pix_icon('i/dragdrop', get_string('movecondition', 'block_xp'), '',
+                array('class' => 'iconsmall rule-move')));
+            $content .= $ruleset->get_form($basename);
+            $content .= $this->action_link('#', '', null, array('class' => 'rule-delete'),
+                new pix_icon('t/delete', get_string('deletecondition', 'block_xp'), '', array('class' => 'iconsmall')));
+        } else {
+            $content = s($ruleset->get_description());
+        }
+        $o .= html_writer::tag('p', $content, array('class' => 'rule-definition', 'data-basename' => $basename));
+        $o .= html_writer::start_tag('ul', array('class' => 'rule-rules', 'data-basename' => $basename . '[rules]'));
+        foreach ($ruleset->get_rules() as $rule) {
+            if ($iseditable) {
+                $options['basename'] = $basename . '[rules][' . $i++ . ']';
+            }
+            $o .= html_writer::start_tag('li', array('class' => 'rule-node'));
+            $o .= $this->render($rule, $options);
+            $o .= html_writer::end_tag('li');
+        }
+        if ($iseditable) {
+            $o .= html_writer::start_tag('li', array('class' => 'rule-add'));
+            $o .= $this->action_link('#', get_string('addacondition', 'block_xp'), null, null,
+                new pix_icon('t/add', '', '', array('class' => 'iconsmall')));
+            $o .= html_writer::end_tag('li');
+        }
+        $o .= html_writer::end_tag('ul');
+        $o .= html_writer::end_tag('div');
+        return $o;
+    }
+
+    /**
      * Returns the links for the students.
      *
      * @param int $courseid The course ID.

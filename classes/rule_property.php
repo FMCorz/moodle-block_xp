@@ -58,6 +58,41 @@ class block_xp_rule_property extends block_xp_rule_base {
     }
 
     /**
+     * Returns a string describing the rule.
+     *
+     * @return string
+     */
+    public function get_description() {
+        return get_string('rulepropertydesc', 'block_xp', (object)array(
+            'property' => $this->property,
+            'compare' => get_string('rule:' . $this->compare, 'block_xp'),
+            'value' => $this->value
+        ));
+    }
+
+    /**
+     * Returns a form element for this rule.
+     *
+     * @param string $basename The form element base name.
+     * @return string
+     */
+    public function get_form($basename) {
+        $o = parent::get_form($basename);
+        $o .= html_writer::select(array(
+                'eventname' => get_string('property:eventname', 'block_xp'),
+                'component' => get_string('property:component', 'block_xp'),
+                'action' => get_string('property:action', 'block_xp'),
+                'target' => get_string('property:target', 'block_xp'),
+                'crud' => get_string('property:crud', 'block_xp'),
+            ), $basename . '[property]', $this->property, '', array('id' => '', 'class' => ''));
+        $o .= '&nbsp;';
+        $o .= self::get_compare_select($basename);
+        $o .= '&nbsp;';
+        $o .= html_writer::empty_tag('input', array('type' => 'text', 'name' => $basename . '[value]', 'value' => s($this->value)));
+        return $o;
+    }
+
+    /**
      * Export the properties and their values.
      *
      * This must return all the values required by the {@link self::create()} method.
