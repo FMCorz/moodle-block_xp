@@ -63,6 +63,7 @@ Please note that this can also be controlled more granularly using the capabilit
 $string['errorformvalues'] = 'There are some issues in the form values, please fix them.';
 $string['errorlevelsincorrect'] = 'The minimum number of levels is 2';
 $string['errornotalllevelsbadgesprovided'] = 'Not all the level badges have been provided. Missing: {$a}';
+$string['errorunknownmodule'] = 'Error: unknown module';
 $string['errorxprequiredlowerthanpreviouslevel'] = 'The XP required is lower than or equal to the previous level.';
 $string['event_user_leveledup'] = 'User leveled up';
 $string['eventname'] = 'Event name';
@@ -125,6 +126,8 @@ $string['rule:gte'] = 'is greater or equal to';
 $string['rule:lt'] = 'is less than';
 $string['rule:lte'] = 'is less or equal to';
 $string['rule:regex'] = 'matches the regex';
+$string['rulecm'] = 'Activity module';
+$string['rulecmdesc'] = 'The event happens in \'{$a->contextname}\'.';
 $string['ruleproperty'] = 'Event property';
 $string['rulepropertydesc'] = 'The property \'{$a->property}\' {$a->compare} \'{$a->value}\'.';
 $string['ruleset'] = 'Group of conditions';
@@ -141,6 +144,7 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
     <li>And the events of educational level not equal to <em>Participating</em>.</li>
 </ul>
 </p>';
+$string['theeventhappensin'] = 'The event happens in {$a}';
 $string['timebetweensameactions'] = 'Time required between identical actions';
 $string['timebetweensameactions_help'] = 'In seconds, the minimum time required between identical actions. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identifical if the same post is read again.';
 $string['timeformaxactions'] = 'Time frame for max. actions';

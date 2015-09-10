@@ -95,11 +95,16 @@ $templatefilter = $renderer->render($dummyfilter);
 
 // Templates of rules.
 $typeruleproperty = new block_xp_rule_property();
+$typerulecm = new block_xp_rule_cm($manager->get_courseid());
 $typeruleset = new block_xp_ruleset();
 $templatetypes = array(
     'block_xp_rule_property' => array(
         'name' => get_string('ruleproperty', 'block_xp'),
         'template' => $renderer->render($typeruleproperty, array('iseditable' => true, 'basename' => 'XXXXX')),
+    ),
+    'block_xp_rule_cm' => array(
+        'name' => get_string('rulecm', 'block_xp'),
+        'template' => $renderer->render($typerulecm, array('iseditable' => true, 'basename' => 'XXXXX')),
     ),
     'block_xp_ruleset' => array(
         'name' => get_string('ruleset', 'block_xp'),
