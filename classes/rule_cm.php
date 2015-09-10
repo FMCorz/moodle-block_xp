@@ -99,7 +99,7 @@ class block_xp_rule_cm extends block_xp_rule_property {
 
         $o = block_xp_rule::get_form($basename);
         $modules = html_writer::select($options, $basename . '[value]', $this->value, '', array('id' => '', 'class' => ''));
-        $o .= get_string('theeventhappensin', 'block_xp', $modules);
+        $o .= get_string('activityoresourceis', 'block_xp', $modules);
         return $o;
     }
 

@@ -24,6 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['activityoresourceis'] = 'The activity or resource is {$a}';
 $string['addacondition'] = 'Add a condition';
 $string['addarule'] = 'Add a rule';
 $string['addrulesformhelp'] = 'The last column defines the amount of experience points gained when the criteria is met.';
@@ -126,14 +127,14 @@ $string['rule:gte'] = 'is greater or equal to';
 $string['rule:lt'] = 'is less than';
 $string['rule:lte'] = 'is less or equal to';
 $string['rule:regex'] = 'matches the regex';
-$string['rulecm'] = 'Activity module';
-$string['rulecmdesc'] = 'The event happens in \'{$a->contextname}\'.';
+$string['rulecm'] = 'Activity or resource';
+$string['rulecmdesc'] = 'The activity or resource is \'{$a->contextname}\'.';
 $string['ruleproperty'] = 'Event property';
 $string['rulepropertydesc'] = 'The property \'{$a->property}\' {$a->compare} \'{$a->value}\'.';
-$string['ruleset'] = 'Group of conditions';
-$string['ruleset:all'] = 'All of the child conditions are met (And)';
-$string['ruleset:any'] = 'Any of the child conditions are met (Or)';
-$string['ruleset:none'] = 'None of the child conditions are met (And not)';
+$string['ruleset'] = 'Set of conditions';
+$string['ruleset:all'] = 'ALL of the conditions are true';
+$string['ruleset:any'] = 'ANY of the conditions are true';
+$string['ruleset:none'] = 'NONE of the conditions are true';
 $string['rulesformhelp'] = '<p>This plugin is making use of the events to attribute experience points to actions performed by the students. You can use the form below to add your own rules and view the default ones.</p>
 <p>It is advised to check the plugin\'s <a href="{$a->log}">log</a> to identify what events are triggered as you perform actions in the course, and also to read more about events themselves: <a href="{$a->list}">list of all events</a>, <a href="{$a->doc}">developer documentation</a>.</p>
 <p>Finally, please note that the plugin always ignores:
@@ -144,7 +145,6 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
     <li>And the events of educational level not equal to <em>Participating</em>.</li>
 </ul>
 </p>';
-$string['theeventhappensin'] = 'The event happens in {$a}';
 $string['timebetweensameactions'] = 'Time required between identical actions';
 $string['timebetweensameactions_help'] = 'In seconds, the minimum time required between identical actions. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identifical if the same post is read again.';
 $string['timeformaxactions'] = 'Time frame for max. actions';
