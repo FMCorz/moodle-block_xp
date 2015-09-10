@@ -221,7 +221,7 @@ class block_xp_manager {
     public function capture_event(\core\event\base $event) {
         global $CFG, $DB;
 
-        if ($CFG->block_xp_context != CONTEXT_SYSTEM && $event->courseid !== $this->courseid) {
+        if ($CFG->block_xp_context != CONTEXT_SYSTEM && $event->courseid != $this->courseid) {
             throw new coding_exception('Event course ID does not match block course ID');
         }
 
