@@ -173,8 +173,11 @@ class block_xp_filter implements renderable {
                 continue;
             }
 
-            if ($key == 'points' || $key == 'sortorder') {
+            if ($key == 'points') {
+                // Prevent negatives.
                 $value = abs(intval($value));
+            } else if ($key == 'sortorder') {
+                $value = intval($value);
             }
 
             $filter->$key = $value;

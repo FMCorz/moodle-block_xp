@@ -136,18 +136,18 @@ class block_xp_filters_testcase extends advanced_testcase {
 
         // This filter will catch everything.
         $rule = new block_xp_rule_property(block_xp_rule_base::CT, 'something', 'eventname');
-        $data = array('courseid' => $course->id, 'sortorder' => -1, 'points' => -10, 'rule' => $rule);
+        $data = array('courseid' => $course->id, 'sortorder' => -1, 'points' => 1, 'rule' => $rule);
         block_xp_filter::load_from_data($data)->save();
         $fm->invalidate_filters_cache();
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'u', 'objectid' => 2));
-        $this->assertSame(-10, $fm->get_points_for_event($e));
+        $this->assertSame(1, $fm->get_points_for_event($e));
         $e = \block_xp\event\something_happened::mock(array('crud' => 'r', 'objectid' => 100));
-        $this->assertSame(-10, $fm->get_points_for_event($e));
+        $this->assertSame(1, $fm->get_points_for_event($e));
         $e = \block_xp\event\something_happened::mock(array('crud' => 'd'));
-        $this->assertSame(-10, $fm->get_points_for_event($e));
+        $this->assertSame(1, $fm->get_points_for_event($e));
         $e = \block_xp\event\something_happened::mock(array('crud' => 'r'));
-        $this->assertSame(-10, $fm->get_points_for_event($e));
+        $this->assertSame(1, $fm->get_points_for_event($e));
 
     }
 
