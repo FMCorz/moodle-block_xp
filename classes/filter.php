@@ -192,7 +192,7 @@ class block_xp_filter implements renderable {
      */
     protected function load_rule() {
         $ruledata = json_decode($this->ruledata, true);
-        $this->rule = $ruledata['_class']::create($ruledata);
+        $this->rule = block_xp_rule::create($ruledata);
     }
 
     /**

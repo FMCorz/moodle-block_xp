@@ -142,7 +142,10 @@ class block_xp_ruleset extends block_xp_rule {
         if (isset($properties['rules'])) {
             $ruleslist = array();
             foreach ($properties['rules'] as $rule) {
-                $ruleslist[] = block_xp_rule::create($rule);
+                $ruleobject = block_xp_rule::create($rule);
+                if ($ruleobject) {
+                    $ruleslist[] = $ruleobject;
+                }
             }
             $this->rules = $ruleslist;
         }

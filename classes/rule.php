@@ -42,9 +42,12 @@ abstract class block_xp_rule implements renderable {
      * This then calls the method {@link self::import()}.
      *
      * @param array $properties Array of properties acquired from {@link self::export()}.
-     * @return block_xp_rule The rule object.
+     * @return block_xp_rule|false The rule object.
      */
     public static function create(array $properties) {
+        if (!class_exists($properties['_class'])) {
+            return false;
+        }
         $class = new $properties['_class'];
         unset($properties['_class']);
         $class->import($properties);

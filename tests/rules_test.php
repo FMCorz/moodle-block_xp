@@ -152,5 +152,10 @@ class block_xp_rules_testcase extends advanced_testcase {
         $rs = new block_xp_ruleset(array($rule), block_xp_ruleset::ALL);
         $newrs = block_xp_rule::create($rs->export());
         $this->assertEquals($rs, $newrs);
+
+        // Test with bad data.
+        $data = $rs->export();
+        $data['_class'] = 'Does not exist';
+        $this->assertFalse(block_xp_rule::create($data));
     }
 }
