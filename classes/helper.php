@@ -75,6 +75,8 @@ class block_xp_helper {
             // Skip own events.
         } else if (!$event->userid || isguestuser($event->userid) || is_siteadmin($event->userid)) {
             // Skip non-logged in users and guests.
+        } else if ($event->anonymous) {
+            // Skip all the events marked as anonymous.
         } else if (!in_array($event->contextlevel, $allowedcontexts)) {
             // Ignore events that are not in the right context.
         } else if ($event->edulevel !== \core\event\base::LEVEL_PARTICIPATING) {

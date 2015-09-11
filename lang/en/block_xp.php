@@ -148,6 +148,7 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
     <li>The actions performed by administrators, guests or non-logged in users.</li>
     <li>The actions performed by users not having the capability <em>block/xp:earnxp</em>.</li>
     <li>Repeated actions within a short time interval, to prevent cheating.</li>
+    <li>Events that are flagged as <em>anonymous</em>, e.g. in an anonymous Feedback.</li>
     <li>And the events of educational level not equal to <em>Participating</em>.</li>
 </ul>
 </p>';
