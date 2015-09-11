@@ -40,7 +40,7 @@ class block_xp extends block_base {
      */
     public function applicable_formats() {
         global $CFG;
-        if ($CFG->block_xp_context == CONTEXT_SYSTEM) {
+        if (isset($CFG->block_xp_context) && $CFG->block_xp_context == CONTEXT_SYSTEM) {
             return array('site' => true, 'course' => true, 'my' => true);
         }
         return array('course' => true);
