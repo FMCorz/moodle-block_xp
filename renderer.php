@@ -185,7 +185,8 @@ class block_xp_renderer extends plugin_renderer_base {
         static $i = 0;
         $o = '';
         $basename = 'filters[' . $i++ . ']';
-        $o .= html_writer::start_tag('div', array('class' => 'filter', 'data-basename' => $basename));
+
+        $o .= html_writer::start_tag('li', array('class' => 'filter', 'data-basename' => $basename));
 
         if ($filter->is_editable()) {
 
@@ -216,11 +217,9 @@ class block_xp_renderer extends plugin_renderer_base {
             $o .= html_writer::tag('p', get_string('awardaxpwhen', 'block_xp', $filter->get_points()));
         }
         $o .= html_writer::start_tag('ul', array('class' => 'filter-rules'));
-        $o .= html_writer::start_tag('li', array('class' => 'rule-top'));
         $o .= $this->render($filter->get_rule(), array('iseditable' => $filter->is_editable(), 'basename' => $basename));
-        $o .= html_writer::end_tag('li');
         $o .= html_writer::end_tag('ul');
-        $o .= html_writer::end_tag('div');
+        $o .= html_writer::end_tag('li');
         return $o;
     }
 
@@ -244,9 +243,9 @@ class block_xp_renderer extends plugin_renderer_base {
             $content = s($rule->get_description());
         }
         $o = '';
-        $o .= html_writer::start_div('rule rule-type-rule');
+        $o .= html_writer::start_tag('li', array('class' => 'rule rule-type-rule'));
         $o .= html_writer::tag('p', $content, array('class' => 'rule-definition', 'data-basename' => $basename));
-        $o .= html_writer::end_div();
+        $o .= html_writer::end_tag('li');
         return $o;
     }
 
@@ -261,7 +260,7 @@ class block_xp_renderer extends plugin_renderer_base {
         $iseditable = !empty($options['iseditable']);
         $basename = isset($options['basename']) ? $options['basename'] : '';
         $o = '';
-        $o .= html_writer::start_tag('div', array('class' => 'rule rule-type-ruleset'));
+        $o .= html_writer::start_tag('li', array('class' => 'rule rule-type-ruleset'));
         if ($iseditable) {
             $content = $this->render(new pix_icon('i/dragdrop', get_string('movecondition', 'block_xp'), '',
                 array('class' => 'iconsmall rule-move')));
@@ -277,9 +276,7 @@ class block_xp_renderer extends plugin_renderer_base {
             if ($iseditable) {
                 $options['basename'] = $basename . '[rules][' . $i++ . ']';
             }
-            $o .= html_writer::start_tag('li', array('class' => 'rule-node'));
             $o .= $this->render($rule, $options);
-            $o .= html_writer::end_tag('li');
         }
         if ($iseditable) {
             $o .= html_writer::start_tag('li', array('class' => 'rule-add'));
@@ -288,7 +285,7 @@ class block_xp_renderer extends plugin_renderer_base {
             $o .= html_writer::end_tag('li');
         }
         $o .= html_writer::end_tag('ul');
-        $o .= html_writer::end_tag('div');
+        $o .= html_writer::end_tag('li');
         return $o;
     }
 

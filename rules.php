@@ -146,25 +146,30 @@ $addlink .= html_writer::end_tag('li');
 
 echo $OUTPUT->heading(get_string('yourownrules', 'block_xp'), 3);
 
-echo html_writer::start_tag('ul', array('class' => 'filters-list'));
+echo html_writer::start_tag('ul', array('class' => 'filters-list filters-editable'));
 echo $addlink;
 foreach ($userfilters as $filter) {
-    echo html_writer::tag('li', $renderer->render($filter), array('class' => 'filter-node'));
+    echo $renderer->render($filter);
     echo $addlink;
 }
 echo html_writer::end_tag('ul');
 
 echo html_writer::start_tag('p');
 echo html_writer::empty_tag('input', array('value' => get_string('savechanges'), 'type' => 'submit', 'name' => 'save'));
+echo ' ';
 echo html_writer::empty_tag('input', array('value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel'));
 echo html_writer::end_tag('p');
 echo html_writer::end_tag('form');
 
 echo $OUTPUT->heading(get_string('defaultrules', 'block_xp'), 3);
 echo html_writer::tag('p', get_string('defaultrulesformhelp', 'block_xp'));
+
+echo html_writer::start_tag('ul', array('class' => 'filters-list filters-readonly'));
 foreach (block_xp_filter_manager::get_static_filters() as $filter) {
     echo $renderer->render($filter);
+
 }
+echo html_writer::end_tag('ul');
 
 echo html_writer::end_div();
 

@@ -120,71 +120,159 @@
 
 /**
  * Rules pages.
+ *
+ * Note: We find the very first rule using .filter-rules > .rule
  */
 .block-xp-filters-wrapper ul {
     list-style: none;
-    margin: 0;
-    padding: 0;
 }
-.block-xp-filters-wrapper .filters-list {
-    margin-bottom: 10px;
+.block-xp-filters-wrapper p,
+.block-xp-filters-wrapper ul,
+.block-xp-filters-wrapper ul.filters-list,  /** Made more specific for RTL. */
+.block-xp-filters-wrapper input[type],
+.block-xp-filters-wrapper select {
+    margin: 0;
+}
+.block-xp-filters-wrapper .filter-rules {
+    margin-top: 5px;
+    margin-left: 20px;
 }
 .block-xp-filters-wrapper .filter {
-    padding: 10px;
-    background-color: #e0e0e0;
-    margin: 5px 0;
-    border-color
+    padding: 8px 4px;
+    border: 1px solid #ddd;
+    margin: 10px 0;
 }
-.block-xp-filters-wrapper .filter input,
-.block-xp-filters-wrapper .filter select {
-    margin: 0;
+.block-xp-filters-wrapper .filter-add {
+    margin: 10px 0;
 }
-.block-xp-filters-wrapper .filter p {
-    margin: 0;
-    padding: 2px 5px;
+.block-xp-filters-wrapper .rule-rules {
+    margin-left: 35px;
 }
-.block-xp-filters-wrapper .filter > p {
-    padding: 0;
+.block-xp-filters-wrapper .filter-rules > .rule {
+    border: 0;
+    padding-left: 0;
 }
-.block-xp-filters-wrapper .filter ul {
-    border-left: 2px solid #fff;
-    margin-left: 3px;
+.block-xp-filters-wrapper .filter-rules > .rule::before {
+    border: 0;
 }
-.block-xp-filters-wrapper .filter li {
+.block-xp-filters-wrapper .filter-rules > .rule > .rule-rules {
+    margin-left: 20px;
+}
+.block-xp-filters-wrapper .filter-rules > .rule > .rule-definition {
+    line-height: 40px;
+    padding-left: 5px;
+}
+.block-xp-filters-wrapper .rule-type-ruleset,
+.block-xp-filters-wrapper .rule-type-ruleset .rule-rules > .rule:first-child {
+    padding-top: 5px;
+}
+.block-xp-filters-wrapper .rule-type-ruleset > .rule-definition {
+    background-color: #f1f1f1;
+    padding-bottom: 2px;
+}
+.block-xp-filters-wrapper .rule-rules .rule {
     position: relative;
+    border-left: 1px dotted #ccc;
+    padding-left: 15px;
+    min-height: 40px;
+    line-height: 40px;
 }
-.block-xp-filters-wrapper .filter ul > li p::before {
+.block-xp-filters-wrapper .rule-rules .rule::before {
     content: "";
-    border-top: 2px solid #fff;
+    border-top: 1px dotted #ccc;
     display: block;
     width: 15px;
     position: absolute;
-    top: 10px;
-    left: 0px;
-    z-index: 1;
+    top: 20px;
+    left: 0;
 }
-.block-xp-filters-wrapper .rule-type-ruleset {
-    margin: 5px 15px;
+.block-xp-filters-wrapper .rule-type-ruleset .rule-rules > .rule:first-child::before,
+.block-xp-filters-wrapper .rule.rule-type-ruleset::before {
+    top: 25px;
 }
-.block-xp-filters-wrapper .rule-type-ruleset > p {
-    background-color: #ccc;
+.block-xp-filters-wrapper .rule-add {
+    position: relative;
+    padding: 10px 17px;
 }
-.block-xp-filters-wrapper .rule-type-ruleset > ul {
-    padding-top: 1px;
-    margin: 5px 15px;
-    margin-top: 0;
-    margin-bottom: 15px;
+.block-xp-filters-wrapper .rule-add::before,
+.block-xp-filters-wrapper .rule-rules .rule:last-child::before {
+    content: "";
+    border-top: 0;
+    border-left: 1px dotted #ccc;
+    border-bottom: 1px dotted #ccc;
+    display: block;
+    width: 15px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
-.block-xp-filters-wrapper .rule-type-rule p {
-    margin: 5px 15px;
+.block-xp-filters-wrapper .rule-rules .rule:last-child {
+    border: 0;
 }
 .block-xp-filters-wrapper .rule-move,
 .block-xp-filters-wrapper .filter-move {
     cursor: move;
 }
-/** Hide the delete button on the top rule. */
-.block-xp-filters-wrapper .filter > ul > li:first-child > .rule > .rule-definition .rule-delete,
-/** Hide the move button on the top rule. */
-.block-xp-filters-wrapper .filter > ul > li:first-child > .rule > .rule-definition .rule-move {
+.block-xp-filters-wrapper .filter-rules > .rule > .rule-definition .rule-delete,
+.block-xp-filters-wrapper .filter-rules > .rule > .rule-definition .rule-move {
+    /** Hide the move/delete button on the top rule. */
     display: none;
+}
+
+/** Readonly filters. */
+.block-xp-filters-wrapper .filters-readonly .filter {
+    padding: 10px;
+}
+.block-xp-filters-wrapper .filters-readonly .filter-rules > .rule > .rule-definition,
+.block-xp-filters-wrapper .filters-readonly .rule-rules .rule {
+    min-height: 30px;
+    line-height: 30px;
+}
+.block-xp-filters-wrapper .filters-readonly .filter-rules > .rule > .rule-definition {
+    padding: 0 10px;
+}
+.block-xp-filters-wrapper .filters-readonly .rule-type-ruleset .rule-rules > .rule:first-child::before,
+.block-xp-filters-wrapper .filters-readonly .rule.rule-type-ruleset::before {
+    top: 20px;
+}
+.block-xp-filters-wrapper .filters-readonly .rule-rules .rule::before {
+    top: 15px;
+}
+.block-xp-filters-wrapper .filters-readonly .rule-rules .rule:last-child::before {
+    top: 0;
+    height: 15px;
+}
+
+/** RTL styles. */
+.dir-rtl .block-xp-filters-wrapper .filter-rules {
+    margin-left: 0;
+    margin-right: 20px;
+}
+.dir-rtl .block-xp-filters-wrapper .rule-rules {
+    margin-left: 0;
+    margin-right: 40px;
+}
+.dir-rtl .block-xp-filters-wrapper .filter-rules > .rule > .rule-rules {
+    margin-left: 0;
+    margin-right: 20px;
+}
+.dir-rtl .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition {
+    padding-left: 0;
+    padding-right: 5px;
+}
+.dir-rtl .block-xp-filters-wrapper .rule-rules .rule {
+    border-left: 0;
+    border-right: 1px dotted #ccc;
+    padding-right: 15px;
+    padding-left: 0;
+}
+.dir-rtl .block-xp-filters-wrapper .rule-rules .rule::before {
+    right: 0;
+}
+.dir-rtl .block-xp-filters-wrapper .rule-add::before,
+.dir-rtl .block-xp-filters-wrapper .rule-rules .rule:last-child::before {
+    border-left: 0;
+    border-right: 1px dotted #ccc;
+    right: 0;
 }

@@ -33,11 +33,10 @@ var COMPONENT = 'block_xp';
 var CSS = {
     ADDFILTER: 'filter-add',
     FILTER: 'filter',
-    FILTERNODE: 'filter-node',
     FILTERSLIST: 'filters-list',
     PREFIX: 'block_xp-filters',
-    RULESLIST: 'rule-rules',
-    RULENODE: 'rule-node',
+    RULE: 'rule',
+    RULES: 'rule-rules',
 };
 var SELECTORS = {
     ADDFILTER: '.filter-add',
@@ -51,16 +50,13 @@ var SELECTORS = {
     DELETERULEBTN: '.rule-delete',
     FILTER: '.filter',
     FILTERMOVE: '.filter-move',
-    FILTERNODE: '.filter-node',
     FILTERRULES: '.filter-rules',
     FILTERSLIST: '.filters-list',
     FILTERSLISTNODES: '.filters-list > li',
     RULE: '.rule',
     RULEDEFINITION: '.rule-definition',
     RULEMOVE: '.rule .rule-move',
-    RULENODE: '.rule-node',
     RULES: '.rule-rules',
-    RULESLIST: '.rule-rules',
 };
 // This file is part of Moodle - http://moodle.org/
 //
@@ -165,8 +161,8 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
             containerSelector: SELECTORS.FILTERSLIST,
             groups: ['filters'],
             handleSelector: SELECTORS.FILTERMOVE,
-            nodeClass: CSS.FILTERNODE,
-            nodeSelector: SELECTORS.FILTERNODE
+            nodeClass: CSS.FILTER,
+            nodeSelector: SELECTORS.FILTER
         });
 
         this.filterDnD.on('drag:end', function() {
@@ -178,7 +174,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
         }, this);
 
         this.rulesDnD = {};
-        this.container.all(SELECTORS.FILTERNODE).each(function(node) {
+        this.container.all(SELECTORS.FILTER).each(function(node) {
             this.setFilterRulesDnD(node);
         }, this);
     },
@@ -229,7 +225,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
     deleteFilter: function(e) {
         e.preventDefault();
 
-        var filter = e.currentTarget.ancestor(SELECTORS.FILTERNODE);
+        var filter = e.currentTarget.ancestor(SELECTORS.FILTER);
 
         // Delete the fitler.
         filter.remove();
@@ -249,7 +245,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
     deleteRule: function(e) {
         e.preventDefault();
 
-        var rule = e.currentTarget.ancestor(SELECTORS.RULENODE);
+        var rule = e.currentTarget.ancestor(SELECTORS.RULE);
         var parentRule = rule.ancestor(SELECTORS.RULE, false, Y.bind(function(el) {
             return el == this.container;
         }, this));
@@ -380,12 +376,10 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * @return {Node}
      */
     getNewFilterTemplate: function() {
-        var tpl = this.get('filter'),
-            container = Y.Node.create('<li class="' + CSS.FILTERNODE + '">');
+        var tpl = this.get('filter');
 
         tpl = tpl.replace(this.get('filterTemplateBasename'), this.generateFilterBasename(this.getNewFilterIncrement()));
-        container.append(tpl);
-        return container;
+        return Y.Node.create(tpl);
     },
 
     /**
@@ -419,14 +413,12 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
         var rule = this.get('rules')[ruleId],
             tpl = rule.template,
             rulesContainer = this.rulesetTarget.one(SELECTORS.RULES),
-            ruleContainer = Y.Node.create('<li class="' + CSS.RULENODE + '">'),
             basename = this.generateRuleBasename(rulesContainer.getData('basename'), this.getNewRuleIncrement(this.rulesetTarget));
 
         tpl = tpl.replace(this.get('ruleTemplateBasename'), basename);
-        ruleContainer.append(tpl);
-        rulesContainer.insertBefore(ruleContainer, rulesContainer.one(SELECTORS.ADDRULEINRULES));
+        rulesContainer.insertBefore(tpl, rulesContainer.one(SELECTORS.ADDRULEINRULES));
 
-        this.rulesDnD[rulesContainer.ancestor(SELECTORS.FILTERNODE).generateID()].syncTargets();
+        this.rulesDnD[rulesContainer.ancestor(SELECTORS.FILTER).generateID()].syncTargets();
     },
 
     /**
@@ -457,12 +449,12 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
         this.rulesDnD[filterNode.generateID()] = Y.namespace('M.block_xp.Filters.DnD').init({
             additionalDropsSelector: SELECTORS.ADDRULE,
             dropBeforeSelector: SELECTORS.ADDRULE,
-            containerClass: CSS.RULESLIST,
-            containerSelector: '#' + filterNode.generateID() + ' ' + SELECTORS.RULESLIST,
+            containerClass: CSS.RULES,
+            containerSelector: '#' + filterNode.generateID() + ' ' + SELECTORS.RULES,
             groups: ['rules_' + filterNode.generateID()],
             handleSelector: SELECTORS.RULEMOVE,
-            nodeClass: CSS.RULENODE,
-            nodeSelector: SELECTORS.RULENODE
+            nodeClass: CSS.RULE,
+            nodeSelector: SELECTORS.RULE
         });
 
         this.rulesDnD[filterNode.generateID()].on('drop:hit', function(e) {

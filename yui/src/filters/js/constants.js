@@ -31,11 +31,10 @@ var COMPONENT = 'block_xp';
 var CSS = {
     ADDFILTER: 'filter-add',
     FILTER: 'filter',
-    FILTERNODE: 'filter-node',
     FILTERSLIST: 'filters-list',
     PREFIX: 'block_xp-filters',
-    RULESLIST: 'rule-rules',
-    RULENODE: 'rule-node',
+    RULE: 'rule',
+    RULES: 'rule-rules',
 };
 var SELECTORS = {
     ADDFILTER: '.filter-add',
@@ -49,14 +48,11 @@ var SELECTORS = {
     DELETERULEBTN: '.rule-delete',
     FILTER: '.filter',
     FILTERMOVE: '.filter-move',
-    FILTERNODE: '.filter-node',
     FILTERRULES: '.filter-rules',
     FILTERSLIST: '.filters-list',
     FILTERSLISTNODES: '.filters-list > li',
     RULE: '.rule',
     RULEDEFINITION: '.rule-definition',
     RULEMOVE: '.rule .rule-move',
-    RULENODE: '.rule-node',
     RULES: '.rule-rules',
-    RULESLIST: '.rule-rules',
 };
