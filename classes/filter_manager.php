@@ -98,9 +98,9 @@ class block_xp_filter_manager {
         $u = new block_xp_rule_property(block_xp_rule_base::EQ, 'u', 'crud');
 
         // Skip those as they duplicate other more low level actions.
-        $bcmv = new block_xp_rule_property(block_xp_rule_base::EQ, '\mod_book\event\course_module_viewed', 'eventname');
-        $dsc = new block_xp_rule_property(block_xp_rule_base::EQ, '\mod_forum\event\discussion_subscription_created', 'eventname');
-        $sc = new block_xp_rule_property(block_xp_rule_base::EQ, '\mod_forum\event\subscription_created', 'eventname');
+        $bcmv = new block_xp_rule_event('\mod_book\event\course_module_viewed');
+        $dsc = new block_xp_rule_event('\mod_forum\event\discussion_subscription_created');
+        $sc = new block_xp_rule_event('\mod_forum\event\subscription_created');
         $as = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_submitted', 'eventname');
         $au = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_uploaded', 'eventname');
 

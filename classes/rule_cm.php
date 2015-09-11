@@ -71,7 +71,7 @@ class block_xp_rule_cm extends block_xp_rule_property {
             $contextname = $context->get_context_name();
         }
         return get_string('rulecmdesc', 'block_xp', (object)array(
-            'contextname' => "'" . $contextname . "'"
+            'contextname' => $contextname
         ));
     }
 

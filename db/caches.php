@@ -29,5 +29,10 @@ $definitions = array(
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
         'staticacceleration' => true
+    ),
+
+    'ruleevent_eventslist' => array(
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true
     )
 );
