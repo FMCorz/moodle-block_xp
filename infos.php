@@ -51,6 +51,7 @@ $renderer = $PAGE->get_renderer('block_xp');
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strinfos);
 echo $renderer->navigation($manager, 'infos');
+echo $renderer->notices($manager);
 
 $levels = $manager->get_level_count();
 $levelsdata = $manager->get_levels_data();

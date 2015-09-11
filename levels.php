@@ -69,6 +69,7 @@ if ($data = $form->get_data()) {
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strlevels);
 echo $renderer->navigation($manager, 'levels');
+echo $renderer->notices($manager);
 
 if ($form->is_submitted() && !$form->is_validated() && !$form->no_submit_button_pressed()) {
     echo $OUTPUT->notification(get_string('errorformvalues', 'block_xp'));

@@ -60,6 +60,7 @@ if ($data = $form->get_data()) {
 }
 
 echo $renderer->navigation($manager, 'config');
+echo $renderer->notices($manager);
 
 echo $form->display();
 

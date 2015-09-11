@@ -69,6 +69,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($strcoursevisuals);
 
 echo $renderer->navigation($manager, 'visuals');
+echo $renderer->notices($manager);
 
 echo $form->display();
 

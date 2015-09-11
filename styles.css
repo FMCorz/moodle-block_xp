@@ -88,6 +88,16 @@
 }
 
 /**
+ * Like notice.
+ */
+.block-xp-notices .dismiss-action {
+    float: right;
+}
+.dir-rtl .block-xp-notices .dismiss-action {
+    float: left;
+}
+
+/**
  * Notification dialogue.
  */
 

@@ -42,6 +42,9 @@ class block_xp_manager {
     /** User preference key storing if we should notify a user for his level up */
     const USERPREF_NOTIFY = 'block_xp_notify_level_up';
 
+    /** User preference key storing if they dismissed the like notice */
+    const USERPREF_NOTICES = 'block_xp_notices';
+
     /** @var array Array of singletons. */
     protected static $instances;
 

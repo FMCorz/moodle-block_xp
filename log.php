@@ -54,8 +54,8 @@ $table->define_baseurl($url);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strcoursereport);
-
 echo $renderer->navigation($manager, 'log');
+echo $renderer->notices($manager);
 
 groups_print_course_menu($manager->get_course(), $url);
 

@@ -127,7 +127,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($strcourserules);
 
 echo $renderer->navigation($manager, 'rules');
-
+echo $renderer->notices($manager);
 
 $a = new stdClass();
 $a->list = (new moodle_url('/report/eventlist/index.php'))->out();

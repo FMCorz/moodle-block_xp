@@ -52,6 +52,7 @@ $string['defaultrulesformhelp'] = 'Those are the default rules provided by the p
 $string['deletecondition'] = 'Delete condition';
 $string['deleterule'] = 'Delete rule';
 $string['description'] = 'Description';
+$string['dismissnotice'] = 'Dismiss notice';
 $string['enableinfos'] = 'Enable infos page';
 $string['enableinfos_help'] = 'When set to \'No\', students will not be able to view the infos page.';
 $string['enableladder'] = 'Enable the ladder';
@@ -95,6 +96,7 @@ $string['levels'] = 'Levels';
 $string['levelswillbereset'] = 'Warning! Saving this form will recalculate the levels of everyone!';
 $string['levelup'] = 'Level up!';
 $string['levelx'] = 'Level #{$a}';
+$string['likenotice'] = '<strong>Do you like the plugin?</strong> Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourites</a> on Moodle.org and <a href="{$a->github}" target="_blank">star it on GitHub</a>.';
 $string['logging'] = 'Logging';
 $string['maxactionspertime'] = 'Max. actions in time frame';
 $string['maxactionspertime_help'] = 'The maximum number of actions that will count for XP during the time frame given. Any subsequent action will be ignored.';

@@ -80,6 +80,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($strcoursereport);
 
 echo $renderer->navigation($manager, 'report');
+echo $renderer->notices($manager);
 
 // Editing a user.
 if ($action == 'edit' && !empty($userid)) {

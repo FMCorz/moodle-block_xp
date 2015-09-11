@@ -93,6 +93,47 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Return the notices.
+     *
+     * @param block_xp_manager $manager The manager.
+     * @return string The notices.
+     */
+    public function notices($manager) {
+        global $CFG;
+        $o = '';
+
+        if (!$manager->can_manage()) {
+            return $o;
+        }
+
+        if (!get_user_preferences(block_xp_manager::USERPREF_NOTICES, false)) {
+            require_once($CFG->libdir . '/ajax/ajaxlib.php');
+            user_preference_allow_ajax_update(block_xp_manager::USERPREF_NOTICES, PARAM_BOOL);
+
+            $moodleorgurl = new moodle_url('https://moodle.org/plugins/view.php?plugin=block_xp');
+            $githuburl = new moodle_url('https://github.com/FMCorz/moodle-block_xp');
+            $text = get_string('likenotice', 'block_xp', (object) array(
+                'moodleorg' => $moodleorgurl->out(),
+                'github' => $githuburl->out()
+            ));
+
+            $id = html_writer::random_id();
+            $this->page->requires->js_init_call("Y.one('.block-xp-rocks').on('click', function(e) {
+                e.preventDefault();
+                M.util.set_user_preference('" . block_xp_manager::USERPREF_NOTICES . "', 1);
+                Y.one('.block-xp-notices').hide();
+            });");
+
+            $icon = new pix_icon('t/delete', get_string('dismissnotice', 'block_xp'));
+            $actionicon = $this->action_icon(new moodle_url($this->page->url), $icon, null, array('class' => 'block-xp-rocks'));
+            $text .= html_writer::div($actionicon, 'dismiss-action');
+            $o .= html_writer::div($this->notification($text, 'notifysuccess'), 'block-xp-notices');
+        }
+
+        return $o;
+    }
+
+    /**
      * Outputs the navigation.
      *
      * @param block_xp_manager $manager The manager.

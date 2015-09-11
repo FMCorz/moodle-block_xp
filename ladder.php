@@ -51,8 +51,8 @@ $renderer = $PAGE->get_renderer('block_xp');
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strladder);
-
 echo $renderer->navigation($manager, 'ladder');
+echo $renderer->notices($manager);
 
 groups_print_course_menu($manager->get_course(), $url);
 
