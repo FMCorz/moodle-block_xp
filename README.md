@@ -41,6 +41,7 @@ The following events are always __ignored__:
 
 - Events from another context than course or module
 - Events having another _educational level_ than _participating_
+- Events flagged as _anonymous_, e.g. in an anonymous Feedback
 
 The rest is up to you. By default the plugin comes with a minimal set of rules to attribute experience points to actions, and to ignore some redundant ones. Visit the _Rules_ page in the plugin itself to view or override them.
 
@@ -50,6 +51,11 @@ Restricting access based on students' levels
 --------------------------------------------
 
 Have a look at this availability plugin [Level](https://github.com/FMCorz/moodle-availability_xp).
+
+How to use one block for all courses
+------------------------------------
+
+In order to gather experience points from all the courses a student is participating in, you have to set the admin setting _Where are experience points used?_ to 'For the whole site'. This setting is located under "Site administration > Plugins > Blocks > Level up!". Once set, any block newly or previously added will display the total experience points of your student.
 
 Todo
 ----

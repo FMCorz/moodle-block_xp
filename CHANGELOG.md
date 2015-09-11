@@ -1,6 +1,18 @@
 Changelog
 =========
 
+v2.0.0
+------
+
+- Experience points can be used either for the whole site or per course
+- Course groups are considered when displaying the report and the ladder
+- \mod_book\event\course_module_viewed has been added to the list of redundant events
+- Complete new user interface to set up rules (nested conditions, drag and drop, ...)
+- Ability to filter events per activity
+- Added a user friendly condition to filter per event
+- Anonymous events are now always ignored
+- Bug fixes
+
 v1.5.2
 ------
 
