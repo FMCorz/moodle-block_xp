@@ -37,8 +37,11 @@ defined('MOODLE_INTERNAL') || die();
  * @return void|false
  */
 function block_xp_pluginfile($course, $bi, $context, $filearea, $args, $forcedownload, array $options = array()) {
+    global $CFG;
 
-    if ($context->contextlevel !== CONTEXT_COURSE) {
+    if ($CFG->block_xp_context == CONTEXT_SYSTEM && $context->contextlevel !== CONTEXT_SYSTEM) {
+        return false;
+    } else if ($CFG->block_xp_context != CONTEXT_SYSTEM && $context->contextlevel !== CONTEXT_COURSE) {
         return false;
     }
 
