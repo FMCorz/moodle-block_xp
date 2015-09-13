@@ -66,7 +66,7 @@ class block_xp_helper {
         static $allowedcontexts = null;
         if ($allowedcontexts === null) {
             $allowedcontexts = array(CONTEXT_COURSE, CONTEXT_MODULE);
-            if ($CFG->block_xp_context == CONTEXT_SYSTEM) {
+            if (isset($CFG->block_xp_context) && $CFG->block_xp_context == CONTEXT_SYSTEM) {
                 $allowedcontexts[] = CONTEXT_SYSTEM;
             }
         }
