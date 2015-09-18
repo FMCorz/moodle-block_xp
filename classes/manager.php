@@ -627,10 +627,10 @@ class block_xp_manager {
         global $DB;
 
         // Delete XP records.
-        $sql = "DELETE FROM {block_xp} b WHERE b.courseid = :courseid";
+        $sql = "DELETE FROM {block_xp} WHERE courseid = :courseid";
         $params = array('courseid' => $this->courseid);
         if ($groupid) {
-            $sql .= " AND b.userid IN
+            $sql .= " AND userid IN
                   (SELECT gm.userid
                      FROM {groups_members} gm
                     WHERE gm.groupid = :groupid)";
@@ -639,10 +639,10 @@ class block_xp_manager {
         $DB->execute($sql, $params);
 
         // Delete logs.
-        $sql = "DELETE FROM {block_xp_log} l WHERE l.courseid = :courseid";
+        $sql = "DELETE FROM {block_xp_log} WHERE courseid = :courseid";
         $params = array('courseid' => $this->courseid);
         if ($groupid) {
-            $sql .= " AND l.userid IN
+            $sql .= " AND userid IN
                   (SELECT gm.userid
                      FROM {groups_members} gm
                     WHERE gm.groupid = :groupid)";
