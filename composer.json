@@ -7,6 +7,9 @@
     "require": {
         "composer/installers": "*"
     },
+    "extra": {
+        "installer-name": "xp"
+    },
     "support": {
         "issues": "https://github.com/FMCorz/moodle-block_xp/issues",
         "source": "https://github.com/FMCorz/moodle-block_xp"
