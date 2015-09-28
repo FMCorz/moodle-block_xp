@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v2.0.1
+------
+
+- Fix composer installation directory
+- Fix MySQL compability when resetting all course data
+- Fix bug causing visuals not to be displayed when XP is used site-wide
+
 v2.0.0
 ------
 
