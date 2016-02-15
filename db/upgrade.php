@@ -212,6 +212,14 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2015030903, 'xp');
     }
 
+    if ($oldversion < 2016021500) {
+
+        // We changed the way the "Level up" notifications are triggered, so we'll remove the old flags from the database.
+        $DB->delete_records('user_preferences', array('name' => 'block_xp_notify_level_up'));
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2016021500, 'xp');
+    }
 
     return true;
 

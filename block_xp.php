@@ -153,7 +153,10 @@ class block_xp extends block_base {
         }
 
         // We should be congratulating the user because they leveled up!
-        if (get_user_preferences($manager::USERPREF_NOTIFY, false)) {
+        // Also resets the flag. We could potentially do that from JS so that if the user does not
+        // stay on the page long enough they'd be notified the next time they access the course page,
+        // but that's probably an overkill for now.
+        if ($manager->has_levelled_up($USER->id)) {
             $args = array(
                 'badge' => $renderer->$currentlevelmethod($progress),
                 'headline' => get_string('youreachedlevela', 'block_xp', $progress->level),
@@ -168,11 +171,6 @@ class block_xp extends block_base {
                 ),
                 'block_xp'
             );
-
-            // Reset the value of the user preference. We could potentially do that from JS so that if
-            // the user does not stay on the page long enough they'd be notified the next time they access
-            // the course page, but that's probably an overkill for now.
-            unset_user_preference($manager::USERPREF_NOTIFY);
         }
 
         return $this->content;

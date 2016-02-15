@@ -39,8 +39,8 @@ class block_xp_manager {
     /** Default coef for XP algo. */
     const DEFAULT_COEF = 1.3;
 
-    /** User preference key storing if we should notify a user for his level up */
-    const USERPREF_NOTIFY = 'block_xp_notify_level_up';
+    /** User preference key storing if we should notify a user for his level up. It should be prepended to the course ID. */
+    const USERPREF_NOTIFY = 'block_xp_notify_level_up_';
 
     /** User preference key storing if they dismissed the like notice */
     const USERPREF_NOTICES = 'block_xp_notices';
@@ -527,6 +527,24 @@ class block_xp_manager {
     }
 
     /**
+     * Check if the user has levelled up since the last time we reset the status.
+     *
+     * See {@link self::update_user_level()} for when the flag is set.
+     *
+     * @param int $userid The user that may have levelled up.
+     * @param boolean $reset The reset flag, when true the levelled up flag will be reset.
+     * @return boolean
+     */
+    public function has_levelled_up($userid, $reset = true) {
+        $prefkey = self::USERPREF_NOTIFY . $this->courseid;
+        $levelledup = get_user_preferences($prefkey, false, $userid);
+        if ($levelledup && $reset) {
+            unset_user_preference($prefkey);
+        }
+        return $levelledup;
+    }
+
+    /**
      * Is the block enabled on the course?
      *
      * @return boolean True if enabled.
@@ -752,7 +770,7 @@ class block_xp_manager {
 
         if ($level > $lvl && $this->get_config('enablelevelupnotif')) {
             // Level up, and we want to notify the user.
-            set_user_preference(self::USERPREF_NOTIFY, 1, $userid);
+            set_user_preference(self::USERPREF_NOTIFY . $this->courseid, 1, $userid);
         }
     }
 
