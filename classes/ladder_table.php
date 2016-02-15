@@ -43,6 +43,27 @@ class block_xp_ladder_table extends table_sql {
     /** @var block_xp_manager XP Manager. */
     protected $xpoutput = null;
 
+    /** @var boolean Only show neighbours. */
+    protected $neighboursonly = false;
+
+    /** @var boolean When showing neighbours only show n before. */
+    protected $neighboursabove = 4;
+
+    /** @var boolean When showing neighbours only show n after. */
+    protected $neighboursbelow = 4;
+
+    /** @var int The level we're starting from to compute the rank. */
+    protected $startinglevel = -1;
+
+    /** @var int The offset to start with to compute the rank. */
+    protected $startingoffset = 1;
+
+    /** @var int The rank to start with to compute the rank. */
+    protected $startingrank = 0;
+
+    /** @var int The XP we're counting from to compute the rank. */
+    protected $startingxp = -1;
+
     /**
      * Constructor.
      *
@@ -92,7 +113,7 @@ class block_xp_ladder_table extends table_sql {
         }
 
         $this->sql = new stdClass();
-        $this->sql->fields = 'x.*, ' . user_picture::fields('u');
+        $this->sql->fields = 'x.*, ' . user_picture::fields('u', null, 'userid');
         $this->sql->from = $sqlfrom;
         $this->sql->where = 'courseid = :courseid';
         $this->sql->params = array_merge(array('courseid' => $courseid), $sqlparams);
@@ -115,11 +136,12 @@ class block_xp_ladder_table extends table_sql {
     function build_table() {
         global $USER;
 
+
         $i = 0;
-        $rank = 0;
-        $lastlvl = -1;
-        $lastxp = -1;
-        $offset = 1;
+        $rank = $this->startingrank;
+        $lastlvl = $this->startinglevel;
+        $lastxp = $this->startingxp;
+        $offset = $this->startingoffset;
 
         if ($this->rawdata) {
             foreach ($this->rawdata as $row) {
@@ -170,7 +192,7 @@ class block_xp_ladder_table extends table_sql {
      */
     protected function col_userpic($row) {
         global $OUTPUT;
-        return $OUTPUT->user_picture($row);
+        return $OUTPUT->user_picture(user_picture::unalias($row, null, 'userid'));
     }
 
     /**
@@ -179,7 +201,7 @@ class block_xp_ladder_table extends table_sql {
      * @return array column => SORT_ constant.
      */
     public function get_sort_columns() {
-        return array('lvl' => SORT_DESC, 'xp' => SORT_DESC);
+        return array('x.lvl' => SORT_DESC, 'x.xp' => SORT_DESC, 'x.id' => SORT_ASC);
     }
 
     /**
@@ -192,8 +214,15 @@ class block_xp_ladder_table extends table_sql {
      * @param bool $useinitialsbar Do you want to use the initials bar?
      */
     function query_db($pagesize, $useinitialsbar=true) {
-        global $DB;
+        global $DB, $USER;
 
+        // Only display neighbours.
+        if ($this->neighboursonly) {
+            $this->query_db_neighbours($USER->id, $this->neighboursabove, $this->neighboursbelow);
+            return;
+        }
+
+        // When we're not downloading there is a pagination.
         if (!$this->is_downloading()) {
             if ($this->countsql === NULL) {
                 $this->countsql = 'SELECT COUNT(1) FROM '.$this->sql->from.' WHERE '.$this->sql->where;
@@ -231,6 +260,90 @@ class block_xp_ladder_table extends table_sql {
                 {$sort}";
 
         $this->rawdata = $DB->get_recordset_sql($sql, $this->sql->params);
+    }
+
+    /**
+     * Query DB for the neighbours only.
+     *
+     * Note that this method resets and ignores pagination settings.
+     *
+     * @param int $userid The user to get the ladder for.
+     * @param int $abovecount Number of neighbours to display above.
+     * @param int $belowcount Number of neighbours to display below.
+     * @return void
+     */
+    public function query_db_neighbours($userid, $abovecount, $belowcount) {
+        global $DB;
+
+        // First fetch self.
+        $sqlme = "SELECT
+                {$this->sql->fields}
+                FROM {$this->sql->from}
+                WHERE {$this->sql->where}
+                  AND x.userid = :neighuserid";
+        $me = $DB->get_record_sql($sqlme, $this->sql->params + array('neighuserid' => $userid));
+        if (!$me) {
+            $this->rawdata = array();
+            return;
+        }
+
+        // Fetch the neighbours.
+        $params = $this->sql->params + array(
+            'neighid' => $me->id,
+            'neighxp' => $me->xp,
+            'neighxpeq' => $me->xp,
+        );
+        $sqlabove = "SELECT {$this->sql->fields}
+                       FROM {$this->sql->from}
+                      WHERE {$this->sql->where}
+                        AND (x.xp > :neighxp
+                         OR (x.xp = :neighxpeq AND x.id < :neighid))
+                      ORDER BY x.xp ASC, x.id DESC";
+        $sqlbelow = "SELECT {$this->sql->fields}
+                       FROM {$this->sql->from}
+                      WHERE {$this->sql->where}
+                        AND (x.xp < :neighxp
+                         OR (x.xp = :neighxpeq AND x.id > :neighid))
+                      ORDER BY x.xp DESC, x.id ASC";
+
+        $records = array();
+        $above = $DB->get_records_sql($sqlabove, $params, 0, $abovecount);
+        foreach ($above as $record) {
+            array_unshift($records, $record);
+        }
+        array_push($records, $me);
+        $below = $DB->get_records_sql($sqlbelow, $params, 0, $belowcount);
+        foreach ($below as $record) {
+            array_push($records, $record);
+        }
+
+        // Guess the starting rank.
+        $record = reset($records);
+        $sql = "SELECT COUNT(x.id)
+                  FROM {$this->sql->from}
+                 WHERE {$this->sql->where}
+                   AND x.xp > :neighxp";
+        $this->startingrank = $DB->count_records_sql($sql, $this->sql->params + array('neighxp' => $record->xp)) + 1;
+        $params = $this->sql->params + array(
+            'neighid' => $record->id,
+            'neighxp' => $record->xp,
+            'neighxpeq' => $record->xp
+        );
+        $sql = "SELECT COUNT(x.id)
+                  FROM {$this->sql->from}
+                 WHERE {$this->sql->where}
+                   AND (x.xp > :neighxp
+                    OR (x.xp = :neighxpeq AND x.id < :neighid))";
+        $this->startingoffset = 1 + $DB->count_records_sql($sql, $params) - $this->startingrank;
+        $this->startinglevel = $record->lvl;
+        $this->startingxp = $record->xp;
+
+        // Set the raw data.
+        $this->rawdata = $records;
+
+        // No pagination.
+        $count = count($records);
+        $this->pagesize($count, $count);
     }
 
 }
