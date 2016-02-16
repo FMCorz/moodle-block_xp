@@ -79,6 +79,9 @@ class block_xp_ladder_table extends table_sql {
     /** @var int The XP to compare with. Used with RANK_REL. */
     protected $startingxpdiff;
 
+    /** @var array The fields found in the XP table. */
+    protected static $xpfields = array('id', 'courseid', 'userid', 'xp', 'lvl');
+
     /**
      * Constructor.
      *
@@ -260,7 +263,13 @@ class block_xp_ladder_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_progress($row) {
-        $progress = $this->xpmanager->get_progress_for_user($row->userid);
+        static $fields = null;
+        if ($fields === null) {
+            $fields = array_flip(self::$xpfields);
+        }
+
+        $record = (object) array_intersect_key((array) $row, $fields);
+        $progress = $this->xpmanager->get_progress_for_user($row->userid, $record);
         return $this->xpoutput->progress_bar($progress);
     }
 

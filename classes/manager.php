@@ -492,11 +492,16 @@ class block_xp_manager {
      * Get progress renderable of user.
      *
      * @param int $userid The user ID.
+     * @param stdClass $record The prefetched record, if any.
      * @return block_xp_progress The progress renderable.
      */
-    public function get_progress_for_user($userid) {
+    public function get_progress_for_user($userid, stdClass $record = null) {
         global $DB;
-        $record = $DB->get_record('block_xp', array('courseid' => $this->courseid, 'userid' => $userid));
+
+        if (!$record) {
+            $record = $DB->get_record('block_xp', array('courseid' => $this->courseid, 'userid' => $userid));
+        }
+
         if (!$record) {
             $record = new stdClass();
             $record->xp = 0;
