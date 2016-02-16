@@ -52,6 +52,7 @@ $string['defaultrulesformhelp'] = 'Those are the default rules provided by the p
 $string['deletecondition'] = 'Delete condition';
 $string['deleterule'] = 'Delete rule';
 $string['description'] = 'Description';
+$string['difference'] = 'Diff.';
 $string['dismissnotice'] = 'Dismiss notice';
 $string['enableinfos'] = 'Enable infos page';
 $string['enableinfos_help'] = 'When set to \'No\', students will not be able to view the infos page.';

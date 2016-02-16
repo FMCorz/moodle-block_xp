@@ -34,6 +34,13 @@ require_once($CFG->libdir . '/tablelib.php');
  */
 class block_xp_ladder_table extends table_sql {
 
+    /** No ranking. */
+    const RANK_OFF = 0;
+    /** Ranking enabled. */
+    const RANK_ON = 1;
+    /** Relative ranking. Difference in XP between row and point of reference. */
+    const RANK_REL = 2;
+
     /** @var string The key of the user ID column. */
     public $useridfield = 'userid';
 
@@ -42,6 +49,12 @@ class block_xp_ladder_table extends table_sql {
 
     /** @var block_xp_manager XP Manager. */
     protected $xpoutput = null;
+
+    /** @var int The user ID we're viewing the ladder for. */
+    protected $userid;
+
+    /** @var Cache of the user record, use {@link self::get_user_record()}. */
+    protected $currentuserrecord;
 
     /** @var boolean Only show neighbours. */
     protected $neighboursonly = false;
@@ -52,17 +65,23 @@ class block_xp_ladder_table extends table_sql {
     /** @var boolean When showing neighbours only show n after. */
     protected $neighboursbelow = 4;
 
+    /** @var int The rank mode. */
+    protected $rankmode = self::RANK_ON;
+
     /** @var int The level we're starting from to compute the rank. */
-    protected $startinglevel = -1;
+    protected $startinglevel;
 
     /** @var int The offset to start with to compute the rank. */
-    protected $startingoffset = 1;
+    protected $startingoffset;
 
     /** @var int The rank to start with to compute the rank. */
-    protected $startingrank = 0;
+    protected $startingrank;
 
     /** @var int The XP we're counting from to compute the rank. */
-    protected $startingxp = -1;
+    protected $startingxp;
+
+    /** @var int The XP to compare with. Used with RANK_REL. */
+    protected $startingxpdiff;
 
     /**
      * Constructor.
@@ -71,31 +90,60 @@ class block_xp_ladder_table extends table_sql {
      * @param int $courseid Course ID.
      * @param int $groupid Group ID.
      */
-    public function __construct($uniqueid, $courseid, $groupid) {
-        global $PAGE;
+    public function __construct($uniqueid, $courseid, $groupid, array $options = array(), $userid = null) {
+        global $PAGE, $USER;
         parent::__construct($uniqueid);
+
+        if (isset($options['rankmode'])) {
+            $this->rankmode = $options['rankmode'];
+        }
+        if (isset($options['neighboursonly'])) {
+            $this->neighboursonly = $options['neighboursonly'];
+        }
+        if (isset($options['neighboursabove'])) {
+            $this->neighboursabove = $options['neighboursabove'];
+        }
+        if (isset($options['neighboursbelow'])) {
+            $this->neighboursbelow = $options['neighboursbelow'];
+        }
+
+        // The user ID we're viewing the ladder for.
+        if ($userid === null) {
+            $userid = $USER->id;
+        }
+        $this->userid = $userid;
 
         // Block XP stuff.
         $this->xpmanager = block_xp_manager::get($courseid);
         $this->xpoutput = $PAGE->get_renderer('block_xp');
 
-        // Define columns.
-        $this->define_columns(array(
-            'rank',
+        // Define columns, and headers.
+        $columns = array();
+        $headers = array();
+        if ($this->rankmode != self::RANK_OFF) {
+            $columns += array('rank');
+            if ($this->rankmode == self::RANK_REL) {
+                $headers += array(get_string('difference', 'block_xp'));
+            } else {
+                $headers += array(get_string('rank', 'block_xp'));
+            }
+        }
+        $columns = array_merge($columns, array(
             'userpic',
             'fullname',
             'lvl',
             'xp',
             'progress'
         ));
-        $this->define_headers(array(
-            get_string('rank', 'block_xp'),
+        $headers = array_merge($headers, array(
             '',
             get_string('fullname'),
             get_string('level', 'block_xp'),
             get_string('xp', 'block_xp'),
             get_string('progress', 'block_xp'),
         ));
+        $this->define_columns($columns);
+        $this->define_headers($headers);
 
         // Define SQL.
         $sqlfrom = '';
@@ -118,7 +166,6 @@ class block_xp_ladder_table extends table_sql {
         $this->sql->where = 'courseid = :courseid';
         $this->sql->params = array_merge(array('courseid' => $courseid), $sqlparams);
 
-
         // Define various table settings.
         $this->sortable(false);
         $this->no_sorting('userpic');
@@ -129,34 +176,55 @@ class block_xp_ladder_table extends table_sql {
     /**
      * Process the data returned by the query.
      *
-     * This is not very efficient, but it gives an accurate to each student.
+     * This is not very efficient, but it gives an accurate rank to each student.
      *
      * @return void
      */
     function build_table() {
         global $USER;
 
+        $this->compute_rank_start();
 
         $i = 0;
         $rank = $this->startingrank;
         $lastlvl = $this->startinglevel;
         $lastxp = $this->startingxp;
         $offset = $this->startingoffset;
+        $xptodiff = $this->startingxpdiff;
 
         if ($this->rawdata) {
             foreach ($this->rawdata as $row) {
 
-                // If this row is different than the previous one.
-                if ($row->lvl != $lastlvl || $row->xp != $lastxp) {
-                    $rank += $offset;
-                    $offset = 1;
-                    $lastlvl = $row->lvl;
-                    $lastxp = $row->xp;
-                } else {
-                    $offset++;
-                }
+                // Show the real rank.
+                if ($this->rankmode == self::RANK_ON) {
 
-                $row->rank = $rank;
+                    // If this row is different than the previous one.
+                    if ($row->lvl != $lastlvl || $row->xp != $lastxp) {
+                        $rank += $offset;
+                        $offset = 1;
+                        $lastlvl = $row->lvl;
+                        $lastxp = $row->xp;
+                    } else {
+                        $offset++;
+                    }
+                    $row->rank = $rank;
+
+                // Show a "relative" rank, the difference between a student and another.
+                } else if ($this->rankmode == self::RANK_REL) {
+
+                    // There was no indication of what XP to diff with, let's take the first entry.
+                    if ($xptodiff == -1 && $lastxp == -1) {
+                        $xptodiff = $row->xp;
+                    }
+
+                    // The last row does not this one.
+                    if ($row->xp != $lastxp) {
+                        $rank = $row->xp - $xptodiff;
+                        $lastxp = $row->xp;
+                    }
+
+                    $row->rank = $rank;
+                }
 
                 $i++;
 
@@ -165,7 +233,7 @@ class block_xp_ladder_table extends table_sql {
                     return;
                 } else if ($i > ($this->pagesize * $this->currpage)) {
                     // We display the results for that page only.
-                    $classes = ($USER->id == $row->userid) ? 'highlight' : '';
+                    $classes = ($this->userid == $row->userid) ? 'highlight' : '';
                     $formattedrow = $this->format_row($row);
                     $this->add_data_keyed($formattedrow, $classes);
                 }
@@ -185,6 +253,18 @@ class block_xp_ladder_table extends table_sql {
     }
 
     /**
+     * Formats the rank column.
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
+    protected function col_rank($row) {
+        if ($this->rankmode == self::RANK_REL && $row->rank > 0) {
+            return '+' . $row->rank;
+        }
+        return $row->rank;
+    }
+
+    /**
      * Formats the column userpic.
      *
      * @param stdClass $row Table row.
@@ -193,6 +273,69 @@ class block_xp_ladder_table extends table_sql {
     protected function col_userpic($row) {
         global $OUTPUT;
         return $OUTPUT->user_picture(user_picture::unalias($row, null, 'userid'));
+    }
+
+    /**
+     * Guesses where to start the rank computation.
+     *
+     * @return void
+     */
+    protected function compute_rank_start() {
+        global $DB;
+
+        $this->startingrank = 0;
+        $this->startinglevel = -1;
+        $this->startingxp = -1;
+        $this->startingoffset = 1;
+        $this->startingxpdiff = -1;
+
+        // Guess the starting rank when only neighbours are displayed.
+        if ($this->rankmode == self::RANK_ON && $this->neighboursonly) {
+            $record = reset($this->rawdata);
+            $sql = "SELECT COUNT(x.id)
+                      FROM {$this->sql->from}
+                     WHERE {$this->sql->where}
+                       AND x.xp > :neighxp";
+            $this->startingrank = $DB->count_records_sql($sql, $this->sql->params + array('neighxp' => $record->xp)) + 1;
+            $params = $this->sql->params + array(
+                'neighid' => $record->id,
+                'neighxp' => $record->xp,
+                'neighxpeq' => $record->xp
+            );
+            $sql = "SELECT COUNT(x.id)
+                      FROM {$this->sql->from}
+                     WHERE {$this->sql->where}
+                       AND (x.xp > :neighxp
+                        OR (x.xp = :neighxpeq AND x.id < :neighid))";
+            $this->startingoffset = 1 + $DB->count_records_sql($sql, $params) - $this->startingrank;
+            $this->startinglevel = $record->lvl;
+            $this->startingxp = $record->xp;
+
+        // When relative, set self XP as difference.
+        } else if ($this->rankmode == self::RANK_REL) {
+
+            $record = $this->get_user_record($this->userid);
+            if ($record) {
+                $this->startingxpdiff = $record->xp;
+            }
+        }
+    }
+
+    /**
+     * Get the current user record.
+     *
+     * @return stdClass|false
+     */
+    protected function get_user_record() {
+        global $DB;
+        if ($this->currentuserrecord === null) {
+            $sqlme = "SELECT {$this->sql->fields}
+                        FROM {$this->sql->from}
+                       WHERE {$this->sql->where}
+                         AND x.userid = :myuserid";
+            $this->currentuserrecord = $DB->get_record_sql($sqlme, $this->sql->params + array('myuserid' => $this->userid));
+        }
+        return $this->currentuserrecord;
     }
 
     /**
@@ -214,11 +357,11 @@ class block_xp_ladder_table extends table_sql {
      * @param bool $useinitialsbar Do you want to use the initials bar?
      */
     function query_db($pagesize, $useinitialsbar=true) {
-        global $DB, $USER;
+        global $DB;
 
         // Only display neighbours.
         if ($this->neighboursonly) {
-            $this->query_db_neighbours($USER->id, $this->neighboursabove, $this->neighboursbelow);
+            $this->query_db_neighbours($this->userid, $this->neighboursabove, $this->neighboursbelow);
             return;
         }
 
@@ -276,12 +419,7 @@ class block_xp_ladder_table extends table_sql {
         global $DB;
 
         // First fetch self.
-        $sqlme = "SELECT
-                {$this->sql->fields}
-                FROM {$this->sql->from}
-                WHERE {$this->sql->where}
-                  AND x.userid = :neighuserid";
-        $me = $DB->get_record_sql($sqlme, $this->sql->params + array('neighuserid' => $userid));
+        $me = $this->get_user_record($userid);
         if (!$me) {
             $this->rawdata = array();
             return;
@@ -316,27 +454,6 @@ class block_xp_ladder_table extends table_sql {
         foreach ($below as $record) {
             array_push($records, $record);
         }
-
-        // Guess the starting rank.
-        $record = reset($records);
-        $sql = "SELECT COUNT(x.id)
-                  FROM {$this->sql->from}
-                 WHERE {$this->sql->where}
-                   AND x.xp > :neighxp";
-        $this->startingrank = $DB->count_records_sql($sql, $this->sql->params + array('neighxp' => $record->xp)) + 1;
-        $params = $this->sql->params + array(
-            'neighid' => $record->id,
-            'neighxp' => $record->xp,
-            'neighxpeq' => $record->xp
-        );
-        $sql = "SELECT COUNT(x.id)
-                  FROM {$this->sql->from}
-                 WHERE {$this->sql->where}
-                   AND (x.xp > :neighxp
-                    OR (x.xp = :neighxpeq AND x.id < :neighid))";
-        $this->startingoffset = 1 + $DB->count_records_sql($sql, $params) - $this->startingrank;
-        $this->startinglevel = $record->lvl;
-        $this->startingxp = $record->xp;
 
         // Set the raw data.
         $this->rawdata = $records;
