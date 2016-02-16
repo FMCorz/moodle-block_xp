@@ -184,8 +184,7 @@ class block_xp_ladder_table extends table_sql {
     /**
      * Process the data returned by the query.
      *
-     * This is not very efficient, but it gives an accurate rank to each student.
-     *
+     * @see self::compute_rank_start()
      * @return void
      */
     function build_table() {
@@ -193,7 +192,6 @@ class block_xp_ladder_table extends table_sql {
 
         $this->compute_rank_start();
 
-        $i = 0;
         $rank = $this->startingrank;
         $lastlvl = $this->startinglevel;
         $lastxp = $this->startingxp;
@@ -237,17 +235,9 @@ class block_xp_ladder_table extends table_sql {
                     $row->rank = $rank;
                 }
 
-                $i++;
-
-                if ($i > $this->pagesize * ($this->currpage + 1)) {
-                    // We do not need to do anything any more.
-                    return;
-                } else if ($i > ($this->pagesize * $this->currpage)) {
-                    // We display the results for that page only.
-                    $classes = ($this->userid == $row->userid) ? 'highlight' : '';
-                    $formattedrow = $this->format_row($row);
-                    $this->add_data_keyed($formattedrow, $classes);
-                }
+                $classes = ($this->userid == $row->userid) ? 'highlight' : '';
+                $formattedrow = $this->format_row($row);
+                $this->add_data_keyed($formattedrow, $classes);
             }
         }
     }
@@ -328,8 +318,8 @@ class block_xp_ladder_table extends table_sql {
         $this->startingoffset = 1;
         $this->startingxpdiff = -1;
 
-        // Guess the starting rank when only neighbours are displayed.
-        if ($this->rankmode == block_xp_manager::RANK_ON && $this->neighboursonly) {
+        // Guess the starting rank.
+        if ($this->rankmode == block_xp_manager::RANK_ON && !empty($this->rawdata)) {
             $record = reset($this->rawdata);
             $sql = "SELECT COUNT(x.id)
                       FROM {$this->sql->from}
@@ -481,7 +471,7 @@ class block_xp_ladder_table extends table_sql {
                 WHERE {$this->sql->where}
                 {$sort}";
 
-        $this->rawdata = $DB->get_recordset_sql($sql, $this->sql->params);
+        $this->rawdata = $DB->get_records_sql($sql, $this->sql->params, $this->pagesize * $this->currpage, $this->pagesize);
     }
 
     /**
