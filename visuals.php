@@ -56,7 +56,7 @@ $data = new stdClass();
 $data->badges = $draftitemid;
 $data->enablecustomlevelbadges = $manager->get_config('enablecustomlevelbadges');
 
-$form = new block_xp_visuals_form($url, array('manager' => $manager, 'fmoptions' => $fmoptions));
+$form = new block_xp_visuals_form($url->out(false), array('manager' => $manager, 'fmoptions' => $fmoptions));
 $form->set_data($data);
 
 if ($data = $form->get_data()) {

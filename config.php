@@ -52,7 +52,7 @@ echo $OUTPUT->heading($strcoursesettings);
 
 $renderer = $PAGE->get_renderer('block_xp');
 
-$form = new block_xp_settings_form($url, array('defaultconfig' => block_xp_manager::get_default_config()));
+$form = new block_xp_settings_form($url->out(false), array('defaultconfig' => block_xp_manager::get_default_config()));
 if ($data = $form->get_data()) {
     $manager->update_config($data);
 } else {
