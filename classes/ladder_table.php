@@ -161,9 +161,15 @@ class block_xp_ladder_table extends table_sql {
         } else {
             $sqlfrom = '{block_xp} x JOIN {user} u ON x.userid = u.id';
         }
+        $sqlfrom .= " JOIN {context} ctx
+                        ON ctx.instanceid = u.id
+                       AND ctx.contextlevel = :contextlevel";
+        $sqlparams += array('contextlevel' => CONTEXT_USER);
 
         $this->sql = new stdClass();
-        $this->sql->fields = 'x.*, ' . user_picture::fields('u', null, 'userid');
+        $this->sql->fields = 'x.*, ' .
+            user_picture::fields('u', null, 'userid') . ', ' .
+            context_helper::get_preload_record_columns_sql('ctx');
         $this->sql->from = $sqlfrom;
         $this->sql->where = 'courseid = :courseid';
         $this->sql->params = array_merge(array('courseid' => $courseid), $sqlparams);
@@ -196,6 +202,9 @@ class block_xp_ladder_table extends table_sql {
 
         if ($this->rawdata) {
             foreach ($this->rawdata as $row) {
+
+                // Preload the context.
+                context_helper::preload_from_record($row);
 
                 // Show the real rank.
                 if ($this->rankmode == block_xp_manager::RANK_ON) {
