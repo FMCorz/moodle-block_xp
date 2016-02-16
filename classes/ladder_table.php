@@ -152,11 +152,11 @@ class block_xp_ladder_table extends table_sql {
                      JOIN {groups_members} gm
                        ON gm.groupid = :groupid
                       AND gm.userid = x.userid
-                LEFT JOIN {user} u
+                     JOIN {user} u
                        ON x.userid = u.id';
             $sqlparams = array('groupid' => $groupid);
         } else {
-            $sqlfrom = '{block_xp} x LEFT JOIN {user} u ON x.userid = u.id';
+            $sqlfrom = '{block_xp} x JOIN {user} u ON x.userid = u.id';
         }
 
         $this->sql = new stdClass();
