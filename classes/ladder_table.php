@@ -430,6 +430,27 @@ class block_xp_ladder_table extends table_sql {
             }
 
             $this->pagesize($pagesize, $total);
+
+            // When we are displaying the full ranking, and the user did not request a specific page,
+            // we will guess what page they appear on and jump right to that page. This logic makes
+            // some assumption on the logic present in the parent class, not ideal but we have no choice.
+            $requestedpage = optional_param($this->request[TABLE_VAR_PAGE], null, PARAM_INT);
+            if ($requestedpage === null && ($record = $this->get_user_record())) {
+                $sql = "SELECT COUNT('x')
+                          FROM {$this->sql->from}
+                         WHERE {$this->sql->where}
+                           AND (x.xp > :thexp
+                            OR (x.xp = :thexpeq AND x.id < :theid))";
+                $params = $this->sql->params + array(
+                    'thexp' => $record->xp,
+                    'thexpeq' => $record->xp,
+                    'theid' => $record->id
+                );
+                $count = $DB->count_records_sql($sql, $params);
+                if ($count > 0) {
+                    $this->currpage = floor($count / $pagesize);
+                }
+            }
         }
 
         $sort = $this->get_sql_sort();
