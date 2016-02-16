@@ -41,6 +41,11 @@ class block_xp_ladder_table extends table_sql {
     /** Relative ranking. Difference in XP between row and point of reference. */
     const RANK_REL = 2;
 
+    /** Hide identity. */
+    const IDENTITY_OFF = 0;
+    /** Identity displayed. */
+    const IDENTITY_ON = 1;
+
     /** @var string The key of the user ID column. */
     public $useridfield = 'userid';
 
@@ -55,6 +60,9 @@ class block_xp_ladder_table extends table_sql {
 
     /** @var Cache of the user record, use {@link self::get_user_record()}. */
     protected $currentuserrecord;
+
+    /** @var int The identity mode. */
+    protected $identitymode = self::IDENTITY_ON;
 
     /** @var boolean Only show neighbours. */
     protected $neighboursonly = false;
@@ -105,6 +113,9 @@ class block_xp_ladder_table extends table_sql {
         }
         if (isset($options['neighboursbelow'])) {
             $this->neighboursbelow = $options['neighboursbelow'];
+        }
+        if (isset($options['identitymode'])) {
+            $this->identitymode = $options['identitymode'];
         }
 
         // The user ID we're viewing the ladder for.
@@ -242,6 +253,19 @@ class block_xp_ladder_table extends table_sql {
     }
 
     /**
+     * Formats the column fullname.
+     *
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
+    public function col_fullname($row) {
+        if ($this->identitymode == self::IDENTITY_OFF && $row->userid != $this->userid) {
+            return get_string('someoneelse', 'block_xp');
+        }
+        return parent::col_fullname($row);
+    }
+
+    /**
      * Formats the column progress.
      *
      * @param stdClass $row Table row.
@@ -271,7 +295,16 @@ class block_xp_ladder_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_userpic($row) {
-        global $OUTPUT;
+        global $CFG, $OUTPUT;
+
+        if ($this->identitymode == self::IDENTITY_OFF && $this->userid != $row->userid) {
+            static $guestuser = null;
+            if ($guestuser === null) {
+                $guestuser = guest_user();
+            }
+            return $OUTPUT->user_picture($guestuser, array('link' => false, 'alttext' => false));
+        }
+
         return $OUTPUT->user_picture(user_picture::unalias($row, null, 'userid'));
     }
 

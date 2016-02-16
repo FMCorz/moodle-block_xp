@@ -155,6 +155,7 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
     <li>And the events of educational level not equal to <em>Participating</em>.</li>
 </ul>
 </p>';
+$string['someoneelse'] = 'Someone else';
 $string['timebetweensameactions'] = 'Time required between identical actions';
 $string['timebetweensameactions_help'] = 'In seconds, the minimum time required between identical actions. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identifical if the same post is read again.';
 $string['timeformaxactions'] = 'Time frame for max. actions';
