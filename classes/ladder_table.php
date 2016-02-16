@@ -360,14 +360,33 @@ class block_xp_ladder_table extends table_sql {
      * @return stdClass|false
      */
     protected function get_user_record() {
-        global $DB;
+        global $DB, $USER;
+
         if ($this->currentuserrecord === null) {
             $sqlme = "SELECT {$this->sql->fields}
                         FROM {$this->sql->from}
                        WHERE {$this->sql->where}
                          AND x.userid = :myuserid";
-            $this->currentuserrecord = $DB->get_record_sql($sqlme, $this->sql->params + array('myuserid' => $this->userid));
+            $record = $DB->get_record_sql($sqlme, $this->sql->params + array('myuserid' => $this->userid));
+
+            // Hack so that admin can see something. Hopefully we won't create too many bugs in case of missing fields.
+            if (empty($record) && $this->neighboursonly && $this->xpmanager->can_manage()) {
+                $record = (object) array(
+                    'id' => 0,
+                    'userid' => $this->userid,
+                    'courseid' => $this->xpmanager->get_courseid(),
+                    'xp' => 0,
+                    'lvl' => 1,
+                );
+                $record = username_load_fields_from_object($record, $USER);
+                $record->picture = $USER->picture;
+                $record->imagealt = $USER->imagealt;
+                $record->email = $USER->email;
+            }
+
+            $this->currentuserrecord = $record;
         }
+
         return $this->currentuserrecord;
     }
 
