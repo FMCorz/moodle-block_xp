@@ -195,4 +195,37 @@ class block_xp_report_table extends table_sql {
         return $OUTPUT->user_picture($row);
     }
 
+    /**
+     * Construct the ORDER BY clause.
+     *
+     * We override this to ensure that XP set to null appears at the bottom, not the top.
+     *
+     * @param array $cols The columns.
+     * @param array $textsortcols The text columns.
+     * @return string
+     */
+    public static function construct_order_by($cols, $textsortcols = array()) {
+        $newcols = array();
+
+        // We use a foreach to maintain the order in which the fields were defined.
+        foreach ($cols as $field => $sortorder) {
+            if ($field == 'xp') {
+                $field = 'COALESCE(xp, 0)';
+            }
+            $newcols[$field] = $sortorder;
+        }
+
+        return parent::construct_order_by($newcols, $textsortcols);
+    }
+
+    /**
+     * Get SQL sort.
+     *
+     * Must be overridden because otherwise it calls the parent 'construct_order_by()'.
+     *
+     * @return string
+     */
+    public function get_sql_sort() {
+        return static::construct_order_by($this->get_sort_columns(), array());
+    }
 }
