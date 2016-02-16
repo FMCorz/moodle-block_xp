@@ -56,7 +56,13 @@ echo $renderer->notices($manager);
 
 groups_print_course_menu($manager->get_course(), $url);
 
-$table = new block_xp_ladder_table('block_xp_ladder', $courseid, $group);
+$table = new block_xp_ladder_table('block_xp_ladder', $courseid, $group, array(
+    'identitymode' => $manager->get_config('identitymode'),
+    'rankmode' => $manager->get_config('rankmode'),
+    'neighboursonly' => !empty($manager->get_config('neighbours')),
+    'neighboursabove' => $manager->get_config('neighbours'),
+    'neighboursbelow' => $manager->get_config('neighbours'),
+));
 $table->define_baseurl($url);
 
 echo $table->out(20, false);

@@ -34,18 +34,6 @@ require_once($CFG->libdir . '/tablelib.php');
  */
 class block_xp_ladder_table extends table_sql {
 
-    /** No ranking. */
-    const RANK_OFF = 0;
-    /** Ranking enabled. */
-    const RANK_ON = 1;
-    /** Relative ranking. Difference in XP between row and point of reference. */
-    const RANK_REL = 2;
-
-    /** Hide identity. */
-    const IDENTITY_OFF = 0;
-    /** Identity displayed. */
-    const IDENTITY_ON = 1;
-
     /** @var string The key of the user ID column. */
     public $useridfield = 'userid';
 
@@ -62,19 +50,19 @@ class block_xp_ladder_table extends table_sql {
     protected $currentuserrecord;
 
     /** @var int The identity mode. */
-    protected $identitymode = self::IDENTITY_ON;
+    protected $identitymode = block_xp_manager::IDENTITY_ON;
 
     /** @var boolean Only show neighbours. */
     protected $neighboursonly = false;
 
     /** @var boolean When showing neighbours only show n before. */
-    protected $neighboursabove = 4;
+    protected $neighboursabove = 3;
 
     /** @var boolean When showing neighbours only show n after. */
-    protected $neighboursbelow = 4;
+    protected $neighboursbelow = 3;
 
     /** @var int The rank mode. */
-    protected $rankmode = self::RANK_ON;
+    protected $rankmode = block_xp_manager::RANK_ON;
 
     /** @var int The level we're starting from to compute the rank. */
     protected $startinglevel;
@@ -131,9 +119,9 @@ class block_xp_ladder_table extends table_sql {
         // Define columns, and headers.
         $columns = array();
         $headers = array();
-        if ($this->rankmode != self::RANK_OFF) {
+        if ($this->rankmode != block_xp_manager::RANK_OFF) {
             $columns += array('rank');
-            if ($this->rankmode == self::RANK_REL) {
+            if ($this->rankmode == block_xp_manager::RANK_REL) {
                 $headers += array(get_string('difference', 'block_xp'));
             } else {
                 $headers += array(get_string('rank', 'block_xp'));
@@ -207,7 +195,7 @@ class block_xp_ladder_table extends table_sql {
             foreach ($this->rawdata as $row) {
 
                 // Show the real rank.
-                if ($this->rankmode == self::RANK_ON) {
+                if ($this->rankmode == block_xp_manager::RANK_ON) {
 
                     // If this row is different than the previous one.
                     if ($row->lvl != $lastlvl || $row->xp != $lastxp) {
@@ -221,7 +209,7 @@ class block_xp_ladder_table extends table_sql {
                     $row->rank = $rank;
 
                 // Show a "relative" rank, the difference between a student and another.
-                } else if ($this->rankmode == self::RANK_REL) {
+                } else if ($this->rankmode == block_xp_manager::RANK_REL) {
 
                     // There was no indication of what XP to diff with, let's take the first entry.
                     if ($xptodiff == -1 && $lastxp == -1) {
@@ -259,7 +247,7 @@ class block_xp_ladder_table extends table_sql {
      * @return string Output produced.
      */
     public function col_fullname($row) {
-        if ($this->identitymode == self::IDENTITY_OFF && $row->userid != $this->userid) {
+        if ($this->identitymode == block_xp_manager::IDENTITY_OFF && $row->userid != $this->userid) {
             return get_string('someoneelse', 'block_xp');
         }
         return parent::col_fullname($row);
@@ -282,7 +270,7 @@ class block_xp_ladder_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_rank($row) {
-        if ($this->rankmode == self::RANK_REL && $row->rank > 0) {
+        if ($this->rankmode == block_xp_manager::RANK_REL && $row->rank > 0) {
             return '+' . $row->rank;
         }
         return $row->rank;
@@ -297,7 +285,7 @@ class block_xp_ladder_table extends table_sql {
     protected function col_userpic($row) {
         global $CFG, $OUTPUT;
 
-        if ($this->identitymode == self::IDENTITY_OFF && $this->userid != $row->userid) {
+        if ($this->identitymode == block_xp_manager::IDENTITY_OFF && $this->userid != $row->userid) {
             static $guestuser = null;
             if ($guestuser === null) {
                 $guestuser = guest_user();
@@ -323,7 +311,7 @@ class block_xp_ladder_table extends table_sql {
         $this->startingxpdiff = -1;
 
         // Guess the starting rank when only neighbours are displayed.
-        if ($this->rankmode == self::RANK_ON && $this->neighboursonly) {
+        if ($this->rankmode == block_xp_manager::RANK_ON && $this->neighboursonly) {
             $record = reset($this->rawdata);
             $sql = "SELECT COUNT(x.id)
                       FROM {$this->sql->from}
@@ -345,7 +333,7 @@ class block_xp_ladder_table extends table_sql {
             $this->startingxp = $record->xp;
 
         // When relative, set self XP as difference.
-        } else if ($this->rankmode == self::RANK_REL) {
+        } else if ($this->rankmode == block_xp_manager::RANK_REL) {
 
             $record = $this->get_user_record($this->userid);
             if ($record) {

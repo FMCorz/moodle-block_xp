@@ -55,13 +55,44 @@ class block_xp_settings_form extends moodleform {
         $mform->setDefault('enableinfos', $defaultconfig->enableinfos);
         $mform->addHelpButton('enableinfos', 'enableinfos', 'block_xp');
 
+        $mform->addElement('selectyesno', 'enablelevelupnotif', get_string('enablelevelupnotif', 'block_xp'));
+        $mform->setDefault('enablelevelupnotif', $defaultconfig->enablelevelupnotif);
+        $mform->addHelpButton('enablelevelupnotif', 'enablelevelupnotif', 'block_xp');
+
+        $mform->addElement('header', 'hdrladder', get_string('ladder', 'block_xp'));
+
         $mform->addElement('selectyesno', 'enableladder', get_string('enableladder', 'block_xp'));
         $mform->setDefault('enableladder', $defaultconfig->enableladder);
         $mform->addHelpButton('enableladder', 'enableladder', 'block_xp');
 
-        $mform->addElement('selectyesno', 'enablelevelupnotif', get_string('enablelevelupnotif', 'block_xp'));
-        $mform->setDefault('enablelevelupnotif', $defaultconfig->enablelevelupnotif);
-        $mform->addHelpButton('enablelevelupnotif', 'enablelevelupnotif', 'block_xp');
+        $mform->addElement('select', 'identitymode', get_string('anonymity', 'block_xp'), array(
+            block_xp_manager::IDENTITY_OFF => get_string('hideparticipantsidentity', 'block_xp'),
+            block_xp_manager::IDENTITY_ON => get_string('displayparticipantsidentity', 'block_xp'),
+        ));
+        $mform->setDefault('identitymode', $defaultconfig->identitymode);
+        $mform->addHelpButton('identitymode', 'anonymity', 'block_xp');
+        $mform->disabledIf('identitymode', 'enableladder', 'eq', 0);
+
+        $mform->addElement('select', 'neighbours', get_string('limitparticipants', 'block_xp'), array(
+            0 => get_string('displayeveryone', 'block_xp'),
+            1 => get_string('displayoneneigbour', 'block_xp'),
+            2 => get_string('displaynneighbours', 'block_xp', 'two'),
+            3 => get_string('displaynneighbours', 'block_xp', 'three'),
+            4 => get_string('displaynneighbours', 'block_xp', 'four'),
+            5 => get_string('displaynneighbours', 'block_xp', 'five'),
+        ));
+        $mform->setDefault('neighbours', $defaultconfig->neighbours);
+        $mform->addHelpButton('neighbours', 'limitparticipants', 'block_xp');
+        $mform->disabledIf('neighbours', 'enableladder', 'eq', 0);
+
+        $mform->addElement('select', 'rankmode', get_string('ranking', 'block_xp'), array(
+            block_xp_manager::RANK_OFF => get_string('hiderank', 'block_xp'),
+            block_xp_manager::RANK_ON => get_string('displayrank', 'block_xp'),
+            block_xp_manager::RANK_REL => get_string('displayrelativerank', 'block_xp'),
+        ));
+        $mform->setDefault('rankmode', $defaultconfig->rankmode);
+        $mform->addHelpButton('rankmode', 'ranking', 'block_xp');
+        $mform->disabledIf('rankmode', 'enableladder', 'eq', 0);
 
         $mform->addElement('header', 'hdrcheating', get_string('cheatguard', 'block_xp'));
 

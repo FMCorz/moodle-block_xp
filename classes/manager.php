@@ -45,6 +45,21 @@ class block_xp_manager {
     /** User preference key storing if they dismissed the like notice */
     const USERPREF_NOTICES = 'block_xp_notices';
 
+    /** No ranking. */
+    const RANK_OFF = 0;
+
+    /** Ranking enabled. */
+    const RANK_ON = 1;
+
+    /** Relative ranking. Difference in XP between row and point of reference. */
+    const RANK_REL = 2;
+
+    /** Hide identity. */
+    const IDENTITY_OFF = 0;
+
+    /** Identity displayed. */
+    const IDENTITY_ON = 1;
+
     /** @var array Array of singletons. */
     protected static $instances;
 
@@ -71,6 +86,9 @@ class block_xp_manager {
         'maxactionspertime' => 10,           // Max actions during timepermaxactions.
         'timeformaxactions' => 60,           // Time during which max actions cannot be reached.
         'timebetweensameactions' => 180,     // Time between similar actions.
+        'identitymode' => self::IDENTITY_ON, // Identity mode.
+        'rankmode' => self::RANK_ON,         // Rank mode.
+        'neighbours' => 0,                   // Number of neighbours to show on ladder, 0 means everyone.
     );
 
     /** @var context The context related to this manager.*/
