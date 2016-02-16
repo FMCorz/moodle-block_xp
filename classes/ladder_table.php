@@ -80,7 +80,7 @@ class block_xp_ladder_table extends table_sql {
     protected $startingxpdiff;
 
     /** @var array The fields found in the XP table. */
-    protected static $xpfields = array('id', 'courseid', 'userid', 'xp', 'lvl');
+    public static $xpfields = array('id', 'courseid', 'userid', 'xp', 'lvl');
 
     /**
      * Constructor.
