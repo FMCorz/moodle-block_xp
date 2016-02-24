@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v2.1.1
+------
+
+- Fixed a bug where new settings were not saved on new installs
+
 v2.1.0
 ------
 

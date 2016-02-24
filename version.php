@@ -28,5 +28,5 @@ $plugin->version    = 2016022404;
 $plugin->requires   = 2014041500;
 $plugin->component  = 'block_xp';
 $plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '2.1.0';
+$plugin->release    = '2.1.1';
 $plugin->cron       = 86400;
