@@ -97,10 +97,6 @@ class restore_xp_block_structure_step extends restore_structure_step {
     protected function process_filter($data) {
         global $DB;
         $data['courseid'] = $this->get_courseid();
-        if ($DB->record_exists('block_xp_filters', array('courseid' => $data['courseid']))) {
-            $this->log("block_xp: filter not restored, existing filters were found", backup::LOG_DEBUG);
-            return;
-        }
         $DB->insert_record('block_xp_filters', $data);
     }
 
