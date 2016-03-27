@@ -90,6 +90,9 @@
 /**
  * Like notice.
  */
+.block-xp-notices .close {
+    display: none;
+}
 .block-xp-notices .dismiss-action {
     float: right;
 }
