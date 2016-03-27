@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v2.1.2
+------
+
+- Fixed a bug causing a blank ladder on older PHP versions
+- Fixed a bug where some settings where not backed up
+- Fixed a bug where some rules filters were not restored
+- Other minor bug fixes and improvements
+
 v2.1.1
 ------
 
