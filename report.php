@@ -88,12 +88,12 @@ if ($action == 'edit' && !empty($userid)) {
     echo $OUTPUT->heading(fullname($user), 3);
 
     $progress = $manager->get_progress_for_user($userid);
-    $form = new block_xp_user_edit_form($url);
+    $form = new block_xp_user_edit_form($url->out(false));
     $form->set_data(array('userid' => $userid, 'level' => $progress->level, 'xp' => $progress->xp));
 
     if ($data = $form->get_data()) {
         $manager->reset_user_xp($userid, $data->xp);
-    } else {
+    } else if (!$form->is_cancelled()) {
         $form->display();
     }
 }
