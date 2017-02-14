@@ -62,6 +62,7 @@ $string['displayoneneigbour'] = 'Display one neighbour';
 $string['displayparticipantsidentity'] = 'Display participants identity';
 $string['displayrank'] = 'Display rank';
 $string['displayrelativerank'] = 'Display a relative rank';
+$string['enablecheatguard'] = 'Enable cheat guard';
 $string['enableinfos'] = 'Enable infos page';
 $string['enableinfos_help'] = 'When set to \'No\', students will not be able to view the infos page.';
 $string['enableladder'] = 'Enable the ladder';

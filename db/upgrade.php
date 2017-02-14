@@ -311,6 +311,21 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2016022403, 'xp');
     }
 
+    if ($oldversion < 2017021401) {
+
+        // Define field enablecheatguard to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('enablecheatguard', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'lastlogpurge');
+
+        // Conditionally launch add field enablecheatguard.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2017021401, 'xp');
+    }
+
     return true;
 
 }
