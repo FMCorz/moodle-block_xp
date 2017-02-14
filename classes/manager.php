@@ -78,6 +78,7 @@ class block_xp_manager {
         'levels' => 10,
         'enablelog' => 1,
         'keeplogs' => 3,
+        'enablecheatguard' => true,   // Enable cheat guard.
         'enableladder' => true,       // Enable the ladder.
         'enableinfos' => true,        // Enable the infos page.
         'levelsdata' => '',           // JSON encoded value of the levels data.
@@ -251,9 +252,11 @@ class block_xp_manager {
             return;
         }
 
-        // Check if the user can capture this event, anti cheater method.
-        if (!$this->can_capture_event($event)) {
-            return;
+        if (get_config('enablecheatguard')) {
+            // Check if the user can capture this event, anti cheater method.
+            if (!$this->can_capture_event($event)) {
+                return;
+            }
         }
 
         $userid = $event->userid;

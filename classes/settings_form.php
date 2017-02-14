@@ -96,20 +96,26 @@ class block_xp_settings_form extends moodleform {
 
         $mform->addElement('header', 'hdrcheating', get_string('cheatguard', 'block_xp'));
 
+        $mform->setDefault('enablecheatguard', $defaultconfig->enableanticheater);
+        $mform->addElement('selectyesno', 'enablecheatguard', get_string('enablecheatguard', 'block_xp'));
+
         $mform->addElement('text', 'maxactionspertime', get_string('maxactionspertime', 'block_xp'));
         $mform->setDefault('maxactionspertime', $defaultconfig->maxactionspertime);
         $mform->addHelpButton('maxactionspertime', 'maxactionspertime', 'block_xp');
         $mform->setType('maxactionspertime', PARAM_INT);
+        $mform->disabledIf('maxactionspertime','enablecheatguard', 'eq', 0);
 
         $mform->addElement('text', 'timeformaxactions', get_string('timeformaxactions', 'block_xp'));
         $mform->setDefault('timeformaxactions', $defaultconfig->timeformaxactions);
         $mform->addHelpButton('timeformaxactions', 'timeformaxactions', 'block_xp');
         $mform->setType('timeformaxactions', PARAM_INT);
+        $mform->disabledIf('timeformaxactions','enablecheatguard', 'eq', 0);
 
         $mform->addElement('text', 'timebetweensameactions', get_string('timebetweensameactions', 'block_xp'));
         $mform->setDefault('timebetweensameactions', $defaultconfig->timebetweensameactions);
         $mform->addHelpButton('timebetweensameactions', 'timebetweensameactions', 'block_xp');
         $mform->setType('timebetweensameactions', PARAM_INT);
+        $mform->disabledIf('timebetweensameactions','enablecheatguard', 'eq', 0);
 
         $mform->addElement('header', 'hdrloggin', get_string('logging', 'block_xp'));
 
