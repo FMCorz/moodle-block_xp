@@ -232,6 +232,23 @@ class block_xp_filter implements renderable {
         }
     }
 
+    public function save_default() {
+        global $DB;
+
+        $record = (object) array(
+                'ruledata' => $this->ruledata,
+                'points' => $this->points,
+                'sortorder' => $this->sortorder,
+        );
+
+        if (!$this->id) {
+            $this->id = $DB->insert_record('block_xp_default_filters', $record);
+        } else {
+            $record->id = $this->id;
+            $DB->update_record('block_xp_default_filters', $record);
+        }
+    }
+
     /**
      * Set the points.
      *

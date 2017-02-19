@@ -57,19 +57,6 @@ class block_xp_filter_manager {
      *
      * @return array of fitlers.
      */
-    public function get_all_filters() {
-        $cache = cache::make('block_xp', 'filters');
-        $key = 'filters_' . $this->manager->get_courseid();
-        if (false === ($filters = $cache->get($key))) {
-            $filters = $this->get_user_filters();
-            $i = -1;
-            foreach (self::get_static_filters() as $filter) {
-                $filters[$i--] = $filter;
-            }
-            $cache->set($key, $filters);
-        }
-        return $filters;
-    }
 
     /**
      * Return the points filtered for this event.
@@ -78,7 +65,7 @@ class block_xp_filter_manager {
      * @return int points.
      */
     public function get_points_for_event(\core\event\base $event) {
-        foreach ($this->get_all_filters() as $filter) {
+        foreach ($this->get_course_filters() as $filter) {
             if ($filter->match($event)) {
                 return $filter->get_points();
             }
@@ -107,19 +94,19 @@ class block_xp_filter_manager {
         $list = array();
 
         $ruleset = new block_xp_ruleset(array($bcmv, $dsc, $sc, $as, $au), block_xp_ruleset::ANY);
-        $data = array('rule' => $ruleset, 'points' => 0, 'editable' => false);
+        $data = array('rule' => $ruleset, 'points' => 0, 'editable' => true);
         $list[] = block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $c, 'points' => 45, 'editable' => false);
+        $data = array('rule' => $c, 'points' => 45, 'editable' => true);
         $list[] = block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $r, 'points' => 9, 'editable' => false);
+        $data = array('rule' => $r, 'points' => 9, 'editable' => true);
         $list[] = block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $u, 'points' => 3, 'editable' => false);
+        $data = array('rule' => $u, 'points' => 3, 'editable' => true);
         $list[] = block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $d, 'points' => 0, 'editable' => false);
+        $data = array('rule' => $d, 'points' => 0, 'editable' => true);
         $list[] = block_xp_filter::load_from_data($data);
         return $list;
     }
@@ -129,7 +116,7 @@ class block_xp_filter_manager {
      *
      * @return array Of filter data from the DB, though properties is already json_decoded.
      */
-    public function get_user_filters() {
+    public function get_course_filters() {
         global $DB;
         $results = $DB->get_recordset('block_xp_filters', array('courseid' => $this->manager->get_courseid()),
             'sortorder ASC, id ASC');
@@ -141,6 +128,28 @@ class block_xp_filter_manager {
         return $filters;
     }
 
+	// Used when adding block to course
+    public function copy_default_filters_to_course() {
+        global $DB;
+
+        $course_filters = $DB->get_records('block_xp_filters', array('courseid' => $this->manager->get_courseid()));
+
+        // Only copy default filters if there are no course filters
+        if (empty($course_filters)) {
+            $default_filters = $DB->get_recordset('block_xp_default_filters', array(),
+                    'sortorder ASC, id ASC');
+            $filters = array();
+            foreach ($default_filters as $key => $filterdata) {
+                $filterdata->courseid = $this->manager->get_courseid();
+                unset($filterdata->id);
+
+                $filter = block_xp_filter::load_from_data($filterdata);
+                $filter->save();
+            }
+            $default_filters->close();
+        }
+    }
+
     /**
      * Invalidate the filters cache.
      *
@@ -149,5 +158,13 @@ class block_xp_filter_manager {
     public function invalidate_filters_cache() {
         $cache = cache::make('block_xp', 'filters');
         $cache->delete('filters_' . $this->manager->get_courseid());
+    }
+
+    public static function save_default_filters() {
+        $filters = self::get_static_filters();
+
+        foreach($filters as $filter) {
+            $filter->save_default();
+        }
     }
 }
