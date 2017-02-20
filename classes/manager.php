@@ -252,7 +252,7 @@ class block_xp_manager {
             return;
         }
 
-        if (get_config('enablecheatguard')) {
+        if ($this->get_config('enablecheatguard')) {
             // Check if the user can capture this event, anti cheater method.
             if (!$this->can_capture_event($event)) {
                 return;
