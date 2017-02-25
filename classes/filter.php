@@ -214,38 +214,45 @@ class block_xp_filter implements renderable {
      * @return block_xp_filter
      */
     public function save() {
-        global $DB;
+        // Unsure what to do with this flag...
         if (!$this->editable) {
             throw new coding_exception('Non-editable filters cannot be saved.');
         }
+
         $record = (object) array(
             'courseid' => $this->courseid,
             'ruledata' => $this->ruledata,
             'points' => $this->points,
             'sortorder' => $this->sortorder,
         );
-        if (!$this->id) {
-            $this->id = $DB->insert_record('block_xp_filters', $record);
-        } else {
-            $record->id = $this->id;
-            $DB->update_record('block_xp_filters', $record);
-        }
+
+        $this->insert_or_update('block_xp_filters', $record);
     }
 
-    public function save_default() {
-        global $DB;
+    /**
+     * Save the record as a default filter
+     *
+     * @return void
+     */
 
+    public function save_default() {
         $record = (object) array(
                 'ruledata' => $this->ruledata,
                 'points' => $this->points,
                 'sortorder' => $this->sortorder,
         );
 
+        $this->insert_or_update('block_xp_default_filters', $record);
+    }
+
+    private function insert_or_update($table, $record) {
+        global $DB;
+
         if (!$this->id) {
-            $this->id = $DB->insert_record('block_xp_default_filters', $record);
+            $this->id = $DB->insert_record($table, $record);
         } else {
             $record->id = $this->id;
-            $DB->update_record('block_xp_default_filters', $record);
+            $DB->update_record($table, $record);
         }
     }
 

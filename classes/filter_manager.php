@@ -50,13 +50,26 @@ class block_xp_filter_manager {
     }
 
     /**
-     * Get all the filter objects.
+     * Set cache filters to course filters and return them.
      *
-     * Positive indexes are user filters, negatives are static ones.
-     * Do not reorder this array, it is ordered by priority.
-     *
-     * @return array of fitlers.
+     * @return array of filters.
      */
+    public function get_all_filters() {
+        $cache = cache::make('block_xp', 'filters');
+        $filters = $this->get_course_filters();
+        set_cache_filters(filters, $this->get_courseid());
+        return filters();
+    }
+
+    /**
+     * Returns the course id
+     *
+     * @return course id
+     */
+    public function get_courseid() {
+        return $this->manager->get_courseid();
+    }
+
 
     /**
      * Return the points filtered for this event.
@@ -65,7 +78,7 @@ class block_xp_filter_manager {
      * @return int points.
      */
     public function get_points_for_event(\core\event\base $event) {
-        foreach ($this->get_course_filters() as $filter) {
+        foreach ($this->get_all_filters() as $filter) {
             if ($filter->match($event)) {
                 return $filter->get_points();
             }
@@ -112,13 +125,13 @@ class block_xp_filter_manager {
     }
 
     /**
-     * Get the filters defined by the user.
+     * Get the filters defined for the course.
      *
-     * @return array Of filter data from the DB, though properties is already json_decoded.
+     * @return array of filter data from the DB, though properties is already json_decoded.
      */
     public function get_course_filters() {
         global $DB;
-        $results = $DB->get_recordset('block_xp_filters', array('courseid' => $this->manager->get_courseid()),
+        $results = $DB->get_recordset('block_xp_filters', array('courseid' => $this->get_courseid()),
             'sortorder ASC, id ASC');
         $filters = array();
         foreach ($results as $key => $filter) {
@@ -128,11 +141,36 @@ class block_xp_filter_manager {
         return $filters;
     }
 
-	// Used when adding block to course
+    /**
+     * Alias of get_course_filters()
+     *
+     * @return array of filters
+     */
+    public function get_user_filters() {
+        return $this->get_course_filters();
+    }
+
+    /**
+     * Used to populate default filters table with predefined filters.
+     *
+     * @return void
+     */
+    public static function save_default_filters() {
+        $filters = self::get_static_filters();
+
+        foreach($filters as $filter) {
+            $filter->save_default();
+        }
+    }
+
+    /**
+     * Used when adding block to course
+     *
+     *  @return void */
     public function copy_default_filters_to_course() {
         global $DB;
 
-        $course_filters = $DB->get_records('block_xp_filters', array('courseid' => $this->manager->get_courseid()));
+        $course_filters = $DB->get_records('block_xp_filters', array('courseid' => $this->get_courseid()));
 
         // Only copy default filters if there are no course filters
         if (empty($course_filters)) {
@@ -140,7 +178,7 @@ class block_xp_filter_manager {
                     'sortorder ASC, id ASC');
             $filters = array();
             foreach ($default_filters as $key => $filterdata) {
-                $filterdata->courseid = $this->manager->get_courseid();
+                $filterdata->courseid = $this->get_courseid();
                 unset($filterdata->id);
 
                 $filter = block_xp_filter::load_from_data($filterdata);
@@ -157,14 +195,19 @@ class block_xp_filter_manager {
      */
     public function invalidate_filters_cache() {
         $cache = cache::make('block_xp', 'filters');
-        $cache->delete('filters_' . $this->manager->get_courseid());
+        $cache->delete('filters_' . $this->get_courseid());
     }
 
-    public static function save_default_filters() {
-        $filters = self::get_static_filters();
-
-        foreach($filters as $filter) {
-            $filter->save_default();
+    /**
+     * Add an array of filters to cache
+     *
+     * @return void
+     */
+    public function set_cache_filters($filters, $course_id) {
+        $key = 'filters_' . $course_id;
+        if (false === ($filters = $cache->get($key))) {
+            $cache->set($key, $filters);
         }
     }
+
 }
