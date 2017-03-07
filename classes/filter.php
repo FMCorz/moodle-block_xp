@@ -93,7 +93,7 @@ class block_xp_filter implements renderable {
      *
      * Use {@link self::load_from_data()} instead.
      */
-    protected function __construct() {}
+    public function __construct() {}
 
     /**
      * Delete the rule.
@@ -245,7 +245,7 @@ class block_xp_filter implements renderable {
         $this->insert_or_update('block_xp_default_filters', $record);
     }
 
-    private function insert_or_update($table, $record) {
+    protected function insert_or_update($table, $record) {
         global $DB;
 
         if (!$this->id) {

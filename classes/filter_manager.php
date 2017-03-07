@@ -92,36 +92,10 @@ class block_xp_filter_manager {
      * @return array Of filter objects.
      */
     public static function get_static_filters() {
-        $d = new block_xp_rule_property(block_xp_rule_base::EQ, 'd', 'crud');
-        $c = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
-        $r = new block_xp_rule_property(block_xp_rule_base::EQ, 'r', 'crud');
-        $u = new block_xp_rule_property(block_xp_rule_base::EQ, 'u', 'crud');
+        $static_filters = new block_xp_filters_static();
+        $static_filters->load();
 
-        // Skip those as they duplicate other more low level actions.
-        $bcmv = new block_xp_rule_event('\mod_book\event\course_module_viewed');
-        $dsc = new block_xp_rule_event('\mod_forum\event\discussion_subscription_created');
-        $sc = new block_xp_rule_event('\mod_forum\event\subscription_created');
-        $as = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_submitted', 'eventname');
-        $au = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_uploaded', 'eventname');
-
-        $list = array();
-
-        $ruleset = new block_xp_ruleset(array($bcmv, $dsc, $sc, $as, $au), block_xp_ruleset::ANY);
-        $data = array('rule' => $ruleset, 'points' => 0, 'editable' => true);
-        $list[] = block_xp_filter::load_from_data($data);
-
-        $data = array('rule' => $c, 'points' => 45, 'editable' => true);
-        $list[] = block_xp_filter::load_from_data($data);
-
-        $data = array('rule' => $r, 'points' => 9, 'editable' => true);
-        $list[] = block_xp_filter::load_from_data($data);
-
-        $data = array('rule' => $u, 'points' => 3, 'editable' => true);
-        $list[] = block_xp_filter::load_from_data($data);
-
-        $data = array('rule' => $d, 'points' => 0, 'editable' => true);
-        $list[] = block_xp_filter::load_from_data($data);
-        return $list;
+        return $static_filters->get();
     }
 
     /**
@@ -156,11 +130,16 @@ class block_xp_filter_manager {
      * @return void
      */
     public static function save_default_filters() {
-        $filters = self::get_static_filters();
+        $static_filters = new block_xp_filters_static();
+        $default_filters = new block_xp_filters_default();
 
-        foreach($filters as $filter) {
-            $filter->save_default();
-        }
+        $default_filters->import($static_filters);
+
+        //$filters = self::get_static_filters();
+
+        //foreach($filters as $filter) {
+        //    $filter->save_default();
+        //}
     }
 
     /**
