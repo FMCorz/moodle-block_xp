@@ -5,6 +5,8 @@ defined('MOODLE_INTERNAL') || die();
 class block_xp_filter_default extends block_xp_filter {
 
     public function load($filter_object) {
+
+        // TODO: check null
         $this->ruledata = $filter_object->ruledata;
         $this->points = $filter_object->points;
         $this->sortorder = $filter_object->sortorder;
@@ -12,6 +14,7 @@ class block_xp_filter_default extends block_xp_filter {
 
     public function save() {
         $record = (object) array(
+                'id' => $this->id,
                 'ruledata' => $this->ruledata,
                 'points' => $this->points,
                 'sortorder' => $this->sortorder,

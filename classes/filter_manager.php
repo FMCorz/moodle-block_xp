@@ -134,12 +134,6 @@ class block_xp_filter_manager {
         $default_filters = new block_xp_filters_default();
 
         $default_filters->import($static_filters);
-
-        //$filters = self::get_static_filters();
-
-        //foreach($filters as $filter) {
-        //    $filter->save_default();
-        //}
     }
 
     /**
@@ -147,23 +141,11 @@ class block_xp_filter_manager {
      *
      *  @return void */
     public function copy_default_filters_to_course() {
-        global $DB;
+        $default_filters = new block_xp_filters_default();
+        $course_filters = new block_xp_filters_course($this->get_courseid());
 
-        $course_filters = $DB->get_records('block_xp_filters', array('courseid' => $this->get_courseid()));
-
-        // Only copy default filters if there are no course filters
-        if (empty($course_filters)) {
-            $default_filters = $DB->get_recordset('block_xp_default_filters', array(),
-                    'sortorder ASC, id ASC');
-            $filters = array();
-            foreach ($default_filters as $key => $filterdata) {
-                $filterdata->courseid = $this->get_courseid();
-                unset($filterdata->id);
-
-                $filter = block_xp_filter::load_from_data($filterdata);
-                $filter->save();
-            }
-            $default_filters->close();
+        if ($course_filters->empty()) {
+            $course_filters->import($default_filters);
         }
     }
 

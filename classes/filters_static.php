@@ -6,11 +6,6 @@ class block_xp_filters_static extends block_xp_filters {
         throw new coding_exception('Static filters cannot be modified.');
     }
 
-    public function __construct() {
-        $this->filters = array();
-        $this->load();
-    }
-
     public function load() {
         if (empty($this->filters)) {
             $this->load_set_1();
