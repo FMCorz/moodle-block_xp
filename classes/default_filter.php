@@ -15,12 +15,13 @@ class block_xp_default_filter extends block_xp_filter {
     public function save() {
         $record = (object) array(
                 'id' => $this->id,
+                'courseid' => 0,
                 'ruledata' => $this->ruledata,
                 'points' => $this->points,
                 'sortorder' => $this->sortorder,
         );
 
-        $this->insert_or_update('block_xp_default_filters', $record);
+        $this->insert_or_update('block_xp_filters', $record);
     }
 }
 
