@@ -1,6 +1,6 @@
 <?php
 
-class block_xp_filters_default extends block_xp_filters {
+class block_xp_default_filterset extends block_xp_filterset {
 
     public function load() {
         global $DB;
@@ -18,7 +18,7 @@ class block_xp_filters_default extends block_xp_filters {
     }
 
     public function create_filter() {
-        return new block_xp_filter_default();
+        return new block_xp_default_filter();
     }
 }
 

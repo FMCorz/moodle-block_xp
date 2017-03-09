@@ -130,8 +130,8 @@ class block_xp_filter_manager {
      * @return void
      */
     public static function save_default_filters() {
-        $static_filters = new block_xp_filters_static();
-        $default_filters = new block_xp_filters_default();
+        $static_filters = new block_xp_static_filterset();
+        $default_filters = new block_xp_default_filterset();
 
         $default_filters->import($static_filters);
     }
@@ -141,8 +141,8 @@ class block_xp_filter_manager {
      *
      *  @return void */
     public function copy_default_filters_to_course() {
-        $default_filters = new block_xp_filters_default();
-        $course_filters = new block_xp_filters_course($this->get_courseid());
+        $default_filters = new block_xp_default_filterset();
+        $course_filters = new block_xp_course_filterset($this->get_courseid());
 
         if ($course_filters->empty()) {
             $course_filters->import($default_filters);

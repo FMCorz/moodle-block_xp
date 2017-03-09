@@ -2,7 +2,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-class block_xp_filter_default extends block_xp_filter {
+class block_xp_default_filter extends block_xp_filter {
 
     public function load($filter_object) {
 

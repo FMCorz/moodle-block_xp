@@ -2,7 +2,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-class block_xp_filter_course extends block_xp_filter {
+class block_xp_course_filter extends block_xp_filter {
 
     public function __construct($courseid) {
         $this->courseid = $courseid;

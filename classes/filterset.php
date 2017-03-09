@@ -1,6 +1,6 @@
 <?php
 
-abstract class block_xp_filters {
+abstract class block_xp_filterset {
 
     protected $filters;
 
