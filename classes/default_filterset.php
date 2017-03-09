@@ -5,8 +5,8 @@ class block_xp_default_filterset extends block_xp_filterset {
     public function load() {
         global $DB;
 
-        $records = $DB->get_recordset('block_xp_default_filters',
-                array(), 'sortorder ASC, id ASC');
+        $records = $DB->get_recordset('block_xp_filters',
+                array('courseid' => 0));
 
         unset($this->filters);
 
