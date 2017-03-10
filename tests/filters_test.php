@@ -68,6 +68,7 @@ class block_xp_filters_testcase extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $manager = block_xp_manager::get($course->id);
         $fm = $manager->get_filter_manager();
+        $fm->copy_default_filters_to_course();
 
         $c = \block_xp\event\something_happened::mock(array('crud' => 'c'));
         $r = \block_xp\event\something_happened::mock(array('crud' => 'r'));

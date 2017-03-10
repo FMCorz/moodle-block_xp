@@ -55,10 +55,9 @@ class block_xp_filter_manager {
      * @return array of filters.
      */
     public function get_all_filters() {
-        $cache = cache::make('block_xp', 'filters');
         $filters = $this->get_course_filters();
-        set_cache_filters(filters, $this->get_courseid());
-        return filters();
+        $this->set_cache_filters($filters, $this->get_courseid());
+        return $filters;
     }
 
     /**
@@ -78,7 +77,7 @@ class block_xp_filter_manager {
      * @return int points.
      */
     public function get_points_for_event(\core\event\base $event) {
-        foreach ($this->get_all_filters() as $filter) {
+        foreach ($this->get_static_filters() as $filter) {
             if ($filter->match($event)) {
                 return $filter->get_points();
             }
@@ -92,7 +91,7 @@ class block_xp_filter_manager {
      * @return array Of filter objects.
      */
     public static function get_static_filters() {
-        $static_filters = new block_xp_filters_static();
+        $static_filters = new block_xp_filterset_static();
         $static_filters->load();
 
         return $static_filters->get();
@@ -165,6 +164,7 @@ class block_xp_filter_manager {
      * @return void
      */
     public function set_cache_filters($filters, $course_id) {
+        $cache = cache::make('block_xp', 'filters');
         $key = 'filters_' . $course_id;
         if (false === ($filters = $cache->get($key))) {
             $cache->set($key, $filters);
