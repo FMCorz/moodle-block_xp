@@ -1,6 +1,6 @@
 <?php
 
-class block_xp_course_filterset extends block_xp_filterset {
+class block_xp_filterset_course extends block_xp_filterset {
 
     protected $courseid;
 
@@ -26,7 +26,7 @@ class block_xp_course_filterset extends block_xp_filterset {
     }
 
     public function create_filter() {
-        return new block_xp_course_filter($this->courseid);
+        return new block_xp_filter_course($this->courseid);
     }
 }
 

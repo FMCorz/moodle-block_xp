@@ -20,11 +20,7 @@ abstract class block_xp_filterset {
     }
 
     // Should import delete previous filters? Dont' think so...
-    public function import($filters_object) {
-
-        if (!method_exists($this, 'create_filter')) {
-            throw new coding_exception(get_class($this) , " can't import filters");
-        }
+    public function import(block_xp_filterset $filters_object) {
 
         foreach($filters_object->get() as $filter) {
             $cloned_filter = $this->create_filter();

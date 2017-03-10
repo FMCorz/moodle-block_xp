@@ -1,6 +1,6 @@
 <?php
 
-class block_xp_static_filterset extends block_xp_filterset {
+class block_xp_filterset_static extends block_xp_filterset {
 
     public function create_filter() {
         throw new coding_exception('Static filters cannot be modified.');
