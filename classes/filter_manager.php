@@ -50,13 +50,19 @@ class block_xp_filter_manager {
     }
 
     /**
-     * Set cache filters to course filters and return them.
+     * Get all the filter objects.
+     *
+     * Do not reorder this array, it is ordered by priority.
      *
      * @return array of filters.
      */
     public function get_all_filters() {
-        $filters = $this->get_course_filters();
-        $this->set_cache_filters($filters, $this->get_courseid());
+        $cache = cache::make('block_xp', 'filters');
+        $key = 'filters_' . $this->manager->get_courseid();
+        if (false === ($filters = $cache->get($key))) {
+            $filters = $this->get_course_filters();
+            $cache->set($key, $filters);
+        }
         return $filters;
     }
 
@@ -156,19 +162,6 @@ class block_xp_filter_manager {
     public function invalidate_filters_cache() {
         $cache = cache::make('block_xp', 'filters');
         $cache->delete('filters_' . $this->get_courseid());
-    }
-
-    /**
-     * Add an array of filters to cache
-     *
-     * @return void
-     */
-    public function set_cache_filters($filters, $course_id) {
-        $cache = cache::make('block_xp', 'filters');
-        $key = 'filters_' . $course_id;
-        if (false === ($filters = $cache->get($key))) {
-            $cache->set($key, $filters);
-        }
     }
 
 }

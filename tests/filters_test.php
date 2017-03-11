@@ -87,6 +87,7 @@ class block_xp_filters_testcase extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $manager = block_xp_manager::get($course->id);
         $fm = $manager->get_filter_manager();
+        $fm->copy_default_filters_to_course();
 
         // Define some custom rules, the sortorder and IDs are mixed here.
         $rule = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
