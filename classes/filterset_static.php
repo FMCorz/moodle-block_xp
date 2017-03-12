@@ -30,19 +30,19 @@ class block_xp_filterset_static extends block_xp_filterset {
         $au = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_uploaded', 'eventname');
 
         $ruleset = new block_xp_ruleset(array($bcmv, $dsc, $sc, $as, $au), block_xp_ruleset::ANY);
-        $data = array('rule' => $ruleset, 'points' => 0, 'editable' => true, 'sortorder' => 100000);
+        $data = array('rule' => $ruleset, 'points' => 0, 'editable' => false, 'sortorder' => 100000);
         $this->filters[] = block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $c, 'points' => 45, 'editable' => true, 'sortorder' => 100001);
+        $data = array('rule' => $c, 'points' => 45, 'editable' => false, 'sortorder' => 100001);
         $this->filters[] = block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $r, 'points' => 9, 'editable' => true, 'sortorder' => 100002);
+        $data = array('rule' => $r, 'points' => 9, 'editable' => false, 'sortorder' => 100002);
         $this->filters[] = block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $u, 'points' => 3, 'editable' => true, 'sortorder' => 100003);
+        $data = array('rule' => $u, 'points' => 3, 'editable' => false, 'sortorder' => 100003);
         $this->filters[] = block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $d, 'points' => 0, 'editable' => true, 'sortorder' => 100004);
+        $data = array('rule' => $d, 'points' => 0, 'editable' => false, 'sortorder' => 100004);
         $this->filters[] = block_xp_filter::load_from_data($data);
     }
 }

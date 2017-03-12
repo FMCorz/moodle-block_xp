@@ -162,6 +162,14 @@ echo html_writer::empty_tag('input', array('value' => get_string('cancel'), 'typ
 echo html_writer::end_tag('p');
 echo html_writer::end_tag('form');
 
+echo $OUTPUT->heading(get_string('defaultrules', 'block_xp'), 3);
+echo html_writer::tag('p', get_string('defaultrulesformhelp', 'block_xp'));
+
+echo html_writer::start_tag('ul', array('class' => 'filters-list filters-readonly'));
+foreach (block_xp_filter_manager::get_static_filters() as $filter) {
+    echo $renderer->render($filter);
+}
+
 echo html_writer::end_tag('ul');
 
 echo html_writer::end_div();
