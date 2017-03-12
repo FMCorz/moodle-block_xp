@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Block XP class.
+ * Block XP filters abstract class.
  *
  * @package    block_xp_filterset
  * @copyright  2017 Ruben Cancho
