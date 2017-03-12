@@ -41,9 +41,9 @@ abstract class block_xp_filterset {
         $this->load();
     }
 
-    public abstract function create_filter();
+    protected abstract function create_filter();
 
-    public abstract function load();
+    protected abstract function load();
 
     public function save() {
         foreach($this->filters as $filter) {
@@ -52,7 +52,6 @@ abstract class block_xp_filterset {
     }
 
     public function import(block_xp_filterset $filters_object) {
-
         foreach($filters_object->get() as $filter) {
             $cloned_filter = $this->create_filter();
             $cloned_filter->load($filter);
