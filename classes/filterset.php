@@ -46,16 +46,16 @@ abstract class block_xp_filterset {
     protected abstract function load();
 
     public function save() {
-        foreach($this->filters as $filter) {
+        foreach ($this->filters as $filter) {
             $filter->save();
         }
     }
 
-    public function import(block_xp_filterset $filters_object) {
-        foreach($filters_object->get() as $filter) {
-            $cloned_filter = $this->create_filter();
-            $cloned_filter->load($filter);
-            $this->filters[] = $cloned_filter;
+    public function import(block_xp_filterset $filters) {
+        foreach ($filters->get() as $filter) {
+            $clonedfilter = $this->create_filter();
+            $clonedfilter->load($filter);
+            $this->filters[] = $clonedfilter;
         }
 
         $this->save();
@@ -69,5 +69,3 @@ abstract class block_xp_filterset {
         return $this->filters;
     }
 }
-
-?>

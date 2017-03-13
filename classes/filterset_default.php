@@ -16,11 +16,11 @@
 
 /**
  * Block XP.
-*
-* @package    block_xp
-* @copyright  2014 Frédéric Massart
-* @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ *
+ * @package    block_xp
+ * @copyright  2014 Frédéric Massart
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -42,9 +42,9 @@ class block_xp_filterset_default extends block_xp_filterset {
 
         unset($this->filters);
 
-        foreach ($records as $key => $filter_data) {
+        foreach ($records as $key => $filterdata) {
             $filter = $this->create_filter();
-            $filter->load($filter_data);
+            $filter->load($filterdata);
             $this->filters[] = $filter;
         }
     }
@@ -53,5 +53,3 @@ class block_xp_filterset_default extends block_xp_filterset {
         return new block_xp_filter_default();
     }
 }
-
-?>

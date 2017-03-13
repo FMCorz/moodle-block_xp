@@ -97,10 +97,10 @@ class block_xp_filter_manager {
      * @return array Of filter objects.
      */
     public static function get_static_filters() {
-        $static_filters = new block_xp_filterset_static();
-        $static_filters->load();
+        $staticfilters = new block_xp_filterset_static();
+        $staticfilters->load();
 
-        return $static_filters->get();
+        return $staticfilters->get();
     }
 
     /**
@@ -135,22 +135,22 @@ class block_xp_filter_manager {
      * @return void
      */
     public static function save_default_filters() {
-        $static_filters = new block_xp_filterset_static();
-        $default_filters = new block_xp_filterset_default();
+        $staticfilters = new block_xp_filterset_static();
+        $defaultfilters = new block_xp_filterset_default();
 
-        $default_filters->import($static_filters);
+        $defaultfilters->import($staticfilters);
     }
 
     /**
      * Used when adding block to course
      *
-     *  @return void */
+     * @return void */
     public function copy_default_filters_to_course() {
-        $default_filters = new block_xp_filterset_default();
-        $course_filters = new block_xp_filterset_course($this->get_courseid());
+        $defaultfilters = new block_xp_filterset_default();
+        $coursefilters = new block_xp_filterset_course($this->get_courseid());
 
-        if ($course_filters->empty()) {
-            $course_filters->import($default_filters);
+        if ($coursefilters->empty()) {
+            $coursefilters->import($defaultfilters);
         }
     }
 

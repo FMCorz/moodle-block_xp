@@ -16,11 +16,11 @@
 
 /**
  * Block XP.
-*
-* @package    block_xp
-* @copyright  2014 Frédéric Massart
-* @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ *
+ * @package    block_xp
+ * @copyright  2014 Frédéric Massart
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -39,15 +39,15 @@ class block_xp_filter_course extends block_xp_filter {
     }
 
     // TODO: refactor with filter_default?
-    public function load($filter_object) {
-        // TODO: check null
-        $this->ruledata = $filter_object->ruledata;
-        $this->points = $filter_object->points;
-        $this->sortorder = $filter_object->sortorder;
+    public function load(block_xp_filter $filter) {
+        // TODO: check null.
+        $this->ruledata = $filter->ruledata;
+        $this->points = $filter->points;
+        $this->sortorder = $filter->sortorder;
     }
 
     public function save() {
-        // TODO: check null
+        // TODO: check null.
         $record = (object) array(
                 'id' => $this->id,
                 'courseid' => $this->courseid,
@@ -60,5 +60,3 @@ class block_xp_filter_course extends block_xp_filter {
     }
 
 }
-
-?>

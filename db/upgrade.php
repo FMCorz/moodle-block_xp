@@ -312,13 +312,11 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2017021801) {
-        // Populate block_xp_filters with default filters
+        // Populate block_xp_filters with default filters.
         block_xp_filter_manager::save_default_filters();
 
         // Xp savepoint reached.
         upgrade_block_savepoint(true, 2017021801, 'xp');
-        }
-
     }
 
     return true;

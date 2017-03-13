@@ -16,11 +16,11 @@
 
 /**
  * Block XP.
-*
-* @package    block_xp
-* @copyright  2014 Frédéric Massart
-* @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ *
+ * @package    block_xp
+ * @copyright  2014 Frédéric Massart
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -79,5 +79,3 @@ class block_xp_filterset_static extends block_xp_filterset {
         $this->filters[] = block_xp_filter::load_from_data($data);
     }
 }
-
-?>
