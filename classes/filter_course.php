@@ -38,12 +38,19 @@ class block_xp_filter_course extends block_xp_filter {
         $this->courseid = $courseid;
     }
 
-    // TODO: refactor with filter_default?
-    public function load(block_xp_filter $filter) {
-        // TODO: check null.
-        $this->ruledata = $filter->ruledata;
-        $this->points = $filter->points;
-        $this->sortorder = $filter->sortorder;
+    /**
+     *  Loads object properties from array, stdClass or block_xp_filter
+     *
+     * @param block_xp_filter|array $filter
+     */
+    public function load($object) {
+        $object = (is_array($object)) ? (object)$object : $object;
+
+        foreach ($this as $key => $value) {
+            if (isset($object->$key)) {
+                $this->$key = $object->$key;
+            }
+        }
     }
 
     public function save() {

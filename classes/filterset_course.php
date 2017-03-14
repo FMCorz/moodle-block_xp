@@ -48,7 +48,7 @@ class block_xp_filterset_course extends block_xp_filterset {
         $records = $DB->get_recordset('block_xp_filters',
                 array('courseid' => $this->courseid));
 
-        unset($this->filters);
+        $this->clean();
 
         foreach ($records as $key => $filterdata) {
             $filter = $this->create_filter();

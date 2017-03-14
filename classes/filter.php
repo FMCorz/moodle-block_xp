@@ -86,7 +86,7 @@ class block_xp_filter implements renderable {
      *
      * @var int
      */
-    protected $sortorder = 0;
+    public $sortorder = 0;
 
     /**
      * Constructor.
