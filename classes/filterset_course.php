@@ -42,19 +42,24 @@ class block_xp_filterset_course extends block_xp_filterset {
         parent::__construct();
     }
 
+    // TODO: refactor
     public function load() {
         global $DB;
 
-        $records = $DB->get_recordset('block_xp_filters',
-                array('courseid' => $this->courseid));
+        $recordset = $DB->get_recordset('block_xp_filters',
+                array('courseid' => $this->courseid),
+                'sortorder ASC, id ASC');
 
         $this->clean();
 
-        foreach ($records as $key => $filterdata) {
-            $filter = $this->create_filter();
-            $filter->load($filterdata);
-            $this->filters[] = $filter;
+        if ($recordset->valid()) {
+            foreach ($recordset as $key => $filterdata) {
+                $filter = $this->create_filter();
+                $filter->load($filterdata);
+                $this->filters[] = $filter;
+            }
         }
+        $recordset->close();
     }
 
     public function create_filter() {

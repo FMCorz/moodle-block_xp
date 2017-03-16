@@ -83,25 +83,23 @@ class block_xp_filterset_testcase extends advanced_testcase {
         global $DB;
 
         $course = $this->getDataGenerator()->create_course();
+
         $defaultfilters = new block_xp_filterset_default();
         $coursefilters = new block_xp_filterset_course($course->id);
         $coursefilters->import($defaultfilters);
-        $filterset = new block_xp_filterset_course($course->id);
 
         $rule = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
         $filter = new block_xp_filter_course($course->id);
-        $filter->load(array('points' => 100, 'rule' => $rule, 'sortorder'));
+        $filter->load(array('points' => 100, 'rule' => $rule));
 
-        $filterset->add($filter, 1);
-
-        $filterset->save();
-
-        // Test if filterset contains filter in the correct position
-        $this->assertTrue($filter == $filterset->get()[1]);
+        $coursefilters->add($filter, 1);
+        $coursefilters->save();
 
         // Test if filterset is saved correctly in DB
-        $filterset2 = new block_xp_filterset_course($course->id);
-        $this->assertTrue($filter->get_rule() == $filterset2->get()[1]->get_rule());
+        $coursefiltersclone = new block_xp_filterset_course($course->id);
+
+        // TODO: How to compare filters? rule should be the same.
+        $this->assertTrue($filter->get_rule() == $coursefiltersclone->get()[1]->get_rule());
 
     }
 

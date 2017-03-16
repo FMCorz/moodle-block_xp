@@ -39,18 +39,33 @@ class block_xp_filter_course extends block_xp_filter {
     }
 
     /**
-     *  Loads object properties from array, stdClass or block_xp_filter
+     *  Loads object properties from array, stdClass or block_xp_filter.
+     *
      *
      * @param block_xp_filter|array $filter
      */
     public function load($object) {
-        $object = (is_array($object)) ? (object)$object : $object;
+        //$object = (is_array($object)) ? (object)$object : $object;
+        $tempcourseid = $this->courseid;
+        $this->load_from_data2($object);
+        $this->courseid = $tempcourseid;
+//         foreach ($this as $key => $value) {
+//             if ($key != "courseid") {
+//                 if (isset($object->$key)) {
+//                     $this->$key = $object->$key;
+//                 }
+//             }
+//         }
+    }
 
-        foreach ($this as $key => $value) {
-            if (isset($object->$key)) {
-                $this->$key = $object->$key;
-            }
-        }
+    /**
+     * As load but always create a new object in DB.
+     *
+     * @param block_xp_filter|array $filter
+     */
+    public function load_as_new($object) {
+        $this->load($object);
+        $this->id = null;
     }
 
     public function save() {

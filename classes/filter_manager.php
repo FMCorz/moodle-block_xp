@@ -33,20 +33,17 @@ defined('MOODLE_INTERNAL') || die();
  */
 class block_xp_filter_manager {
 
-    /**
-     * The block XP manager.
-     *
-     * @var block_xp_manager.
-     */
-    protected $manager;
+    protected $courseid;
 
+    protected $filterset;
     /**
      * Constructor.
      *
      * @param block_xp_manager $manager The XP manager.
      */
-    public function __construct(block_xp_manager $manager) {
-        $this->manager = $manager;
+    public function __construct($courseid) {
+        $this->courseid = $courseid;
+        $this->filterset = new block_xp_filterset_course($courseid);
     }
 
     /**
@@ -58,7 +55,7 @@ class block_xp_filter_manager {
      */
     public function get_all_filters() {
         $cache = cache::make('block_xp', 'filters');
-        $key = 'filters_' . $this->manager->get_courseid();
+        $key = 'filters_' . $this->get_courseid();
         if (false === ($filters = $cache->get($key))) {
             $filters = $this->get_course_filters();
             $cache->set($key, $filters);
@@ -72,7 +69,7 @@ class block_xp_filter_manager {
      * @return course id
      */
     public function get_courseid() {
-        return $this->manager->get_courseid();
+        return $this->courseid;
     }
 
 
@@ -97,10 +94,7 @@ class block_xp_filter_manager {
      * @return array Of filter objects.
      */
     public static function get_static_filters() {
-        $staticfilters = new block_xp_filterset_static();
-        $staticfilters->load();
-
-        return $staticfilters->get();
+        return (new block_xp_filterset_static())->get();
     }
 
     /**
@@ -109,15 +103,7 @@ class block_xp_filter_manager {
      * @return array of filter data from the DB, though properties is already json_decoded.
      */
     public function get_course_filters() {
-        global $DB;
-        $results = $DB->get_recordset('block_xp_filters', array('courseid' => $this->get_courseid()),
-            'sortorder ASC, id ASC');
-        $filters = array();
-        foreach ($results as $key => $filter) {
-            $filters[$filter->id] = block_xp_filter::load_from_data($filter);
-        }
-        $results->close();
-        return $filters;
+        return $this->filterset->get();
     }
 
     /**
@@ -137,7 +123,6 @@ class block_xp_filter_manager {
     public static function save_default_filters() {
         $staticfilters = new block_xp_filterset_static();
         $defaultfilters = new block_xp_filterset_default();
-
         $defaultfilters->import($staticfilters);
     }
 
@@ -145,13 +130,26 @@ class block_xp_filter_manager {
      * Used when adding block to course
      *
      * @return void */
-    public function copy_default_filters_to_course() {
+    public function copy_default_filters() {
         $defaultfilters = new block_xp_filterset_default();
-        $coursefilters = new block_xp_filterset_course($this->get_courseid());
+        print_object("--REGLAS DEFECTO DENTRO ANTES APPEND --");
+        print_object($defaultfilters->get());
+        $this->filterset->append($defaultfilters);
+        print_object("--REGLAS DEFECTO DENTRO DESPUES APPEND --");
+        print_object($defaultfilters->get());
 
-        if ($coursefilters->empty()) {
-            $coursefilters->import($defaultfilters);
-        }
+
+    }
+
+    public static function copy_default_filters_to_course($courseid) {
+        $defaultfilters = new block_xp_filterset_default();
+        $coursefilters = new block_xp_filterset_course($courseid);
+        print_object("--REGLAS DEFECTO DENTRO ANTES APPEND --");
+        print_object($defaultfilters->get());
+
+        $coursefilters->append($defaultfilters);
+        print_object("--REGLAS DEFECTO DENTRO DESPUES APPEND --");
+        print_object($defaultfilters->get());
     }
 
     /**
@@ -162,6 +160,10 @@ class block_xp_filter_manager {
     public function invalidate_filters_cache() {
         $cache = cache::make('block_xp', 'filters');
         $cache->delete('filters_' . $this->get_courseid());
+    }
+
+    public function get_filterset() {
+        return $this->filterset;
     }
 
 }

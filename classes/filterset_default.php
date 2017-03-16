@@ -37,16 +37,26 @@ class block_xp_filterset_default extends block_xp_filterset {
     public function load() {
         global $DB;
 
-        $records = $DB->get_recordset('block_xp_filters',
-                array('courseid' => 0));
+        $recordset = $DB->get_recordset('block_xp_filters',
+                array('courseid' => 0),
+                'sortorder ASC, id ASC');
 
-        unset($this->filters);
+        print_object("--RECORDS DEFAULT--");
+        print_object($recordset);
 
-        foreach ($records as $key => $filterdata) {
-            $filter = $this->create_filter();
-            $filter->load($filterdata);
-            $this->filters[] = $filter;
+
+        if ($recordset->valid()) {
+            $this->clean();
+            foreach ($recordset as $key => $filterdata) {
+                $filter = $this->create_filter();
+                $filter->load($filterdata);
+                $this->filters[] = $filter;
+            }
         }
+        else {
+            throw new coding_exception("Default filters can't be retrieved");
+        }
+        $recordset->close();
     }
 
     public function create_filter() {

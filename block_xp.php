@@ -91,8 +91,7 @@ class block_xp extends block_base {
 
         // Copy default filters to course
         // TODO: only do this the first time the block is added.
-        $filtermanager = new block_xp_filter_manager($manager);
-        $filtermanager->copy_default_filters_to_course();
+        $manager->get_filter_manager()->copy_default_filters();
 
         return true;
     }

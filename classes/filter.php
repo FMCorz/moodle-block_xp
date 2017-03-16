@@ -56,7 +56,7 @@ class block_xp_filter implements renderable {
      *
      * @var int
      */
-    protected $id;
+    public $id;
 
     /**
      * Points for this filter.
@@ -185,6 +185,31 @@ class block_xp_filter implements renderable {
         return $filter;
     }
 
+    // TODO: testing if we can replace static load_from_data
+    public function load_from_data2($object) {
+        //$record = (array) $record;
+        $object = (is_array($object)) ? (object)$object : $object;
+        //print_object($record);
+        foreach ($object as $key => $value) {
+            if ($key == 'rule' and !empty($value)) {
+                $this->set_rule($value);
+                continue;
+            }
+
+            if ($key == 'points') {
+                // Prevent negatives.
+                $value = abs(intval($value));
+            } else if ($key == 'sortorder') {
+                $value = intval($value);
+            }
+
+            $this->$key = $value;
+        }
+        if (is_null($this->rule) and is_null($this->ruledata)) {
+            throw new coding_exception("filter must have rule or ruledata property");
+        }
+    }
+
     /**
      * Load the rule from {@link self::$ruledata}.
      *
@@ -229,20 +254,9 @@ class block_xp_filter implements renderable {
         $this->insert_or_update('block_xp_filters', $record);
     }
 
-    /**
-     * Save the record as a default filter
-     *
-     * @return void
-     */
-
-    public function save_default() {
-        $record = (object) array(
-                'ruledata' => $this->ruledata,
-                'points' => $this->points,
-                'sortorder' => $this->sortorder,
-        );
-
-        $this->insert_or_update('block_xp_default_filters', $record);
+    public function cmp($a, $b)
+    {
+        return strcmp($a->sortorder, $b->sortorder);
     }
 
     protected function insert_or_update($table, $record) {

@@ -66,20 +66,16 @@ abstract class block_xp_filterset {
         }
     }
 
-    public function merge(block_xp_filterset $filters) {
+    public function append(block_xp_filterset $filters) {
         foreach ($filters->get() as $filter) {
-            $clonedfilter = $this->create_filter();
-            $clonedfilter->load($filter);
-            $this->add_last($clonedfilter);
+            $this->add_last($filter);
         }
-
-        $this->reset_sortorder();
         $this->save();
     }
 
     public function import(block_xp_filterset $filters) {
         $this->delete_all();
-        $this->merge($filters);
+        $this->append($filters);
     }
 
     /*
@@ -96,20 +92,23 @@ abstract class block_xp_filterset {
     }
 
     public function add_last(block_xp_filter $filter) {
-        $this->filters[] = $filter;
+        $clonedfilter = $this->create_filter();
+        $clonedfilter->load($filter);
+        $this->filters[] = $clonedfilter;
         $this->reset_sortorder();
     }
 
     public function add_first(block_xp_filter $filter) {
-        $this->add($filter, 0);
+        $clonedfilter = $this->create_filter();
+        $clonedfilter->load_as_new($filter);
+        $this->add($clonedfilter, 0);
     }
 
-    /*
-     * Insert filter in specific position
-     */
     public function add($filter, $position) {
+        $clonedfilter = $this->create_filter();
+        $clonedfilter->load_as_new($filter);
         $position = min($position, $this->count()+1);
-        array_splice( $this->filters, $position, 0, [$filter] );
+        array_splice( $this->filters, $position, 0, [$clonedfilter] );
         $this->reset_sortorder();
     }
 
