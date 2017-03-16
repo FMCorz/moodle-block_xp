@@ -264,13 +264,12 @@ class block_xp_renderer extends plugin_renderer_base {
         return $o;
     }
 
-    // Testing, doens't work...
     public function render_block_xp_filter_course($filter) {
-        $this->render_block_xp_filter($filter);
+        return $this->render_block_xp_filter($filter);
     }
 
     public function render_block_xp_filter_default($filter) {
-        $this->render_block_xp_filter($filter);
+        return $this->render_block_xp_filter($filter);
     }
 
     /**
