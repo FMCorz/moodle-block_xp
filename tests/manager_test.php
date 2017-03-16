@@ -123,6 +123,8 @@ class block_xp_manager_testcase extends advanced_testcase {
         $this->getDataGenerator()->create_group_member(array('groupid' => $g1->id, 'userid' => $u1->id));
 
         $manager = block_xp_manager::get($c1->id);
+        $manager->get_filter_manager()->copy_default_filters();
+
         $manager->update_config(array('enabled' => true, 'timebetweensameactions' => 0));
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c1->id));
@@ -134,6 +136,7 @@ class block_xp_manager_testcase extends advanced_testcase {
         $manager->capture_event($e);
 
         $manager = block_xp_manager::get($c2->id);
+        $manager->get_filter_manager()->copy_default_filters();
         $manager->update_config(array('enabled' => true, 'timebetweensameactions' => 0));
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c2->id));
