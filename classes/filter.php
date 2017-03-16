@@ -187,9 +187,7 @@ class block_xp_filter implements renderable {
 
     // TODO: testing if we can replace static load_from_data
     public function load_from_data2($object) {
-        //$record = (array) $record;
         $object = (is_array($object)) ? (object)$object : $object;
-        //print_object($record);
         foreach ($object as $key => $value) {
             if ($key == 'rule' and !empty($value)) {
                 $this->set_rule($value);

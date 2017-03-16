@@ -41,10 +41,6 @@ class block_xp_filterset_default extends block_xp_filterset {
                 array('courseid' => 0),
                 'sortorder ASC, id ASC');
 
-        print_object("--RECORDS DEFAULT--");
-        print_object($recordset);
-
-
         if ($recordset->valid()) {
             $this->clean();
             foreach ($recordset as $key => $filterdata) {
@@ -53,9 +49,7 @@ class block_xp_filterset_default extends block_xp_filterset {
                 $this->filters[] = $filter;
             }
         }
-        else {
-            throw new coding_exception("Default filters can't be retrieved");
-        }
+
         $recordset->close();
     }
 

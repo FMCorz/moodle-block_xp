@@ -93,7 +93,7 @@ abstract class block_xp_filterset {
 
     public function add_last(block_xp_filter $filter) {
         $clonedfilter = $this->create_filter();
-        $clonedfilter->load($filter);
+        $clonedfilter->load_as_new($filter);
         $this->filters[] = $clonedfilter;
         $this->reset_sortorder();
     }

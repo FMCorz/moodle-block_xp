@@ -314,6 +314,7 @@ function xmldb_block_xp_upgrade($oldversion) {
     if ($oldversion < 2017021801) {
         // Populate block_xp_filters with default filters.
         block_xp_filter_manager::save_default_filters();
+        block_xp_filter_manager::append_default_filters_to_courses();
 
         // Xp savepoint reached.
         upgrade_block_savepoint(true, 2017021801, 'xp');

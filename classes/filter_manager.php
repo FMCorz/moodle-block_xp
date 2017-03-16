@@ -123,7 +123,8 @@ class block_xp_filter_manager {
     public static function save_default_filters() {
         $staticfilters = new block_xp_filterset_static();
         $defaultfilters = new block_xp_filterset_default();
-        $defaultfilters->import($staticfilters);
+        $defaultfilters->delete_all();
+        $defaultfilters->append($staticfilters);
     }
 
     /**
@@ -132,24 +133,22 @@ class block_xp_filter_manager {
      * @return void */
     public function copy_default_filters() {
         $defaultfilters = new block_xp_filterset_default();
-        print_object("--REGLAS DEFECTO DENTRO ANTES APPEND --");
-        print_object($defaultfilters->get());
         $this->filterset->append($defaultfilters);
-        print_object("--REGLAS DEFECTO DENTRO DESPUES APPEND --");
-        print_object($defaultfilters->get());
-
-
     }
 
     public static function copy_default_filters_to_course($courseid) {
         $defaultfilters = new block_xp_filterset_default();
         $coursefilters = new block_xp_filterset_course($courseid);
-        print_object("--REGLAS DEFECTO DENTRO ANTES APPEND --");
-        print_object($defaultfilters->get());
-
         $coursefilters->append($defaultfilters);
-        print_object("--REGLAS DEFECTO DENTRO DESPUES APPEND --");
-        print_object($defaultfilters->get());
+    }
+
+    public static function append_default_filters_to_courses() {
+        global $DB;
+
+        $records = $DB->get_records('block_xp_config');
+        foreach($records as $record) {
+            self::copy_default_filters_to_course($record->courseid);
+        }
     }
 
     /**
