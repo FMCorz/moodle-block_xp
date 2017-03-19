@@ -41,9 +41,15 @@ class block_xp_filter_manager {
      *
      * @param block_xp_manager $manager The XP manager.
      */
-    public function __construct($courseid) {
+    public function __construct($courseid = 0) {
         $this->courseid = $courseid;
-        $this->filterset = new block_xp_filterset_course($courseid);
+
+        if ($courseid == 0) {
+            $this->filterset = new block_xp_filterset_default();
+        }
+        else {
+            $this->filterset = new block_xp_filterset_course($courseid);
+        }
     }
 
     /**
