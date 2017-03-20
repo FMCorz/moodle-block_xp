@@ -81,9 +81,7 @@ abstract class block_xp_filterset {
         if ($recordset->valid()) {
             $this->clean();
             foreach ($recordset as $key => $filterdata) {
-                $filter = $this->create_filter();
-                $filter->load($filterdata);
-                $this->filters[] = $filter;
+                $this->filters[] = block_xp_filter::create_from_data($filterdata);
             }
         }
         $recordset->close();
