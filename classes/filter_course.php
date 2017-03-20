@@ -39,17 +39,6 @@ class block_xp_filter_course extends block_xp_filter {
     }
 
     /**
-     *  Loads object properties from array, stdClass or block_xp_filter.
-     *
-     * @param block_xp_filter|array $filter
-     */
-    public function load($object) {
-        $tempcourseid = $this->courseid;
-        parent::load($object);
-        $this->courseid = $tempcourseid;
-    }
-
-    /**
      * As load but always create a new object in DB.
      *
      * @param block_xp_filter|array $filter

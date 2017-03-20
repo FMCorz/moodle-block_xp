@@ -39,23 +39,6 @@ class block_xp_filter_default extends block_xp_filter {
     }
 
     /**
-     * Loads filter data from object except courseid and id.
-     *
-     * default filters don't have courseid.
-     * Not having id means that when saved will always create a new record.
-     *
-     * @param stdClass|array|block_xp_filter $filter
-     */
-    public function load($filter) {
-        // TODO: check nulls.
-        // TODO: validate ruledata to avoid course context.
-        $this->id = $filter->id;
-        $this->ruledata = $filter->ruledata;
-        $this->points = $filter->points;
-        $this->sortorder = $filter->sortorder;
-    }
-
-    /**
      * As load but always create a new object in DB.
      *
      * @param block_xp_filter|array $filter

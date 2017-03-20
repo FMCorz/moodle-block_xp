@@ -186,12 +186,14 @@ class block_xp_filter implements renderable {
     }
 
     /**
-     * Load the current filter from data.
+     * Load the current filter from data. Preserve id.
      *
      * @param stdClass|array $record Information of the filter, from DB or not.
      * @return block_xp_filter The filter.
      */
     public function load($object) {
+        $tempcourseid = $this->courseid;
+
         $object = (is_array($object)) ? (object)$object : $object;
         foreach ($object as $key => $value) {
             if ($key == 'rule' and !empty($value)) {
@@ -208,6 +210,9 @@ class block_xp_filter implements renderable {
 
             $this->$key = $value;
         }
+
+        $this->courseid = $tempcourseid;
+
         if (is_null($this->rule) and is_null($this->ruledata)) {
             throw new coding_exception("filter must have rule or ruledata property");
         }
@@ -242,11 +247,6 @@ class block_xp_filter implements renderable {
      * @return block_xp_filter
      */
     public function save() {
-        // Unsure what to do with this flag...
-        if (!$this->editable) {
-            throw new coding_exception('Non-editable filters cannot be saved.');
-        }
-
         $record = (object) array(
             'id' => $this->id,
             'courseid' => $this->courseid,
