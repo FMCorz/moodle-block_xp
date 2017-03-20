@@ -69,7 +69,7 @@ if (!empty($_POST['save'])) {
             throw new moodle_exception('Data could not be validated');
         }
 
-        $filter = block_xp_filter::load_from_data($data);
+        $filter = block_xp_filter::create_from_data($data);
         if ($filter->get_id() && !array_key_exists($filter->get_id(), $userfilters)) {
             throw new moodle_exception('Invalid filter ID');
         }
@@ -91,7 +91,7 @@ if (!empty($_POST['save'])) {
 
 // Preparing form.
 $dummyruleset = new block_xp_ruleset();
-$dummyfilter = block_xp_filter::load_from_data(array('rule' => $dummyruleset));
+$dummyfilter = block_xp_filter::create_from_data(array('rule' => $dummyruleset));
 $templatefilter = $renderer->render($dummyfilter);
 
 // Templates of rules.

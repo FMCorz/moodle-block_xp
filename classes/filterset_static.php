@@ -64,18 +64,18 @@ class block_xp_filterset_static extends block_xp_filterset {
 
         $ruleset = new block_xp_ruleset(array($bcmv, $dsc, $sc, $as, $au), block_xp_ruleset::ANY);
         $data = array('rule' => $ruleset, 'points' => 0, 'editable' => false, 'sortorder' => 100000);
-        $this->filters[] = block_xp_filter::load_from_data($data);
+        $this->filters[] = block_xp_filter::create_from_data($data);
 
         $data = array('rule' => $c, 'points' => 45, 'editable' => false, 'sortorder' => 100001);
-        $this->filters[] = block_xp_filter::load_from_data($data);
+        $this->filters[] = block_xp_filter::create_from_data($data);
 
         $data = array('rule' => $r, 'points' => 9, 'editable' => false, 'sortorder' => 100002);
-        $this->filters[] = block_xp_filter::load_from_data($data);
+        $this->filters[] = block_xp_filter::create_from_data($data);
 
         $data = array('rule' => $u, 'points' => 3, 'editable' => false, 'sortorder' => 100003);
-        $this->filters[] = block_xp_filter::load_from_data($data);
+        $this->filters[] = block_xp_filter::create_from_data($data);
 
         $data = array('rule' => $d, 'points' => 0, 'editable' => false, 'sortorder' => 100004);
-        $this->filters[] = block_xp_filter::load_from_data($data);
+        $this->filters[] = block_xp_filter::create_from_data($data);
     }
 }

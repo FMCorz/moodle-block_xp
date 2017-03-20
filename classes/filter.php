@@ -91,7 +91,7 @@ class block_xp_filter implements renderable {
     /**
      * Constructor.
      *
-     * Use {@link self::load_from_data()} instead.
+     * Use {@link self::create_from_data()} instead.
      */
     public function __construct() {}
 
@@ -157,36 +157,36 @@ class block_xp_filter implements renderable {
     }
 
     /**
-     * Create the filter from data.
+     * Simple Factory. Create an empty subclass of filter, based on id.
+     *
+     * @param int $id
+     * @return block_xp_filter_default|block_xp_filter_course
+     */
+    public static function create($id = 0) {
+        if ($id == 0) {
+            return new block_xp_filter_default();
+        }
+        else {
+            return new block_xp_filter_course($id);
+        }
+    }
+    /**
+     * Simple Factory. Create a new filter from data.
      *
      * Do not combine the keys 'rule' and 'ruledata' as it could lead to random behaviours.
      *
      * @param stdClass|array $record Information of the filter, from DB or not.
      * @return block_xp_filter The filter.
      */
-    public static function load_from_data($record) {
-        $filter = new static();
-        $record = (array) $record;
-        foreach ($record as $key => $value) {
-            if ($key == 'rule') {
-                $filter->set_rule($value);
-                continue;
-            }
-
-            if ($key == 'points') {
-                // Prevent negatives.
-                $value = abs(intval($value));
-            } else if ($key == 'sortorder') {
-                $value = intval($value);
-            }
-
-            $filter->$key = $value;
-        }
+    public static function create_from_data($record) {
+        $id = (isset($record->id)) ? $record->id : 0;
+        $filter = self::create($id);
+        $filter->load($record);
         return $filter;
     }
 
     /**
-     * Load the current filter from data. Preserve id.
+     * Load the current filter from data.
      *
      * @param stdClass|array $record Information of the filter, from DB or not.
      * @return block_xp_filter The filter.
@@ -211,6 +211,7 @@ class block_xp_filter implements renderable {
             $this->$key = $value;
         }
 
+        // Preserve courseid
         $this->courseid = $tempcourseid;
 
         if (is_null($this->rule) and is_null($this->ruledata)) {

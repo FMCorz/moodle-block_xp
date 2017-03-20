@@ -42,7 +42,7 @@ class block_xp_filters_testcase extends advanced_testcase {
 
     public function test_filter_match() {
         $rule = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
-        $filter = block_xp_filter::load_from_data(array('rule' => $rule));
+        $filter = block_xp_filter::create_from_data(array('rule' => $rule));
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c'));
         $this->assertTrue($filter->match($e));
@@ -55,13 +55,13 @@ class block_xp_filters_testcase extends advanced_testcase {
         $rulec = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c'));
 
-        $filter = block_xp_filter::load_from_data(array('rule' => $rulec));
+        $filter = block_xp_filter::create_from_data(array('rule' => $rulec));
         $this->assertTrue($filter->match($e));
 
-        $filter = block_xp_filter::load_from_data(array('ruledata' => json_encode($rulec->export())));
+        $filter = block_xp_filter::create_from_data(array('ruledata' => json_encode($rulec->export())));
         $this->assertTrue($filter->match($e));
 
-        $filter = block_xp_filter::load_from_data(array());
+        $filter = block_xp_filter::create_from_data(array());
         $filter->set_rule($rulec);
         $this->assertTrue($filter->match($e));
     }
