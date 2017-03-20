@@ -34,23 +34,9 @@ defined('MOODLE_INTERNAL') || die();
 
 class block_xp_filterset_default extends block_xp_filterset {
 
-    public function load() {
-        global $DB;
-
-        $recordset = $DB->get_recordset('block_xp_filters',
-                array('courseid' => 0),
-                'sortorder ASC, id ASC');
-
-        if ($recordset->valid()) {
-            $this->clean();
-            foreach ($recordset as $key => $filterdata) {
-                $filter = $this->create_filter();
-                $filter->load($filterdata);
-                $this->filters[] = $filter;
-            }
-        }
-
-        $recordset->close();
+    public function __construct() {
+        $this->courseid = 0;
+        parent::__construct();
     }
 
     public function create_filter() {

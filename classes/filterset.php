@@ -37,6 +37,9 @@ abstract class block_xp_filterset {
     /** @var block_xp_filterset[] Array of block_xp_filterset's subclasses. */
     protected $filters;
 
+    /** @var int course id. */
+    protected $courseid;
+
 
     public function __construct() {
         $this->filters = array();
@@ -51,13 +54,6 @@ abstract class block_xp_filterset {
     protected abstract function create_filter();
 
     /**
-     * Loads block_xp_filter array ($this->filters) from DB.
-     *
-     * @return void
-     */
-    protected abstract function load();
-
-    /**
      * Return the points filtered for this event.
      *
      * @param \core\event\base $event The event.
@@ -70,6 +66,27 @@ abstract class block_xp_filterset {
             }
         }
         throw new coding_exception('The event did not match any filter.');
+    }
+
+    /**
+     * Loads block_xp_filter array ($this->filters) from DB.
+     *
+     */
+    public function load() {
+        global $DB;
+
+        $recordset = $DB->get_recordset('block_xp_filters',
+                array('courseid' => $this->courseid), 'sortorder ASC, id ASC');
+
+        if ($recordset->valid()) {
+            $this->clean();
+            foreach ($recordset as $key => $filterdata) {
+                $filter = $this->create_filter();
+                $filter->load($filterdata);
+                $this->filters[] = $filter;
+            }
+        }
+        $recordset->close();
     }
 
     /**
@@ -109,12 +126,10 @@ abstract class block_xp_filterset {
      *
      */
     public function delete_all() {
-
-       foreach ($this->filters as $filter) {
-           $filter->delete();
-       }
-
-       $this->clean();
+        foreach ($this->filters as $filter) {
+            $filter->delete();
+        }
+        $this->clean();
     }
 
     /**
@@ -149,7 +164,7 @@ abstract class block_xp_filterset {
     public function add($filter, $position) {
         $clonedfilter = $this->create_filter();
         $clonedfilter->load_as_new($filter);
-        $position = min($position, $this->count()+1);
+        $position = min($position, $this->count() + 1);
         array_splice( $this->filters, $position, 0, [$clonedfilter] );
         $this->update_sortorder();
     }
