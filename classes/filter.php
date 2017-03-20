@@ -274,6 +274,11 @@ class block_xp_filter implements renderable {
         return strcmp($a->sortorder, $b->sortorder);
     }
 
+    /**
+     * Insert or update current filter, based on id property existence.
+     * @param string $table
+     * @param object $record
+     */
     protected function insert_or_update($table, $record) {
         global $DB;
 
