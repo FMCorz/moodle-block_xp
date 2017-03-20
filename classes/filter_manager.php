@@ -43,13 +43,6 @@ class block_xp_filter_manager {
      */
     public function __construct($courseid = 0) {
         $this->courseid = $courseid;
-
-        if ($courseid == 0) {
-            $this->filterset = new block_xp_filterset_default();
-        }
-        else {
-            $this->filterset = new block_xp_filterset_course($courseid);
-        }
     }
 
     /**
@@ -104,12 +97,12 @@ class block_xp_filter_manager {
     }
 
     /**
-     * Get the filters defined for the course.
+     * Get the array of filters defined for the course.
      *
      * @return array of filter data from the DB, though properties is already json_decoded.
      */
     public function get_course_filters() {
-        return $this->filterset->get();
+        return $this->get_filterset()->get();
     }
 
     /**
@@ -139,7 +132,7 @@ class block_xp_filter_manager {
      * @return void */
     public function copy_default_filters() {
         $defaultfilters = new block_xp_filterset_default();
-        $this->filterset->append($defaultfilters);
+        $this->get_filterset()->append($defaultfilters);
     }
 
     /**
@@ -177,7 +170,24 @@ class block_xp_filter_manager {
         $cache->delete('filters_' . $this->get_courseid());
     }
 
+    /**
+     * Get block_xp_filterset subclass depending on courseid.
+     * Default filterset has courseid = 0.
+     *
+     * @return block_xp_filterset_course|block_xp_filterset_default
+     */
     public function get_filterset() {
+        if (isset($this->filterset)) {
+            return $this->filterset;
+        }
+
+        // filterset lazy loading
+        if ($this->courseid == 0) {
+            $this->filterset = new block_xp_filterset_default();
+        }
+        else {
+            $this->filterset = new block_xp_filterset_course($this->courseid);
+        }
         return $this->filterset;
     }
 
