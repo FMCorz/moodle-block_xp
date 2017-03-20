@@ -219,6 +219,16 @@ class block_xp_filter implements renderable {
     }
 
     /**
+     * As load but always create a new object in DB, by clearing id.
+     *
+     * @param block_xp_filter|array $filter
+     */
+    public function load_as_new($object) {
+        $this->load($object);
+        $this->id = null;
+    }
+
+    /**
      * Load the rule from {@link self::$ruledata}.
      *
      * @return void

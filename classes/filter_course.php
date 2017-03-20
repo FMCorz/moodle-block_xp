@@ -38,14 +38,4 @@ class block_xp_filter_course extends block_xp_filter {
         $this->courseid = $courseid;
     }
 
-    /**
-     * As load but always create a new object in DB.
-     *
-     * @param block_xp_filter|array $filter
-     */
-    public function load_as_new($object) {
-        $this->load($object);
-        $this->id = null;
-    }
-
 }
