@@ -34,6 +34,10 @@ defined('MOODLE_INTERNAL') || die();
 
 class block_xp_filter_default extends block_xp_filter {
 
+    public function __construct() {
+        $this->courseid = 0;
+    }
+
     /**
      * Loads filter data from object except courseid and id.
      *
@@ -61,15 +65,4 @@ class block_xp_filter_default extends block_xp_filter {
         $this->id = null;
     }
 
-    public function save() {
-        $record = (object) array(
-                'id' => $this->id,
-                'courseid' => 0,
-                'ruledata' => $this->ruledata,
-                'points' => $this->points,
-                'sortorder' => $this->sortorder,
-        );
-
-        $this->insert_or_update('block_xp_filters', $record);
-    }
 }

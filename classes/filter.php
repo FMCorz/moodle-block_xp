@@ -185,8 +185,13 @@ class block_xp_filter implements renderable {
         return $filter;
     }
 
-    // TODO: testing if we can replace static load_from_data
-    public function load_from_data2($object) {
+    /**
+     * Load the current filter from data.
+     *
+     * @param stdClass|array $record Information of the filter, from DB or not.
+     * @return block_xp_filter The filter.
+     */
+    public function load($object) {
         $object = (is_array($object)) ? (object)$object : $object;
         foreach ($object as $key => $value) {
             if ($key == 'rule' and !empty($value)) {
@@ -243,6 +248,7 @@ class block_xp_filter implements renderable {
         }
 
         $record = (object) array(
+            'id' => $this->id,
             'courseid' => $this->courseid,
             'ruledata' => $this->ruledata,
             'points' => $this->points,
