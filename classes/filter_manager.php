@@ -142,12 +142,23 @@ class block_xp_filter_manager {
         $this->filterset->append($defaultfilters);
     }
 
+    /**
+     * Append default filters to course.
+     *
+     * @param int $courseid
+     * @return void
+     */
     public static function copy_default_filters_to_course($courseid) {
         $defaultfilters = new block_xp_filterset_default();
         $coursefilters = new block_xp_filterset_course($courseid);
         $coursefilters->append($defaultfilters);
     }
 
+    /**
+     * Append default filters to all courses.
+     *
+     * @return void
+     */
     public static function append_default_filters_to_courses() {
         global $DB;
 
@@ -160,7 +171,6 @@ class block_xp_filter_manager {
     /**
      * Invalidate the filters cache.
      *
-     * @return void
      */
     public function invalidate_filters_cache() {
         $cache = cache::make('block_xp', 'filters');
