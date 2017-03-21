@@ -120,7 +120,7 @@ echo $OUTPUT->heading(get_string('yourownrules', 'block_xp'), 3);
 
 echo html_writer::start_tag('ul', array('class' => 'filters-list filters-editable'));
 echo $addlink;
-foreach ($userfilters->get() as $filter) {
+foreach ($userfilters as $filter) {
     echo $renderer->render($filter);
     echo $addlink;
 }

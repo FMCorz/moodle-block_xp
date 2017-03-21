@@ -79,7 +79,7 @@ class block_xp_filter_manager {
      * @return int points.
      */
     public function get_points_for_event(\core\event\base $event) {
-        foreach ($this->get_all_filters()->get() as $filter) {
+        foreach ($this->get_all_filters() as $filter) { // get()
             if ($filter->match($event)) {
                 return $filter->get_points();
             }

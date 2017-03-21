@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-abstract class block_xp_filterset {
+abstract class block_xp_filterset implements Iterator {
 
     /** @var block_xp_filterset[] Array of block_xp_filterset's subclasses. */
     protected $filters;
@@ -40,8 +40,12 @@ abstract class block_xp_filterset {
     /** @var int course id. */
     protected $courseid;
 
+    /** @var int iterator position */
+    private $position = 0;
+
 
     public function __construct() {
+        $this->position = 0;
         $this->filters = array();
         $this->load();
     }
@@ -243,6 +247,46 @@ abstract class block_xp_filterset {
      */
     public function count() {
         return count($this->filters);
+    }
+
+    /**
+     * Iterator. Rewind.
+     *
+     */
+    function rewind() {
+        $this->position = 0;
+    }
+
+    /**
+     * Iterator. Current position.
+     *
+     */
+    function current() {
+        return $this->filters[$this->position];
+    }
+
+    /**
+     * Iterator. key method.
+     *
+     */
+    function key() {
+        return $this->position;
+    }
+
+    /**
+     * Iterator. valid method.
+     *
+     */
+    function next() {
+        ++$this->position;
+    }
+
+    /**
+     * Iterator. valid method.
+     *
+     */
+    function valid() {
+        return isset($this->filters[$this->position]);
     }
 
     /**
