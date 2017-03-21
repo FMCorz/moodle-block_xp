@@ -162,7 +162,7 @@ class block_xp_filter implements renderable {
      * @param int $id
      * @return block_xp_filter_default|block_xp_filter_course
      */
-    public static function create($courseid = 0) {
+    public static function create(int $courseid = 0) {
         if ($courseid == 0) {
             return new block_xp_filter_default();
         }
@@ -257,10 +257,7 @@ class block_xp_filter implements renderable {
      * @return bool Whether or not it matches.
      */
     public function match(\core\event\base $event) {
-        if (!$this->rule) {
-            $this->load_rule();
-        }
-        return $this->rule->match($event);
+        return $this->get_rule()->match($event);
     }
 
     /**
@@ -291,11 +288,6 @@ class block_xp_filter implements renderable {
         $this->insert_or_update('block_xp_filters', $record);
     }
 
-    public function cmp($a, $b)
-    {
-        return strcmp($a->sortorder, $b->sortorder);
-    }
-
     /**
      * Insert or update current filter, based on id property existence.
      * @param string $table
@@ -324,7 +316,7 @@ class block_xp_filter implements renderable {
     /**
      * Overrides the rule of the filter.
      *
-     * @param block_xp_rule $rule
+     * @param block_xp_rule|array $rule
      */
     public function set_rule($rule) {
         if(is_array($rule)) {

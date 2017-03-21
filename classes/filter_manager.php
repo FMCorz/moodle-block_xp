@@ -142,7 +142,7 @@ class block_xp_filter_manager {
      * @param int $courseid
      * @return void
      */
-    public static function copy_default_filters_to_course($courseid) {
+    public static function copy_default_filters_to_course(int $courseid) {
         $defaultfilters = new block_xp_filterset_default();
         $coursefilters = new block_xp_filterset_course($courseid);
         $coursefilters->append($defaultfilters);
@@ -210,7 +210,7 @@ class block_xp_filter_manager {
      *
      * @param block_xp_filterset_course[]|block_xp_filterset_default[] $filtersetdata
      */
-    public function save($filtersetdata) {
+    public function save(array $filtersetdata) {
         $newfilterset = block_xp_filterset::create_from_data($this->courseid, $filtersetdata);
         $this->get_filterset()->import($newfilterset);
         $this->invalidate_filters_cache();

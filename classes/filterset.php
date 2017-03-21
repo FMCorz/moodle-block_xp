@@ -74,7 +74,7 @@ abstract class block_xp_filterset {
      * @param int $courseid
      * @return block_xp_filterset_default|block_xp_filterset_course
      */
-    public static function create($courseid) {
+    public static function create(int $courseid) {
         if ($courseid == 0) {
             return new block_xp_filterset_default();
         }
@@ -89,7 +89,7 @@ abstract class block_xp_filterset {
      * @param block_xp_filterset|array|object $filterdata
      * @return block_xp_filterset
      */
-    public static function create_from_data($courseid, $filtersetdata) {
+    public static function create_from_data(int $courseid, array $filtersetdata) {
         // TODO: should not load records from DB!
         $filterset = self::create($courseid);
 
@@ -137,7 +137,7 @@ abstract class block_xp_filterset {
      *
      * @param block_xp_filterset $filters
      */
-    public function append($filterset) {
+    public function append(block_xp_filterset $filterset) {
         foreach ($filterset->get() as $filter) {
             $this->add_last($filter);
         }
@@ -149,7 +149,7 @@ abstract class block_xp_filterset {
      *
      * @param block_xp_filterset $filters
      */
-    public function import($filterset) {
+    public function import(block_xp_filterset $filterset) {
         $this->delete_all();
         if (!empty($filterset)) {
             $this->append($filterset);
@@ -196,7 +196,7 @@ abstract class block_xp_filterset {
      * @param block_xp_filter $filter
      * @param int $position
      */
-    public function add($filter, $position) {
+    public function add(block_xp_filter $filter, int $position) {
         $clonedfilter = $this->create_filter();
         $clonedfilter->load_as_new($filter);
         $position = min($position, $this->count() + 1);
