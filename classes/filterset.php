@@ -69,6 +69,41 @@ abstract class block_xp_filterset {
     }
 
     /**
+     * Simple factory. Creates a subclass of block_xp_filterset based on $courseid.
+     *
+     * @param int $courseid
+     * @return block_xp_filterset_default|block_xp_filterset_course
+     */
+    public static function create($courseid) {
+        if ($courseid == 0) {
+            return new block_xp_filterset_default();
+        }
+        else {
+            return new block_xp_filterset_course($courseid);
+        }
+    }
+
+    /**
+     * Creates a new filteset subclass from data.
+     *
+     * @param block_xp_filterset|array|object $filterdata
+     * @return block_xp_filterset
+     */
+    public static function create_from_data($courseid, $filtersetdata) {
+        // TODO: should not load records from DB!
+        $filterset = self::create($courseid);
+
+        $filterset->clean();
+
+        foreach ($filtersetdata as $key => $filterdata) {
+             $filter = block_xp_filter::create_from_data($filterdata);
+             $filterset->filters[] = $filter;
+        }
+
+        return $filterset;
+    }
+
+    /**
      * Loads block_xp_filter array ($this->filters) from DB.
      *
      */
@@ -102,8 +137,8 @@ abstract class block_xp_filterset {
      *
      * @param block_xp_filterset $filters
      */
-    public function append(block_xp_filterset $filters) {
-        foreach ($filters->get() as $filter) {
+    public function append($filterset) {
+        foreach ($filterset->get() as $filter) {
             $this->add_last($filter);
         }
         $this->save();
@@ -114,9 +149,11 @@ abstract class block_xp_filterset {
      *
      * @param block_xp_filterset $filters
      */
-    public function import(block_xp_filterset $filters) {
+    public function import($filterset) {
         $this->delete_all();
-        $this->append($filters);
+        if (!empty($filterset)) {
+            $this->append($filterset);
+        }
     }
 
     /*

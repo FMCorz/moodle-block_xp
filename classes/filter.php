@@ -157,17 +157,17 @@ class block_xp_filter implements renderable {
     }
 
     /**
-     * Simple Factory. Create an empty subclass of filter, based on id.
+     * Simple Factory. Create an empty subclass of filter, based on courseid.
      *
      * @param int $id
      * @return block_xp_filter_default|block_xp_filter_course
      */
-    public static function create($id = 0) {
-        if ($id == 0) {
+    public static function create($courseid = 0) {
+        if ($courseid == 0) {
             return new block_xp_filter_default();
         }
         else {
-            return new block_xp_filter_course($id);
+            return new block_xp_filter_course($courseid);
         }
     }
     /**
@@ -179,14 +179,16 @@ class block_xp_filter implements renderable {
      * @return block_xp_filter The filter.
      */
     public static function create_from_data($record) {
-        $id = (isset($record->id)) ? $record->id : 0;
-        $filter = self::create($id);
+        $courseid = (isset($record->courseid)) ? $record->courseid : 0;
+        $filter = self::create($courseid);
         $filter->load($record);
         return $filter;
     }
 
     /**
      * Load the current filter from data.
+     *
+     * Do not combine the keys 'rule' and 'ruledata' as it could lead to random behaviours.
      *
      * @param stdClass|array $record Information of the filter, from DB or not.
      * @return block_xp_filter The filter.
@@ -196,7 +198,12 @@ class block_xp_filter implements renderable {
 
         $object = (is_array($object)) ? (object)$object : $object;
         foreach ($object as $key => $value) {
-            if ($key == 'rule' and !empty($value)) {
+            if ($key == 'ruledata' && !empty($value)) {
+                $this->set_ruledata($value);
+                continue;
+            }
+
+            if ($key == 'rule' && !empty($value)) {
                 $this->set_rule($value);
                 continue;
             }
@@ -214,8 +221,8 @@ class block_xp_filter implements renderable {
         // Preserve courseid
         $this->courseid = $tempcourseid;
 
-        if (is_null($this->rule) and is_null($this->ruledata)) {
-            throw new coding_exception("filter must have rule or ruledata property");
+        if (is_null($this->ruledata)) {
+            throw new coding_exception("filter must have ruledata property");
         }
     }
 
@@ -235,6 +242,10 @@ class block_xp_filter implements renderable {
      * @return void
      */
     protected function load_rule() {
+        if (is_null($this->ruledata)) {
+            throw new coding_exception("ruledata must not be null");
+        }
+
         $ruledata = json_decode($this->ruledata, true);
         $this->rule = block_xp_rule::create($ruledata);
     }
@@ -258,6 +269,17 @@ class block_xp_filter implements renderable {
      * @return block_xp_filter
      */
     public function save() {
+        if (empty($this->ruledata)) {
+            if (empty($this->rule)) {
+                new coding_exception("ruledata and rule should not be empty when saving");
+            }
+
+            if(is_array($this->rule)) {
+                $this->rule = block_xp_rule::create($this->rule);
+            }
+            $this->ruledata = json_encode($this->rule->export());
+        }
+
         $record = (object) array(
             'id' => $this->id,
             'courseid' => $this->courseid,
@@ -304,9 +326,24 @@ class block_xp_filter implements renderable {
      *
      * @param block_xp_rule $rule
      */
-    public function set_rule(block_xp_rule $rule) {
+    public function set_rule($rule) {
+        if(is_array($rule)) {
+            $rule = block_xp_rule::create($rule);
+        }
+        if (empty($rule)) {
+            throw new coding_exception("rule can't be empty to generate ruledata");
+        }
+        if (!($rule instanceof block_xp_rule)) {
+            throw new coding_exception("rule must be a block_xp_rule class");
+        }
+
         $this->rule = $rule;
         $this->ruledata = json_encode($rule->export());
+    }
+
+    public function set_ruledata($ruledata) {
+        $this->ruledata = $ruledata;
+        $this->load_rule();
     }
 
     /**

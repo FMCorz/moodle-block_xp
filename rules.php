@@ -54,38 +54,9 @@ $userfilters = $filtermanager->get_course_filters();
 if (!empty($_POST['save'])) {
     require_sesskey();
 
-    // Saves all the filters.
-    $filterids = array();
     $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
+    $filtermanager->save($filters);
 
-    foreach ($filters as $filterdata) {
-
-        $data = $filterdata;
-        $data['ruledata'] = json_encode($data['rule'], true);
-        unset($data['rule']);
-        $data['courseid'] = $manager->get_courseid();
-
-        if (!block_xp_filter::validate_data($data)) {
-            throw new moodle_exception('Data could not be validated');
-        }
-
-        $filter = block_xp_filter::create_from_data($data);
-        if ($filter->get_id() && !array_key_exists($filter->get_id(), $userfilters)) {
-            throw new moodle_exception('Invalid filter ID');
-        }
-
-        $filter->save();
-        $filterids[$filter->get_id()] = true;
-    }
-
-    // Check for filters to be deleted.
-    foreach ($userfilters as $filterid => $filter) {
-        if (!array_key_exists($filterid, $filterids)) {
-            $filter->delete();
-        }
-    }
-
-    $filtermanager->invalidate_filters_cache();
     redirect($url, get_string('changessaved'));
 }
 
@@ -149,7 +120,7 @@ echo $OUTPUT->heading(get_string('yourownrules', 'block_xp'), 3);
 
 echo html_writer::start_tag('ul', array('class' => 'filters-list filters-editable'));
 echo $addlink;
-foreach ($userfilters as $filter) {
+foreach ($userfilters->get() as $filter) {
     echo $renderer->render($filter);
     echo $addlink;
 }

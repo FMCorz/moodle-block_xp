@@ -79,7 +79,7 @@ class block_xp_filter_manager {
      * @return int points.
      */
     public function get_points_for_event(\core\event\base $event) {
-        foreach ($this->get_all_filters() as $filter) {
+        foreach ($this->get_all_filters()->get() as $filter) {
             if ($filter->match($event)) {
                 return $filter->get_points();
             }
@@ -102,7 +102,7 @@ class block_xp_filter_manager {
      * @return array of filter data from the DB, though properties is already json_decoded.
      */
     public function get_course_filters() {
-        return $this->get_filterset()->get();
+        return $this->get_filterset();
     }
 
     /**
@@ -133,6 +133,7 @@ class block_xp_filter_manager {
     public function copy_default_filters() {
         $defaultfilters = new block_xp_filterset_default();
         $this->get_filterset()->append($defaultfilters);
+        $this->invalidate_filters_cache();
     }
 
     /**
@@ -189,6 +190,30 @@ class block_xp_filter_manager {
             $this->filterset = new block_xp_filterset_course($this->courseid);
         }
         return $this->filterset;
+    }
+
+    /**
+     *  Get ordered array of filters
+     *
+     * @return block_xp_filterset_course[]|block_xp_filterset_default[]
+     */
+    public function get() {
+        $filtersetdata = array();
+        foreach ($this->get_filterset() as $key => $filter) {
+            $filtersetdata[$filter->sortorder] = $filter;
+        }
+        return $filtersetdata;
+    }
+
+    /**
+     * Delete current course filters and save the ones passed.
+     *
+     * @param block_xp_filterset_course[]|block_xp_filterset_default[] $filtersetdata
+     */
+    public function save($filtersetdata) {
+        $newfilterset = block_xp_filterset::create_from_data($this->courseid, $filtersetdata);
+        $this->get_filterset()->import($newfilterset);
+        $this->invalidate_filters_cache();
     }
 
 }
