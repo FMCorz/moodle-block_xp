@@ -48,7 +48,7 @@ $PAGE->set_url($url);
 
 $renderer = $PAGE->get_renderer('block_xp');
 $filtermanager = $manager->get_filter_manager();
-$userfilters = $filtermanager->get_course_filters();
+$coursefilters = $filtermanager->get_filterset();
 
 // Saving the data.
 if (!empty($_POST['save'])) {
@@ -120,7 +120,7 @@ echo $OUTPUT->heading(get_string('yourownrules', 'block_xp'), 3);
 
 echo html_writer::start_tag('ul', array('class' => 'filters-list filters-editable'));
 echo $addlink;
-foreach ($userfilters as $filter) {
+foreach ($coursefilters as $filter) {
     echo $renderer->render($filter);
     echo $addlink;
 }

@@ -39,6 +39,8 @@ class block_xp_filter_manager {
     /**
      * Constructor.
      *
+     * If no courseid is passed it will manage default filterset.
+     *
      * @param block_xp_manager $manager The XP manager.
      */
     public function __construct($courseid = 0) {
@@ -56,7 +58,7 @@ class block_xp_filter_manager {
         $cache = cache::make('block_xp', 'filters');
         $key = 'filters_' . $this->get_courseid();
         if (false === ($filters = $cache->get($key))) {
-            $filters = $this->get_course_filters();
+            $filters = $this->get_filterset();
             $cache->set($key, $filters);
         }
         return $filters;
@@ -93,26 +95,21 @@ class block_xp_filter_manager {
      * @return array Of filter objects.
      */
     public static function get_static_filters() {
-        return (new block_xp_filterset_static())->get();
+        return (new block_xp_filterset_static());
+    }
+
+    public static function get_default_filters() {
+        return (new block_xp_filterset_default());
     }
 
     /**
-     * Get the array of filters defined for the course.
-     *
-     * @return array of filter data from the DB, though properties is already json_decoded.
-     */
-    public function get_course_filters() {
-        return $this->get_filterset();
-    }
-
-    /**
-     * Alias of get_course_filters()
+     * Alias of get_filterset()
      *
      * @return array of filters
      */
-    public function get_user_filters() {
-        return $this->get_course_filters();
-    }
+//     public function get_user_filters() {
+//         return $this->get_filterset();
+//     }
 
     /**
      * Used to populate default filters table with predefined filters.
@@ -190,19 +187,6 @@ class block_xp_filter_manager {
             $this->filterset = new block_xp_filterset_course($this->courseid);
         }
         return $this->filterset;
-    }
-
-    /**
-     *  Get ordered array of filters
-     *
-     * @return block_xp_filterset_course[]|block_xp_filterset_default[]
-     */
-    public function get() {
-        $filtersetdata = array();
-        foreach ($this->get_filterset() as $key => $filter) {
-            $filtersetdata[$filter->sortorder] = $filter;
-        }
-        return $filtersetdata;
     }
 
     /**

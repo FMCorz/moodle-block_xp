@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-abstract class block_xp_filterset implements Iterator {
+abstract class block_xp_filterset implements SeekableIterator {
 
     /** @var block_xp_filterset[] Array of block_xp_filterset's subclasses. */
     protected $filters;
@@ -64,7 +64,7 @@ abstract class block_xp_filterset implements Iterator {
      * @return int points.
      */
     public function get_points_for_event(\core\event\base $event) {
-        foreach ($this->get() as $filter) {
+        foreach ($this as $filter) {
             if ($filter->match($event)) {
                 return $filter->get_points();
             }
@@ -131,7 +131,7 @@ abstract class block_xp_filterset implements Iterator {
      *
      */
     public function save() {
-        foreach ($this->filters as $filter) {
+        foreach ($this as $filter) {
             $filter->save();
         }
     }
@@ -142,7 +142,7 @@ abstract class block_xp_filterset implements Iterator {
      * @param block_xp_filterset $filters
      */
     public function append(block_xp_filterset $filterset) {
-        foreach ($filterset->get() as $filter) {
+        foreach ($filterset as $filter) {
             $this->add_last($filter);
         }
         $this->save();
@@ -165,7 +165,7 @@ abstract class block_xp_filterset implements Iterator {
      *
      */
     public function delete_all() {
-        foreach ($this->filters as $filter) {
+        foreach ($this as $filter) {
             $filter->delete();
         }
         $this->clean();
@@ -215,7 +215,7 @@ abstract class block_xp_filterset implements Iterator {
     public function update_sortorder() {
         $sortorder = 0;
 
-        foreach ($this->filters as $filter) {
+        foreach ($this as $filter) {
 
             $filter->sortorder = $sortorder;
             $sortorder++;
@@ -290,11 +290,14 @@ abstract class block_xp_filterset implements Iterator {
     }
 
     /**
-     * Return array of loaded filters.
+     * SeekIterator interface. seek method.
      *
-     * @return block_xp_filter[]
      */
-    public function get() {
-        return $this->filters;
+    public function seek($position) {
+        if (!isset($this->filters[$position])) {
+            throw new OutOfBoundsException("invalid seek position ($position)");
+        }
+
+        $this->position = $position;
     }
 }

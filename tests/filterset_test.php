@@ -98,9 +98,10 @@ class block_xp_filterset_testcase extends advanced_testcase {
         // Test if filterset is saved correctly in DB
         $coursefiltersclone = new block_xp_filterset_course($course->id);
 
-        // TODO: How to compare filters? rule should be the same.
-        $this->assertTrue($filter->get_rule() == $coursefiltersclone->get()[1]->get_rule());
-
+        // TODO: Improve filters comparison
+        // Two filters are equal if rules are equal (points,courseid... are not checked!)
+        $coursefiltersclone->seek(1);
+        $this->assertTrue($filter->get_rule() == $coursefiltersclone->current()->get_rule());
     }
 
 }
