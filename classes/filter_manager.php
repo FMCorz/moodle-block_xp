@@ -58,7 +58,7 @@ class block_xp_filter_manager {
         $cache = cache::make('block_xp', 'filters');
         $key = 'filters_' . $this->get_courseid();
         if (false === ($filters = $cache->get($key))) {
-            $filters = $this->get_filterset();
+            $filters = $this->get_filters();
             $cache->set($key, $filters);
         }
         return $filters;
@@ -94,7 +94,7 @@ class block_xp_filter_manager {
      *
      * @return block_xp_filterset
      */
-    public static function get_static_filterset() {
+    public static function get_static_filters() {
         return (new block_xp_filterset_static());
     }
 
@@ -103,7 +103,7 @@ class block_xp_filter_manager {
      *
      * @return block_xp_filterset
      */
-    public static function get_default_filterset() {
+    public static function get_default_filters() {
         return (new block_xp_filterset_default());
     }
 
@@ -113,18 +113,9 @@ class block_xp_filter_manager {
      * @param int courseid
      * @return block_xp_filterset
      */
-    public static function get_course_filterset(int $courseid) {
+    public static function get_course_filters(int $courseid) {
         return (new block_xp_filterset_course($courseid));
     }
-
-    /**
-     * Alias of get_filterset()
-     *
-     * @return array of filters
-     */
-//     public function get_user_filters() {
-//         return $this->get_filterset();
-//     }
 
     /**
      * Used to populate default filters table with predefined filters.
@@ -143,8 +134,8 @@ class block_xp_filter_manager {
      *
      * @return void */
     public function copy_default_filters() {
-        $defaultfilters = self::get_default_filterset();
-        $this->get_filterset()->append($defaultfilters);
+        $defaultfilters = self::get_default_filters();
+        $this->get_filters()->append($defaultfilters);
         $this->invalidate_filters_cache();
     }
 
@@ -155,8 +146,8 @@ class block_xp_filter_manager {
      * @return void
      */
     public static function copy_default_filters_to_course(int $courseid) {
-        $defaultfilters = self::get_default_filterset();
-        $coursefilters = self::get_course_filterset($courseid);
+        $defaultfilters = self::get_default_filters();
+        $coursefilters = self::get_course_filters($courseid);
         $coursefilters->append($defaultfilters);
     }
 
@@ -189,17 +180,17 @@ class block_xp_filter_manager {
      *
      * @return block_xp_filterset_course|block_xp_filterset_default
      */
-    public function get_filterset() {
+    public function get_filters() {
         if (isset($this->filterset)) {
             return $this->filterset;
         }
 
         // filterset lazy loading
         if ($this->courseid == 0) {
-            $this->filterset = self::get_default_filterset();
+            $this->filterset = self::get_default_filters();
         }
         else {
-            $this->filterset = self::get_course_filterset($this->courseid);
+            $this->filterset = self::get_course_filters($this->courseid);
         }
         return $this->filterset;
     }
@@ -211,7 +202,7 @@ class block_xp_filter_manager {
      */
     public function save(array $filtersetdata) {
         $newfilterset = block_xp_filterset::create_from_data($this->courseid, $filtersetdata);
-        $this->get_filterset()->import($newfilterset);
+        $this->get_filters()->import($newfilterset);
         $this->invalidate_filters_cache();
     }
 

@@ -48,7 +48,7 @@ $PAGE->set_url($url);
 
 $renderer = $PAGE->get_renderer('block_xp');
 $filtermanager = $manager->get_filter_manager();
-$coursefilters = $filtermanager->get_filterset();
+$coursefilters = $filtermanager->get_filters();
 
 // Saving the data.
 if (!empty($_POST['save'])) {

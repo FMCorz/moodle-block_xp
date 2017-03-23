@@ -89,7 +89,7 @@ class block_xp_filters_testcase extends advanced_testcase {
         $fm = $manager->get_filter_manager();
         $fm->copy_default_filters();
 
-        $filterset = $fm->get_filterset();
+        $filterset = $fm->get_filters();
 
         $rule = new block_xp_ruleset(array(
                 new block_xp_rule_property(block_xp_rule_base::GTE, 100, 'objectid'),
