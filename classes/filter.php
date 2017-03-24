@@ -202,10 +202,7 @@ class block_xp_filter implements renderable {
      * @return bool Whether or not it matches.
      */
     public function match(\core\event\base $event) {
-        if (!$this->rule) {
-            $this->load_rule();
-        }
-        return $this->rule->match($event);
+        return $this->get_rule()->match($event);
     }
 
     /**
