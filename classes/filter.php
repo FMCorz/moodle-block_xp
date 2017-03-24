@@ -56,7 +56,7 @@ class block_xp_filter implements renderable {
      *
      * @var int
      */
-    public $id;
+    protected $id;
 
     /**
      * Points for this filter.
@@ -86,7 +86,7 @@ class block_xp_filter implements renderable {
      *
      * @var int
      */
-    public $sortorder = 0;
+    protected $sortorder = 0;
 
     /**
      * Constructor.

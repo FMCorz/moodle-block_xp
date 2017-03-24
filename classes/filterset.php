@@ -217,7 +217,7 @@ abstract class block_xp_filterset implements SeekableIterator {
 
         foreach ($this as $filter) {
 
-            $filter->sortorder = $sortorder;
+            $filter->set_sortorder($sortorder);
             $sortorder++;
         }
     }
