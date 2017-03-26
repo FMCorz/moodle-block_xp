@@ -34,12 +34,12 @@ defined('MOODLE_INTERNAL') || die();
 
 class block_xp_filterset_default extends block_xp_filterset {
 
-    public function __construct() {
+    public function __construct($editable = false) {
         $this->courseid = 0;
-        parent::__construct();
+        parent::__construct($editable);
     }
 
     public function create_filter() {
-        return new block_xp_filter_default();
+        return new block_xp_filter_default($this->is_editable());
     }
 }

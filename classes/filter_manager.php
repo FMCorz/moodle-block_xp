@@ -103,8 +103,8 @@ class block_xp_filter_manager {
      *
      * @return block_xp_filterset
      */
-    public static function get_default_filters() {
-        return (new block_xp_filterset_default());
+    public static function get_default_filters(bool $editable = false) {
+        return (new block_xp_filterset_default($editable));
     }
 
     /**

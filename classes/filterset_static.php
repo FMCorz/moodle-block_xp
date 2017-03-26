@@ -35,6 +35,10 @@ defined('MOODLE_INTERNAL') || die();
 
 class block_xp_filterset_static extends block_xp_filterset {
 
+    public function __construct() {
+        parent::__construct(false);
+    }
+
     public function create_filter() {
         throw new coding_exception('Static filters cannot be modified.');
     }

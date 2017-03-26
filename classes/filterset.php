@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-abstract class block_xp_filterset implements SeekableIterator {
+abstract class block_xp_filterset implements renderable, SeekableIterator {
 
     /** @var block_xp_filterset[] Array of block_xp_filterset's subclasses. */
     protected $filters;
@@ -40,13 +40,17 @@ abstract class block_xp_filterset implements SeekableIterator {
     /** @var int course id. */
     protected $courseid;
 
+    /** @var bool editable flag. */
+    protected $editable;
+
     /** @var int iterator position */
     private $position = 0;
 
 
-    public function __construct() {
+    public function __construct($editable = true) {
         $this->position = 0;
         $this->filters = array();
+        $this->set_editable($editable);
         $this->load();
     }
 
@@ -120,7 +124,12 @@ abstract class block_xp_filterset implements SeekableIterator {
         if ($recordset->valid()) {
             $this->clean();
             foreach ($recordset as $key => $filterdata) {
-                $this->filters[] = block_xp_filter::create_from_data($filterdata);
+                $newfilter = block_xp_filter::create_from_data($filterdata);
+
+                // filter inherits editable property from filterset.
+                $newfilter->set_editable($this->is_editable());
+
+                $this->filters[] = $newfilter;
             }
         }
         $recordset->close();
@@ -299,5 +308,13 @@ abstract class block_xp_filterset implements SeekableIterator {
         }
 
         $this->position = $position;
+    }
+
+    public function is_editable() {
+        return $this->editable;
+    }
+
+    public function set_editable($editable) {
+        $this->editable = $editable;
     }
 }

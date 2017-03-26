@@ -36,7 +36,7 @@ class block_xp_filterset_course extends block_xp_filterset {
 
     public function __construct($id) {
         $this->courseid = $id;
-        parent::__construct();
+        parent::__construct(true);
     }
 
     public function create_filter() {

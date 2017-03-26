@@ -343,8 +343,17 @@ class block_xp_filter implements renderable {
      *
      * @param int $sortorder
      */
-    public function set_sortorder($sortorder) {
+    public function set_sortorder(int $sortorder) {
         $this->sortorder = $sortorder;
+    }
+
+    /**
+     * Set if filter is editable.
+     *
+     * @param bool $editable
+     */
+    public function set_editable(bool $editable) {
+        $this->editable = $editable;
     }
 
     /**
