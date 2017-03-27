@@ -123,8 +123,8 @@ class block_xp_filter_manager {
      * @return void
      */
     public static function save_default_filters() {
-        $staticfilters = self::get_static_filterset();
-        $defaultfilters = self::get_default_filterset();
+        $staticfilters = self::get_static_filters();
+        $defaultfilters = self::get_default_filters();
         $defaultfilters->delete_all();
         $defaultfilters->append($staticfilters);
     }
