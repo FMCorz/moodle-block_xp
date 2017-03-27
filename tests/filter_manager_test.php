@@ -59,5 +59,12 @@ class block_xp_filter_manager_testcase extends advanced_testcase {
         $this->assertSame(5, $manager2->get_filter_manager()->get_all_filters()->count());
     }
 
-    // TODO: add a test to function get_static_filterset
+    function test_save_default_filters() {
+        block_xp_filter_manager::save_default_filters();
+        $this->assertSame(5, block_xp_filter_manager::get_default_filters()->count());
+
+        // Filters do not duplicate.
+        block_xp_filter_manager::save_default_filters();
+        $this->assertSame(5, block_xp_filter_manager::get_default_filters()->count());
+    }
 }
