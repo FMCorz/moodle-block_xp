@@ -48,28 +48,23 @@ class block_xp_settings_form extends moodleform {
         $mform->addElement('header', 'hdrgeneral', get_string('general'));
 
         $mform->addElement('selectyesno', 'enabled', get_string('enablexpgain', 'block_xp'));
-        $mform->setDefault('enabled', $defaultconfig->enabled);
         $mform->addHelpButton('enabled', 'enablexpgain', 'block_xp');
 
         $mform->addElement('selectyesno', 'enableinfos', get_string('enableinfos', 'block_xp'));
-        $mform->setDefault('enableinfos', $defaultconfig->enableinfos);
         $mform->addHelpButton('enableinfos', 'enableinfos', 'block_xp');
 
         $mform->addElement('selectyesno', 'enablelevelupnotif', get_string('enablelevelupnotif', 'block_xp'));
-        $mform->setDefault('enablelevelupnotif', $defaultconfig->enablelevelupnotif);
         $mform->addHelpButton('enablelevelupnotif', 'enablelevelupnotif', 'block_xp');
 
         $mform->addElement('header', 'hdrladder', get_string('ladder', 'block_xp'));
 
         $mform->addElement('selectyesno', 'enableladder', get_string('enableladder', 'block_xp'));
-        $mform->setDefault('enableladder', $defaultconfig->enableladder);
         $mform->addHelpButton('enableladder', 'enableladder', 'block_xp');
 
         $mform->addElement('select', 'identitymode', get_string('anonymity', 'block_xp'), array(
             block_xp_manager::IDENTITY_OFF => get_string('hideparticipantsidentity', 'block_xp'),
             block_xp_manager::IDENTITY_ON => get_string('displayparticipantsidentity', 'block_xp'),
         ));
-        $mform->setDefault('identitymode', $defaultconfig->identitymode);
         $mform->addHelpButton('identitymode', 'anonymity', 'block_xp');
         $mform->disabledIf('identitymode', 'enableladder', 'eq', 0);
 
@@ -81,7 +76,6 @@ class block_xp_settings_form extends moodleform {
             4 => get_string('displaynneighbours', 'block_xp', 'four'),
             5 => get_string('displaynneighbours', 'block_xp', 'five'),
         ));
-        $mform->setDefault('neighbours', $defaultconfig->neighbours);
         $mform->addHelpButton('neighbours', 'limitparticipants', 'block_xp');
         $mform->disabledIf('neighbours', 'enableladder', 'eq', 0);
 
@@ -90,29 +84,24 @@ class block_xp_settings_form extends moodleform {
             block_xp_manager::RANK_ON => get_string('displayrank', 'block_xp'),
             block_xp_manager::RANK_REL => get_string('displayrelativerank', 'block_xp'),
         ));
-        $mform->setDefault('rankmode', $defaultconfig->rankmode);
         $mform->addHelpButton('rankmode', 'ranking', 'block_xp');
         $mform->disabledIf('rankmode', 'enableladder', 'eq', 0);
 
         $mform->addElement('header', 'hdrcheating', get_string('cheatguard', 'block_xp'));
 
-        $mform->setDefault('enablecheatguard', $defaultconfig->enablecheatguard);
         $mform->addElement('selectyesno', 'enablecheatguard', get_string('enablecheatguard', 'block_xp'));
 
         $mform->addElement('text', 'maxactionspertime', get_string('maxactionspertime', 'block_xp'));
-        $mform->setDefault('maxactionspertime', $defaultconfig->maxactionspertime);
         $mform->addHelpButton('maxactionspertime', 'maxactionspertime', 'block_xp');
         $mform->setType('maxactionspertime', PARAM_INT);
         $mform->disabledIf('maxactionspertime','enablecheatguard', 'eq', 0);
 
         $mform->addElement('text', 'timeformaxactions', get_string('timeformaxactions', 'block_xp'));
-        $mform->setDefault('timeformaxactions', $defaultconfig->timeformaxactions);
         $mform->addHelpButton('timeformaxactions', 'timeformaxactions', 'block_xp');
         $mform->setType('timeformaxactions', PARAM_INT);
         $mform->disabledIf('timeformaxactions','enablecheatguard', 'eq', 0);
 
         $mform->addElement('text', 'timebetweensameactions', get_string('timebetweensameactions', 'block_xp'));
-        $mform->setDefault('timebetweensameactions', $defaultconfig->timebetweensameactions);
         $mform->addHelpButton('timebetweensameactions', 'timebetweensameactions', 'block_xp');
         $mform->setType('timebetweensameactions', PARAM_INT);
         $mform->disabledIf('timebetweensameactions','enablecheatguard', 'eq', 0);
@@ -120,7 +109,6 @@ class block_xp_settings_form extends moodleform {
         $mform->addElement('header', 'hdrloggin', get_string('logging', 'block_xp'));
 
         $mform->addElement('advcheckbox', 'enablelog', get_string('enablelogging', 'block_xp'));
-        $mform->setDefault('enablelog', $defaultconfig->enablelog);
 
         $options = array(
             '0' => get_string('forever', 'block_xp'),
@@ -130,7 +118,6 @@ class block_xp_settings_form extends moodleform {
             '30' => get_string('for1month', 'block_xp'),
         );
         $mform->addElement('select', 'keeplogs', get_string('keeplogs', 'block_xp'), $options);
-        $mform->setDefault('keeplogs', $defaultconfig->keeplogs);
 
         $this->add_action_buttons();
     }
