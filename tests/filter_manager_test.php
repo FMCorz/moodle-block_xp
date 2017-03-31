@@ -57,6 +57,16 @@ class block_xp_filter_manager_testcase extends advanced_testcase {
         // Check added number of filtersets in courses.
         $this->assertSame(5, $manager1->get_filter_manager()->get_all_filters()->count());
         $this->assertSame(5, $manager2->get_filter_manager()->get_all_filters()->count());
+
+        block_xp_filter_manager::append_default_filters_to_courses($course1->id);
+
+        // should not add filters if they are already in the course.
+        $this->assertSame(5, $manager1->get_filter_manager()->get_all_filters()->count());
+    }
+
+
+    function test_append_default_filters_to_courses_with_filters() {
+        // TODO...
     }
 
     function test_save_default_filters() {

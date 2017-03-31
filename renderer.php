@@ -151,7 +151,7 @@ class block_xp_renderer extends plugin_renderer_base {
                 get_string('navinfos', 'block_xp')
             );
         }
-        if ($manager->can_view_infos_page()) {
+        if ($manager->can_view_ladder_page()) {
             $tabs[] = new tabobject(
                 'ladder',
                 new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid)),

@@ -23,6 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot . '/course/lib.php');
 
 /**
  * Rule cm class.

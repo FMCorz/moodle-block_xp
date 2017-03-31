@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v2.2.0
+------
+
+- Option to disable the cheat guard
+- Fixed a bug preventing access to rules for site-wide block
+- Fixed a bug always showing the tab to access the ladder
+
 v2.1.2
 ------
 
