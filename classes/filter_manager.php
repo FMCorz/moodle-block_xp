@@ -55,7 +55,7 @@ class block_xp_filter_manager {
      * @return array of filters.
      */
     public function get_all_filters() {
-        // TODO: move caching to filterset class.
+        // TODO: move caching to cached_filterset decorator.
         $cache = cache::make('block_xp', 'filters');
         $key = 'filters_' . $this->get_courseid();
         if (false === ($filters = $cache->get($key))) {
