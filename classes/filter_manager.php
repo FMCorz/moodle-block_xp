@@ -141,7 +141,7 @@ class block_xp_filter_manager {
     }
 
     /**
-     * Append default filters to course.
+     * Append default filters to course, only if the do not exist yet.
      *
      * @param int $courseid
      * @return void
@@ -149,7 +149,7 @@ class block_xp_filter_manager {
     public static function copy_default_filters_to_course(int $courseid) {
         $defaultfilters = self::get_default_filters();
         $coursefilters = self::get_course_filters($courseid);
-        $coursefilters->append($defaultfilters);
+        $coursefilters->append_if_not_exists($defaultfilters);
         self::invalidate_filters($courseid);
     }
 

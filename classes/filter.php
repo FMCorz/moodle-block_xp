@@ -96,6 +96,15 @@ class block_xp_filter implements renderable {
     public function __construct() {}
 
     /**
+     *  Compare a filter with other, using ruledata string.
+     *
+     *  @return bool true if are equal
+     */
+    public static function compare(block_xp_filter $filter1, block_xp_filter $filter2) {
+        return ($filter1->ruledata == $filter2->ruledata);
+    }
+
+    /**
      * Delete the rule.
      *
      * @return void

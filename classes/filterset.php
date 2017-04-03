@@ -158,6 +158,35 @@ abstract class block_xp_filterset implements renderable, SeekableIterator {
     }
 
     /**
+     * Append a filterset to the current filterset, but only adds new filters.
+     * @param unknown $filterset
+     */
+    public function append_if_not_exists(block_xp_filterset $filterset) {
+        foreach($filterset as $filter) {
+            if (!$this->contains($filter)) {
+                $this->add_last($filter);
+            }
+        }
+        $this->save();
+    }
+
+    /**
+     * Indicates if a filter is in the filterset.
+     *
+     * @param block_xp_filter $filter
+     * @return boolean
+     */
+    public function contains(block_xp_filter $filter) {
+        foreach ($this as $currentfilter) {
+            if (block_xp_filter::compare($currentfilter, $filter)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Substitute current filterset for the passed one.
      *
      * @param block_xp_filterset $filters
