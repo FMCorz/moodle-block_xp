@@ -122,7 +122,7 @@ class block_xp_filters_testcase extends advanced_testcase {
         $filterset->add_first($filter3);
         $filterset->save();
 
-        $fm->invalidate_filters_cache();
+        $fm->invalidate_filters($course->id);
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'objectid' => 2));
         $this->assertSame(100, $fm->get_points_for_event($e));
@@ -149,7 +149,7 @@ class block_xp_filters_testcase extends advanced_testcase {
         $filterset->add($filter4, 3);
         $filterset->save();
 
-        $fm->invalidate_filters_cache();
+        $fm->invalidate_filters($course->id);
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'd'));
         $this->assertSame(110, $fm->get_points_for_event($e));
@@ -164,7 +164,8 @@ class block_xp_filters_testcase extends advanced_testcase {
         $filter5->load($data);
         $filterset->add_first($filter5);
         $filterset->save();
-        $fm->invalidate_filters_cache();
+
+        $fm->invalidate_filters($course->id);
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'u', 'objectid' => 2));
         $this->assertSame(1, $fm->get_points_for_event($e));

@@ -77,10 +77,6 @@ $typerulecm = new block_xp_rule_cm(0);
 $typeruleevent = new block_xp_rule_event();
 $typeruleset = new block_xp_ruleset();
 $templatetypes = array(
-        'block_xp_rule_cm' => array(
-                'name' => get_string('rulecm', 'block_xp'),
-                'template' => $renderer->render($typerulecm, array('iseditable' => true, 'basename' => 'XXXXX')),
-        ),
         'block_xp_rule_event' => array(
                 'name' => get_string('ruleevent', 'block_xp'),
                 'template' => $renderer->render($typeruleevent, array('iseditable' => true, 'basename' => 'XXXXX')),
@@ -115,6 +111,8 @@ echo $renderer->render($defaultfilters);
 echo html_writer::start_tag('p');
 echo html_writer::empty_tag('input', array('value' => get_string('savechanges'), 'type' => 'submit', 'name' => 'save'));
 echo ' ';
+
+// TODO: add a javascript warning before reseting to static filters.
 echo html_writer::empty_tag('input', array('value' => get_string('reset'), 'type' => 'submit', 'name' => 'reset'));
 echo ' ';
 echo html_writer::empty_tag('input', array('value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel'));

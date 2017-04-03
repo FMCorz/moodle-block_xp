@@ -55,6 +55,7 @@ class block_xp_filter_manager {
      * @return array of filters.
      */
     public function get_all_filters() {
+        // TODO: move caching to filterset class.
         $cache = cache::make('block_xp', 'filters');
         $key = 'filters_' . $this->get_courseid();
         if (false === ($filters = $cache->get($key))) {
@@ -136,7 +137,7 @@ class block_xp_filter_manager {
     public function copy_default_filters() {
         $defaultfilters = self::get_default_filters();
         $this->get_filters()->append($defaultfilters);
-        $this->invalidate_filters_cache();
+        self::invalidate_filters($this->get_courseid());
     }
 
     /**
@@ -149,6 +150,7 @@ class block_xp_filter_manager {
         $defaultfilters = self::get_default_filters();
         $coursefilters = self::get_course_filters($courseid);
         $coursefilters->append($defaultfilters);
+        self::invalidate_filters($courseid);
     }
 
     /**
@@ -168,11 +170,13 @@ class block_xp_filter_manager {
     /**
      * Invalidate the filters cache.
      *
+     * @param int courseid
      */
-    public function invalidate_filters_cache() {
+    public static function invalidate_filters($courseid) {
         $cache = cache::make('block_xp', 'filters');
-        $cache->delete('filters_' . $this->get_courseid());
+        $cache->delete('filters_' . $courseid);
     }
+
 
     /**
      * Get block_xp_filterset subclass depending on courseid.
@@ -181,9 +185,6 @@ class block_xp_filter_manager {
      * @return block_xp_filterset_course|block_xp_filterset_default
      */
     public function get_filters() {
-        if (isset($this->filterset)) {
-            return $this->filterset;
-        }
 
         // filterset lazy loading
         if ($this->courseid == 0) {
@@ -203,7 +204,7 @@ class block_xp_filter_manager {
     public function save(array $filtersetdata) {
         $newfilterset = block_xp_filterset::create_from_data($this->courseid, $filtersetdata);
         $this->get_filters()->import($newfilterset);
-        $this->invalidate_filters_cache();
+        self::invalidate_filters($this->courseid);
     }
 
 }
