@@ -24,13 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Block XP filters abstract class.
- *
- * @package    block_xp_filterset
- * @copyright  2017 Ruben Cancho
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+require_once("upgradelib.php");
 
 function xmldb_block_xp_install() {
 

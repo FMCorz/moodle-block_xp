@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once("upgrade_lib.php")
+
 /**
  * Block XP upgrade function.
  *
@@ -328,9 +330,9 @@ function xmldb_block_xp_upgrade($oldversion) {
 
     if ($oldversion < 2017032901) {
 
-        // Populate block_xp_filters with default filters.
-        block_xp_filter_manager::save_default_filters();
+        save_default_filters();
 
+        // TODO: this call should be removed or replaced by a raw DB function.
         // Add default filters to courses config.
         block_xp_filter_manager::append_default_filters_to_courses();
 
