@@ -32,6 +32,7 @@ require_once("upgradelib.php");
  * @param int $oldversion Old version.
  * @return true
  */
+
 function xmldb_block_xp_upgrade($oldversion) {
     global $CFG, $DB;
 
@@ -331,7 +332,7 @@ function xmldb_block_xp_upgrade($oldversion) {
     if ($oldversion < 2017040901) {
 
         // Save default filters in database.
-        save_default_filters();
+        upgradelib::save_default_filters();
 
         // Xp savepoint reached.
         upgrade_block_savepoint(true, 2017040901, 'xp');
@@ -340,7 +341,7 @@ function xmldb_block_xp_upgrade($oldversion) {
     if ($oldversion < 2017040902) {
 
         // Add default filters to courses.
-        append_default_filters_to_courses();
+        upgradelib::append_default_filters_to_courses();
 
         // Xp savepoint reached.
         upgrade_block_savepoint(true, 2017040902, 'xp');
