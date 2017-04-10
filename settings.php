@@ -38,5 +38,8 @@ if ($ADMIN->fulltree) {
         )
     ));
 
+    $url = new moodle_url('/blocks/xp/settings_rules.php');
+    $link = html_writer::link($url, get_string('setdefaultrules', 'block_xp'));
+    $settings->add(new admin_setting_heading('defaultrules', get_string('defaultrules', 'block_xp'), $link));
 }
 

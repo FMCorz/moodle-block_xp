@@ -398,7 +398,7 @@ class block_xp_manager {
      */
     public function get_filter_manager() {
         if (!$this->filtermanager) {
-            $this->filtermanager = new block_xp_filter_manager($this);
+            $this->filtermanager = new block_xp_filter_manager($this->get_courseid());
         }
         return $this->filtermanager;
     }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Block XP upgrade.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
@@ -24,9 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2017040902;
-$plugin->requires   = 2014041500;
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '2.2.0';
-$plugin->cron       = 86400;
+require_once("upgradelib.php");
+
+function xmldb_block_xp_install() {
+
+    // Populate block_xp_default_filters table.
+    upgradelib::save_default_filters();
+
+    return true;
+
+}

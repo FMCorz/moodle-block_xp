@@ -33,43 +33,47 @@ defined('MOODLE_INTERNAL') || die();
  */
 class block_xp_filter_manager {
 
-    /**
-     * The block XP manager.
-     *
-     * @var block_xp_manager.
-     */
-    protected $manager;
+    protected $courseid;
 
+    protected $filterset;
     /**
      * Constructor.
      *
+     * If no courseid is passed it will manage default filterset.
+     *
      * @param block_xp_manager $manager The XP manager.
      */
-    public function __construct(block_xp_manager $manager) {
-        $this->manager = $manager;
+    public function __construct($courseid = 0) {
+        $this->courseid = $courseid;
     }
 
     /**
      * Get all the filter objects.
      *
-     * Positive indexes are user filters, negatives are static ones.
      * Do not reorder this array, it is ordered by priority.
      *
-     * @return array of fitlers.
+     * @return array of filters.
      */
     public function get_all_filters() {
+        // TODO: move caching to cached_filterset decorator.
         $cache = cache::make('block_xp', 'filters');
-        $key = 'filters_' . $this->manager->get_courseid();
+        $key = 'filters_' . $this->get_courseid();
         if (false === ($filters = $cache->get($key))) {
-            $filters = $this->get_user_filters();
-            $i = -1;
-            foreach (self::get_static_filters() as $filter) {
-                $filters[$i--] = $filter;
-            }
+            $filters = $this->get_filters();
             $cache->set($key, $filters);
         }
         return $filters;
     }
+
+    /**
+     * Returns the course id
+     *
+     * @return course id
+     */
+    public function get_courseid() {
+        return $this->courseid;
+    }
+
 
     /**
      * Return the points filtered for this event.
@@ -87,67 +91,120 @@ class block_xp_filter_manager {
     }
 
     /**
-     * Get the default filters.
+     * Get static filters.
      *
-     * @return array Of filter objects.
+     * @return block_xp_filterset
      */
     public static function get_static_filters() {
-        $d = new block_xp_rule_property(block_xp_rule_base::EQ, 'd', 'crud');
-        $c = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
-        $r = new block_xp_rule_property(block_xp_rule_base::EQ, 'r', 'crud');
-        $u = new block_xp_rule_property(block_xp_rule_base::EQ, 'u', 'crud');
-
-        // Skip those as they duplicate other more low level actions.
-        $bcmv = new block_xp_rule_event('\mod_book\event\course_module_viewed');
-        $dsc = new block_xp_rule_event('\mod_forum\event\discussion_subscription_created');
-        $sc = new block_xp_rule_event('\mod_forum\event\subscription_created');
-        $as = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_submitted', 'eventname');
-        $au = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_uploaded', 'eventname');
-
-        $list = array();
-
-        $ruleset = new block_xp_ruleset(array($bcmv, $dsc, $sc, $as, $au), block_xp_ruleset::ANY);
-        $data = array('rule' => $ruleset, 'points' => 0, 'editable' => false);
-        $list[] = block_xp_filter::load_from_data($data);
-
-        $data = array('rule' => $c, 'points' => 45, 'editable' => false);
-        $list[] = block_xp_filter::load_from_data($data);
-
-        $data = array('rule' => $r, 'points' => 9, 'editable' => false);
-        $list[] = block_xp_filter::load_from_data($data);
-
-        $data = array('rule' => $u, 'points' => 3, 'editable' => false);
-        $list[] = block_xp_filter::load_from_data($data);
-
-        $data = array('rule' => $d, 'points' => 0, 'editable' => false);
-        $list[] = block_xp_filter::load_from_data($data);
-        return $list;
+        return (new block_xp_filterset_static());
     }
 
     /**
-     * Get the filters defined by the user.
+     * Get default filters.
      *
-     * @return array Of filter data from the DB, though properties is already json_decoded.
+     * @return block_xp_filterset
      */
-    public function get_user_filters() {
+    public static function get_default_filters(bool $editable = false) {
+        return (new block_xp_filterset_default($editable));
+    }
+
+    /**
+     * Get course filters.
+     *
+     * @param int courseid
+     * @return block_xp_filterset
+     */
+    public static function get_course_filters(int $courseid) {
+        return (new block_xp_filterset_course($courseid));
+    }
+
+    /**
+     * Used to populate default filters table with predefined filters.
+     *
+     * @return void
+     */
+    public static function save_default_filters() {
+        $staticfilters = self::get_static_filters();
+        $defaultfilters = self::get_default_filters();
+        $defaultfilters->delete_all();
+        $defaultfilters->append($staticfilters);
+    }
+
+    /**
+     * Used when adding block to course
+     *
+     * @return void */
+    public function copy_default_filters() {
+        $defaultfilters = self::get_default_filters();
+        $this->get_filters()->append($defaultfilters);
+        self::invalidate_filters($this->get_courseid());
+    }
+
+    /**
+     * Append default filters to course, only if the do not exist yet.
+     *
+     * @param int $courseid
+     * @return void
+     */
+    public static function copy_default_filters_to_course(int $courseid) {
+        $defaultfilters = self::get_default_filters();
+        $coursefilters = self::get_course_filters($courseid);
+        $coursefilters->append_if_not_exists($defaultfilters);
+        self::invalidate_filters($courseid);
+    }
+
+    /**
+     * Append default filters to all courses.
+     *
+     * @return void
+     */
+    public static function append_default_filters_to_courses() {
         global $DB;
-        $results = $DB->get_recordset('block_xp_filters', array('courseid' => $this->manager->get_courseid()),
-            'sortorder ASC, id ASC');
-        $filters = array();
-        foreach ($results as $key => $filter) {
-            $filters[$filter->id] = block_xp_filter::load_from_data($filter);
+
+        $records = $DB->get_records('block_xp_config');
+        foreach($records as $record) {
+            self::copy_default_filters_to_course($record->courseid);
         }
-        $results->close();
-        return $filters;
     }
 
     /**
      * Invalidate the filters cache.
      *
-     * @return void
+     * @param int courseid
      */
-    public function invalidate_filters_cache() {
+    public static function invalidate_filters($courseid) {
         $cache = cache::make('block_xp', 'filters');
-        $cache->delete('filters_' . $this->manager->get_courseid());
+        $cache->delete('filters_' . $courseid);
     }
+
+
+    /**
+     * Get block_xp_filterset subclass depending on courseid.
+     * Default filterset has courseid = 0.
+     *
+     * @return block_xp_filterset_course|block_xp_filterset_default
+     */
+    public function get_filters() {
+
+        // filterset lazy loading
+        if ($this->courseid == 0) {
+            $this->filterset = self::get_default_filters();
+        }
+        else {
+            $this->filterset = self::get_course_filters($this->courseid);
+        }
+        return $this->filterset;
+    }
+
+    /**
+     * Delete current course filters and save the ones passed.
+     *
+     * @param block_xp_filterset_course[]|block_xp_filterset_default[] $filtersetdata
+     */
+    public function save(array $filtersetdata) {
+        $newfilterset = block_xp_filterset::create_from_data($this->courseid, $filtersetdata);
+        $this->get_filters()->import($newfilterset);
+        self::invalidate_filters($this->courseid);
+    }
+
 }

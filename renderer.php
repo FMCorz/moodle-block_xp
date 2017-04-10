@@ -215,6 +215,55 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Renders a block XP filterset.
+     *
+     * @param block_xp_filterset $filterset
+     */
+     public function render_block_xp_filterset($filterset) {
+         $o = '';
+         if ($filterset->is_editable()) {
+             $o .= html_writer::start_tag('ul', array('class' => 'filters-list filters-editable'));
+             $o .= $this->add_rulelink();
+         }
+         else {
+             $o .= html_writer::start_tag('ul', array('class' => 'filters-list filters-readonly'));
+         }
+
+         foreach ($filterset as $filter) {
+             $o .= $this->render($filter);
+             if ($filterset->is_editable()) {
+                 $o .= $this->add_rulelink();
+             }
+         }
+
+         $o .= html_writer::end_tag('ul');
+
+         return $o;
+     }
+
+    public function render_block_xp_filterset_course($filterset) {
+        return $this->render_block_xp_filterset($filterset);
+    }
+
+    public function render_block_xp_filterset_default($filterset) {
+        return $this->render_block_xp_filterset($filterset);
+    }
+
+    public function render_block_xp_filterset_static($filterset) {
+        return $this->render_block_xp_filterset($filterset);
+    }
+
+    private function add_rulelink() {
+        $o = '';
+        $o = html_writer::start_tag('li', array('class' => 'filter-add'));
+        $o .= $this->action_link('#', get_string('addarule', 'block_xp'), null, null,
+                new pix_icon('t/add', '', '', array('class' => 'iconsmall')));
+        $o .= html_writer::end_tag('li');
+
+        return $o;
+    }
+
+    /**
      * Renders a block XP filter.
      *
      * Not very proud of the way I implement this... The HTML is tied to Javascript
@@ -262,6 +311,14 @@ class block_xp_renderer extends plugin_renderer_base {
         $o .= html_writer::end_tag('ul');
         $o .= html_writer::end_tag('li');
         return $o;
+    }
+
+    public function render_block_xp_filter_course($filter) {
+        return $this->render_block_xp_filter($filter);
+    }
+
+    public function render_block_xp_filter_default($filter) {
+        return $this->render_block_xp_filter($filter);
     }
 
     /**

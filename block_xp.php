@@ -88,6 +88,11 @@ class block_xp extends block_base {
         // Enable the capture of events for that course.
         $manager = block_xp_manager::get($this->page->course->id);
         $manager->update_config((object) array('enabled' => true));
+
+        // Copy default filters to course
+        // TODO: only do this the first time the block is added.
+        $manager->get_filter_manager()->copy_default_filters();
+
         return true;
     }
 

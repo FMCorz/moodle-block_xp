@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Block XP.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
@@ -24,9 +24,22 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2017040902;
-$plugin->requires   = 2014041500;
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '2.2.0';
-$plugin->cron       = 86400;
+/**
+ * Block XP course filters class.
+ *
+ * @package    block_xp_filterset_course
+ * @copyright  2017 Ruben Cancho
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+class block_xp_filterset_course extends block_xp_filterset {
+
+    public function __construct($id) {
+        $this->courseid = $id;
+        parent::__construct(true);
+    }
+
+    public function create_filter() {
+        return new block_xp_filter_course($this->courseid);
+    }
+}

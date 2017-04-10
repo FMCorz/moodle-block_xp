@@ -50,7 +50,7 @@ $string['coursesettings'] = 'Course settings';
 $string['coursevisuals'] = 'Course visuals';
 $string['customizelevels'] = 'Customize the levels';
 $string['defaultrules'] = 'Default rules';
-$string['defaultrulesformhelp'] = 'Those are the default rules provided by the plugin, they automatically give default experience points and ignore some redundant events. Your own rules take precedence over them.';
+$string['defaultrulesformhelp'] = 'Those are the default rules provided by the plugin, they automatically give default experience points and ignore some redundant events. They are copied to a course when you add the block for the first time.';
 $string['deletecondition'] = 'Delete condition';
 $string['deleterule'] = 'Delete rule';
 $string['description'] = 'Description';
@@ -170,6 +170,7 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
     <li>And the events of educational level not equal to <em>Participating</em>.</li>
 </ul>
 </p>';
+$string['setdefaultrules'] = 'Set default rules';
 $string['someoneelse'] = 'Someone else';
 $string['timebetweensameactions'] = 'Time required between identical actions';
 $string['timebetweensameactions_help'] = 'In seconds, the minimum time required between identical actions. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identifical if the same post is read again.';

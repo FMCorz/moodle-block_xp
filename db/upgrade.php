@@ -24,12 +24,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once("upgradelib.php");
+
 /**
  * Block XP upgrade function.
  *
  * @param int $oldversion Old version.
  * @return true
  */
+
 function xmldb_block_xp_upgrade($oldversion) {
     global $CFG, $DB;
 
@@ -324,6 +327,24 @@ function xmldb_block_xp_upgrade($oldversion) {
 
         // Xp savepoint reached.
         upgrade_block_savepoint(true, 2017021401, 'xp');
+    }
+
+    if ($oldversion < 2017040901) {
+
+        // Save default filters in database.
+        upgradelib::save_default_filters();
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2017040901, 'xp');
+    }
+
+    if ($oldversion < 2017040902) {
+
+        // Add default filters to courses.
+        upgradelib::append_default_filters_to_courses();
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2017040902, 'xp');
     }
 
     return true;

@@ -71,37 +71,42 @@ class block_xp_manager_testcase extends advanced_testcase {
         $this->getDataGenerator()->enrol_user($u2->id, $c1->id);
         $this->getDataGenerator()->enrol_user($u1->id, $c2->id);
 
-        $manager = block_xp_manager::get($c1->id);
-        $manager->update_config(array('enabled' => true, 'timebetweensameactions' => 0));
+        $manager1 = block_xp_manager::get($c1->id);
+
+        $filterset_default = new block_xp_filterset_default();
+
+        block_xp_filter_manager::copy_default_filters_to_course($c1->id);
+
+        $manager2 = block_xp_manager::get($c2->id);
+        $manager2->get_filter_manager()->copy_default_filters();
+
+        $manager1->update_config(array('enabled' => true, 'timebetweensameactions' => 0));
+        $manager2->update_config(array('enabled' => true, 'timebetweensameactions' => 0));
+
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c1->id));
-        $manager->capture_event($e);
-        $manager->capture_event($e);
+        $manager1->capture_event($e);
+        $manager1->capture_event($e);
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u2->id, 'courseid' => $c1->id));
-        $manager->capture_event($e);
-        $manager->capture_event($e);
-
-        $manager = block_xp_manager::get($c2->id);
-        $manager->update_config(array('enabled' => true, 'timebetweensameactions' => 0));
+        $manager1->capture_event($e);
+        $manager1->capture_event($e);
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c2->id));
-        $manager->capture_event($e);
+        $manager2->capture_event($e);
 
         $this->assertEquals(2, $DB->count_records('block_xp', array('courseid' => $c1->id)));
         $this->assertEquals(4, $DB->count_records('block_xp_log', array('courseid' => $c1->id)));
         $this->assertEquals(1, $DB->count_records('block_xp', array('courseid' => $c2->id)));
         $this->assertEquals(1, $DB->count_records('block_xp_log', array('courseid' => $c2->id)));
 
-        $manager = block_xp_manager::get($c1->id);
-        $manager->reset_data();
+        $manager1->reset_data();
 
         $this->assertEquals(0, $DB->count_records('block_xp', array('courseid' => $c1->id)));
         $this->assertEquals(0, $DB->count_records('block_xp_log', array('courseid' => $c1->id)));
         $this->assertEquals(1, $DB->count_records('block_xp', array('courseid' => $c2->id)));
         $this->assertEquals(1, $DB->count_records('block_xp_log', array('courseid' => $c2->id)));
     }
-
 
     public function test_reset_data_with_groups() {
         global $DB;
@@ -118,6 +123,8 @@ class block_xp_manager_testcase extends advanced_testcase {
         $this->getDataGenerator()->create_group_member(array('groupid' => $g1->id, 'userid' => $u1->id));
 
         $manager = block_xp_manager::get($c1->id);
+        $manager->get_filter_manager()->copy_default_filters();
+
         $manager->update_config(array('enabled' => true, 'timebetweensameactions' => 0));
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c1->id));
@@ -129,6 +136,7 @@ class block_xp_manager_testcase extends advanced_testcase {
         $manager->capture_event($e);
 
         $manager = block_xp_manager::get($c2->id);
+        $manager->get_filter_manager()->copy_default_filters();
         $manager->update_config(array('enabled' => true, 'timebetweensameactions' => 0));
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c2->id));

@@ -91,9 +91,18 @@ class block_xp_filter implements renderable {
     /**
      * Constructor.
      *
-     * Use {@link self::load_from_data()} instead.
+     * Use {@link self::create_from_data()} instead.
      */
-    protected function __construct() {}
+    public function __construct() {}
+
+    /**
+     *  Compare a filter with other, using ruledata string.
+     *
+     *  @return bool true if are equal
+     */
+    public static function compare(block_xp_filter $filter1, block_xp_filter $filter2) {
+        return ($filter1->ruledata == $filter2->ruledata);
+    }
 
     /**
      * Delete the rule.
@@ -157,19 +166,54 @@ class block_xp_filter implements renderable {
     }
 
     /**
-     * Create the filter from data.
+     * Simple Factory. Create an empty subclass of filter, based on courseid.
+     *
+     * @param int $id
+     * @return block_xp_filter_default|block_xp_filter_course
+     */
+    public static function create(int $courseid = 0) {
+        if ($courseid == 0) {
+            return new block_xp_filter_default();
+        }
+        else {
+            return new block_xp_filter_course($courseid);
+        }
+    }
+    /**
+     * Simple Factory. Create a new filter from data.
      *
      * Do not combine the keys 'rule' and 'ruledata' as it could lead to random behaviours.
      *
      * @param stdClass|array $record Information of the filter, from DB or not.
      * @return block_xp_filter The filter.
      */
-    public static function load_from_data($record) {
-        $filter = new static();
-        $record = (array) $record;
-        foreach ($record as $key => $value) {
-            if ($key == 'rule') {
-                $filter->set_rule($value);
+    public static function create_from_data($record) {
+        $courseid = (isset($record->courseid)) ? $record->courseid : 0;
+        $filter = self::create($courseid);
+        $filter->load($record);
+        return $filter;
+    }
+
+    /**
+     * Load the current filter from data.
+     *
+     * Do not combine the keys 'rule' and 'ruledata' as it could lead to random behaviours.
+     *
+     * @param stdClass|array $record Information of the filter, from DB or not.
+     * @return block_xp_filter The filter.
+     */
+    public function load($object) {
+        $tempcourseid = $this->courseid;
+
+        $object = (is_array($object)) ? (object)$object : $object;
+        foreach ($object as $key => $value) {
+            if ($key == 'ruledata' && !empty($value)) {
+                $this->set_ruledata($value);
+                continue;
+            }
+
+            if ($key == 'rule' && !empty($value)) {
+                $this->set_rule($value);
                 continue;
             }
 
@@ -180,9 +224,25 @@ class block_xp_filter implements renderable {
                 $value = intval($value);
             }
 
-            $filter->$key = $value;
+            $this->$key = $value;
         }
-        return $filter;
+
+        // Preserve courseid
+        $this->courseid = $tempcourseid;
+
+        if (is_null($this->ruledata)) {
+            throw new coding_exception("filter must have ruledata property");
+        }
+    }
+
+    /**
+     * As load but always create a new object in DB, by clearing id.
+     *
+     * @param block_xp_filter|array $filter
+     */
+    public function load_as_new($object) {
+        $this->load($object);
+        $this->id = null;
     }
 
     /**
@@ -191,6 +251,10 @@ class block_xp_filter implements renderable {
      * @return void
      */
     protected function load_rule() {
+        if (is_null($this->ruledata)) {
+            throw new coding_exception("ruledata must not be null");
+        }
+
         $ruledata = json_decode($this->ruledata, true);
         $this->rule = block_xp_rule::create($ruledata);
     }
@@ -202,10 +266,7 @@ class block_xp_filter implements renderable {
      * @return bool Whether or not it matches.
      */
     public function match(\core\event\base $event) {
-        if (!$this->rule) {
-            $this->load_rule();
-        }
-        return $this->rule->match($event);
+        return $this->get_rule()->match($event);
     }
 
     /**
@@ -214,21 +275,41 @@ class block_xp_filter implements renderable {
      * @return block_xp_filter
      */
     public function save() {
-        global $DB;
-        if (!$this->editable) {
-            throw new coding_exception('Non-editable filters cannot be saved.');
+        if (empty($this->ruledata)) {
+            if (empty($this->rule)) {
+                new coding_exception("ruledata and rule should not be empty when saving");
+            }
+
+            if(is_array($this->rule)) {
+                $this->rule = block_xp_rule::create($this->rule);
+            }
+            $this->ruledata = json_encode($this->rule->export());
         }
+
         $record = (object) array(
+            'id' => $this->id,
             'courseid' => $this->courseid,
             'ruledata' => $this->ruledata,
             'points' => $this->points,
             'sortorder' => $this->sortorder,
         );
+
+        $this->insert_or_update('block_xp_filters', $record);
+    }
+
+    /**
+     * Insert or update current filter, based on id property existence.
+     * @param string $table
+     * @param object $record
+     */
+    protected function insert_or_update($table, $record) {
+        global $DB;
+
         if (!$this->id) {
-            $this->id = $DB->insert_record('block_xp_filters', $record);
+            $this->id = $DB->insert_record($table, $record);
         } else {
             $record->id = $this->id;
-            $DB->update_record('block_xp_filters', $record);
+            $DB->update_record($table, $record);
         }
     }
 
@@ -244,11 +325,26 @@ class block_xp_filter implements renderable {
     /**
      * Overrides the rule of the filter.
      *
-     * @param block_xp_rule $rule
+     * @param block_xp_rule|array $rule
      */
-    public function set_rule(block_xp_rule $rule) {
+    public function set_rule($rule) {
+        if(is_array($rule)) {
+            $rule = block_xp_rule::create($rule);
+        }
+        if (empty($rule)) {
+            throw new coding_exception("rule can't be empty to generate ruledata");
+        }
+        if (!($rule instanceof block_xp_rule)) {
+            throw new coding_exception("rule must be a block_xp_rule class");
+        }
+
         $this->rule = $rule;
         $this->ruledata = json_encode($rule->export());
+    }
+
+    public function set_ruledata($ruledata) {
+        $this->ruledata = $ruledata;
+        $this->load_rule();
     }
 
     /**
@@ -256,8 +352,17 @@ class block_xp_filter implements renderable {
      *
      * @param int $sortorder
      */
-    public function set_sortorder($sortorder) {
+    public function set_sortorder(int $sortorder) {
         $this->sortorder = $sortorder;
+    }
+
+    /**
+     * Set if filter is editable.
+     *
+     * @param bool $editable
+     */
+    public function set_editable(bool $editable) {
+        $this->editable = $editable;
     }
 
     /**

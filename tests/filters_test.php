@@ -36,9 +36,13 @@ require_once($CFG->dirroot . '/blocks/xp/tests/fixtures/events.php');
  */
 class block_xp_filters_testcase extends advanced_testcase {
 
+    protected function setUp() {
+        $this->resetAfterTest(true);
+    }
+
     public function test_filter_match() {
         $rule = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
-        $filter = block_xp_filter::load_from_data(array('rule' => $rule));
+        $filter = block_xp_filter::create_from_data(array('rule' => $rule));
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c'));
         $this->assertTrue($filter->match($e));
@@ -51,22 +55,21 @@ class block_xp_filters_testcase extends advanced_testcase {
         $rulec = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c'));
 
-        $filter = block_xp_filter::load_from_data(array('rule' => $rulec));
+        $filter = block_xp_filter::create_from_data(array('rule' => $rulec));
         $this->assertTrue($filter->match($e));
 
-        $filter = block_xp_filter::load_from_data(array('ruledata' => json_encode($rulec->export())));
+        $filter = block_xp_filter::create_from_data(array('ruledata' => json_encode($rulec->export())));
         $this->assertTrue($filter->match($e));
 
-        $filter = block_xp_filter::load_from_data(array());
+        $filter = block_xp_filter::create_from_data(array());
         $filter->set_rule($rulec);
         $this->assertTrue($filter->match($e));
     }
 
     public function test_standard_filters() {
-        $this->resetAfterTest(true);
-
         $course = $this->getDataGenerator()->create_course();
         $manager = block_xp_manager::get($course->id);
+        block_xp_filter_manager::copy_default_filters_to_course($course->id);
         $fm = $manager->get_filter_manager();
 
         $c = \block_xp\event\something_happened::mock(array('crud' => 'c'));
@@ -81,33 +84,46 @@ class block_xp_filters_testcase extends advanced_testcase {
     }
 
     public function test_custom_filters() {
-        $this->resetAfterTest(true);
-
         $course = $this->getDataGenerator()->create_course();
         $manager = block_xp_manager::get($course->id);
         $fm = $manager->get_filter_manager();
+        $fm->copy_default_filters();
 
-        // Define some custom rules, the sortorder and IDs are mixed here.
-        $rule = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
-        $data = array('courseid' => $course->id, 'sortorder' => 1, 'points' => 100, 'rule' => $rule);
-        block_xp_filter::load_from_data($data)->save();
-        $fm->invalidate_filters_cache();
+        $filterset = $fm->get_filters();
+
+        $rule = new block_xp_ruleset(array(
+                new block_xp_rule_property(block_xp_rule_base::GTE, 100, 'objectid'),
+                new block_xp_rule_property(block_xp_rule_base::EQ, 'r', 'crud'),
+        ), block_xp_ruleset::ALL);
+        $data = array('points' => 130, 'rule' => $rule);
+
+        $filter1 = new block_xp_filter_course($course->id);
+        $filter1->load($data);
+        $filterset->add_first($filter1);
+        $filterset->save();
 
         $rule = new block_xp_ruleset(array(
             new block_xp_rule_property(block_xp_rule_base::EQ, 2, 'objectid'),
             new block_xp_rule_property(block_xp_rule_base::EQ, 'u', 'crud'),
         ), block_xp_ruleset::ANY);
-        $data = array('courseid' => $course->id, 'sortorder' => 2, 'points' => 120, 'rule' => $rule);
-        block_xp_filter::load_from_data($data)->save();
+        $data = array('points' => 120, 'rule' => $rule);
 
-        $rule = new block_xp_ruleset(array(
-            new block_xp_rule_property(block_xp_rule_base::GTE, 100, 'objectid'),
-            new block_xp_rule_property(block_xp_rule_base::EQ, 'r', 'crud'),
-        ), block_xp_ruleset::ALL);
-        $data = array('courseid' => $course->id, 'sortorder' => 0, 'points' => 130, 'rule' => $rule);
-        block_xp_filter::load_from_data($data)->save();
+        $filter2 = new block_xp_filter_course($course->id);
+        $filter2->load($data);
+        $filterset->add_first($filter2);
+        $filterset->save();
 
-        // We can override default filters.
+        // Define some custom rules, the sortorder and IDs are mixed here.
+        $rule = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
+        $data = array('points' => 100, 'rule' => $rule);
+
+        $filter3 = new block_xp_filter_course($course->id);
+        $filter3->load($data);
+        $filterset->add_first($filter3);
+        $filterset->save();
+
+        $fm->invalidate_filters($course->id);
+
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'objectid' => 2));
         $this->assertSame(100, $fm->get_points_for_event($e));
 
@@ -124,10 +140,16 @@ class block_xp_filters_testcase extends advanced_testcase {
         $this->assertSame(130, $fm->get_points_for_event($e));
 
         // This filter will catch everything before the default rules.
+        // We can override default filters.
         $rule = new block_xp_rule_property(block_xp_rule_base::CT, 'something', 'eventname');
-        $data = array('courseid' => $course->id, 'sortorder' => 3, 'points' => 110, 'rule' => $rule);
-        block_xp_filter::load_from_data($data)->save();
-        $fm->invalidate_filters_cache();
+        $data = array('points' => 110, 'rule' => $rule);
+
+        $filter4 = new block_xp_filter_course($course->id);
+        $filter4->load($data);
+        $filterset->add($filter4, 3);
+        $filterset->save();
+
+        $fm->invalidate_filters($course->id);
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'd'));
         $this->assertSame(110, $fm->get_points_for_event($e));
@@ -136,9 +158,14 @@ class block_xp_filters_testcase extends advanced_testcase {
 
         // This filter will catch everything.
         $rule = new block_xp_rule_property(block_xp_rule_base::CT, 'something', 'eventname');
-        $data = array('courseid' => $course->id, 'sortorder' => -1, 'points' => 1, 'rule' => $rule);
-        block_xp_filter::load_from_data($data)->save();
-        $fm->invalidate_filters_cache();
+        $data = array('points' => 1, 'rule' => $rule);
+
+        $filter5 = new block_xp_filter_course($course->id);
+        $filter5->load($data);
+        $filterset->add_first($filter5);
+        $filterset->save();
+
+        $fm->invalidate_filters($course->id);
 
         $e = \block_xp\event\something_happened::mock(array('crud' => 'u', 'objectid' => 2));
         $this->assertSame(1, $fm->get_points_for_event($e));
