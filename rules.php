@@ -140,7 +140,7 @@ echo html_writer::start_tag('form', array('method' => 'POST', 'class' => 'block-
 echo html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()));
 
 $addlink = html_writer::start_tag('li', array('class' => 'filter-add'));
-$addlink.= $renderer->action_link('#', get_string('addarule', 'block_xp'), null, null,
+$addlink .= $renderer->action_link('#', get_string('addarule', 'block_xp'), null, null,
     new pix_icon('t/add', '', '', array('class' => 'iconsmall')));
 $addlink .= html_writer::end_tag('li');
 

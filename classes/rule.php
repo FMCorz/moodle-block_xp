@@ -59,7 +59,7 @@ abstract class block_xp_rule implements renderable {
      *
      * @return string
      */
-    abstract function get_description();
+    abstract public function get_description();
 
     /**
      * Returns a form element for this rule.
@@ -70,7 +70,8 @@ abstract class block_xp_rule implements renderable {
      * @return string
      */
     public function get_form($basename) {
-        return html_writer::empty_tag('input', array('type' => 'hidden', 'name' => $basename . '[_class]', 'value' => get_class($this)));
+        return html_writer::empty_tag('input', array('type' => 'hidden', 'name' => $basename . '[_class]',
+            'value' => get_class($this)));
     }
 
     /**
@@ -128,7 +129,7 @@ abstract class block_xp_rule implements renderable {
                 $reflexion = new ReflectionClass($value);
                 $valid = $reflexion->isSubclassOf('block_xp_rule');
             } else if (is_array($value)) {
-                $valid = block_xp_rule::validate_data($value);
+                $valid = self::validate_data($value);
             }
         }
 

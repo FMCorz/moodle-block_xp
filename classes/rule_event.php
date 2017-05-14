@@ -176,7 +176,8 @@ class block_xp_rule_event extends block_xp_rule_property {
      */
     public function get_form($basename) {
         $o = block_xp_rule::get_form($basename);
-        $modules = html_writer::select(self::get_events_list(), $basename . '[value]', $this->value, '', array('id' => '', 'class' => ''));
+        $modules = html_writer::select(self::get_events_list(), $basename . '[value]', $this->value, '',
+            array('id' => '', 'class' => ''));
         $o .= get_string('eventis', 'block_xp', $modules);
         return $o;
     }

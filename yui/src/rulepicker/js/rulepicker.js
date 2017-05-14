@@ -76,16 +76,17 @@ Y.namespace('M.block_xp').RulePicker = Y.extend(PICKER, M.core.dialogue, {
 
     prepare: function() {
         var content,
-            tpl;
+            tpl,
+            html;
 
-        tpl = Y.Handlebars.compile(
-            '<div>' +
-                '{{#rules}}' +
-                '<div class="{{../CSS.RULE}}">' +
-                    '<button data-id="{{id}}">{{name}}</button>' +
-                '</div>' +
-                '{{/rules}}' +
-            '</div>');
+        html = '<div>';
+        html += ' {{#rules}}';
+        html += ' <div class="{{../CSS.RULE}}">';
+        html += '  <button data-id="{{id}}">{{name}}</button>';
+        html += ' </div>';
+        html += ' {{/rules}}';
+        html += '</div>';
+        tpl = Y.Handlebars.compile(html);
 
         // Set the header.
         this.getStdModNode(Y.WidgetStdMod.HEADER).prepend(Y.Node.create('<h1>' + this.get('title') + '</h1>'));

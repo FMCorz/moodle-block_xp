@@ -84,7 +84,8 @@ class block_xp_levels_form extends moodleform {
         $mform->addelement('hidden', 'insertlevelshere');
         $mform->setType('insertlevelshere', PARAM_BOOL);
 
-        $mform->addElement('static', 'warn', '', $OUTPUT->notification(get_string('levelswillbereset', 'block_xp'), 'notifyproblem'));
+        $mform->addElement('static', 'warn', '',
+            $OUTPUT->notification(get_string('levelswillbereset', 'block_xp'), 'notifyproblem'));
 
         $this->add_action_buttons();
 

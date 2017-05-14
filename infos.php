@@ -63,7 +63,7 @@ $table->define_headers(array(get_string('level', 'block_xp'), get_string('xprequ
     get_string('description', 'block_xp')));
 $table->setup();
 
-for ($i = 1; $i <= $levels ; $i++) {
+for ($i = 1; $i <= $levels; $i++) {
     $desc = isset($levelsdata['desc'][$i]) ? $levelsdata['desc'][$i] : '';
     $table->add_data(array($i, $levelsdata['xp'][$i], $desc), 'level-' . $i);
 }

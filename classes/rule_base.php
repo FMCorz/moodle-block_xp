@@ -103,8 +103,8 @@ abstract class block_xp_rule_base extends block_xp_rule {
      */
     protected function get_compare_select($basename) {
         return html_writer::select(array(
-                block_xp_rule_base::CT => get_string('rule:' . block_xp_rule_base::CT, 'block_xp'),
-                block_xp_rule_base::EQ => get_string('rule:' . block_xp_rule_base::EQ, 'block_xp')
+                self::CT => get_string('rule:' . self::CT, 'block_xp'),
+                self::EQ => get_string('rule:' . self::EQ, 'block_xp')
             ), $basename . '[compare]', $this->compare, '', array('id' => '', 'class' => ''));
     }
 

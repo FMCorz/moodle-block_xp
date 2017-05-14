@@ -1,12 +1,12 @@
 .block_xp .current-level {
-    margin: 10px auto;
-    text-align: center;
+    background: url([[pix:block_xp|10]]) no-repeat;
+    color: #fff;
     font-size: 4em;
     height: 100px;
-    width: 100px;
-    color: #fff;
     line-height: 110px;
-    background: url([[pix:block_xp|10]]) no-repeat;
+    margin: 10px auto;
+    text-align: center;
+    width: 100px;
 }
 
 .block_xp .level-1 {
@@ -36,9 +36,6 @@
 .block_xp .level-9 {
     background-image: url([[pix:block_xp|9]]);
 }
-.block_xp .level-10 {
-    background-image: url([[pix:block_xp|10]]);
-}
 
 .block_xp .level-badge {
     background: none;
@@ -58,13 +55,13 @@
 
 /** Use over defined class name to re-use it through the block pages. */
 .block_xp-level-progress {
-    margin: 0 auto;
-    max-width: 200px;
-    height: 25px;
-    border-radius: 5px;
     background-color: #ccc;
-    position: relative;
+    border-radius: 5px;
+    height: 25px;
+    margin: 0 auto;
     margin-bottom: 10px;
+    max-width: 200px;
+    position: relative;
 }
 .block_xp-level-progress .bar {
     background-color: green;
@@ -72,19 +69,19 @@
     height: 25px;
 }
 .block_xp-level-progress .txt {
-    line-height: 25px;
-    text-align: center;
     color: #fff;
     font-size: 10px;
-    width: 100%;
-    top: 0;
     left: 0;
+    line-height: 25px;
     position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
 }
 
 /** Using !important because of super-qualified rules to bypass. */
 .path-blocks-xp table .highlight > td{
-    background-color: #D9EDF7 !important;
+    background-color: #D9EDF7 !important; /* stylelint-disable-line declaration-no-important */
 }
 
 /**
@@ -109,7 +106,7 @@
 }
 .block_xp-notification .moodle-dialogue-bd,
 .block_xp-notification .moodle-dialogue-ft {
-    text-align: center !important;
+    text-align: center !important; /* stylelint-disable-line declaration-no-important */
 }
 .block_xp-notification .level-headline {
     font-size: 1.4em;
@@ -147,13 +144,13 @@
     margin: 0;
 }
 .block-xp-filters-wrapper .filter-rules {
-    margin-top: 5px;
     margin-left: 20px;
+    margin-top: 5px;
 }
 .block-xp-filters-wrapper .filter {
-    padding: 8px 4px;
     border: 1px solid #ddd;
     margin: 10px 0;
+    padding: 8px 4px;
 }
 .block-xp-filters-wrapper .filter-add {
     margin: 10px 0;
@@ -184,41 +181,41 @@
     padding-bottom: 2px;
 }
 .block-xp-filters-wrapper .rule-rules .rule {
-    position: relative;
     border-left: 1px dotted #ccc;
-    padding-left: 15px;
-    min-height: 40px;
     line-height: 40px;
+    min-height: 40px;
+    padding-left: 15px;
+    position: relative;
 }
 .block-xp-filters-wrapper .rule-rules .rule::before {
-    content: "";
     border-top: 1px dotted #ccc;
+    content: "";
     display: block;
-    width: 15px;
+    left: 0;
     position: absolute;
     top: 20px;
-    left: 0;
+    width: 15px;
 }
 .block-xp-filters-wrapper .rule-type-ruleset .rule-rules > .rule:first-child::before,
 .block-xp-filters-wrapper .rule.rule-type-ruleset::before {
     top: 25px;
 }
 .block-xp-filters-wrapper .rule-add {
-    position: relative;
     padding: 10px 17px;
+    position: relative;
 }
 .block-xp-filters-wrapper .rule-add::before,
 .block-xp-filters-wrapper .rule-rules .rule:last-child::before {
-    content: "";
-    border-top: 0;
-    border-left: 1px dotted #ccc;
     border-bottom: 1px dotted #ccc;
+    border-left: 1px dotted #ccc;
+    border-top: 0;
+    content: "";
     display: block;
-    width: 15px;
     height: 20px;
+    left: 0;
     position: absolute;
     top: 0;
-    left: 0;
+    width: 15px;
 }
 .block-xp-filters-wrapper .rule-rules .rule:last-child {
     border: 0;
@@ -239,8 +236,8 @@
 }
 .block-xp-filters-wrapper .filters-readonly .filter-rules > .rule > .rule-definition,
 .block-xp-filters-wrapper .filters-readonly .rule-rules .rule {
-    min-height: 30px;
     line-height: 30px;
+    min-height: 30px;
 }
 .block-xp-filters-wrapper .filters-readonly .filter-rules > .rule > .rule-definition {
     padding: 0 10px;
@@ -277,8 +274,8 @@
 .dir-rtl .block-xp-filters-wrapper .rule-rules .rule {
     border-left: 0;
     border-right: 1px dotted #ccc;
-    padding-right: 15px;
     padding-left: 0;
+    padding-right: 15px;
 }
 .dir-rtl .block-xp-filters-wrapper .rule-rules .rule::before {
     right: 0;

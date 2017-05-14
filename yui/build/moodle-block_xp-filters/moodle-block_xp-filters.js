@@ -273,7 +273,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
                 isFirstNode = !lastNode,
                 isDeleted = node.getData('deleted'),
                 wasLink = !isFirstNode && lastNode.hasClass(CSS.ADDFILTER),
-                isLastNode = index -1 == count;
+                isLastNode = index - 1 == count;
 
             // Ignore the deleted fitlers.
             if (isDeleted) {
@@ -318,10 +318,10 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
         filters.each(function(node) {
             var basename = node.getData('basename'),
                 sortnode = node.one('input[name="' + basename + '[sortorder]"]');
-                if (sortnode) {
-                    sortnode.setAttribute('value', sortorder);
-                    sortorder++;
-                }
+            if (sortnode) {
+                sortnode.setAttribute('value', sortorder);
+                sortorder++;
+            }
         }, this);
     },
 
@@ -362,7 +362,6 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
         filters.each(function(node) {
             var basename = node.getData('basename'),
                 inc = parseInt(/\[([0-9]+)\]$/.exec(basename)[1] || 0, 10);
-
 
             filterIncrement = filterIncrement < inc ? inc : filterIncrement;
         }, this);

@@ -89,15 +89,15 @@ class block_xp_report_table extends table_sql {
         // be displayed in the report for the teachers' benefit. We need to filter out the users which
         // are not a member of the group though.
         if (empty($groupid)) {
-            $sql ='SELECT userid FROM {block_xp} WHERE courseid = :courseid';
+            $sql = 'SELECT userid FROM {block_xp} WHERE courseid = :courseid';
             $params = array('courseid' => $courseid);
         } else {
-            $sql ='SELECT b.userid
-                     FROM {block_xp} b
-                     JOIN {groups_members} gm
-                       ON b.userid = gm.userid
-                      AND gm.groupid = :groupid
-                    WHERE courseid = :courseid';
+            $sql = 'SELECT b.userid
+                      FROM {block_xp} b
+                      JOIN {groups_members} gm
+                        ON b.userid = gm.userid
+                       AND gm.groupid = :groupid
+                     WHERE courseid = :courseid';
             $params = array('courseid' => $courseid, 'groupid' => $groupid);
         }
         $entries = $DB->get_recordset_sql($sql, $params);

@@ -93,7 +93,8 @@ class block_xp_filter implements renderable {
      *
      * Use {@link self::load_from_data()} instead.
      */
-    protected function __construct() {}
+    protected function __construct() {
+    }
 
     /**
      * Delete the rule.

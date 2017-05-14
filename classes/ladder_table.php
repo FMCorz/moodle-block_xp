@@ -187,7 +187,7 @@ class block_xp_ladder_table extends table_sql {
      * @see self::compute_rank_start()
      * @return void
      */
-    function build_table() {
+    public function build_table() {
         global $USER;
 
         $this->compute_rank_start();
@@ -204,8 +204,8 @@ class block_xp_ladder_table extends table_sql {
                 // Preload the context.
                 context_helper::preload_from_record($row);
 
-                // Show the real rank.
                 if ($this->rankmode == block_xp_manager::RANK_ON) {
+                    // Show the real rank.
 
                     // If this row is different than the previous one.
                     if ($row->lvl != $lastlvl || $row->xp != $lastxp) {
@@ -218,8 +218,8 @@ class block_xp_ladder_table extends table_sql {
                     }
                     $row->rank = $rank;
 
-                // Show a "relative" rank, the difference between a student and another.
                 } else if ($this->rankmode == block_xp_manager::RANK_REL) {
+                    // Show a "relative" rank, the difference between a student and another.
 
                     // There was no indication of what XP to diff with, let's take the first entry.
                     if ($xptodiff == -1 && $lastxp == -1) {
@@ -318,8 +318,8 @@ class block_xp_ladder_table extends table_sql {
         $this->startingoffset = 1;
         $this->startingxpdiff = -1;
 
-        // Guess the starting rank.
         if ($this->rankmode == block_xp_manager::RANK_ON && !empty($this->rawdata)) {
+            // Guess the starting rank.
             $record = reset($this->rawdata);
             $sql = "SELECT COUNT(x.id)
                       FROM {$this->sql->from}
@@ -340,9 +340,8 @@ class block_xp_ladder_table extends table_sql {
             $this->startinglevel = $record->lvl;
             $this->startingxp = $record->xp;
 
-        // When relative, set self XP as difference.
         } else if ($this->rankmode == block_xp_manager::RANK_REL) {
-
+            // When relative, set self XP as difference.
             $record = $this->get_user_record($this->userid);
             if ($record) {
                 $this->startingxpdiff = $record->xp;
@@ -404,7 +403,7 @@ class block_xp_ladder_table extends table_sql {
      * @param int $pagesize Size of page for paginated displayed table.
      * @param bool $useinitialsbar Do you want to use the initials bar?
      */
-    function query_db($pagesize, $useinitialsbar=true) {
+    public function query_db($pagesize, $useinitialsbar=true) {
         global $DB;
 
         // Only display neighbours.
@@ -415,7 +414,7 @@ class block_xp_ladder_table extends table_sql {
 
         // When we're not downloading there is a pagination.
         if (!$this->is_downloading()) {
-            if ($this->countsql === NULL) {
+            if ($this->countsql === null) {
                 $this->countsql = 'SELECT COUNT(1) FROM '.$this->sql->from.' WHERE '.$this->sql->where;
                 $this->countparams = $this->sql->params;
             }
