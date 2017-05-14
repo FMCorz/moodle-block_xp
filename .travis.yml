@@ -1,0 +1,84 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+php:
+  - 7.1
+  - 7.0
+  - 5.6
+  - 5.4
+
+env:
+  global:
+    # Copy/paste from XMLDBEditor should not be linted.
+    - IGNORE_PATHS=db/upgrade.php
+
+  matrix:
+    - MOODLE_BRANCH=MOODLE_27_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_27_STABLE DB=mysqli
+    - MOODLE_BRANCH=MOODLE_28_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_29_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_30_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_31_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_32_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_32_STABLE DB=mysqli
+
+matrix:
+  exclude:
+    # Exclude builds not compatible with 5.4.
+    - php: 5.4
+      env: MOODLE_BRANCH=MOODLE_32_STABLE DB=pgsql
+    - php: 5.4
+      env: MOODLE_BRANCH=MOODLE_32_STABLE DB=mysqli
+
+    # Exclude builds not compatible with 7.0.
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_27_STABLE DB=pgsql
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_27_STABLE DB=mysqli
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_28_STABLE DB=pgsql
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_29_STABLE DB=pgsql
+
+    # Exclude builds not compatible with 7.1.
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_27_STABLE DB=pgsql
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_27_STABLE DB=mysqli
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_28_STABLE DB=pgsql
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_29_STABLE DB=pgsql
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_30_STABLE DB=pgsql
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_31_STABLE DB=pgsql
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - cd ../..
+  - composer selfupdate
+  - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^1
+  - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+
+install:
+  - moodle-plugin-ci install
+
+script:
+  - moodle-plugin-ci phplint
+  - moodle-plugin-ci codechecker
+  - moodle-plugin-ci shifter
+  - moodle-plugin-ci validate
+  - moodle-plugin-ci phpunit
+  - moodle-plugin-ci behat
+
+  # The following plugins are disabled:
+  # - moodle-plugin-ci phpmd
+  # - moodle-plugin-ci phpcpd
+  # - moodle-plugin-ci csslint (Does not use Moodle's stylelint rules)
+  # - moodle-plugin-ci jshint (Does not use Moodle's eslint rules)

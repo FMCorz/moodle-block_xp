@@ -1,4 +1,4 @@
-Level up! (block_xp)
+Level up! (block_xp) ![GitHub tag](https://img.shields.io/github/tag/FMCorz/moodle-block_xp.svg) ![Travis branch](https://img.shields.io/travis/FMCorz/moodle-block_xp/master.svg)
 ====================
 
 Engage your students! A Moodle plugin to gamify your students' learning experience by allowing them to _level up_ in their courses.
