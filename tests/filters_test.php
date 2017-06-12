@@ -25,7 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/blocks/xp/tests/fixtures/events.php');
+require_once(__DIR__ . '/base_testcase.php');
+require_once(__DIR__ . '/fixtures/events.php');
 
 /**
  * Filters testcase.
@@ -34,7 +35,12 @@ require_once($CFG->dirroot . '/blocks/xp/tests/fixtures/events.php');
  * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_filters_testcase extends advanced_testcase {
+class block_xp_filters_testcase extends block_xp_base_testcase {
+
+    protected function get_filter_manager($courseid) {
+        $manager = \block_xp\di::get('manager_factory')->get_manager($courseid);
+        return \block_xp\di::get('filter_manager_factory')->get_filter_manager($manager);
+    }
 
     public function test_filter_match() {
         $rule = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
@@ -66,8 +72,7 @@ class block_xp_filters_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
 
         $course = $this->getDataGenerator()->create_course();
-        $manager = block_xp_manager::get($course->id);
-        $fm = $manager->get_filter_manager();
+        $fm = $this->get_filter_manager($course->id);
 
         $c = \block_xp\event\something_happened::mock(array('crud' => 'c'));
         $r = \block_xp\event\something_happened::mock(array('crud' => 'r'));
@@ -84,8 +89,7 @@ class block_xp_filters_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
 
         $course = $this->getDataGenerator()->create_course();
-        $manager = block_xp_manager::get($course->id);
-        $fm = $manager->get_filter_manager();
+        $fm = $this->get_filter_manager($course->id);
 
         // Define some custom rules, the sortorder and IDs are mixed here.
         $rule = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');

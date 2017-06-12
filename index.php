@@ -15,17 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Block XP event rules.
+ * Welcome to the future of Moodle plugin!
+ *
+ * Just kidding, but isn't it much nicer to have routing? I am not
+ * pretending to have designed the best API. In fact I did not try,
+ * there really is not point trying to do better than many of the
+ * existing libraries. But copying a whole library in this plugin
+ * is just not worth it.
+ *
+ * Moodle core should support routing and other niceties for any
+ * developer to use. Oh, and when I say 'support', I don't mean
+ * rewriting a new routing engine...
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since 3.0.0, will be removed in 3.2.0
  */
 
 require(__DIR__ . '/../../config.php');
 
-$courseid = required_param('courseid', PARAM_INT);
-$PAGE->set_url('/blocks/xp/rules.php', ['courseid' => $courseid]);
-debugging(get_string('urlaccessdeprecated', 'block_xp'), DEBUG_DEVELOPER);
-redirect(\block_xp\di::get('url_resolver')->reverse('rules', ['courseid' => $courseid]));
+\block_xp\di::get('router')->dispatch();

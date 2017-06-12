@@ -22,7 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local;
 defined('MOODLE_INTERNAL') || die();
+
+use cache;
+use coding_exception;
 
 /**
  * Filter manager class.
@@ -31,21 +35,21 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_filter_manager {
+class filter_manager implements filter_manager_interface {
 
     /**
      * The block XP manager.
      *
-     * @var block_xp_manager.
+     * @var manager_interface.
      */
     protected $manager;
 
     /**
      * Constructor.
      *
-     * @param block_xp_manager $manager The XP manager.
+     * @param manager_interface $manager The XP manager.
      */
-    public function __construct(block_xp_manager $manager) {
+    public function __construct(manager_interface $manager) {
         $this->manager = $manager;
     }
 
@@ -92,35 +96,35 @@ class block_xp_filter_manager {
      * @return array Of filter objects.
      */
     public static function get_static_filters() {
-        $d = new block_xp_rule_property(block_xp_rule_base::EQ, 'd', 'crud');
-        $c = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
-        $r = new block_xp_rule_property(block_xp_rule_base::EQ, 'r', 'crud');
-        $u = new block_xp_rule_property(block_xp_rule_base::EQ, 'u', 'crud');
+        $d = new \block_xp_rule_property(\block_xp_rule_base::EQ, 'd', 'crud');
+        $c = new \block_xp_rule_property(\block_xp_rule_base::EQ, 'c', 'crud');
+        $r = new \block_xp_rule_property(\block_xp_rule_base::EQ, 'r', 'crud');
+        $u = new \block_xp_rule_property(\block_xp_rule_base::EQ, 'u', 'crud');
 
         // Skip those as they duplicate other more low level actions.
-        $bcmv = new block_xp_rule_event('\mod_book\event\course_module_viewed');
-        $dsc = new block_xp_rule_event('\mod_forum\event\discussion_subscription_created');
-        $sc = new block_xp_rule_event('\mod_forum\event\subscription_created');
-        $as = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_submitted', 'eventname');
-        $au = new block_xp_rule_property(block_xp_rule_base::CT, 'assessable_uploaded', 'eventname');
+        $bcmv = new \block_xp_rule_event('\mod_book\event\course_module_viewed');
+        $dsc = new \block_xp_rule_event('\mod_forum\event\discussion_subscription_created');
+        $sc = new \block_xp_rule_event('\mod_forum\event\subscription_created');
+        $as = new \block_xp_rule_property(\block_xp_rule_base::CT, 'assessable_submitted', 'eventname');
+        $au = new \block_xp_rule_property(\block_xp_rule_base::CT, 'assessable_uploaded', 'eventname');
 
         $list = array();
 
-        $ruleset = new block_xp_ruleset(array($bcmv, $dsc, $sc, $as, $au), block_xp_ruleset::ANY);
+        $ruleset = new \block_xp_ruleset(array($bcmv, $dsc, $sc, $as, $au), \block_xp_ruleset::ANY);
         $data = array('rule' => $ruleset, 'points' => 0, 'editable' => false);
-        $list[] = block_xp_filter::load_from_data($data);
+        $list[] = \block_xp_filter::load_from_data($data);
 
         $data = array('rule' => $c, 'points' => 45, 'editable' => false);
-        $list[] = block_xp_filter::load_from_data($data);
+        $list[] = \block_xp_filter::load_from_data($data);
 
         $data = array('rule' => $r, 'points' => 9, 'editable' => false);
-        $list[] = block_xp_filter::load_from_data($data);
+        $list[] = \block_xp_filter::load_from_data($data);
 
         $data = array('rule' => $u, 'points' => 3, 'editable' => false);
-        $list[] = block_xp_filter::load_from_data($data);
+        $list[] = \block_xp_filter::load_from_data($data);
 
         $data = array('rule' => $d, 'points' => 0, 'editable' => false);
-        $list[] = block_xp_filter::load_from_data($data);
+        $list[] = \block_xp_filter::load_from_data($data);
         return $list;
     }
 
@@ -135,7 +139,7 @@ class block_xp_filter_manager {
             'sortorder ASC, id ASC');
         $filters = array();
         foreach ($results as $key => $filter) {
-            $filters[$filter->id] = block_xp_filter::load_from_data($filter);
+            $filters[$filter->id] = \block_xp_filter::load_from_data($filter);
         }
         $results->close();
         return $filters;

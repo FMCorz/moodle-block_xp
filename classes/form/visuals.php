@@ -22,8 +22,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\form;
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
+
+use context_user;
+use moodleform;
 
 /**
  * Visuals form class.
@@ -32,7 +37,7 @@ require_once($CFG->libdir . '/formslib.php');
  * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_visuals_form extends moodleform {
+class visuals extends moodleform {
 
     public function definition() {
         $mform = $this->_form;
@@ -57,7 +62,7 @@ class block_xp_visuals_form extends moodleform {
             // Make sure the user has uploaded all the badges.
             $fs = get_file_storage();
             $usercontext = context_user::instance($USER->id);
-            $expected = array_flip(range(1, $this->_customdata['manager']->get_level_count()));
+            $expected = array_flip(range(1, $this->_customdata['manager']->get_levels_info()->get_count()));
             $draftfiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $data['badges'], 'filename', false);
             foreach ($draftfiles as $file) {
                 $pathinfo = pathinfo($file->get_filename());

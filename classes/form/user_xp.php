@@ -22,8 +22,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\form;
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
+
+use moodleform;
 
 /**
  * Block XP user edit form class.
@@ -32,7 +36,7 @@ require_once($CFG->libdir . '/formslib.php');
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_user_edit_form extends moodleform {
+class user_xp extends moodleform {
 
     /**
      * Form definintion.

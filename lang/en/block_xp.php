@@ -181,6 +181,7 @@ $string['viewtheladder'] = 'View the ladder';
 $string['wherearexpused'] = 'Where are experience points used?';
 $string['wherearexpused_desc'] = 'When set to \'In courses\', the experience points gained will only account for the course in which the block was added to. When set to \'For the whole site\', a user will "level up" in the site rather than selectively per course, all the experience gained throughout the site will be used.';
 $string['updateandpreview'] = 'Update and preview';
+$string['urlaccessdeprecated'] = 'Access via this URL is deprecated, please update your links.';
 $string['usealgo'] = 'Use the algorithm';
 $string['usecustomlevelbadges'] = 'Use custom level badges';
 $string['usecustomlevelbadges_help'] = 'When set to yes, you must provide an image for each level.';

@@ -22,8 +22,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\form;
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
+
+use moodleform;
 
 /**
  * Block XP levels form class.
@@ -32,7 +36,7 @@ require_once($CFG->libdir . '/formslib.php');
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_levels_form extends moodleform {
+class levels extends moodleform {
 
     /** @var block_xp_manager The XP manager. */
     protected $manager;
@@ -60,16 +64,13 @@ class block_xp_levels_form extends moodleform {
         }
 
         $mform->addElement('selectyesno', 'usealgo', get_string('usealgo', 'block_xp'));
-        $mform->setDefault('usealgo', 1);
 
         $mform->addElement('text', 'basexp', get_string('basexp', 'block_xp'));
-        $mform->setDefault('basexp', block_xp_manager::DEFAULT_BASE);
         $mform->disabledIf('basexp', 'usealgo', 'eq', 0);
         $mform->setType('basexp', PARAM_INT);
         $mform->setAdvanced('basexp', true);
 
         $mform->addElement('text', 'coefxp', get_string('coefxp', 'block_xp'));
-        $mform->setDefault('coefxp', block_xp_manager::DEFAULT_COEF);
         $mform->disabledIf('coefxp', 'usealgo', 'eq', 0);
         $mform->setType('coefxp', PARAM_FLOAT);
         $mform->setAdvanced('coefxp', true);
@@ -104,7 +105,7 @@ class block_xp_levels_form extends moodleform {
         $base = max((int) $mform->exportValue('basexp'), 1);
         $coef = max((float) $mform->exportValue('coefxp'), 1.001);
 
-        $defaultlevels = block_xp_manager::get_levels_with_algo($levels, $base, $coef);
+        $defaultlevels = \block_xp\local\levels::get_xp_with_algo($levels, $base, $coef);
 
         // Add the levels.
         for ($i = 2; $i <= $levels; $i++) {
@@ -128,63 +129,59 @@ class block_xp_levels_form extends moodleform {
     }
 
     /**
-     * Get the submitted data.
+     * Get the levels info from submitted data.
      *
-     * @return Array with levels and levelsdata.
+     * @return block_xp\local\levels Levels.
      */
-    public function get_data() {
-        $mform =& $this->_form;
+    public function get_levels_from_data() {
         $data = parent::get_data();
         if (!$data) {
             return $data;
         }
 
         // Rearranging the information.
-        $newdata = array(
-            'levels' => $data->levels,
-            'levelsdata' => null
-        );
-
-        $newdata['levelsdata'] = array(
+        $newdata = [
             'usealgo' => $data->usealgo,
             'base' => $data->basexp,
             'coef' => $data->coefxp,
-            'xp' => array(
+            'xp' => [
                 '1' => 0
-            ),
-            'desc' => array(
+            ],
+            'desc' => [
                 '1' => ''
-            )
-        );
+            ]
+        ];
         for ($i = 2; $i <= $data->levels; $i++) {
-            $newdata['levelsdata']['xp'][$i] = $data->{'lvlxp_' . $i};
-            $newdata['levelsdata']['desc'][$i] = $data->{'lvldesc_' . $i};
+            $newdata['xp'][$i] = $data->{'lvlxp_' . $i};
+            $newdata['desc'][$i] = $data->{'lvldesc_' . $i};
         }
 
-        return $newdata;
+        return new \block_xp\local\levels($newdata);
     }
 
     /**
-     * Set the default values.
+     * Set the data from the levels.
      *
-     * This translates the data from the format returned by get_data().
+     * Note that this does not use the interface levels_interface. This is
+     * dependent on the default implementation.
      *
-     * @param array $data In the format returned by get_data().
+     * @param \block_xp\local\levels $levels Levels.
      */
-    public function set_data($data) {
-        $levels = $data['levels'];
-        $levelsdata = $data['levelsdata'];
-        if ($levelsdata) {
-            $data['usealgo'] = $levelsdata['usealgo'];
-            $data['basexp'] = $levelsdata['base'];
-            $data['coefxp'] = $levelsdata['coef'];
-            for ($i = 2; $i <= $levels; $i++) {
-                $data['lvlxp_' . $i] = $levelsdata['xp'][$i];
-                $data['lvldesc_' . $i] = isset($levelsdata['desc'][$i]) ? $levelsdata['desc'][$i] : '';
+    public function set_data_from_levels(\block_xp\local\levels $levels) {
+        $data = [
+            'levels' => $levels->get_count(),
+            'usealgo' => (int) $levels->get_use_algo(),
+            'coefxp' => $levels->get_coef(),
+            'basexp' => $levels->get_base(),
+        ];
+        foreach ($levels->get_levels() as $level) {
+            if ($level->get_level() <= 1) {
+                continue;
             }
+            $data['lvlxp_' . $level->get_level()] = $level->get_xp_required();
+            $data['lvldesc_' . $level->get_level()] = $level->get_description();
         }
-        unset($data['levelsdata']);
-        parent::set_data($data);
+        $this->set_data($data);
     }
 
     /**

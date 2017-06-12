@@ -20,47 +20,12 @@
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since 3.0.0, will be removed in 3.2.0
  */
 
 require(__DIR__ . '/../../config.php');
 
 $courseid = required_param('courseid', PARAM_INT);
-$resetdata = optional_param('resetdata', 0, PARAM_INT);
-$confirm = optional_param('confirm', 0, PARAM_INT);
-
-require_login($courseid);
-$manager = block_xp_manager::get($courseid);
-$context = $manager->get_context();
-
-if (!$manager->can_manage()) {
-    throw new moodle_exception('nopermissions', '', '', 'can_manage');
-}
-
-// Some stuff.
-$url = new moodle_url('/blocks/xp/config.php', array('courseid' => $courseid));
-$strcoursesettings = get_string('coursesettings', 'block_xp');
-
-// Page info.
-$PAGE->set_context($context);
-$PAGE->set_pagelayout('course');
-$PAGE->set_title($strcoursesettings);
-$PAGE->set_heading($COURSE->fullname);
-$PAGE->set_url($url);
-
-echo $OUTPUT->header();
-echo $OUTPUT->heading($strcoursesettings);
-
-$renderer = $PAGE->get_renderer('block_xp');
-
-$form = new block_xp_settings_form($url->out(false), array('defaultconfig' => block_xp_manager::get_default_config()));
-$form->set_data((array) $manager->get_config());
-if ($data = $form->get_data()) {
-    $manager->update_config($data);
-}
-
-echo $renderer->navigation($manager, 'config');
-echo $renderer->notices($manager);
-
-echo $form->display();
-
-echo $OUTPUT->footer();
+$PAGE->set_url('/blocks/xp/config.php', ['courseid' => $courseid]);
+debugging(get_string('urlaccessdeprecated', 'block_xp'), DEBUG_DEVELOPER);
+redirect(\block_xp\di::get('url_resolver')->reverse('config', ['courseid' => $courseid]));

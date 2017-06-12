@@ -20,61 +20,12 @@
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since 3.0.0, will be removed in 3.2.0
  */
 
 require(__DIR__ . '/../../config.php');
 
 $courseid = required_param('courseid', PARAM_INT);
-
-require_login($courseid);
-$manager = block_xp_manager::get($courseid);
-$context = $manager->get_context();
-
-if (!$manager->can_manage()) {
-    throw new moodle_exception('nopermissions', '', '', 'can_manage');
-}
-
-// Some stuff.
-$url = new moodle_url('/blocks/xp/levels.php', array('courseid' => $courseid));
-$strlevels = get_string('levels', 'block_xp');
-
-// Page info.
-$PAGE->set_context($context);
-$PAGE->set_pagelayout('course');
-$PAGE->set_title($strlevels);
-$PAGE->set_heading($COURSE->fullname);
-$PAGE->set_url($url);
-
-$renderer = $PAGE->get_renderer('block_xp');
-
-// Set form and its default (existing) values.
-$form = new block_xp_levels_form($url, array('defaultconfig' => block_xp_manager::get_default_config(), 'manager' => $manager));
-$form->set_data(array('levels' => $manager->get_level_count(), 'levelsdata' => $manager->get_levels_data()));
-
-if ($data = $form->get_data()) {
-    if ($manager->get_level_count() != $data['levels']) {
-        // The number of levels have changed, we need to disable the custom badges.
-        $data['enablecustomlevelbadges'] = false;
-    }
-    $manager->update_config($data);
-    $manager = block_xp_manager::get($courseid, true);      // Force reload.
-    $manager->recalculate_levels();
-    redirect(new moodle_url('/blocks/xp/infos.php', array('courseid' => $courseid)), get_string('valuessaved', 'block_xp'));
-    die();
-} else if ($form->is_cancelled()) {
-    redirect(new moodle_url('/blocks/xp/infos.php', array('courseid' => $courseid)));
-    die();
-}
-
-echo $OUTPUT->header();
-echo $OUTPUT->heading($strlevels);
-echo $renderer->navigation($manager, 'levels');
-echo $renderer->notices($manager);
-
-if ($form->is_submitted() && !$form->is_validated() && !$form->no_submit_button_pressed()) {
-    echo $OUTPUT->notification(get_string('errorformvalues', 'block_xp'));
-}
-
-echo $form->display();
-
-echo $OUTPUT->footer();
+$PAGE->set_url('/blocks/xp/levels.php', ['courseid' => $courseid]);
+debugging(get_string('urlaccessdeprecated', 'block_xp'), DEBUG_DEVELOPER);
+redirect(\block_xp\di::get('url_resolver')->reverse('levels', ['courseid' => $courseid]));

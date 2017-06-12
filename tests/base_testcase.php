@@ -15,17 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Block XP event rules.
+ * Base testcase.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since 3.0.0, will be removed in 3.2.0
  */
 
-require(__DIR__ . '/../../config.php');
+defined('MOODLE_INTERNAL') || die();
 
-$courseid = required_param('courseid', PARAM_INT);
-$PAGE->set_url('/blocks/xp/rules.php', ['courseid' => $courseid]);
-debugging(get_string('urlaccessdeprecated', 'block_xp'), DEBUG_DEVELOPER);
-redirect(\block_xp\di::get('url_resolver')->reverse('rules', ['courseid' => $courseid]));
+global $CFG;
+
+/**
+ * Base testcase class.
+ *
+ * @package    block_xp
+ * @copyright  2014 Frédéric Massart - FMCorz.net
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+abstract class block_xp_base_testcase extends advanced_testcase {
+
+    public function setUp() {
+        $this->resetAfterTest();
+        \block_xp\di::set_container(new \block_xp\local\std_container());
+    }
+
+}

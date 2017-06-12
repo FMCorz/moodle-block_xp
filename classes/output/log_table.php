@@ -22,8 +22,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\output;
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
+
+use stdClass;
+use table_sql;
 
 /**
  * Block XP log table class.
@@ -32,7 +37,7 @@ require_once($CFG->libdir . '/tablelib.php');
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_log_table extends table_sql {
+class log_table extends table_sql {
 
     /** @var string The key of the user ID column. */
     public $useridfield = 'userid';

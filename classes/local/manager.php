@@ -22,7 +22,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local;
 defined('MOODLE_INTERNAL') || die();
+
+use block_xp_progress;
+use coding_exception;
+use context_course;
+use context_system;
+use stdClass;
 
 /**
  * Block XP manager class.
@@ -31,13 +38,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_manager {
-
-    /** Default base for XP algo. */
-    const DEFAULT_BASE = 120;
-
-    /** Default coef for XP algo. */
-    const DEFAULT_COEF = 1.3;
+class manager implements manager_interface {
 
     /** User preference key storing if we should notify a user for his level up. It should be prepended to the course ID. */
     const USERPREF_NOTIFY = 'block_xp_notify_level_up_';
@@ -95,11 +96,8 @@ class block_xp_manager {
     /** @var context The context related to this manager.*/
     protected $context;
 
-    /** @var block_xp_filter_manager Cache of the manager. */
-    protected $filtermanager;
-
-    /** @var array Cache of levels and their required XP. */
-    protected $levels;
+    /** @var array Cache of levels info. */
+    protected $levelsinfo;
 
     /** @var bool Whether or not to trigger events, for instance when the user levels up. */
     protected $triggereevents = true;
@@ -110,7 +108,7 @@ class block_xp_manager {
      * @param int $courseid The course ID.
      * @return void
      */
-    protected function __construct($courseid) {
+    public function __construct($courseid) {
         global $CFG;
 
         $courseid = intval($courseid);
@@ -233,7 +231,6 @@ class block_xp_manager {
         return $this->can_view();
     }
 
-
     /**
      * Capture an event.
      *
@@ -282,32 +279,6 @@ class block_xp_manager {
     }
 
     /**
-     * Get an instance of the manager.
-     *
-     * The courseid parameter will be ignored when the block was set to be used on the system.
-     * It is easier to do it this way than handling the course ID paramter from everywhere we
-     * need to get the manager.
-     *
-     * @param int $courseid The course ID.
-     * @param bool $forcereload Force the reload of the singleton, to invalidate local cache.
-     * @return block_xp_manager The instance of the manager.
-     */
-    public static function get($courseid, $forcereload = false) {
-        global $CFG;
-
-        // When the block was set up for the whole site we attach it to the site course.
-        if ($CFG->block_xp_context == CONTEXT_SYSTEM) {
-            $courseid = SITEID;
-        }
-
-        $courseid = intval($courseid);
-        if ($forcereload || !isset(self::$instances[$courseid])) {
-            self::$instances[$courseid] = new block_xp_manager($courseid);
-        }
-        return self::$instances[$courseid];
-    }
-
-    /**
      * Get the configuration.
      *
      * @param string $name The config to get.
@@ -341,7 +312,7 @@ class block_xp_manager {
      * and in this case the site/front page context is nto the right one as it's a child of the
      * system context, and not parent of the courses.
      *
-     * Also read the nodes of {@link self::get_courseid()}.
+     * Also read the notes of {@link self::get_courseid()}.
      *
      * @return context
      */
@@ -374,7 +345,7 @@ class block_xp_manager {
      * and there that assumes that the course exists. In any other scenario we use the course ID
      * of the course the block was added to.
      *
-     * Also read the nodes of {@link self::get_context()}.
+     * Also read the notes of {@link self::get_context()}.
      *
      * @return int The course ID.
      */
@@ -383,67 +354,20 @@ class block_xp_manager {
     }
 
     /**
-     * Return the default configuration.
+     * Get the levels info.
      *
-     * @return stdClass Default config.
+     * @return levels
      */
-    public static function get_default_config() {
-        return (object) self::$configdefaults;
-    }
-
-    /**
-     * Get the filter manager.
-     *
-     * @return block_xp_filter_manager
-     */
-    public function get_filter_manager() {
-        if (!$this->filtermanager) {
-            $this->filtermanager = new block_xp_filter_manager($this);
-        }
-        return $this->filtermanager;
-    }
-
-    /**
-     * Return the number of levels in the course.
-     *
-     * @return int Level count.
-     */
-    public function get_level_count() {
-        return $this->get_config('levels');
-    }
-
-    /**
-     * Return the level at which we are at $xp.
-     *
-     * @param int $xp XP acquired.
-     * @return int The level.
-     */
-    public function get_level_from_xp($xp) {
-        $levels = $this->get_levels();
-
-        $level = 1;
-        for ($i = $level; $i <= count($levels); $i++) {
-            if ($levels[$i] <= $xp) {
-                $level = $i;
+    public function get_levels_info() {
+        if (empty($this->levelsinfo)) {
+            $levelsdata = $this->get_levels_data('levelsdata');
+            if (!$levelsdata) {
+                $this->levelsinfo = levels::make_from_defaults();
             } else {
-                break;
+                $this->levelsinfo = new levels($levelsdata);
             }
         }
-
-        return $level;
-    }
-
-    /**
-     * Get the levels and the experience points needed.
-     *
-     * @return array level => xp required.
-     */
-    public function get_levels() {
-        if (empty($this->levels)) {
-            $eventsdata = $this->get_levels_data('levelsdata');
-            $this->levels = $eventsdata['xp'];
-        }
-        return $this->levels;
+        return $this->levelsinfo;
     }
 
     /**
@@ -451,7 +375,7 @@ class block_xp_manager {
      *
      * @return array of levels data.
      */
-    public function get_levels_data() {
+    protected function get_levels_data() {
         $levelsdata = $this->get_config('levelsdata');
         if ($levelsdata) {
             $levelsdata = json_decode($levelsdata, true);
@@ -459,36 +383,7 @@ class block_xp_manager {
                 return $levelsdata;
             }
         }
-
-        return array(
-            'usealgo' => 1,
-            'base' => self::DEFAULT_BASE,
-            'coef' => self::DEFAULT_COEF,
-            'xp' => self::get_levels_with_algo($this->get_level_count()),
-            'desc' => array()
-        );
-    }
-
-    /**
-     * Get the levels and their XP based on a simple algorithm.
-     *
-     * @param int $levelcount The number of levels.
-     * @param int $base The base XP required.
-     * @param float $coef The coefficient between levels.
-     * @return array level => xp required.
-     */
-    public static function get_levels_with_algo($levelcount, $base = self::DEFAULT_BASE, $coef = self::DEFAULT_COEF) {
-        $list = array();
-        for ($i = 1; $i <= $levelcount; $i++) {
-            if ($i == 1) {
-                $list[$i] = 0;
-            } else if ($i == 2) {
-                $list[$i] = $base;
-            } else {
-                $list[$i] = $base + round($list[$i - 1] * $coef);
-            }
-        }
-        return $list;
+        return null;
     }
 
     /**
@@ -520,8 +415,12 @@ class block_xp_manager {
         unset($record->lvl);
         $params = (array) $record;
 
-        $params['levelxp'] = $this->get_xp_for_level($record->level);
-        $params['nextlevelxp'] = $this->get_xp_for_level($record->level + 1);
+        $levelsinfo = $this->get_levels_info();
+        $params['levelxp'] = $levelsinfo->get_level($record->level)->get_xp_required();
+        $params['nextlevelxp'] = null;
+        if ($levelsinfo->get_count() > $record->level) {
+            $params['nextlevelxp'] = $this->get_levels_info()->get_level($record->level + 1)->get_xp_required();
+        }
         $progress = new block_xp_progress($params);
 
         return $progress;
@@ -533,8 +432,8 @@ class block_xp_manager {
      * @param \core\event\base $event The event.
      * @return int XP points.
      */
-    public function get_xp_from_event(\core\event\base $event) {
-        $fm = $this->get_filter_manager();
+    protected function get_xp_from_event(\core\event\base $event) {
+        $fm = \block_xp\di::get('filter_manager_factory')->get_filter_manager($this);
         return $fm->get_points_for_event($event);
     }
 
@@ -622,20 +521,6 @@ class block_xp_manager {
                 'time' => time() - ($keeplogs * DAYSECS)
             ));
         }
-    }
-
-    /**
-     * Clears the static caches of this class.
-     *
-     * Usage reserved to PHP Unit.
-     *
-     * @return void
-     */
-    public static function purge_static_caches() {
-        if (!PHPUNIT_TEST) {
-            return;
-        }
-        self::$instances = array();
     }
 
     /**
@@ -743,6 +628,8 @@ class block_xp_manager {
                 if (in_array($key, array('levelsdata'))) {
                     // Some keys needs to be JSON encoded.
                     $value = json_encode($value);
+                    // We also need to invalidate the levels info.
+                    $this->levelsinfo = null;
                 }
                 $config->{$key} = $value;
             }
@@ -766,7 +653,7 @@ class block_xp_manager {
      * @param int $lvl The known user level.
      * @return void
      */
-    public function update_user_level($userid, $xp = null, $lvl = null) {
+    protected function update_user_level($userid, $xp = null, $lvl = null) {
         global $DB;
 
         if ($xp === null || $lvl === null) {
@@ -778,7 +665,7 @@ class block_xp_manager {
             $lvl = $record->lvl;
         }
 
-        $level = $this->get_level_from_xp($xp);
+        $level = $this->get_levels_info()->get_level_from_xp($xp)->get_level();
         if ($level != $lvl) {
             // Level up!
             $DB->set_field('block_xp', 'lvl', $level, array('courseid' => $this->courseid, 'userid' => $userid));

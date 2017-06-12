@@ -15,15 +15,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Observers.
+ * Observer rules maker.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local\observer;
 defined('MOODLE_INTERNAL') || die();
 
-$rulemaker = \block_xp\di::get('observer_rules_maker');
-$observers = $rulemaker->get_observer_rules();
-unset($rulemaker);
+/**
+ * Observer rules maker class.
+ *
+ * @package    block_xp
+ * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class std_observer_rules_maker implements observer_rules_maker {
+
+    public function get_observer_rules() {
+        return [
+            [
+                'eventname' => '*',
+                'callback' => 'block_xp\\local\\observer\\observer::catch_all',
+                'internal' => false
+            ],
+            [
+                'eventname' => '\\core\\event\\course_deleted',
+                'callback' => 'block_xp\\local\\observer\\observer::course_deleted'
+            ]
+        ];
+    }
+
+}

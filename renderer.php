@@ -95,7 +95,7 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Return the notices.
      *
-     * @param block_xp_manager $manager The manager.
+     * @param \block_xp\local\manager $manager The manager.
      * @return string The notices.
      */
     public function notices($manager) {
@@ -106,9 +106,9 @@ class block_xp_renderer extends plugin_renderer_base {
             return $o;
         }
 
-        if (!get_user_preferences(block_xp_manager::USERPREF_NOTICES, false)) {
+        if (!get_user_preferences(\block_xp\local\manager::USERPREF_NOTICES, false)) {
             require_once($CFG->libdir . '/ajax/ajaxlib.php');
-            user_preference_allow_ajax_update(block_xp_manager::USERPREF_NOTICES, PARAM_BOOL);
+            user_preference_allow_ajax_update(\block_xp\local\manager::USERPREF_NOTICES, PARAM_BOOL);
 
             $moodleorgurl = new moodle_url('https://moodle.org/plugins/view.php?plugin=block_xp');
             $githuburl = new moodle_url('https://github.com/FMCorz/moodle-block_xp');
@@ -120,7 +120,7 @@ class block_xp_renderer extends plugin_renderer_base {
             $id = html_writer::random_id();
             $this->page->requires->js_init_call("Y.one('.block-xp-rocks').on('click', function(e) {
                 e.preventDefault();
-                M.util.set_user_preference('" . block_xp_manager::USERPREF_NOTICES . "', 1);
+                M.util.set_user_preference('" . \block_xp\local\manager::USERPREF_NOTICES . "', 1);
                 Y.one('.block-xp-notices').hide();
             });");
 
@@ -136,25 +136,26 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Outputs the navigation.
      *
-     * @param block_xp_manager $manager The manager.
+     * @param \block_xp\local\manager $manager The manager.
      * @param string $page The page we are on.
      * @return string The navigation.
      */
     public function navigation($manager, $page) {
         $tabs = array();
         $courseid = $manager->get_courseid();
+        $urlresolver = \block_xp\di::get('url_resolver');
 
         if ($manager->can_view_infos_page()) {
             $tabs[] = new tabobject(
                 'infos',
-                new moodle_url('/blocks/xp/infos.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('infos', ['courseid' => $courseid]),
                 get_string('navinfos', 'block_xp')
             );
         }
         if ($manager->can_view_ladder_page()) {
             $tabs[] = new tabobject(
                 'ladder',
-                new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('ladder', ['courseid' => $courseid]),
                 get_string('navladder', 'block_xp')
             );
         }
@@ -162,32 +163,32 @@ class block_xp_renderer extends plugin_renderer_base {
         if ($manager->can_manage()) {
             $tabs[] = new tabobject(
                 'report',
-                new moodle_url('/blocks/xp/report.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('report', ['courseid' => $courseid]),
                 get_string('navreport', 'block_xp')
             );
             $tabs[] = new tabobject(
                 'log',
-                new moodle_url('/blocks/xp/log.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('log', ['courseid' => $courseid]),
                 get_string('navlog', 'block_xp')
             );
             $tabs[] = new tabobject(
                 'levels',
-                new moodle_url('/blocks/xp/levels.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('levels', ['courseid' => $courseid]),
                 get_string('navlevels', 'block_xp')
             );
             $tabs[] = new tabobject(
                 'rules',
-                new moodle_url('/blocks/xp/rules.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('rules', ['courseid' => $courseid]),
                 get_string('navrules', 'block_xp')
             );
             $tabs[] = new tabobject(
                 'visuals',
-                new moodle_url('/blocks/xp/visuals.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('visuals', ['courseid' => $courseid]),
                 get_string('navvisuals', 'block_xp')
             );
             $tabs[] = new tabobject(
                 'config',
-                new moodle_url('/blocks/xp/config.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('config', ['courseid' => $courseid]),
                 get_string('navsettings', 'block_xp')
             );
         }

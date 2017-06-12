@@ -22,8 +22,16 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\output;
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
+
+use context_helper;
+use stdClass;
+use table_sql;
+use user_picture;
+use block_xp\local\manager;
 
 /**
  * Block XP ladder table class.
@@ -32,15 +40,15 @@ require_once($CFG->libdir . '/tablelib.php');
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_ladder_table extends table_sql {
+class ladder_table extends table_sql {
 
     /** @var string The key of the user ID column. */
     public $useridfield = 'userid';
 
-    /** @var block_xp_manager XP Manager. */
+    /** @var manager XP Manager. */
     protected $xpmanager = null;
 
-    /** @var block_xp_manager XP Manager. */
+    /** @var block_xp_renderer XP Renderer. */
     protected $xpoutput = null;
 
     /** @var int The user ID we're viewing the ladder for. */
@@ -50,7 +58,7 @@ class block_xp_ladder_table extends table_sql {
     protected $currentuserrecord;
 
     /** @var int The identity mode. */
-    protected $identitymode = block_xp_manager::IDENTITY_ON;
+    protected $identitymode = manager::IDENTITY_ON;
 
     /** @var boolean Only show neighbours. */
     protected $neighboursonly = false;
@@ -62,7 +70,7 @@ class block_xp_ladder_table extends table_sql {
     protected $neighboursbelow = 3;
 
     /** @var int The rank mode. */
-    protected $rankmode = block_xp_manager::RANK_ON;
+    protected $rankmode = manager::RANK_ON;
 
     /** @var int The level we're starting from to compute the rank. */
     protected $startinglevel;
@@ -80,7 +88,7 @@ class block_xp_ladder_table extends table_sql {
     protected $startingxpdiff;
 
     /** @var array The fields found in the XP table. */
-    public static $xpfields = array('id', 'courseid', 'userid', 'xp', 'lvl');
+    public static $xpfields = ['id', 'courseid', 'userid', 'xp', 'lvl'];
 
     /**
      * Constructor.
@@ -89,7 +97,7 @@ class block_xp_ladder_table extends table_sql {
      * @param int $courseid Course ID.
      * @param int $groupid Group ID.
      */
-    public function __construct($uniqueid, $courseid, $groupid, array $options = array(), $userid = null) {
+    public function __construct($uniqueid, $courseid, $groupid, array $options = [], $userid = null) {
         global $PAGE, $USER;
         parent::__construct($uniqueid);
 
@@ -116,15 +124,15 @@ class block_xp_ladder_table extends table_sql {
         $this->userid = $userid;
 
         // Block XP stuff.
-        $this->xpmanager = block_xp_manager::get($courseid);
-        $this->xpoutput = $PAGE->get_renderer('block_xp');
+        $this->xpmanager = \block_xp\di::get('manager_factory')->get_manager($courseid);
+        $this->xpoutput = \block_xp\di::get('renderer');
 
         // Define columns, and headers.
-        $columns = array();
-        $headers = array();
-        if ($this->rankmode != block_xp_manager::RANK_OFF) {
+        $columns = [];
+        $headers = [];
+        if ($this->rankmode != manager::RANK_OFF) {
             $columns += array('rank');
-            if ($this->rankmode == block_xp_manager::RANK_REL) {
+            if ($this->rankmode == manager::RANK_REL) {
                 $headers += array(get_string('difference', 'block_xp'));
             } else {
                 $headers += array(get_string('rank', 'block_xp'));
@@ -149,7 +157,7 @@ class block_xp_ladder_table extends table_sql {
 
         // Define SQL.
         $sqlfrom = '';
-        $sqlparams = array();
+        $sqlparams = [];
         if ($groupid) {
             $sqlfrom = '{block_xp} x
                      JOIN {groups_members} gm
@@ -204,7 +212,7 @@ class block_xp_ladder_table extends table_sql {
                 // Preload the context.
                 context_helper::preload_from_record($row);
 
-                if ($this->rankmode == block_xp_manager::RANK_ON) {
+                if ($this->rankmode == manager::RANK_ON) {
                     // Show the real rank.
 
                     // If this row is different than the previous one.
@@ -218,7 +226,7 @@ class block_xp_ladder_table extends table_sql {
                     }
                     $row->rank = $rank;
 
-                } else if ($this->rankmode == block_xp_manager::RANK_REL) {
+                } else if ($this->rankmode == manager::RANK_REL) {
                     // Show a "relative" rank, the difference between a student and another.
 
                     // There was no indication of what XP to diff with, let's take the first entry.
@@ -249,7 +257,7 @@ class block_xp_ladder_table extends table_sql {
      * @return string Output produced.
      */
     public function col_fullname($row) {
-        if ($this->identitymode == block_xp_manager::IDENTITY_OFF && $row->userid != $this->userid) {
+        if ($this->identitymode == manager::IDENTITY_OFF && $row->userid != $this->userid) {
             return get_string('someoneelse', 'block_xp');
         }
         return parent::col_fullname($row);
@@ -278,7 +286,7 @@ class block_xp_ladder_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_rank($row) {
-        if ($this->rankmode == block_xp_manager::RANK_REL && $row->rank > 0) {
+        if ($this->rankmode == manager::RANK_REL && $row->rank > 0) {
             return '+' . $row->rank;
         }
         return $row->rank;
@@ -291,17 +299,17 @@ class block_xp_ladder_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_userpic($row) {
-        global $CFG, $OUTPUT;
+        global $CFG;
 
-        if ($this->identitymode == block_xp_manager::IDENTITY_OFF && $this->userid != $row->userid) {
+        if ($this->identitymode == manager::IDENTITY_OFF && $this->userid != $row->userid) {
             static $guestuser = null;
             if ($guestuser === null) {
                 $guestuser = guest_user();
             }
-            return $OUTPUT->user_picture($guestuser, array('link' => false, 'alttext' => false));
+            return $this->xpoutput->user_picture($guestuser, array('link' => false, 'alttext' => false));
         }
 
-        return $OUTPUT->user_picture(user_picture::unalias($row, null, 'userid'));
+        return $this->xpoutput->user_picture(user_picture::unalias($row, null, 'userid'));
     }
 
     /**
@@ -318,7 +326,7 @@ class block_xp_ladder_table extends table_sql {
         $this->startingoffset = 1;
         $this->startingxpdiff = -1;
 
-        if ($this->rankmode == block_xp_manager::RANK_ON && !empty($this->rawdata)) {
+        if ($this->rankmode == manager::RANK_ON && !empty($this->rawdata)) {
             // Guess the starting rank.
             $record = reset($this->rawdata);
             $sql = "SELECT COUNT(x.id)
@@ -340,7 +348,7 @@ class block_xp_ladder_table extends table_sql {
             $this->startinglevel = $record->lvl;
             $this->startingxp = $record->xp;
 
-        } else if ($this->rankmode == block_xp_manager::RANK_REL) {
+        } else if ($this->rankmode == manager::RANK_REL) {
             // When relative, set self XP as difference.
             $record = $this->get_user_record($this->userid);
             if ($record) {
@@ -391,7 +399,7 @@ class block_xp_ladder_table extends table_sql {
      * @return array column => SORT_ constant.
      */
     public function get_sort_columns() {
-        return array('x.lvl' => SORT_DESC, 'x.xp' => SORT_DESC, 'x.id' => SORT_ASC);
+        return ['x.lvl' => SORT_DESC, 'x.xp' => SORT_DESC, 'x.id' => SORT_ASC];
     }
 
     /**
@@ -489,7 +497,7 @@ class block_xp_ladder_table extends table_sql {
         // First fetch self.
         $me = $this->get_user_record($userid);
         if (!$me) {
-            $this->rawdata = array();
+            $this->rawdata = [];
             return;
         }
 
@@ -512,7 +520,7 @@ class block_xp_ladder_table extends table_sql {
                          OR (x.xp = :neighxpeq AND x.id > :neighid))
                       ORDER BY x.xp DESC, x.id ASC";
 
-        $records = array();
+        $records = [];
         $above = $DB->get_records_sql($sqlabove, $params, 0, $abovecount);
         foreach ($above as $record) {
             array_unshift($records, $record);

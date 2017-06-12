@@ -15,23 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Block XP manager.
+ * Block XP observer.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local\observer;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Block XP helper class.
+ * Block XP observer class.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_helper {
+class observer {
 
     /**
      * Act when a course is deleted.
@@ -55,12 +56,12 @@ class block_xp_helper {
     }
 
     /**
-     * Observe the events, and dispatch them if necessary.
+     * Observe all events.
      *
      * @param \core\event\base $event The event.
      * @return void
      */
-    public static function observer(\core\event\base $event) {
+    public static function catch_all(\core\event\base $event) {
         global $CFG;
 
         static $allowedcontexts = null;
@@ -94,7 +95,7 @@ class block_xp_helper {
             $pleaselinter = true;
         } else {
             // Keep the event, and proceed.
-            $manager = block_xp_manager::get($event->courseid);
+            $manager = \block_xp\dr::get()->get_manager($event->courseid);
             $manager->capture_event($event);
         }
 

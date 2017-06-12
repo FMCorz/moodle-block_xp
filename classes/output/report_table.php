@@ -22,8 +22,19 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\output;
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
+
+use context_course;
+use context_helper;
+use html_writer;
+use moodle_url;
+use pix_icon;
+use stdClass;
+use table_sql;
+use user_picture;
 
 /**
  * Block XP report table class.
@@ -32,7 +43,7 @@ require_once($CFG->libdir . '/tablelib.php');
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_report_table extends table_sql {
+class report_table extends table_sql {
 
     /** @var string The key of the user ID column. */
     public $useridfield = 'id';
@@ -55,8 +66,9 @@ class block_xp_report_table extends table_sql {
         parent::__construct($uniqueid);
 
         // Block XP stuff.
-        $this->xpmanager = block_xp_manager::get($courseid);
-        $this->xpoutput = $PAGE->get_renderer('block_xp');
+        $this->xpmanager = \block_xp\di::get('manager_factory')->get_manager($courseid);
+        $this->xpoutput = \block_xp\di::get('renderer');
+        $this->urlresolver = \block_xp\di::get('url_resolver');
         $context = context_course::instance($courseid);
 
         // Define columns.
@@ -78,7 +90,7 @@ class block_xp_report_table extends table_sql {
         ));
 
         // Get all the users that are enrolled and can earn XP.
-        $ids = array();
+        $ids = [];
         $users = get_enrolled_users($context, 'block/xp:earnxp', $groupid);
         foreach ($users as $user) {
             $ids[$user->id] = $user->id;
@@ -137,13 +149,12 @@ class block_xp_report_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_actions($row) {
-        global $OUTPUT;
-        $url = new moodle_url('/blocks/xp/report.php', array(
-            'courseid' => $this->xpmanager->get_courseid(),
+        $url = new moodle_url($this->baseurl);
+        $url->params([
             'action' => 'edit',
             'userid' => $row->id
-        ));
-        return $OUTPUT->action_icon($url, new pix_icon('t/edit', get_string('edit')));
+        ]);
+        return $this->xpoutput->action_icon($url, new pix_icon('t/edit', get_string('edit')));
     }
 
     /**
@@ -165,7 +176,7 @@ class block_xp_report_table extends table_sql {
     protected function col_progress($row) {
         static $fields = null;
         if ($fields === null) {
-            $fields = array_flip(block_xp_ladder_table::$xpfields);
+            $fields = array_flip(\block_xp\output\ladder_table::$xpfields);
         }
 
         $record = (object) array_intersect_key((array) $row, $fields);
@@ -190,9 +201,8 @@ class block_xp_report_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_userpic($row) {
-        global $OUTPUT;
         context_helper::preload_from_record($row);
-        return $OUTPUT->user_picture($row);
+        return $this->xpoutput->user_picture($row);
     }
 
     /**
@@ -204,8 +214,8 @@ class block_xp_report_table extends table_sql {
      * @param array $textsortcols The text columns.
      * @return string
      */
-    public static function construct_order_by($cols, $textsortcols = array()) {
-        $newcols = array();
+    public static function construct_order_by($cols, $textsortcols = []) {
+        $newcols = [];
 
         // We use a foreach to maintain the order in which the fields were defined.
         foreach ($cols as $field => $sortorder) {
@@ -226,6 +236,6 @@ class block_xp_report_table extends table_sql {
      * @return string
      */
     public function get_sql_sort() {
-        return static::construct_order_by($this->get_sort_columns(), array());
+        return static::construct_order_by($this->get_sort_columns(), []);
     }
 }

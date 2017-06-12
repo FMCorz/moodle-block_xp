@@ -15,35 +15,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Block XP settings form.
+ * Block XP config form.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+namespace block_xp\form;
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
+use block_xp\local\manager;
+use moodleform;
+
 /**
- * Block XP settings form class.
+ * Block XP config form class.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_settings_form extends moodleform {
+class config extends moodleform {
 
     /**
-     * Form definintion.
+     * Form definition.
      *
      * @return void
      */
     public function definition() {
         $mform = $this->_form;
         $mform->setDisableShortforms(true);
-
-        $defaultconfig = $this->_customdata['defaultconfig'];
 
         $mform->addElement('header', 'hdrgeneral', get_string('general'));
 
@@ -62,8 +65,8 @@ class block_xp_settings_form extends moodleform {
         $mform->addHelpButton('enableladder', 'enableladder', 'block_xp');
 
         $mform->addElement('select', 'identitymode', get_string('anonymity', 'block_xp'), array(
-            block_xp_manager::IDENTITY_OFF => get_string('hideparticipantsidentity', 'block_xp'),
-            block_xp_manager::IDENTITY_ON => get_string('displayparticipantsidentity', 'block_xp'),
+            manager::IDENTITY_OFF => get_string('hideparticipantsidentity', 'block_xp'),
+            manager::IDENTITY_ON => get_string('displayparticipantsidentity', 'block_xp'),
         ));
         $mform->addHelpButton('identitymode', 'anonymity', 'block_xp');
         $mform->disabledIf('identitymode', 'enableladder', 'eq', 0);
@@ -80,9 +83,9 @@ class block_xp_settings_form extends moodleform {
         $mform->disabledIf('neighbours', 'enableladder', 'eq', 0);
 
         $mform->addElement('select', 'rankmode', get_string('ranking', 'block_xp'), array(
-            block_xp_manager::RANK_OFF => get_string('hiderank', 'block_xp'),
-            block_xp_manager::RANK_ON => get_string('displayrank', 'block_xp'),
-            block_xp_manager::RANK_REL => get_string('displayrelativerank', 'block_xp'),
+            manager::RANK_OFF => get_string('hiderank', 'block_xp'),
+            manager::RANK_ON => get_string('displayrank', 'block_xp'),
+            manager::RANK_REL => get_string('displayrelativerank', 'block_xp'),
         ));
         $mform->addHelpButton('rankmode', 'ranking', 'block_xp');
         $mform->disabledIf('rankmode', 'enableladder', 'eq', 0);

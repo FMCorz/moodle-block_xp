@@ -15,17 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Block XP event rules.
+ * Filter manager factory interface.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since 3.0.0, will be removed in 3.2.0
  */
 
-require(__DIR__ . '/../../config.php');
+namespace block_xp\local\factory;
+defined('MOODLE_INTERNAL') || die();
 
-$courseid = required_param('courseid', PARAM_INT);
-$PAGE->set_url('/blocks/xp/rules.php', ['courseid' => $courseid]);
-debugging(get_string('urlaccessdeprecated', 'block_xp'), DEBUG_DEVELOPER);
-redirect(\block_xp\di::get('url_resolver')->reverse('rules', ['courseid' => $courseid]));
+/**
+ * Filter manager factory interface.
+ *
+ * @package    block_xp
+ * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface filter_manager_factory {
+
+    /**
+     * Get the filter manager.
+     *
+     * @param block_xp\local\manager_interface $manager The manager.
+     * @return block_xp\local\filter_manager_interface;
+     */
+    public function get_filter_manager(\block_xp\local\manager_interface $manager);
+
+}

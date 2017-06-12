@@ -55,7 +55,7 @@ class block_xp extends block_base {
         global $DB;
         $courseids = $DB->get_fieldset_sql('SELECT DISTINCT(courseid) FROM {block_xp}', array());
         foreach ($courseids as $courseid) {
-            $manager = block_xp_manager::get($courseid);
+            $manager = $this->get_manager($courseid);
             $manager->purge_log();
         }
         return true;
@@ -86,7 +86,7 @@ class block_xp extends block_base {
      */
     public function instance_create() {
         // Enable the capture of events for that course.
-        $manager = block_xp_manager::get($this->page->course->id);
+        $manager = $this->get_manager($this->page->course->id);
         $manager->update_config((object) array('enabled' => true));
         return true;
     }
@@ -98,7 +98,7 @@ class block_xp extends block_base {
      */
     public function instance_delete() {
         // It's bad, but here we assume there is only one block per course.
-        $manager = block_xp_manager::get($this->page->course->id);
+        $manager = $this->get_manager($this->page->course->id);
         $manager->update_config((object) array('enabled' => false));
         return true;
     }
@@ -119,7 +119,7 @@ class block_xp extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        $manager = block_xp_manager::get($this->page->course->id);
+        $manager = $this->get_manager($this->page->course->id);
 
         $canview = $manager->can_view();
         $canedit = $manager->can_manage();
@@ -174,6 +174,16 @@ class block_xp extends block_base {
         }
 
         return $this->content;
+    }
+
+    /**
+     * Get the manager.
+     *
+     * @param int $courseid The course ID.
+     * @return \block_xp\local\manager_interface The manager.
+     */
+    protected function get_manager($courseid) {
+        return \block_xp\di::get('manager_factory')->get_manager($courseid);
     }
 
     /**
