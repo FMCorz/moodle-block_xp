@@ -61,15 +61,17 @@ class router {
      * @return void
      */
     public function dispatch() {
-        $url = $this->urlresolver->get_route_url();
-        list($route, $params) = $this->urlresolver->match($url);
+        $uri = $this->urlresolver->get_route_url();
+        $route = $this->urlresolver->match($uri);
 
         if (!$route) {
-            throw new moodle_exception('Unknown route: ' . $url);
+            throw new moodle_exception('Unknown route: ' . $uri);
         }
 
         $method = isset($_SERVER['REQUEST_METHOD']) ? strtoupper($_SERVER['REQUEST_METHOD']) : 'GET';
-        $request = new request($url, $params, $route, $method);
+        $url = $this->urlresolver->reverse($route->get_definition()->get_name(), $route->get_params());
+        $request = new routed_request($method, $url, $route);
+
         $this->defer_to_controller($request);
     }
 
@@ -81,7 +83,7 @@ class router {
      */
     protected function defer_to_controller(request $request) {
         $controller = $this->get_controller_from_request($request);
-        $controller->handle();
+        $controller->handle($request);
     }
 
     /**
@@ -92,14 +94,14 @@ class router {
      */
     protected function get_controller_from_request(request $request) {
         $route = $request->get_route();
-        $name = $route['controller'];
+        $name = $route->get_definition()->get_controller_name();
         $class = "block_xp\\local\\controller\\{$name}_controller";
 
         if (!class_exists($class)) {
             throw new coding_exception('Controller for route not found.');
         }
 
-        return new $class($request);
+        return new $class();
     }
 
 }

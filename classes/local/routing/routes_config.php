@@ -38,27 +38,14 @@ interface routes_config {
      * Get a route.
      *
      * @param string $name The route name.
-     * @return array
+     * @return route_definition
      */
     public function get_route($name);
 
     /**
      * Return an array of routes.
      *
-     * The keys are the route names.
-     *
-     * Each route in the array should contain the following:
-     *
-     * - url (string) The URL to the page, with placeholders (:name).
-     * - regex (string) The regex the route should match.
-     * - controller (string) The name of the controller.
-     *
-     * Additionally, routes can contain the following:
-     *
-     * - mapping (array) An array where the keys are the group numbers from the
-     *                   regex argument, and the values are the parameter names.
-     *
-     * @return array
+     * @return route_definition[]
      */
     public function get_routes();
 

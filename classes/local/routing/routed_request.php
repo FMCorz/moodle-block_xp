@@ -15,31 +15,72 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Controller interface.
+ * Routed request.
  *
  * @package    block_xp
  * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local\controller;
+namespace block_xp\local\routing;
 defined('MOODLE_INTERNAL') || die();
 
+use moodle_url;
+
 /**
- * Controller interface.
+ * Routed request.
  *
  * @package    block_xp
  * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface controller {
+class routed_request implements request {
+
+    /** @var moodle_url The URL. */
+    protected $url;
+    /** @var route The route. */
+    protected $route;
+    /** @var string The HTTP method. */
+    protected $method;
 
     /**
-     * Handle the request.
+     * Constructor.
      *
-     * @param \block_xp\local\routing\request $request The request object.
-     * @return void
+     * @param string $method The HTTP method.
+     * @param moodle_url $url The full URL.
+     * @param route $route The route.
      */
-    public function handle(\block_xp\local\routing\request $request);
+    public function __construct($method, moodle_url $url, route $route) {
+        $this->method = $method;
+        $this->url = $url;
+        $this->route = $route;
+    }
+
+    /**
+     * Get method.
+     *
+     * @return string
+     */
+    public function get_method() {
+        return $this->method;
+    }
+
+    /**
+     * Get route.
+     *
+     * @return route
+     */
+    public function get_route() {
+        return $this->route;
+    }
+
+    /**
+     * Get URL.
+     *
+     * @return moodle_url
+     */
+    public function get_url() {
+        return $this->url;
+    }
 
 }

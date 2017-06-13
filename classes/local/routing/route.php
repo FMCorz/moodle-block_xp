@@ -15,37 +15,61 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Observer rules maker.
+ * Route.
  *
  * @package    block_xp
  * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local\observer;
+namespace block_xp\local\routing;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Observer rules maker class.
+ * Route.
  *
  * @package    block_xp
  * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class std_observer_rules_maker implements observer_rules_maker {
+class route {
 
-    public function get_observer_rules() {
-        return [
-            [
-                'eventname' => '*',
-                'callback' => 'block_xp\\local\\observer\\observer::catch_all',
-                'internal' => false
-            ],
-            [
-                'eventname' => '\\core\\event\\course_deleted',
-                'callback' => 'block_xp\\local\\observer\\observer::course_deleted'
-            ]
-        ];
+    /** @var route_definition Route definition. */
+    protected $definition;
+
+    /** @var array Paramters. */
+    protected $params;
+
+    /**
+     * Constructor.
+     *
+     * @param route_definition $definition The definition this is based on.
+     * @param array $params The parameters.
+     */
+    public function __construct(route_definition $definition, array $params = []) {
+        $this->definition = $definition;
+        $this->params = $params;
+    }
+
+    /**
+     * Get the definition this is based on.
+     *
+     * @return route_definition
+     */
+    public function get_definition() {
+        return $this->definition;
+    }
+
+    /**
+     * Get the route params.
+     *
+     * Typically the parameters which were extracted from
+     * the route definition from a request.
+     *
+     * @return array
+     */
+    public function get_params() {
+        return $this->params;
     }
 
 }

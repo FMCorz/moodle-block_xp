@@ -49,7 +49,7 @@ interface url_resolver {
      * Match a given route URL with the routes.
      *
      * @param string $uri A route URL.
-     * @return array With the route, and its parameters. The route is null when not found.
+     * @return route|null
      */
     public function match($uri);
 

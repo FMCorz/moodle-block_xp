@@ -35,7 +35,7 @@ use moodle_url;
  * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class std_url_resolver implements url_resolver {
+class default_url_resolver implements url_resolver {
 
     /** The GET argument for routing without $CFG->slasharguments. */
     const ROUTE_GET_PARAM = '_r';
@@ -113,33 +113,34 @@ class std_url_resolver implements url_resolver {
      * Match a given route URL with the routes.
      *
      * @param string $uri A route URL.
-     * @return array With the route, and its parameters.
+     * @return route|null
      */
     public function match($uri) {
         $route = null;
 
         foreach ($this->routesconfig->get_routes() as $candidate) {
             $matches = null;
-            if (preg_match($candidate['regex'], $uri, $matches)) {
+            if (preg_match($candidate->get_regex(), $uri, $matches)) {
                 $route = $candidate;
                 break;
             }
         }
 
         if (!$route) {
-            return [null, []];
+            return null;
         }
 
         $params = [];
-        if (count($matches) > 0 && !empty($route['mapping'])) {
+        $mapping = $route->get_mapping();
+        if (count($matches) > 0 && !empty($mapping)) {
             foreach ($matches as $key => $match) {
-                if (isset($route['mapping'][$key])) {
-                    $params[$route['mapping'][$key]] = $match;
+                if (isset($mapping[$key])) {
+                    $params[$mapping[$key]] = $match;
                 }
             }
         }
 
-        return [$route, $params];
+        return new route($route, $params);
     }
 
     /**
@@ -154,8 +155,8 @@ class std_url_resolver implements url_resolver {
      */
     public function reverse($name, array $params = []) {
         $route = $this->routesconfig->get_route($name);
-        $url = $route['url'];
-        $mapping = isset($route['mapping']) ? $route['mapping'] : [];
+        $url = $route->get_url();
+        $mapping = $route->get_mapping();
 
         if (count($params) != count($mapping)) {
             throw new coding_exception('Could not reverse the route: ' . $name);

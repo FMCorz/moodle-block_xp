@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Base controller.
+ * Route controller.
  *
  * @package    block_xp
  * @copyright  2017 Frédéric Massart - FMCorz.net
@@ -30,13 +30,13 @@ use moodle_exception;
 use moodle_url;
 
 /**
- * Base controller class.
+ * Route controller class.
  *
  * @package    block_xp
  * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class base_controller implements controller {
+abstract class route_controller implements controller {
 
     /** @var context The context of the page. */
     protected $context;
@@ -53,22 +53,17 @@ abstract class base_controller implements controller {
 
     /** @var array The combined request and optional parameters. */
     private $params;
+    /** @var array The optional parameters. */
+    private $optionalparams;
 
     /**
-     * Constructor.
+     * Define the page url.
      *
-     * @param \block_xp\local\routing\request $request The request.
+     * @return void
      */
-    final public function __construct(\block_xp\local\routing\request $request) {
-        $this->request = $request;
-
-        $queryparams = $this->get_optional_params();
-        $this->params = $request->get_params() + $queryparams;
-
-        // TODO Change this thing! We should not imply the get parameter here.
-        $url = new moodle_url(\block_xp\di::get('base_url'), $queryparams);
-        $url->set_slashargument($request->get_uri(), 'r');
-        $this->pageurl = $url;
+    protected function define_pageurl() {
+        $this->pageurl = new moodle_url($this->request->get_url());
+        $this->pageurl->params($this->optionalparams);
     }
 
     /**
@@ -146,6 +141,16 @@ abstract class base_controller implements controller {
     }
 
     /**
+     * Collect the parameters.
+     *
+     * @return void
+     */
+    final private function collect_params() {
+        $this->collect_optional_params();
+        $this->params = $this->request->get_route()->get_params() + $this->optionalparams;
+    }
+
+    /**
      * The optional params expected.
      *
      * Using this format:
@@ -167,8 +172,8 @@ abstract class base_controller implements controller {
      *
      * @return array
      */
-    final protected function get_optional_params() {
-        return array_reduce($this->define_optional_params(), function($carry, $data) {
+    final private function collect_optional_params() {
+        $this->optionalparams = array_reduce($this->define_optional_params(), function($carry, $data) {
             $carry[$data[0]] = optional_param($data[0], $data[1], $data[2]);
             return $carry;
         }, []);
@@ -204,9 +209,16 @@ abstract class base_controller implements controller {
     /**
      * Handle the request.
      *
+     * @param \block_xp\local\routing\routed_request $request The request.
      * @return void
      */
-    final public function handle() {
+    final public function handle(\block_xp\local\routing\request $request) {
+        if (!$request instanceof \block_xp\local\routing\routed_request) {
+            throw new coding_exception('Routed request must be used here...');
+        }
+        $this->request = $request;
+        $this->collect_params();
+        $this->define_pageurl();
         $this->require_login();
         $this->post_login();
         $this->permissions_checks();

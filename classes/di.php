@@ -61,7 +61,7 @@ class di {
         if (class_exists('local_xp\local\container')) {
             $container = new \local_xp\local\container();
         } else {
-            $container = new \block_xp\local\std_container();
+            $container = new \block_xp\local\default_container();
         }
         return $container;
     }

@@ -35,7 +35,7 @@ use moodle_url;
  * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class std_container implements container {
+class default_container implements container {
 
     /** @var array The objects supported by this container. */
     protected static $supports = [
@@ -91,7 +91,7 @@ class std_container implements container {
     }
 
     protected function get_observer_rules_maker() {
-        return new \block_xp\local\observer\std_observer_rules_maker();
+        return new \block_xp\local\observer\default_observer_rules_maker();
     }
 
     protected function get_renderer() {
@@ -106,11 +106,11 @@ class std_container implements container {
     }
 
     protected function get_routes_config() {
-        return new \block_xp\local\routing\std_routes_config();
+        return new \block_xp\local\routing\default_routes_config();
     }
 
     protected function get_url_resolver() {
-        return new \block_xp\local\routing\std_url_resolver(
+        return new \block_xp\local\routing\default_url_resolver(
             $this->get('base_url'),
             $this->get('routes_config')
         );

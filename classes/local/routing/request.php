@@ -32,34 +32,23 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class request {
+interface request {
 
-    protected $uri;
-    protected $params;
-    protected $route;
-    protected $method;
+    /**
+     * Return the HTTP method.
+     *
+     * @return string
+     */
+    public function get_method();
 
-    public function __construct($uri, array $params, $route, $method) {
-        $this->uri = $uri;
-        $this->params = $params;
-        $this->route = $route;
-        $this->method = $method;
-    }
-
-    public function get_method() {
-        return $this->method;
-    }
-
-    public function get_params() {
-        return $this->params;
-    }
-
-    public function get_route() {
-        return $this->route;
-    }
-
-    public function get_uri() {
-        return $this->uri;
-    }
+    /**
+     * The URL leading to this request.
+     *
+     * This URL disregards any form of routing, it is the full URL
+     * which lead to this request being created.
+     *
+     * @return moodle_url
+     */
+    public function get_url();
 
 }

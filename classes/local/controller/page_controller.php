@@ -38,7 +38,7 @@ use moodle_exception;
  * @copyright  2017 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class page_controller extends base_controller {
+abstract class page_controller extends route_controller {
 
     /** @var string The route name. */
     protected $routename = null;
