@@ -62,43 +62,10 @@ class observer {
      * @return void
      */
     public static function catch_all(\core\event\base $event) {
-        global $CFG;
-
-        static $allowedcontexts = null;
-        if ($allowedcontexts === null) {
-            $allowedcontexts = array(CONTEXT_COURSE, CONTEXT_MODULE);
-            if (isset($CFG->block_xp_context) && $CFG->block_xp_context == CONTEXT_SYSTEM) {
-                $allowedcontexts[] = CONTEXT_SYSTEM;
-            }
+        $cs = \block_xp\di::get('collection_strategy');
+        if ($cs instanceof \block_xp\local\strategy\event_collection_strategy) {
+            $cs->collect_event($event);
         }
-
-        // We can't use empty if statements...
-        $pleaselinter = false;
-
-        if ($event->component === 'block_xp') {
-            // Skip own events.
-            $pleaselinter = true;
-        } else if (!$event->userid || isguestuser($event->userid) || is_siteadmin($event->userid)) {
-            // Skip non-logged in users and guests.
-            $pleaselinter = true;
-        } else if ($event->anonymous) {
-            // Skip all the events marked as anonymous.
-            $pleaselinter = true;
-        } else if (!in_array($event->contextlevel, $allowedcontexts)) {
-            // Ignore events that are not in the right context.
-            $pleaselinter = true;
-        } else if ($event->edulevel !== \core\event\base::LEVEL_PARTICIPATING) {
-            // Ignore events that are not participating.
-            $pleaselinter = true;
-        } else if (!has_capability('block/xp:earnxp', $event->get_context(), $event->userid)) {
-            // Skip the events if the user does not have the capability to earn XP.
-            $pleaselinter = true;
-        } else {
-            // Keep the event, and proceed.
-            $manager = \block_xp\dr::get()->get_manager($event->courseid);
-            $manager->capture_event($event);
-        }
-
     }
 
 }

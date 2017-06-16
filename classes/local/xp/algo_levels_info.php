@@ -18,23 +18,26 @@
  * Levels.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local;
+namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
+use context;
 
 /**
- * Levels class.
+ * Levels with algorithm computation support.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class levels implements levels_interface {
+class algo_levels_info implements levels_info {
 
     /** Default number of levels. */
     const DEFAULT_COUNT = 10;
@@ -45,7 +48,7 @@ class levels implements levels_interface {
 
     /** @var int Number of levels. */
     protected $count;
-    /** @var level_interface[] The levels. */
+    /** @var level[] The levels. */
     protected $levels;
     /** @var int Base XP */
     protected $base;
@@ -58,12 +61,18 @@ class levels implements levels_interface {
      * Constructor.
      *
      * @param array $data Array containing both keys 'xp' and 'desc'. Indexes should start at 1.
+     * @param context $badgecontext The context of the badges, if any.
      */
-    public function __construct(array $data) {
-        $this->levels = array_reduce(array_keys($data['xp']), function($carry, $key) use ($data) {
+    public function __construct(array $data, context $badgecontext = null) {
+        $this->levels = array_reduce(array_keys($data['xp']), function($carry, $key) use ($data, $badgecontext) {
             $level = $key;
             $desc = isset($data['desc'][$key]) ? $data['desc'][$key] : null;
-            $carry[$level] = new level($level, $data['xp'][$key], $desc);
+            if (!$badgecontext) {
+                $obj = new described_level($level, $data['xp'][$key], $desc);
+            } else {
+                $obj = new badged_level($level, $data['xp'][$key], $desc, $badgecontext);
+            }
+            $carry[$level] = $obj;
             return $carry;
         }, []);
         $this->count = count($this->levels);
@@ -104,7 +113,7 @@ class levels implements levels_interface {
      * Get the level.
      *
      * @param int $level The level as a number.
-     * @return level_interface
+     * @return level
      */
     public function get_level($level) {
         if (!isset($this->levels[$level])) {
@@ -117,7 +126,7 @@ class levels implements levels_interface {
      * Get the level for a certain amount of experience points.
      *
      * @param int $xp The experience points.
-     * @return level_interface
+     * @return level
      */
     public function get_level_from_xp($xp) {
         for ($i = $this->get_count(); $i > 0; $i--) {
@@ -132,7 +141,7 @@ class levels implements levels_interface {
     /**
      * Get the levels.
      *
-     * @return level_interface[]
+     * @return level[]
      */
     public function get_levels() {
         return $this->levels;
@@ -152,7 +161,7 @@ class levels implements levels_interface {
      *
      * @return array
      */
-    public function jsonSerialize() {
+    public function jsonSerialize() { // @codingStandardsIgnoreLine.
         return [
             'xp' => array_map(function($level) {
                 return $level->get_xp_required();
@@ -169,16 +178,17 @@ class levels implements levels_interface {
     /**
      * Make levels from the defaults.
      *
+     * @param context $badgecontext The context of the badges, if any.
      * @return self
      */
-    public static function make_from_defaults() {
+    public static function make_from_defaults(context $badgecontext = null) {
         return new self([
             'usealgo' => true,
             'base' => self::DEFAULT_BASE,
             'coef' => self::DEFAULT_COEF,
             'xp' => self::get_xp_with_algo(self::DEFAULT_COUNT, self::DEFAULT_BASE, self::DEFAULT_COEF),
             'desc' => []
-        ]);
+        ], $badgecontext);
     }
 
     /**

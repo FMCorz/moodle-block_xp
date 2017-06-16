@@ -24,180 +24,38 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+// Well, well, well... what have we got here? An evil eval!
+// Don't you worry, this is safe! Yes, I know, it is very scary, but some
+// arbitrary code could not possibly be a valid class name, and a subclass
+// of block_base and still be an exploit.
+//
+// "OK, but why did you even do this Fred? Evals are evil!". Well, you see,
+// I need to be able to substitude the class responsible for setting up
+// the block, but as Moodle core is expecting a very specific class name, I
+// don't have other options than to dynamically create that class. I have
+// tried to find other solutions, but I didn't succeed. Let me know if you've
+// got a better idea!
+//
+// By the way, this is not the first eval in Moodle. Did you know that each
+// web service call triggers an eval? Check webservice::init_service_class().
+// The calculated question type also uses eval.
+$class = \block_xp\di::get('block_class');
+if (!class_exists($class) || !is_subclass_of($class, 'block_base')) {
+    throw new coding_exception('Block class does not pass validation, or does not exist.');
+}
+eval("class block_xp_block_class extends {$class} {}"); // @codingStandardsIgnoreLine.
+
 /**
  * Block XP class.
  *
+ * Typically we do not need to do this, but some automated checks want to
+ * make sure that we're creating the right class here. Adding this
+ * shows green instead of red, and nobody likes red.
+ *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp extends block_base {
-
-    /**
-     * Applicable formats.
-     *
-     * @return array
-     */
-    public function applicable_formats() {
-        global $CFG;
-        if (isset($CFG->block_xp_context) && $CFG->block_xp_context == CONTEXT_SYSTEM) {
-            return array('site' => true, 'course' => true, 'my' => true);
-        }
-        return array('course' => true);
-    }
-
-    /**
-     * Cron.
-     *
-     * @return void
-     */
-    public function cron() {
-        global $DB;
-        $courseids = $DB->get_fieldset_sql('SELECT DISTINCT(courseid) FROM {block_xp}', array());
-        foreach ($courseids as $courseid) {
-            $manager = $this->get_manager($courseid);
-            $manager->purge_log();
-        }
-        return true;
-    }
-
-    /**
-     * The plugin has a settings.php file.
-     *
-     * @return boolean True.
-     */
-    public function has_config() {
-        return true;
-    }
-
-    /**
-     * Init.
-     *
-     * @return void
-     */
-    public function init() {
-        $this->title = get_string('pluginname', 'block_xp');
-    }
-
-    /**
-     * Callback when a block is created.
-     *
-     * @return bool
-     */
-    public function instance_create() {
-        // Enable the capture of events for that course.
-        $manager = $this->get_manager($this->page->course->id);
-        $manager->update_config((object) array('enabled' => true));
-        return true;
-    }
-
-    /**
-     * Callback when a block is deleted.
-     *
-     * @return bool
-     */
-    public function instance_delete() {
-        // It's bad, but here we assume there is only one block per course.
-        $manager = $this->get_manager($this->page->course->id);
-        $manager->update_config((object) array('enabled' => false));
-        return true;
-    }
-
-    /**
-     * Get content.
-     *
-     * @return stdClass
-     */
-    public function get_content() {
-        global $DB, $PAGE, $USER;
-
-        if (isset($this->content)) {
-            return $this->content;
-        }
-
-        $this->content = new stdClass();
-        $this->content->text = '';
-        $this->content->footer = '';
-
-        $manager = $this->get_manager($this->page->course->id);
-
-        $canview = $manager->can_view();
-        $canedit = $manager->can_manage();
-
-        // Hide the block to non-logged in users, guests and those who cannot view the block.
-        if (!$USER->id || isguestuser() || !$canview) {
-            return $this->content;
-        }
-
-        $progress = $manager->get_progress_for_user($USER->id);
-        $renderer = $this->page->get_renderer('block_xp');
-        $currentlevelmethod = $manager->get_config('enablecustomlevelbadges') ? 'custom_current_level' : 'current_level';
-
-        $this->content->text = $renderer->$currentlevelmethod($progress);
-        $this->content->text .= $renderer->progress_bar($progress);
-        if (isset($this->config->description)) {
-            $this->content->text .= $renderer->description($this->config->description);
-        } else {
-            $this->content->text .= $renderer->description(get_string('participatetolevelup', 'block_xp'));
-        }
-
-        $this->content->footer .= $renderer->student_links($manager->get_courseid(),
-            $manager->can_view_ladder_page(), $manager->can_view_infos_page());
-
-        if ($canedit) {
-            $this->content->footer .= $renderer->admin_links($manager->get_courseid());
-            if (!$manager->get_config('enabled')) {
-                $this->content->footer .= html_writer::tag('p',
-                    html_writer::tag('small', get_string('xpgaindisabled', 'block_xp')), array('class' => 'alert alert-warning'));
-            }
-        }
-
-        // We should be congratulating the user because they leveled up!
-        // Also resets the flag. We could potentially do that from JS so that if the user does not
-        // stay on the page long enough they'd be notified the next time they access the course page,
-        // but that's probably an overkill for now.
-        if ($manager->has_levelled_up($USER->id)) {
-            $args = array(
-                'badge' => $renderer->$currentlevelmethod($progress),
-                'headline' => get_string('youreachedlevela', 'block_xp', $progress->level),
-                'level' => $progress->level,
-            );
-
-            $PAGE->requires->yui_module('moodle-block_xp-notification', 'Y.M.block_xp.Notification.init', array($args));
-            $PAGE->requires->strings_for_js(
-                array(
-                    'coolthanks',
-                    'congratulationsyouleveledup',
-                ),
-                'block_xp'
-            );
-        }
-
-        return $this->content;
-    }
-
-    /**
-     * Get the manager.
-     *
-     * @param int $courseid The course ID.
-     * @return \block_xp\local\manager_interface The manager.
-     */
-    protected function get_manager($courseid) {
-        return \block_xp\di::get('manager_factory')->get_manager($courseid);
-    }
-
-    /**
-     * Specialization.
-     *
-     * Happens right after the initialisation is complete.
-     *
-     * @return void
-     */
-    public function specialization() {
-        parent::specialization();
-        if (!empty($this->config->title)) {
-            $this->title = $this->config->title;
-        }
-    }
-
+class block_xp extends block_xp_block_class {
 }

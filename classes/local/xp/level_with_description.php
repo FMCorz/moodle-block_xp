@@ -15,31 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manager factory interface.
+ * Level with description interface.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local\factory;
+namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Manager factory interface.
+ * Level with description interface.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface manager_factory {
+interface level_with_description extends level {
 
     /**
-     * Get the manager.
+     * Get the description of the level.
      *
-     * @param int $courseid Course ID.
-     * @return block_xp\local\manager_interface;
+     * @return string
      */
-    public function get_manager($courseid);
+    public function get_description();
 
 }

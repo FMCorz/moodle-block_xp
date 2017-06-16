@@ -18,7 +18,8 @@
  * Levels controller.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +30,8 @@ defined('MOODLE_INTERNAL') || die();
  * Levels controller class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class levels_controller extends page_controller {
@@ -41,32 +43,37 @@ class levels_controller extends page_controller {
     protected $form;
 
     protected function pre_content() {
-        $manager = $this->manager;
-        $courseid = $this->manager->get_courseid();
+        $levelsinfo = $this->world->get_levels_info();
 
-        $this->form = new \block_xp\form\levels($this->pageurl->out(false), ['manager' => $manager]);
-        $form = $this->form;
-
-        $levelsinfo = $manager->get_levels_info();
+        $form = $this->get_form();
         $form->set_data_from_levels($levelsinfo);
-
         if ($newlevelsinfo = $form->get_levels_from_data()) {
             $data = [];
             if ($levelsinfo->get_count() != $newlevelsinfo->get_count()) {
                 // The number of levels have changed, we need to disable the custom badges.
                 $data['enablecustomlevelbadges'] = false;
             }
-            // This is ugly, but we basically convert the object to an array.
-            $data['levelsdata'] = $newlevelsinfo->jsonSerialize();
-            $manager->update_config($data);
-            $manager->recalculate_levels();
+            // Serialise and encode within the config object?
+            // Or better if the levels info can save itself?
+            $data['levelsdata'] = json_encode($newlevelsinfo->jsonSerialize());
+            $this->world->get_config()->set_many($data);
+            $this->world->get_store()->recalculate_levels();
             $this->redirect(
-                $this->urlresolver->reverse('infos', ['courseid' => $courseid]),
+                $this->urlresolver->reverse('infos', ['courseid' => $this->courseid]),
                 get_string('valuessaved', 'block_xp')
             );
         } else if ($form->is_cancelled()) {
-            $this->redirect($this->urlresolver->reverse('infos', ['courseid' => $courseid]));
+            $this->redirect($this->urlresolver->reverse('infos', ['courseid' => $this->courseid]));
         }
+    }
+
+    protected function get_form() {
+        if (!$this->form) {
+            $this->form = new \block_xp\form\levels_with_algo($this->pageurl->out(false), [
+                'config' => $this->world->get_config()
+            ]);
+        }
+        return $this->form;
     }
 
     protected function get_page_html_head_title() {
@@ -78,7 +85,7 @@ class levels_controller extends page_controller {
     }
 
     protected function page_content() {
-        $form = $this->form;
+        $form = $this->get_form();
         if ($form->is_submitted() && !$form->is_validated() && !$form->no_submit_button_pressed()) {
             echo $this->get_renderer()->notification(get_string('errorformvalues', 'block_xp'));
         }

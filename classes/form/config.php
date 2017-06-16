@@ -27,7 +27,7 @@ namespace block_xp\form;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
-use block_xp\local\manager;
+use block_xp\local\config\course_world_config;
 use moodleform;
 
 /**
@@ -65,8 +65,8 @@ class config extends moodleform {
         $mform->addHelpButton('enableladder', 'enableladder', 'block_xp');
 
         $mform->addElement('select', 'identitymode', get_string('anonymity', 'block_xp'), array(
-            manager::IDENTITY_OFF => get_string('hideparticipantsidentity', 'block_xp'),
-            manager::IDENTITY_ON => get_string('displayparticipantsidentity', 'block_xp'),
+            course_world_config::IDENTITY_OFF => get_string('hideparticipantsidentity', 'block_xp'),
+            course_world_config::IDENTITY_ON => get_string('displayparticipantsidentity', 'block_xp'),
         ));
         $mform->addHelpButton('identitymode', 'anonymity', 'block_xp');
         $mform->disabledIf('identitymode', 'enableladder', 'eq', 0);
@@ -83,9 +83,9 @@ class config extends moodleform {
         $mform->disabledIf('neighbours', 'enableladder', 'eq', 0);
 
         $mform->addElement('select', 'rankmode', get_string('ranking', 'block_xp'), array(
-            manager::RANK_OFF => get_string('hiderank', 'block_xp'),
-            manager::RANK_ON => get_string('displayrank', 'block_xp'),
-            manager::RANK_REL => get_string('displayrelativerank', 'block_xp'),
+            course_world_config::RANK_OFF => get_string('hiderank', 'block_xp'),
+            course_world_config::RANK_ON => get_string('displayrank', 'block_xp'),
+            course_world_config::RANK_REL => get_string('displayrelativerank', 'block_xp'),
         ));
         $mform->addHelpButton('rankmode', 'ranking', 'block_xp');
         $mform->disabledIf('rankmode', 'enableladder', 'eq', 0);
@@ -123,6 +123,21 @@ class config extends moodleform {
         $mform->addElement('select', 'keeplogs', get_string('keeplogs', 'block_xp'), $options);
 
         $this->add_action_buttons();
+    }
+
+    /**
+     * Get the data.
+     *
+     * @return stdClass
+     */
+    public function get_data() {
+        $data = parent::get_data();
+        if (!$data) {
+            return $data;
+        }
+
+        unset($data->submitbutton);
+        return $data;
     }
 
 }

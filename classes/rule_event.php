@@ -37,6 +37,8 @@ class block_xp_rule_event extends block_xp_rule_property {
 
     /**
      * Constructor.
+     *
+     * @param string $eventname The event name.
      */
     public function __construct($eventname = '') {
         parent::__construct(self::EQ, $eventname, 'eventname');

@@ -15,10 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Route controller.
+ * Course route controller.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,30 +28,35 @@ defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
 use moodle_exception;
-use moodle_url;
+use block_xp\local\routing\url;
 
 /**
- * Route controller class.
+ * Course route controller class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class route_controller implements controller {
+abstract class course_route_controller implements controller {
 
-    /** @var context The context of the page. */
-    protected $context;
-    /** @var \block_xp\local\manager_interface The manager. */
-    protected $manager;
+    /** @var stdClass The course. */
+    protected $course;
+    /** @var int The course ID. */
+    protected $courseid;
     /** @var \block_xp\local\request The request. */
     protected $request;
-    /** @var moodle_url The page URL, not relative to the router. */
+    /** @var url The page URL, not relative to the router. */
     protected $pageurl;
     /** @var renderer_base A renderer. */
     protected $renderer;
+    /** @var bool Whether the page supports groups. */
+    protected $supportsgroups = false;
     /** @var url_resolver URL resolver. */
     protected $urlresolver;
 
+    /** @var int The group ID. */
+    private $groupid;
     /** @var array The combined request and optional parameters. */
     private $params;
     /** @var array The optional parameters. */
@@ -62,8 +68,31 @@ abstract class route_controller implements controller {
      * @return void
      */
     protected function define_pageurl() {
-        $this->pageurl = new moodle_url($this->request->get_url());
-        $this->pageurl->params($this->optionalparams);
+        $paramsdef = array_reduce($this->define_optional_params(), function($carry, $item) {
+            if (isset($item[3]) && !$item[3]) {
+                // Do not return parameters which must not be in the URL.
+                return $carry;
+            }
+            $carry[$item[0]] = $item[1];
+            return $carry;
+        }, []);
+
+        $params = [];
+        foreach ($this->optionalparams as $param => $value) {
+            // Skip the ones which didn't make the cut.
+            if (!array_key_exists($param, $paramsdef)) {
+                continue;
+            }
+            // Skip arguments whose defaults values are the same.
+            if ($paramsdef[$param] == $value) {
+                continue;
+            }
+            // Finally, accept the parameter.
+            $params[$param] = $value;
+        }
+
+        $this->pageurl = new url($this->request->get_url());
+        $this->pageurl->params($params);
     }
 
     /**
@@ -72,10 +101,14 @@ abstract class route_controller implements controller {
      * @return void
      */
     protected function require_login() {
-        $courseid = $this->get_param('courseid');
+        global $CFG;
+
+        $courseid = intval($this->get_param('courseid'));
         if (!$courseid) {
             throw new coding_exception('Excepted a course ID parameter but got none.');
         }
+
+        $this->courseid = $courseid;
         require_login($courseid);
     }
 
@@ -87,8 +120,7 @@ abstract class route_controller implements controller {
      * @return void
      */
     protected function post_login() {
-        $this->manager = \block_xp\di::get('manager_factory')->get_manager($this->get_param('courseid'));
-        $this->context = $this->manager->get_context();
+        $this->world = \block_xp\di::get('course_world_factory')->get_world($this->courseid);
         $this->urlresolver = \block_xp\di::get('url_resolver');
     }
 
@@ -99,7 +131,7 @@ abstract class route_controller implements controller {
      */
     protected function page_setup() {
         global $PAGE;
-        $PAGE->set_context($this->context);
+        // Note that the context was set by require_login().
         $PAGE->set_url($this->pageurl);
         $PAGE->set_pagelayout($this->get_page_layout());
         $PAGE->set_title($this->get_page_html_head_title());
@@ -113,6 +145,30 @@ abstract class route_controller implements controller {
      * @return void
      */
     abstract protected function permissions_checks();
+
+    /**
+     * Whether the page supports groups.
+     *
+     * @return bool
+     */
+    protected function is_supporting_groups() {
+        return $this->supportsgroups;
+    }
+
+    /**
+     * Return the group ID.
+     *
+     * @return int|false False if groups are not used used, 0 for all groups, else group ID.
+     */
+    final protected function get_groupid() {
+        if (!$this->is_supporting_groups()) {
+            throw new coding_exception('This page is not marked as supporting groups.');
+        }
+        if ($this->groupid === null) {
+            $this->groupid = groups_get_course_group($this->get_course(), true);
+        }
+        return $this->groupid;
+    }
 
     /**
      * The page layout to use.
@@ -156,8 +212,15 @@ abstract class route_controller implements controller {
      * Using this format:
      * [
      *     ['paramname', $defaultvalue, PARAM_TYPE],
+     *     ['paramname2', $defaultvalue, PARAM_TYPE, $includeinurl],
      *     ...
      * ]
+     *
+     * The parameter $includeinurl is optional and defaults to true. When false,
+     * the value will not be added to the page URL, you can consider it as being
+     * dismissed when the user navigated to another page. Make sure to pass it
+     * around when you need it. It's useful for values such as 'confirm' which
+     * you would want to automatically remove from the page URL.
      *
      * @return array
      */
@@ -177,6 +240,21 @@ abstract class route_controller implements controller {
             $carry[$data[0]] = optional_param($data[0], $data[1], $data[2]);
             return $carry;
         }, []);
+    }
+
+    /**
+     * Get the course.
+     *
+     * @return stdClass
+     */
+    final protected function get_course() {
+        if (!$this->course) {
+            if (!$this->courseid) {
+                throw new coding_exception('Too early to request the course.');
+            }
+            $this->course = get_course($this->courseid, false);
+        }
+        return $this->course;
     }
 
     /**
@@ -256,6 +334,18 @@ abstract class route_controller implements controller {
     abstract protected function content();
 
     /**
+     * Print the group menu.
+     *
+     * @return string
+     */
+    protected function print_group_menu() {
+        if (!$this->is_supporting_groups()) {
+            throw new coding_exception('This page is not marked as supporting groups.');
+        }
+        echo groups_print_course_menu($this->get_course(), $this->pageurl->get_compatible_url());
+    }
+
+    /**
      * Finalise the output.
      *
      * @return void
@@ -267,11 +357,11 @@ abstract class route_controller implements controller {
     /**
      * Helper method to redirect.
      *
-     * @param moodle_url $url The URL to go to.
+     * @param url $url The URL to go to.
      * @param string $message The redirect message.
      * @return void
      */
-    final protected function redirect(moodle_url $url = null, $message = '') {
+    final protected function redirect(url $url = null, $message = '') {
         if ($url === null) {
             $url = $this->pageurl;
         }

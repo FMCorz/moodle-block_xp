@@ -15,10 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Levels info interface.
+ * World interface.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,42 +27,43 @@ namespace block_xp\local;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Levels info interface.
+ * World interface.
+ *
+ * The thing in which things are collecting experience.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface levels_interface extends \JsonSerializable {
+interface world {
 
     /**
-     * Get the number of levels.
+     * Get the access permissions.
      *
-     * @return int
+     * @return block_xp\local\permission\access_permissions
      */
-    public function get_count();
+    public function get_access_permissions();
 
     /**
-     * Get the level.
+     * Get the config.
      *
-     * @param int $level The level as a number.
-     * @return level_interface
+     * @return block_xp\local\config\config
      */
-    public function get_level($level);
+    public function get_config();
 
     /**
-     * Get the level for a certain amount of experience points.
+     * Return the collection strategy.
      *
-     * @param int $xp The experience points.
-     * @return level_interface
+     * @return block_xp\local\strategy\collection_strategy
      */
-    public function get_level_from_xp($xp);
+    public function get_collection_strategy();
 
     /**
-     * Get the levels.
+     * Get levels info.
      *
-     * @return level_interface[]
+     * @return block_xp\local\xp\levels_info
      */
-    public function get_levels();
+    public function get_levels_info();
 
 }

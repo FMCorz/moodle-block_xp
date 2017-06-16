@@ -15,60 +15,42 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Level.
+ * Block XP edit form.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local;
+namespace block_xp\form;
 defined('MOODLE_INTERNAL') || die();
 
+use block_edit_form;
+
 /**
- * Level class.
+ * Block XP edit form class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class level implements level_interface {
-
-    protected $level;
-    protected $xprequired;
-    protected $desc;
-
-    public function __construct($level, $xprequired, $desc) {
-        $this->level = $level;
-        $this->xprequired = $xprequired;
-        $this->desc = $desc;
-    }
+class edit_form extends block_edit_form {
 
     /**
-     * Get the level as a number.
+     * Form definition.
      *
-     * @return int
+     * @param moodleform $mform Moodle form.
+     * @return void
      */
-    public function get_level() {
-        return $this->level;
-    }
+    protected function specific_definition($mform) {
+        $mform->addElement('header', 'confighdr', get_string('configheader', 'block_xp'));
+        $mform->addElement('text', 'config_title', get_string('configtitle', 'block_xp'));
+        $mform->setDefault('config_title', get_string('levelup', 'block_xp'));
+        $mform->setType('config_title', PARAM_TEXT);
 
-    /**
-     * Get a human readable description of the level.
-     *
-     * @return string
-     */
-    public function get_description() {
-        return $this->desc;
-    }
-
-    /**
-     * Get the amount of experience points required.
-     *
-     * @return int
-     */
-    public function get_xp_required() {
-        return $this->xprequired;
+        $mform->addElement('textarea', 'config_description', get_string('configdescription', 'block_xp'));
+        $mform->setDefault('config_description', get_string('participatetolevelup', 'block_xp'));
+        $mform->setType('config_description', PARAM_TEXT);
     }
 
 }

@@ -37,32 +37,8 @@ defined('MOODLE_INTERNAL') || die();
  * @return void|false
  */
 function block_xp_pluginfile($course, $bi, $context, $filearea, $args, $forcedownload, array $options = array()) {
-    global $CFG;
-
-    if ($CFG->block_xp_context == CONTEXT_SYSTEM && $context->contextlevel !== CONTEXT_SYSTEM) {
-        return false;
-    } else if ($CFG->block_xp_context != CONTEXT_SYSTEM && $context->contextlevel !== CONTEXT_COURSE) {
-        return false;
+    $fs = \block_xp\di::get('file_server');
+    if ($fs instanceof \block_xp\local\file\block_file_server) {
+        $fs->serve_block_file($course, $bi, $context, $filearea, $args, $forcedownload, $options);
     }
-
-    $fs = get_file_storage();
-    $file = null;
-
-    if ($filearea == 'badges') {
-        // For performance reason, and very low risk, we do not restrict the access to the level badges
-        // to the participant of the course, nor do we check if they have the required level, etc...
-        $itemid = array_shift($args);
-        $filename = array_shift($args);
-        $filepath = '/';
-        $file = $fs->get_file($context->id, 'block_xp', $filearea, $itemid, $filepath, $filename . '.png');
-        if (!$file) {
-            $file = $fs->get_file($context->id, 'block_xp', $filearea, $itemid, $filepath, $filename . '.jpg');
-        }
-    }
-
-    if (!$file) {
-        return false;
-    }
-
-    send_stored_file($file);
 }

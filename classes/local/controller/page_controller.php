@@ -18,7 +18,8 @@
  * Page controller.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -35,10 +36,11 @@ use moodle_exception;
  * typical capability checks, etc...
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class page_controller extends route_controller {
+abstract class page_controller extends course_route_controller {
 
     /** @var string The route name. */
     protected $routename = null;
@@ -57,15 +59,9 @@ abstract class page_controller extends route_controller {
     protected function permissions_checks() {
         // We only need one of, ordered in such a way that the most important check is done first.
         if ($this->requiremanage) {
-            if (!$this->manager->can_manage()) {
-                throw new moodle_exception('nopermissions', '', '', 'can_manage');
-            }
-
+            $this->world->get_access_permissions()->require_manage();
         } else if ($this->requireview) {
-            if (!$this->manager->can_view()) {
-                throw new moodle_exception('nopermissions', '', '', 'can_view');
-            }
-
+            $this->world->get_access_permissions()->require_access();
         } else if (!$this->ispublic) {
             throw new coding_exception('Misconfigured controller. Is page public, or are permissions required?');
         }
@@ -97,15 +93,32 @@ abstract class page_controller extends route_controller {
      *
      * @return void
      */
-    final protected function content() {
+    protected function content() {
         $output = $this->get_renderer();
-        $manager = $this->manager;
-
         echo $output->heading($this->get_page_heading());
-        echo $output->navigation($manager, $this->get_route_name());
-        echo $output->notices($manager);
-
+        $this->page_navigation();
+        $this->page_notices();
         $this->page_content();
+    }
+
+    /**
+     * The page navigation.
+     *
+     * @return void
+     */
+    protected function page_navigation() {
+        $output = $this->get_renderer();
+        echo $output->course_world_navigation($this->urlresolver, $this->world, $this->get_route_name());
+    }
+
+    /**
+     * The page notices.
+     *
+     * @return void
+     */
+    protected function page_notices() {
+        $output = $this->get_renderer();
+        echo $output->notices($this->world);
     }
 
     /**

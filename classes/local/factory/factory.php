@@ -18,46 +18,64 @@
  * Main factory.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_xp\local\factory;
 defined('MOODLE_INTERNAL') || die();
 
+use moodle_database;
+
 /**
  * Main factory.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class factory implements filter_manager_factory, manager_factory {
+class factory implements course_world_factory {
 
-    protected $filtermanagers = [];
-    protected $managers = [];
+    /** @var moodle_database The DB. */
+    protected $db;
+    /** @var bool For the whole site? */
+    protected $forwholesite = false;
+    /** @var course_world[] World cache. */
+    protected $worlds = [];
 
-    public function get_filter_manager(\block_xp\local\manager_interface $manager) {
-        $courseid = $manager->get_courseid();
-        if (!isset($this->filtermanagers[$courseid])) {
-            $this->filtermanagers[$courseid] = new \block_xp\local\filter_manager($manager);
+    /**
+     * Constructor.
+     *
+     * @param moodle_database $db The DB.
+     * @param int $contextmode The context mode. When equal to CONTEXT_SYSTEM, we force SITEID.
+     */
+    public function __construct(moodle_database $db, $contextmode) {
+        $this->db = $db;
+        if (!empty($contextmode) && $contextmode == CONTEXT_SYSTEM) {
+            $this->forwholesite = true;
         }
-        return $this->filtermanagers[$courseid];
     }
 
-    public function get_manager($courseid) {
-        global $CFG;
+    /**
+     * Get the world.
+     *
+     * @param int $courseid Course ID.
+     * @return block_xp\local\course_world
+     */
+    public function get_world($courseid) {
 
         // When the block was set up for the whole site we attach it to the site course.
-        if ($CFG->block_xp_context == CONTEXT_SYSTEM) {
+        if ($this->forwholesite) {
             $courseid = SITEID;
         }
 
         $courseid = intval($courseid);
-        if (!isset($this->managers[$courseid])) {
-            $this->managers[$courseid] = new \block_xp\local\manager($courseid);
+        if (!isset($this->worlds[$courseid])) {
+            $this->worlds[$courseid] = new \block_xp\local\course_world($this->db, $courseid);
         }
-        return $this->managers[$courseid];
+        return $this->worlds[$courseid];
     }
 
 }

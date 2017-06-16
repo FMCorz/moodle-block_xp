@@ -18,7 +18,8 @@
  * Routes config.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,7 +32,8 @@ use coding_exception;
  * Routes config.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_routes_config implements routes_config {
@@ -52,8 +54,8 @@ class default_routes_config implements routes_config {
             ),
             'config' => new route_definition(
                 'config',
-                '/:courseid/config',
-                '~^/(\d+)/config$~',
+                '/config/:courseid',
+                '~^/config/(\d+)$~',
                 'config',
                 [
                     1 => 'courseid'
@@ -61,8 +63,8 @@ class default_routes_config implements routes_config {
             ),
             'infos' => new route_definition(
                 'infos',
-                '/:courseid/infos',
-                '~^/(\d+)/infos$~',
+                '/infos/:courseid',
+                '~^/infos/(\d+)$~',
                 'infos',
                 [
                     1 => 'courseid'
@@ -70,8 +72,8 @@ class default_routes_config implements routes_config {
             ),
             'ladder' => new route_definition(
                 'ladder',
-                '/:courseid/ladder',
-                '~^/(\d+)/ladder$~',
+                '/ladder/:courseid',
+                '~^/ladder/(\d+)$~',
                 'ladder',
                 [
                     1 => 'courseid'
@@ -79,8 +81,8 @@ class default_routes_config implements routes_config {
             ),
             'levels' => new route_definition(
                 'levels',
-                '/:courseid/levels',
-                '~^/(\d+)/levels$~',
+                '/levels/:courseid',
+                '~^/levels/(\d+)$~',
                 'levels',
                 [
                     1 => 'courseid'
@@ -88,8 +90,8 @@ class default_routes_config implements routes_config {
             ),
             'log' => new route_definition(
                 'log',
-                '/:courseid/log',
-                '~^/(\d+)/log$~',
+                '/log/:courseid',
+                '~^/log/(\d+)$~',
                 'log',
                 [
                     1 => 'courseid'
@@ -97,8 +99,8 @@ class default_routes_config implements routes_config {
             ),
             'report' => new route_definition(
                 'report',
-                '/:courseid/report',
-                '~^/(\d+)/report$~',
+                '/report/:courseid',
+                '~^/report/(\d+)$~',
                 'report',
                 [
                     1 => 'courseid'
@@ -106,8 +108,8 @@ class default_routes_config implements routes_config {
             ),
             'rules' => new route_definition(
                 'rules',
-                '/:courseid/rules',
-                '~^/(\d+)/rules$~',
+                '/rules/:courseid',
+                '~^/rules/(\d+)$~',
                 'rules',
                 [
                     1 => 'courseid'
@@ -115,8 +117,8 @@ class default_routes_config implements routes_config {
             ),
             'visuals' => new route_definition(
                 'visuals',
-                '/:courseid/visuals',
-                '~^/(\d+)/visuals$~',
+                '/visuals/:courseid',
+                '~^/visuals/(\d+)$~',
                 'visuals',
                 [
                     1 => 'courseid'

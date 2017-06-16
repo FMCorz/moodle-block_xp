@@ -36,10 +36,10 @@ use moodleform;
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class levels extends moodleform {
+class levels_with_algo extends moodleform {
 
-    /** @var block_xp_manager The XP manager. */
-    protected $manager;
+    /** @var config The config. */
+    protected $config;
 
     /**
      * Form definintion.
@@ -50,7 +50,7 @@ class levels extends moodleform {
         global $OUTPUT;
 
         $mform = $this->_form;
-        $this->manager = $this->_customdata['manager'];
+        $config = $this->_customdata['config'];
 
         $mform->setDisableShortforms(true);
         $mform->addElement('header', 'hdrgen', get_string('general', 'form'));
@@ -59,7 +59,7 @@ class levels extends moodleform {
         $mform->addRule('levels', get_string('required'), 'required');
         $mform->setType('levels', PARAM_INT);
 
-        if ($this->manager->get_config('enablecustomlevelbadges')) {
+        if ($config->get('enablecustomlevelbadges')) {
             $mform->addElement('static', '', '', get_string('changelevelformhelp', 'block_xp'));
         }
 
@@ -105,7 +105,7 @@ class levels extends moodleform {
         $base = max((int) $mform->exportValue('basexp'), 1);
         $coef = max((float) $mform->exportValue('coefxp'), 1.001);
 
-        $defaultlevels = \block_xp\local\levels::get_xp_with_algo($levels, $base, $coef);
+        $defaultlevels = \block_xp\local\xp\algo_levels_info::get_xp_with_algo($levels, $base, $coef);
 
         // Add the levels.
         for ($i = 2; $i <= $levels; $i++) {
@@ -156,18 +156,18 @@ class levels extends moodleform {
             $newdata['desc'][$i] = $data->{'lvldesc_' . $i};
         }
 
-        return new \block_xp\local\levels($newdata);
+        return new \block_xp\local\xp\algo_levels_info($newdata);
     }
 
     /**
      * Set the data from the levels.
      *
-     * Note that this does not use the interface levels_interface. This is
+     * Note that this does not use the interface levels_info. This is
      * dependent on the default implementation.
      *
-     * @param \block_xp\local\levels $levels Levels.
+     * @param \block_xp\local\xp\algo_levels_info $levels Levels.
      */
-    public function set_data_from_levels(\block_xp\local\levels $levels) {
+    public function set_data_from_levels(\block_xp\local\xp\algo_levels_info $levels) {
         $data = [
             'levels' => $levels->get_count(),
             'usealgo' => (int) $levels->get_use_algo(),

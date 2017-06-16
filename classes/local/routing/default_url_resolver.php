@@ -18,7 +18,8 @@
  * URL resolver.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,7 +33,8 @@ use moodle_url;
  * URL resolver class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_url_resolver implements url_resolver {
@@ -151,7 +153,7 @@ class default_url_resolver implements url_resolver {
      *
      * @param string $name The route name.
      * @param array $params The parameters for the route.
-     * @return moodle_url
+     * @return url
      */
     public function reverse($name, array $params = []) {
         $route = $this->routesconfig->get_route($name);
@@ -169,7 +171,7 @@ class default_url_resolver implements url_resolver {
             $url = str_replace(':' . $placeholder, $params[$placeholder], $url);
         }
 
-        $absurl = new moodle_url($this->baseurl);
+        $absurl = new url($this->baseurl);
         $absurl->set_slashargument($url, static::ROUTE_GET_PARAM);
         return $absurl;
     }

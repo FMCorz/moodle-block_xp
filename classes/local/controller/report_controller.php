@@ -18,7 +18,8 @@
  * Report controller.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,50 +28,50 @@ defined('MOODLE_INTERNAL') || die();
 
 use core_user;
 use html_writer;
-use moodle_url;
+use block_xp\local\routing\url;
 
 /**
  * Report controller class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class report_controller extends page_controller {
 
+    /** @var bool The page supports groups. */
+    protected $supportsgroups = true;
     /** @var string The route name. */
     protected $routename = 'report';
 
-    /** @var int The group ID, if any. */
-    protected $groupid;
-
     /** @var moodleform The form. */
     protected $form;
-
     /** @var flexible_table The table. */
     protected $table;
 
     protected function define_optional_params() {
         return [
             ['userid', null, PARAM_INT],
-            ['resetdata', 0, PARAM_INT],
+            ['resetdata', 0, PARAM_INT, false],
             ['action', null, PARAM_ALPHA],
-            ['confirm', 0, PARAM_INT],
+            ['confirm', 0, PARAM_INT, false],
             ['page', 0, PARAM_INT],     // To keep the table page in URL.
         ];
-    }
-
-    protected function post_login() {
-        parent::post_login();
-        $this->groupid = groups_get_course_group($this->manager->get_course(), true);
     }
 
     protected function pre_content() {
         // Reset data.
         if ($this->get_param('resetdata') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
-                $this->manager->reset_data($this->groupid);
-                $this->redirect();
+                if ($this->get_groupid()) {
+                    $this->world->get_store()->reset_by_group($this->get_groupid());
+                    $this->world->get_user_event_collection_logger()->reset_by_group($this->get_groupid());
+                } else {
+                    $this->world->get_store()->reset();
+                    $this->world->get_user_event_collection_logger()->reset();
+                }
+                $this->redirect(new url($this->pageurl));
             }
         }
 
@@ -79,9 +80,9 @@ class report_controller extends page_controller {
         $action = $this->get_param('action');
         if ($action === 'edit' && !empty($userid)) {
             $form = $this->get_form($userid);
-            $nexturl = new moodle_url($this->pageurl, ['userid' => null]);
+            $nexturl = new url($this->pageurl, ['userid' => null]);
             if ($data = $form->get_data()) {
-                $this->manager->reset_user_xp($userid, $data->xp);
+                $this->world->get_store()->set($userid, $data->xp);
                 $this->redirect($nexturl);
             } else if ($form->is_cancelled()) {
                 $this->redirect($nexturl);
@@ -99,9 +100,9 @@ class report_controller extends page_controller {
 
     protected function get_form($userid) {
         if (!$this->form) {
-            $progress = $this->manager->get_progress_for_user($userid);
+            $state = $this->world->get_store()->get_state($userid);
             $form = new \block_xp\form\user_xp($this->pageurl->out(false));
-            $form->set_data(['userid' => $userid, 'level' => $progress->level, 'xp' => $progress->xp]);
+            $form->set_data(['userid' => $userid, 'level' => $state->get_level()->get_level(), 'xp' => $state->get_xp()]);
             $this->form = $form;
         }
         return $form;
@@ -109,7 +110,12 @@ class report_controller extends page_controller {
 
     protected function get_table() {
         if (!$this->table) {
-            $this->table = new \block_xp\output\report_table('block_xp_report', $this->manager->get_courseid(), $this->groupid);
+            $this->table = new \block_xp\output\report_table(
+                $this->world,
+                $this->get_renderer(),
+                $this->world->get_store(),
+                $this->get_groupid()
+            );
             $this->table->define_baseurl($this->pageurl);
         }
         return $this->table;
@@ -117,14 +123,15 @@ class report_controller extends page_controller {
 
     protected function page_content() {
         $output = $this->get_renderer();
-        $groupid = $this->groupid;
+        $groupid = $this->get_groupid();
 
         // Confirming reset data.
         if ($this->get_param('resetdata')) {
-            $this->get_renderer()->confirm(
+            echo $this->get_renderer()->confirm(
                 empty($groupid) ? get_string('reallyresetdata', 'block_xp') : get_string('reallyresetgroupdata', 'block_xp'),
-                new moodle_url($this->pageurl, ['resetdata' => 1, 'confirm' => 1, 'sesskey' => sesskey(), 'group' => $groupid]),
-                $this->pageurl
+                new url($this->pageurl->get_compatible_url(), ['resetdata' => 1, 'confirm' => 1,
+                    'sesskey' => sesskey(), 'group' => $groupid]),
+                new url($this->pageurl->get_compatible_url())
             );
             return;
         }
@@ -137,21 +144,21 @@ class report_controller extends page_controller {
         }
 
         // Displaying the report.
-        groups_print_course_menu($this->manager->get_course(), $this->pageurl);
+        $this->print_group_menu();
         echo $this->get_table()->out(20, true);
 
-        if (empty($this->groupid)) {
+        if (empty($groupid)) {
             $strreset = get_string('resetcoursedata', 'block_xp');
         } else {
             $strreset = get_string('resetgroupdata', 'block_xp');
         }
-        // TODO Fix the single button bug.
+
         echo html_writer::tag('p',
             $output->single_button(
-                new moodle_url($this->pageurl, [
+                new url($this->pageurl->get_compatible_url(), [
                     'resetdata' => 1,
                     'sesskey' => sesskey(),
-                    'group' => $this->groupid
+                    'group' => $groupid
                 ]),
                 $strreset,
                 'get'

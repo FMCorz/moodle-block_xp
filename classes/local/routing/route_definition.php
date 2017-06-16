@@ -18,7 +18,8 @@
  * Route definition.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +30,8 @@ defined('MOODLE_INTERNAL') || die();
  * Route definition.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class route_definition {
@@ -40,8 +42,8 @@ class route_definition {
      * @param string $name The route name.
      * @param string $url The route URL.
      * @param string $regex The regex.
-     * @param array $mapping The mappings.
      * @param string $controller The controller name.
+     * @param array $mapping The mappings.
      */
     public function __construct($name, $url, $regex, $controller, array $mapping = []) {
         $this->name = $name;

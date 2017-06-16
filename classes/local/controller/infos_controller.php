@@ -18,7 +18,8 @@
  * Infos controller.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -35,7 +36,8 @@ use moodle_exception;
  * Infos controller class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class infos_controller extends page_controller {
@@ -45,7 +47,7 @@ class infos_controller extends page_controller {
 
     protected function permissions_checks() {
         parent::permissions_checks();
-        if (!$this->manager->can_view_infos_page()) {
+        if (!$this->world->get_config()->get('enableinfos')) {
             throw new moodle_exception('nopermissions', '', '', 'view_infos_page');
         }
     }
@@ -60,7 +62,7 @@ class infos_controller extends page_controller {
 
     protected function page_content() {
         $output = $this->get_renderer();
-        $levelsinfo = $this->manager->get_levels_info();
+        $levelsinfo = $this->world->get_levels_info();
 
         $table = new flexible_table('xpinfos');
         $table->define_baseurl($this->pageurl);
@@ -70,16 +72,17 @@ class infos_controller extends page_controller {
         $table->setup();
 
         foreach ($levelsinfo->get_levels() as $level) {
-            $table->add_data([$level->get_level(), $level->get_xp_required(), $level->get_description()], 'level-' . $level->get_level());
+            $desc = $level instanceof \block_xp\local\xp\level_with_description ? $level->get_description() : '';
+            $table->add_data([$level->get_level(), $level->get_xp_required(), $desc], 'level-' . $level->get_level());
         }
 
         $table->finish_output();
 
-        // TODO Fix this. SingleButton doesn't work with slash arguments >_<!
-        if ($this->manager->can_manage()) {
+        if ($this->world->get_access_permissions()->can_manage()) {
+            $levelsurl = $this->urlresolver->reverse('levels', ['courseid' => $this->courseid]);
             echo html_writer::tag('p',
                 $output->single_button(
-                    $this->urlresolver->reverse('levels', ['courseid' => $this->manager->get_courseid()]),
+                    $levelsurl->get_compatible_url(),
                     get_string('customizelevels', 'block_xp'),
                     'get'
                 )

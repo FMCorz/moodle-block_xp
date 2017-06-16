@@ -18,20 +18,24 @@
  * Visuals controller.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_xp\local\controller;
 defined('MOODLE_INTERNAL') || die();
 
+use context_course;
+use context_system;
 use stdClass;
 
 /**
  * Visuals controller class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class visuals_controller extends page_controller {
@@ -43,23 +47,26 @@ class visuals_controller extends page_controller {
     protected $form;
 
     protected function pre_content() {
-        $manager = $this->manager;
-        $context = $manager->get_context();
+        $context = $this->world->get_context();
+        $levelsinfo = $this->world->get_levels_info();
 
+        // The logic here is shared with the class badged_level.
         $fmoptions = ['subdirs' => 0, 'accepted_types' => array('.jpg', '.png')];
         $draftitemid = file_get_submitted_draft_itemid('badges');
         file_prepare_draft_area($draftitemid, $context->id, 'block_xp', 'badges', 0, $fmoptions);
 
         $data = new stdClass();
         $data->badges = $draftitemid;
-        $data->enablecustomlevelbadges = $manager->get_config('enablecustomlevelbadges');
+        $data->enablecustomlevelbadges = $this->world->get_config()->get('enablecustomlevelbadges');
 
-        $form = new \block_xp\form\visuals($this->pageurl->out(false), ['manager' => $manager, 'fmoptions' => $fmoptions]);
+        $levelscount = $levelsinfo->get_count();
+        $form = new \block_xp\form\visuals($this->pageurl->out(false), ['levelscount' => $levelscount,
+            'fmoptions' => $fmoptions]);
         $form->set_data($data);
 
         if ($data = $form->get_data()) {
             file_save_draft_area_files($data->badges, $context->id, 'block_xp', 'badges', 0, $fmoptions);
-            $manager->update_config(['enablecustomlevelbadges' => $data->enablecustomlevelbadges]);
+            $this->world->get_config()->set_many(['enablecustomlevelbadges' => $data->enablecustomlevelbadges]);
             // TODO Add a confirmation message.
             $this->redirect();
         }

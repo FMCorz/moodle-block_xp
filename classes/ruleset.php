@@ -68,6 +68,7 @@ class block_xp_ruleset extends block_xp_rule {
      *  - Subject must match regex $value.
      *
      * @param array $rules The rules to add in this set.
+     * @param string $method The method.
      */
     public function __construct(array $rules = array(), $method = self::ANY) {
         $this->rules = $rules;

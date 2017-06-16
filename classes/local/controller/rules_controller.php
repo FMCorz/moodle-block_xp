@@ -18,7 +18,8 @@
  * Rules controller.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -35,7 +36,8 @@ use stdClass;
  * Rules controller class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class rules_controller extends page_controller {
@@ -46,7 +48,7 @@ class rules_controller extends page_controller {
     /** @var moodleform The form. */
     protected $form;
 
-    /** @var \block_xp\local\filter_manager_interface The filter manager. */
+    /** @var \block_xp\local\course_filter_manager The filter manager. */
     protected $filtermanager;
 
     /** @var array User filters. */
@@ -54,7 +56,7 @@ class rules_controller extends page_controller {
 
     protected function post_login() {
         parent::post_login();
-        $this->filtermanager = \block_xp\di::get('filter_manager_factory')->get_filter_manager($this->manager);
+        $this->filtermanager = $this->world->get_filter_manager();
         $this->userfilters = $this->filtermanager->get_user_filters();
     }
 
@@ -77,7 +79,7 @@ class rules_controller extends page_controller {
 
         // Templates of rules.
         $typeruleproperty = new \block_xp_rule_property();
-        $typerulecm = new \block_xp_rule_cm($this->manager->get_courseid());
+        $typerulecm = new \block_xp_rule_cm($this->courseid);
         $typeruleevent = new \block_xp_rule_event();
         $typeruleset = new \block_xp_ruleset();
         $templatetypes = array(
@@ -113,7 +115,7 @@ class rules_controller extends page_controller {
             $data = $filterdata;
             $data['ruledata'] = json_encode($data['rule'], true);
             unset($data['rule']);
-            $data['courseid'] = $this->manager->get_courseid();
+            $data['courseid'] = $this->courseid;
 
             if (!\block_xp_filter::validate_data($data)) {
                 throw new moodle_exception('Data could not be validated');
@@ -150,9 +152,10 @@ class rules_controller extends page_controller {
     protected function page_content() {
         $output = $this->get_renderer();
 
+        $logurl = $this->urlresolver->reverse('log', ['courseid' => $this->courseid]);
         $a = new stdClass();
         $a->list = (new moodle_url('/report/eventlist/index.php'))->out();
-        $a->log = ($this->urlresolver->reverse('log', ['courseid' => $this->manager->get_courseid()]))->out();
+        $a->log = $logurl->out();
         $a->doc = (new moodle_url('https://docs.moodle.org/dev/Event_2'))->out();
         echo get_string('rulesformhelp', 'block_xp', $a);
 
@@ -186,7 +189,7 @@ class rules_controller extends page_controller {
         echo html_writer::tag('p', get_string('defaultrulesformhelp', 'block_xp'));
 
         echo html_writer::start_tag('ul', array('class' => 'filters-list filters-readonly'));
-        foreach ($this->filtermanager::get_static_filters() as $filter) {
+        foreach ($this->filtermanager->get_static_filters() as $filter) {
             echo $output->render($filter);
 
         }

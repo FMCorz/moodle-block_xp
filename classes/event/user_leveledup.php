@@ -55,10 +55,10 @@ class user_leveledup extends \core\event\base {
     /**
      * Get URL related to the action.
      *
-     * @return \moodle_url
+     * @return block_xp\local\routing\url
      */
     public function get_url() {
-        return new \moodle_url('/block_xp/report.php', array('courseid' => $this->courseid));
+        return \block_xp\di::get('url_resolver')->reverse('report', ['courseid' => $this->courseid]);
     }
 
     /**

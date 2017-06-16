@@ -52,6 +52,7 @@ class block_xp_rule_cm extends block_xp_rule_property {
     /**
      * Constructor.
      *
+     * @param int $courseid The course ID.
      * @param int $contextid The context ID.
      */
     public function __construct($courseid = 0, $contextid = 0) {

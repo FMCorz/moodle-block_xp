@@ -18,7 +18,8 @@
  * Config controller.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +30,8 @@ defined('MOODLE_INTERNAL') || die();
  * Config controller class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class config_controller extends page_controller {
@@ -41,10 +43,12 @@ class config_controller extends page_controller {
     protected $form;
 
     protected function pre_content() {
+        $config = $this->world->get_config();
         $this->form = new \block_xp\form\config($this->pageurl->out(false));
-        $this->form->set_data((array) $this->manager->get_config());
+        $this->form->set_data($config->get_all());
         if ($data = $this->form->get_data()) {
-            $this->manager->update_config($data);
+            $config->set_many((array) $data);
+            // TODO Display a message.
             $this->redirect();
         }
     }

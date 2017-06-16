@@ -51,6 +51,7 @@ class block_xp_rule_property extends block_xp_rule_base {
      *
      * @param string $compare Constant value.
      * @param mixed $value The value.
+     * @param string $property The property.
      */
     public function __construct($compare = self::EQ, $value = '', $property = '') {
         parent::__construct($compare, $value);

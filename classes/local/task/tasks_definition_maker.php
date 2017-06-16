@@ -15,44 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Level interface.
+ * Tasks definition maker interface.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local;
+namespace block_xp\local\task;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Level interface.
+ * Tasks definition maker interface.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface level_interface {
+interface tasks_definition_maker {
 
     /**
-     * Get the level as a number.
+     * Get the tasks.
      *
-     * @return int
-     */
-    public function get_level();
-
-    /**
-     * Get a human readable description of the level.
+     * This must conform to what is expected to be found in db/tasks.php,
+     * in the variable $tasks. Note that the tasks are cached, and thus
+     * are only refreshed when the version of a plugin changes.
      *
-     * @return string
+     * @return array
      */
-    public function get_description();
-
-    /**
-     * Get the amount of experience points required.
-     *
-     * @return int
-     */
-    public function get_xp_required();
+    public function get_tasks_definition();
 
 }

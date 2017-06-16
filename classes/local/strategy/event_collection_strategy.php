@@ -15,23 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Filter manager interface.
+ * Event collection strategy.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local;
+namespace block_xp\local\strategy;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Filter manager interface.
+ * Event collection strategy.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface filter_manager_interface {
-    // TODO!
+interface event_collection_strategy extends collection_strategy {
+
+    /**
+     * Handle an event.
+     *
+     * @param \core\event\base $event The event.
+     * @return void
+     */
+    public function collect_event(\core\event\base $event);
+
 }

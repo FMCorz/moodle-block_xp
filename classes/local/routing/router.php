@@ -18,7 +18,8 @@
  * Dead simple router.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -38,13 +39,16 @@ use moodle_exception;
  * would of course be for Moodle core to have something similar to this.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class router {
 
     /** @var url_resolver_interface The URL resolver. */
     protected $urlresolver;
+    /** @var controller_resolver The controller resolver. */
+    protected $ctrlresolver;
 
     /**
      * Constructor.
@@ -72,27 +76,17 @@ class router {
         $url = $this->urlresolver->reverse($route->get_definition()->get_name(), $route->get_params());
         $request = new routed_request($method, $url, $route);
 
-        $this->defer_to_controller($request);
-    }
-
-    /**
-     * Defer the rest to the controller.
-     *
-     * @param request $request The request.
-     * @return void
-     */
-    protected function defer_to_controller(request $request) {
-        $controller = $this->get_controller_from_request($request);
-        $controller->handle($request);
+        $ctrl = $this->get_controller_from_request($request);
+        $ctrl->handle($request);
     }
 
     /**
      * Find the controller from the request.
      *
-     * @param request $request The request.
+     * @param routed_request $request The request.
      * @return block_xp\local\controller\controller_interface
      */
-    protected function get_controller_from_request(request $request) {
+    protected function get_controller_from_request(routed_request $request) {
         $route = $request->get_route();
         $name = $route->get_definition()->get_controller_name();
         $class = "block_xp\\local\\controller\\{$name}_controller";

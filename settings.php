@@ -24,19 +24,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-if ($ADMIN->fulltree) {
-
-    // Context in which the block is enabled.
-    $settings->add(new admin_setting_configselect(
-        'block_xp_context',
-        get_string('wherearexpused', 'block_xp'),
-        get_string('wherearexpused_desc', 'block_xp'),
-        CONTEXT_COURSE,
-        array(
-            CONTEXT_COURSE => get_string('incourses', 'block_xp'),
-            CONTEXT_SYSTEM => get_string('forthewholesite', 'block_xp')
-        )
-    ));
-
-}
-
+$maker = \block_xp\di::get('settings_maker');
+$env = new \block_xp\local\setting\environment(
+    $adminroot,
+    $parentnodename,
+    $hassiteconfig,
+    $plugininfo,
+    $blockinstance,
+    $settings
+);
+$settings = $maker->get_settings($env);
+unset($maker);
+unset($env);

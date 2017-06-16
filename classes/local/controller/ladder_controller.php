@@ -18,7 +18,8 @@
  * Ladder controller.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,42 +32,39 @@ use moodle_exception;
  * Ladder controller class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class ladder_controller extends page_controller {
 
     protected $requiremanage = false;
+    protected $supportsgroups = true;
     protected $routename = 'ladder';
-
-    /** @var int The current group ID. */
-    protected $groupid;
-
-    protected function post_login() {
-        parent::post_login();
-        $this->groupid = groups_get_course_group($this->manager->get_course(), true);
-    }
 
     protected function permissions_checks() {
         parent::permissions_checks();
-        if (!$this->manager->can_view_ladder_page()) {
+        if (!$this->world->get_config()->get('enableladder')) {
             throw new moodle_exception('nopermissions', '', '', 'view_ladder_page');
         }
     }
 
     protected function get_table() {
-        $manager = $this->manager;
-        $courseid = $manager->get_courseid();
-
-        $table = new \block_xp\output\ladder_table('block_xp_ladder', $courseid, $this->groupid, [
-            'identitymode' => $manager->get_config('identitymode'),
-            'rankmode' => $manager->get_config('rankmode'),
-            'neighboursonly' => $manager->get_config('neighbours') > 0,
-            'neighboursabove' => $manager->get_config('neighbours'),
-            'neighboursbelow' => $manager->get_config('neighbours'),
-        ]);
+        $courseid = $this->courseid;
+        $table = new \block_xp\output\ladder_table(
+            $this->world,
+            $this->get_renderer(),
+            $this->world->get_store(),
+            $this->get_groupid(),
+            [
+                'identitymode' => $this->world->get_config()->get('identitymode'),
+                'rankmode' => $this->world->get_config()->get('rankmode'),
+                'neighboursonly' => $this->world->get_config()->get('neighbours') > 0,
+                'neighboursabove' => $this->world->get_config()->get('neighbours'),
+                'neighboursbelow' => $this->world->get_config()->get('neighbours'),
+            ]
+        );
         $table->define_baseurl($this->pageurl);
-
         return $table;
     }
 
@@ -79,7 +77,7 @@ class ladder_controller extends page_controller {
     }
 
     protected function page_content() {
-        groups_print_course_menu($this->manager->get_course(), $this->pageurl);
+        $this->print_group_menu();
         echo $this->get_table()->out(20, false);
     }
 

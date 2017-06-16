@@ -18,7 +18,8 @@
  * Dead simple request.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +30,8 @@ defined('MOODLE_INTERNAL') || die();
  * Dead simple request.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface request {
@@ -47,7 +49,7 @@ interface request {
      * This URL disregards any form of routing, it is the full URL
      * which lead to this request being created.
      *
-     * @return moodle_url
+     * @return url
      */
     public function get_url();
 

@@ -60,9 +60,10 @@ class visuals extends moodleform {
 
         if ($data['enablecustomlevelbadges']) {
             // Make sure the user has uploaded all the badges.
+            $levelscount = $this->_customdata['levelscount'];
             $fs = get_file_storage();
             $usercontext = context_user::instance($USER->id);
-            $expected = array_flip(range(1, $this->_customdata['manager']->get_levels_info()->get_count()));
+            $expected = array_flip(range(1, $levelscount));
             $draftfiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $data['badges'], 'filename', false);
             foreach ($draftfiles as $file) {
                 $pathinfo = pathinfo($file->get_filename());

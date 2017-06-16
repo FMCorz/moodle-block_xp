@@ -24,6 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use block_xp\local\course_world;
+use block_xp\local\routing\url_resolver;
+use block_xp\local\xp\level;
+use block_xp\local\xp\level_with_badge;
+use block_xp\local\xp\state;
+
 /**
  * Block XP renderer class.
  *
@@ -33,50 +39,27 @@ defined('MOODLE_INTERNAL') || die();
  */
 class block_xp_renderer extends plugin_renderer_base {
 
+    /** @var string Notices flag. */
+    protected $noticesflag = 'block_xp_notices';
+
     /**
      * Administration links.
      *
-     * @param int $courseid The course ID.
+     * @param course_world $world The world.
+     * @param url_resolver $urlresolver URL resolver.
      * @return string HTML produced.
      */
-    public function admin_links($courseid) {
+    public function admin_links(course_world $world, url_resolver $urlresolver) {
         return html_writer::tag('p',
             html_writer::link(
-                new moodle_url('/blocks/xp/report.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('report', ['courseid' => $world->get_courseid()]),
                 get_string('navreport', 'block_xp'))
             . ' - '
             . html_writer::link(
-                new moodle_url('/blocks/xp/config.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('config', ['courseid' => $world->get_courseid()]),
                 get_string('navsettings', 'block_xp'))
             , array('class' => 'admin-links')
         );
-    }
-
-    /**
-     * Returns the current level rendered.
-     *
-     * @param renderable $progress The renderable object.
-     * @return string HTML produced.
-     */
-    public function current_level(renderable $progress) {
-        $html = '';
-        $html .= html_writer::tag('div', $progress->level, array('class' => 'current-level level-' . $progress->level));
-        return $html;
-    }
-
-    /**
-     * Returns the current level rendered with custom badges.
-     *
-     * @param renderable $progress The renderable object.
-     * @return string HTML produced.
-     */
-    public function custom_current_level(renderable $progress) {
-        $html = '';
-        $html .= html_writer::tag('div',
-            html_writer::empty_tag('img', array('src' => $progress->levelimgsrc)),
-            array('class' => 'level-badge current-level level-' . $progress->level)
-        );
-        return $html;
     }
 
     /**
@@ -93,22 +76,46 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Print a level's badge.
+     *
+     * @param level $level The level.
+     * @return string
+     */
+    public function level_badge(level $level) {
+        $levelnum = $level->get_level();
+        $classes = 'level level-' . $levelnum;
+
+        $html = '';
+        if ($level instanceof level_with_badge) {
+            $html .= html_writer::tag(
+                'div',
+                html_writer::empty_tag('img', ['src' => $level->get_badge_url(),
+                    'alt' => get_string('levelx', 'block_xp', $levelnum)]),
+                ['class' => $classes . ' level-badge']
+            );
+        } else {
+            $html .= html_writer::tag('div', $levelnum, ['class' => $classes]);
+        }
+        return $html;
+    }
+
+    /**
      * Return the notices.
      *
-     * @param \block_xp\local\manager $manager The manager.
+     * @param \block_xp\local\course_world $world The world.
      * @return string The notices.
      */
-    public function notices($manager) {
+    public function notices(\block_xp\local\course_world $world) {
         global $CFG;
         $o = '';
 
-        if (!$manager->can_manage()) {
+        if (!$world->get_access_permissions()->can_manage()) {
             return $o;
         }
 
-        if (!get_user_preferences(\block_xp\local\manager::USERPREF_NOTICES, false)) {
+        if (!get_user_preferences($this->noticesflag, false)) {
             require_once($CFG->libdir . '/ajax/ajaxlib.php');
-            user_preference_allow_ajax_update(\block_xp\local\manager::USERPREF_NOTICES, PARAM_BOOL);
+            user_preference_allow_ajax_update($this->noticesflag, PARAM_BOOL);
 
             $moodleorgurl = new moodle_url('https://moodle.org/plugins/view.php?plugin=block_xp');
             $githuburl = new moodle_url('https://github.com/FMCorz/moodle-block_xp');
@@ -120,7 +127,7 @@ class block_xp_renderer extends plugin_renderer_base {
             $id = html_writer::random_id();
             $this->page->requires->js_init_call("Y.one('.block-xp-rocks').on('click', function(e) {
                 e.preventDefault();
-                M.util.set_user_preference('" . \block_xp\local\manager::USERPREF_NOTICES . "', 1);
+                M.util.set_user_preference('" . $this->noticesflag . "', 1);
                 Y.one('.block-xp-notices').hide();
             });");
 
@@ -136,23 +143,26 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Outputs the navigation.
      *
-     * @param \block_xp\local\manager $manager The manager.
+     * This specifically requires a course_world and not a world.
+     *
+     * @param url_resolver $urlresolver The URL resolver.
+     * @param course_world $world The world.
      * @param string $page The page we are on.
      * @return string The navigation.
      */
-    public function navigation($manager, $page) {
-        $tabs = array();
-        $courseid = $manager->get_courseid();
-        $urlresolver = \block_xp\di::get('url_resolver');
+    public function course_world_navigation(url_resolver $urlresolver, course_world $world, $page) {
 
-        if ($manager->can_view_infos_page()) {
+        $tabs = array();
+        $courseid = $world->get_courseid();
+
+        if ($world->get_config()->get('enableinfos')) {
             $tabs[] = new tabobject(
                 'infos',
                 $urlresolver->reverse('infos', ['courseid' => $courseid]),
                 get_string('navinfos', 'block_xp')
             );
         }
-        if ($manager->can_view_ladder_page()) {
+        if ($world->get_config()->get('enableladder')) {
             $tabs[] = new tabobject(
                 'ladder',
                 $urlresolver->reverse('ladder', ['courseid' => $courseid]),
@@ -160,7 +170,7 @@ class block_xp_renderer extends plugin_renderer_base {
             );
         }
 
-        if ($manager->can_manage()) {
+        if ($world->get_access_permissions()->can_manage()) {
             $tabs[] = new tabobject(
                 'report',
                 $urlresolver->reverse('report', ['courseid' => $courseid]),
@@ -204,6 +214,8 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Override render method.
      *
+     * @param renderable $renderable The renderable.
+     * @param array $options Options.
      * @return string
      */
     public function render(renderable $renderable, $options = array()) {
@@ -221,6 +233,7 @@ class block_xp_renderer extends plugin_renderer_base {
      * Not very proud of the way I implement this... The HTML is tied to Javascript
      * and to the rule objects themselves. Careful when changing something!
      *
+     * @param block_xp_filter $filter The filter.
      * @return string
      */
     public function render_block_xp_filter($filter) {
@@ -266,8 +279,9 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
-     * Renders a block XP ruleset.
+     * Renders a block XP rule.
      *
+     * @param block_xp_rule_base $rule The rule.
      * @param array $options
      * @return string
      */
@@ -294,7 +308,8 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Renders a block XP ruleset.
      *
-     * @param array $options
+     * @param block_xp_ruleset $ruleset The ruleset.
+     * @param array $options The options
      * @return string
      */
     public function render_block_xp_ruleset($ruleset, $options) {
@@ -334,24 +349,23 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Returns the links for the students.
      *
-     * @param int $courseid The course ID.
-     * @param bool $showladder Show the ladder link
-     * @param bool $showinfos Show the infos link
+     * @param course_world $world The world.
+     * @param url_resolver $urlresolver URL resolver.
      * @return string HTML produced.
      */
-    public function student_links($courseid, $showladder, $showinfos) {
+    public function student_links(course_world $world, url_resolver $urlresolver) {
         $html = '';
         $links = array();
 
-        if ($showinfos) {
+        if ($world->get_config()->get('enableinfos')) {
             $links[] = html_writer::link(
-                new moodle_url('/blocks/xp/infos.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('infos', ['courseid' => $world->get_courseid()]),
                 get_string('infos', 'block_xp')
             );
         }
-        if ($showladder) {
+        if ($world->get_config()->get('enableladder')) {
             $links[] = html_writer::link(
-                new moodle_url('/blocks/xp/ladder.php', array('courseid' => $courseid)),
+                $urlresolver->reverse('ladder', ['courseid' => $world->get_courseid()]),
                 get_string('viewtheladder', 'block_xp')
             );
         }
@@ -366,14 +380,16 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Returns the progress bar rendered.
      *
-     * @param renderable $progress The renderable object.
+     * @param state $state The renderable object.
      * @return string HTML produced.
      */
-    public function progress_bar(renderable $progress) {
+    public function progress_bar(state $state) {
         $html = '';
-        $html .= html_writer::start_tag('div', array('class' => 'block_xp-level-progress'));
-        $html .= html_writer::tag('div', '', array('style' => 'width: ' . $progress->percentage . '%;', 'class' => 'bar'));
-        $html .= html_writer::tag('div', $progress->xpinlevel . '/' . $progress->xpforlevel, array('class' => 'txt'));
+        $html .= html_writer::start_tag('div', ['class' => 'block_xp-level-progress']);
+        $html .= html_writer::tag('div', '',
+            ['style' => 'width: ' . $state->get_ratio_in_level() * 100 . '%;', 'class' => 'bar']);
+        $html .= html_writer::tag('div', $state->get_xp_in_level() . '/' . $state->get_total_xp_in_level(),
+            ['class' => 'txt']);
         $html .= html_writer::end_tag('div');
         return $html;
     }

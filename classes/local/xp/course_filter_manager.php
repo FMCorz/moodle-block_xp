@@ -22,11 +22,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local;
+namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
 use cache;
 use coding_exception;
+use moodle_database;
 
 /**
  * Filter manager class.
@@ -35,22 +36,22 @@ use coding_exception;
  * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class filter_manager implements filter_manager_interface {
+class course_filter_manager {
 
-    /**
-     * The block XP manager.
-     *
-     * @var manager_interface.
-     */
-    protected $manager;
+    /** @var int The course ID. */
+    protected $courseid;
+    /** @var moodle_database The DB. */
+    protected $db;
 
     /**
      * Constructor.
      *
-     * @param manager_interface $manager The XP manager.
+     * @param moodle_database $db The DB.
+     * @param int $courseid The course ID.
      */
-    public function __construct(manager_interface $manager) {
-        $this->manager = $manager;
+    public function __construct(moodle_database $db, $courseid) {
+        $this->db = $db;
+        $this->courseid = $courseid;
     }
 
     /**
@@ -63,11 +64,11 @@ class filter_manager implements filter_manager_interface {
      */
     public function get_all_filters() {
         $cache = cache::make('block_xp', 'filters');
-        $key = 'filters_' . $this->manager->get_courseid();
+        $key = 'filters_' . $this->courseid;
         if (false === ($filters = $cache->get($key))) {
             $filters = $this->get_user_filters();
             $i = -1;
-            foreach (self::get_static_filters() as $filter) {
+            foreach ($this->get_static_filters() as $filter) {
                 $filters[$i--] = $filter;
             }
             $cache->set($key, $filters);
@@ -95,7 +96,7 @@ class filter_manager implements filter_manager_interface {
      *
      * @return array Of filter objects.
      */
-    public static function get_static_filters() {
+    public function get_static_filters() {
         $d = new \block_xp_rule_property(\block_xp_rule_base::EQ, 'd', 'crud');
         $c = new \block_xp_rule_property(\block_xp_rule_base::EQ, 'c', 'crud');
         $r = new \block_xp_rule_property(\block_xp_rule_base::EQ, 'r', 'crud');
@@ -134,8 +135,7 @@ class filter_manager implements filter_manager_interface {
      * @return array Of filter data from the DB, though properties is already json_decoded.
      */
     public function get_user_filters() {
-        global $DB;
-        $results = $DB->get_recordset('block_xp_filters', array('courseid' => $this->manager->get_courseid()),
+        $results = $this->db->get_recordset('block_xp_filters', array('courseid' => $this->courseid),
             'sortorder ASC, id ASC');
         $filters = array();
         foreach ($results as $key => $filter) {
@@ -152,6 +152,6 @@ class filter_manager implements filter_manager_interface {
      */
     public function invalidate_filters_cache() {
         $cache = cache::make('block_xp', 'filters');
-        $cache->delete('filters_' . $this->manager->get_courseid());
+        $cache->delete('filters_' . $this->courseid);
     }
 }

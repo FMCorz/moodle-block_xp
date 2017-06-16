@@ -18,25 +18,25 @@
  * Routed request.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_xp\local\routing;
 defined('MOODLE_INTERNAL') || die();
 
-use moodle_url;
-
 /**
  * Routed request.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class routed_request implements request {
 
-    /** @var moodle_url The URL. */
+    /** @var url The URL. */
     protected $url;
     /** @var route The route. */
     protected $route;
@@ -47,10 +47,10 @@ class routed_request implements request {
      * Constructor.
      *
      * @param string $method The HTTP method.
-     * @param moodle_url $url The full URL.
+     * @param url $url The full URL.
      * @param route $route The route.
      */
-    public function __construct($method, moodle_url $url, route $route) {
+    public function __construct($method, url $url, route $route) {
         $this->method = $method;
         $this->url = $url;
         $this->route = $route;
@@ -77,7 +77,7 @@ class routed_request implements request {
     /**
      * Get URL.
      *
-     * @return moodle_url
+     * @return url
      */
     public function get_url() {
         return $this->url;

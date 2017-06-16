@@ -32,9 +32,12 @@ use context_helper;
 use html_writer;
 use moodle_url;
 use pix_icon;
+use renderer_base;
 use stdClass;
 use table_sql;
 use user_picture;
+use block_xp\local\course_world;
+use block_xp\local\xp\user_state_course_store;
 
 /**
  * Block XP report table class.
@@ -45,30 +48,35 @@ use user_picture;
  */
 class report_table extends table_sql {
 
-    /** @var string The key of the user ID column. */
-    public $useridfield = 'id';
-
-    /** @var block_xp_manager XP Manager. */
-    protected $xpmanager = null;
-
-    /** @var block_xp_manager XP Manager. */
-    protected $xpoutput = null;
+    /** @var block_xp\local\course_world The world. */
+    protected $world = null;
+    /** @var block_xp\local\xp\user_state_course_store The store. */
+    protected $store = null;
+    /** @var renderer_base The renderer. */
+    protected $renderer = null;
 
     /**
      * Constructor.
      *
-     * @param string $uniqueid Unique ID.
-     * @param int $courseid Course ID.
-     * @param int $groupid Group ID.
+     * @param course_world $world The world.
+     * @param renderer_base $renderer The renderer.
+     * @param user_state_course_store $store The store.
+     * @param int $groupid The group ID.
      */
-    public function __construct($uniqueid, $courseid, $groupid) {
+    public function __construct(
+            course_world $world,
+            renderer_base $renderer,
+            user_state_course_store $store,
+            $groupid
+        ) {
         global $DB, $PAGE;
-        parent::__construct($uniqueid);
+        parent::__construct('block_xp_report');
 
         // Block XP stuff.
-        $this->xpmanager = \block_xp\di::get('manager_factory')->get_manager($courseid);
-        $this->xpoutput = \block_xp\di::get('renderer');
-        $this->urlresolver = \block_xp\di::get('url_resolver');
+        $this->world = $world;
+        $this->renderer = $renderer;
+        $this->store = $store;
+        $courseid = $this->world->get_courseid();
         $context = context_course::instance($courseid);
 
         // Define columns.
@@ -143,6 +151,26 @@ class report_table extends table_sql {
     }
 
     /**
+     * Override to add states.
+     *
+     * @return void
+     */
+    public function build_table() {
+        if (!$this->rawdata) {
+            return;
+        }
+
+        foreach ($this->rawdata as $row) {
+            $row->state = $this->store->make_state_from_record($row, 'id');
+            $row->lvl = $row->state->get_level()->get_level();
+
+            $formattedrow = $this->format_row($row);
+            $this->add_data_keyed($formattedrow,
+                $this->get_row_class($row));
+        }
+    }
+
+    /**
      * Formats the column actions.
      *
      * @param stdClass $row Table row.
@@ -154,7 +182,7 @@ class report_table extends table_sql {
             'action' => 'edit',
             'userid' => $row->id
         ]);
-        return $this->xpoutput->action_icon($url, new pix_icon('t/edit', get_string('edit')));
+        return $this->renderer->action_icon($url, new pix_icon('t/edit', get_string('edit')));
     }
 
     /**
@@ -174,14 +202,7 @@ class report_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_progress($row) {
-        static $fields = null;
-        if ($fields === null) {
-            $fields = array_flip(\block_xp\output\ladder_table::$xpfields);
-        }
-
-        $record = (object) array_intersect_key((array) $row, $fields);
-        $progress = $this->xpmanager->get_progress_for_user($row->id, $record);
-        return $this->xpoutput->progress_bar($progress);
+        return $this->renderer->progress_bar($row->state);
     }
 
     /**
@@ -201,8 +222,7 @@ class report_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_userpic($row) {
-        context_helper::preload_from_record($row);
-        return $this->xpoutput->user_picture($row);
+        return $this->renderer->user_picture($row->state->get_user());
     }
 
     /**

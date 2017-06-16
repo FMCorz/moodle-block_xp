@@ -15,31 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Filter manager factory interface.
+ * Tasks.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local\factory;
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * Filter manager factory interface.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-interface filter_manager_factory {
-
-    /**
-     * Get the filter manager.
-     *
-     * @param block_xp\local\manager_interface $manager The manager.
-     * @return block_xp\local\filter_manager_interface;
-     */
-    public function get_filter_manager(\block_xp\local\manager_interface $manager);
-
-}
+$maker = \block_xp\di::get('tasks_definition_maker');
+$tasks = $maker->get_tasks_definition();
+unset($maker);

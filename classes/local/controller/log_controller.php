@@ -18,7 +18,8 @@
  * Log controller.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,24 +32,20 @@ use moodle_exception;
  * Log controller class.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class log_controller extends page_controller {
 
     protected $routename = 'log';
-
-    /** @var int The current group ID. */
-    protected $groupid;
-
-    protected function post_login() {
-        parent::post_login();
-        $this->groupid = groups_get_course_group($this->manager->get_course(), true);
-    }
+    protected $supportsgroups = true;
 
     protected function get_table() {
-        $courseid = $this->manager->get_courseid();
-        $table = new \block_xp\output\log_table('block_xp_log', $courseid, $this->groupid);
+        $table = new \block_xp\output\log_table(
+            $this->world,
+            $this->get_groupid()
+        );
         $table->define_baseurl($this->pageurl);
         return $table;
     }
@@ -62,7 +59,8 @@ class log_controller extends page_controller {
     }
 
     protected function page_content() {
-        groups_print_course_menu($this->manager->get_course(), $this->pageurl);
+        // TODO Display something when logging is disabled.
+        $this->print_group_menu();
         echo $this->get_table()->out(50, true);
     }
 

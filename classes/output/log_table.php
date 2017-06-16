@@ -29,6 +29,7 @@ require_once($CFG->libdir . '/tablelib.php');
 
 use stdClass;
 use table_sql;
+use block_xp\local\course_world;
 
 /**
  * Block XP log table class.
@@ -42,19 +43,19 @@ class log_table extends table_sql {
     /** @var string The key of the user ID column. */
     public $useridfield = 'userid';
 
-    /** @var int The course ID. */
-    protected $courseid;
+    /** @var course_world The world. */
+    protected $world;
 
     /**
      * Constructor.
      *
-     * @param string $uniqueid Unique ID.
-     * @param int $courseid Course ID.
-     * @param int $groupid Group ID.
+     * @param course_world $world The world.
+     * @param int $groupid The group ID.
      */
-    public function __construct($uniqueid, $courseid, $groupid) {
-        parent::__construct($uniqueid);
-        $this->courseid = $courseid;
+    public function __construct(course_world $world, $groupid) {
+        parent::__construct('block_xp_log');
+        $this->world = $world;
+        $courseid = $world->get_courseid();
 
         // Define columns.
         $this->define_columns(array(

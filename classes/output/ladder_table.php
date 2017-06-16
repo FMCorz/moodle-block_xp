@@ -28,13 +28,21 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
 
 use context_helper;
+use renderer_base;
 use stdClass;
 use table_sql;
 use user_picture;
-use block_xp\local\manager;
+use block_xp\local\course_world;
+use block_xp\local\config\course_world_config;
+use block_xp\local\xp\user_state_course_store;
+
 
 /**
  * Block XP ladder table class.
+ *
+ * This implementation is terrible and highly depends on the internals of
+ * user_state_course_store. We cannot switch to another store and hope this
+ * ladder table will work as expected.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
@@ -42,11 +50,14 @@ use block_xp\local\manager;
  */
 class ladder_table extends table_sql {
 
-    /** @var string The key of the user ID column. */
-    public $useridfield = 'userid';
+    /** @var string The key of the user ID column. It's "id" because we get the user from the state. */
+    public $useridfield = 'id';
 
-    /** @var manager XP Manager. */
-    protected $xpmanager = null;
+    /** @var course_world Course world. */
+    protected $world = null;
+
+    /** @var user_state_course_store The store. */
+    protected $store = null;
 
     /** @var block_xp_renderer XP Renderer. */
     protected $xpoutput = null;
@@ -58,7 +69,7 @@ class ladder_table extends table_sql {
     protected $currentuserrecord;
 
     /** @var int The identity mode. */
-    protected $identitymode = manager::IDENTITY_ON;
+    protected $identitymode = course_world_config::IDENTITY_ON;
 
     /** @var boolean Only show neighbours. */
     protected $neighboursonly = false;
@@ -70,7 +81,7 @@ class ladder_table extends table_sql {
     protected $neighboursbelow = 3;
 
     /** @var int The rank mode. */
-    protected $rankmode = manager::RANK_ON;
+    protected $rankmode = course_world_config::RANK_ON;
 
     /** @var int The level we're starting from to compute the rank. */
     protected $startinglevel;
@@ -87,19 +98,27 @@ class ladder_table extends table_sql {
     /** @var int The XP to compare with. Used with RANK_REL. */
     protected $startingxpdiff;
 
-    /** @var array The fields found in the XP table. */
-    public static $xpfields = ['id', 'courseid', 'userid', 'xp', 'lvl'];
-
     /**
      * Constructor.
      *
-     * @param string $uniqueid Unique ID.
-     * @param int $courseid Course ID.
-     * @param int $groupid Group ID.
+     * @param course_world $world The world.
+     * @param renderer_base $renderer The renderer.
+     * @param user_state_course_store $store The store.
+     * @param int $groupid The group ID.
+     * @param array $options Options.
+     * @param int $userid The user viewing this.
      */
-    public function __construct($uniqueid, $courseid, $groupid, array $options = [], $userid = null) {
-        global $PAGE, $USER;
-        parent::__construct($uniqueid);
+    public function __construct(
+            course_world $world,
+            renderer_base $renderer,
+            user_state_course_store $store,
+            $groupid,
+            array $options = [],
+            $userid = null
+        ) {
+
+        global $USER;
+        parent::__construct('block_xp_ladder');
 
         if (isset($options['rankmode'])) {
             $this->rankmode = $options['rankmode'];
@@ -124,15 +143,17 @@ class ladder_table extends table_sql {
         $this->userid = $userid;
 
         // Block XP stuff.
-        $this->xpmanager = \block_xp\di::get('manager_factory')->get_manager($courseid);
-        $this->xpoutput = \block_xp\di::get('renderer');
+        $this->world = $world;
+        $this->store = $store;
+        $this->xpoutput = $renderer;
+        $courseid = $this->world->get_courseid();
 
         // Define columns, and headers.
         $columns = [];
         $headers = [];
-        if ($this->rankmode != manager::RANK_OFF) {
+        if ($this->rankmode != course_world_config::RANK_OFF) {
             $columns += array('rank');
-            if ($this->rankmode == manager::RANK_REL) {
+            if ($this->rankmode == course_world_config::RANK_REL) {
                 $headers += array(get_string('difference', 'block_xp'));
             } else {
                 $headers += array(get_string('rank', 'block_xp'));
@@ -209,10 +230,13 @@ class ladder_table extends table_sql {
         if ($this->rawdata) {
             foreach ($this->rawdata as $row) {
 
-                // Preload the context.
-                context_helper::preload_from_record($row);
+                // Add the state, and update the level in case it's incorrect. Though
+                // if the level is incorrect there the ordering will be as well so it
+                // better be right really.
+                $row->state = $this->store->make_state_from_record($row);
+                $row->lvl = $row->state->get_level()->get_level();
 
-                if ($this->rankmode == manager::RANK_ON) {
+                if ($this->rankmode == course_world_config::RANK_ON) {
                     // Show the real rank.
 
                     // If this row is different than the previous one.
@@ -226,7 +250,7 @@ class ladder_table extends table_sql {
                     }
                     $row->rank = $rank;
 
-                } else if ($this->rankmode == manager::RANK_REL) {
+                } else if ($this->rankmode == course_world_config::RANK_REL) {
                     // Show a "relative" rank, the difference between a student and another.
 
                     // There was no indication of what XP to diff with, let's take the first entry.
@@ -257,10 +281,10 @@ class ladder_table extends table_sql {
      * @return string Output produced.
      */
     public function col_fullname($row) {
-        if ($this->identitymode == manager::IDENTITY_OFF && $row->userid != $this->userid) {
+        if ($this->identitymode == course_world_config::IDENTITY_OFF && $row->userid != $this->userid) {
             return get_string('someoneelse', 'block_xp');
         }
-        return parent::col_fullname($row);
+        return parent::col_fullname($row->state->get_user());
     }
 
     /**
@@ -270,14 +294,7 @@ class ladder_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_progress($row) {
-        static $fields = null;
-        if ($fields === null) {
-            $fields = array_flip(self::$xpfields);
-        }
-
-        $record = (object) array_intersect_key((array) $row, $fields);
-        $progress = $this->xpmanager->get_progress_for_user($row->userid, $record);
-        return $this->xpoutput->progress_bar($progress);
+        return $this->xpoutput->progress_bar($row->state);
     }
 
     /**
@@ -286,7 +303,7 @@ class ladder_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_rank($row) {
-        if ($this->rankmode == manager::RANK_REL && $row->rank > 0) {
+        if ($this->rankmode == course_world_config::RANK_REL && $row->rank > 0) {
             return '+' . $row->rank;
         }
         return $row->rank;
@@ -301,7 +318,7 @@ class ladder_table extends table_sql {
     protected function col_userpic($row) {
         global $CFG;
 
-        if ($this->identitymode == manager::IDENTITY_OFF && $this->userid != $row->userid) {
+        if ($this->identitymode == course_world_config::IDENTITY_OFF && $this->userid != $row->userid) {
             static $guestuser = null;
             if ($guestuser === null) {
                 $guestuser = guest_user();
@@ -309,7 +326,7 @@ class ladder_table extends table_sql {
             return $this->xpoutput->user_picture($guestuser, array('link' => false, 'alttext' => false));
         }
 
-        return $this->xpoutput->user_picture(user_picture::unalias($row, null, 'userid'));
+        return $this->xpoutput->user_picture($row->state->get_user());
     }
 
     /**
@@ -326,7 +343,7 @@ class ladder_table extends table_sql {
         $this->startingoffset = 1;
         $this->startingxpdiff = -1;
 
-        if ($this->rankmode == manager::RANK_ON && !empty($this->rawdata)) {
+        if ($this->rankmode == course_world_config::RANK_ON && !empty($this->rawdata)) {
             // Guess the starting rank.
             $record = reset($this->rawdata);
             $sql = "SELECT COUNT(x.id)
@@ -348,7 +365,7 @@ class ladder_table extends table_sql {
             $this->startinglevel = $record->lvl;
             $this->startingxp = $record->xp;
 
-        } else if ($this->rankmode == manager::RANK_REL) {
+        } else if ($this->rankmode == course_world_config::RANK_REL) {
             // When relative, set self XP as difference.
             $record = $this->get_user_record($this->userid);
             if ($record) {
@@ -373,11 +390,11 @@ class ladder_table extends table_sql {
             $record = $DB->get_record_sql($sqlme, $this->sql->params + array('myuserid' => $this->userid));
 
             // Hack so that admin can see something. Hopefully we won't create too many bugs in case of missing fields.
-            if (empty($record) && $this->neighboursonly && $this->xpmanager->can_manage()) {
+            if (empty($record) && $this->neighboursonly && $this->world->get_access_permissions()->can_manage()) {
                 $record = (object) array(
                     'id' => 0,
                     'userid' => $this->userid,
-                    'courseid' => $this->xpmanager->get_courseid(),
+                    'courseid' => $this->world->get_courseid(),
                     'xp' => 0,
                     'lvl' => 1,
                 );
