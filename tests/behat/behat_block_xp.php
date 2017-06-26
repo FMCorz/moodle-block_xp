@@ -15,29 +15,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Base testcase.
+ * Additional behat steps definition.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+// NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
 
-global $CFG;
+require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
 /**
- * Base testcase class.
+ * Additional steps definition.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class block_xp_base_testcase extends advanced_testcase {
+class behat_block_xp extends behat_base {
 
-    public function setUp() {
-        $this->resetAfterTest();
-        \block_xp\di::set_container(new \block_xp\local\default_container());
+    /**
+     * Go to the front page.
+     *
+     * There are no standard definitions available from 2.7 so we use our own.
+     *
+     * @Given /^I am on front page$/
+     */
+    public function i_am_on_front_page() {
+        $this->getSession()->visit($this->locate_path('/?redirect=0'));
     }
 
 }

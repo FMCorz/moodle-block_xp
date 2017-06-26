@@ -38,8 +38,8 @@ require_once(__DIR__ . '/fixtures/events.php');
 class block_xp_filters_testcase extends block_xp_base_testcase {
 
     protected function get_filter_manager($courseid) {
-        $manager = \block_xp\di::get('manager_factory')->get_manager($courseid);
-        return \block_xp\di::get('filter_manager_factory')->get_filter_manager($manager);
+        $world = \block_xp\di::get('course_world_factory')->get_world($courseid);
+        return $world->get_filter_manager();
     }
 
     public function test_filter_match() {
