@@ -111,6 +111,7 @@ class report_controller extends page_controller {
     protected function get_table() {
         if (!$this->table) {
             $this->table = new \block_xp\output\report_table(
+                \block_xp\di::get('db'),
                 $this->world,
                 $this->get_renderer(),
                 $this->world->get_store(),

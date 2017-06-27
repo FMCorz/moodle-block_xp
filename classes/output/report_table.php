@@ -30,6 +30,7 @@ require_once($CFG->libdir . '/tablelib.php');
 use context_course;
 use context_helper;
 use html_writer;
+use moodle_database;
 use moodle_url;
 use pix_icon;
 use renderer_base;
@@ -48,54 +49,71 @@ use block_xp\local\xp\user_state_course_store;
  */
 class report_table extends table_sql {
 
+    /** @var moodle_database The DB. */
+    protected $db;
     /** @var block_xp\local\course_world The world. */
     protected $world = null;
     /** @var block_xp\local\xp\user_state_course_store The store. */
     protected $store = null;
     /** @var renderer_base The renderer. */
     protected $renderer = null;
+    /** @var int The groupd ID. */
+    protected $groupid = null;
 
     /**
      * Constructor.
      *
+     * @param moodle_database $db The DB.
      * @param course_world $world The world.
      * @param renderer_base $renderer The renderer.
      * @param user_state_course_store $store The store.
      * @param int $groupid The group ID.
      */
     public function __construct(
+            moodle_database $db,
             course_world $world,
             renderer_base $renderer,
             user_state_course_store $store,
             $groupid
         ) {
-        global $DB, $PAGE;
+
         parent::__construct('block_xp_report');
 
-        // Block XP stuff.
+        $this->db = $db;
+        $this->groupid = $groupid;
         $this->world = $world;
         $this->renderer = $renderer;
         $this->store = $store;
+
+        // Init the stuff.
+        $this->init();
+    }
+
+    /**
+     * Init function.
+     *
+     * @return void
+     */
+    protected function init() {
+        $this->define_columns($this->get_columns());
+        $this->define_headers($this->get_headers());
+        $this->init_sql();
+
+        $this->sortable(true, 'lvl', SORT_DESC);
+        $this->no_sorting('userpic');
+        $this->no_sorting('progress');
+        $this->collapsible(false);
+    }
+
+    /**
+     * Initialise the SQL bits.
+     *
+     * @return void
+     */
+    protected function init_sql() {
         $courseid = $this->world->get_courseid();
         $context = context_course::instance($courseid);
-
-        // Define columns.
-        $this->define_columns(array(
-            'userpic',
-            'fullname',
-            'lvl',
-            'xp',
-            'progress',
-            'actions'
-        ));
-        $this->define_headers(array(
-            '',
-            get_string('fullname'),
-            get_string('level', 'block_xp'),
-            get_string('xp', 'block_xp'),
-            get_string('progress', 'block_xp'),
-            ''
-        ));
+        $groupid = $this->groupid;
 
         // Get all the users that are enrolled and can earn XP.
         $ids = [];
@@ -120,12 +138,12 @@ class report_table extends table_sql {
                      WHERE courseid = :courseid';
             $params = array('courseid' => $courseid, 'groupid' => $groupid);
         }
-        $entries = $DB->get_recordset_sql($sql, $params);
+        $entries = $this->db->get_recordset_sql($sql, $params);
         foreach ($entries as $entry) {
             $ids[$entry->userid] = $entry->userid;
         }
         $entries->close();
-        list($insql, $inparams) = $DB->get_in_or_equal($ids, SQL_PARAMS_NAMED, 'param', true, null);
+        list($insql, $inparams) = $this->db->get_in_or_equal($ids, SQL_PARAMS_NAMED, 'param', true, null);
 
         // Define SQL.
         $this->sql = new stdClass();
@@ -142,12 +160,38 @@ class report_table extends table_sql {
             'courseid' => $courseid,
             'contextlevel' => CONTEXT_USER
         ));
+    }
 
-        // Define various table settings.
-        $this->sortable(true, 'lvl', SORT_DESC);
-        $this->no_sorting('userpic');
-        $this->no_sorting('progress');
-        $this->collapsible(false);
+    /**
+     * Get the columns.
+     *
+     * @return array
+     */
+    protected function get_columns() {
+        return [
+            'userpic',
+            'fullname',
+            'lvl',
+            'xp',
+            'progress',
+            'actions'
+        ];
+    }
+
+    /**
+     * Get the headers.
+     *
+     * @return void
+     */
+    protected function get_headers() {
+        return [
+            '',
+            get_string('fullname'),
+            get_string('level', 'block_xp'),
+            get_string('xp', 'block_xp'),
+            get_string('progress', 'block_xp'),
+            ''
+        ];
     }
 
     /**
