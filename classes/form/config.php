@@ -121,6 +121,7 @@ class config extends moodleform {
             '30' => get_string('for1month', 'block_xp'),
         );
         $mform->addElement('select', 'keeplogs', get_string('keeplogs', 'block_xp'), $options);
+        $mform->disabledIf('keeplogs', 'enablelog', 'eq', 0);
 
         $this->add_action_buttons();
     }
