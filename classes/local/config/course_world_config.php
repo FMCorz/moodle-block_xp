@@ -58,39 +58,24 @@ class course_world_config implements config {
     /** When the defaults filters have not yet been added. */
     const DEFAULT_FILTERS_MISSING = 2;
 
-    /** @var array Config defaults. */
-    protected static $configdefaults = array(
-        'enabled' => false,
-        'enablelog' => 1,
-        'keeplogs' => 3,
-        'enablecheatguard' => true,   // Enable cheat guard.
-        'enableladder' => true,       // Enable the ladder.
-        'enableinfos' => true,        // Enable the infos page.
-        'levels' => 0,                // Not used any more.
-        'levelsdata' => '',           // JSON encoded value of the levels data.
-        'enablelevelupnotif' => true, // Enable the level up notification.
-        'enablecustomlevelbadges' => false,  // Enable the usage of custom level badges.
-        'maxactionspertime' => 10,           // Max actions during timepermaxactions.
-        'timeformaxactions' => 60,           // Time during which max actions cannot be reached.
-        'timebetweensameactions' => 180,     // Time between similar actions.
-        'identitymode' => self::IDENTITY_ON, // Identity mode.
-        'rankmode' => self::RANK_ON,         // Rank mode.
-        'neighbours' => 0,                   // Number of neighbours to show on ladder, 0 means everyone.
-        'defaultfilters' => self::DEFAULT_FILTERS_MISSING  // Flag about the default filters.
-    );
-
     /** @var config The proxied config object. */
     protected $store;
 
     /**
      * Constructor.
      *
+     * @param config $adminconfig The admin config.
      * @param moodle_database $db The DB.
      * @param int $courseid The course ID.
      */
-    public function __construct(moodle_database $db, $courseid) {
+    public function __construct(config $adminconfig, moodle_database $db, $courseid) {
+        // What do we do here? We create a stack of configuration which the table_row_config
+        // can get the defaults from if it needs to. This works so long as we do not introduce
+        // keys in both course and admin configs which do not represent the same thing.
+        $defaults = new config_stack([new frozen_config($adminconfig), new default_course_world_config()]);
+
         $this->store = new \block_xp\local\config\table_row_config($db, 'block_xp_config',
-            static::$configdefaults, ['courseid' => $courseid]);
+            $defaults, ['courseid' => $courseid]);
     }
 
     /**

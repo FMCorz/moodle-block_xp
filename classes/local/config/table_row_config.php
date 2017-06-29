@@ -49,24 +49,34 @@ class table_row_config implements config {
     protected $table;
     /** @var array The conditions. */
     protected $conditions;
-    /** @var array The defaults. */
+    /** @var config The config holding the defaults. */
     protected $defaults;
     /** @var stdClass The table row. */
     protected $record;
+    /** @var array Reserved keys. */
+    protected $reservedkeys;
 
     /**
      * Constructor.
      *
      * @param moodle_database $db The DB.
      * @param string $table The table.
-     * @param array $defaults The defaults.
+     * @param config $defaults The defaults.
      * @param array $conditions The conditions to find the record.
      */
-    public function __construct(moodle_database $db, $table, array $defaults, array $conditions = []) {
+    public function __construct(moodle_database $db, $table, config $defaults, array $conditions = []) {
         $this->db = $db;
         $this->table = $table;
         $this->conditions = $conditions;
         $this->defaults = $defaults;
+        $this->reservedkeys = array_flip(array_merge(['id'], array_keys($conditions)));
+
+        // Quick validation.
+        foreach ($this->reservedkeys as $key => $unused) {
+            if ($defaults->has($key)) {
+                throw new coding_exception('Found conflict in defaults values and conditions at key: ' . $key);
+            }
+        }
     }
 
     /**
@@ -76,15 +86,13 @@ class table_row_config implements config {
      * @return mixed
      */
     public function get($name) {
-        if ($name === 'id' || array_key_exists($name, $this->conditions)) {
+        if (array_key_exists($name, $this->reservedkeys)) {
             throw new coding_exception('Invalid config name: ' . $name);
         }
 
-        $this->load();
-        if (!property_exists($this->record, $name)) {
+        if (!$this->has($name)) {
             throw new coding_exception('Unknown config: ' . $name);
         }
-
         return $this->record->{$name};
     }
 
@@ -97,8 +105,18 @@ class table_row_config implements config {
         $this->load();
         $data = (array) $this->record;
         unset($data['id']);
-        unset($data['courseid']);
-        return $data;
+        return array_diff_key($data, $this->reservedkeys);
+    }
+
+    /**
+     * Do we have the config?
+     *
+     * @param string $name The config name.
+     * @return bool
+     */
+    public function has($name) {
+        $this->load();
+        return property_exists($this->record, $name);
     }
 
     /**
@@ -111,7 +129,7 @@ class table_row_config implements config {
             $record = $this->db->get_record($this->table, $this->conditions);
             if (!$record) {
                 $record = $this->conditions;
-                $record += $this->defaults;
+                $record += $this->defaults->get_all();
                 $record['id'] = 0;
                 $record = (object) $record;
             }
@@ -154,17 +172,15 @@ class table_row_config implements config {
      * @param mixed $value The value.
      */
     protected function set_without_save($name, $value) {
-        if ($name === 'id' || array_key_exists($name, $this->conditions)) {
+        if (array_key_exists($name, $this->reservedkeys)) {
             throw new coding_exception('Invalid config name: ' . $name);
         } else if (!is_scalar($value)) {
             throw new coding_exception('Value for config is not scalar: ' . $value);
         }
 
-        $this->load();
-        if (!property_exists($this->record, $name)) {
+        if (!$this->has($name)) {
             throw new coding_exception('Unknown config: ' . $name);
         }
-
         $this->record->{$name} = $value;
     }
 

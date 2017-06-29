@@ -27,6 +27,7 @@ namespace block_xp\local\factory;
 defined('MOODLE_INTERNAL') || die();
 
 use moodle_database;
+use block_xp\local\config\config;
 
 /**
  * Main factory.
@@ -38,6 +39,8 @@ use moodle_database;
  */
 class factory implements course_world_factory {
 
+    /** @var config The admin config. */
+    protected $adminconfig;
     /** @var moodle_database The DB. */
     protected $db;
     /** @var bool For the whole site? */
@@ -48,12 +51,13 @@ class factory implements course_world_factory {
     /**
      * Constructor.
      *
+     * @param config $adminconfig The admin config.
      * @param moodle_database $db The DB.
-     * @param int $contextmode The context mode. When equal to CONTEXT_SYSTEM, we force SITEID.
      */
-    public function __construct(moodle_database $db, $contextmode) {
+    public function __construct(config $adminconfig, moodle_database $db) {
+        $this->adminconfig = $adminconfig;
         $this->db = $db;
-        if (!empty($contextmode) && $contextmode == CONTEXT_SYSTEM) {
+        if ($adminconfig->get('context') == CONTEXT_SYSTEM) {
             $this->forwholesite = true;
         }
     }
@@ -73,7 +77,7 @@ class factory implements course_world_factory {
 
         $courseid = intval($courseid);
         if (!isset($this->worlds[$courseid])) {
-            $this->worlds[$courseid] = new \block_xp\local\course_world($this->db, $courseid);
+            $this->worlds[$courseid] = new \block_xp\local\course_world($this->adminconfig, $this->db, $courseid);
         }
         return $this->worlds[$courseid];
     }

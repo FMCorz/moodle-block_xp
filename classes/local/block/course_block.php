@@ -44,8 +44,8 @@ class course_block extends block_base {
      * @return array
      */
     public function applicable_formats() {
-        global $CFG;
-        if (isset($CFG->block_xp_context) && $CFG->block_xp_context == CONTEXT_SYSTEM) {
+        $mode = \block_xp\di::get('config')->get('context');
+        if ($mode == CONTEXT_SYSTEM) {
             return array('site' => true, 'course' => true, 'my' => true);
         }
         return array('course' => true);

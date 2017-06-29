@@ -45,6 +45,7 @@ class default_container implements container {
         'block_class' => true,
         'block_edit_form_class' => true,
         'collection_strategy' => true,
+        'config' => true,
         'course_world_factory' => true,
         'db' => true,
         'file_server' => true,
@@ -111,10 +112,20 @@ class default_container implements container {
      * @return collection_strategy
      */
     protected function get_collection_strategy() {
-        global $CFG;
         return new \block_xp\local\strategy\global_collection_strategy(
             $this->get_factory(),
-            $CFG->block_xp_context
+            $this->get('config')->get('context')
+        );
+    }
+
+    /**
+     * Get the global config object.
+     *
+     * @return config
+     */
+    protected function get_config() {
+        return new \block_xp\local\config\admin_config(
+            new \block_xp\local\config\default_admin_config()
         );
     }
 
@@ -143,11 +154,10 @@ class default_container implements container {
      * @return factory
      */
     protected function get_factory() {
-        global $CFG;
         if (!$this->factory) {
             $factory = new \block_xp\local\factory\factory(
-                $this->get('db'),
-                $CFG->block_xp_context
+                $this->get('config'),
+                $this->get('db')
             );
         }
         return $factory;
@@ -160,7 +170,7 @@ class default_container implements container {
      */
     protected function get_file_server() {
         global $CFG;
-        return new \block_xp\local\file\file_server(get_file_storage(), $CFG->block_xp_context);
+        return new \block_xp\local\file\file_server(get_file_storage(), $this->get('config')->get('context'));
     }
 
     /**

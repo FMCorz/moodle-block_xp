@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 use context_course;
 use context_system;
 use moodle_database;
+use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
 
 /**
@@ -41,6 +42,8 @@ use block_xp\local\config\course_world_config;
  */
 class course_world implements world {
 
+    /** @var config The admin config. */
+    protected $adminconfig;
     /** @var config The config. */
     protected $config;
     /** @var context The context. */
@@ -65,10 +68,12 @@ class course_world implements world {
     /**
      * Constructor.
      *
+     * @param config $adminconfig The admin config.
      * @param moodle_database $db The DB.
      * @param int $courseid The course ID.
      */
-    public function __construct(moodle_database $db, $courseid) {
+    public function __construct(config $adminconfig, moodle_database $db, $courseid) {
+        $this->adminconfig = $adminconfig;
         $this->courseid = $courseid;
         $this->db = $db;
 
@@ -87,7 +92,7 @@ class course_world implements world {
 
     public function get_config() {
         if (!$this->config) {
-            $this->config = new course_world_config($this->db, $this->courseid);
+            $this->config = new course_world_config($this->adminconfig, $this->db, $this->courseid);
         }
         return $this->config;
     }
