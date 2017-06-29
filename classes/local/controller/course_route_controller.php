@@ -27,8 +27,6 @@ namespace block_xp\local\controller;
 defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
-use moodle_exception;
-use block_xp\local\routing\url;
 
 /**
  * Course route controller class.
@@ -38,62 +36,17 @@ use block_xp\local\routing\url;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class course_route_controller implements controller {
+abstract class course_route_controller extends route_controller {
 
     /** @var stdClass The course. */
     protected $course;
     /** @var int The course ID. */
     protected $courseid;
-    /** @var \block_xp\local\request The request. */
-    protected $request;
-    /** @var url The page URL, not relative to the router. */
-    protected $pageurl;
-    /** @var renderer_base A renderer. */
-    protected $renderer;
     /** @var bool Whether the page supports groups. */
     protected $supportsgroups = false;
-    /** @var url_resolver URL resolver. */
-    protected $urlresolver;
 
     /** @var int The group ID. */
     private $groupid;
-    /** @var array The combined request and optional parameters. */
-    private $params;
-    /** @var array The optional parameters. */
-    private $optionalparams;
-
-    /**
-     * Define the page url.
-     *
-     * @return void
-     */
-    protected function define_pageurl() {
-        $paramsdef = array_reduce($this->define_optional_params(), function($carry, $item) {
-            if (isset($item[3]) && !$item[3]) {
-                // Do not return parameters which must not be in the URL.
-                return $carry;
-            }
-            $carry[$item[0]] = $item[1];
-            return $carry;
-        }, []);
-
-        $params = [];
-        foreach ($this->optionalparams as $param => $value) {
-            // Skip the ones which didn't make the cut.
-            if (!array_key_exists($param, $paramsdef)) {
-                continue;
-            }
-            // Skip arguments whose defaults values are the same.
-            if ($paramsdef[$param] == $value) {
-                continue;
-            }
-            // Finally, accept the parameter.
-            $params[$param] = $value;
-        }
-
-        $this->pageurl = new url($this->request->get_url());
-        $this->pageurl->params($params);
-    }
 
     /**
      * Authentication.
@@ -120,8 +73,8 @@ abstract class course_route_controller implements controller {
      * @return void
      */
     protected function post_login() {
+        parent::post_login();
         $this->world = \block_xp\di::get('course_world_factory')->get_world($this->courseid);
-        $this->urlresolver = \block_xp\di::get('url_resolver');
     }
 
     /**
@@ -137,14 +90,6 @@ abstract class course_route_controller implements controller {
         $PAGE->set_title($this->get_page_html_head_title());
         $PAGE->set_heading($this->get_page_title());
     }
-
-    /**
-     * Add here all permissions checks related to accessing the page.
-     *
-     * @throws moodle_exception When the conditions are not met.
-     * @return void
-     */
-    abstract protected function permissions_checks();
 
     /**
      * Whether the page supports groups.
@@ -197,52 +142,6 @@ abstract class course_route_controller implements controller {
     }
 
     /**
-     * Collect the parameters.
-     *
-     * @return void
-     */
-    final private function collect_params() {
-        $this->collect_optional_params();
-        $this->params = $this->request->get_route()->get_params() + $this->optionalparams;
-    }
-
-    /**
-     * The optional params expected.
-     *
-     * Using this format:
-     * [
-     *     ['paramname', $defaultvalue, PARAM_TYPE],
-     *     ['paramname2', $defaultvalue, PARAM_TYPE, $includeinurl],
-     *     ...
-     * ]
-     *
-     * The parameter $includeinurl is optional and defaults to true. When false,
-     * the value will not be added to the page URL, you can consider it as being
-     * dismissed when the user navigated to another page. Make sure to pass it
-     * around when you need it. It's useful for values such as 'confirm' which
-     * you would want to automatically remove from the page URL.
-     *
-     * @return array
-     */
-    protected function define_optional_params() {
-        return [];
-    }
-
-    /**
-     * Read and compute the optional params.
-     *
-     * This should only be used once, to read the parameters, refer to {@link self::get_param}.
-     *
-     * @return array
-     */
-    final private function collect_optional_params() {
-        $this->optionalparams = array_reduce($this->define_optional_params(), function($carry, $data) {
-            $carry[$data[0]] = optional_param($data[0], $data[1], $data[2]);
-            return $carry;
-        }, []);
-    }
-
-    /**
      * Get the course.
      *
      * @return stdClass
@@ -258,82 +157,6 @@ abstract class course_route_controller implements controller {
     }
 
     /**
-     * Read one of the parameters.
-     *
-     * This includes request, and GET/POST parameters.
-     *
-     * @param string $name The parameter name.
-     * @return mixed
-     */
-    final protected function get_param($name) {
-        if (!array_key_exists($name, $this->params)) {
-            throw new \coding_exception('Unknown parameter: ' . $name);
-        }
-        return $this->params[$name];
-    }
-
-    /**
-     * Get the renderer.
-     *
-     * @return renderer_base.
-     */
-    protected function get_renderer() {
-        if (!$this->renderer) {
-            $this->renderer = \block_xp\di::get('renderer');
-        }
-        return $this->renderer;
-    }
-
-    /**
-     * Handle the request.
-     *
-     * @param \block_xp\local\routing\routed_request $request The request.
-     * @return void
-     */
-    final public function handle(\block_xp\local\routing\request $request) {
-        if (!$request instanceof \block_xp\local\routing\routed_request) {
-            throw new coding_exception('Routed request must be used here...');
-        }
-        $this->request = $request;
-        $this->collect_params();
-        $this->define_pageurl();
-        $this->require_login();
-        $this->post_login();
-        $this->permissions_checks();
-        $this->page_setup();
-        $this->pre_content();
-        $this->start();
-        $this->content();
-        $this->end();
-    }
-
-    /**
-     * What needs to be done prior to any output.
-     *
-     * This is the place you want to initiate redirections from.
-     *
-     * @return void
-     */
-    protected function pre_content() {
-    }
-
-    /**
-     * Start the output.
-     *
-     * @return void
-     */
-    final protected function start() {
-        echo $this->get_renderer()->header();
-    }
-
-    /**
-     * Echo the content.
-     *
-     * @return void
-     */
-    abstract protected function content();
-
-    /**
      * Print the group menu.
      *
      * @return string
@@ -345,26 +168,4 @@ abstract class course_route_controller implements controller {
         echo groups_print_course_menu($this->get_course(), $this->pageurl->get_compatible_url());
     }
 
-    /**
-     * Finalise the output.
-     *
-     * @return void
-     */
-    final protected function end() {
-        echo $this->get_renderer()->footer();
-    }
-
-    /**
-     * Helper method to redirect.
-     *
-     * @param url $url The URL to go to.
-     * @param string $message The redirect message.
-     * @return void
-     */
-    final protected function redirect(url $url = null, $message = '') {
-        if ($url === null) {
-            $url = $this->pageurl;
-        }
-        redirect($url, $message);
-    }
 }
