@@ -67,6 +67,7 @@ class default_admin_config extends frozen_config {
             'enablelog' => 1,
             'identitymode' => course_world_config::IDENTITY_ON,
             'keeplogs' => 3,
+            'levelsdata' => '',
             'maxactionspertime' => 10,
             'neighbours' => 0,
             'rankmode' => course_world_config::RANK_ON,

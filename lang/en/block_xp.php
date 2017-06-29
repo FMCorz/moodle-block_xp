@@ -55,6 +55,7 @@ $string['coursesettings'] = 'Course settings';
 $string['coursevisuals'] = 'Course visuals';
 $string['customizelevels'] = 'Customize the levels';
 $string['dangerzone'] = 'Danger zone';
+$string['defaultlevels'] = 'Default levels';
 $string['defaultrules'] = 'Default rules';
 $string['defaultrulesformhelp'] = 'Those are the default rules provided by the plugin, they automatically give default experience points and ignore some redundant events. Your own rules take precedence over them.';
 $string['defaultsettings'] = 'Default settings';

@@ -50,7 +50,7 @@ class levels_with_algo extends moodleform {
         global $OUTPUT;
 
         $mform = $this->_form;
-        $config = $this->_customdata['config'];
+        $config = isset($this->_customdata['config']) ? $this->_customdata['config'] : null;
 
         $mform->setDisableShortforms(true);
         $mform->addElement('header', 'hdrgen', get_string('general', 'form'));
@@ -59,7 +59,8 @@ class levels_with_algo extends moodleform {
         $mform->addRule('levels', get_string('required'), 'required');
         $mform->setType('levels', PARAM_INT);
 
-        if ($config->get('enablecustomlevelbadges')) {
+        // Typically, we only have a config when this form is used in a course, not in the admin.
+        if ($config && $config->get('enablecustomlevelbadges')) {
             $mform->addElement('static', '', '', get_string('changelevelformhelp', 'block_xp'));
         }
 
@@ -85,8 +86,11 @@ class levels_with_algo extends moodleform {
         $mform->addelement('hidden', 'insertlevelshere');
         $mform->setType('insertlevelshere', PARAM_BOOL);
 
-        $mform->addElement('static', 'warn', '',
-            $OUTPUT->notification(get_string('levelswillbereset', 'block_xp'), 'notifyproblem'));
+        // We only need to show this in the course.
+        if ($config) {
+            $mform->addElement('static', 'warn', '',
+                $OUTPUT->notification(get_string('levelswillbereset', 'block_xp'), 'notifyproblem'));
+        }
 
         $this->add_action_buttons();
 

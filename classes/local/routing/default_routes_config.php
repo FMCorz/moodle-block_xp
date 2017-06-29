@@ -126,6 +126,12 @@ class default_routes_config implements routes_config {
             ),
 
             // Admin routes.
+            'admin/levels' => new route_definition(
+                'admin/levels',
+                '/admin/levels',
+                '~^/admin/levels$~',
+                'admin_levels'
+            ),
             'admin/rules' => new route_definition(
                 'admin/rules',
                 '/admin/rules',

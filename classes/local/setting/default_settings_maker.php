@@ -97,7 +97,13 @@ class default_settings_maker implements settings_maker {
         }
         $settings->add($catname, $settingspage);
 
-        // Add the external rules page.
+        // Add the default levels page.
+        $settingspage = new admin_externalpage('block_xp_default_levels',
+            get_string('defaultlevels', 'block_xp'),
+            $this->urlresolver->reverse('admin/levels'));
+        $settings->add($catname, $settingspage);
+
+        // Add the default rules page.
         $settingspage = new admin_externalpage('block_xp_default_rules',
             get_string('defaultrules', 'block_xp'),
             $this->urlresolver->reverse('admin/rules'));

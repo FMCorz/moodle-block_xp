@@ -54,7 +54,8 @@ abstract class admin_route_controller extends route_controller {
         if (!$this->sectionname) {
             throw new coding_exception('The property $sectionname was not defined.');
         }
-        admin_externalpage_setup($this->sectionname, '', null, $this->pageurl);
+        // We must pass the compatible URL, or the navigation does not match the right page.
+        admin_externalpage_setup($this->sectionname, '', null, $this->pageurl->get_compatible_url());
     }
 
     /**
