@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Config interface.
+ * Frozen config.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
@@ -27,53 +27,75 @@ namespace block_xp\local\config;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Config interface.
+ * Frozen config.
+ *
+ * Wrap a config object around this one to prevent any unexpected writes.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface config {
+class frozen_config implements config {
+
+    /** @var config The config. */
+    private $config;
+
+    /**
+     * Constructor.
+     *
+     * @param config $config The config object.
+     */
+    public function __construct(config $config) {
+        $this->config = $config;
+    }
 
     /**
      * Get a value.
      *
      * @param string $name The name.
      * @return mixed
-     * @throws coding_exception When not found.
      */
-    public function get($name);
+    final public function get($name) {
+        return $this->config->get($name);
+    }
 
     /**
      * Get all config.
      *
      * @return array
      */
-    public function get_all();
+    final public function get_all() {
+        return $this->config->get_all();
+    }
 
     /**
-     * Whether the config exists.
+     * Whether we have that config.
      *
+     * @param string $name The config name.
      * @return bool
      */
-    public function has($name);
+    final public function has($name) {
+        return $this->config->has($name);
+    }
 
     /**
      * Set a value.
      *
      * @param string $name Name of the config.
      * @param mixed $value The value.
-     * @throws coding_exception When the value is not scalar.
      */
-    public function set($name, $value);
+    final public function set($name, $value) {
+        // Do nothing, it's frozen.
+    }
 
     /**
      * Set many.
      *
      * @param array $values Keys are config names, and values are values.
-     * @throws coding_exception When a value is not scalar.
      */
-    public function set_many(array $values);
+    final public function set_many(array $values) {
+        // Do nothing, it's still frozen.
+    }
 
 }

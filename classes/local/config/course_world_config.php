@@ -113,6 +113,16 @@ class course_world_config implements config {
     }
 
     /**
+     * Whether we have that config.
+     *
+     * @param string $name The config name.
+     * @return bool
+     */
+    public function has($name) {
+        return $this->store->has($name);
+    }
+
+    /**
      * Set a value.
      *
      * @param string $name Name of the config.

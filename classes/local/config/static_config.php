@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Config interface.
+ * Static config.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
@@ -26,54 +26,84 @@
 namespace block_xp\local\config;
 defined('MOODLE_INTERNAL') || die();
 
+use coding_exception;
+
 /**
- * Config interface.
+ * Static config.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface config {
+final class static_config implements config {
+
+    /** @var array Data values. */
+    private $data;
+
+    /**
+     * Constructor.
+     *
+     * @param array $initialdata The initial data.
+     */
+    public function __construct(array $initialdata = []) {
+        $this->set_many($initialdata);
+    }
 
     /**
      * Get a value.
      *
      * @param string $name The name.
      * @return mixed
-     * @throws coding_exception When not found.
      */
-    public function get($name);
+    public function get($name) {
+        if (!$this->has($name)) {
+            throw new coding_exception('Unknown config name.');
+        }
+        return $this->data[$name];
+    }
 
     /**
      * Get all config.
      *
      * @return array
      */
-    public function get_all();
+    public function get_all() {
+        return $this->data;
+    }
 
     /**
-     * Whether the config exists.
+     * Whether we have that config.
      *
+     * @param string $name The config name.
      * @return bool
      */
-    public function has($name);
+    public function has($name) {
+        return array_key_exists($name, $this->data);
+    }
 
     /**
      * Set a value.
      *
      * @param string $name Name of the config.
      * @param mixed $value The value.
-     * @throws coding_exception When the value is not scalar.
      */
-    public function set($name, $value);
+    public function set($name, $value) {
+        if (!is_scalar($value)) {
+            throw new coding_exception('Value for config is not scalar: ' . $value);
+        }
+        $this->data[$name] = $value;
+    }
 
     /**
      * Set many.
      *
      * @param array $values Keys are config names, and values are values.
-     * @throws coding_exception When a value is not scalar.
      */
-    public function set_many(array $values);
+    public function set_many(array $values) {
+        foreach ($values as $key => $value) {
+            $this->set($key, $value);
+        }
+    }
 
 }
