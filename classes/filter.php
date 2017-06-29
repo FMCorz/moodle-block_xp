@@ -110,6 +110,20 @@ class block_xp_filter implements renderable {
     }
 
     /**
+     * Get the record data.
+     *
+     * @return stdClass
+     */
+    public function export() {
+        $record = new stdClass();
+        $record->courseid = $this->courseid;
+        $record->points = $this->points;
+        $record->ruledata = $this->ruledata;
+        $record->sortorder = $this->sortorder;
+        return $record;
+    }
+
+    /**
      * Return whether or not the filter is editable.
      *
      * @return boolean
@@ -219,12 +233,7 @@ class block_xp_filter implements renderable {
         if (!$this->editable) {
             throw new coding_exception('Non-editable filters cannot be saved.');
         }
-        $record = (object) array(
-            'courseid' => $this->courseid,
-            'ruledata' => $this->ruledata,
-            'points' => $this->points,
-            'sortorder' => $this->sortorder,
-        );
+        $record = $this->export();
         if (!$this->id) {
             $this->id = $DB->insert_record('block_xp_filters', $record);
         } else {
