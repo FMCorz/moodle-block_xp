@@ -208,7 +208,9 @@ class default_container implements container {
      * @return settings_maker
      */
     protected function get_settings_maker() {
-        return new \block_xp\local\setting\default_settings_maker();
+        return new \block_xp\local\setting\default_settings_maker(
+            $this->get('url_resolver')
+        );
     }
 
     /**

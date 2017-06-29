@@ -49,7 +49,7 @@ class default_routes_config implements routes_config {
             'home' => new route_definition(
                 'home',
                 '/',
-                '~$/^~',
+                '~^/$~',
                 'index'
             ),
             'config' => new route_definition(
@@ -123,6 +123,14 @@ class default_routes_config implements routes_config {
                 [
                     1 => 'courseid'
                 ]
+            ),
+
+            // Admin routes.
+            'admin/rules' => new route_definition(
+                'admin/rules',
+                '/admin/rules',
+                '~^/admin/rules$~',
+                'admin_rules'
             ),
         ];
     }

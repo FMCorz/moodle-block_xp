@@ -26,7 +26,10 @@
 namespace block_xp\local\setting;
 defined('MOODLE_INTERNAL') || die();
 
+use admin_category;
+use admin_externalpage;
 use admin_setting_configselect;
+use block_xp\local\routing\url_resolver;
 
 /**
  * Default settings maker.
@@ -38,6 +41,18 @@ use admin_setting_configselect;
  */
 class default_settings_maker implements settings_maker {
 
+    /** @var url_resolver The URL resolver. */
+    protected $urlresolver;
+
+    /**
+     * Constructor.
+     *
+     * @param url_resolver $urlresolver The URL resolver.
+     */
+    public function __construct(url_resolver $urlresolver) {
+        $this->urlresolver = $urlresolver;
+    }
+
     /**
      * Get the settings.
      *
@@ -45,24 +60,48 @@ class default_settings_maker implements settings_maker {
      * @return part_of_admin_tree|null
      */
     public function get_settings(environment $env) {
-        $settings = $env->get_settings_page();
+        $catname = 'block_xp_category';
+        $plugininfo = $env->get_plugininfo();
 
+        // Create a category to hold different pages.
+        $settings = new admin_category($catname, $plugininfo->displayname);
+
+        // Block are given a generic settings page.
+        // We rename it, add it to the category, and populate it.
+        $settingspage = $env->get_settings_page();
+        $settingspage->visiblename = get_string('generalsettings', 'admin');
+        $settings->add($catname, $settingspage);
         if ($env->is_full_tree()) {
-
-            // Context in which the block is enabled.
-            $settings->add(new admin_setting_configselect(
-                'block_xp_context',
-                get_string('wherearexpused', 'block_xp'),
-                get_string('wherearexpused_desc', 'block_xp'),
-                CONTEXT_COURSE,
-                [
-                    CONTEXT_COURSE => get_string('incourses', 'block_xp'),
-                    CONTEXT_SYSTEM => get_string('forthewholesite', 'block_xp')
-                ]
-            ));
+            $this->add_general_settings($env, $settingspage);
         }
 
+        // Add the external rules page.
+        $settingspage = new admin_externalpage('block_xp_default_rules',
+            get_string('defaultrules', 'block_xp'),
+            $this->urlresolver->reverse('admin/rules'));
+        $settings->add($catname, $settingspage);
+
         return $settings;
+    }
+
+    /**
+     * Add the general settings to the page given.
+     *
+     * @param environment $env The environment.
+     * @param adminsetting_page $page The page.
+     */
+    protected function add_general_settings(environment $env, $page) {
+        // Context in which the block is enabled.
+        $page->add(new admin_setting_configselect(
+            'block_xp_context',
+            get_string('wherearexpused', 'block_xp'),
+            get_string('wherearexpused_desc', 'block_xp'),
+            CONTEXT_COURSE,
+            [
+                CONTEXT_COURSE => get_string('incourses', 'block_xp'),
+                CONTEXT_SYSTEM => get_string('forthewholesite', 'block_xp')
+            ]
+        ));
     }
 
 }
