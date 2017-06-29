@@ -326,6 +326,34 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2017021401, 'xp');
     }
 
+    if ($oldversion < 2017062900) {
+
+        // Define field defaultfilters to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('defaultfilters', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1', 'neighbours');
+
+        // Conditionally launch add field defaultfilters.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2017062900, 'xp');
+    }
+
+    if ($oldversion < 2017062901) {
+
+        // Although this should have been done when adding the database field, here
+        // we ensure that existing instances of the block will be set to the 'static'
+        // flag for default filters. This ensures that they are properly marked as
+        // legacy instances, so that we can convert them on the fly later on.
+        define('BLOCK_XP_UPGRADE_DEFAULT_FILTERS_STATIC', 1);
+        $DB->set_field('block_xp_config', 'defaultfilters', BLOCK_XP_UPGRADE_DEFAULT_FILTERS_STATIC);
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2017062901, 'xp');
+    }
+
     return true;
 
 }

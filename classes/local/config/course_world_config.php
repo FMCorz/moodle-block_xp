@@ -51,6 +51,13 @@ class course_world_config implements config {
     /** Identity displayed. */
     const IDENTITY_ON = 1;
 
+    /** When there is nothing to do about the default filters. */
+    const DEFAULT_FILTERS_NOOP = 0;
+    /** When the default filters are static, and non-editable. This is a legacy state for spotting v2.x. */
+    const DEFAULT_FILTERS_STATIC = 1;
+    /** When the defaults filters have not yet been added. */
+    const DEFAULT_FILTERS_MISSING = 2;
+
     /** @var array Config defaults. */
     protected static $configdefaults = array(
         'enabled' => false,
@@ -69,6 +76,7 @@ class course_world_config implements config {
         'identitymode' => self::IDENTITY_ON, // Identity mode.
         'rankmode' => self::RANK_ON,         // Rank mode.
         'neighbours' => 0,                   // Number of neighbours to show on ladder, 0 means everyone.
+        'defaultfilters' => self::DEFAULT_FILTERS_MISSING  // Flag about the default filters.
     );
 
     /** @var config The proxied config object. */

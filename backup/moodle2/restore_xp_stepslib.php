@@ -84,6 +84,12 @@ class restore_xp_block_structure_step extends restore_structure_step {
     protected function process_config($data) {
         global $DB;
         $data['courseid'] = $this->get_courseid();
+
+        // Guarantees that older backups are given the expected legacy value here.
+        if (!isset($data['defaultfilters'])) {
+            $data['defaultfilters'] = \block_xp\local\config\course_world_config::DEFAULT_FILTERS_STATIC;
+        }
+
         if ($DB->record_exists('block_xp_config', array('courseid' => $data['courseid']))) {
             $this->log('block_xp: config not restored, existing config was found', backup::LOG_DEBUG);
             return;
