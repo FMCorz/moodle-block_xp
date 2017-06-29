@@ -152,22 +152,28 @@ class ladder_table extends table_sql {
         $columns = [];
         $headers = [];
         if ($this->rankmode != course_world_config::RANK_OFF) {
-            $columns += array('rank');
             if ($this->rankmode == course_world_config::RANK_REL) {
-                $headers += array(get_string('difference', 'block_xp'));
+                $columns[] = 'lvl';
+                $headers[] =  get_string('level', 'block_xp');
+                $columns[] = 'rank';
+                $headers[] = get_string('difference', 'block_xp');
             } else {
-                $headers += array(get_string('rank', 'block_xp'));
+                $columns[] = 'rank';
+                $headers[] = get_string('rank', 'block_xp');
+                $columns[] = 'lvl';
+                $headers[] =  get_string('level', 'block_xp');
             }
+        } else {
+            $columns[] = 'lvl';
+            $headers[] =  get_string('level', 'block_xp');
         }
         $columns = array_merge($columns, array(
-            'lvl',
             'userpic',
             'fullname',
             'xp',
             'progress'
         ));
         $headers = array_merge($headers, array(
-            get_string('level', 'block_xp'),
             '',
             get_string('fullname'),
             get_string('xp', 'block_xp'),
