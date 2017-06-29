@@ -347,6 +347,70 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Render the filters widget.
+     *
+     * /!\ We only support one editable widget per page!
+     *
+     * @param renderer_base $widget The widget.
+     * @return string
+     */
+    public function render_filters_widget(renderable $widget) {
+        if ($widget->editable) {
+            $templatefilter = $this->render($widget->filter);
+
+            $templatetypes = [];
+            foreach ($widget->rules as $rule) {
+                $templatetypes[uniqid()] = [
+                    'name' => $rule->name,
+                    'template' => $this->render($rule->rule, ['iseditable' => true, 'basename' => 'XXXXX'])
+                ];
+            }
+
+            // Prepare Javascript.
+            $this->page->requires->yui_module('moodle-block_xp-filters', 'Y.M.block_xp.Filters.init', [[
+                'filter' => $templatefilter,
+                'rules' => $templatetypes
+            ]]);
+            $this->page->requires->strings_for_js(array('pickaconditiontype'), 'block_xp');
+        }
+
+        echo html_writer::start_div('block-xp-filters-wrapper');
+
+        $addlink = '';
+        if ($widget->editable) {
+            echo html_writer::start_tag('form', ['method' => 'POST', 'class' => 'block-xp-filters']);
+            echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+
+            $addlink = html_writer::start_tag('li', ['class' => 'filter-add']);
+            $addlink .= $this->action_link('#', get_string('addarule', 'block_xp'), null, null,
+                new pix_icon('t/add', '', '', ['class' => 'iconsmall']));
+            $addlink .= html_writer::end_tag('li');
+        }
+
+        $class = $widget->editable ? 'filters-editable' : 'filters-readonly';
+        echo html_writer::start_tag('ul', ['class' => 'filters-list ' . $class]);
+        echo $addlink;
+
+        foreach ($widget->filters as $filter) {
+            echo $this->render($filter);
+            echo $addlink;
+        }
+
+        echo html_writer::end_tag('ul');
+
+        if ($widget->editable) {
+            echo html_writer::start_tag('p');
+            echo html_writer::empty_tag('input', array('value' => get_string('savechanges'), 'type' => 'submit', 'name' => 'save'));
+            echo ' ';
+            echo html_writer::empty_tag('input', array('value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel'));
+            echo html_writer::end_tag('p');
+            echo html_writer::end_tag('form');
+        }
+
+        echo html_writer::end_div();
+    }
+
+    /**
      * Returns the links for the students.
      *
      * @param course_world $world The world.
