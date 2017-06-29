@@ -59,6 +59,7 @@ class default_admin_config extends frozen_config {
     public function __construct() {
         parent::__construct(new static_config([
             'context' => CONTEXT_COURSE,
+
             'enablecheatguard' => 1,
             'enableinfos' => 1,
             'enableladder' => 1,
@@ -70,7 +71,10 @@ class default_admin_config extends frozen_config {
             'neighbours' => 0,
             'rankmode' => course_world_config::RANK_ON,
             'timebetweensameactions' => 180,
-            'timeformaxactions' => 60
+            'timeformaxactions' => 60,
+
+            'blocktitle' => get_string('levelup', 'block_xp'),
+            'blockdescription' => get_string('participatetolevelup', 'block_xp'),
         ]));
     }
 

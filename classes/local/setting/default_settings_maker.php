@@ -33,6 +33,7 @@ use admin_setting_heading;
 use admin_setting_configcheckbox;
 use admin_setting_configselect;
 use admin_setting_configtext;
+use admin_setting_configtextarea;
 use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
 use block_xp\local\routing\url_resolver;
@@ -235,6 +236,20 @@ class default_settings_maker implements settings_maker {
                 '30' => get_string('for1month', 'block_xp'),
             ]
         ));
+
+        // Block appearance settings.
+        $settings[] = (new admin_setting_heading('block_xp/hdrblockappearance',
+            get_string('blockappearance', 'block_xp'), ''));
+
+        // Block title.
+        $settings[] = (new admin_setting_configtext('block_xp/blocktitle',
+            get_string('configtitle', 'block_xp'), get_string('configtitle_help', 'block_xp'),
+            $defaults['blocktitle'], PARAM_TEXT));
+
+        // Block description.
+        $settings[] = (new admin_setting_configtextarea('block_xp/blockdescription',
+            get_string('configdescription', 'block_xp'), get_string('configdescription_help', 'block_xp'),
+            $defaults['blockdescription'], PARAM_TEXT));
 
         return $settings;
     }

@@ -43,13 +43,18 @@ class edit_form extends block_edit_form {
      * @return void
      */
     protected function specific_definition($mform) {
+        // Not to use DI here, but we do not control when this instance is created.
+        $config = \block_xp\di::get('config');
+
         $mform->addElement('header', 'confighdr', get_string('configheader', 'block_xp'));
         $mform->addElement('text', 'config_title', get_string('configtitle', 'block_xp'));
-        $mform->setDefault('config_title', get_string('levelup', 'block_xp'));
+        $mform->setDefault('config_title', $config->get('blocktitle'));
+        $mform->addHelpButton('config_title', 'configtitle', 'block_xp');
         $mform->setType('config_title', PARAM_TEXT);
 
         $mform->addElement('textarea', 'config_description', get_string('configdescription', 'block_xp'));
-        $mform->setDefault('config_description', get_string('participatetolevelup', 'block_xp'));
+        $mform->setDefault('config_description', $config->get('blockdescription'));
+        $mform->addHelpButton('config_description', 'configdescription', 'block_xp');
         $mform->setType('config_description', PARAM_TEXT);
     }
 

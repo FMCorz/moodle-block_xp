@@ -66,6 +66,9 @@ class course_block extends block_base {
      * @return void
      */
     public function init() {
+        // At this stage, this is not the title, it is the name displayed in the block
+        // selector. In self::specialization() we will change that property to what it
+        // should be as the title of the block.
         $this->title = get_string('pluginname', 'block_xp');
     }
 
@@ -129,7 +132,7 @@ class course_block extends block_base {
         if (isset($this->config->description)) {
             $this->content->text .= $renderer->description($this->config->description);
         } else {
-            $this->content->text .= $renderer->description(get_string('participatetolevelup', 'block_xp'));
+            $this->content->text .= $renderer->description(\block_xp\di::get('config')->get('blockdescription'));
         }
 
         $this->content->footer .= $renderer->student_links($world, $urlresolver);
@@ -191,6 +194,8 @@ class course_block extends block_base {
         parent::specialization();
         if (!empty($this->config->title)) {
             $this->title = $this->config->title;
+        } else {
+            $this->title = \block_xp\di::get('config')->get('blocktitle');
         }
     }
 
