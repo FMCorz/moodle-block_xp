@@ -82,19 +82,44 @@ class block_xp_renderer extends plugin_renderer_base {
      * @return string
      */
     public function level_badge(level $level) {
+        return $this->level_badge_with_options($level);
+    }
+
+    /**
+     * Small level badge.
+     *
+     * @param level $level The level.
+     * @return string.
+     */
+    public function small_level_badge(level $level) {
+        return $this->level_badge_with_options($level, ['small' => true]);
+    }
+
+    /**
+     * Print a level's badge.
+     *
+     * @param level $level The level.
+     * @return string
+     */
+    protected function level_badge_with_options(level $level, array $options = []) {
         $levelnum = $level->get_level();
         $classes = 'level level-' . $levelnum;
+        $label = get_string('levelx', 'block_xp', $levelnum);
+
+        if (!empty($options['small'])) {
+            $classes .= ' small';
+        }
 
         $html = '';
         if ($level instanceof level_with_badge) {
             $html .= html_writer::tag(
                 'div',
                 html_writer::empty_tag('img', ['src' => $level->get_badge_url(),
-                    'alt' => get_string('levelx', 'block_xp', $levelnum)]),
+                    'alt' => $label]),
                 ['class' => $classes . ' level-badge']
             );
         } else {
-            $html .= html_writer::tag('div', $levelnum, ['class' => $classes]);
+            $html .= html_writer::tag('div', $levelnum, ['class' => $classes, 'aria-label' => $label]);
         }
         return $html;
     }

@@ -208,6 +208,10 @@ class ladder_table extends table_sql {
         $this->no_sorting('userpic');
         $this->no_sorting('progress');
         $this->collapsible(false);
+        $this->set_attribute('class', 'block_xp-ladder');
+        $this->column_class('rank', 'col-rank');
+        $this->column_class('lvl', 'block_xp col-lvl');
+        $this->column_class('userpic', 'col-userpic');
     }
 
     /**
@@ -285,6 +289,16 @@ class ladder_table extends table_sql {
             return get_string('someoneelse', 'block_xp');
         }
         return parent::col_fullname($row->state->get_user());
+    }
+
+    /**
+     * Formats the level.
+     *
+     * @param stdClass $row Table row.
+     * @return string
+     */
+    public function col_lvl($row) {
+        return $this->xpoutput->small_level_badge($row->state->get_level());
     }
 
     /**

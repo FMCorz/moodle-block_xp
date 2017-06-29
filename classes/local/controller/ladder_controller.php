@@ -49,6 +49,12 @@ class ladder_controller extends page_controller {
         }
     }
 
+    protected function page_setup() {
+        global $PAGE;
+        parent::page_setup();
+        $PAGE->add_body_class('block_xp-ladder');
+    }
+
     protected function get_table() {
         $courseid = $this->courseid;
         $table = new \block_xp\output\ladder_table(

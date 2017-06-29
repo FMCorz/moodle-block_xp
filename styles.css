@@ -36,14 +36,28 @@
 .block_xp .level-9 {
     background-image: url([[pix:block_xp|9]]);
 }
+.block_xp .level.small {
+    height: 35px;
+    width: 35px;
+    font-size: 18px;
+    line-height: 40px;
+    margin: 0 auto;
+    background-size: cover;
+}
 
-.block_xp .level-badge {
+.block_xp .level-badge,
+.block_xp .level-badge.small {
     background: none;
     height: auto;
     width: auto;
 }
 .block_xp .level-badge img {
     width: 100px;
+}
+.block_xp .level-badge.small img {
+    width: auto;
+    max-width: 100px;
+    height: 35px;
 }
 
 .block_xp .description {
@@ -82,6 +96,24 @@
 /** Using !important because of super-qualified rules to bypass. */
 .path-blocks-xp table .highlight > td{
     background-color: #D9EDF7 !important; /* stylelint-disable-line declaration-no-important */
+}
+
+/**
+ * Ladder table.
+ */
+.block_xp-ladder td {
+    /* Using !important because it's late and I can't be bothered looking for an alternative. */
+    vertical-align: middle !important; /* stylelint-disable-line declaration-no-important */
+}
+.block_xp-ladder .col-lvl {
+    width: 50px;
+    text-align: center;
+}
+.block_xp-ladder .col-rank {
+    width: 50px;
+}
+.block_xp-ladder .col-userpic {
+    width: 35px;
 }
 
 /**
