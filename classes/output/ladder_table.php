@@ -160,16 +160,16 @@ class ladder_table extends table_sql {
             }
         }
         $columns = array_merge($columns, array(
+            'lvl',
             'userpic',
             'fullname',
-            'lvl',
             'xp',
             'progress'
         ));
         $headers = array_merge($headers, array(
+            get_string('level', 'block_xp'),
             '',
             get_string('fullname'),
-            get_string('level', 'block_xp'),
             get_string('xp', 'block_xp'),
             get_string('progress', 'block_xp'),
         ));
