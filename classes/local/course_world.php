@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 use context_course;
 use context_system;
 use moodle_database;
+use block_xp\local\config\course_world_config;
 
 /**
  * Course World.
@@ -58,6 +59,8 @@ class course_world implements world {
     protected $store;
     /** @var collection_strategy The collection strategy. */
     protected $strategy;
+    /** @var course_filter_manager The filter manager. */
+    protected $filtermanager;
 
     /**
      * Constructor.
@@ -84,7 +87,7 @@ class course_world implements world {
 
     public function get_config() {
         if (!$this->config) {
-            $this->config = new \block_xp\local\config\course_world_config($this->db, $this->courseid);
+            $this->config = new course_world_config($this->db, $this->courseid);
         }
         return $this->config;
     }
@@ -128,7 +131,28 @@ class course_world implements world {
      * @return course_filter_manager
      */
     public function get_filter_manager() {
-        return new \block_xp\local\xp\course_filter_manager($this->db, $this->courseid);
+        if (!$this->filtermanager)  {
+            $this->filtermanager = new \block_xp\local\xp\course_filter_manager($this->db, $this->courseid);
+
+            $config = $this->get_config();
+            $state = $config->get('defaultfilters');
+            if ($state == course_world_config::DEFAULT_FILTERS_NOOP) {
+                // Early bail.
+                return $this->filtermanager;
+
+            } else if ($state == course_world_config::DEFAULT_FILTERS_MISSING) {
+                // The default filters were not applied yet.
+                $this->filtermanager->import_default_filters();
+                $config->set('defaultfilters', course_world_config::DEFAULT_FILTERS_NOOP);
+
+            } else if ($state == course_world_config::DEFAULT_FILTERS_STATIC) {
+                // We are in a legacy state, convert.
+                $this->filtermanager->convert_static_filters_to_regular();
+                $config->set('defaultfilters', course_world_config::DEFAULT_FILTERS_NOOP);
+            }
+
+        }
+        return $this->filtermanager;
     }
 
     public function get_levels_info() {

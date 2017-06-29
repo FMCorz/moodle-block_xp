@@ -55,22 +55,43 @@ class course_filter_manager {
     }
 
     /**
+     * Take the static filters and conver them.
+     *
+     * This should not be used any more. It is only used when converting
+     * the static filters to regular filters when dealing with legacy
+     * code.
+     *
+     * @return void
+     */
+    public function convert_static_filters_to_regular() {
+        $filters = $this->get_static_filters();
+        $this->import_filters($filters);
+    }
+
+    /**
      * Get all the filter objects.
      *
      * Positive indexes are user filters, negatives are static ones.
      * Do not reorder this array, it is ordered by priority.
      *
-     * @return array of fitlers.
+     * @return array of filters.
+     * @deprecated Since 3.0.0
      */
     public function get_all_filters() {
+        debugging('The method get_all_filters() is deprecated, use get_filters() instead.', DEBUG_DEVELOPER);
+        return $this->get_filters();
+    }
+
+    /**
+     * Get the filters.
+     *
+     * @return array of filters.
+     */
+    public function get_filters() {
         $cache = cache::make('block_xp', 'filters');
         $key = 'filters_' . $this->courseid;
         if (false === ($filters = $cache->get($key))) {
             $filters = $this->get_user_filters();
-            $i = -1;
-            foreach ($this->get_static_filters() as $filter) {
-                $filters[$i--] = $filter;
-            }
             $cache->set($key, $filters);
         }
         return $filters;
@@ -83,16 +104,27 @@ class course_filter_manager {
      * @return int points.
      */
     public function get_points_for_event(\core\event\base $event) {
-        foreach ($this->get_all_filters() as $filter) {
+        foreach ($this->get_filters() as $filter) {
             if ($filter->match($event)) {
                 return $filter->get_points();
             }
         }
+        // TODO Accept when it doesn't.
         throw new coding_exception('The event did not match any filter.');
     }
 
     /**
-     * Get the default filters.
+     * Get the static filters.
+     *
+     * This is a legacy method, it contains a list of static filters which were
+     * used in version prior to 3.0. Those static filters were not editable and
+     * ensured that events were always matched with something. From 3.0, there are
+     * no longer static filters, but there are default filters, typically defined
+     * by the adminstrator.
+     *
+     * This method should only be used whenever the static filters are converted
+     * to standard filters to maintain backwards compatibility while allowing the
+     * users to edit them.
      *
      * @return array Of filter objects.
      */
@@ -109,23 +141,24 @@ class course_filter_manager {
         $as = new \block_xp_rule_property(\block_xp_rule_base::CT, 'assessable_submitted', 'eventname');
         $au = new \block_xp_rule_property(\block_xp_rule_base::CT, 'assessable_uploaded', 'eventname');
 
-        $list = array();
+        $list = [];
 
-        $ruleset = new \block_xp_ruleset(array($bcmv, $dsc, $sc, $as, $au), \block_xp_ruleset::ANY);
-        $data = array('rule' => $ruleset, 'points' => 0, 'editable' => false);
+        $ruleset = new \block_xp_ruleset([$bcmv, $dsc, $sc, $as, $au], \block_xp_ruleset::ANY);
+        $data = ['rule' => $ruleset, 'points' => 0, 'editable' => false];
         $list[] = \block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $c, 'points' => 45, 'editable' => false);
+        $data = ['rule' => $c, 'points' => 45, 'editable' => false];
         $list[] = \block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $r, 'points' => 9, 'editable' => false);
+        $data = ['rule' => $r, 'points' => 9, 'editable' => false];
         $list[] = \block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $u, 'points' => 3, 'editable' => false);
+        $data = ['rule' => $u, 'points' => 3, 'editable' => false];
         $list[] = \block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $d, 'points' => 0, 'editable' => false);
+        $data = ['rule' => $d, 'points' => 0, 'editable' => false];
         $list[] = \block_xp_filter::load_from_data($data);
+
         return $list;
     }
 
@@ -143,6 +176,37 @@ class course_filter_manager {
         }
         $results->close();
         return $filters;
+    }
+
+    /**
+     * Import filters by appending them.
+     *
+     * @param array $filters An array of filters.
+     * @return void
+     */
+    protected function import_filters(array $filters) {
+        $sortorder = (int) $this->db->get_field('block_xp_filters', 'COALESCE(MAX(sortorder), -1) + 1',
+            ['courseid' => $this->courseid]);
+
+        foreach ($filters as $filter) {
+            $record = $filter->export();
+            $record->courseid = $this->courseid;
+            $record->sortorder = $sortorder++;
+            $newfilter = \block_xp_filter::load_from_data($record);
+            $newfilter->save();
+        }
+
+        $this->invalidate_filters_cache();
+    }
+
+    /**
+     * Import the default filters.
+     *
+     * @return void
+     */
+    public function import_default_filters() {
+        $fm = new admin_filter_manager($this->db);
+        $this->import_filters($fm->get_filters());
     }
 
     /**

@@ -69,44 +69,10 @@ class rules_controller extends page_controller {
             $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
             $this->save_filters($filters);
             $this->redirect(null, get_string('changessaved'));
+
+        } else if (!empty($_POST['cancel'])) {
+            $this->redirect();
         }
-
-        // Preparing form.
-        $renderer = $this->get_renderer();
-        $dummyruleset = new \block_xp_ruleset();
-        $dummyfilter = \block_xp_filter::load_from_data(array('rule' => $dummyruleset));
-        $templatefilter = $renderer->render($dummyfilter);
-
-        // Templates of rules.
-        $typeruleproperty = new \block_xp_rule_property();
-        $typerulecm = new \block_xp_rule_cm($this->courseid);
-        $typeruleevent = new \block_xp_rule_event();
-        $typeruleset = new \block_xp_ruleset();
-        $templatetypes = array(
-            'block_xp_rule_cm' => array(
-                'name' => get_string('rulecm', 'block_xp'),
-                'template' => $renderer->render($typerulecm, array('iseditable' => true, 'basename' => 'XXXXX')),
-            ),
-            'block_xp_rule_event' => array(
-                'name' => get_string('ruleevent', 'block_xp'),
-                'template' => $renderer->render($typeruleevent, array('iseditable' => true, 'basename' => 'XXXXX')),
-            ),
-            'block_xp_rule_property' => array(
-                'name' => get_string('ruleproperty', 'block_xp'),
-                'template' => $renderer->render($typeruleproperty, array('iseditable' => true, 'basename' => 'XXXXX')),
-            ),
-            'block_xp_ruleset' => array(
-                'name' => get_string('ruleset', 'block_xp'),
-                'template' => $renderer->render($typeruleset, array('iseditable' => true, 'basename' => 'XXXXX')),
-            ),
-        );
-
-        $PAGE->requires->yui_module('moodle-block_xp-filters', 'Y.M.block_xp.Filters.init', array(array(
-            'filter' => $templatefilter,
-            'rules' => $templatetypes
-        )));
-        $PAGE->requires->strings_for_js(array('pickaconditiontype'), 'block_xp');
-
     }
 
     protected function save_filters($filters) {
@@ -159,43 +125,44 @@ class rules_controller extends page_controller {
         $a->doc = (new moodle_url('https://docs.moodle.org/dev/Event_2'))->out();
         echo get_string('rulesformhelp', 'block_xp', $a);
 
-        echo html_writer::start_div('block-xp-filters-wrapper');
-        echo html_writer::start_tag('form', array('method' => 'POST', 'class' => 'block-xp-filters'));
-        echo html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()));
+        $widget = new \block_xp\output\filters_widget(
+            \block_xp_filter::load_from_data(['rule' => new \block_xp_ruleset()]), [
+            (object) [
+                'name' => get_string('ruleproperty', 'block_xp'),
+                'rule' => new \block_xp_rule_property(),
+            ],
+            (object) [
+                'name' => get_string('rulecm', 'block_xp'),
+                'rule' => new \block_xp_rule_cm($this->courseid),
+            ],
+            (object) [
+                'name' => get_string('ruleevent', 'block_xp'),
+                'rule' => new \block_xp_rule_event(),
+            ],
+            (object) [
+                'name' => get_string('ruleset', 'block_xp'),
+                'rule' => new \block_xp_ruleset(),
+            ],
+        ], $this->userfilters);
 
-        $addlink = html_writer::start_tag('li', array('class' => 'filter-add'));
-        $addlink .= $output->action_link('#', get_string('addarule', 'block_xp'), null, null,
-            new pix_icon('t/add', '', '', array('class' => 'iconsmall')));
-        $addlink .= html_writer::end_tag('li');
+        // echo $output->heading(get_string('yourownrules', 'block_xp'), 3);
+        echo $output->render($widget);
 
-        echo $output->heading(get_string('yourownrules', 'block_xp'), 3);
+        // echo $output->heading(get_string('defaultrules', 'block_xp'), 3);
+        // echo html_writer::tag('p', get_string('defaultrulesformhelp', 'block_xp'));
 
-        echo html_writer::start_tag('ul', array('class' => 'filters-list filters-editable'));
-        echo $addlink;
-        foreach ($this->userfilters as $filter) {
-            echo $output->render($filter);
-            echo $addlink;
-        }
-        echo html_writer::end_tag('ul');
+        // echo html_writer::start_tag('ul', array('class' => 'filters-list filters-readonly'));
+        // foreach ($this->filtermanager->get_static_filters() as $filter) {
+        //     echo $output->render($filter);
 
-        echo html_writer::start_tag('p');
-        echo html_writer::empty_tag('input', array('value' => get_string('savechanges'), 'type' => 'submit', 'name' => 'save'));
-        echo ' ';
-        echo html_writer::empty_tag('input', array('value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel'));
-        echo html_writer::end_tag('p');
-        echo html_writer::end_tag('form');
+        // }
+        // echo html_writer::end_tag('ul');
 
-        echo $output->heading(get_string('defaultrules', 'block_xp'), 3);
-        echo html_writer::tag('p', get_string('defaultrulesformhelp', 'block_xp'));
+        // TODO Change the introduction.
+        // TODO Add revert button.
+        // TODO Decide whether we want to separate the "default" rules from the rest.
+        // TODO Decide whether we want to be able to "unlock" the default rules.
 
-        echo html_writer::start_tag('ul', array('class' => 'filters-list filters-readonly'));
-        foreach ($this->filtermanager->get_static_filters() as $filter) {
-            echo $output->render($filter);
-
-        }
-        echo html_writer::end_tag('ul');
-
-        echo html_writer::end_div();
     }
 
 }
