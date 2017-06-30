@@ -257,6 +257,14 @@ class default_settings_maker implements settings_maker {
             get_string('configdescription', 'block_xp'), get_string('configdescription_help', 'block_xp'),
             $defaults['blockdescription'], PARAM_TEXT));
 
+        // Block recent activity.
+        $settings[] = (new admin_setting_configselect('block_xp/blockrecentactivity',
+            get_string('configrecentactivity', 'block_xp'), get_string('configrecentactivity_help', 'block_xp'),
+            $defaults['blockrecentactivity'], [
+                0 => get_string('no'),
+                3 => get_string('yes')
+            ]));
+
         return $settings;
     }
 

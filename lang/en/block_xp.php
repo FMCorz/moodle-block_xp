@@ -46,6 +46,10 @@ $string['configdescription_help'] = 'A short description displayed in the block,
 $string['configheader'] = 'Settings';
 $string['configtitle'] = 'Title';
 $string['configtitle_help'] = 'The title of the block.';
+$string['configrecentactivity'] = 'Display recent rewards';
+$string['configrecentactivity_help'] = 'When enabled, the block will display a short list of recent events which rewarded the student with experience points.
+
+__Note__: This requires logging to be enabled.';
 $string['congratulationsyouleveledup'] = 'Congratulations!';
 $string['coolthanks'] = 'Cool, thanks!';
 $string['courselog'] = 'Course log';
@@ -132,6 +136,7 @@ $string['navreport'] = 'Report';
 $string['navrules'] = 'Rules';
 $string['navsettings'] = 'Settings';
 $string['navvisuals'] = 'Visuals';
+$string['norecentrewards'] = 'None yet!';
 $string['pickaconditiontype'] = 'Pick a condition type';
 $string['pluginname'] = 'Level up!';
 $string['progress'] = 'Progress';
@@ -144,6 +149,7 @@ $string['participatetolevelup'] = 'Participate in the course to gain experience 
 $string['rank'] = 'Rank';
 $string['ranking'] = 'Ranking';
 $string['ranking_help'] = 'The rank is the absolute position of the current user in the ladder. The relative rank is the difference in experience points between a user and their neighbours.';
+$string['recentrewards'] = 'Recent rewards';
 $string['reallyresetdata'] = 'Really reset the levels and experience points of everyone in this course?';
 $string['reallyresetgroupdata'] = 'Really reset the levels and experience points of everyone in this group?';
 $string['reallyreverttopluginsdefaults'] = 'Really reset the default rules to the defaults suggested by the plugin? This action is not reversible.';
@@ -182,6 +188,7 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
 </ul>
 </p>';
 $string['someoneelse'] = 'Someone else';
+$string['somethinghappened'] = 'Something happened';
 $string['taskcourseusereventcollectionlogpurge'] = 'Purge logs containing user\'s XP collection in courses.';
 $string['timebetweensameactions'] = 'Time required between identical actions';
 $string['timebetweensameactions_help'] = 'In seconds, the minimum time required between identical actions. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identifical if the same post is read again.';

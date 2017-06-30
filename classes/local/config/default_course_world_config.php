@@ -59,7 +59,7 @@ class default_course_world_config extends immutable_config {
             'identitymode' => course_world_config::IDENTITY_ON, // Identity mode.
             'rankmode' => course_world_config::RANK_ON,         // Rank mode.
             'neighbours' => 0,                                  // Number of neighbours to show on ladder, 0 means everyone.
-            'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING  // Flag about the default filters.
+            'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING,  // Flag about the default filters.
         ]));
     }
 

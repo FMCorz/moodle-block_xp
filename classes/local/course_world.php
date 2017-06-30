@@ -203,4 +203,13 @@ class course_world implements world {
         return $this->logger;
     }
 
+    /**
+     * Get the user recent activity repository.
+     *
+     * @return user_recent_activity_repository
+     */
+    public function get_user_recent_activity_repository() {
+        return new \block_xp\local\activity\course_log_recent_activity_repository($this->db, $this->courseid);
+    }
+
 }

@@ -56,6 +56,14 @@ class edit_form extends block_edit_form {
         $mform->setDefault('config_description', $config->get('blockdescription'));
         $mform->addHelpButton('config_description', 'configdescription', 'block_xp');
         $mform->setType('config_description', PARAM_TEXT);
+
+        $mform->addElement('select', 'config_recentactivity', get_string('configrecentactivity', 'block_xp'), [
+            0 => get_string('no'),
+            3 => get_string('yes'),
+        ]);
+        $mform->setDefault('config_recentactivity', $config->get('blockrecentactivity'));
+        $mform->addHelpButton('config_recentactivity', 'configrecentactivity', 'block_xp');
+        $mform->setType('config_recentactivity', PARAM_INT);
     }
 
 }
