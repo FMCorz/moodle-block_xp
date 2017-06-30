@@ -72,7 +72,11 @@ class course_world_config implements config {
         // What do we do here? We create a stack of configuration which the table_row_config
         // can get the defaults from if it needs to. This works so long as we do not introduce
         // keys in both course and admin configs which do not represent the same thing.
-        $defaults = new config_stack([new frozen_config($adminconfig), new default_course_world_config()]);
+        // Note that we set the admin config as immutable, just to make sure we don't change it.
+        $defaults = new config_stack([
+            new immutable_config($adminconfig),
+            new default_course_world_config()
+        ]);
 
         $this->store = new \block_xp\local\config\table_row_config($db, 'block_xp_config',
             $defaults, ['courseid' => $courseid]);

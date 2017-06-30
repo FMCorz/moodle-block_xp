@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use moodle_database;
 use block_xp\local\config\config;
+use block_xp\local\config\course_world_config;
 
 /**
  * Main factory.
@@ -77,7 +78,8 @@ class factory implements course_world_factory {
 
         $courseid = intval($courseid);
         if (!isset($this->worlds[$courseid])) {
-            $this->worlds[$courseid] = new \block_xp\local\course_world($this->adminconfig, $this->db, $courseid);
+            $config = new course_world_config($this->adminconfig, $this->db, $courseid);
+            $this->worlds[$courseid] = new \block_xp\local\course_world($config, $this->db, $courseid);
         }
         return $this->worlds[$courseid];
     }

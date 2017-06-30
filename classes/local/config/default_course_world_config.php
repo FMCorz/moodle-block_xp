@@ -36,7 +36,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class default_course_world_config extends frozen_config {
+class default_course_world_config extends immutable_config {
 
     /**
      * Constructor.

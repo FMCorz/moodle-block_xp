@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Frozen config.
+ * Immutable config.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
@@ -27,16 +27,17 @@ namespace block_xp\local\config;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Frozen config.
+ * Immutable config.
  *
- * Wrap a config object around this one to prevent any unexpected writes.
+ * Wrap a config object around this one to prevent writes. Exceptions are not
+ * thrown we just do not do anything in set() and set_many().
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class frozen_config implements config {
+class immutable_config implements config {
 
     /** @var config The config. */
     private $config;
@@ -86,7 +87,7 @@ class frozen_config implements config {
      * @param mixed $value The value.
      */
     final public function set($name, $value) {
-        // Do nothing, it's frozen.
+        // Do nothing, it's immutable.
     }
 
     /**
@@ -95,7 +96,7 @@ class frozen_config implements config {
      * @param array $values Keys are config names, and values are values.
      */
     final public function set_many(array $values) {
-        // Do nothing, it's still frozen.
+        // Do nothing, it's still immutable.
     }
 
 }
