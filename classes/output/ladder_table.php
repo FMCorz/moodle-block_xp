@@ -214,7 +214,7 @@ class ladder_table extends table_sql {
         $this->no_sorting('userpic');
         $this->no_sorting('progress');
         $this->collapsible(false);
-        $this->set_attribute('class', 'block_xp-ladder');
+        $this->set_attribute('class', 'block_xp-table');
         $this->column_class('rank', 'col-rank');
         $this->column_class('lvl', 'block_xp col-lvl');
         $this->column_class('userpic', 'col-userpic');

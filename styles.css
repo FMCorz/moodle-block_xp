@@ -101,18 +101,18 @@
 /**
  * Ladder table.
  */
-.block_xp-ladder td {
+.block_xp-table td {
     /* Using !important because it's late and I can't be bothered looking for an alternative. */
     vertical-align: middle !important; /* stylelint-disable-line declaration-no-important */
 }
-.block_xp-ladder .col-lvl {
+.block_xp-table .col-lvl {
     width: 50px;
     text-align: center;
 }
-.block_xp-ladder .col-rank {
+.block_xp-table .col-rank {
     width: 50px;
 }
-.block_xp-ladder .col-userpic {
+.block_xp-table .col-userpic {
     width: 35px;
 }
 
