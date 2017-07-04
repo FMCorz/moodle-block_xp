@@ -90,6 +90,13 @@ class config extends moodleform {
         $mform->addHelpButton('rankmode', 'ranking', 'block_xp');
         $mform->disabledIf('rankmode', 'enableladder', 'eq', 0);
 
+        $el = $mform->addElement('select', 'laddercols', get_string('ladderadditionalcols', 'block_xp'), [
+            'xp' => get_string('xp', 'block_xp'),
+            'progress' => get_string('progress', 'block_xp'),
+        ], ['style' => 'height: 4em;']);
+        $el->setMultiple(true);
+        $mform->addHelpButton('laddercols', 'ladderadditionalcols', 'block_xp');
+
         $mform->addElement('header', 'hdrcheating', get_string('cheatguard', 'block_xp'));
 
         $mform->addElement('selectyesno', 'enablecheatguard', get_string('enablecheatguard', 'block_xp'));
@@ -137,8 +144,25 @@ class config extends moodleform {
             return $data;
         }
 
+        // When not selecting any, the data is not sent.
+        if (!isset($data->laddercols)) {
+            $data->laddercols = [];
+        }
+        $data->laddercols = implode(',', $data->laddercols);
+
         unset($data->submitbutton);
         return $data;
+    }
+
+    /**
+     * Set the data.
+     */
+    public function set_data($data) {
+        $data = (array) $data;
+        if (isset($data['laddercols'])) {
+            $data['laddercols'] = explode(',', $data['laddercols']);
+        }
+        parent::set_data($data);
     }
 
 }

@@ -67,6 +67,7 @@ class default_admin_config extends immutable_config {
             'enablelog' => 1,
             'identitymode' => course_world_config::IDENTITY_ON,
             'keeplogs' => 3,
+            'laddercols' => 'xp,progress',
             'levelsdata' => '',
             'maxactionspertime' => 10,
             'neighbours' => 0,

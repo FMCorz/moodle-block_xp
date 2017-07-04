@@ -42,9 +42,10 @@ class log_table extends table_sql {
 
     /** @var string The key of the user ID column. */
     public $useridfield = 'userid';
-
     /** @var course_world The world. */
     protected $world;
+    /** @var renderer_base The renderer. */
+    protected $renderer;
 
     /**
      * Constructor.
@@ -55,6 +56,7 @@ class log_table extends table_sql {
     public function __construct(course_world $world, $groupid) {
         parent::__construct('block_xp_log');
         $this->world = $world;
+        $this->renderer = \block_xp\di::get('renderer');
         $courseid = $world->get_courseid();
 
         // Define columns.
@@ -106,6 +108,16 @@ class log_table extends table_sql {
      */
     protected function col_time($row) {
         return userdate($row->time);
+    }
+
+    /**
+     * XP.
+     *
+     * @param stdClass $row The row.
+     * @return string
+     */
+    protected function col_xp($row) {
+        return $this->renderer->xp($row->xp);
     }
 
 }

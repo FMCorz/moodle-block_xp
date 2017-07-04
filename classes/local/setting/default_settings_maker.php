@@ -31,6 +31,7 @@ use admin_settingpage;
 use admin_externalpage;
 use admin_setting_heading;
 use admin_setting_configcheckbox;
+use admin_setting_configmultiselect;
 use admin_setting_configselect;
 use admin_setting_configtext;
 use admin_setting_configtextarea;
@@ -197,6 +198,15 @@ class default_settings_maker implements settings_maker {
                 course_world_config::RANK_OFF => get_string('hiderank', 'block_xp'),
                 course_world_config::RANK_ON => get_string('displayrank', 'block_xp'),
                 course_world_config::RANK_REL => get_string('displayrelativerank', 'block_xp'),
+            ]
+        ));
+
+        // Additional columns.
+        $settings[] = (new admin_setting_configmultiselect('block_xp/laddercols',
+            get_string('ladderadditionalcols', 'block_xp'), get_string('ladderadditionalcols_help', 'block_xp'),
+            explode(',', $defaults['laddercols']), [
+                'xp' => get_string('xp', 'block_xp'),
+                'progress' => get_string('progress', 'block_xp'),
             ]
         ));
 

@@ -68,6 +68,9 @@ class ladder_table extends table_sql {
     /** @var Cache of the user record, use {@link self::get_user_record()}. */
     protected $currentuserrecord;
 
+    /** @var array Contains the names of the additional columns. */
+    protected $additionalcols = [];
+
     /** @var int The identity mode. */
     protected $identitymode = course_world_config::IDENTITY_ON;
 
@@ -117,7 +120,7 @@ class ladder_table extends table_sql {
             $userid = null
         ) {
 
-        global $USER;
+        global $CFG, $USER;
         parent::__construct('block_xp_ladder');
 
         if (isset($options['rankmode'])) {
@@ -134,6 +137,9 @@ class ladder_table extends table_sql {
         }
         if (isset($options['identitymode'])) {
             $this->identitymode = $options['identitymode'];
+        }
+        if (isset($options['additionalcols'])) {
+            $this->additionalcols = $options['additionalcols'];
         }
 
         // The user ID we're viewing the ladder for.
@@ -167,18 +173,20 @@ class ladder_table extends table_sql {
             $columns[] = 'lvl';
             $headers[] =  get_string('level', 'block_xp');
         }
-        $columns = array_merge($columns, array(
-            'userpic',
-            'fullname',
-            'xp',
-            'progress'
-        ));
-        $headers = array_merge($headers, array(
-            '',
-            get_string('fullname'),
-            get_string('xp', 'block_xp'),
-            get_string('progress', 'block_xp'),
-        ));
+
+        $columns[] = 'fullname';
+        $headers[] = get_string('participant', 'block_xp');;
+
+        // Additional columns.
+        if (in_array('xp', $this->additionalcols)) {
+            $columns[] = 'xp';
+            $headers[] = get_string('xp', 'block_xp');
+        }
+        if (in_array('progress', $this->additionalcols)) {
+            $columns[] = 'progress';
+            $headers[] = get_string('progress', 'block_xp');
+        }
+
         $this->define_columns($columns);
         $this->define_headers($headers);
 
@@ -291,10 +299,13 @@ class ladder_table extends table_sql {
      * @return string Output produced.
      */
     public function col_fullname($row) {
+        $o = $this->col_userpic($row);
         if ($this->identitymode == course_world_config::IDENTITY_OFF && $row->userid != $this->userid) {
-            return get_string('someoneelse', 'block_xp');
+            $o .= get_string('someoneelse', 'block_xp');
+        } else {
+            $o .= parent::col_fullname($row->state->get_user());
         }
-        return parent::col_fullname($row->state->get_user());
+        return $o;
     }
 
     /**
@@ -323,8 +334,13 @@ class ladder_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_rank($row) {
-        if ($this->rankmode == course_world_config::RANK_REL && $row->rank > 0) {
-            return '+' . $row->rank;
+        if ($this->rankmode == course_world_config::RANK_REL) {
+            $symbol = '';
+            if ($row->rank > 0) {
+                $symbol = '+';
+            }
+            // We want + when it's positive, and - when it's negative, else nothing.
+            return $symbol . $this->xpoutput->xp($row->rank);
         }
         return $row->rank;
     }
@@ -345,8 +361,6 @@ class ladder_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_userpic($row) {
-        global $CFG;
-
         if ($this->identitymode == course_world_config::IDENTITY_OFF && $this->userid != $row->userid) {
             static $guestuser = null;
             if ($guestuser === null) {

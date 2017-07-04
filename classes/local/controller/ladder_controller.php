@@ -68,6 +68,7 @@ class ladder_controller extends page_controller {
                 'neighboursonly' => $this->world->get_config()->get('neighbours') > 0,
                 'neighboursabove' => $this->world->get_config()->get('neighbours'),
                 'neighboursbelow' => $this->world->get_config()->get('neighbours'),
+                'additionalcols' => explode(',', $this->world->get_config()->get('laddercols')),
             ]
         );
         $table->define_baseurl($this->pageurl);

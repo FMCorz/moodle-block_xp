@@ -354,6 +354,22 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2017062901, 'xp');
     }
 
+    if ($oldversion < 2017070400) {
+
+        // Define field laddercols to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('laddercols', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, 'xp,progress', 'defaultfilters');
+
+        // Conditionally launch add field laddercols.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2017070400, 'xp');
+    }
+
+
     return true;
 
 }

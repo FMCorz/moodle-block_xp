@@ -60,6 +60,7 @@ class default_course_world_config extends immutable_config {
             'rankmode' => course_world_config::RANK_ON,         // Rank mode.
             'neighbours' => 0,                                  // Number of neighbours to show on ladder, 0 means everyone.
             'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING,  // Flag about the default filters.
+            'laddercols' => 'xp,progress',      // Addditional columns to be displayed on the ladder.
         ]));
     }
 

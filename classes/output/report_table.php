@@ -256,7 +256,8 @@ class report_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_xp($row) {
-        return isset($row->xp) ? $row->xp : 0;
+        $xp = isset($row->xp) ? $row->xp : 0;
+        return $this->renderer->xp($xp);
     }
 
     /**
