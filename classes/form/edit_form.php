@@ -43,7 +43,7 @@ class edit_form extends block_edit_form {
      * @return void
      */
     protected function specific_definition($mform) {
-        // Not to use DI here, but we do not control when this instance is created.
+        // Not nice to use DI here, but we do not control when this instance is created.
         $config = \block_xp\di::get('config');
 
         $mform->addElement('header', 'confighdr', get_string('configheader', 'block_xp'));

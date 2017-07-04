@@ -26,6 +26,8 @@
 namespace block_xp\local\controller;
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir . '/filelib.php');
+
 use context_course;
 use context_system;
 use stdClass;
