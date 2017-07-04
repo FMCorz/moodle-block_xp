@@ -25,8 +25,10 @@
 namespace block_xp\local\block;
 defined('MOODLE_INTERNAL') || die();
 
+use action_link;
 use block_base;
 use html_writer;
+use pix_icon;
 use stdClass;
 
 /**
@@ -127,97 +129,53 @@ class course_block extends block_base {
         $adminconfig = \block_xp\di::get('config');
         $config = $world->get_config();
 
-        $badge = $renderer->level_badge($state->get_level());
-
-        $this->content->text = $badge;
-        $this->content->text .= $renderer->progress_bar($state);
-        if (isset($this->config->description)) {
-            $this->content->text .= $renderer->description($this->config->description);
-        } else {
-            $this->content->text .= $renderer->description($adminconfig->get('blockdescription'));
-        }
-
-        // TODO Move this elsewhere...
-        $timeago = function(\DateTime $dt) {
-            $now = new \DateTime();
-            $diff = $now->getTimestamp() - $dt->getTimestamp();
-
-            if ($diff < 15) {
-                return 'now';
-            } else if ($diff < 45) {
-                return sprintf('not a minute ago', $diff);
-            } else if ($diff < 60 * 1.7) {
-                return 'a minute ago';
-            } else if ($diff < HOURSECS * 0.7) {
-                return sprintf('%d minutes ago', round($diff / 60));
-            } else if ($diff < HOURSECS * 1.7) {
-                return 'an hour ago';
-            } else if ($diff < DAYSECS * 0.7) {
-                return sprintf('%d hours ago', round($diff / HOURSECS));
-            } else if ($diff < DAYSECS * 1.7) {
-                return 'a day ago';
-            } else if ($diff < DAYSECS * 7 * 0.7) {
-                return sprintf('%d days ago', round($diff / DAYSECS));
-            } else if ($diff < DAYSECS * 7 * 1.7) {
-                return 'a week ago';
-            } else if ($diff < DAYSECS * 30 * 0.7) {
-                return sprintf('%d weeks ago', round($diff / DAYSECS * 7));
-            } else if ($diff < DAYSECS * 30 * 1.7) {
-                return 'a month ago';
-            } else {
-                return 'months ago';
-            }
-        };
-
-        $recentactivity = !empty($this->config->recentactivity) ? $this->config->recentactivity : 0;
+        // Recent activity.
+        $activity = [];
+        $moreurl = $urlresolver->reverse('log', ['courseid' => $world->get_courseid()]);
+        $recentactivity = isset($this->config->recentactivity) ? $this->config->recentactivity : 0;
         if ($config->get('enablelog') && $recentactivity) {
             $repo = $world->get_user_recent_activity_repository();
-            $logs = $repo->get_user_recent_activity($USER->id, $recentactivity);
-
-            // TODO Move this somewhere else.
-            if ($logs || $canedit) {
-                $dostuff = function($log) use ($timeago) {
-                    return implode('', array_map(function($entry) use ($timeago) {
-                        $date = $timeago($entry->get_date());
-                        $title = userdate($entry->get_date()->getTimestamp());
-                        $xp = $entry instanceof \block_xp\local\activity\activity_with_xp ? $entry->get_xp() : '';
-                        $desc = s($entry->get_description());
-                        return "
-                            <tr>
-                                <td title='" . s($title) . "'>{$date}</td>
-                                <td>{$xp}</td>
-                                <td>{$desc}</td>
-                            </tr>";
-                    }, $log));
-                };
-
-                $moreurl = $urlresolver->reverse('log', ['courseid' => $world->get_courseid()]);
-
-                $this->content->text .= html_writer::tag('p', html_writer::tag('strong',
-                    get_string('recentrewards', 'block_xp')));
-                if ($logs) {
-                    $this->content->text .= "<table class='table' style='font-size: .75em;'>{$dostuff($logs)}</table>";
-                } else {
-                    $this->content->text .= html_writer::tag('p', get_string('norecentrewards', 'block_xp'));
-                }
-
-                // TODO Link to the log page.
-                // if (count($logs) >= 3) {
-                //     $this->content->text .= "<p><a href='$moreurl'>View more...</a></p>";
-                // }
-            }
+            $activity = $repo->get_user_recent_activity($USER->id, $recentactivity);
         }
 
-
-        $this->content->footer .= $renderer->student_links($world, $urlresolver);
-
+        // Navigation.
+        $actions = [];
+        if ($config->get('enableinfos')) {
+            $actions[] = new action_link(
+                $urlresolver->reverse('infos', ['courseid' => $world->get_courseid()]),
+                get_string('navinfos', 'block_xp'), null, null,
+                new pix_icon('i/info', '', 'block_xp')
+            );
+        }
+        if ($world->get_config()->get('enableladder')) {
+            $actions[] = new action_link(
+                $urlresolver->reverse('ladder', ['courseid' => $world->get_courseid()]),
+                get_string('navladder', 'block_xp'), null, null,
+                new pix_icon('i/ladder', '', 'block_xp')
+            );
+        }
         if ($canedit) {
-            $this->content->footer .= $renderer->admin_links($world, $urlresolver);
-            if (!$world->get_config()->get('enabled')) {
-                $this->content->footer .= html_writer::tag('p',
-                    html_writer::tag('small', get_string('xpgaindisabled', 'block_xp')), array('class' => 'alert alert-warning'));
-            }
+            $actions[] = new action_link(
+                $urlresolver->reverse('report', ['courseid' => $world->get_courseid()]),
+                get_string('navreport', 'block_xp'), null, null,
+                new pix_icon('i/report', '')
+            );
+            $actions[] = new action_link(
+                $urlresolver->reverse('config', ['courseid' => $world->get_courseid()]),
+                get_string('navsettings', 'block_xp'), null, null,
+                new pix_icon('i/settings', '', 'block_xp')
+            );
         }
+
+        // Widget.
+        $widget = new \block_xp\output\xp_widget(
+            $state,
+            $activity,
+            $moreurl,
+            isset($this->config->description) ? $this->config->description : $adminconfig->get('blockdescription'),
+            $actions
+        );
+        $this->content->text = $renderer->render($widget);
 
         // We should be congratulating the user because they leveled up!
         // Also resets the flag. We could potentially do that from JS so that if the user does not

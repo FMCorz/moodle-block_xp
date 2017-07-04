@@ -76,7 +76,7 @@ class infos_controller extends page_controller {
         foreach ($levelsinfo->get_levels() as $level) {
             $desc = $level instanceof \block_xp\local\xp\level_with_description ? $level->get_description() : '';
             $badge = $output->small_level_badge($level);
-            $table->add_data([$badge, $level->get_xp_required(), $desc], 'level-' . $level->get_level());
+            $table->add_data([$badge, $output->xp($level->get_xp_required()), $desc], 'level-' . $level->get_level());
         }
 
         $table->finish_output();

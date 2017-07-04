@@ -60,42 +60,132 @@
     height: 35px;
 }
 
+.block_xp .xp-total {
+    text-align: center;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
 .block_xp .description {
-    font-size: 0.9em;
+    color: #3a87ad;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    padding: 8px 14px 8px 14px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 .block_xp .footer {
     font-size: 0.9em;
 }
 
+.block_xp nav {
+    text-align: center;
+}
+.block_xp nav .nav-button {
+    display: inline-block;
+    text-decoration: none;
+    color: #333;
+    font-size: 80%;
+    padding: 5px 5px 0;
+    width: 44%;
+}
+.block_xp nav .nav-button .icon {
+    margin: 0;
+}
+.block_xp nav .nav-button:hover {
+    background: #eee;
+}
+
+/** Recent rewards styles. */
+.block_xp-recent-activity {
+    clear: both;
+    padding: 0 2px;
+    margin-bottom: 10px;
+}
+.block_xp-recent-activity h5 {
+    text-transform: uppercase;
+    color: #999;
+    font-size: 11px;
+    letter-spacing: 0;
+    margin-bottom: 5px;
+}
+.block_xp-recent-activity h5 a {
+    float: right;
+    text-transform: none;
+    font-weight: normal;
+}
+.block_xp-recent-activity .activity-entry {
+    font-size: 90%;
+    clear: both;
+}
+.block_xp-recent-activity .activity-entry .date {
+    float: right;
+    color: #999;
+    font-size: 90%;
+}
+.block_xp-recent-activity .activity-entry .xp {
+    float: left;
+    margin-right: 5px;
+    min-width: 25px;
+}
+
 /** Use over defined class name to re-use it through the block pages. */
-.block_xp-level-progress {
+.block_xp-currency {
+    letter-spacing: 0;
+    vertical-align: super;
+    font-size: 9px;
+    line-height: 9px;
+}
+
+.block_xp-level-progress .xp-bar-wrapper {
     background-color: #ccc;
     border-radius: 5px;
-    height: 25px;
+    height: 10px;
     margin: 0 auto;
-    margin-bottom: 10px;
-    max-width: 200px;
     position: relative;
 }
-.block_xp-level-progress .bar {
-    background-color: green;
+.block_xp-level-progress .xp-bar {
+    background-color: #4bb1cf;
+    background-image: -moz-linear-gradient(top, #5bc0de, #339bb9);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#5bc0de), to(#339bb9));
+    background-image: -webkit-linear-gradient(top, #5bc0de, #339bb9);
+    background-image: -o-linear-gradient(top, #5bc0de, #339bb9);
+    background-image: linear-gradient(to bottom, #5bc0de, #339bb9);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de', endColorstr='#ff339bb9', GradientType=0);
     border-radius: 5px;
-    height: 25px;
+    height: 100%;
 }
-.block_xp-level-progress .txt {
+.block_xp-level-progress.progress-non-zero .xp-bar {
+    min-width: 5px;
+}
+.block_xp-level-progress .xp-bar-txt {
     color: #fff;
-    font-size: 10px;
+    font-size: 12px;
     left: 0;
     line-height: 25px;
     position: absolute;
     text-align: center;
     top: 0;
     width: 100%;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.block_xp-level-progress .xp-togo {
+    font-size: 90%;
+    text-align: right;
+    padding: 0 3px;
+}
+.block_xp-level-progress .xp-togo-txt {
+    font-size: 90%;
+    color: #999;
 }
 
-/** Using !important because of super-qualified rules to bypass. */
-.path-blocks-xp table .highlight > td{
-    background-color: #D9EDF7 !important; /* stylelint-disable-line declaration-no-important */
+.block_xp .block_xp-level-progress {
+    margin-bottom: 10px;
+}
+
+/** Use our own highlight because of discrepencies between various themes. Sorry themers,
+    it's a nightmare to maintain a plugin for multiple themes... */
+.path-blocks-xp .highlight-row > td{
+    background-color: #d9edf7;
 }
 
 /**

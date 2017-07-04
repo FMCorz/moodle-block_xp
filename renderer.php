@@ -25,10 +25,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 use block_xp\local\course_world;
+use block_xp\local\activity\activity;
 use block_xp\local\routing\url_resolver;
 use block_xp\local\xp\level;
 use block_xp\local\xp\level_with_badge;
 use block_xp\local\xp\state;
+use block_xp\output\xp_widget;
 
 /**
  * Block XP renderer class.
@@ -41,39 +43,6 @@ class block_xp_renderer extends plugin_renderer_base {
 
     /** @var string Notices flag. */
     protected $noticesflag = 'block_xp_notices';
-
-    /**
-     * Administration links.
-     *
-     * @param course_world $world The world.
-     * @param url_resolver $urlresolver URL resolver.
-     * @return string HTML produced.
-     */
-    public function admin_links(course_world $world, url_resolver $urlresolver) {
-        return html_writer::tag('p',
-            html_writer::link(
-                $urlresolver->reverse('report', ['courseid' => $world->get_courseid()]),
-                get_string('navreport', 'block_xp'))
-            . ' - '
-            . html_writer::link(
-                $urlresolver->reverse('config', ['courseid' => $world->get_courseid()]),
-                get_string('navsettings', 'block_xp'))
-            , array('class' => 'admin-links')
-        );
-    }
-
-    /**
-     * The description to display in the field.
-     *
-     * @param string $string The text to display.
-     * @return string HTML producted.
-     */
-    public function description($string) {
-        if (empty($string)) {
-            return '';
-        }
-        return html_writer::tag('p', $string, array('class' => 'description'));
-    }
 
     /**
      * Print a level's badge.
@@ -436,51 +405,176 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
-     * Returns the links for the students.
-     *
-     * @param course_world $world The world.
-     * @param url_resolver $urlresolver URL resolver.
-     * @return string HTML produced.
-     */
-    public function student_links(course_world $world, url_resolver $urlresolver) {
-        $html = '';
-        $links = array();
-
-        if ($world->get_config()->get('enableinfos')) {
-            $links[] = html_writer::link(
-                $urlresolver->reverse('infos', ['courseid' => $world->get_courseid()]),
-                get_string('infos', 'block_xp')
-            );
-        }
-        if ($world->get_config()->get('enableladder')) {
-            $links[] = html_writer::link(
-                $urlresolver->reverse('ladder', ['courseid' => $world->get_courseid()]),
-                get_string('viewtheladder', 'block_xp')
-            );
-        }
-
-        if (!empty($links)) {
-            $html = html_writer::tag('p', implode(' - ', $links), array('class' => 'student-links'));
-        }
-
-        return $html;
-    }
-
-    /**
      * Returns the progress bar rendered.
      *
      * @param state $state The renderable object.
      * @return string HTML produced.
      */
     public function progress_bar(state $state) {
+        $classes = ['block_xp-level-progress'];
+        $pc = $state->get_ratio_in_level() * 100;
+        if ($pc != 0) {
+            $classes[] = 'progress-non-zero';
+        }
+
         $html = '';
-        $html .= html_writer::start_tag('div', ['class' => 'block_xp-level-progress']);
-        $html .= html_writer::tag('div', '',
-            ['style' => 'width: ' . $state->get_ratio_in_level() * 100 . '%;', 'class' => 'bar']);
-        $html .= html_writer::tag('div', $state->get_xp_in_level() . '/' . $state->get_total_xp_in_level(),
-            ['class' => 'txt']);
+        $remaining = $state->get_total_xp_in_level() - $state->get_xp_in_level();
+
+        $html .= html_writer::start_tag('div', ['class' => implode(' ', $classes)]);
+
+        $html .= html_writer::start_tag('div', ['class' => 'xp-bar-wrapper', 'role' => 'progressbar',
+            'aria-valuenow' => round($pc, 1), 'aria-valuemin' => 0, 'aria-valuemax' => 100]);
+        $html .= html_writer::tag('div', '', ['style' => "width: {$pc}%;", 'class' => 'xp-bar']);
+        $html .= html_writer::end_tag('div');
+
+        $togo = get_string('xptogo', 'block_xp', $this->xp($remaining));
+        $span = html_writer::start_tag('span', ['class' => 'xp-togo-txt']);
+        if (strpos($togo, '[[') !== false && strpos($togo, ']]')) {
+            $togo = $span . $togo . '</span>';
+            $togo = str_replace('[[', '</span>', $togo);
+            $togo = str_replace(']]', $span, $togo);
+        }
+
+        $html .= html_writer::tag('div', $togo, ['class' => 'xp-togo']);
+
         $html .= html_writer::end_tag('div');
         return $html;
+    }
+
+    /**
+     * Recent activity.
+     *
+     * @param activity[] $activity The activity entries.
+     * @param moodle_url $moreurl The URL to view more.
+     * @return string
+     */
+    public function recent_activity(array $activity, moodle_url $moreurl) {
+        $o = '';
+
+        $o .= html_writer::start_tag('div', ['class' => 'block_xp-recent-activity']);
+        $o .= html_writer::tag('h5',
+            get_string('recentrewards', 'block_xp') . ' ' . html_writer::link($moreurl, get_string('viewmore')),
+            ['class'=>"clearfix"]
+        );
+
+        $o .= implode('', array_map(function(activity $entry) {
+            $tinyago = $this->tiny_time_ago($entry->get_date());
+            $date = userdate($entry->get_date()->getTimestamp());
+            $xp = $entry instanceof \block_xp\local\activity\activity_with_xp ? $entry->get_xp() : '';
+            $o = '';
+            $o .= html_writer::start_div('activity-entry');
+            $o .= html_writer::div($tinyago, 'date', ['title' => $date]);
+            $o .= html_writer::div($this->xp($xp), 'xp');
+            $o .= html_writer::div(s($entry->get_description()), 'desc');
+            $o .= html_writer::end_div();
+            return $o;
+        }, $activity));
+
+        $o .= html_writer::end_tag('div');
+
+        return $o;
+    }
+
+    /**
+     * Render XP widget.
+     *
+     * @param renderable $widget The widget.
+     * @return string
+     */
+    public function render_xp_widget(xp_widget $widget) {
+        $o = '';
+
+        // Badge.
+        $o .= $this->level_badge($widget->state->get_level());
+
+        // Total XP.
+        $xp = $widget->state->get_xp();
+        $o .= html_writer::tag('div', $this->xp($xp), ['class' => 'xp-total']);
+
+        // Progress bar.
+        $o .= $this->progress_bar($widget->state);
+
+        // Intro.
+        if (!empty($widget->intro)) {
+            $o .= html_writer::tag('p', $widget->intro, array('class' => 'description'));
+        }
+
+        // Recent rewards.
+        if (!empty($widget->recentactivity)) {
+            $o .= $this->recent_activity($widget->recentactivity, $widget->recentactivityurl);
+        }
+
+        // Navigation.
+        if (!empty($widget->actions)) {
+            $o .= $this->xp_widget_navigation($widget->actions);
+        }
+
+        return $o;
+    }
+
+    /**
+     * Tiny time ago string.
+     *
+     * @param DateTime $dt The date object.
+     * @return string
+     */
+    public function tiny_time_ago(DateTime $dt) {
+        $now = new \DateTime();
+        $diff = $now->getTimestamp() - $dt->getTimestamp();
+        $ago = '?';
+
+        if ($diff < 15) {
+            $ago = get_string('tinytimenow', 'block_xp');
+        } else if ($diff < 45) {
+            $ago = get_string('tinytimeseconds', 'block_xp', $diff);
+        } else if ($diff < HOURSECS * 0.7) {
+            $ago = get_string('tinytimeminutes', 'block_xp', round($diff / 60));
+        } else if ($diff < DAYSECS * 0.7) {
+            $ago = get_string('tinytimehours', 'block_xp', round($diff / HOURSECS));
+        } else if ($diff < DAYSECS * 7 * 0.7) {
+            $ago = get_string('tinytimedays', 'block_xp', round($diff / DAYSECS));
+        } else if ($diff < DAYSECS * 30 * 0.7) {
+            $ago = get_string('tinytimeweeks', 'block_xp', round($diff / DAYSECS * 7));
+        } else if ($diff < DAYSECS * 365) {
+            $ago = userdate($dt->getTimestamp(), get_string('tinytimewithinayearformat', 'block_xp'));
+        } else {
+            $ago = userdate($dt->getTimestamp(), get_string('tinytimeolderyearformat', 'block_xp'));
+        }
+
+        return $ago;
+    }
+
+    /**
+     * Format an amount of XP.
+     *
+     * @param int $amount The XP.
+     * @return string
+     */
+    public function xp($amount) {
+        $xp = (int) $amount;
+        if ($xp > 999) {
+            $thousandssep = get_string('thousandssep', 'langconfig');
+            $xp = number_format($xp, 0, '.', $thousandssep);
+        }
+        return $xp . html_writer::tag('span', 'xp', ['class' => 'block_xp-currency']);
+    }
+
+    /**
+     * Render XP widget navigation.
+     *
+     * @param array $actions The actions.
+     * @return string
+     */
+    public function xp_widget_navigation(array $actions) {
+        $o = '';
+        $o .= html_writer::start_tag('nav');
+        $o .= implode('', array_map(function(action_link $action) {
+            $content = html_writer::div($this->render($action->icon));
+            $content .= html_writer::div($action->text);
+            return html_writer::link($action->url, $content, ['class' => 'nav-button']);
+        }, $actions));
+        $o .= html_writer::end_tag('nav');
+        return $o;
     }
 
 }

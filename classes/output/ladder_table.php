@@ -277,7 +277,7 @@ class ladder_table extends table_sql {
                     $row->rank = $rank;
                 }
 
-                $classes = ($this->userid == $row->userid) ? 'highlight' : '';
+                $classes = ($this->userid == $row->userid) ? 'highlight-row' : '';
                 $formattedrow = $this->format_row($row);
                 $this->add_data_keyed($formattedrow, $classes);
             }
@@ -327,6 +327,15 @@ class ladder_table extends table_sql {
             return '+' . $row->rank;
         }
         return $row->rank;
+    }
+
+    /**
+     * Formats the rank column.
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
+    protected function col_xp($row) {
+        return $this->xpoutput->xp($row->xp);
     }
 
     /**
