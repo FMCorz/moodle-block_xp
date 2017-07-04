@@ -158,7 +158,7 @@ class course_block extends block_base {
             $actions[] = new action_link(
                 $urlresolver->reverse('report', ['courseid' => $world->get_courseid()]),
                 get_string('navreport', 'block_xp'), null, null,
-                new pix_icon('i/report', '')
+                new pix_icon('i/report', '', 'block_xp')
             );
             $actions[] = new action_link(
                 $urlresolver->reverse('config', ['courseid' => $world->get_courseid()]),
