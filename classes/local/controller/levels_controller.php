@@ -58,6 +58,8 @@ class levels_controller extends page_controller {
             $data['levelsdata'] = json_encode($newlevelsinfo->jsonSerialize());
             $this->world->get_config()->set_many($data);
             $this->world->get_store()->recalculate_levels();
+
+            // TODO Cannot redirect when the info page does not exist.
             $this->redirect(
                 $this->urlresolver->reverse('infos', ['courseid' => $this->courseid]),
                 get_string('valuessaved', 'block_xp')

@@ -39,8 +39,8 @@ use moodle_url;
  */
 class badged_level extends described_level implements level_with_badge {
 
-    /** @var context Badge context. */
-    protected $badgecontext;
+    /** @var moodle_url Badge URL. */
+    protected $url;
 
     /**
      * Constructor.
@@ -48,11 +48,11 @@ class badged_level extends described_level implements level_with_badge {
      * @param int $level The level.
      * @param int $xprequired The XP required.
      * @param string $desc The description.
-     * @param context $badgecontext The badget context.
+     * @param moodle_url $url The badge URL.
      */
-    public function __construct($level, $xprequired, $desc, context $badgecontext) {
+    public function __construct($level, $xprequired, $desc, $url) {
         parent::__construct($level, $xprequired, $desc);
-        $this->badgecontext = $badgecontext;
+        $this->url = $url;
     }
 
     /**
@@ -61,7 +61,7 @@ class badged_level extends described_level implements level_with_badge {
      * @return moodle_url
      */
     public function get_badge_url() {
-        return moodle_url::make_pluginfile_url($this->badgecontext->id, 'block_xp', 'badges', 0, '/', $this->level);
+        return $this->url;
     }
 
 }

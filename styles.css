@@ -7,6 +7,14 @@
     margin: 10px auto;
     text-align: center;
     width: 100px;
+
+    cursor: default;
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+       -khtml-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
 }
 
 .block_xp .level-1 {
@@ -50,6 +58,13 @@
     background: none;
     height: auto;
     width: auto;
+
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+       -khtml-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
 }
 .block_xp .level-badge img {
     width: 100px;
@@ -92,9 +107,9 @@
     align-items: stretch;
 }
 .block_xp nav .nav-button {
-    -webkit-flex: 1 1 auto;
-    -ms-flex: 1 1 auto;
-    flex: 1 1 auto;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
     -webkit-align-self: auto;
     -ms-flex-item-align: auto;
     align-self: auto;
@@ -194,9 +209,20 @@
     font-size: 90%;
     color: #999;
 }
-
 .block_xp .block_xp-level-progress {
+    /** Add margin in the block. */
     margin-bottom: 10px;
+}
+
+/** Levels preview. */
+.block_xp-level-preview .previewed-level {
+    display: inline-block;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+.block_xp-level-preview .level-name {
+    white-space: nowrap;
+    text-align: center;
 }
 
 /** Use our own highlight because of discrepencies between various themes. Sorry themers,

@@ -158,12 +158,30 @@ class course_world implements world {
     public function get_levels_info() {
         if (!$this->levelsinfo) {
             $config = $this->get_config();
-            $data = json_decode($config->get('levelsdata'), true);
-            $context = $config->get('enablecustomlevelbadges') ? $this->get_context() : null;
-            if (!$data) {
-                $this->levelsinfo = \block_xp\local\xp\algo_levels_info::make_from_defaults($context);
+
+            $custombadges = $config->get('enablecustomlevelbadges');
+            if ($custombadges == course_world_config::CUSTOM_BADGES_NOOP) {
+                // We're all set, use the badges present.
+                $resolver = $this->get_badge_url_resolver();
+
+            } else if ($custombadges == course_world_config::CUSTOM_BADGES_MISSING) {
+                // The scenario here is that we are in a new course (not a legacy one),
+                // and the badges have not been customised, so we will use the admin
+                // ones. We will exit the 'missing' state when the teacher will
+                // effectively custommise the levels.
+                $resolver = $this->get_admin_badge_url_resolver();
+
             } else {
-                $this->levelsinfo = new \block_xp\local\xp\algo_levels_info($data, $context);
+                // Probably the legacy state of course_world_config::CUSTOM_BADGES_NONE.
+                // We use the standard look of the levels.
+                $resolver = null;
+            }
+
+            $data = json_decode($config->get('levelsdata'), true);
+            if (!$data) {
+                $this->levelsinfo = \block_xp\local\xp\algo_levels_info::make_from_defaults($resolver);
+            } else {
+                $this->levelsinfo = new \block_xp\local\xp\algo_levels_info($data, $resolver);
             }
         }
         return $this->levelsinfo;
@@ -189,6 +207,25 @@ class course_world implements world {
                 $this->get_courseid());
         }
         return $this->store;
+    }
+
+    /**
+     * Get the admin badge URL resolver.
+     *
+     * @return badge_url_resolver
+     */
+    protected function get_admin_badge_url_resolver() {
+        // TODO This should be somewhere else!
+        return new \block_xp\local\xp\file_storage_badge_url_resolver(context_system::instance(), 'block_xp', 'defaultbadges', 0);
+    }
+
+    /**
+     * Get the badge URL resolver.
+     *
+     * @return badge_url_resolver
+     */
+    protected function get_badge_url_resolver() {
+        return new \block_xp\local\xp\file_storage_badge_url_resolver($this->get_context(), 'block_xp', 'badges', 0);
     }
 
     /**

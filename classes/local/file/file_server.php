@@ -70,24 +70,40 @@ class file_server implements block_file_server {
      * @return void
      */
     public function serve_block_file($course, $bi, context $context, $filearea, $args, $forcedownload, array $options = []) {
-        if ($this->forwholesite && $context->contextlevel !== CONTEXT_SYSTEM) {
-            return false;
-        } else if (!$this->forwholesite && $context->contextlevel !== CONTEXT_COURSE) {
-            return false;
+        // Check context consistency.
+        if ($filearea == 'badges') {
+            if ($this->forwholesite && $context->contextlevel !== CONTEXT_SYSTEM) {
+                return false;
+            } else if (!$this->forwholesite && $context->contextlevel !== CONTEXT_COURSE) {
+                return false;
+            }
+
+        } else if ($filearea == 'defaultbadges') {
+            if ($context->contextlevel !== CONTEXT_SYSTEM) {
+                return false;
+            }
         }
 
         $fs = $this->fs;
         $file = null;
 
-        if ($filearea == 'badges') {
+        if ($filearea == 'badges' || $filearea == 'defaultbadges') {
             // For performance reason, and very low risk, we do not restrict the access to the level badges
-            // to the participant of the course, nor do we check if they have the required level, etc...
+            // to the participant of the course, nor do we check if they have the required level, etc... And
+            // we allow files to be served from 'defaultbadges' to avoid having to copy them to the other area.
             $itemid = array_shift($args);
             $filename = array_shift($args);
             $filepath = '/';
-            $file = $fs->get_file($context->id, 'block_xp', $filearea, $itemid, $filepath, $filename . '.png');
-            if (!$file) {
-                $file = $fs->get_file($context->id, 'block_xp', $filearea, $itemid, $filepath, $filename . '.jpg');
+
+            // Check we have an expected file name, we do not want to leak other files in the file area.
+            if (!preg_match('~^(\d+)\.[a-z]+$~i', $filename)) {
+                return false;
+            }
+            $file = $fs->get_file($context->id, 'block_xp', $filearea, $itemid, $filepath, $filename);
+
+            // Make sure this is an image.
+            if (!$file || strpos($file->get_mimetype(), 'image/') !== 0) {
+                return false;
             }
         }
 

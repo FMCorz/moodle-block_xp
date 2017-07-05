@@ -138,6 +138,12 @@ class default_routes_config implements routes_config {
                 '~^/admin/rules$~',
                 'admin_rules'
             ),
+            'admin/visuals' => new route_definition(
+                'admin/visuals',
+                '/admin/visuals',
+                '~^/admin/visuals$~',
+                'admin_visuals'
+            ),
         ];
     }
 

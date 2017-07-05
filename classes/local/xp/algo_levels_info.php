@@ -46,6 +46,8 @@ class algo_levels_info implements levels_info {
     /** Default coef for XP algo. */
     const DEFAULT_COEF = 1.3;
 
+    /** @var array The initial data. */
+    protected $data;
     /** @var int Number of levels. */
     protected $count;
     /** @var level[] The levels. */
@@ -56,30 +58,21 @@ class algo_levels_info implements levels_info {
     protected $coef;
     /** @var bool Used algo? */
     protected $usealgo;
+    /** @var badge_url_resolver The resolver. */
+    protected $resolver;
 
     /**
      * Constructor.
      *
      * @param array $data Array containing both keys 'xp' and 'desc'. Indexes should start at 1.
-     * @param context $badgecontext The context of the badges, if any.
+     * @param badge_url_resolver $resolver The server resolving badge URLs if any.
      */
-    public function __construct(array $data, context $badgecontext = null) {
-        $this->levels = array_reduce(array_keys($data['xp']), function($carry, $key) use ($data, $badgecontext) {
-            $level = $key;
-            $desc = isset($data['desc'][$key]) ? $data['desc'][$key] : null;
-            if (!$badgecontext) {
-                $obj = new described_level($level, $data['xp'][$key], $desc);
-            } else {
-                $obj = new badged_level($level, $data['xp'][$key], $desc, $badgecontext);
-            }
-            $carry[$level] = $obj;
-            return $carry;
-        }, []);
-        $this->count = count($this->levels);
-
+    public function __construct(array $data, badge_url_resolver $resolver = null) {
+        $this->data = $data;
         $this->base = $data['base'];
         $this->coef = $data['coef'];
         $this->usealgo = (bool) $data['usealgo'];
+        $this->resolver = $resolver;
     }
 
     /**
@@ -106,6 +99,7 @@ class algo_levels_info implements levels_info {
      * @return int
      */
     public function get_count() {
+        $this->load();
         return $this->count;
     }
 
@@ -116,6 +110,7 @@ class algo_levels_info implements levels_info {
      * @return level
      */
     public function get_level($level) {
+        $this->load();
         if (!isset($this->levels[$level])) {
             throw new coding_exception('Invalid level: ' . $level);
         }
@@ -129,6 +124,7 @@ class algo_levels_info implements levels_info {
      * @return level
      */
     public function get_level_from_xp($xp) {
+        $this->load();
         for ($i = $this->get_count(); $i > 0; $i--) {
             $level = $this->levels[$i];
             if ($level->get_xp_required() <= $xp) {
@@ -144,6 +140,7 @@ class algo_levels_info implements levels_info {
      * @return level[]
      */
     public function get_levels() {
+        $this->load();
         return $this->levels;
     }
 
@@ -175,20 +172,45 @@ class algo_levels_info implements levels_info {
         ];
     }
 
+    protected function load() {
+        if ($this->levels !== null) {
+            return;
+        }
+
+        $data = $this->data;
+        $resolver = $this->resolver;
+
+        // TODO Find a way to reduce the need to load everything, and to not ask
+        // the resolver until the last moment.
+        $this->levels = array_reduce(array_keys($data['xp']), function($carry, $key) use ($data, $resolver) {
+            $level = $key;
+            $desc = isset($data['desc'][$key]) ? $data['desc'][$key] : null;
+            $url = $resolver ? $resolver->get_url_for_level($level) : null;
+            if (!$url) {
+                $obj = new described_level($level, $data['xp'][$key], $desc);
+            } else {
+                $obj = new badged_level($level, $data['xp'][$key], $desc, $url);
+            }
+            $carry[$level] = $obj;
+            return $carry;
+        }, []);
+        $this->count = count($this->levels);
+    }
+
     /**
      * Make levels from the defaults.
      *
      * @param context $badgecontext The context of the badges, if any.
      * @return self
      */
-    public static function make_from_defaults(context $badgecontext = null) {
+    public static function make_from_defaults(badge_url_resolver $resolver = null) {
         return new self([
             'usealgo' => true,
             'base' => self::DEFAULT_BASE,
             'coef' => self::DEFAULT_COEF,
             'xp' => self::get_xp_with_algo(self::DEFAULT_COUNT, self::DEFAULT_BASE, self::DEFAULT_COEF),
             'desc' => []
-        ], $badgecontext);
+        ], $resolver);
     }
 
     /**

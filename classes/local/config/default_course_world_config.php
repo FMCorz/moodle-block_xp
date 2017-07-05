@@ -52,7 +52,9 @@ class default_course_world_config extends immutable_config {
             'levels' => 0,                // Not used any more.
             'levelsdata' => '',           // JSON encoded value of the levels data.
             'enablelevelupnotif' => true, // Enable the level up notification.
-            'enablecustomlevelbadges' => false,  // Enable the usage of custom level badges.
+            // This used to flag whether we use the custom badges, or not. We changed it to be a flag describing whether
+            // we need to copy admin badge, or not, or if we are in the legacy state of not using custom badges.
+            'enablecustomlevelbadges' => course_world_config::CUSTOM_BADGES_MISSING,
             'maxactionspertime' => 10,           // Max actions during timepermaxactions.
             'timeformaxactions' => 60,           // Time during which max actions cannot be reached.
             'timebetweensameactions' => 180,     // Time between similar actions.

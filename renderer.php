@@ -94,6 +94,27 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Levels preview.
+     *
+     * @param level[] $levels The levels.
+     * @return string
+     */
+    public function levels_preview(array $levels) {
+        $o = '';
+
+        $o .= html_writer::start_div('block_xp-level-preview');
+        foreach ($levels as $level) {
+            // TODO Remove the need for the class block_xp on levels.
+            $o .= html_writer::start_div('previewed-level block_xp');
+            $o .= html_writer::div('#' . $level->get_level(), 'level-name');
+            $o .= $this->small_level_badge($level);
+            $o .= html_writer::end_div();
+        }
+
+        return $o;
+    }
+
+    /**
      * Return the notices.
      *
      * @param \block_xp\local\course_world $world The world.

@@ -110,6 +110,12 @@ class default_settings_maker implements settings_maker {
             $this->urlresolver->reverse('admin/rules'));
         $settings->add($catname, $settingspage);
 
+        // Add the default visuals page.
+        $settingspage = new admin_externalpage('block_xp_default_visuals',
+            get_string('defaultvisuals', 'block_xp'),
+            $this->urlresolver->reverse('admin/visuals'));
+        $settings->add($catname, $settingspage);
+
         return $settings;
     }
 

@@ -58,6 +58,13 @@ class course_world_config implements config {
     /** When the defaults filters have not yet been added. */
     const DEFAULT_FILTERS_MISSING = 2;
 
+    /** When hardcoded to no badges. Legacy of 'No custom badges'. */
+    const CUSTOM_BADGES_NONE = 0;
+    /** When there is nothing to do. Legacy of 'Yes, use custom badges'. */
+    const CUSTOM_BADGES_NOOP = 1;
+    /** When the default badges are missing. */
+    const CUSTOM_BADGES_MISSING = 2;
+
     /** @var config The proxied config object. */
     protected $store;
 

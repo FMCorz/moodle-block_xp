@@ -15,34 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Visuals form.
+ * Badge URL resolver interface.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\form;
-
+namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->libdir . '/formslib.php');
-
-use moodleform;
 
 /**
- * Visuals form class.
+ * Badge URL resolver interface.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart - FMCorz.net
+ * @copyright  2017 Branch Up Pty Ltd
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class visuals extends moodleform {
+interface badge_url_resolver {
 
-    public function definition() {
-        $mform = $this->_form;
-        $mform->addElement('filemanager', 'badges', get_string('levelbadges', 'block_xp'), null, $this->_customdata['fmoptions']);
-        $mform->addElement('static', '', '', get_string('levelbadgesformhelp', 'block_xp'));
-        $this->add_action_buttons();
-    }
+    /**
+     * Get badge URL for level.
+     *
+     * @param int $level The level, as an integer.
+     * @return moodle_url|null
+     */
+    public function get_url_for_level($level);
 
 }
