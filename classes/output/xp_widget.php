@@ -42,10 +42,17 @@ use block_xp\local\activity\activity;
  */
 class xp_widget implements renderable {
 
+    /** @var state The user's state. */
     public $state;
+    /** @var activity[] The activity objects. */
     public $recentactivity;
+    /** @var moodle_url The URL to see more. */
     public $recentactivityurl;
+    /** @var bool Whether to force showing the recent activity. */
+    public $forcerecentactivity = false;
+    /** @var string The introduction text. */
     public $intro;
+    /** @var action_link[] The navigation links.*/
     public $actions;
 
     public function __construct(state $state, array $recentactivity, $intro, array $actions,
@@ -61,6 +68,10 @@ class xp_widget implements renderable {
         $this->actions = array_filter($actions, function($action) {
             return $action instanceof action_link;
         });
+    }
+
+    public function set_force_recent_activity($value) {
+        $this->forcerecentactivity = (bool) $value;
     }
 
 }

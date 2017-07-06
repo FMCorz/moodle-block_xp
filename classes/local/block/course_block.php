@@ -130,14 +130,17 @@ class course_block extends block_base {
         $config = $world->get_config();
 
         // Recent activity.
-        // TODO Show an empty recent activity to admins.
         $activity = [];
+        $forcerecentactivity = false;
         $moreurl = null; // TODO Add URL for students to see, and option to control it.
         // $moreurl = $urlresolver->reverse('log', ['courseid' => $world->get_courseid()]);
         $recentactivity = isset($this->config->recentactivity) ? $this->config->recentactivity : 0;
         if ($config->get('enablelog') && $recentactivity) {
             $repo = $world->get_user_recent_activity_repository();
             $activity = $repo->get_user_recent_activity($USER->id, $recentactivity);
+
+            // Users who can manage should see this when it's enabled, even without activity to show.
+            $forcerecentactivity = $canedit;
         }
 
         // Navigation.
@@ -177,6 +180,7 @@ class course_block extends block_base {
             $actions,
             $moreurl
         );
+        $widget->set_force_recent_activity($forcerecentactivity);
         $this->content->text = $renderer->render($widget);
 
         // We should be congratulating the user because they leveled up!

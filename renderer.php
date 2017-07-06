@@ -493,6 +493,10 @@ class block_xp_renderer extends plugin_renderer_base {
             return $o;
         }, $activity));
 
+        if (!$activity) {
+            $o .= html_writer::tag('p', '-');
+        }
+
         $o .= html_writer::end_tag('div');
 
         return $o;
@@ -523,7 +527,7 @@ class block_xp_renderer extends plugin_renderer_base {
         }
 
         // Recent rewards.
-        if (!empty($widget->recentactivity)) {
+        if (!empty($widget->recentactivity) || $widget->forcerecentactivity) {
             $o .= $this->recent_activity($widget->recentactivity, $widget->recentactivityurl);
         }
 
