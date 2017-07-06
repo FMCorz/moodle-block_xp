@@ -469,14 +469,16 @@ class block_xp_renderer extends plugin_renderer_base {
      * @param moodle_url $moreurl The URL to view more.
      * @return string
      */
-    public function recent_activity(array $activity, moodle_url $moreurl) {
+    public function recent_activity(array $activity, moodle_url $moreurl = null) {
         $o = '';
 
         $o .= html_writer::start_tag('div', ['class' => 'block_xp-recent-activity']);
-        $o .= html_writer::tag('h5',
-            get_string('recentrewards', 'block_xp') . ' ' . html_writer::link($moreurl, get_string('viewmore')),
-            ['class'=>"clearfix"]
-        );
+
+        $title = get_string('recentrewards', 'block_xp');
+        if ($moreurl) {
+            $title .= ' ' . html_writer::link($moreurl, get_string('viewmore'));
+        }
+        $o .= html_writer::tag('h5', $title, ['class'=>"clearfix"]);
 
         $o .= implode('', array_map(function(activity $entry) {
             $tinyago = $this->tiny_time_ago($entry->get_date());

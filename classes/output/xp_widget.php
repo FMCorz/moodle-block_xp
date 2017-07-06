@@ -48,8 +48,8 @@ class xp_widget implements renderable {
     public $intro;
     public $actions;
 
-    public function __construct(state $state, array $recentactivity, moodle_url $recentactivityurl,
-            $intro, array $actions) {
+    public function __construct(state $state, array $recentactivity, $intro, array $actions,
+            moodle_url $recentactivityurl = null) {
 
         $this->state = $state;
         $this->intro = $intro;

@@ -130,8 +130,10 @@ class course_block extends block_base {
         $config = $world->get_config();
 
         // Recent activity.
+        // TODO Show an empty recent activity to admins.
         $activity = [];
-        $moreurl = $urlresolver->reverse('log', ['courseid' => $world->get_courseid()]);
+        $moreurl = null; // TODO Add URL for students to see, and option to control it.
+        // $moreurl = $urlresolver->reverse('log', ['courseid' => $world->get_courseid()]);
         $recentactivity = isset($this->config->recentactivity) ? $this->config->recentactivity : 0;
         if ($config->get('enablelog') && $recentactivity) {
             $repo = $world->get_user_recent_activity_repository();
@@ -171,9 +173,9 @@ class course_block extends block_base {
         $widget = new \block_xp\output\xp_widget(
             $state,
             $activity,
-            $moreurl,
             isset($this->config->description) ? $this->config->description : $adminconfig->get('blockdescription'),
-            $actions
+            $actions,
+            $moreurl
         );
         $this->content->text = $renderer->render($widget);
 
