@@ -45,6 +45,12 @@ class levels_controller extends page_controller {
     protected function pre_content() {
         $levelsinfo = $this->world->get_levels_info();
 
+        $redirectto = null;
+        if ($this->world->get_config()->get('enableinfos')) {
+            // When the infos page is enabled, redirect to it.
+            $redirectto = $this->urlresolver->reverse('infos', ['courseid' => $this->courseid]);
+        }
+
         $form = $this->get_form();
         $form->set_data_from_levels($levelsinfo);
         if ($newlevelsinfo = $form->get_levels_from_data()) {
@@ -59,13 +65,9 @@ class levels_controller extends page_controller {
             $this->world->get_config()->set_many($data);
             $this->world->get_store()->recalculate_levels();
 
-            // TODO Cannot redirect when the info page does not exist.
-            $this->redirect(
-                $this->urlresolver->reverse('infos', ['courseid' => $this->courseid]),
-                get_string('valuessaved', 'block_xp')
-            );
+            $this->redirect($redirectto, get_string('valuessaved', 'block_xp'));
         } else if ($form->is_cancelled()) {
-            $this->redirect($this->urlresolver->reverse('infos', ['courseid' => $this->courseid]));
+            $this->redirect($redirectto);
         }
     }
 

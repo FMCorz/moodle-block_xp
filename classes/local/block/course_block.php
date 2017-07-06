@@ -123,6 +123,7 @@ class course_block extends block_base {
             return $this->content;
         }
 
+        // TODO Show when XP gain disabled.
         $renderer = \block_xp\di::get('renderer');
         $urlresolver = \block_xp\di::get('url_resolver');
         $state = $world->get_store()->get_state($USER->id);
