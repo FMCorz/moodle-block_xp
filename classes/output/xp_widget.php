@@ -27,6 +27,7 @@ namespace block_xp\output;
 defined('MOODLE_INTERNAL') || die();
 
 use action_link;
+use lang_string;
 use moodle_url;
 use renderable;
 use block_xp\local\xp\state;
@@ -54,6 +55,8 @@ class xp_widget implements renderable {
     public $intro;
     /** @var action_link[] The navigation links.*/
     public $actions;
+    /** @var lang_string[] Manager notices. */
+    public $managernotices = [];
 
     public function __construct(state $state, array $recentactivity, $intro, array $actions,
             moodle_url $recentactivityurl = null) {
@@ -68,6 +71,10 @@ class xp_widget implements renderable {
         $this->actions = array_filter($actions, function($action) {
             return $action instanceof action_link;
         });
+    }
+
+    public function add_manager_notice(lang_string $managernotice) {
+        $this->managernotices[] = $managernotice;
     }
 
     public function set_force_recent_activity($value) {

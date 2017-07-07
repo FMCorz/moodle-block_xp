@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 use action_link;
 use block_base;
 use html_writer;
+use lang_string;
 use pix_icon;
 use stdClass;
 
@@ -123,7 +124,6 @@ class course_block extends block_base {
             return $this->content;
         }
 
-        // TODO Show when XP gain disabled.
         $renderer = \block_xp\di::get('renderer');
         $urlresolver = \block_xp\di::get('url_resolver');
         $state = $world->get_store()->get_state($USER->id);
@@ -182,6 +182,12 @@ class course_block extends block_base {
             $moreurl
         );
         $widget->set_force_recent_activity($forcerecentactivity);
+
+        // When XP gain is disabled, let the teacher now.
+        if (!$config->get('enabled') && $canedit) {
+            $widget->add_manager_notice(new lang_string('xpgaindisabled', 'block_xp'));
+        }
+
         $this->content->text = $renderer->render($widget);
 
         // We should be congratulating the user because they leveled up!

@@ -149,7 +149,7 @@ class block_xp_renderer extends plugin_renderer_base {
             $icon = new pix_icon('t/delete', get_string('dismissnotice', 'block_xp'));
             $actionicon = $this->action_icon(new moodle_url($this->page->url), $icon, null, array('class' => 'block-xp-rocks'));
             $text .= html_writer::div($actionicon, 'dismiss-action');
-            $o .= html_writer::div($this->notification($text, 'notifysuccess'), 'block-xp-notices');
+            $o .= html_writer::div($this->notification_without_close($text, 'success'), 'block-xp-notices');
         }
 
         return $o;
@@ -224,6 +224,56 @@ class block_xp_renderer extends plugin_renderer_base {
         }
 
         return $this->tabtree($tabs, $page);
+    }
+
+    /**
+     * Print a notification without a close button.
+     *
+     * @param string|lang_string $message The message.
+     * @param string $type The notification type.
+     * @return string
+     */
+    public function notification_without_close($message, $type) {
+        if (class_exists('core\output\notification')) {
+            $typemappings = [
+                'success'           => \core\output\notification::NOTIFY_SUCCESS,
+                'info'              => \core\output\notification::NOTIFY_INFO,
+                'warning'           => \core\output\notification::NOTIFY_WARNING,
+                'error'             => \core\output\notification::NOTIFY_ERROR,
+                'notifyproblem'     => \core\output\notification::NOTIFY_ERROR,
+                'notifytiny'        => \core\output\notification::NOTIFY_ERROR,
+                'notifyerror'       => \core\output\notification::NOTIFY_ERROR,
+                'notifysuccess'     => \core\output\notification::NOTIFY_SUCCESS,
+                'notifymessage'     => \core\output\notification::NOTIFY_INFO,
+                'notifyredirect'    => \core\output\notification::NOTIFY_INFO,
+                'redirectmessage'   => \core\output\notification::NOTIFY_INFO,
+            ];
+        } else {
+            // Old-style notifications.
+            $typemappings = [
+                'success'           => 'notifysuccess',
+                'info'              => 'notifymessage',
+                'warning'           => 'notifyproblem',
+                'error'             => 'notifyproblem',
+                'notifyproblem'     => 'notifyproblem',
+                'notifytiny'        => 'notifyproblem',
+                'notifyerror'       => 'notifyproblem',
+                'notifysuccess'     => 'notifysuccess',
+                'notifymessage'     => 'notifymessage',
+                'notifyredirect'    => 'notifyredirect',
+                'redirectmessage'   => 'redirectmessage',
+            ];
+        }
+
+        $type = $typemappings[$type];
+
+        if (class_exists('core\output\notification')) {
+            $notification = new \core\output\notification($message, $type);
+            $notification->set_show_closebutton(false);
+            return $this->render($notification);
+        }
+
+        return $this->notification($message, $type);
     }
 
     /**
@@ -510,6 +560,10 @@ class block_xp_renderer extends plugin_renderer_base {
      */
     public function render_xp_widget(xp_widget $widget) {
         $o = '';
+
+        foreach ($widget->managernotices as $notice) {
+            $o .= $this->notification_without_close($notice, 'warning');
+        }
 
         // Badge.
         $o .= $this->level_badge($widget->state->get_level());
