@@ -39,7 +39,7 @@ interface level_with_badge extends level {
     /**
      * Get the badge URL.
      *
-     * @return string
+     * @return moodle_url|null
      */
     public function get_badge_url();
 

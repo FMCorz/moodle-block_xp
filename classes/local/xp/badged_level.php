@@ -26,9 +26,6 @@
 namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
-use context;
-use moodle_url;
-
 /**
  * Level with badge & description.
  *
@@ -39,8 +36,8 @@ use moodle_url;
  */
 class badged_level extends described_level implements level_with_badge {
 
-    /** @var moodle_url Badge URL. */
-    protected $url;
+    /** @var badge_url_resolver Badge URL resolver. */
+    protected $resolver;
 
     /**
      * Constructor.
@@ -48,20 +45,20 @@ class badged_level extends described_level implements level_with_badge {
      * @param int $level The level.
      * @param int $xprequired The XP required.
      * @param string $desc The description.
-     * @param moodle_url $url The badge URL.
+     * @param badge_url_resolver $resolver The URL resolver.
      */
-    public function __construct($level, $xprequired, $desc, $url) {
+    public function __construct($level, $xprequired, $desc, badge_url_resolver $resolver) {
         parent::__construct($level, $xprequired, $desc);
-        $this->url = $url;
+        $this->resolver = $resolver;
     }
 
     /**
      * Get the badge URL.
      *
-     * @return moodle_url
+     * @return moodle_url|null
      */
     public function get_badge_url() {
-        return $this->url;
+        return $this->resolver->get_url_for_level($this->get_level());
     }
 
 }

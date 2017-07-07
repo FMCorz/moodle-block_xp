@@ -180,16 +180,13 @@ class algo_levels_info implements levels_info {
         $data = $this->data;
         $resolver = $this->resolver;
 
-        // TODO Find a way to reduce the need to load everything, and to not ask
-        // the resolver until the last moment.
         $this->levels = array_reduce(array_keys($data['xp']), function($carry, $key) use ($data, $resolver) {
             $level = $key;
             $desc = isset($data['desc'][$key]) ? $data['desc'][$key] : null;
-            $url = $resolver ? $resolver->get_url_for_level($level) : null;
-            if (!$url) {
+            if (!$resolver) {
                 $obj = new described_level($level, $data['xp'][$key], $desc);
             } else {
-                $obj = new badged_level($level, $data['xp'][$key], $desc, $url);
+                $obj = new badged_level($level, $data['xp'][$key], $desc, $resolver);
             }
             $carry[$level] = $obj;
             return $carry;

@@ -80,10 +80,10 @@ class block_xp_renderer extends plugin_renderer_base {
         }
 
         $html = '';
-        if ($level instanceof level_with_badge) {
+        if ($level instanceof level_with_badge && ($badgeurl = $level->get_badge_url()) !== null) {
             $html .= html_writer::tag(
                 'div',
-                html_writer::empty_tag('img', ['src' => $level->get_badge_url(),
+                html_writer::empty_tag('img', ['src' => $badgeurl,
                     'alt' => $label]),
                 ['class' => $classes . ' level-badge']
             );
