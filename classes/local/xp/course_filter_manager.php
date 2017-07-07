@@ -109,8 +109,7 @@ class course_filter_manager {
                 return $filter->get_points();
             }
         }
-        // TODO Accept when it doesn't.
-        throw new coding_exception('The event did not match any filter.');
+        return 0;
     }
 
     /**
