@@ -91,6 +91,8 @@ class course_filter_manager {
         $cache = cache::make('block_xp', 'filters');
         $key = 'filters_' . $this->courseid;
         if (false === ($filters = $cache->get($key))) {
+            // TODO Caching is unsafe, we should not be serializing the object when
+            // we have a mechanism for exporting them...
             $filters = $this->get_user_filters();
             $cache->set($key, $filters);
         }

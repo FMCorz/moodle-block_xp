@@ -45,10 +45,11 @@ abstract class block_xp_rule implements renderable {
      * @return block_xp_rule|false The rule object.
      */
     public static function create(array $properties) {
-        if (!class_exists($properties['_class'])) {
+        $classname = $properties['_class'];
+        if (!class_exists($classname) || !is_subclass_of($classname, 'block_xp_rule')) {
             return false;
         }
-        $class = new $properties['_class'];
+        $class = new $classname();
         unset($properties['_class']);
         $class->import($properties);
         return $class;

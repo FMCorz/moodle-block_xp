@@ -208,6 +208,12 @@ class block_xp_filter implements renderable {
     protected function load_rule() {
         $ruledata = json_decode($this->ruledata, true);
         $this->rule = block_xp_rule::create($ruledata);
+
+        // There was a problem loading the rule, let's ignore it and create an empty one.
+        // Most likely the class used went missing, or someone played tricks on us.
+        if ($this->rule === false) {
+            $this->set_rule(new \block_xp_ruleset());
+        }
     }
 
     /**
