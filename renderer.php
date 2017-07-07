@@ -284,10 +284,10 @@ class block_xp_renderer extends plugin_renderer_base {
      * @return string
      */
     public function render(renderable $renderable, $options = array()) {
-        if ($renderable instanceof block_xp_rule_base) {
-            return $this->render_block_xp_rule($renderable, $options);
-        } else if ($renderable instanceof block_xp_ruleset) {
+        if ($renderable instanceof block_xp_ruleset) {
             return $this->render_block_xp_ruleset($renderable, $options);
+        } else if ($renderable instanceof block_xp_rule) {
+            return $this->render_block_xp_rule($renderable, $options);
         }
         return parent::render($renderable);
     }
