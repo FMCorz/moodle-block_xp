@@ -41,6 +41,9 @@ class default_container implements container {
 
     /** @var array The objects supported by this container. */
     protected static $supports = [
+        'ajax_base_url' => true,
+        'ajax_router' => true,
+        'ajax_url_resolver' => true,
         'base_url' => true,
         'block_class' => true,
         'block_edit_form_class' => true,
@@ -77,6 +80,47 @@ class default_container implements container {
             $this->instances[$id] = $this->{$method}();
         }
         return $this->instances[$id];
+    }
+
+    /**
+     * Get the router.
+     *
+     * @return router
+     */
+    protected function get_ajax_base_url() {
+        return new moodle_url('/blocks/xp/ajax.php');
+    }
+
+    /**
+     * Get the router.
+     *
+     * @return router
+     */
+    protected function get_ajax_router() {
+        return new \block_xp\local\routing\router(
+            $this->get('ajax_url_resolver')
+        );
+    }
+
+    /**
+     * Get the routes config.
+     *
+     * @return routes_config
+     */
+    protected function get_ajax_routes_config() {
+        return new \block_xp\local\routing\ajax_routes_config();
+    }
+
+    /**
+     * Get URL resolver.
+     *
+     * @return url_resolver
+     */
+    protected function get_ajax_url_resolver() {
+        return new \block_xp\local\routing\default_url_resolver(
+            $this->get('ajax_base_url'),
+            $this->get_ajax_routes_config()
+        );
     }
 
     /**

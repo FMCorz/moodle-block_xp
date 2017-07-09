@@ -26,8 +26,6 @@
 namespace block_xp\local\routing;
 defined('MOODLE_INTERNAL') || die();
 
-use coding_exception;
-
 /**
  * Routes config.
  *
@@ -36,23 +34,20 @@ use coding_exception;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class default_routes_config implements routes_config {
-
-    /** @var array Routes. */
-    protected $routes;
+class default_routes_config extends static_routes_config {
 
     /**
      * Constructor.
      */
     public function __construct() {
-        $this->routes = [
-            'home' => new route_definition(
+        parent::__construct([
+            new route_definition(
                 'home',
                 '/',
                 '~^/$~',
                 'index'
             ),
-            'config' => new route_definition(
+            new route_definition(
                 'config',
                 '/config/:courseid',
                 '~^/config/(\d+)$~',
@@ -61,7 +56,7 @@ class default_routes_config implements routes_config {
                     1 => 'courseid'
                 ]
             ),
-            'infos' => new route_definition(
+            new route_definition(
                 'infos',
                 '/infos/:courseid',
                 '~^/infos/(\d+)$~',
@@ -70,7 +65,7 @@ class default_routes_config implements routes_config {
                     1 => 'courseid'
                 ]
             ),
-            'ladder' => new route_definition(
+            new route_definition(
                 'ladder',
                 '/ladder/:courseid',
                 '~^/ladder/(\d+)$~',
@@ -79,7 +74,7 @@ class default_routes_config implements routes_config {
                     1 => 'courseid'
                 ]
             ),
-            'levels' => new route_definition(
+            new route_definition(
                 'levels',
                 '/levels/:courseid',
                 '~^/levels/(\d+)$~',
@@ -88,7 +83,7 @@ class default_routes_config implements routes_config {
                     1 => 'courseid'
                 ]
             ),
-            'log' => new route_definition(
+            new route_definition(
                 'log',
                 '/log/:courseid',
                 '~^/log/(\d+)$~',
@@ -97,7 +92,7 @@ class default_routes_config implements routes_config {
                     1 => 'courseid'
                 ]
             ),
-            'report' => new route_definition(
+            new route_definition(
                 'report',
                 '/report/:courseid',
                 '~^/report/(\d+)$~',
@@ -106,7 +101,7 @@ class default_routes_config implements routes_config {
                     1 => 'courseid'
                 ]
             ),
-            'rules' => new route_definition(
+            new route_definition(
                 'rules',
                 '/rules/:courseid',
                 '~^/rules/(\d+)$~',
@@ -115,7 +110,7 @@ class default_routes_config implements routes_config {
                     1 => 'courseid'
                 ]
             ),
-            'visuals' => new route_definition(
+            new route_definition(
                 'visuals',
                 '/visuals/:courseid',
                 '~^/visuals/(\d+)$~',
@@ -126,47 +121,25 @@ class default_routes_config implements routes_config {
             ),
 
             // Admin routes.
-            'admin/levels' => new route_definition(
+            new route_definition(
                 'admin/levels',
                 '/admin/levels',
                 '~^/admin/levels$~',
                 'admin_levels'
             ),
-            'admin/rules' => new route_definition(
+            new route_definition(
                 'admin/rules',
                 '/admin/rules',
                 '~^/admin/rules$~',
                 'admin_rules'
             ),
-            'admin/visuals' => new route_definition(
+            new route_definition(
                 'admin/visuals',
                 '/admin/visuals',
                 '~^/admin/visuals$~',
                 'admin_visuals'
             ),
-        ];
-    }
-
-    /**
-     * Get a route.
-     *
-     * @param string $name The route name.
-     * @return route_definition
-     */
-    public function get_route($name) {
-        if (!isset($this->routes[$name])) {
-            throw new coding_exception('Unknown route.');
-        }
-        return $this->routes[$name];
-    }
-
-    /**
-     * Return an array of routes.
-     *
-     * @return route_definition[]
-     */
-    public function get_routes() {
-        return $this->routes;
+        ]);
     }
 
 }
