@@ -57,7 +57,8 @@ class default_container implements container {
         'router' => true,
         'settings_maker' => true,
         'tasks_definition_maker' => true,
-        'url_resolver' => true
+        'url_resolver' => true,
+        'user_notice_indicator' => true,
     ];
 
     /** @var array Object instances. */
@@ -287,6 +288,15 @@ class default_container implements container {
             $this->get('base_url'),
             $this->get_routes_config()
         );
+    }
+
+    /**
+     * Get the user notice indicator.
+     *
+     * @return user_indicator
+     */
+    protected function get_user_notice_indicator() {
+        return new \block_xp\local\indicator\user_notice_indicator($this->get('db'));
     }
 
 }

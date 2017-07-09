@@ -31,6 +31,8 @@ use html_writer;
 use lang_string;
 use pix_icon;
 use stdClass;
+use \block_xp\output\notice;
+use \block_xp\output\dismissable_notice;
 
 /**
  * Block class.
@@ -105,7 +107,7 @@ class course_block extends block_base {
      * @return stdClass
      */
     public function get_content() {
-        global $DB, $PAGE, $USER;
+        global $PAGE, $USER;
 
         if (isset($this->content)) {
             return $this->content;
@@ -128,13 +130,15 @@ class course_block extends block_base {
         $urlresolver = \block_xp\di::get('url_resolver');
         $state = $world->get_store()->get_state($USER->id);
         $adminconfig = \block_xp\di::get('config');
+        $indicator = \block_xp\di::get('user_notice_indicator');
+        $courseid = $world->get_courseid();
         $config = $world->get_config();
 
         // Recent activity.
         $activity = [];
         $forcerecentactivity = false;
         $moreurl = null; // TODO Add URL for students to see, and option to control it.
-        // $moreurl = $urlresolver->reverse('log', ['courseid' => $world->get_courseid()]);
+        // $moreurl = $urlresolver->reverse('log', ['courseid' => $courseid]);
         $recentactivity = isset($this->config->recentactivity) ? $this->config->recentactivity : 0;
         if ($config->get('enablelog') && $recentactivity) {
             $repo = $world->get_user_recent_activity_repository();
@@ -148,36 +152,49 @@ class course_block extends block_base {
         $actions = [];
         if ($config->get('enableinfos')) {
             $actions[] = new action_link(
-                $urlresolver->reverse('infos', ['courseid' => $world->get_courseid()]),
+                $urlresolver->reverse('infos', ['courseid' => $courseid]),
                 get_string('navinfos', 'block_xp'), null, null,
                 new pix_icon('i/info', '', 'block_xp')
             );
         }
         if ($world->get_config()->get('enableladder')) {
             $actions[] = new action_link(
-                $urlresolver->reverse('ladder', ['courseid' => $world->get_courseid()]),
+                $urlresolver->reverse('ladder', ['courseid' => $courseid]),
                 get_string('navladder', 'block_xp'), null, null,
                 new pix_icon('i/ladder', '', 'block_xp')
             );
         }
         if ($canedit) {
             $actions[] = new action_link(
-                $urlresolver->reverse('report', ['courseid' => $world->get_courseid()]),
+                $urlresolver->reverse('report', ['courseid' => $courseid]),
                 get_string('navreport', 'block_xp'), null, null,
                 new pix_icon('i/report', '', 'block_xp')
             );
             $actions[] = new action_link(
-                $urlresolver->reverse('config', ['courseid' => $world->get_courseid()]),
+                $urlresolver->reverse('config', ['courseid' => $courseid]),
                 get_string('navsettings', 'block_xp'), null, null,
                 new pix_icon('i/settings', '', 'block_xp')
             );
+        }
+
+        // Introduction.
+        $introduction = isset($this->config->description) ? $this->config->description : $adminconfig->get('blockdescription');
+        $introname = 'block_intro_' . $courseid;
+        if ($canedit) {
+            // Always show the notification to teachers.
+            $introduction = $introduction ? new notice($introduction, notice::INFO) : null;
+        } else if (!$indicator->user_has_flag($USER->id, $introname)) {
+            // Allow students to dismiss the message.
+            $introduction = $introduction ? new dismissable_notice($introduction, $introname, notice::INFO) : null;
+        } else {
+            $introduction = null;
         }
 
         // Widget.
         $widget = new \block_xp\output\xp_widget(
             $state,
             $activity,
-            isset($this->config->description) ? $this->config->description : $adminconfig->get('blockdescription'),
+            $introduction,
             $actions,
             $moreurl
         );

@@ -412,6 +412,39 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Render a dismissable notice.
+     *
+     * Yes, we cannot use CSS IDs in there because they are stripped out... turns out they
+     * are considered dangerous. Oh well, we use a class instead. Not pretty, but it works...
+     *
+     * @param renderable $notice The notice.
+     * @return string
+     */
+    public function render_dismissable_notice(renderable $notice) {
+        $id = html_writer::random_id();
+        $url = \block_xp\di::get('ajax_url_resolver')->reverse('notice/dismiss', ['name' => $notice->name]);
+        $this->page->requires->js_init_call(<<<EOT
+            Y.one('.$id .dismiss-action a').on('click', function(e) {
+                e.preventDefault();
+                Y.one('.$id').hide();
+                var url = '$url';
+                var cfg = {
+                    method: 'POST'
+                };
+                Y.io(url, cfg);
+            });
+EOT
+        );
+
+        $icon = new pix_icon('t/close', get_string('dismissnotice', 'block_xp'), 'block_xp');
+        $actionicon = $this->action_icon('#', $icon, null);
+        $text = html_writer::div($actionicon, 'dismiss-action') . $notice->message;
+
+        return html_writer::div($this->notification_without_close($text, $notice->type),
+            'block_xp-dismissable-notice ' . $id);
+    }
+
+    /**
      * Render the filters widget.
      *
      * /!\ We only support one editable widget per page!
@@ -473,6 +506,16 @@ class block_xp_renderer extends plugin_renderer_base {
         }
 
         echo html_writer::end_div();
+    }
+
+    /**
+     * Render a notice.
+     *
+     * @param renderable $notice The notice.
+     * @return string
+     */
+    public function render_notice(renderable $notice) {
+        return $this->notification_without_close($notice->message, $notice->type);
     }
 
     /**
@@ -577,7 +620,7 @@ class block_xp_renderer extends plugin_renderer_base {
 
         // Intro.
         if (!empty($widget->intro)) {
-            $o .= html_writer::tag('p', $widget->intro, array('class' => 'description'));
+            $o .= html_writer::div($this->render($widget->intro), 'introduction');
         }
 
         // Recent rewards.

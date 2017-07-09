@@ -80,12 +80,8 @@
     margin-bottom: 5px;
     letter-spacing: 1px;
 }
-.block_xp .description {
-    color: #3a87ad;
-    background-color: #d9edf7;
-    border-color: #bce8f1;
-    padding: 8px 14px 8px 14px;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+.block_xp .introduction .alert {
+    padding: 8px;
 }
 .block_xp .footer {
     font-size: 0.9em;
@@ -250,12 +246,22 @@
 }
 
 /**
- * Like notice.
+ * Dismissable notice.
  */
-.block-xp-notices .dismiss-action {
-    float: right;
+.block_xp-dismissable-notice .alert {
+    /** We override the padding, because else the close button doesn't align well... */
+    padding: 14px;
 }
-.dir-rtl .block-xp-notices .dismiss-action {
+.block_xp-dismissable-notice .dismiss-action {
+    float: right;
+    line-height: 12px;
+}
+.block_xp-dismissable-notice .dismiss-action .icon {
+    padding: 0;
+    width: 12px;
+    height: 12px;
+}
+.dir-rtl .block_xp-dismissable-notice .dismiss-action {
     float: left;
 }
 

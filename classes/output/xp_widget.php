@@ -51,14 +51,14 @@ class xp_widget implements renderable {
     public $recentactivityurl;
     /** @var bool Whether to force showing the recent activity. */
     public $forcerecentactivity = false;
-    /** @var string The introduction text. */
+    /** @var renderable The introduction text. */
     public $intro;
     /** @var action_link[] The navigation links.*/
     public $actions;
     /** @var lang_string[] Manager notices. */
     public $managernotices = [];
 
-    public function __construct(state $state, array $recentactivity, $intro, array $actions,
+    public function __construct(state $state, array $recentactivity, renderable $intro = null, array $actions,
             moodle_url $recentactivityurl = null) {
 
         $this->state = $state;
