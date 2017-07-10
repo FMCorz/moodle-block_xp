@@ -180,7 +180,10 @@ class course_block extends block_base {
         // Introduction.
         $introduction = isset($this->config->description) ? $this->config->description : $adminconfig->get('blockdescription');
         $introname = 'block_intro_' . $courseid;
-        if ($canedit) {
+        if (empty($introduction)) {
+            // The intro is empty, no need for further checks then...
+            $introduction = null;
+        } else if ($canedit) {
             // Always show the notification to teachers.
             $introduction = $introduction ? new notice($introduction, notice::INFO) : null;
         } else if (!$indicator->user_has_flag($USER->id, $introname)) {

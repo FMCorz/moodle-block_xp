@@ -43,12 +43,20 @@ class observer {
     public static function course_deleted(\core\event\course_deleted $event) {
         global $DB;
 
+        $courseid = $event->objectid;
+
         // Clean up the data that could be left behind.
-        $conditions = array('courseid' => $event->objectid);
+        $conditions = array('courseid' => $courseid);
         $DB->delete_records('block_xp', $conditions);
         $DB->delete_records('block_xp_config', $conditions);
         $DB->delete_records('block_xp_filters', $conditions);
         $DB->delete_records('block_xp_log', $conditions);
+
+        // Notice flags, note that this is based on the internals of course_block, and user_notice_indicator.
+        $sql = $DB->sql_like('name', ':name');
+        $DB->delete_records_select('user_preferences', $sql, [
+            'name' => 'block_xp|notice|block_intro_' . $courseid
+        ]);
 
         // Delete the files.
         $fs = get_file_storage();
