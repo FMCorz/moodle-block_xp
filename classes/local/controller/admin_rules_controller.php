@@ -121,6 +121,50 @@ class admin_rules_controller extends admin_route_controller {
     }
 
     /**
+     * Get available rules.
+     *
+     * @return array
+     */
+    protected function get_available_rules() {
+        return [
+            (object) [
+                'name' => get_string('ruleproperty', 'block_xp'),
+                'rule' => new \block_xp_rule_property()
+            ],
+            (object) [
+                'name' => get_string('ruleevent', 'block_xp'),
+                'rule' => new \block_xp_rule_event()
+            ],
+            (object) [
+                'name' => get_string('ruleset', 'block_xp'),
+                'rule' => new \block_xp_ruleset()
+            ],
+        ];
+    }
+
+    /**
+     * Get default filters.
+     *
+     * @return block_xp_filter
+     */
+    protected function get_default_filter() {
+        return \block_xp_filter::load_from_data(['rule' => new \block_xp_ruleset()]);
+    }
+
+    /**
+     * Get widget.
+     *
+     * @return renderable
+     */
+    protected function get_widget() {
+        return new \block_xp\output\filters_widget(
+            $this->get_default_filter(),
+            $this->get_available_rules(),
+            $this->filtermanager->get_filters()
+        );
+    }
+
+    /**
      * Echo the content.
      *
      * @return void
@@ -139,21 +183,7 @@ class admin_rules_controller extends admin_route_controller {
         }
 
         // Preparing form.
-        $dummyfilter = \block_xp_filter::load_from_data(['rule' => new \block_xp_ruleset()]);
-        $widget = new \block_xp\output\filters_widget($dummyfilter, [
-            (object) [
-                'name' => get_string('ruleproperty', 'block_xp'),
-                'rule' => new \block_xp_rule_property()
-            ],
-            (object) [
-                'name' => get_string('ruleevent', 'block_xp'),
-                'rule' => new \block_xp_rule_event()
-            ],
-            (object) [
-                'name' => get_string('ruleset', 'block_xp'),
-                'rule' => new \block_xp_ruleset()
-            ],
-        ], $this->filtermanager->get_filters());
+        $widget = $this->get_widget();
 
         echo html_writer::tag('p', get_string('admindefaultrulesintro', 'block_xp'));
         echo $output->render($widget);

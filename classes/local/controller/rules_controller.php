@@ -115,18 +115,13 @@ class rules_controller extends page_controller {
         return get_string('courserules', 'block_xp');
     }
 
-    protected function page_content() {
-        $output = $this->get_renderer();
-
-        $logurl = $this->urlresolver->reverse('log', ['courseid' => $this->courseid]);
-        $a = new stdClass();
-        $a->list = (new moodle_url('/report/eventlist/index.php'))->out();
-        $a->log = $logurl->out();
-        $a->doc = (new moodle_url('https://docs.moodle.org/dev/Event_2'))->out();
-        echo get_string('rulesformhelp', 'block_xp', $a);
-
-        $widget = new \block_xp\output\filters_widget(
-            \block_xp_filter::load_from_data(['rule' => new \block_xp_ruleset()]), [
+    /**
+     * Get available rules.
+     *
+     * @return array
+     */
+    protected function get_available_rules() {
+        return [
             (object) [
                 'name' => get_string('ruleproperty', 'block_xp'),
                 'rule' => new \block_xp_rule_property(),
@@ -142,11 +137,44 @@ class rules_controller extends page_controller {
             (object) [
                 'name' => get_string('ruleset', 'block_xp'),
                 'rule' => new \block_xp_ruleset(),
-            ],
-        ], $this->userfilters);
+            ]
+        ];
+    }
+
+    /**
+     * Get default filters.
+     *
+     * @return block_xp_filter
+     */
+    protected function get_default_filter() {
+        return \block_xp_filter::load_from_data(['rule' => new \block_xp_ruleset()]);
+    }
+
+    /**
+     * Get widget.
+     *
+     * @return renderable
+     */
+    protected function get_widget() {
+        return new \block_xp\output\filters_widget(
+            $this->get_default_filter(),
+            $this->get_available_rules(),
+            $this->userfilters
+        );
+    }
+
+    protected function page_content() {
+        $output = $this->get_renderer();
+
+        $logurl = $this->urlresolver->reverse('log', ['courseid' => $this->courseid]);
+        $a = new stdClass();
+        $a->list = (new moodle_url('/report/eventlist/index.php'))->out();
+        $a->log = $logurl->out();
+        $a->doc = (new moodle_url('https://docs.moodle.org/dev/Event_2'))->out();
+        echo get_string('rulesformhelp', 'block_xp', $a);
 
         // echo $output->heading(get_string('yourownrules', 'block_xp'), 3);
-        echo $output->render($widget);
+        echo $output->render($this->get_widget());
 
         // echo $output->heading(get_string('defaultrules', 'block_xp'), 3);
         // echo html_writer::tag('p', get_string('defaultrulesformhelp', 'block_xp'));
