@@ -38,7 +38,7 @@ use stdClass;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_world_config implements config {
+class course_world_config extends proxy_config {
 
     /** No ranking. */
     const RANK_OFF = 0;
@@ -85,56 +85,9 @@ class course_world_config implements config {
             new default_course_world_config()
         ]);
 
-        $this->store = new \block_xp\local\config\table_row_config($db, 'block_xp_config',
+        $config = new \block_xp\local\config\table_row_config($db, 'block_xp_config',
             $defaults, ['courseid' => $courseid]);
+        parent::__construct($config);
     }
 
-    /**
-     * Get a value.
-     *
-     * @param string $name The name.
-     * @return mixed
-     */
-    public function get($name) {
-        return $this->store->get($name);
-    }
-
-    /**
-     * Get all config.
-     *
-     * @return array
-     */
-    public function get_all() {
-        return $this->store->get_all();
-    }
-
-    /**
-     * Whether we have that config.
-     *
-     * @param string $name The config name.
-     * @return bool
-     */
-    public function has($name) {
-        return $this->store->has($name);
-    }
-
-    /**
-     * Set a value.
-     *
-     * @param string $name Name of the config.
-     * @param mixed $value The value.
-     */
-    public function set($name, $value) {
-        return $this->store->set($name, $value);
-    }
-
-    /**
-     * Set many.
-     *
-     * @param array $values Keys are config names, and values are values.
-     * @throws coding_exception When a value is not scalar.
-     */
-    public function set_many(array $values) {
-        return $this->store->set_many($values);
-    }
 }

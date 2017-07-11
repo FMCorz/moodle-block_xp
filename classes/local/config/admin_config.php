@@ -35,15 +35,18 @@ use coding_exception;
  * the values returned by this class, and this is because they do not fall
  * back on the defaults when values are not set, but we do. And we do it right.
  *
+ * We override the standard mdl_config implementation in order to cater
+ * for the legacy value $CFG->block_xp_context which sits in a different namespace.
+ *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class admin_config implements config {
+class admin_config extends mdl_config {
 
     /** @var config The defaults. */
-    protected $defaults;
+    private $defaults;
 
     /**
      * Constructor.
@@ -51,6 +54,7 @@ class admin_config implements config {
      * @param config $defaults The defaults.
      */
     public function __construct(config $defaults) {
+        parent::__construct('block_xp', $defaults);
         $this->defaults = $defaults;
     }
 
@@ -64,23 +68,15 @@ class admin_config implements config {
         $this->validate($name);
 
         // Legacy hack.
-        $plugin = 'block_xp';
-        $origname = $name;
         if ($name === 'context') {
-            $plugin = 'core';
-            $name = 'block_xp_context';
+            $value = get_config('core', 'block_xp_context');
+            if ($value === false) {
+                return $this->defaults->get('context');
+            }
+            return $value;
         }
 
-        // In very rare situations we may not found the config value, this typically
-        // occurs when the code runs before settings have been upgraded. Such as when
-        // an admin does not visit the notifications page.
-        // Also note that the comparison (=== false) is correct here because
-        // get_config() returns strings.
-        $value = get_config($plugin, $name);
-        if ($value === false) {
-            $value = $this->defaults->get($name);
-        }
-        return $value;
+        return parent::get($name);
     }
 
     /**
@@ -90,29 +86,13 @@ class admin_config implements config {
      */
     public function get_all() {
         global $CFG;
-        $all = (array) get_config('block_xp');
+
+        $all = parent::get_all();
         if (isset($CFG->block_xp_context)) {
             $all['context'] = $CFG->block_xp_context;
         }
 
-        // Get the defaults.
-        $configdefaults = $this->defaults->get_all();
-
-        // Remove what we were not suppose to have.
-        $cleaned = array_intersect_key($all, $configdefaults);
-
-        // Make sure we return all the keys by including the defaults.
-        return array_merge($configdefaults, $cleaned);
-    }
-
-    /**
-     * Whether we have that config.
-     *
-     * @param string $name The config name.
-     * @return bool
-     */
-    public function has($name) {
-        return $this->defaults->has($name);
+        return $all;
     }
 
     /**
@@ -125,13 +105,11 @@ class admin_config implements config {
         $this->validate($name);
 
         // Legacy hack.
-        $plugin = 'block_xp';
         if ($name === 'context') {
-            $plugin = 'core';
-            $name = 'block_xp_context';
+            return set_config('block_xp_context', $value);
         }
 
-        set_config($name, $value, $plugin);
+        return parent::set($name, $value);
     }
 
     /**
@@ -140,22 +118,11 @@ class admin_config implements config {
      * @param array $values Keys are config names, and values are values.
      */
     public function set_many(array $values) {
-        foreach ($values as $key => $value) {
-            $this->set($key, $value);
+        if (isset($values['context'])) {
+            $this->set('context', $values['context']);
+            unset($values['context']);
         }
-    }
-
-    /**
-     * Validate the config key.
-     *
-     * @param string $name The config key.
-     * @return void
-     * @throws coding_exception
-     */
-    protected function validate($name) {
-        if (!$this->defaults->has($name)) {
-            throw new coding_exception('Unknown config name.');
-        }
+        parent::set_many($values);
     }
 
 }

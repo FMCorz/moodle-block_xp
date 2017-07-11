@@ -39,7 +39,7 @@ use coding_exception;
 final class static_config implements config {
 
     /** @var array Data values. */
-    private $data;
+    private $data = [];
 
     /**
      * Constructor.

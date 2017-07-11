@@ -37,48 +37,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class immutable_config implements config {
-
-    /** @var config The config. */
-    private $config;
-
-    /**
-     * Constructor.
-     *
-     * @param config $config The config object.
-     */
-    public function __construct(config $config) {
-        $this->config = $config;
-    }
-
-    /**
-     * Get a value.
-     *
-     * @param string $name The name.
-     * @return mixed
-     */
-    final public function get($name) {
-        return $this->config->get($name);
-    }
-
-    /**
-     * Get all config.
-     *
-     * @return array
-     */
-    final public function get_all() {
-        return $this->config->get_all();
-    }
-
-    /**
-     * Whether we have that config.
-     *
-     * @param string $name The config name.
-     * @return bool
-     */
-    final public function has($name) {
-        return $this->config->has($name);
-    }
+class immutable_config extends proxy_config {
 
     /**
      * Set a value.
