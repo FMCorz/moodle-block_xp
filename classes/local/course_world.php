@@ -97,7 +97,6 @@ class course_world implements world {
             $this->strategy = new \block_xp\local\strategy\course_world_collection_strategy(
                 $this->get_context(),
                 $this->get_config(),
-                $this->get_levels_info(),
                 $this->get_store(),
                 $this->get_filter_manager(),
                 $this->get_user_event_collection_logger(),

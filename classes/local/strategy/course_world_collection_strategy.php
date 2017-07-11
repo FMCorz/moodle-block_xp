@@ -27,8 +27,6 @@ namespace block_xp\local\strategy;
 defined('MOODLE_INTERNAL') || die();
 
 use context;
-use dml_exception;
-use moodle_database;
 use block_xp\local\config\config;
 use block_xp\local\logger\course_user_event_collection_logger;
 use block_xp\local\notification\course_level_up_notification_service;
@@ -50,8 +48,6 @@ class course_world_collection_strategy implements event_collection_strategy {
     protected $context;
     /** @var config The config. */
     protected $config;
-    /** @var levels_info The levels infos. */
-    protected $levelsinfo;
     /** @var user_state_course_store The store. */
     protected $store;
     /** @var course_filter_manager The filter manager. */
@@ -66,7 +62,6 @@ class course_world_collection_strategy implements event_collection_strategy {
      *
      * @param context $context The context.
      * @param config $config The config.
-     * @param levels_info $levelsinfo The levels infos.
      * @param user_state_course_store $store The store.
      * @param course_filter_manager $filtermanager The filter manager.
      * @param course_user_event_collection_logger $logger The logger.
@@ -75,7 +70,6 @@ class course_world_collection_strategy implements event_collection_strategy {
     public function __construct(
             context $context,
             config $config,
-            levels_info $levelsinfo,
             user_state_course_store $store,
             course_filter_manager $filtermanager,
             course_user_event_collection_logger $logger,
@@ -83,7 +77,6 @@ class course_world_collection_strategy implements event_collection_strategy {
         ) {
         $this->context = $context;
         $this->config = $config;
-        $this->levelsinfo = $levelsinfo;
         $this->store = $store;
         $this->filtermanager = $filtermanager;
         $this->logger = $logger;
