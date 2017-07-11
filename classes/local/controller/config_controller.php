@@ -38,15 +38,37 @@ class config_controller extends page_controller {
 
     /** @var string The route name. */
     protected $routename = 'config';
-
     /** @var moodleform The form. */
-    protected $form;
+    private $form;
+
+    /**
+     * Define the form.
+     *
+     * @return moodleform
+     */
+    protected function define_form() {
+        return new \block_xp\form\config($this->pageurl->out(false));
+    }
+
+    /**
+     * Get the form.
+     *
+     * Private so that we do not override this one.
+     *
+     * @return moodleform
+     */
+    private function get_form() {
+        if (!$this->form) {
+            $this->form = $this->define_form();
+        }
+        return $this->form;
+    }
 
     protected function pre_content() {
         $config = $this->world->get_config();
-        $this->form = new \block_xp\form\config($this->pageurl->out(false));
-        $this->form->set_data($config->get_all());
-        if ($data = $this->form->get_data()) {
+        $form = $this->get_form();
+        $form->set_data($config->get_all());
+        if ($data = $form->get_data()) {
             $config->set_many((array) $data);
             // TODO Display a message.
             $this->redirect();
@@ -62,7 +84,8 @@ class config_controller extends page_controller {
     }
 
     protected function page_content() {
-        $this->form->display();
+        $form = $this->get_form();
+        $form->display();
     }
 
 }
