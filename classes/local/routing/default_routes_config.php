@@ -40,7 +40,7 @@ class default_routes_config extends static_routes_config {
      * Constructor.
      */
     public function __construct() {
-        parent::__construct([
+        $routes = [
             new route_definition(
                 'home',
                 '/',
@@ -139,7 +139,15 @@ class default_routes_config extends static_routes_config {
                 '~^/admin/visuals$~',
                 'admin_visuals'
             ),
-        ]);
+            new route_definition(
+                'debug',
+                '/i/am/dev',
+                '~^/i/am/dev$~',
+                'debug'
+            )
+        ];
+
+        parent::__construct($routes);
     }
 
 }
