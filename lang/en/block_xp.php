@@ -24,6 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['actions'] = 'Actions';
 $string['activityoresourceis'] = 'The activity or resource is {$a}';
 $string['addacondition'] = 'Add a condition';
 $string['addarule'] = 'Add a rule';
@@ -129,7 +130,7 @@ $string['limitparticipants'] = 'Limit participants';
 $string['limitparticipants_help'] = 'This setting controls who is displayed in the leaderboard. Neighbours are the participants ranked above and below the current user. For instance, when choosing \'Display two neighbours\', only the two participants ranked directly higher and lower than the current user will be displayed.';
 $string['logging'] = 'Logging';
 $string['maxactionspertime'] = 'Max. actions in time frame';
-$string['maxactionspertime_help'] = 'The maximum number of actions that will count for XP during the time frame given. Any subsequent action will be ignored.';
+$string['maxactionspertime_help'] = 'The maximum number of actions that will count for XP during the time frame given. Any subsequent action will be ignored. When this value is empty, or equals to zero, it does not apply.';
 $string['movecondition'] = 'Move condition';
 $string['moverule'] = 'Move rule';
 $string['navinfos'] = 'Info';
@@ -143,6 +144,8 @@ $string['navvisuals'] = 'Visuals';
 $string['participant'] = 'Participant';
 $string['pickaconditiontype'] = 'Pick a condition type';
 $string['pluginname'] = 'Level up!';
+$string['points'] = 'Points';
+$string['pointsintimelinker'] = 'per';
 $string['progress'] = 'Progress';
 $string['property:action'] = 'Event action';
 $string['property:component'] = 'Event component';
@@ -195,7 +198,7 @@ $string['someoneelse'] = 'Someone else';
 $string['somethinghappened'] = 'Something happened';
 $string['taskcourseusereventcollectionlogpurge'] = 'Purge logs containing user\'s XP collection in courses.';
 $string['timebetweensameactions'] = 'Time required between identical actions';
-$string['timebetweensameactions_help'] = 'In seconds, the minimum time required between identical actions. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identifical if the same post is read again.';
+$string['timebetweensameactions_help'] = 'The minimum time required before an action that already happened previously is accepted again. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identifical if the same post is read again. When this value is empty, or equals to zero, it does not apply.';
 $string['timeformaxactions'] = 'Time frame for max. actions';
 $string['timeformaxactions_help'] = 'The time frame (in seconds) during which the user should not exceed a maximum number of actions.';
 $string['tinytimenow'] = 'now';

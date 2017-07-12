@@ -26,6 +26,8 @@ namespace block_xp\form;
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
+require_once(__DIR__ . '/itemspertime.php');
+require_once(__DIR__ . '/duration.php');
 
 use block_xp\local\config\course_world_config;
 use moodleform;
@@ -101,17 +103,18 @@ class config extends moodleform {
 
         $mform->addElement('selectyesno', 'enablecheatguard', get_string('enablecheatguard', 'block_xp'));
 
-        $mform->addElement('text', 'maxactionspertime', get_string('maxactionspertime', 'block_xp'));
+        $mform->addElement('block_xp_form_itemspertime', 'maxactionspertime', get_string('maxactionspertime', 'block_xp'), [
+            'maxunit' => HOURSECS,
+            'itemlabel' => get_string('actions', 'block_xp')
+        ]);
         $mform->addHelpButton('maxactionspertime', 'maxactionspertime', 'block_xp');
         $mform->setType('maxactionspertime', PARAM_INT);
         $mform->disabledIf('maxactionspertime', 'enablecheatguard', 'eq', 0);
 
-        $mform->addElement('text', 'timeformaxactions', get_string('timeformaxactions', 'block_xp'));
-        $mform->addHelpButton('timeformaxactions', 'timeformaxactions', 'block_xp');
-        $mform->setType('timeformaxactions', PARAM_INT);
-        $mform->disabledIf('timeformaxactions', 'enablecheatguard', 'eq', 0);
-
-        $mform->addElement('text', 'timebetweensameactions', get_string('timebetweensameactions', 'block_xp'));
+        $mform->addElement('block_xp_form_duration', 'timebetweensameactions', get_string('timebetweensameactions', 'block_xp'), [
+            'maxunit' => 60,
+            'optional' => false,        // We must set this...
+        ]);
         $mform->addHelpButton('timebetweensameactions', 'timebetweensameactions', 'block_xp');
         $mform->setType('timebetweensameactions', PARAM_INT);
         $mform->disabledIf('timebetweensameactions', 'enablecheatguard', 'eq', 0);
@@ -144,11 +147,28 @@ class config extends moodleform {
             return $data;
         }
 
+        // Convert back from itemspertime.
+        if (!isset($data->maxactionspertime) || !is_array($data->maxactionspertime)) {
+            $data->maxactionspertime = 0;
+            $data->timeformaxactions = 0;
+        } else {
+            $data->timeformaxactions = (int) $data->maxactionspertime['time'];
+            $data->maxactionspertime = (int) $data->maxactionspertime['points'];
+        }
+
         // When not selecting any, the data is not sent.
         if (!isset($data->laddercols)) {
             $data->laddercols = [];
         }
         $data->laddercols = implode(',', $data->laddercols);
+
+        // When the cheat guard is disabled, we remove the config fields so that
+        // we can keep the defaults and the data previously submitted by the user.
+        if (empty($data->enablecheatguard)) {
+            unset($data->maxactionspertime);
+            unset($data->timeformaxactions);
+            unset($data->timebetweensameactions);
+        }
 
         unset($data->submitbutton);
         return $data;
@@ -162,6 +182,16 @@ class config extends moodleform {
         if (isset($data['laddercols'])) {
             $data['laddercols'] = explode(',', $data['laddercols']);
         }
+
+        // Convert to itemspertime.
+        if (isset($data['maxactionspertime']) && isset($data['timeformaxactions'])) {
+            $data['maxactionspertime'] = [
+                'points' => (int) $data['maxactionspertime'],
+                'time' => (int) $data['timeformaxactions']
+            ];
+            unset($data['timeformaxactions']);
+        }
+
         parent::set_data($data);
     }
 
