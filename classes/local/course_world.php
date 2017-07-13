@@ -56,7 +56,7 @@ class course_world implements world {
     protected $logger;
     /** @var access_permissions The access permissions. */
     protected $perms;
-    /** @var user_state_course_store The store. */
+    /** @var course_user_state_store The store. */
     protected $store;
     /** @var collection_strategy The collection strategy. */
     protected $strategy;
@@ -75,6 +75,7 @@ class course_world implements world {
         $this->courseid = $courseid;
         $this->db = $db;
 
+        // TODO We should move the context out of here, and inject the permissions instead.
         if ($courseid == SITEID) {
             $this->context = context_system::instance();
         } else {
@@ -112,6 +113,7 @@ class course_world implements world {
      * @return context
      */
     public function get_context() {
+        // TODO It seems that we could work around this being public.
         return $this->context;
     }
 
@@ -192,17 +194,13 @@ class course_world implements world {
      * @return course_level_up_notification_service
      */
     public function get_level_up_notification_service() {
+        // TODO We could put that somewhere else.
         return new \block_xp\local\notification\course_level_up_notification_service($this->courseid);
     }
 
-    /**
-     * Get store.
-     *
-     * @return user_state_course_store
-     */
     public function get_store() {
         if (!$this->store) {
-            $this->store = new \block_xp\local\xp\user_state_course_store($this->db, $this->get_levels_info(),
+            $this->store = new \block_xp\local\xp\course_user_state_store($this->db, $this->get_levels_info(),
                 $this->get_courseid());
         }
         return $this->store;

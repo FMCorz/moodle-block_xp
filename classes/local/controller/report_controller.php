@@ -64,11 +64,15 @@ class report_controller extends page_controller {
         // Reset data.
         if ($this->get_param('resetdata') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
+                $store = $this->world->get_store();
                 if ($this->get_groupid()) {
-                    $this->world->get_store()->reset_by_group($this->get_groupid());
-                    $this->world->get_user_event_collection_logger()->reset_by_group($this->get_groupid());
+                    // Make sure that we've got a compatible store first.
+                    if ($store instanceof \block_xp\local\xp\course_state_store) {
+                        $store->reset_by_group($this->get_groupid());
+                        $this->world->get_user_event_collection_logger()->reset_by_group($this->get_groupid());
+                    }
                 } else {
-                    $this->world->get_store()->reset();
+                    $store->reset();
                     $this->world->get_user_event_collection_logger()->reset();
                 }
                 $this->redirect(new url($this->pageurl));
@@ -148,23 +152,27 @@ class report_controller extends page_controller {
         $this->print_group_menu();
         echo $this->get_table()->out(20, true);
 
+        // Make sure that we can reset for a group only.
+        $strreset = null;
         if (empty($groupid)) {
             $strreset = get_string('resetcoursedata', 'block_xp');
-        } else {
+        } else if ($this->world->get_store() instanceof \block_xp\local\xp\course_state_store) {
             $strreset = get_string('resetgroupdata', 'block_xp');
         }
 
-        echo html_writer::tag('p',
-            $output->single_button(
-                new url($this->pageurl->get_compatible_url(), [
-                    'resetdata' => 1,
-                    'sesskey' => sesskey(),
-                    'group' => $groupid
-                ]),
-                $strreset,
-                'get'
-            )
-        );
+        if (!empty($strreset)) {
+            echo html_writer::tag('p',
+                $output->single_button(
+                    new url($this->pageurl->get_compatible_url(), [
+                        'resetdata' => 1,
+                        'sesskey' => sesskey(),
+                        'group' => $groupid
+                    ]),
+                    $strreset,
+                    'get'
+                )
+            );
+        }
     }
 
 }

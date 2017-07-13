@@ -63,7 +63,13 @@ class levels_controller extends page_controller {
             // Or better if the levels info can save itself?
             $data['levelsdata'] = json_encode($newlevelsinfo->jsonSerialize());
             $this->world->get_config()->set_many($data);
-            $this->world->get_store()->recalculate_levels();
+
+            // Reset the levels in the store, this is very specific to that store.
+            // We probably could write that better in a different manner...
+            $store = $this->world->get_store();
+            if ($store instanceof \block_xp\local\xp\course_user_state_store) {
+                $store->recalculate_levels();
+            }
 
             $this->redirect($redirectto, get_string('valuessaved', 'block_xp'));
         } else if ($form->is_cancelled()) {

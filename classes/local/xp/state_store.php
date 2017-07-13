@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * World interface.
+ * State store.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
@@ -23,54 +23,48 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local;
+namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * World interface.
- *
- * The thing in which things are collecting experience.
+ * State store.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface world {
+interface state_store {
 
     /**
-     * Get the access permissions.
+     * Get a state.
      *
-     * @return block_xp\local\permission\access_permissions
+     * @param int $id The object ID.
+     * @return state
      */
-    public function get_access_permissions();
+    public function get_state($id);
 
     /**
-     * Get the config.
+     * Add a certain amount of experience points.
      *
-     * @return block_xp\local\config\config
+     * @param int $id The receiver.
+     * @param int $amount The amount.
      */
-    public function get_config();
+    public function increase($id, $amount);
 
     /**
-     * Return the collection strategy.
+     * Reset all experience points.
      *
-     * @return block_xp\local\strategy\collection_strategy
+     * @return void
      */
-    public function get_collection_strategy();
+    public function reset();
 
     /**
-     * Get levels info.
+     * Set the amount of experience points.
      *
-     * @return block_xp\local\xp\levels_info
+     * @param int $id The receiver.
+     * @param int $amount The amount.
      */
-    public function get_levels_info();
-
-    /**
-     * Get the state store.
-     *
-     * @return state_store
-     */
-    public function get_store();
+    public function set($id, $amount);
 
 }

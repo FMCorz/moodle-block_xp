@@ -51,6 +51,7 @@ class visuals_controller extends page_controller {
     protected $form;
 
     protected function pre_content() {
+        // TODO Could we shift the logic to save elsewhere, so we do not need to context here?
         $context = $this->world->get_context();
         $levelsinfo = $this->world->get_levels_info();
         $config = $this->world->get_config();

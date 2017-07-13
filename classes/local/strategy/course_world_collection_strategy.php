@@ -32,7 +32,7 @@ use block_xp\local\logger\course_user_event_collection_logger;
 use block_xp\local\notification\course_level_up_notification_service;
 use block_xp\local\xp\course_filter_manager;
 use block_xp\local\xp\levels_info;
-use block_xp\local\xp\user_state_course_store;
+use block_xp\local\xp\course_user_state_store;
 
 /**
  * Course world collection strategy.
@@ -48,7 +48,7 @@ class course_world_collection_strategy implements event_collection_strategy {
     protected $context;
     /** @var config The config. */
     protected $config;
-    /** @var user_state_course_store The store. */
+    /** @var course_user_state_store The store. */
     protected $store;
     /** @var course_filter_manager The filter manager. */
     protected $filtermanager;
@@ -62,7 +62,7 @@ class course_world_collection_strategy implements event_collection_strategy {
      *
      * @param context $context The context.
      * @param config $config The config.
-     * @param user_state_course_store $store The store.
+     * @param course_user_state_store $store The store.
      * @param course_filter_manager $filtermanager The filter manager.
      * @param course_user_event_collection_logger $logger The logger.
      * @param course_level_up_notification_service $levelupnotifificationservice The notification service.
@@ -70,7 +70,7 @@ class course_world_collection_strategy implements event_collection_strategy {
     public function __construct(
             context $context,
             config $config,
-            user_state_course_store $store,
+            course_user_state_store $store,
             course_filter_manager $filtermanager,
             course_user_event_collection_logger $logger,
             course_level_up_notification_service $levelupnotifificationservice

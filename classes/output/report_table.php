@@ -38,7 +38,7 @@ use stdClass;
 use table_sql;
 use user_picture;
 use block_xp\local\course_world;
-use block_xp\local\xp\user_state_course_store;
+use block_xp\local\xp\course_user_state_store;
 
 /**
  * Block XP report table class.
@@ -53,7 +53,7 @@ class report_table extends table_sql {
     protected $db;
     /** @var block_xp\local\course_world The world. */
     protected $world = null;
-    /** @var block_xp\local\xp\user_state_course_store The store. */
+    /** @var block_xp\local\xp\course_user_state_store The store. */
     protected $store = null;
     /** @var renderer_base The renderer. */
     protected $renderer = null;
@@ -66,14 +66,14 @@ class report_table extends table_sql {
      * @param moodle_database $db The DB.
      * @param course_world $world The world.
      * @param renderer_base $renderer The renderer.
-     * @param user_state_course_store $store The store.
+     * @param course_user_state_store $store The store.
      * @param int $groupid The group ID.
      */
     public function __construct(
             moodle_database $db,
             course_world $world,
             renderer_base $renderer,
-            user_state_course_store $store,
+            course_user_state_store $store,
             $groupid
         ) {
 

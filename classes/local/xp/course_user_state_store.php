@@ -43,7 +43,7 @@ use user_picture;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class user_state_course_store {
+class course_user_state_store implements course_state_store {
 
     /** @var moodle_database The database. */
     protected $db;

@@ -34,14 +34,14 @@ use table_sql;
 use user_picture;
 use block_xp\local\course_world;
 use block_xp\local\config\course_world_config;
-use block_xp\local\xp\user_state_course_store;
+use block_xp\local\xp\course_user_state_store;
 
 
 /**
  * Block XP ladder table class.
  *
  * This implementation is terrible and highly depends on the internals of
- * user_state_course_store. We cannot switch to another store and hope this
+ * course_user_state_store. We cannot switch to another store and hope this
  * ladder table will work as expected.
  *
  * @package    block_xp
@@ -56,7 +56,7 @@ class ladder_table extends table_sql {
     /** @var course_world Course world. */
     protected $world = null;
 
-    /** @var user_state_course_store The store. */
+    /** @var course_user_state_store The store. */
     protected $store = null;
 
     /** @var block_xp_renderer XP Renderer. */
@@ -106,7 +106,7 @@ class ladder_table extends table_sql {
      *
      * @param course_world $world The world.
      * @param renderer_base $renderer The renderer.
-     * @param user_state_course_store $store The store.
+     * @param course_user_state_store $store The store.
      * @param int $groupid The group ID.
      * @param array $options Options.
      * @param int $userid The user viewing this.
@@ -114,7 +114,7 @@ class ladder_table extends table_sql {
     public function __construct(
             course_world $world,
             renderer_base $renderer,
-            user_state_course_store $store,
+            course_user_state_store $store,
             $groupid,
             array $options = [],
             $userid = null
