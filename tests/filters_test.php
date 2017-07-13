@@ -28,6 +28,8 @@ global $CFG;
 require_once(__DIR__ . '/base_testcase.php');
 require_once(__DIR__ . '/fixtures/events.php');
 
+use block_xp\local\config\course_world_config;
+
 /**
  * Filters testcase.
  *
@@ -39,6 +41,7 @@ class block_xp_filters_testcase extends block_xp_base_testcase {
 
     protected function get_filter_manager($courseid) {
         $world = \block_xp\di::get('course_world_factory')->get_world($courseid);
+        $world->get_config()->set('defaultfilters', course_world_config::DEFAULT_FILTERS_STATIC);
         return $world->get_filter_manager();
     }
 
@@ -93,7 +96,7 @@ class block_xp_filters_testcase extends block_xp_base_testcase {
 
         // Define some custom rules, the sortorder and IDs are mixed here.
         $rule = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
-        $data = array('courseid' => $course->id, 'sortorder' => 1, 'points' => 100, 'rule' => $rule);
+        $data = array('courseid' => $course->id, 'sortorder' => -20, 'points' => 100, 'rule' => $rule);
         block_xp_filter::load_from_data($data)->save();
         $fm->invalidate_filters_cache();
 
@@ -101,15 +104,16 @@ class block_xp_filters_testcase extends block_xp_base_testcase {
             new block_xp_rule_property(block_xp_rule_base::EQ, 2, 'objectid'),
             new block_xp_rule_property(block_xp_rule_base::EQ, 'u', 'crud'),
         ), block_xp_ruleset::ANY);
-        $data = array('courseid' => $course->id, 'sortorder' => 2, 'points' => 120, 'rule' => $rule);
+        $data = array('courseid' => $course->id, 'sortorder' => -10, 'points' => 120, 'rule' => $rule);
         block_xp_filter::load_from_data($data)->save();
 
         $rule = new block_xp_ruleset(array(
             new block_xp_rule_property(block_xp_rule_base::GTE, 100, 'objectid'),
             new block_xp_rule_property(block_xp_rule_base::EQ, 'r', 'crud'),
         ), block_xp_ruleset::ALL);
-        $data = array('courseid' => $course->id, 'sortorder' => 0, 'points' => 130, 'rule' => $rule);
+        $data = array('courseid' => $course->id, 'sortorder' => -30, 'points' => 130, 'rule' => $rule);
         block_xp_filter::load_from_data($data)->save();
+        $fm->invalidate_filters_cache();
 
         // We can override default filters.
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'objectid' => 2));
@@ -129,7 +133,7 @@ class block_xp_filters_testcase extends block_xp_base_testcase {
 
         // This filter will catch everything before the default rules.
         $rule = new block_xp_rule_property(block_xp_rule_base::CT, 'something', 'eventname');
-        $data = array('courseid' => $course->id, 'sortorder' => 3, 'points' => 110, 'rule' => $rule);
+        $data = array('courseid' => $course->id, 'sortorder' => -5, 'points' => 110, 'rule' => $rule);
         block_xp_filter::load_from_data($data)->save();
         $fm->invalidate_filters_cache();
 
@@ -140,7 +144,7 @@ class block_xp_filters_testcase extends block_xp_base_testcase {
 
         // This filter will catch everything.
         $rule = new block_xp_rule_property(block_xp_rule_base::CT, 'something', 'eventname');
-        $data = array('courseid' => $course->id, 'sortorder' => -1, 'points' => 1, 'rule' => $rule);
+        $data = array('courseid' => $course->id, 'sortorder' => -999, 'points' => 1, 'rule' => $rule);
         block_xp_filter::load_from_data($data)->save();
         $fm->invalidate_filters_cache();
 
