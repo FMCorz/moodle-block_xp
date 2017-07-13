@@ -28,8 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 
 use context;
 use block_xp\local\config\config;
-use block_xp\local\logger\course_user_event_collection_logger;
+use block_xp\local\logger\reason_collection_logger;
 use block_xp\local\notification\course_level_up_notification_service;
+use block_xp\local\reason\event_name_reason;
 use block_xp\local\xp\course_filter_manager;
 use block_xp\local\xp\levels_info;
 use block_xp\local\xp\course_user_state_store;
@@ -52,7 +53,7 @@ class course_world_collection_strategy implements event_collection_strategy {
     protected $store;
     /** @var course_filter_manager The filter manager. */
     protected $filtermanager;
-    /** @var course_user_event_collection_logger The logger. */
+    /** @var reason_collection_logger The logger. */
     protected $logger;
     /** @var course_level_up_notification_service The notification service. */
     protected $levelupnotifificationservice;
@@ -64,7 +65,7 @@ class course_world_collection_strategy implements event_collection_strategy {
      * @param config $config The config.
      * @param course_user_state_store $store The store.
      * @param course_filter_manager $filtermanager The filter manager.
-     * @param course_user_event_collection_logger $logger The logger.
+     * @param reason_collection_logger $logger The logger.
      * @param course_level_up_notification_service $levelupnotifificationservice The notification service.
      */
     public function __construct(
@@ -72,7 +73,7 @@ class course_world_collection_strategy implements event_collection_strategy {
             config $config,
             course_user_state_store $store,
             course_filter_manager $filtermanager,
-            course_user_event_collection_logger $logger,
+            reason_collection_logger $logger,
             course_level_up_notification_service $levelupnotifificationservice
         ) {
         $this->context = $context;
@@ -106,13 +107,16 @@ class course_world_collection_strategy implements event_collection_strategy {
         // Get XP to reward with.
         $points = $this->filtermanager->get_points_for_event($event);
 
+        // Make up the reason.
+        $reason = new event_name_reason($event->eventname);
+
         // Collect.
         // No need to go through the following if the user did not gain XP.
         if ($points > 0) {
 
-            // TODO Implement this differently.
+            // TODO Implement level-up check differently.
             $initiallevel = $this->store->get_state($userid)->get_level()->get_level();
-            $this->store->increase($userid, $points);
+            $this->store->increase_with_reason($userid, $points, $reason);
             $level = $this->store->get_state($userid)->get_level()->get_level();
 
             if ($initiallevel != $level) {
@@ -130,11 +134,10 @@ class course_world_collection_strategy implements event_collection_strategy {
             if ($level > $initiallevel && $config->get('enablelevelupnotif')) {
                 $this->levelupnotifificationservice->notify($userid);
             }
-        }
 
-        // Log collection.
-        if ($config->get('enablelog')) {
-            $this->logger->log_event($event, $userid, $points);
+        } else {
+            // We still want to log the thing.
+            $this->logger->log_reason($userid, $points, $reason);
         }
     }
 

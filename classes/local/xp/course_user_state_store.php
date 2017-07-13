@@ -30,6 +30,9 @@ use context_helper;
 use moodle_database;
 use stdClass;
 use user_picture;
+use block_xp\local\logger\collection_logger_with_group_reset;
+use block_xp\local\logger\reason_collection_logger;
+use block_xp\local\reason\reason;
 
 /**
  * User state course store.
@@ -53,6 +56,8 @@ class course_user_state_store implements course_state_store {
     protected $levelsinfo;
     /** @var string The DB table. */
     protected $table = 'block_xp';
+    /** @var reason_collection_logger The logger. */
+    protected $logger;
 
     /**
      * Constructor.
@@ -61,10 +66,12 @@ class course_user_state_store implements course_state_store {
      * @param levels_info $levelsinfo The levels info.
      * @param int $courseid The course ID.
      */
-    public function __construct(moodle_database $db, levels_info $levelsinfo, $courseid) {
+    public function __construct(moodle_database $db, levels_info $levelsinfo, $courseid,
+            reason_collection_logger $logger) {
         $this->db = $db;
         $this->levelsinfo = $levelsinfo;
         $this->courseid = $courseid;
+        $this->logger = $logger;
     }
 
     /**
@@ -140,6 +147,18 @@ class course_user_state_store implements course_state_store {
     }
 
     /**
+     * Add a certain amount of experience points.
+     *
+     * @param int $id The receiver.
+     * @param int $amount The amount.
+     * @param reason $reason A reason.
+     */
+    public function increase_with_reason($id, $amount, reason $reason) {
+        $this->increase($id, $amount);
+        $this->logger->log_reason($id, $amount, $reason);
+    }
+
+    /**
      * Insert the entry in the database.
      *
      * @param int $id The receiver.
@@ -194,6 +213,7 @@ class course_user_state_store implements course_state_store {
      */
     public function reset() {
         $this->db->delete_records($this->table, ['courseid' => $this->courseid]);
+        $this->logger->reset();
     }
 
     /**
@@ -217,6 +237,10 @@ class course_user_state_store implements course_state_store {
         ];
 
         $this->db->execute($sql, $params);
+
+        if ($this->logger instanceof collection_logger_with_group_reset) {
+            $this->logger->reset_by_group($groupid);
+        }
     }
 
     /**
@@ -243,6 +267,18 @@ class course_user_state_store implements course_state_store {
         } else {
             $this->insert($id, $amount);
         }
+    }
+
+    /**
+     * Set the amount of experience points.
+     *
+     * @param int $id The receiver.
+     * @param int $amount The amount.
+     * @param reason $reason A reason.
+     */
+    public function set_with_reason($id, $amount, reason $reason) {
+        $this->set($id, $amount);
+        $this->logger->log_reason($id, $amount, $reason);
     }
 
 }

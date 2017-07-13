@@ -100,7 +100,7 @@ class course_world implements world {
                 $this->get_config(),
                 $this->get_store(),
                 $this->get_filter_manager(),
-                $this->get_user_event_collection_logger(),
+                $this->get_collection_logger(),
                 $this->get_level_up_notification_service()
             );
         }
@@ -200,8 +200,12 @@ class course_world implements world {
 
     public function get_store() {
         if (!$this->store) {
-            $this->store = new \block_xp\local\xp\course_user_state_store($this->db, $this->get_levels_info(),
-                $this->get_courseid());
+            $this->store = new \block_xp\local\xp\course_user_state_store(
+                $this->db,
+                $this->get_levels_info(),
+                $this->get_courseid(),
+                $this->get_collection_logger()
+            );
         }
         return $this->store;
     }
@@ -230,9 +234,13 @@ class course_world implements world {
      *
      * @return course_user_event_collection_logger
      */
-    public function get_user_event_collection_logger() {
+    private function get_collection_logger() {
         if (!$this->logger) {
-            $this->logger = new \block_xp\local\logger\course_user_event_collection_logger($this->db, $this->courseid);
+            if ($this->get_config()->get('enablelog')) {
+                $this->logger = new \block_xp\local\logger\course_user_event_collection_logger($this->db, $this->courseid);
+            } else {
+                $this->logger = new \block_xp\local\logger\dummy_collection_logger();
+            }
         }
         return $this->logger;
     }

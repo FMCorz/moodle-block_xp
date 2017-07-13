@@ -69,11 +69,9 @@ class report_controller extends page_controller {
                     // Make sure that we've got a compatible store first.
                     if ($store instanceof \block_xp\local\xp\course_state_store) {
                         $store->reset_by_group($this->get_groupid());
-                        $this->world->get_user_event_collection_logger()->reset_by_group($this->get_groupid());
                     }
                 } else {
                     $store->reset();
-                    $this->world->get_user_event_collection_logger()->reset();
                 }
                 $this->redirect(new url($this->pageurl));
             }

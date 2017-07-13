@@ -78,7 +78,6 @@ class block_xp_course_world_testcase extends block_xp_base_testcase {
 
         $world = $this->get_world($c1->id);
         $world->get_store()->reset();
-        $world->get_user_event_collection_logger()->reset();
 
         $this->assertEquals(0, $DB->count_records('block_xp', array('courseid' => $c1->id)));
         $this->assertEquals(0, $DB->count_records('block_xp_log', array('courseid' => $c1->id)));
@@ -129,7 +128,6 @@ class block_xp_course_world_testcase extends block_xp_base_testcase {
 
         $world = $this->get_world($c1->id);
         $world->get_store()->reset_by_group($g1->id);
-        $world->get_user_event_collection_logger()->reset_by_group($g1->id);
 
         $this->assertEquals(0, $DB->count_records('block_xp', array('courseid' => $c1->id, 'userid' => $u1->id)));
         $this->assertEquals(1, $DB->count_records('block_xp', array('courseid' => $c1->id, 'userid' => $u2->id)));

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Dependency container interface.
+ * Reason collection logger.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
@@ -23,37 +23,31 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local;
+namespace block_xp\local\logger;
 defined('MOODLE_INTERNAL') || die();
 
+use DateTime;
+use block_xp\local\reason\reason;
+
 /**
- * Dependency container interface.
- *
- * This should be compatible with PSR-11 containers, apart from the
- * exceptions which I don't want to bother supporting right now.
+ * Reason collection logger.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface container {
+interface reason_collection_logger extends collection_logger {
 
     /**
-     * Get a thing.
+     * Log a thing.
      *
-     * @param string $id The thing's name.
-     * @return mixed
-     * @throws coding_exception When not found.
+     * @param int $id The target.
+     * @param int $points The points.
+     * @param reason $reason The reason.
+     * @param DateTime|null $time When that happened.
+     * @return void
      */
-    public function get($id);
-
-    /**
-     * Whether this container can return an entry for the given identifier.
-     *
-     * @param string $id The thing's name.
-     * @return bool
-     */
-    public function has($id);
+    public function log_reason($id, $points, reason $reason, DateTime $time = null);
 
 }

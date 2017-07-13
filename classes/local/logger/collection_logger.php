@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Dependency container interface.
+ * Collection logger.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
@@ -23,37 +23,46 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local;
+namespace block_xp\local\logger;
 defined('MOODLE_INTERNAL') || die();
 
+use DateTime;
+
 /**
- * Dependency container interface.
- *
- * This should be compatible with PSR-11 containers, apart from the
- * exceptions which I don't want to bother supporting right now.
+ * Collection logger.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface container {
+interface collection_logger {
 
     /**
-     * Get a thing.
+     * Delete logs older than a certain date.
      *
-     * @param string $id The thing's name.
-     * @return mixed
-     * @throws coding_exception When not found.
+     * @param \DateTime $dt The date.
+     * @return void
      */
-    public function get($id);
+    public function delete_older_than(DateTime $dt);
 
     /**
-     * Whether this container can return an entry for the given identifier.
+     * Log a thing.
      *
-     * @param string $id The thing's name.
-     * @return bool
+     * The signature is an arbitrary short text that signs where the points are from.
+     *
+     * @param int $id The target.
+     * @param int $points The points.
+     * @param string $signature A signature.
+     * @param DateTime|null $time When that happened.
+     * @return void
      */
-    public function has($id);
+    public function log($id, $points, $signature, DateTime $time = null);
 
+    /**
+     * Purge all logs.
+     *
+     * @return void
+     */
+    public function reset();
 }

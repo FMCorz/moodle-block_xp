@@ -51,7 +51,6 @@ class course_user_event_collection_log_purge extends \core\task\scheduled_task {
         foreach ($courseids as $courseid) {
             $world = $factory->get_world($courseid);
             $keeplogs = $world->get_config()->get('keeplogs');
-
             if (!$keeplogs) {
                 // Keep forever.
                 return;
@@ -60,7 +59,7 @@ class course_user_event_collection_log_purge extends \core\task\scheduled_task {
             $dt = new DateTime();
             $dt->setTimestamp(time() - ($keeplogs * DAYSECS));
 
-            $logger = $world->get_user_event_collection_logger();
+            $logger = new \block_xp\local\logger\course_user_event_collection_logger($db, $courseid);
             $logger->delete_older_than($dt);
         }
     }

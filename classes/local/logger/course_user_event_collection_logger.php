@@ -30,6 +30,7 @@ use DateTime;
 use dml_exception;
 use moodle_database;
 use stdClass;
+use block_xp\local\reason\reason;
 
 /**
  * Course user event collection logger.
@@ -39,7 +40,7 @@ use stdClass;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_user_event_collection_logger {
+class course_user_event_collection_logger implements reason_collection_logger, collection_logger_with_group_reset {
 
     /** The table name. */
     const TABLE = 'block_xp_log';
@@ -78,26 +79,41 @@ class course_user_event_collection_logger {
     }
 
     /**
-     * Log an event.
+     * Log a thing.
      *
-     * @param \core\event\base $event The event.
-     * @param int $userid The user ID.
-     * @param int $points The experience points.
+     * @param int $id The target.
+     * @param int $points The points.
+     * @param string $signature A signature.
+     * @param DateTime|null $time When that happened.
      * @return void
      */
-    public function log_event(\core\event\base $event, $userid, $points) {
+    public function log($id, $points, $signature, DateTime $time = null) {
+        $time = $time ? $time : new DateTime();
         $record = new stdClass();
         $record->courseid = $this->courseid;
-        $record->userid = $userid;
-        $record->eventname = $event->eventname;
+        $record->userid = $id;
+        $record->eventname = $signature;
         $record->xp = $points;
-        $record->time = time();
+        $record->time = $time->getTimestamp();
         try {
             $this->db->insert_record(static::TABLE, $record);
         } catch (dml_exception $e) {
             // Ignore, but please the linter.
             $pleaselinter = true;
         }
+    }
+
+    /**
+     * Log a thing.
+     *
+     * @param int $id The target.
+     * @param int $points The points.
+     * @param reason $reason The reason.
+     * @param DateTime|null $time When that happened.
+     * @return void
+     */
+    public function log_reason($id, $points, reason $reason, DateTime $time = null) {
+        $this->log($id, $points, $reason->get_signature(), $time);
     }
 
     /**

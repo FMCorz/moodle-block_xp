@@ -74,7 +74,7 @@ class default_container implements container {
      */
     public function get($id) {
         if (!isset($this->instances[$id])) {
-            if (!array_key_exists($id, static::$supports)) {
+            if (!$this->has($id)) {
                 throw new coding_exception('Unknown thing to create: ' . $id);
             }
             $method = 'get_' . $id;
@@ -297,6 +297,16 @@ class default_container implements container {
      */
     protected function get_user_notice_indicator() {
         return new \block_xp\local\indicator\user_notice_indicator($this->get('db'));
+    }
+
+    /**
+     * Whether this container can return an entry for the given identifier.
+     *
+     * @param string $id The thing's name.
+     * @return bool
+     */
+    public function has($id) {
+        return array_key_exists($id, static::$supports);
     }
 
 }

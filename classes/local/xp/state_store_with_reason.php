@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Dependency container interface.
+ * State store.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
@@ -23,37 +23,35 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local;
+namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Dependency container interface.
- *
- * This should be compatible with PSR-11 containers, apart from the
- * exceptions which I don't want to bother supporting right now.
+ * State store.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface container {
+interface state_store_with_reason extends state_store {
 
     /**
-     * Get a thing.
+     * Add a certain amount of experience points.
      *
-     * @param string $id The thing's name.
-     * @return mixed
-     * @throws coding_exception When not found.
+     * @param int $id The receiver.
+     * @param int $amount The amount.
+     * @param reason $reason A reason.
      */
-    public function get($id);
+    public function increase($id, $amount, reason $reason);
 
     /**
-     * Whether this container can return an entry for the given identifier.
+     * Set the amount of experience points.
      *
-     * @param string $id The thing's name.
-     * @return bool
+     * @param int $id The receiver.
+     * @param int $amount The amount.
+     * @param reason $reason A reason.
      */
-    public function has($id);
+    public function set($id, $amount, reason $reason);
 
 }
