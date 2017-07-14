@@ -47,6 +47,7 @@ class default_container implements container {
         'base_url' => true,
         'block_class' => true,
         'block_edit_form_class' => true,
+        'block_instance_finder' => true,
         'collection_strategy' => true,
         'config' => true,
         'course_world_factory' => true,
@@ -149,6 +150,15 @@ class default_container implements container {
      */
     protected function get_block_edit_form_class() {
         return 'block_xp\form\edit_form';
+    }
+
+    /**
+     * Get the block instance finder.
+     *
+     * @return instance_finder
+     */
+    protected function get_block_instance_finder() {
+        return new \block_xp\local\block\default_instance_finder($this->get('db'));
     }
 
     /**

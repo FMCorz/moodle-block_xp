@@ -47,6 +47,9 @@ class config extends moodleform {
      * @return void
      */
     public function definition() {
+        global $PAGE;
+        $showblockconfig = !empty($this->_customdata['showblockconfig']);
+
         $mform = $this->_form;
         $mform->setDisableShortforms(true);
 
@@ -99,6 +102,9 @@ class config extends moodleform {
         $el->setMultiple(true);
         $mform->addHelpButton('laddercols', 'ladderadditionalcols', 'block_xp');
 
+        $mform->addElement('hidden', '__generalend');
+        $mform->setType('__generalend', PARAM_BOOL);
+
         $mform->addElement('header', 'hdrcheating', get_string('cheatguard', 'block_xp'));
 
         $mform->addElement('selectyesno', 'enablecheatguard', get_string('enablecheatguard', 'block_xp'));
@@ -119,6 +125,48 @@ class config extends moodleform {
         $mform->setType('timebetweensameactions', PARAM_INT);
         $mform->disabledIf('timebetweensameactions', 'enablecheatguard', 'eq', 0);
 
+        $mform->addElement('hidden', '__cheatguardend');
+        $mform->setType('__cheatguardend', PARAM_BOOL);
+
+        $mform->addElement('header', 'hdrblockconfig', get_string('blockappearance', 'block_xp'));
+
+        if ($showblockconfig) {
+            // This is a direct duplicate from the form to edit the block, however we
+            // renamed the arguments to start with 'block_', so remember to update both
+            // this and the block form when adding new "block appearance" settings.
+            $config = \block_xp\di::get('config');
+
+            $mform->addElement('text', 'block_title', get_string('configtitle', 'block_xp'));
+            $mform->setDefault('block_title', $config->get('blocktitle'));
+            $mform->addHelpButton('block_title', 'configtitle', 'block_xp');
+            $mform->setType('block_title', PARAM_TEXT);
+
+            $mform->addElement('textarea', 'block_description', get_string('configdescription', 'block_xp'));
+            $mform->setDefault('block_description', $config->get('blockdescription'));
+            $mform->addHelpButton('block_description', 'configdescription', 'block_xp');
+            $mform->setType('block_description', PARAM_TEXT);
+
+            $mform->addElement('select', 'block_recentactivity', get_string('configrecentactivity', 'block_xp'), [
+                0 => get_string('no'),
+                3 => get_string('yes'),
+            ]);
+            $mform->setDefault('block_recentactivity', $config->get('blockrecentactivity'));
+            $mform->addHelpButton('block_recentactivity', 'configrecentactivity', 'block_xp');
+            $mform->setType('block_recentactivity', PARAM_INT);
+        } else {
+            // Suggest the course page, or the home page.
+            if ($PAGE->course->id == SITEID) {
+                $url = new \moodle_url('/', ['redirect' => 0]);
+            } else {
+                $url = new \moodle_url('/course/view.php', ['id' => $PAGE->course->id]);
+            }
+            $mform->addElement('static', 'missingblock', get_string('whoops', 'block_xp'),
+                markdown_to_html(get_string('cannotshowblockconfig', 'block_xp', $url->out(false))));
+        }
+
+        $mform->addElement('hidden', '__blockappearanceend');
+        $mform->setType('__blockappearanceend', PARAM_BOOL);
+
         $mform->addElement('header', 'hdrloggin', get_string('logging', 'block_xp'));
 
         $mform->addElement('advcheckbox', 'enablelog', get_string('enablelogging', 'block_xp'));
@@ -133,6 +181,9 @@ class config extends moodleform {
         $mform->addElement('select', 'keeplogs', get_string('keeplogs', 'block_xp'), $options);
         $mform->disabledIf('keeplogs', 'enablelog', 'eq', 0);
 
+        $mform->addElement('hidden', '__loggingend');
+        $mform->setType('__loggingend', PARAM_BOOL);
+
         $this->add_action_buttons();
     }
 
@@ -146,6 +197,11 @@ class config extends moodleform {
         if (!$data) {
             return $data;
         }
+
+        unset($data->__generalend);
+        unset($data->__cheatguardend);
+        unset($data->__blockappearanceend);
+        unset($data->__loggingend);
 
         // Convert back from itemspertime.
         if (!isset($data->maxactionspertime) || !is_array($data->maxactionspertime)) {
