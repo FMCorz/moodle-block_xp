@@ -205,7 +205,7 @@ class report_table extends table_sql {
         }
 
         foreach ($this->rawdata as $row) {
-            $row->state = $this->store->make_state_from_record($row, 'id');
+            $row->state = $this->make_state_from_record($row);
             $row->lvl = $row->state->get_level()->get_level();
 
             $formattedrow = $this->format_row($row);
@@ -268,6 +268,16 @@ class report_table extends table_sql {
      */
     protected function col_userpic($row) {
         return $this->renderer->user_picture($row->state->get_user());
+    }
+
+    /**
+     * Make state from record.
+     *
+     * @param stdClass $row Table row.
+     * @return user_state
+     */
+    protected function make_state_from_record($row) {
+        return $this->store->make_state_from_record($row, 'id');
     }
 
     /**

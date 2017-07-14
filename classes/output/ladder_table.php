@@ -251,7 +251,7 @@ class ladder_table extends table_sql {
                 // Add the state, and update the level in case it's incorrect. Though
                 // if the level is incorrect there the ordering will be as well so it
                 // better be right really.
-                $row->state = $this->store->make_state_from_record($row);
+                $row->state = $this->make_state_from_record($row);
                 $row->lvl = $row->state->get_level()->get_level();
 
                 if ($this->rankmode == course_world_config::RANK_ON) {
@@ -460,6 +460,16 @@ class ladder_table extends table_sql {
      */
     public function get_sort_columns() {
         return ['x.lvl' => SORT_DESC, 'x.xp' => SORT_DESC, 'x.id' => SORT_ASC];
+    }
+
+    /**
+     * Make state from record.
+     *
+     * @param stdClass $row Table row.
+     * @return user_state
+     */
+    protected function make_state_from_record($row) {
+        return $this->store->make_state_from_record($row);
     }
 
     /**
