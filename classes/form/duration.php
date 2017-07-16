@@ -60,6 +60,9 @@ class block_xp_form_duration extends \MoodleQuickForm_duration {
      * @param array $attributes Attributes.
      */
     public function __construct($elementName = null, $elementLabel = null, $options = [], $attributes = null) {
+        if (isset($options['maxunit'])) {
+            $this->_options['maxunit'] = $options['maxunit'];
+        }
         \MoodleQuickForm_duration::__construct($elementName, $elementLabel, $options, $attributes);
     }
 
@@ -72,6 +75,9 @@ class block_xp_form_duration extends \MoodleQuickForm_duration {
      * @param array $attributes Attributes.
      */
     function local_mootivated_form_duration($elementName = null, $elementLabel = null, $options = [], $attributes = null) {
+        if (isset($options['maxunit'])) {
+            $this->_options['maxunit'] = $options['maxunit'];
+        }
         $this->MoodleQuickForm_duration($elementName, $elementLabel, $options, $attributes);
     }
 

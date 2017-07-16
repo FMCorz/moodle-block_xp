@@ -108,13 +108,13 @@ class config extends moodleform {
         $mform->addElement('header', 'hdrcheating', get_string('cheatguard', 'block_xp'));
 
         $mform->addElement('selectyesno', 'enablecheatguard', get_string('enablecheatguard', 'block_xp'));
+        $mform->addHelpButton('enablecheatguard', 'enablecheatguard', 'block_xp');
 
         $mform->addElement('block_xp_form_itemspertime', 'maxactionspertime', get_string('maxactionspertime', 'block_xp'), [
-            'maxunit' => HOURSECS,
+            'maxunit' => 60,
             'itemlabel' => get_string('actions', 'block_xp')
         ]);
         $mform->addHelpButton('maxactionspertime', 'maxactionspertime', 'block_xp');
-        $mform->setType('maxactionspertime', PARAM_INT);
         $mform->disabledIf('maxactionspertime', 'enablecheatguard', 'eq', 0);
 
         $mform->addElement('block_xp_form_duration', 'timebetweensameactions', get_string('timebetweensameactions', 'block_xp'), [
@@ -122,7 +122,6 @@ class config extends moodleform {
             'optional' => false,        // We must set this...
         ]);
         $mform->addHelpButton('timebetweensameactions', 'timebetweensameactions', 'block_xp');
-        $mform->setType('timebetweensameactions', PARAM_INT);
         $mform->disabledIf('timebetweensameactions', 'enablecheatguard', 'eq', 0);
 
         $mform->addElement('hidden', '__cheatguardend');
