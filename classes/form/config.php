@@ -167,23 +167,6 @@ class config extends moodleform {
         $mform->addElement('hidden', '__blockappearanceend');
         $mform->setType('__blockappearanceend', PARAM_BOOL);
 
-        $mform->addElement('header', 'hdrloggin', get_string('logging', 'block_xp'));
-
-        $mform->addElement('advcheckbox', 'enablelog', get_string('enablelogging', 'block_xp'));
-
-        $options = array(
-            '0' => get_string('forever', 'block_xp'),
-            '1' => get_string('for1day', 'block_xp'),
-            '3' => get_string('for3days', 'block_xp'),
-            '7' => get_string('for1week', 'block_xp'),
-            '30' => get_string('for1month', 'block_xp'),
-        );
-        $mform->addElement('select', 'keeplogs', get_string('keeplogs', 'block_xp'), $options);
-        $mform->disabledIf('keeplogs', 'enablelog', 'eq', 0);
-
-        $mform->addElement('hidden', '__loggingend');
-        $mform->setType('__loggingend', PARAM_BOOL);
-
         $this->add_action_buttons();
     }
 

@@ -59,14 +59,13 @@ class default_admin_config extends immutable_config {
     public function __construct() {
         parent::__construct(new static_config([
             'context' => CONTEXT_COURSE,
+            'keeplogs' => 3,
 
             'enablecheatguard' => 1,
             'enableinfos' => 1,
             'enableladder' => 1,
             'enablelevelupnotif' => 1,
-            'enablelog' => 1,
             'identitymode' => course_world_config::IDENTITY_ON,
-            'keeplogs' => 3,
             'laddercols' => 'xp,progress',
             'levelsdata' => '',
             'maxactionspertime' => 10,

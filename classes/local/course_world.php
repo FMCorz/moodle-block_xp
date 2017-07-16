@@ -236,11 +236,7 @@ class course_world implements world {
      */
     private function get_collection_logger() {
         if (!$this->logger) {
-            if ($this->get_config()->get('enablelog')) {
-                $this->logger = new \block_xp\local\logger\course_user_event_collection_logger($this->db, $this->courseid);
-            } else {
-                $this->logger = new \block_xp\local\logger\dummy_collection_logger();
-            }
+            $this->logger = new \block_xp\local\logger\course_user_event_collection_logger($this->db, $this->courseid);
         }
         return $this->logger;
     }

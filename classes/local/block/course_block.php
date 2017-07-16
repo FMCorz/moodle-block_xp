@@ -140,7 +140,7 @@ class course_block extends block_base {
         $moreurl = null; // TODO Add URL for students to see, and option to control it.
         // $moreurl = $urlresolver->reverse('log', ['courseid' => $courseid]);
         $recentactivity = isset($this->config->recentactivity) ? $this->config->recentactivity : 0;
-        if ($config->get('enablelog') && $recentactivity) {
+        if ($recentactivity) {
             $repo = $world->get_user_recent_activity_repository();
             $activity = $repo->get_user_recent_activity($USER->id, $recentactivity);
 

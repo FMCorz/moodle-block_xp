@@ -369,6 +369,46 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2017070400, 'xp');
     }
 
+    if ($oldversion < 2017071601) {
+
+        // Find what courses were set to, and use that for our admin setting.
+        $keeplogsforever = $DB->record_exists('block_xp_config', ['keeplogs' => 0]);
+        $keeplogsmax = (int) $DB->get_field('block_xp_config', 'MAX(keeplogs)', []);
+        set_config('keeplogs', $keeplogsforever ? 0 : $keeplogsmax, 'block_xp');
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2017071601, 'xp');
+    }
+
+    if ($oldversion < 2017071602) {
+
+        // Define field enablelog to be dropped from block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('enablelog');
+
+        // Conditionally launch drop field enablelog.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2017071602, 'xp');
+    }
+
+    if ($oldversion < 2017071603) {
+
+        // Define field keeplogs to be dropped from block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('keeplogs');
+
+        // Conditionally launch drop field keeplogs.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2017071603, 'xp');
+    }
 
     return true;
 

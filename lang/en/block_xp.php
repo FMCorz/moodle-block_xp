@@ -50,9 +50,7 @@ $string['configheader'] = 'Settings';
 $string['configtitle'] = 'Title';
 $string['configtitle_help'] = 'The title of the block.';
 $string['configrecentactivity'] = 'Display recent rewards';
-$string['configrecentactivity_help'] = 'When enabled, the block will display a short list of recent events which rewarded the student with experience points.
-
-__Note__: This requires logging to be enabled.';
+$string['configrecentactivity_help'] = 'When enabled, the block will display a short list of recent events which rewarded the student with experience points.';
 $string['congratulationsyouleveledup'] = 'Congratulations!';
 $string['coolthanks'] = 'Cool, thanks!';
 $string['courselog'] = 'Course log';
@@ -85,7 +83,6 @@ $string['enableladder'] = 'Enable the ladder';
 $string['enableladder_help'] = 'When set to \'No\', students will not be able to view the ladder.';
 $string['enablelevelupnotif'] = 'Enable level up notification';
 $string['enablelevelupnotif_help'] = 'When set to \'Yes\', students will be displayed a popup congratulating them for the new level reached.';
-$string['enablelogging'] = 'Enable logging';
 $string['enablexpgain'] = 'Enable XP gain';
 $string['enablexpgain_help'] = 'When set to \'No\', nobody will earn experience points in the course. This is useful to freeze the experience gained, or to enable it at a certain point in time.
 
@@ -234,4 +231,5 @@ $string['youreachedlevela'] = 'You reached level {$a}!';
 $string['yourownrules'] = 'Your own rules';
 
 // Deprecated since 3.0.0.
+$string['enablelogging'] = 'Enable logging';
 $string['viewtheladder'] = 'View the ladder';

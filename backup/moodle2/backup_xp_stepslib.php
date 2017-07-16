@@ -43,7 +43,7 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
 
         // Define each element separated.
         $xpconfig = new backup_nested_element('config', array('courseid'), array(
-            'enabled', 'enablelog', 'keeplogs', 'levels', 'lastlogpurge', 'enableladder', 'enableinfos', 'levelsdata',
+            'enabled', 'levels', 'lastlogpurge', 'enableladder', 'enableinfos', 'levelsdata',
             'enablelevelupnotif', 'enablecustomlevelbadges', 'maxactionspertime', 'timeformaxactions', 'timebetweensameactions',
             'identitymode', 'rankmode', 'neighbours', 'enablecheatguard', 'defaultfilters'
         ));

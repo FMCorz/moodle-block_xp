@@ -59,7 +59,6 @@ class log_controller extends page_controller {
     }
 
     protected function page_content() {
-        // TODO Display something when logging is disabled.
         $this->print_group_menu();
         echo $this->get_table()->out(50, true);
     }

@@ -139,6 +139,21 @@ class default_settings_maker implements settings_maker {
             ]
         ));
 
+        // Logging settings.
+        $settings[] = (new admin_setting_heading('block_xp/hdrlogging', get_string('logging', 'block_xp'), ''));
+
+        // Keeps logs for.
+        $settings[] = (new admin_setting_configselect('block_xp/keeplogs',
+            get_string('keeplogs', 'block_xp'), '',
+            $this->defaults->get('keeplogs'), [
+                '0' => get_string('forever', 'block_xp'),
+                '1' => get_string('for1day', 'block_xp'),
+                '3' => get_string('for3days', 'block_xp'),
+                '7' => get_string('for1week', 'block_xp'),
+                '30' => get_string('for1month', 'block_xp'),
+            ]
+        ));
+
         return $settings;
     }
 
@@ -238,26 +253,6 @@ class default_settings_maker implements settings_maker {
         $settings[] = (new admin_setting_configtext('block_xp/timebetweensameactions',
             get_string('timebetweensameactions', 'block_xp'), get_string('timebetweensameactions_help', 'block_xp'),
             $defaults['timebetweensameactions'], PARAM_INT));
-
-        // Logging settings.
-        $settings[] = (new admin_setting_heading('block_xp/hdrlogging', get_string('logging', 'block_xp'), ''));
-
-        // Enable logs?
-        $settings[] = (new admin_setting_configcheckbox('block_xp/enablelog',
-            get_string('enablelogging', 'block_xp'), '',
-            $defaults['enablelog']));
-
-        // Keeps logs for.
-        $settings[] = (new admin_setting_configselect('block_xp/keeplogs',
-            get_string('keeplogs', 'block_xp'), '',
-            $defaults['keeplogs'], [
-                '0' => get_string('forever', 'block_xp'),
-                '1' => get_string('for1day', 'block_xp'),
-                '3' => get_string('for3days', 'block_xp'),
-                '7' => get_string('for1week', 'block_xp'),
-                '30' => get_string('for1month', 'block_xp'),
-            ]
-        ));
 
         // Block appearance settings.
         $settings[] = (new admin_setting_heading('block_xp/hdrblockappearance',

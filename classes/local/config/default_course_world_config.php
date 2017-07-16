@@ -44,8 +44,6 @@ class default_course_world_config extends immutable_config {
     public function __construct() {
         parent::__construct(new static_config([
             'enabled' => false,
-            'enablelog' => 1,
-            'keeplogs' => 3,
             'enablecheatguard' => true,   // Enable cheat guard.
             'enableladder' => true,       // Enable the ladder.
             'enableinfos' => true,        // Enable the infos page.
