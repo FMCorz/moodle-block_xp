@@ -37,7 +37,7 @@ $string['anonymity_help'] = 'This setting controls whether participants can see 
 $string['awardaxpwhen'] = '<strong>{$a}</strong> experience points are earned when:';
 $string['basexp'] = 'Algorithm base';
 $string['blockappearance'] = 'Block appearance';
-$string['changelevelformhelp'] = 'If you change the number of levels, the custom level badges will be temporarily disabled to prevent levels without badges. If you change the level count go to the page \'Visuals\' to re-enable the custom badges once you have saved this form.';
+
 $string['cachedef_filters'] = 'Level filters';
 $string['cachedef_ruleevent_eventslist'] = 'List of some events';
 $string['cannotshowblockconfig'] = 'I would usually display the appearance settings here, but I could not find your block. To change the block\'s appearance, head back [here]({$a}) (or where you added the block), turn editing mode on, and follow the "Configure" option in the block\'s dropdown. If you cannot find the block, add it to your course again.';
@@ -120,7 +120,6 @@ $string['levelbadgesformhelp'] = 'Name the files [level].[file extension], for i
 $string['levelcount'] = 'Level count';
 $string['leveldesc'] = 'Level description';
 $string['levels'] = 'Levels';
-$string['levelswillbereset'] = 'Warning! Saving this form will recalculate the levels of everyone!';
 $string['levelup'] = 'Level up!';
 $string['levelx'] = 'Level #{$a}';
 $string['likenotice'] = '<strong>Do you like the plugin?</strong> Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourites</a> on Moodle.org and <a href="{$a->github}" target="_blank">star it on GitHub</a>.';
@@ -231,5 +230,7 @@ $string['youreachedlevela'] = 'You reached level {$a}!';
 $string['yourownrules'] = 'Your own rules';
 
 // Deprecated since 3.0.0.
+$string['changelevelformhelp'] = 'If you change the number of levels, the custom level badges will be temporarily disabled to prevent levels without badges. If you change the level count go to the page \'Visuals\' to re-enable the custom badges once you have saved this form.';
 $string['enablelogging'] = 'Enable logging';
+$string['levelswillbereset'] = 'Warning! Saving this form will recalculate the levels of everyone!';
 $string['viewtheladder'] = 'View the ladder';

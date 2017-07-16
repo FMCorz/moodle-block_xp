@@ -59,11 +59,6 @@ class levels_with_algo extends moodleform {
         $mform->addRule('levels', get_string('required'), 'required');
         $mform->setType('levels', PARAM_INT);
 
-        // Typically, we only have a config when this form is used in a course, not in the admin.
-        if ($config && $config->get('enablecustomlevelbadges')) {
-            $mform->addElement('static', '', '', get_string('changelevelformhelp', 'block_xp'));
-        }
-
         $mform->addElement('selectyesno', 'usealgo', get_string('usealgo', 'block_xp'));
 
         $mform->addElement('text', 'basexp', get_string('basexp', 'block_xp'));
@@ -85,12 +80,6 @@ class levels_with_algo extends moodleform {
 
         $mform->addelement('hidden', 'insertlevelshere');
         $mform->setType('insertlevelshere', PARAM_BOOL);
-
-        // We only need to show this in the course.
-        if ($config) {
-            $mform->addElement('static', 'warn', '',
-                $OUTPUT->notification(get_string('levelswillbereset', 'block_xp'), 'notifyproblem'));
-        }
 
         $this->add_action_buttons();
 
