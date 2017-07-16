@@ -67,7 +67,7 @@ class config_stack implements config {
                 return $config->get($name);
             }
         }
-        throw new coding_exception('Invalid config requested.');
+        throw new coding_exception('Invalid config requested: ' . $name);
     }
 
     /**
