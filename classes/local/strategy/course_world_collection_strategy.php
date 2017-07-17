@@ -106,6 +106,10 @@ class course_world_collection_strategy implements event_collection_strategy {
 
         // Get XP to reward with.
         $points = $this->filtermanager->get_points_for_event($event);
+        if ($points === null) {
+            // Say no more, we bail.
+            return;
+        }
 
         // Make up the reason.
         $reason = new event_name_reason($event->eventname);

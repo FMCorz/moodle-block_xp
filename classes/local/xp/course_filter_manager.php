@@ -103,7 +103,7 @@ class course_filter_manager {
      * Return the points filtered for this event.
      *
      * @param \core\event\base $event The event.
-     * @return int points.
+     * @return int Points, or null.
      */
     public function get_points_for_event(\core\event\base $event) {
         foreach ($this->get_filters() as $filter) {
@@ -111,7 +111,7 @@ class course_filter_manager {
                 return $filter->get_points();
             }
         }
-        return 0;
+        return null;
     }
 
     /**
