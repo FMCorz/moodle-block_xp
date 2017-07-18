@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Course user event collection logger.
+ * Global collection logger.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
@@ -33,20 +33,24 @@ use stdClass;
 use block_xp\local\reason\reason;
 
 /**
- * Course user event collection logger.
+ * Global collection logger.
+ *
+ * This class points to the same logs as the instances specific to a course,
+ * it uses the same table, but it's useful as an implementation for quickly
+ * deleting all the logs which should not be kept.
+ *
+ * Apart from that, this class has no use.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_user_event_collection_logger implements reason_collection_logger, collection_logger_with_group_reset {
+class global_collection_logger implements collection_logger {
 
     /** The table name. */
     const TABLE = 'block_xp_log';
 
-    /** @var int The course ID. */
-    protected $courseid;
     /** @var moodle_database The DB. */
     protected $db;
 
@@ -54,11 +58,9 @@ class course_user_event_collection_logger implements reason_collection_logger, c
      * Constructor.
      *
      * @param moodle_database $db The DB.
-     * @param int $courseid The course ID.
      */
-    public function __construct(moodle_database $db, $courseid) {
+    public function __construct(moodle_database $db) {
         $this->db = $db;
-        $this->courseid = $courseid;
     }
 
     /**
@@ -70,9 +72,8 @@ class course_user_event_collection_logger implements reason_collection_logger, c
     public function delete_older_than(DateTime $dt) {
         $this->db->delete_records_select(
             static::TABLE,
-            'courseid = :courseid AND time < :time',
+            'time < :time',
             [
-                'courseid' => $this->courseid,
                 'time' => $dt->getTimestamp()
             ]
         );
@@ -88,32 +89,7 @@ class course_user_event_collection_logger implements reason_collection_logger, c
      * @return void
      */
     public function log($id, $points, $signature, DateTime $time = null) {
-        $time = $time ? $time : new DateTime();
-        $record = new stdClass();
-        $record->courseid = $this->courseid;
-        $record->userid = $id;
-        $record->eventname = $signature;
-        $record->xp = $points;
-        $record->time = $time->getTimestamp();
-        try {
-            $this->db->insert_record(static::TABLE, $record);
-        } catch (dml_exception $e) {
-            // Ignore, but please the linter.
-            $pleaselinter = true;
-        }
-    }
-
-    /**
-     * Log a thing.
-     *
-     * @param int $id The target.
-     * @param int $points The points.
-     * @param reason $reason The reason.
-     * @param DateTime|null $time When that happened.
-     * @return void
-     */
-    public function log_reason($id, $points, reason $reason, DateTime $time = null) {
-        $this->log($id, $points, $reason->get_signature(), $time);
+        // Do nothing. We should not be using this to log.
     }
 
     /**
@@ -122,37 +98,7 @@ class course_user_event_collection_logger implements reason_collection_logger, c
      * @return void
      */
     public function reset() {
-        $this->db->delete_records_select(
-            static::TABLE,
-            'courseid = :courseid',
-            [
-                'courseid' => $this->courseid
-            ]
-        );
-    }
-
-    /**
-     * Purge logs for users in a group.
-     *
-     * @param int $groupid The group ID.
-     * @return void
-     */
-    public function reset_by_group($groupid) {
-        $table = static::TABLE;
-        $sql = "DELETE
-                  FROM {{$table}}
-                 WHERE courseid = :courseid
-                   AND userid IN
-               (SELECT gm.userid
-                  FROM {groups_members} gm
-                 WHERE gm.groupid = :groupid)";
-
-        $params = [
-            'courseid' => $this->courseid,
-            'groupid' => $groupid
-        ];
-
-        $this->db->execute($sql, $params);
+        // Unlikely that this was intentional, so we do nothing.
     }
 
 }

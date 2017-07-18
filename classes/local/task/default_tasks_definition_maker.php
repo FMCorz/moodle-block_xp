@@ -39,7 +39,7 @@ class default_tasks_definition_maker implements tasks_definition_maker {
     public function get_tasks_definition() {
         return [
             [
-                'classname' => 'block_xp\task\course_user_event_collection_log_purge',
+                'classname' => 'block_xp\task\collection_logger_purge',
                 'blocking' => 0,
                 'minute' => 47,
                 'hour' => 3,

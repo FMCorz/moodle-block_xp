@@ -29,39 +29,35 @@ defined('MOODLE_INTERNAL') || die();
 use DateTime;
 
 /**
- * Course user event collection log purge task class.
+ * Log purge task class.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_user_event_collection_log_purge extends \core\task\scheduled_task {
+class collection_logger_purge extends \core\task\scheduled_task {
 
     public function get_name() {
-        return get_string('taskcourseusereventcollectionlogpurge', 'block_xp');
+        return get_string('taskcollectionloggerpurge', 'block_xp');
     }
 
     public function execute() {
         $db = \block_xp\di::get('db');
-        $factory = \block_xp\di::get('course_world_factory');
+        $config = \block_xp\di::get('config');
+        $keeplogs = $config->get('keeplogs');
 
-        // Check each course.
-        $courseids = \block_xp\local\logger\course_user_event_collection_logger::get_courses_with_logs($db);
-        foreach ($courseids as $courseid) {
-            $world = $factory->get_world($courseid);
-            $keeplogs = $world->get_config()->get('keeplogs');
-            if (!$keeplogs) {
-                // Keep forever.
-                return;
-            }
-
-            $dt = new DateTime();
-            $dt->setTimestamp(time() - ($keeplogs * DAYSECS));
-
-            $logger = new \block_xp\local\logger\course_user_event_collection_logger($db, $courseid);
-            $logger->delete_older_than($dt);
+        if (!$keeplogs) {
+            // Keep forever.
+            return;
         }
+
+        $dt = new DateTime();
+        $dt->setTimestamp(time() - ($keeplogs * DAYSECS));
+
+        // Get the overall logger.
+        $logger = \block_xp\di::get('collection_logger');
+        $logger->delete_older_than($dt);
     }
 
 }

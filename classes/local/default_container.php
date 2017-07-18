@@ -48,6 +48,7 @@ class default_container implements container {
         'block_class' => true,
         'block_edit_form_class' => true,
         'block_instance_finder' => true,
+        'collection_logger' => true,
         'collection_strategy' => true,
         'config' => true,
         'course_world_factory' => true,
@@ -159,6 +160,15 @@ class default_container implements container {
      */
     protected function get_block_instance_finder() {
         return new \block_xp\local\block\default_instance_finder($this->get('db'));
+    }
+
+    /**
+     * Get the global collection logger.
+     *
+     * @return logger
+     */
+    protected function get_collection_logger() {
+        return new \block_xp\local\logger\global_collection_logger($this->get('db'));
     }
 
     /**

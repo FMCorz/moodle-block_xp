@@ -194,7 +194,7 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
 </p>';
 $string['someoneelse'] = 'Someone else';
 $string['somethinghappened'] = 'Something happened';
-$string['taskcourseusereventcollectionlogpurge'] = 'Purge logs containing user\'s XP collection in courses.';
+$string['taskcollectionloggerpurge'] = 'Purge collection logs';
 $string['timebetweensameactions'] = 'Time required between identical actions';
 $string['timebetweensameactions_help'] = 'The minimum time required before an action that already happened previously is accepted again. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identifical if the same post is read again. When this value is empty, or equals to zero, it does not apply.';
 $string['timeformaxactions'] = 'Time frame for max. actions';
