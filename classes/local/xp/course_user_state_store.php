@@ -46,7 +46,8 @@ use block_xp\local\reason\reason;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_user_state_store implements course_state_store {
+class course_user_state_store implements course_state_store,
+        state_store_with_reason {
 
     /** @var moodle_database The database. */
     protected $db;

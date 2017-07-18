@@ -26,6 +26,8 @@
 namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
+use block_xp\local\reason\reason;
+
 /**
  * State store.
  *
@@ -43,7 +45,7 @@ interface state_store_with_reason extends state_store {
      * @param int $amount The amount.
      * @param reason $reason A reason.
      */
-    public function increase($id, $amount, reason $reason);
+    public function increase_with_reason($id, $amount, reason $reason);
 
     /**
      * Set the amount of experience points.
@@ -52,6 +54,6 @@ interface state_store_with_reason extends state_store {
      * @param int $amount The amount.
      * @param reason $reason A reason.
      */
-    public function set($id, $amount, reason $reason);
+    public function set_with_reason($id, $amount, reason $reason);
 
 }
