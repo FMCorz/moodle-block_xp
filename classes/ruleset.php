@@ -161,6 +161,9 @@ class block_xp_ruleset extends block_xp_rule {
      * @return boolean If it meets the condition.
      */
     public function match($subject) {
+        if (empty($this->rules)) {
+            return true;
+        }
         $method = 'match_' . $this->method;
         return $this->$method($subject);
     }
