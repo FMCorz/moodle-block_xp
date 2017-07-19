@@ -680,7 +680,12 @@ EOT
             $thousandssep = get_string('thousandssep', 'langconfig');
             $xp = number_format($xp, 0, '.', $thousandssep);
         }
-        return $xp . html_writer::tag('span', 'xp', ['class' => 'block_xp-currency']);
+        $o = '';
+        $o .= html_writer::start_div('block_xp-xp');
+        $o .= html_writer::div($xp, 'pts');
+        $o .= html_writer::div('xp', 'sign sign-sup');
+        $o .= html_writer::end_div();
+        return $o;
     }
 
     /**

@@ -156,8 +156,16 @@
 }
 
 /** Use over defined class name to re-use it through the block pages. */
-.block_xp-currency {
+.block_xp-xp {
+    display: inline-block;
+    white-space: nowrap;
+}
+.block_xp-xp .pts,
+.block_xp-xp .sign {
+    display: inline-block;
     letter-spacing: 0;
+}
+.block_xp-xp .sign-sup {
     vertical-align: super;
     font-size: 9px;
     line-height: 9px;
@@ -239,6 +247,7 @@
     text-align: center;
 }
 .block_xp-table .col-rank {
+    white-space: nowrap;
     width: 50px;
 }
 .block_xp-table .col-userpic {
