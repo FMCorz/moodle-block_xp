@@ -63,13 +63,13 @@ class log_table extends table_sql {
         $this->define_columns(array(
             'time',
             'fullname',
-            'xp',
+            'reward',
             'eventname'
         ));
         $this->define_headers(array(
             get_string('eventtime', 'block_xp'),
             get_string('fullname'),
-            get_string('xp', 'block_xp'),
+            get_string('reward', 'block_xp'),
             get_string('eventname', 'block_xp')
         ));
 

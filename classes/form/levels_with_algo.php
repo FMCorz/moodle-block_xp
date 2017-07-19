@@ -76,7 +76,7 @@ class levels_with_algo extends moodleform {
 
         // First level.
         $mform->addElement('header', 'hdrlevel1', get_string('levelx', 'block_xp', 1));
-        $mform->addElement('static', 'lvlxp_1', get_string('xprequired', 'block_xp'), 0);
+        $mform->addElement('static', 'lvlxp_1', get_string('pointsrequired', 'block_xp'), 0);
 
         $mform->addelement('hidden', 'insertlevelshere');
         $mform->setType('insertlevelshere', PARAM_BOOL);
@@ -105,7 +105,7 @@ class levels_with_algo extends moodleform {
             $el =& $mform->createElement('header', 'hdrlevel' . $i, get_string('levelx', 'block_xp', $i));
             $mform->insertElementBefore($el, 'insertlevelshere');
 
-            $el =& $mform->createElement('text', 'lvlxp_' . $i, get_string('xprequired', 'block_xp'));
+            $el =& $mform->createElement('text', 'lvlxp_' . $i, get_string('pointsrequired', 'block_xp'));
             $mform->insertElementBefore($el, 'insertlevelshere');
             $mform->setType('lvlxp_' . $i, PARAM_INT);
             $mform->disabledIf('lvlxp_' . $i, 'usealgo', 'eq', 1);

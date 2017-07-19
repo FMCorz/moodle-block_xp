@@ -180,7 +180,7 @@ class ladder_table extends table_sql {
         // Additional columns.
         if (in_array('xp', $this->additionalcols)) {
             $columns[] = 'xp';
-            $headers[] = get_string('xp', 'block_xp');
+            $headers[] = get_string('total', 'block_xp');
         }
         if (in_array('progress', $this->additionalcols)) {
             $columns[] = 'progress';

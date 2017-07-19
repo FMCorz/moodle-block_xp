@@ -226,7 +226,7 @@ class default_settings_maker implements settings_maker {
         $settings[] = (new admin_setting_configmultiselect('block_xp/laddercols',
             get_string('ladderadditionalcols', 'block_xp'), get_string('ladderadditionalcols_help', 'block_xp'),
             explode(',', $defaults['laddercols']), [
-                'xp' => get_string('xp', 'block_xp'),
+                'xp' => get_string('total', 'block_xp'),
                 'progress' => get_string('progress', 'block_xp'),
             ]
         ));

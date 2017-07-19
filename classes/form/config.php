@@ -96,7 +96,7 @@ class config extends moodleform {
         $mform->disabledIf('rankmode', 'enableladder', 'eq', 0);
 
         $el = $mform->addElement('select', 'laddercols', get_string('ladderadditionalcols', 'block_xp'), [
-            'xp' => get_string('xp', 'block_xp'),
+            'xp' => get_string('total', 'block_xp'),
             'progress' => get_string('progress', 'block_xp'),
         ], ['style' => 'height: 4em;']);
         $el->setMultiple(true);

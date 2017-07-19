@@ -188,7 +188,7 @@ class report_table extends table_sql {
             '',
             get_string('fullname'),
             get_string('level', 'block_xp'),
-            get_string('xp', 'block_xp'),
+            get_string('total', 'block_xp'),
             get_string('progress', 'block_xp'),
             ''
         ];

@@ -67,7 +67,7 @@ class infos_controller extends page_controller {
         $table = new flexible_table('xpinfos');
         $table->define_baseurl($this->pageurl);
         $table->define_columns(array('level', 'xp', 'desc'));
-        $table->define_headers(array(get_string('level', 'block_xp'), get_string('xprequired', 'block_xp'),
+        $table->define_headers(array(get_string('level', 'block_xp'), get_string('requires', 'block_xp'),
             get_string('description', 'block_xp')));
         $table->set_attribute('class', 'block_xp-table');
         $table->setup();

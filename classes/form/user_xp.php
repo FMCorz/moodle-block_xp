@@ -54,7 +54,7 @@ class user_xp extends moodleform {
         $mform->setType('level', PARAM_INT);
         $mform->hardFreeze('level');
 
-        $mform->addElement('text', 'xp', get_string('xp', 'block_xp'));
+        $mform->addElement('text', 'xp', get_string('total', 'block_xp'));
         $mform->setType('xp', PARAM_INT);
 
         $this->add_action_buttons();
