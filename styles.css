@@ -78,6 +78,8 @@
 .block_xp .xp-total {
     text-align: center;
     margin-bottom: 5px;
+}
+.block_xp .xp-total .pts {
     letter-spacing: 1px;
 }
 .block_xp .introduction .alert {
