@@ -48,45 +48,103 @@ class visuals_controller extends page_controller {
     protected $routename = 'visuals';
 
     /** @var moodleform The form. */
-    protected $form;
+    private $form;
+
+    /**
+     * Get manager context.
+     *
+     * @return context
+     */
+    final protected function get_filemanager_context() {
+        return $this->world->get_context();
+    }
+
+    /**
+     * Get file manager options.
+     *
+     * @return array
+     */
+    final protected function get_filemanager_options() {
+        return ['subdirs' => 0, 'accepted_types' => array('.jpg', '.png')];
+    }
+
+    /**
+     * Define the form.
+     *
+     * @return moodleform
+     */
+    protected function define_form() {
+        return new \block_xp\form\visuals($this->pageurl->out(false), [
+            'fmoptions' => $this->get_filemanager_options()
+        ]);
+    }
+
+    /**
+     * Get the form.
+     *
+     * @return moodleform
+     */
+    final protected function get_form() {
+        if (!$this->form) {
+            $this->form = $this->define_form();
+        }
+        return $this->form;
+    }
 
     protected function pre_content() {
         // TODO Could we shift the logic to save elsewhere, so we do not need to context here?
-        $context = $this->world->get_context();
-        $levelsinfo = $this->world->get_levels_info();
-        $config = $this->world->get_config();
-
-        // Some of the logic is tied to the course_world class.
-        $fmoptions = ['subdirs' => 0, 'accepted_types' => array('.jpg', '.png')];
-        $draftitemid = file_get_submitted_draft_itemid('badges');
-
-        // If the badges are missing, we copy them now.
-        if ($config->get('enablecustomlevelbadges') == course_world_config::CUSTOM_BADGES_MISSING) {
-            file_prepare_draft_area($draftitemid, context_system::instance()->id, 'block_xp', 'defaultbadges', 0, $fmoptions);
-        } else {
-            file_prepare_draft_area($draftitemid, $context->id, 'block_xp', 'badges', 0, $fmoptions);
-        }
-
-        $form = new \block_xp\form\visuals($this->pageurl->out(false), ['fmoptions' => $fmoptions]);
-        $form->set_data((object) ['badges' => $draftitemid]);
-
+        $form = $this->get_form();
+        $form->set_data((object) $this->get_initial_form_data());
         if ($data = $form->get_data()) {
-            // Save the area.
-            file_save_draft_area_files($data->badges, $context->id, 'block_xp', 'badges', 0, $fmoptions);
-
-            // When we save, we mark the flag as noop because either we copied the default badges,
-            // when we loaded the draft area, or the user saved the page as they were in a legacy state,
-            // and we want to take them out of it.
-            $config->set('enablecustomlevelbadges', course_world_config::CUSTOM_BADGES_NOOP);
-
+            $this->save_form_data($data);
             // TODO Add a confirmation message.
             $this->redirect();
 
         } else if ($form->is_cancelled()) {
             $this->redirect();
         }
+    }
 
-        $this->form = $form;
+    /**
+     * Get the initial form data.
+     *
+     * @return array
+     */
+    protected function get_initial_form_data() {
+        $config = $this->world->get_config();
+        $draftitemid = file_get_submitted_draft_itemid('badges');
+
+        // If the badges are missing, we copy them now.
+        if ($config->get('enablecustomlevelbadges') == course_world_config::CUSTOM_BADGES_MISSING) {
+            file_prepare_draft_area($draftitemid, context_system::instance()->id, 'block_xp', 'defaultbadges', 0,
+                $this->get_filemanager_options());
+        } else {
+            file_prepare_draft_area($draftitemid, $this->get_filemanager_context()->id, 'block_xp', 'badges', 0,
+                $this->get_filemanager_options());
+        }
+
+        return [
+            'badges' => $draftitemid
+        ];
+    }
+
+    /**
+     * Save the form data.
+     *
+     * @param stdClass $data The form data.
+     * @return void
+     */
+    protected function save_form_data($data) {
+        $config = $this->world->get_config();
+
+        // Save the area.
+        file_save_draft_area_files($data->badges, $this->get_filemanager_context()->id, 'block_xp', 'badges', 0,
+            $this->get_filemanager_options());
+
+        // When we save, we mark the flag as noop because either we copied the default badges,
+        // when we loaded the draft area, or the user saved the page as they were in a legacy state,
+        // and we want to take them out of it.
+        $config->set('enablecustomlevelbadges', course_world_config::CUSTOM_BADGES_NOOP);
     }
 
     protected function get_page_html_head_title() {
@@ -97,13 +155,32 @@ class visuals_controller extends page_controller {
         return get_string('coursevisuals', 'block_xp');
     }
 
-    protected function page_content() {
+    /**
+     * Introduction.
+     *
+     * @return void
+     */
+    protected function intro() {
         echo html_writer::tag('p', get_string('visualsintro', 'block_xp'));
+    }
 
-        $this->form->display();
+    protected function page_content() {
+        $this->intro();
 
-        $levelsinfo = $this->world->get_levels_info();
+        $this->get_form()->display();
+
         echo $this->get_renderer()->heading(get_string('preview'), 3);
+
+        $this->preview();
+    }
+
+    /**
+     * Preview.
+     *
+     * @return void
+     */
+    protected function preview() {
+        $levelsinfo = $this->world->get_levels_info();
         echo $this->get_renderer()->levels_preview($levelsinfo->get_levels());
     }
 

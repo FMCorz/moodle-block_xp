@@ -44,31 +44,84 @@ class admin_visuals_controller extends admin_route_controller {
     /** @var string The section name. */
     protected $sectionname = 'block_xp_default_visuals';
     /** @var moodleform The form. */
-    protected $form;
+    private $form;
 
-    protected function pre_content() {
-        $options = [
+    /**
+     * Define the form.
+     *
+     * @return moodleform
+     */
+    protected function define_form() {
+        return new \block_xp\form\visuals($this->pageurl->out(false), ['fmoptions' => $this->get_filemanager_options()]);
+    }
+
+    /**
+     * Get manager context.
+     *
+     * @return context
+     */
+    final protected function get_filemanager_context() {
+        return context_system::instance();
+    }
+
+    /**
+     * Get file manager options.
+     *
+     * @return array
+     */
+    final protected function get_filemanager_options() {
+        return [
             'subdirs' => 0,
             'accepted_types' => array('.jpg', '.png'),
         ];
-        $context = context_system::instance();
-        $fs = get_file_storage();
+    }
 
-        // Load draft area.
+    /**
+     * Get the form.
+     *
+     * @return moodleform
+     */
+    final protected function get_form() {
+        if (!$this->form) {
+            $this->form = $this->define_form();
+        }
+        return $this->form;
+    }
+
+    /**
+     * Get the initial form data.
+     *
+     * @return array
+     */
+    protected function get_initial_form_data() {
         $draftitemid = file_get_submitted_draft_itemid('badges');
-        file_prepare_draft_area($draftitemid, $context->id, 'block_xp', 'defaultbadges', 0, $options);
+        file_prepare_draft_area($draftitemid, $this->get_filemanager_context()->id, 'block_xp', 'defaultbadges',
+            0, $this->get_filemanager_options());
 
+        return [
+            'badges' => $draftitemid
+        ];
+    }
+
+    protected function pre_content() {
         // Capture form submission.
-        $form = new \block_xp\form\visuals($this->pageurl->out(false), ['fmoptions' => $options]);
-        $form->set_data((object) ['badges' => $draftitemid]);
+        $form = $this->get_form();
+        $form->set_data((object) $this->get_initial_form_data());
         if ($data = $form->get_data()) {
-            // Save the area.
-            file_save_draft_area_files($data->badges, $context->id, 'block_xp', 'defaultbadges', 0, $options);
-            // TODO Add confirmation message.
+            $this->save_form_data($data);
             $this->redirect();
         }
+    }
 
-        $this->form = $form;
+    /**
+     * Save the form data.
+     *
+     * @param stdClass $data The form data.
+     * @return void
+     */
+    protected function save_form_data($data) {
+        file_save_draft_area_files($data->badges, $this->get_filemanager_context()->id, 'block_xp', 'defaultbadges', 0,
+            $this->get_filemanager_options());
     }
 
     /**
@@ -77,27 +130,56 @@ class admin_visuals_controller extends admin_route_controller {
      * @return void
      */
     protected function content() {
+        $form = $this->get_form();
         $output = $this->get_renderer();
-        $config = \block_xp\di::get('config');
 
         echo $output->heading(get_string('defaultvisuals', 'block_xp'));
-        echo html_writer::tag('p', get_string('admindefaultvisualsintro', 'block_xp'));
 
-        $this->form->display();
+        $this->intro();
+
+        $form->display();
 
         // Preview.
+        echo $output->heading(get_string('preview'), 3);
+        $this->preview();
+    }
+
+    /**
+     * Print the intro part.
+     *
+     * @return void
+     */
+    protected function intro() {
+        echo html_writer::tag('p', get_string('admindefaultvisualsintro', 'block_xp'));
+    }
+
+    /**
+     * Print the preview part.
+     *
+     * @return void
+     */
+    protected function preview() {
+        $output = $this->get_renderer();
+        echo $output->levels_preview($this->get_levels_info()->get_levels());
+    }
+
+    /**
+     * Get the levels info.
+     *
+     * @return levels_info
+     */
+    final protected function get_levels_info() {
         // TODO We should get the levels info from somewhere else.
-        $context = context_system::instance();
-        $resolver = new \block_xp\local\xp\file_storage_badge_url_resolver($context, 'block_xp', 'defaultbadges', 0);
+        $config = \block_xp\di::get('config');
+        $resolver = new \block_xp\local\xp\file_storage_badge_url_resolver($this->get_filemanager_context(),
+            'block_xp', 'defaultbadges', 0);
         $data = json_decode($config->get('levelsdata'), true);
         if (!$data) {
             $levelsinfo = \block_xp\local\xp\algo_levels_info::make_from_defaults($resolver);
         } else {
             $levelsinfo = new \block_xp\local\xp\algo_levels_info($data, $resolver);
         }
-
-        echo $output->heading(get_string('preview'), 3);
-        echo $output->levels_preview($levelsinfo->get_levels());
+        return $levelsinfo;
     }
 
 }
