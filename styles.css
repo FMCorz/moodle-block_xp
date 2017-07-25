@@ -1,4 +1,4 @@
-.block_xp .level {
+.block_xp-level {
     background: url([[pix:block_xp|10]]) no-repeat;
     color: #fff;
     font-size: 4em;
@@ -17,34 +17,34 @@
               user-select: none;
 }
 
-.block_xp .level-1 {
+.block_xp-level.level-1 {
     background-image: url([[pix:block_xp|1]]);
 }
-.block_xp .level-2 {
+.block_xp-level.level-2 {
     background-image: url([[pix:block_xp|2]]);
 }
-.block_xp .level-3 {
+.block_xp-level.level-3 {
     background-image: url([[pix:block_xp|3]]);
 }
-.block_xp .level-4 {
+.block_xp-level.level-4 {
     background-image: url([[pix:block_xp|4]]);
 }
-.block_xp .level-5 {
+.block_xp-level.level-5 {
     background-image: url([[pix:block_xp|5]]);
 }
-.block_xp .level-6 {
+.block_xp-level.level-6 {
     background-image: url([[pix:block_xp|6]]);
 }
-.block_xp .level-7 {
+.block_xp-level.level-7 {
     background-image: url([[pix:block_xp|7]]);
 }
-.block_xp .level-8 {
+.block_xp-level.level-8 {
     background-image: url([[pix:block_xp|8]]);
 }
-.block_xp .level-9 {
+.block_xp-level.level-9 {
     background-image: url([[pix:block_xp|9]]);
 }
-.block_xp .level.small {
+.block_xp-level.small {
     height: 35px;
     width: 35px;
     font-size: 18px;
@@ -53,8 +53,8 @@
     background-size: cover;
 }
 
-.block_xp .level-badge,
-.block_xp .level-badge.small {
+.block_xp-level.level-badge,
+.block_xp-level.level-badge.small {
     background: none;
     height: auto;
     width: auto;
@@ -66,15 +66,16 @@
           -ms-user-select: none;
               user-select: none;
 }
-.block_xp .level-badge img {
+.block_xp-level.level-badge img {
     width: 100px;
 }
-.block_xp .level-badge.small img {
+.block_xp-level.level-badge.small img {
     width: auto;
     max-width: 100px;
     height: 35px;
 }
 
+/** Block content. */
 .block_xp .xp-total {
     text-align: center;
     margin-bottom: 5px;

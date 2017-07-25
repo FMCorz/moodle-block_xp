@@ -72,7 +72,7 @@ class block_xp_renderer extends plugin_renderer_base {
      */
     protected function level_badge_with_options(level $level, array $options = []) {
         $levelnum = $level->get_level();
-        $classes = 'level level-' . $levelnum;
+        $classes = 'block_xp-level level-' . $levelnum;
         $label = get_string('levelx', 'block_xp', $levelnum);
 
         if (!empty($options['small'])) {
@@ -104,8 +104,7 @@ class block_xp_renderer extends plugin_renderer_base {
 
         $o .= html_writer::start_div('block_xp-level-preview');
         foreach ($levels as $level) {
-            // TODO Remove the need for the class block_xp on levels.
-            $o .= html_writer::start_div('previewed-level block_xp');
+            $o .= html_writer::start_div('previewed-level');
             $o .= html_writer::div('#' . $level->get_level(), 'level-name');
             $o .= $this->small_level_badge($level);
             $o .= html_writer::end_div();
