@@ -215,6 +215,12 @@ class block_xp_renderer extends plugin_renderer_base {
                 $urlresolver->reverse('config', ['courseid' => $courseid]),
                 get_string('navsettings', 'block_xp')
             );
+            $star = $this->pix_icon('star', '', 'block_xp');
+            $tabs[] = new tabobject(
+                'promo',
+                $urlresolver->reverse('promo', ['courseid' => $courseid]),
+                $star . get_string('navpromo', 'block_xp')
+            );
         }
 
         // If there is only one page, then that is the page we are on.

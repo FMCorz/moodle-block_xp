@@ -144,7 +144,24 @@ class default_routes_config extends static_routes_config {
                 '/i/am/dev',
                 '~^/i/am/dev$~',
                 'debug'
-            )
+            ),
+
+            // Promo.
+            new route_definition(
+                'admin/promo',
+                '/promo',
+                '~^/promo$~',
+                'promo'
+            ),
+            new route_definition(
+                'promo',
+                '/promo/:courseid',
+                '~^/promo/(\d+)$~',
+                'promo',
+                [
+                    1 => 'courseid'
+                ]
+            ),
         ];
 
         parent::__construct($routes);

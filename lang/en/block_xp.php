@@ -67,6 +67,7 @@ $string['deletecondition'] = 'Delete condition';
 $string['deleterule'] = 'Delete rule';
 $string['description'] = 'Description';
 $string['difference'] = 'Diff.';
+$string['discoverlevelupplus'] = 'Discover Level up! Plus';
 $string['dismissnotice'] = 'Dismiss notice';
 $string['displayeveryone'] = 'Display everyone';
 $string['displaynneighbours'] = 'Display {$a} neighbours';
@@ -120,6 +121,7 @@ $string['levelcount'] = 'Level count';
 $string['leveldesc'] = 'Level description';
 $string['levels'] = 'Levels';
 $string['levelup'] = 'Level up!';
+$string['levelupplus'] = 'Level up! Plus';
 $string['levelx'] = 'Level #{$a}';
 $string['likenotice'] = '<strong>Do you like the plugin?</strong> Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourites</a> on Moodle.org and <a href="{$a->github}" target="_blank">star it on GitHub</a>.';
 $string['limitparticipants'] = 'Limit participants';
@@ -133,6 +135,7 @@ $string['navinfos'] = 'Info';
 $string['navladder'] = 'Ladder';
 $string['navlevels'] = 'Levels';
 $string['navlog'] = 'Log';
+$string['navpromo'] = 'Plus';
 $string['navreport'] = 'Report';
 $string['navrules'] = 'Rules';
 $string['navsettings'] = 'Settings';
@@ -148,6 +151,10 @@ $string['property:component'] = 'Event component';
 $string['property:crud'] = 'Event CRUD';
 $string['property:eventname'] = 'Event name';
 $string['property:target'] = 'Event target';
+$string['promoemailusat'] = 'E-mail us at _levelup@branchup.tech_.';
+$string['promoerrorsendingemail'] = 'Ouch! We could not sent the message... please e-mail us directly at: {$a}. Thanks!';
+$string['promoifpreferemailusat'] = 'Psst! If you prefer, e-mail us directly at _{$a}_.';
+$string['promoyourmessagewassent'] = 'Thank you, your message was sent. We will get back to you very shortly.';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';
 $string['rank'] = 'Rank';
 $string['ranking'] = 'Ranking';
@@ -192,6 +199,7 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
     <li>And the events of educational level not equal to <em>Participating</em>.</li>
 </ul>
 </p>';
+$string['send'] = 'Send';
 $string['someoneelse'] = 'Someone else';
 $string['somethinghappened'] = 'Something happened';
 $string['taskcollectionloggerpurge'] = 'Purge collection logs';
@@ -220,6 +228,7 @@ $string['usecustomlevelbadges'] = 'Use custom level badges';
 $string['usecustomlevelbadges_help'] = 'When set to yes, you must provide an image for each level.';
 $string['when'] = 'When';
 $string['whoops'] = 'Whoops!';
+$string['wewillreplyat'] = 'We will reply at: _{$a}_.';
 $string['xp:addinstance'] = 'Add a new block';
 $string['xp:earnxp'] = 'Earning points';
 $string['xp:myaddinstance'] = 'Add the block to my dashboard';
@@ -227,6 +236,7 @@ $string['xp:view'] = 'View the block and its related pages';
 $string['xptogo'] = '[[{$a}]] to go';
 $string['xpgaindisabled'] = 'Points gain disabled';
 $string['youreachedlevela'] = 'You reached level {$a}!';
+$string['yourmessage'] = 'Your message';
 $string['yourownrules'] = 'Your own rules';
 
 // Deprecated since 3.0.0.
