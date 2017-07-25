@@ -421,6 +421,13 @@ class block_xp_renderer extends plugin_renderer_base {
      */
     public function render_dismissable_notice(renderable $notice) {
         $id = html_writer::random_id();
+
+        // Tell the indicator that it should be expecing this notice.
+        $indicator = \block_xp\di::get('user_notice_indicator');
+        if ($indicator instanceof \block_xp\local\indicator\user_indicator_with_acceptance) {
+            $indicator->set_acceptable_user_flag($notice->name);
+        }
+
         $url = \block_xp\di::get('ajax_url_resolver')->reverse('notice/dismiss', ['name' => $notice->name]);
         $this->page->requires->js_init_call(<<<EOT
             Y.one('.$id .dismiss-action a').on('click', function(e) {

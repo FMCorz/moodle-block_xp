@@ -80,8 +80,10 @@ class ajax_notice_dismiss_controller extends route_controller {
      */
     protected function content() {
         global $USER;
-        // TODO Only accept expected notices.
         $indicator = \block_xp\di::get('user_notice_indicator');
+        if ($indicator instanceof \block_xp\local\indicator\user_indicator_with_acceptance) {
+            $indicator->set_requires_acceptable_user_flag(true);
+        }
         $indicator->set_user_flag($USER->id, $this->get_param('name'), 1);
     }
 

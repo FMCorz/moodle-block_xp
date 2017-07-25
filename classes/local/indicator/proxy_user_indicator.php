@@ -60,7 +60,7 @@ class proxy_user_indicator implements user_indicator {
      * @param string $flag The flag name.
      * @return int|null The flag value.
      */
-    final public function get_user_flag($userid, $flag) {
+    public function get_user_flag($userid, $flag) {
         return $this->indicator->get_user_flag($userid, $flag);
     }
 
@@ -71,28 +71,26 @@ class proxy_user_indicator implements user_indicator {
      * @param string $flag The flag name.
      * @param int $value The flag value.
      */
-    final public function set_user_flag($userid, $flag, $value) {
+    public function set_user_flag($userid, $flag, $value) {
         return $this->indicator->set_user_flag($userid, $flag, $value);
     }
+
     /**
      * Unset a user's flag.
      *
      * @param int $userid The user ID.
      * @param string $flag The flag name.
      */
-    final public function unset_user_flag($userid, $flag) {
+    public function unset_user_flag($userid, $flag) {
         return $this->indicator->unset_user_flag($userid, $flag);
     }
 
     /**
      * Unset all user's flag.
      *
-     * Not very efficient... but we cannot just remove the data from the database as it
-     * is because flags are set on user preferences as they are unset, or changed.
-     *
      * @param string $flag The flag name.
      */
-    final public function unset_users_flag($flag) {
+    public function unset_users_flag($flag) {
         return $this->indicator->unset_users_flag($flag);
     }
 
@@ -103,7 +101,7 @@ class proxy_user_indicator implements user_indicator {
      * @param string $key The flag key.
      * @return bool
      */
-    final public function user_has_flag($userid, $flag) {
+    public function user_has_flag($userid, $flag) {
         return $this->indicator->user_has_flag($userid, $flag);
     }
 
