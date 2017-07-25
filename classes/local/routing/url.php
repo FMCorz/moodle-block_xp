@@ -83,6 +83,9 @@ class url extends \moodle_url {
      * @param bool $supported Whether slash argument is supported.
      */
     public function set_slashargument($path, $parameter = 'file', $supported = null) {
+        global $CFG;
+        // We can't always trust that $CFG->slasharguments is set in older versions.
+        $supported = $supported === null ? !empty($CFG->slasharguments) : $supported;
         $this->slasharg = $parameter;
         parent::set_slashargument($path, $parameter, $supported);
     }
