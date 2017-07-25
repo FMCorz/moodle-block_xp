@@ -173,18 +173,7 @@ class rules_controller extends page_controller {
         $a->doc = (new moodle_url('https://docs.moodle.org/dev/Event_2'))->out();
         echo get_string('rulesformhelp', 'block_xp', $a);
 
-        // echo $output->heading(get_string('yourownrules', 'block_xp'), 3);
         echo $output->render($this->get_widget());
-
-        // echo $output->heading(get_string('defaultrules', 'block_xp'), 3);
-        // echo html_writer::tag('p', get_string('defaultrulesformhelp', 'block_xp'));
-
-        // echo html_writer::start_tag('ul', array('class' => 'filters-list filters-readonly'));
-        // foreach ($this->filtermanager->get_static_filters() as $filter) {
-        //     echo $output->render($filter);
-
-        // }
-        // echo html_writer::end_tag('ul');
 
         // TODO Change the introduction.
         // TODO Add revert button.

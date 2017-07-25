@@ -15,7 +15,8 @@ php:
 env:
   global:
     # Copy/paste from XMLDBEditor should not be linted.
-    - IGNORE_PATHS=db/upgrade.php
+    # Custom form elements are formatted according for formslib, which doesn't match Moodle's style.
+    - IGNORE_PATHS=db/upgrade.php,classes/form/duration.php,classes/form/itemspertime.php
 
   matrix:
     - MOODLE_BRANCH=MOODLE_27_STABLE DB=pgsql

@@ -160,18 +160,18 @@ class ladder_table extends table_sql {
         if ($this->rankmode != course_world_config::RANK_OFF) {
             if ($this->rankmode == course_world_config::RANK_REL) {
                 $columns[] = 'lvl';
-                $headers[] =  get_string('level', 'block_xp');
+                $headers[] = get_string('level', 'block_xp');
                 $columns[] = 'rank';
                 $headers[] = get_string('difference', 'block_xp');
             } else {
                 $columns[] = 'rank';
                 $headers[] = get_string('rank', 'block_xp');
                 $columns[] = 'lvl';
-                $headers[] =  get_string('level', 'block_xp');
+                $headers[] = get_string('level', 'block_xp');
             }
         } else {
             $columns[] = 'lvl';
-            $headers[] =  get_string('level', 'block_xp');
+            $headers[] = get_string('level', 'block_xp');
         }
 
         $columns[] = 'fullname';

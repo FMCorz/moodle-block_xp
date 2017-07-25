@@ -92,7 +92,6 @@ class visuals_controller extends page_controller {
     }
 
     protected function pre_content() {
-        // TODO Could we shift the logic to save elsewhere, so we do not need to context here?
         $form = $this->get_form();
         $form->set_data((object) $this->get_initial_form_data());
         if ($data = $form->get_data()) {

@@ -34,7 +34,7 @@ Feature: A student earns experience points for participating in a course
       | Subject | Reply with text   |
       | Message | This is the body  |
     And I follow "Course 1"
-    And I click on "View the ladder" "link" in the "Level up!" "block"
-    Then the following should exist in the "generaltable" table:
-      | Full name   | Level | Experience points |
-      | Student One | 1     | 117               |
+    And I click on "Ladder" "link" in the "Level up!" "block"
+    Then the following should exist in the "block_xp-table" table:
+      | Full name   | Level | Total |
+      | Student One | 1     | 117   |

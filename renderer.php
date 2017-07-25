@@ -577,7 +577,7 @@ EOT
         if ($moreurl) {
             $title .= ' ' . html_writer::link($moreurl, get_string('viewmore'));
         }
-        $o .= html_writer::tag('h5', $title, ['class'=>"clearfix"]);
+        $o .= html_writer::tag('h5', $title, ['class' => "clearfix"]);
 
         $o .= implode('', array_map(function(activity $entry) {
             $tinyago = $this->tiny_time_ago($entry->get_date());

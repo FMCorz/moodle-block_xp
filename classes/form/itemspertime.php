@@ -165,8 +165,8 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
             $this->_elements[] = $optional;
         }
 
-        foreach ($this->_elements as $element){
-            if (method_exists($element, 'setHiddenLabel')){
+        foreach ($this->_elements as $element) {
+            if (method_exists($element, 'setHiddenLabel')) {
                 $element->setHiddenLabel(true);
             }
         }

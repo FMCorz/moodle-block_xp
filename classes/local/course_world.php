@@ -132,7 +132,7 @@ class course_world implements world {
      * @return course_filter_manager
      */
     public function get_filter_manager() {
-        if (!$this->filtermanager)  {
+        if (!$this->filtermanager) {
             $this->filtermanager = new \block_xp\local\xp\course_filter_manager($this->db, $this->courseid);
 
             $config = $this->get_config();
