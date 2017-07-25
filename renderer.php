@@ -234,18 +234,42 @@ class block_xp_renderer extends plugin_renderer_base {
      */
     public function notification_without_close($message, $type) {
         if (class_exists('core\output\notification')) {
+
+            // Of course, it would be too easy if they didn't add and change constants
+            // between two releases... Who reads the upgrade.txt, seriously?
+            if (defined('core\output\notification::NOTIFY_INFO')) {
+                $info = core\output\notification::NOTIFY_INFO;
+            } else {
+                $info = core\output\notification::NOTIFY_MESSAGE;
+            }
+            if (defined('core\output\notification::NOTIFY_SUCCESS')) {
+                $success = core\output\notification::NOTIFY_SUCCESS;
+            } else {
+                $success = core\output\notification::NOTIFY_MESSAGE;
+            }
+            if (defined('core\output\notification::NOTIFY_WARNING')) {
+                $warning = core\output\notification::NOTIFY_WARNING;
+            } else {
+                $warning = core\output\notification::NOTIFY_REDIRECT;
+            }
+            if (defined('core\output\notification::NOTIFY_ERROR')) {
+                $error = core\output\notification::NOTIFY_ERROR;
+            } else {
+                $error = core\output\notification::NOTIFY_PROBLEM;;
+            }
+
             $typemappings = [
-                'success'           => \core\output\notification::NOTIFY_SUCCESS,
-                'info'              => \core\output\notification::NOTIFY_INFO,
-                'warning'           => \core\output\notification::NOTIFY_WARNING,
-                'error'             => \core\output\notification::NOTIFY_ERROR,
-                'notifyproblem'     => \core\output\notification::NOTIFY_ERROR,
-                'notifytiny'        => \core\output\notification::NOTIFY_ERROR,
-                'notifyerror'       => \core\output\notification::NOTIFY_ERROR,
-                'notifysuccess'     => \core\output\notification::NOTIFY_SUCCESS,
-                'notifymessage'     => \core\output\notification::NOTIFY_INFO,
-                'notifyredirect'    => \core\output\notification::NOTIFY_INFO,
-                'redirectmessage'   => \core\output\notification::NOTIFY_INFO,
+                'success'           => $success,
+                'info'              => $info,
+                'warning'           => $warning,
+                'error'             => $error,
+                'notifyproblem'     => $error,
+                'notifytiny'        => $error,
+                'notifyerror'       => $error,
+                'notifysuccess'     => $success,
+                'notifymessage'     => $info,
+                'notifyredirect'    => $info,
+                'redirectmessage'   => $info,
             ];
         } else {
             // Old-style notifications.
@@ -268,7 +292,9 @@ class block_xp_renderer extends plugin_renderer_base {
 
         if (class_exists('core\output\notification')) {
             $notification = new \core\output\notification($message, $type);
-            $notification->set_show_closebutton(false);
+            if (method_exists($notification, 'set_show_closebutton')) {
+                $notification->set_show_closebutton(false);
+            }
             return $this->render($notification);
         }
 
