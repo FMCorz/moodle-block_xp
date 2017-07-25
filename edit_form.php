@@ -19,20 +19,23 @@
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-// Want to know more about what is happening here? Check the file block_xp.php.
+// Moodle expects a certain class to be found here, so we have to workaround it like this.
 $class = \block_xp\di::get('block_edit_form_class');
 if (!class_exists($class) || !is_subclass_of($class, 'block_edit_form')) {
     throw new coding_exception('Block edit form class does not pass validation, or does not exist.');
 }
-eval("class block_xp_block_edit_form_class extends {$class} {}"); // @codingStandardsIgnoreLine.
+class_alias($class, 'block_xp_block_edit_form_class');
 
 /**
  * Block XP edit form class.
+ *
+ * Some code checker maybe expecting to find the class, so here it is...
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
