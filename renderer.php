@@ -302,6 +302,23 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Override pix_url to auto-handle deprecation.
+     *
+     * It's just simpler than having to deal with differences between
+     * Moodle < 3.3, and Moodle >= 3.3.
+     *
+     * @param string $image The file.
+     * @param string $component The component.
+     * @return string
+     */
+    public function pix_url($image, $component = 'moodle') {
+        if (method_exists($this, 'image_url')) {
+            return $this->image_url($image, $component);
+        }
+        return parent::pix_url($image, $component);
+    }
+
+    /**
      * Override render method.
      *
      * @param renderable $renderable The renderable.

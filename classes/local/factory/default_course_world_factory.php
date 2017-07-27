@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Main factory.
+ * Course world factory.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
@@ -31,14 +31,14 @@ use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
 
 /**
- * Main factory.
+ * Course world factory.
  *
  * @package    block_xp
  * @copyright  2017 Branch Up Pty Ltd
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class factory implements course_world_factory {
+class default_course_world_factory implements course_world_factory {
 
     /** @var config The admin config. */
     protected $adminconfig;
@@ -46,6 +46,8 @@ class factory implements course_world_factory {
     protected $db;
     /** @var bool For the whole site? */
     protected $forwholesite = false;
+    /** @var badge_url_resolver_course_world_factory Resolver. */
+    protected $urlresolverfactory;
     /** @var course_world[] World cache. */
     protected $worlds = [];
 
@@ -55,9 +57,11 @@ class factory implements course_world_factory {
      * @param config $adminconfig The admin config.
      * @param moodle_database $db The DB.
      */
-    public function __construct(config $adminconfig, moodle_database $db) {
+    public function __construct(config $adminconfig, moodle_database $db,
+            badge_url_resolver_course_world_factory $urlresolverfactory) {
         $this->adminconfig = $adminconfig;
         $this->db = $db;
+        $this->urlresolverfactory = $urlresolverfactory;
         if ($adminconfig->get('context') == CONTEXT_SYSTEM) {
             $this->forwholesite = true;
         }
@@ -79,7 +83,7 @@ class factory implements course_world_factory {
         $courseid = intval($courseid);
         if (!isset($this->worlds[$courseid])) {
             $config = new course_world_config($this->adminconfig, $this->db, $courseid);
-            $this->worlds[$courseid] = new \block_xp\local\course_world($config, $this->db, $courseid);
+            $this->worlds[$courseid] = new \block_xp\local\course_world($config, $this->db, $courseid, $this->urlresolverfactory);
         }
         return $this->worlds[$courseid];
     }

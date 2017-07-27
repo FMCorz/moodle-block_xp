@@ -45,6 +45,7 @@ class default_container implements container {
         'ajax_router' => true,
         'ajax_url_resolver' => true,
         'base_url' => true,
+        'badge_url_resolver' => true,
         'block_class' => true,
         'block_edit_form_class' => true,
         'block_instance_finder' => true,
@@ -65,8 +66,6 @@ class default_container implements container {
 
     /** @var array Object instances. */
     protected $instances = [];
-    /** @var \block_xp\local\factory\factory Multi-purpose factory. */
-    protected $factory;
 
     /**
      * Get a thing.
@@ -127,6 +126,15 @@ class default_container implements container {
     }
 
     /**
+     * Get the default badge URL resolver.
+     *
+     * @return moodle_url
+     */
+    protected function get_badge_url_resolver() {
+        return new \block_xp\local\xp\file_storage_badge_url_resolver(\context_system::instance(), 'block_xp', 'defaultbadges', 0);
+    }
+
+    /**
      * Get the base URL.
      *
      * @return moodle_url
@@ -178,7 +186,7 @@ class default_container implements container {
      */
     protected function get_collection_strategy() {
         return new \block_xp\local\strategy\global_collection_strategy(
-            $this->get_factory(),
+            $this->get('course_world_factory'),
             $this->get('config')->get('context')
         );
     }
@@ -200,7 +208,13 @@ class default_container implements container {
      * @return course_world_factory
      */
     protected function get_course_world_factory() {
-        return $this->get_factory();
+        return new \block_xp\local\factory\default_course_world_factory(
+            $this->get('config'),
+            $this->get('db'),
+            new \block_xp\local\factory\default_badge_url_resolver_course_world_factory(
+                $this->get('badge_url_resolver')
+            )
+        );
     }
 
     /**
@@ -211,21 +225,6 @@ class default_container implements container {
     protected function get_db() {
         global $DB;
         return $DB;
-    }
-
-    /**
-     * Get factory.
-     *
-     * @return factory
-     */
-    protected function get_factory() {
-        if (!$this->factory) {
-            $factory = new \block_xp\local\factory\factory(
-                $this->get('config'),
-                $this->get('db')
-            );
-        }
-        return $factory;
     }
 
     /**
@@ -250,10 +249,17 @@ class default_container implements container {
     /**
      * Get the renderer.
      *
+     * The renderer is sort an element that can be hard requested from the container rather
+     * than passed around to other objects, mainly because we cannot instantiate it too early.
+     * Which would be hard to avoid when we have factories of objects depending on it.
+     *
      * @return renderer_base
      */
     protected function get_renderer() {
         global $PAGE;
+        if (!$PAGE->has_set_url()) {
+            debugging('The renderer was requested too early in the request.', DEBUG_DEVELOPER);
+        }
         return $PAGE->get_renderer('block_xp');
     }
 

@@ -171,8 +171,7 @@ class admin_visuals_controller extends admin_route_controller {
     final protected function get_levels_info() {
         // TODO We should get the levels info from somewhere else.
         $config = \block_xp\di::get('config');
-        $resolver = new \block_xp\local\xp\file_storage_badge_url_resolver($this->get_filemanager_context(),
-            'block_xp', 'defaultbadges', 0);
+        $resolver = \block_xp\di::get('badge_url_resolver');
         $data = json_decode($config->get('levelsdata'), true);
         if (!$data) {
             $levelsinfo = \block_xp\local\xp\algo_levels_info::make_from_defaults($resolver);

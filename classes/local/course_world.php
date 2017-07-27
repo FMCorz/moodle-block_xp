@@ -31,6 +31,7 @@ use context_system;
 use moodle_database;
 use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
+use block_xp\local\factory\badge_url_resolver_course_world_factory;
 
 /**
  * Course World.
@@ -62,6 +63,8 @@ class course_world implements world {
     protected $strategy;
     /** @var course_filter_manager The filter manager. */
     protected $filtermanager;
+    /** @var badge_url_resolver_course_world_factory The resolver factory. */
+    protected $urlresolverfactory;
 
     /**
      * Constructor.
@@ -70,10 +73,12 @@ class course_world implements world {
      * @param moodle_database $db The DB.
      * @param int $courseid The course ID.
      */
-    public function __construct(config $config, moodle_database $db, $courseid) {
+    public function __construct(config $config, moodle_database $db, $courseid,
+            badge_url_resolver_course_world_factory $urlresolverfactory) {
         $this->config = $config;
         $this->courseid = $courseid;
         $this->db = $db;
+        $this->urlresolverfactory = $urlresolverfactory;
 
         // TODO We should move the context out of here, and inject the permissions instead.
         if ($courseid == SITEID) {
@@ -158,26 +163,8 @@ class course_world implements world {
 
     public function get_levels_info() {
         if (!$this->levelsinfo) {
+            $resolver = $this->urlresolverfactory->get_url_resolver($this);
             $config = $this->get_config();
-
-            $custombadges = $config->get('enablecustomlevelbadges');
-            if ($custombadges == course_world_config::CUSTOM_BADGES_NOOP) {
-                // We're all set, use the badges present.
-                $resolver = $this->get_badge_url_resolver();
-
-            } else if ($custombadges == course_world_config::CUSTOM_BADGES_MISSING) {
-                // The scenario here is that we are in a new course (not a legacy one),
-                // and the badges have not been customised, so we will use the admin
-                // ones. We will exit the 'missing' state when the teacher will
-                // effectively custommise the levels.
-                $resolver = $this->get_admin_badge_url_resolver();
-
-            } else {
-                // Probably the legacy state of course_world_config::CUSTOM_BADGES_NONE.
-                // We use the standard look of the levels.
-                $resolver = null;
-            }
-
             $data = json_decode($config->get('levelsdata'), true);
             if (!$data) {
                 $this->levelsinfo = \block_xp\local\xp\algo_levels_info::make_from_defaults($resolver);
@@ -208,25 +195,6 @@ class course_world implements world {
             );
         }
         return $this->store;
-    }
-
-    /**
-     * Get the admin badge URL resolver.
-     *
-     * @return badge_url_resolver
-     */
-    protected function get_admin_badge_url_resolver() {
-        // TODO This should be somewhere else!
-        return new \block_xp\local\xp\file_storage_badge_url_resolver(context_system::instance(), 'block_xp', 'defaultbadges', 0);
-    }
-
-    /**
-     * Get the badge URL resolver.
-     *
-     * @return badge_url_resolver
-     */
-    protected function get_badge_url_resolver() {
-        return new \block_xp\local\xp\file_storage_badge_url_resolver($this->get_context(), 'block_xp', 'badges', 0);
     }
 
     /**
