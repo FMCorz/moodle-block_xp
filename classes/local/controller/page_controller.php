@@ -108,7 +108,7 @@ abstract class page_controller extends course_route_controller {
      */
     protected function page_navigation() {
         $output = $this->get_renderer();
-        echo $output->course_world_navigation($this->urlresolver, $this->world, $this->get_route_name());
+        echo $output->course_world_navigation($this->world, $this->get_route_name());
     }
 
     /**

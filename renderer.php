@@ -159,74 +159,22 @@ class block_xp_renderer extends plugin_renderer_base {
      *
      * This specifically requires a course_world and not a world.
      *
-     * @param url_resolver $urlresolver The URL resolver.
      * @param course_world $world The world.
      * @param string $page The page we are on.
      * @return string The navigation.
      */
-    public function course_world_navigation(url_resolver $urlresolver, course_world $world, $page) {
-
-        $tabs = array();
-        $courseid = $world->get_courseid();
-
-        if ($world->get_config()->get('enableinfos')) {
-            $tabs[] = new tabobject(
-                'infos',
-                $urlresolver->reverse('infos', ['courseid' => $courseid]),
-                get_string('navinfos', 'block_xp')
-            );
-        }
-        if ($world->get_config()->get('enableladder')) {
-            $tabs[] = new tabobject(
-                'ladder',
-                $urlresolver->reverse('ladder', ['courseid' => $courseid]),
-                get_string('navladder', 'block_xp')
-            );
-        }
-
-        if ($world->get_access_permissions()->can_manage()) {
-            $tabs[] = new tabobject(
-                'report',
-                $urlresolver->reverse('report', ['courseid' => $courseid]),
-                get_string('navreport', 'block_xp')
-            );
-            $tabs[] = new tabobject(
-                'log',
-                $urlresolver->reverse('log', ['courseid' => $courseid]),
-                get_string('navlog', 'block_xp')
-            );
-            $tabs[] = new tabobject(
-                'levels',
-                $urlresolver->reverse('levels', ['courseid' => $courseid]),
-                get_string('navlevels', 'block_xp')
-            );
-            $tabs[] = new tabobject(
-                'rules',
-                $urlresolver->reverse('rules', ['courseid' => $courseid]),
-                get_string('navrules', 'block_xp')
-            );
-            $tabs[] = new tabobject(
-                'visuals',
-                $urlresolver->reverse('visuals', ['courseid' => $courseid]),
-                get_string('navvisuals', 'block_xp')
-            );
-            $tabs[] = new tabobject(
-                'config',
-                $urlresolver->reverse('config', ['courseid' => $courseid]),
-                get_string('navsettings', 'block_xp')
-            );
-            $star = $this->pix_icon('star', '', 'block_xp');
-            $tabs[] = new tabobject(
-                'promo',
-                $urlresolver->reverse('promo', ['courseid' => $courseid]),
-                $star . get_string('navpromo', 'block_xp')
-            );
-        }
+    public function course_world_navigation(course_world $world, $page) {
+        $factory = \block_xp\di::get('course_world_navigation_factory');
+        $links = $factory->get_course_navigation($world);
 
         // If there is only one page, then that is the page we are on.
-        if (count($tabs) == 1) {
+        if (count($links) <= 1) {
             return '';
         }
+
+        $tabs = array_map(function($link) {
+            return new tabobject($link['id'], $link['url'], $link['text']);
+        }, $links);
 
         return $this->tabtree($tabs, $page);
     }

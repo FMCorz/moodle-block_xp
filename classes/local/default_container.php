@@ -53,6 +53,7 @@ class default_container implements container {
         'collection_strategy' => true,
         'config' => true,
         'course_world_factory' => true,
+        'course_world_navigation_factory' => true,
         'db' => true,
         'file_server' => true,
         'observer_rules_maker' => true,
@@ -215,6 +216,15 @@ class default_container implements container {
                 $this->get('badge_url_resolver')
             )
         );
+    }
+
+    /**
+     * Get the course world navigation factory.
+     *
+     * @return course_world_navigation_factory
+     */
+    protected function get_course_world_navigation_factory() {
+        return new \block_xp\local\factory\default_course_world_navigation_factory($this->get('url_resolver'));
     }
 
     /**
