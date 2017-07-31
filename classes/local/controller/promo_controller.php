@@ -174,12 +174,13 @@ class promo_controller extends route_controller {
 
         if (!$this->is_admin_page()) {
             echo $output->heading(get_string('levelupplus', 'block_xp'));
-            echo $output->course_world_navigation($this->urlresolver, $this->world, $this->routename);
+            echo $output->course_world_navigation($this->world, $this->routename);
         }
 
         echo $output->heading(get_string('discoverlevelupplus', 'block_xp'), 3);
+        echo markdown_to_html(get_string('promointro', 'block_xp'));
+
         echo <<<EOT
-        <p>The add-on for <em>Level Up!</em> to unleash its full potential!</p>
 <table>
     <tr>
         <td>
@@ -259,11 +260,10 @@ class promo_controller extends route_controller {
         <td></td>
     </tr>
 </table>
-
-    <h3>Contact us</h3>
-
-    <p>Whether you need more information, you're ready to go, or you just want to have a chat, send us a message!</p>
 EOT;
+
+        echo $output->heading(get_string('promocontactus', 'block_xp'), 3);
+        echo html_writer::tag('p', get_string('promocontactintro', 'block_xp'));
 
         if ($this->supports_email()) {
             $this->form->display();
