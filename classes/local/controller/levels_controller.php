@@ -55,10 +55,7 @@ class levels_controller extends page_controller {
         $form->set_data_from_levels($levelsinfo);
         if ($newlevelsinfo = $form->get_levels_from_data()) {
             $data = [];
-            if ($levelsinfo->get_count() != $newlevelsinfo->get_count()) {
-                // The number of levels have changed, we need to disable the custom badges.
-                $data['enablecustomlevelbadges'] = false;
-            }
+
             // Serialise and encode within the config object?
             // Or better if the levels info can save itself?
             $data['levelsdata'] = json_encode($newlevelsinfo->jsonSerialize());
