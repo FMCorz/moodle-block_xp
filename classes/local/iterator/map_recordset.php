@@ -20,7 +20,7 @@
  * This is based on recordset_walk which is only available from 2.9.
  *
  * @package    block_xp
- * @copyright  2017 Branch Up Pty Ltd
+ * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -36,7 +36,7 @@ use NoRewindIterator;
  * Recordset map iterator.
  *
  * @package    block_xp
- * @copyright  2017 Branch Up Pty Ltd
+ * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

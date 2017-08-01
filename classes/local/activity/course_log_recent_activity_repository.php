@@ -18,7 +18,7 @@
  * A repository for getting activity based on course logs.
  *
  * @package    block_xp
- * @copyright  2017 Branch Up Pty Ltd
+ * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -36,7 +36,7 @@ use moodle_database;
  * This is hardcoded based on the block_xp\local\logger\course_user_event_collection_logger.
  *
  * @package    block_xp
- * @copyright  2017 Branch Up Pty Ltd
+ * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

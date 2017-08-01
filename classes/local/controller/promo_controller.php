@@ -18,7 +18,7 @@
  * Promo controller.
  *
  * @package    block_xp
- * @copyright  2017 Branch Up Pty Ltd
+ * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,7 +35,7 @@ use block_xp\local\routing\url;
  * Promo controller class.
  *
  * @package    block_xp
- * @copyright  2017 Branch Up Pty Ltd
+ * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -175,6 +175,7 @@ class promo_controller extends route_controller {
         if (!$this->is_admin_page()) {
             echo $output->heading(get_string('levelupplus', 'block_xp'));
             echo $output->course_world_navigation($this->world, $this->routename);
+            echo $output->notices($this->world);
         }
 
         echo $output->heading(get_string('discoverlevelupplus', 'block_xp'), 3);

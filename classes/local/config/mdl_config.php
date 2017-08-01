@@ -18,7 +18,7 @@
  * Moodle config.
  *
  * @package    block_xp
- * @copyright  2017 Branch Up Pty Ltd
+ * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,7 +35,7 @@ use coding_exception;
  * We must provide default values as a mean to dermine what keys are expected or not.
  *
  * @package    block_xp
- * @copyright  2017 Branch Up Pty Ltd
+ * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
