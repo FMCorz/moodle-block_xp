@@ -26,8 +26,9 @@
 namespace block_xp\local\factory;
 defined('MOODLE_INTERNAL') || die();
 
-use \block_xp\local\course_world;
-use \block_xp\local\routing\url_resolver;
+use block_xp\local\course_world;
+use block_xp\local\config\config;
+use block_xp\local\routing\url_resolver;
 
 /**
  * Default course world navigation factory.
@@ -39,6 +40,8 @@ use \block_xp\local\routing\url_resolver;
  */
 class default_course_world_navigation_factory implements course_world_navigation_factory {
 
+    /** @var config The admin config. */
+    protected $adminconfig;
     /** @var url_resolver The URL resolver. */
     protected $resolver;
 
@@ -47,8 +50,9 @@ class default_course_world_navigation_factory implements course_world_navigation
      *
      * @param url_resolver $resolver The URL resolver.
      */
-    public function __construct(url_resolver $resolver) {
+    public function __construct(url_resolver $resolver, config $adminconfig) {
         $this->resolver = $resolver;
+        $this->adminconfig = $adminconfig;
     }
 
     /**
@@ -114,12 +118,23 @@ class default_course_world_navigation_factory implements course_world_navigation
                 'url' => $urlresolver->reverse('config', ['courseid' => $courseid]),
                 'text' => get_string('navsettings', 'block_xp')
             ];
-            $star = $renderer->pix_icon('star', '', 'block_xp');
-            $links[] = [
-                'id' => 'promo',
-                'url' => $urlresolver->reverse('promo', ['courseid' => $courseid]),
-                'text' => $star . get_string('navpromo', 'block_xp')
-            ];
+
+            // @codingStandardsIgnoreStart
+            //
+            // If you got here and you want to disable the promo page, there is no need
+            // to hack the code my friend. You can add the following line to your config.php:
+            //
+            //   $CFG->forced_plugin_settings = ['block_xp' => ['enablepromoincourses' => 0]];
+            //
+            // @codingStandardsIgnoreEnd
+            if ($this->adminconfig->get('enablepromoincourses')) {
+                $star = $renderer->pix_icon('star', '', 'block_xp');
+                $links[] = [
+                    'id' => 'promo',
+                    'url' => $urlresolver->reverse('promo', ['courseid' => $courseid]),
+                    'text' => $star . get_string('navpromo', 'block_xp')
+                ];
+            }
         }
 
         return $links;

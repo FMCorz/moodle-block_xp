@@ -224,7 +224,10 @@ class default_container implements container {
      * @return course_world_navigation_factory
      */
     protected function get_course_world_navigation_factory() {
-        return new \block_xp\local\factory\default_course_world_navigation_factory($this->get('url_resolver'));
+        return new \block_xp\local\factory\default_course_world_navigation_factory(
+            $this->get('url_resolver'),
+            $this->get('config')
+        );
     }
 
     /**
