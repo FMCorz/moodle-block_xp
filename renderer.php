@@ -173,7 +173,7 @@ class block_xp_renderer extends plugin_renderer_base {
         }
 
         $tabs = array_map(function($link) {
-            return new tabobject($link['id'], $link['url'], $link['text']);
+            return new tabobject($link['id'], $link['url'], $link['text'], clean_param($link['text'], PARAM_NOTAGS));
         }, $links);
 
         return $this->tabtree($tabs, $page);
