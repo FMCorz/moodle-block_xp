@@ -181,7 +181,7 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
         if (method_exists($this, 'createFormElement')) {
             return call_user_func_array([$this, 'createFormElement'], func_get_args());
         } else {
-            return call_user_func_array('MoodleQuickForm::createElement', func_get_args());
+            return @call_user_func_array('MoodleQuickForm::createElement', func_get_args());
         }
     }
 

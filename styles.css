@@ -256,6 +256,14 @@
 .block_xp-table .col-userpic {
     width: 35px;
 }
+.block_xp-table .userpicture {
+    /* Margin only present in recent Moodle. */
+    margin-right: 5px;
+}
+.dir-rtl .block_xp-table .userpicture {
+    margin-left: 5px;
+    margin-right: 0;
+}
 
 /**
  * Dismissable notice.

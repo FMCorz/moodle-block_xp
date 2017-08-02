@@ -128,7 +128,7 @@ class default_course_world_navigation_factory implements course_world_navigation
             //
             // @codingStandardsIgnoreEnd
             if ($this->adminconfig->get('enablepromoincourses')) {
-                $star = $renderer->pix_icon('star', '', 'block_xp');
+                $star = $renderer->pix_icon('star', '', 'block_xp', ['class' => 'icon']);
                 $links[] = [
                     'id' => 'promo',
                     'url' => $urlresolver->reverse('promo', ['courseid' => $courseid]),
