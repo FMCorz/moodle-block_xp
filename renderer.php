@@ -145,7 +145,7 @@ class block_xp_renderer extends plugin_renderer_base {
                 Y.one('.block-xp-notices').hide();
             });");
 
-            $icon = new pix_icon('t/delete', get_string('dismissnotice', 'block_xp'));
+            $icon = new pix_icon('t/close', get_string('dismissnotice', 'block_xp'), 'block_xp');
             $actionicon = $this->action_icon(new moodle_url($this->page->url), $icon, null, array('class' => 'block-xp-rocks'));
             $text .= html_writer::div($actionicon, 'dismiss-action');
             $o .= html_writer::div($this->notification_without_close($text, 'success'), 'block_xp-dismissable-notice');
