@@ -118,7 +118,7 @@ class default_settings_maker implements settings_maker {
 
         // Add the promo page.
         $settingspage = new admin_externalpage('block_xp_promo',
-            '⭐ ' . get_string('levelupplus', 'block_xp'),
+            '⭐ ' . get_string('navpromo', 'block_xp'),
             $this->urlresolver->reverse('admin/promo'));
         $settings->add($catname, $settingspage);
 

@@ -182,83 +182,99 @@ class promo_controller extends route_controller {
         echo markdown_to_html(get_string('promointro', 'block_xp'));
 
         echo <<<EOT
-<table>
+<style>
+.block_xp-promo-table td:first-of-type {
+    text-align: center;
+    vertical-align: top;
+    width: 110px;
+    margin-top: 40px;
+}
+.block_xp-promo-table td:first-of-type img {
+    height: 50px;
+}
+.block_xp-promo-table h4 {
+    margin-top: 0;
+}
+.block_xp-promo-table h4,
+.block_xp-promo-table td:first-of-type img {
+    margin-top: 20px;
+}
+</style>
+<table class="block_xp-promo-table">
     <tr>
+        <td><img src="{$output->pix_url('noun/checklist', 'block_xp')}" alt=""></td>
         <td>
-            <h4>New rules</h4>
+            <h4>Completion rules</h4>
             <p>Reward your students for completing their tasks.</p>
             <ul>
-                <li>Support for activity completion.</li>
-                <li>Support for course completion.</li>
+                <li>Support for activity completion</li>
+                <li>Support for course completion</li>
             </ul>
         </td>
-        <td></td>
     </tr>
     <tr>
-        <td></td>
+        <td><img src="{$output->pix_url('noun/privacy', 'block_xp')}" alt=""></td>
         <td>
             <h4>Improved cheat guard</h4>
-            <p>Better control over your students' earnings.</p>
+            <p>Better control over your students' rewards.</p>
             <ul>
-                <li>Limit your students' earnings per day (or any other time window).</li>
-                <li>Automatically stop sneaky students from abusing the system.</li>
+                <li>Limit your students' rewards per day (or any other time window)</li>
+                <li>More resilient to students' trickeries</li>
             </ul>
         </td>
     </tr>
     <tr>
+        <td><img src="{$output->pix_url('level', 'block_xp')}" alt=""></td>
         <td>
-            <h4>More styles</h4>
-            <p>Make your learners feel at home with our brand new looks.</p>
+            <h4>Additional badges</h4>
+            <p>Make your learners feel at home with new looks.</p>
             <ul>
-                <li>Three brand new badges.</li>
+                <li>Three new sets of level badges</li>
             </ul>
         </td>
-        <td></td>
     </tr>
     <tr>
-        <td></td>
+        <td><img src="{$output->pix_url('noun/carrots', 'block_xp')}" alt=""></td>
         <td>
             <h4>Give them carrots!</h4>
-            <p>Sick of experience points? Reward your students with something else!</p>
+            <p>Reward your students with something else than experience points.</p>
             <ul>
-                <li>Carrots, gems, reputation points, ...</li>
-                <li>Use any symbol you want!</li>
+                <li>Carrots, gems, thumbs up, reputation points...</li>
+                <li>It's your call, use any symbol you want!</li>
             </ul>
         </td>
     </tr>
     <tr>
+        <td><img src="{$output->pix_url('noun/export', 'block_xp')}" alt=""></td>
         <td>
-            <h4>Reporting at home</h4>
-            <p>Export the report to look at it at ease.</p>
+            <h4>Export the report</h4>
+            <p>Export the report to look at it in more details.</p>
             <ul>
-                <li>Various formats supported: Excel, CSV, OpenDocument, ...</li>
+                <li>Various formats supported: Excel, CSV, OpenDocument, and more</li>
             </ul>
         </td>
-        <td></td>
     </tr>
     <tr>
-        <td></td>
+        <td><img src="{$output->pix_url('noun/help', 'block_xp')}" alt=""></td>
         <td>
             <h4>E-mail support</h4>
-            <p>Get support by e-mail for up to 12 months.</p>
+            <p>Get direct e-mail support from our team.</p>
             <ul>
                 <li>Report bugs for us to fix</li>
                 <li>Get help with setting up the rules and settings</li>
-                <li>Troubleshoot if issues were to arise</li>
             </ul>
         </td>
     </tr>
     <tr>
+        <td><img src="{$output->pix_url('noun/heart', 'block_xp')}" alt=""></td>
         <td>
             <h4>Support us</h4>
-            <p>Purchasing the add-on directly contributes to the plugin.</p>
+            <p>Purchasing the add-on directly contributes to the plugin's development.</p>
             <ul>
                 <li>Bugs will be fixed</li>
                 <li>Features will be added</li>
-                <li>Feedback will be heard</li>
             </ul>
         </td>
-        <td></td>
     </tr>
 </table>
 EOT;
