@@ -77,7 +77,7 @@ class default_admin_config extends immutable_config {
 
             'blocktitle' => get_string('levelup', 'block_xp'),
             'blockdescription' => get_string('participatetolevelup', 'block_xp'),
-            'blockrecentactivity' => 0
+            'blockrecentactivity' => 3
         ]));
     }
 
