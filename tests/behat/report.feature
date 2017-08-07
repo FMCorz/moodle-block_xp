@@ -99,3 +99,37 @@ Feature: A report displays students' progress
       | Student One   | 1     | 0     |
       | Student Two   | 1     | 0     |
       | Student Three | 1     | 0     |
+
+  Scenario: Use the report to edit a student's total
+    Given the following "users" exist:
+      | username | firstname | lastname | email          |
+      | s1       | Student   | One      | s1@example.com |
+      | s2       | Student   | Two      | s2@example.com |
+      | t1       | Teacher   | One      | t1@example.com |
+    And the following "courses" exist:
+      | fullname  | shortname |
+      | Course 1  | c1        |
+    And the following "course enrolments" exist:
+      | user     | course | role    |
+      | s1       | c1     | student |
+      | s2       | c1     | student |
+      | t1       | c1     | editingteacher |
+    And I log in as "t1"
+    And I am on front page
+    And I follow "Course 1"
+    And I turn editing mode on
+    And I add the "Level up!" block
+    And I click on "Report" "link" in the "Level up!" "block"
+    And the following should exist in the "generaltable" table:
+      | Full name     | Level | Total |
+      | Student One   | 1     | 0     |
+      | Student Two   | 1     | 0     |
+    # Click on the edit button for Student One.
+    And I follow edit for "Student One" in XP report
+    # And I click on "td[normalize-space(.)='Student One']/parent::tr/descendant::img[@title='Edit']/parent::a" "xpath"
+    When I set the field "Total" to "512"
+    And I press "Save changes"
+    Then the following should exist in the "generaltable" table:
+      | Full name     | Level | Total |
+      | Student One   | 4     | 512   |
+      | Student Two   | 1     | 0     |
