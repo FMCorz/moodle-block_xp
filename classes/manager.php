@@ -279,8 +279,8 @@ class block_xp_manager {
     public function get_levels_data() {
         return array(
             'usealgo' => 1,
-            'base' => block_xp_manager::DEFAULT_BASE,
-            'coef' => block_xp_manager::DEFAULT_COEF,
+            'base' => self::DEFAULT_BASE,
+            'coef' => self::DEFAULT_COEF,
             'xp' => [1 => 0],
             'desc' => array()
         );
