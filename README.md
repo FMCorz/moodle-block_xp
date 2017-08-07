@@ -18,6 +18,10 @@ Features
 - Experience points are earned per course
 - An event is fired when a student levels up (for developers)
 
+### Additional features
+
+Purchasing the _[Level up! Plus add-on](https://github.com/FMCorz/moodle-local_xp)_ unlocks additional features. [Click here for more details](https://github.com/FMCorz/moodle-local_xp).
+
 Requirements
 ------------
 

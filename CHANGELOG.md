@@ -1,6 +1,25 @@
 Changelog
 =========
 
+v3.0.0
+------
+
+- Administrators can set the defaults for all settings
+- The block optionally displays their recent rewards to students
+- The default rules are no longer locked and can be changed by administrators and teachers
+- The visual appearance of the block has been improved
+- Made ready for compatibility with the [Level up! Plus add-on](https://github.com/FMCorz/moodle-local_xp)
+- Visuals no longer require an image to be uploaded for each level
+- A preview of the badges is displayed in the visuals page
+- The levels are displayed as a graphic in pages accessible to students
+- Added option to control what additional columns to display in the ladder
+- User experience improvement for setting-up the cheat guard options
+- The block appearance options can now directly be set from within the settings page
+- Logging is now required and always enabled
+- Logging options became admin-only settings
+- The block's description text can be dismissed by students
+- Various bug fixes and improvements
+
 v2.2.0
 ------
 
