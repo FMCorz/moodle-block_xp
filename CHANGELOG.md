@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v3.0.1
+------
+
+- Improved compatibility with older plugins depending on Level up!
+
 v3.0.0
 ------
 
