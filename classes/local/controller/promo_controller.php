@@ -237,7 +237,7 @@ class promo_controller extends route_controller {
         <td><img src="{$output->pix_url('noun/carrots', 'block_xp')}" alt=""></td>
         <td>
             <h4>Give them carrots!</h4>
-            <p>Reward your students with something else than experience points.</p>
+            <p>Reward your students with something other than experience points.</p>
             <ul>
                 <li>Carrots, gems, thumbs up, reputation points...</li>
                 <li>It's your call, use any symbol you want!</li>
@@ -248,7 +248,7 @@ class promo_controller extends route_controller {
         <td><img src="{$output->pix_url('noun/export', 'block_xp')}" alt=""></td>
         <td>
             <h4>Export the report</h4>
-            <p>Export the report to look at it in more details.</p>
+            <p>Export the report to look at it in more detail.</p>
             <ul>
                 <li>Various formats supported: Excel, CSV, OpenDocument, and more</li>
             </ul>
