@@ -74,7 +74,7 @@ class block_xp_form_duration extends \MoodleQuickForm_duration {
      * @param array $options Options.
      * @param array $attributes Attributes.
      */
-    function local_mootivated_form_duration($elementName = null, $elementLabel = null, $options = [], $attributes = null) {
+    function block_xp_form_duration($elementName = null, $elementLabel = null, $options = [], $attributes = null) {
         if (isset($options['maxunit'])) {
             $this->_options['maxunit'] = $options['maxunit'];
         }
