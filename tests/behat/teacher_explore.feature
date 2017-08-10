@@ -1,4 +1,4 @@
-@block @block_xp
+@block @block_xp @block_xp_plus_incompatible
 Feature: A teacher can navigate through the pages of the plugin
   In order to view each page
   As a teacher
