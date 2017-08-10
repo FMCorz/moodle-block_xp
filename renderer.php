@@ -313,7 +313,8 @@ class block_xp_renderer extends plugin_renderer_base {
                     'type' => 'text',
                     'value' => $filter->get_points(),
                     'size' => 3,
-                    'name' => $basename . '[points]'))
+                    'name' => $basename . '[points]',
+                    'class' => 'form-control block_xp-form-control-inline'))
             );
             $content .= $this->action_link('#', '', null, array('class' => 'filter-delete'),
                 new pix_icon('t/delete', get_string('deleterule', 'block_xp'), '', array('class' => 'iconsmall')));
@@ -501,9 +502,11 @@ EOT
 
         if ($widget->editable) {
             echo html_writer::start_tag('p');
-            echo html_writer::empty_tag('input', array('value' => get_string('savechanges'), 'type' => 'submit', 'name' => 'save'));
+            echo html_writer::empty_tag('input', ['value' => get_string('savechanges'), 'type' => 'submit', 'name' => 'save',
+                'class' => 'btn btn-primary']);
             echo ' ';
-            echo html_writer::empty_tag('input', array('value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel'));
+            echo html_writer::empty_tag('input', ['value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel',
+                'class' => 'btn btn-default']);
             echo html_writer::end_tag('p');
             echo html_writer::end_tag('form');
         }

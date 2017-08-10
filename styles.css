@@ -315,6 +315,9 @@
 .block_xp-rulepicker-content {
     text-align: center;
 }
+.block_xp-rulepicker-content .rule {
+    margin-bottom: 5px;
+}
 
 /**
  * Rules pages.
@@ -440,6 +443,13 @@
 .block-xp-filters-wrapper .filters-readonly .rule-rules .rule:last-child::before {
     top: 0;
     height: 15px;
+}
+
+/** Support inline input fields. */
+.form-control.block_xp-form-control-inline {
+    min-width: 0;
+    width: auto;
+    display: inline;
 }
 
 /** RTL styles. */

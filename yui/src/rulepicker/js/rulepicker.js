@@ -82,7 +82,7 @@ Y.namespace('M.block_xp').RulePicker = Y.extend(PICKER, M.core.dialogue, {
         html = '<div>';
         html += ' {{#rules}}';
         html += ' <div class="{{../CSS.RULE}}">';
-        html += '  <button data-id="{{id}}">{{name}}</button>';
+        html += '  <button data-id="{{id}}" class="btn btn-default">{{name}}</button>';
         html += ' </div>';
         html += ' {{/rules}}';
         html += '</div>';
