@@ -125,7 +125,7 @@ $string['levelupplus'] = 'Level up! Plus';
 $string['levelx'] = 'Level #{$a}';
 $string['likenotice'] = '<strong>Do you like the plugin?</strong> Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourites</a> on Moodle.org and <a href="{$a->github}" target="_blank">star it on GitHub</a>.';
 $string['limitparticipants'] = 'Limit participants';
-$string['limitparticipants_help'] = 'This setting controls who is displayed in the leaderboard. Neighbours are the participants ranked above and below the current user. For instance, when choosing \'Display two neighbours\', only the two participants ranked directly higher and lower than the current user will be displayed.';
+$string['limitparticipants_help'] = 'This setting controls who is displayed in the leaderboard. Neighbours are the participants ranked above and below the current user. For instance, when choosing \'Display 2 neighbours\', only the two participants ranked directly higher and lower than the current user will be displayed.';
 $string['logging'] = 'Logging';
 $string['maxactionspertime'] = 'Max. actions in time frame';
 $string['maxactionspertime_help'] = 'The maximum number of actions that will count for points during the time frame given. Any subsequent action will be ignored. When this value is empty, or equals to zero, it does not apply.';

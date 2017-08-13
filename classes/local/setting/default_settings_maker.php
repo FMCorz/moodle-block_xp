@@ -211,10 +211,10 @@ class default_settings_maker implements settings_maker {
             $defaults['neighbours'], [
                 0 => get_string('displayeveryone', 'block_xp'),
                 1 => get_string('displayoneneigbour', 'block_xp'),
-                2 => get_string('displaynneighbours', 'block_xp', 'two'),
-                3 => get_string('displaynneighbours', 'block_xp', 'three'),
-                4 => get_string('displaynneighbours', 'block_xp', 'four'),
-                5 => get_string('displaynneighbours', 'block_xp', 'five'),
+                2 => get_string('displaynneighbours', 'block_xp', '2'),
+                3 => get_string('displaynneighbours', 'block_xp', '3'),
+                4 => get_string('displaynneighbours', 'block_xp', '4'),
+                5 => get_string('displaynneighbours', 'block_xp', '5'),
             ]
         ));
 
