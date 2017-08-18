@@ -334,6 +334,11 @@
 .block-xp-filters-wrapper select {
     margin: 0;
 }
+.block-xp-filters-wrapper input[type],
+.block-xp-filters-wrapper select {
+    /* In Edge the line height is inherited when we do not do this. */
+    line-height: 18px;
+}
 .block-xp-filters-wrapper .filter-rules {
     margin-left: 20px;
     margin-top: 5px;
@@ -394,6 +399,7 @@
 .block-xp-filters-wrapper .rule-add {
     padding: 10px 17px;
     position: relative;
+    line-height: 20px;
 }
 .block-xp-filters-wrapper .rule-add::before,
 .block-xp-filters-wrapper .rule-rules .rule:last-child::before {
@@ -414,6 +420,7 @@
 .block-xp-filters-wrapper .rule-move,
 .block-xp-filters-wrapper .filter-move {
     cursor: move;
+    margin: 0 .5rem;
 }
 .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition .rule-delete,
 .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition .rule-move {
