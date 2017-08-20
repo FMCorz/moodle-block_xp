@@ -96,7 +96,7 @@ class levels_with_algo extends moodleform {
         // Ensure that the values are not wrong, the validation on save will catch those problems.
         $levels = max((int) $mform->exportValue('levels'), 2);
         $base = max((int) $mform->exportValue('basexp'), 1);
-        $coef = max((float) $mform->exportValue('coefxp'), 1.001);
+        $coef = max((float) $mform->exportValue('coefxp'), 1);
 
         $defaultlevels = \block_xp\local\xp\algo_levels_info::get_xp_with_algo($levels, $base, $coef);
 
