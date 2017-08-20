@@ -91,7 +91,7 @@ Y.namespace('M.block_xp').Notification = Y.extend(NOTIFICATION, M.core.dialogue,
         this.setStdModContent(Y.WidgetStdMod.BODY, content, Y.WidgetStdMod.REPLACE);
 
         // Set the footer.
-        footerTpl = Y.Handlebars.compile('<button>{{close}}</button>');
+        footerTpl = Y.Handlebars.compile('<button class="btn btn-default">{{close}}</button>');
         content = Y.Node.create(
             footerTpl({
                 close: M.util.get_string('coolthanks', COMPONENT)
