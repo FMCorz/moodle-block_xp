@@ -138,7 +138,7 @@ class course_block extends block_base {
         $activity = [];
         $forcerecentactivity = false;
         $moreurl = null; // TODO Add URL for students to see, and option to control it.
-        $recentactivity = isset($this->config->recentactivity) ? $this->config->recentactivity :
+        $recentactivity = isset($this->config->recentactivity) ? $this->config->recentactivity : // @codingStandardsIgnoreLine.
             $adminconfig->get('blockrecentactivity');
         if ($recentactivity) {
             $repo = $world->get_user_recent_activity_repository();
