@@ -46,7 +46,7 @@ class context_prefs_user_indicator extends proxy_user_indicator {
      * @param context $context The context.
      */
     public function __construct(moodle_database $db, context $context) {
-        parent::__construct(new prefs_user_indicator($db, 'context:' . $context->id));
+        parent::__construct(new prefs_user_indicator($db, 'context-' . $context->id));
     }
 
 }

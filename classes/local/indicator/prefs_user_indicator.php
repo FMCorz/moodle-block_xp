@@ -55,7 +55,7 @@ class prefs_user_indicator implements user_indicator {
      */
     public function __construct(moodle_database $db, $namespace, $component = 'block_xp') {
         $this->db = $db;
-        $this->prefix = $component . '|' . $namespace . '|';
+        $this->prefix = $component . '-' . $namespace . '-';
     }
 
     /**

@@ -410,6 +410,21 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2017071603, 'xp');
     }
 
+    if ($oldversion < 2017082000) {
+
+        // Some webservices were broken because we introduced a format of user
+        // preferences which was not supported. Any preference that was introduced
+        // with the former name needs to be removed. See MDL-59876.
+        $like = $DB->sql_like('name', ':name');
+        $sql = "DELETE FROM {user_preferences}
+                      WHERE $like";
+        $params = ['name' => 'block_xp|%'];
+        $DB->execute($sql, $params);
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2017082000, 'xp');
+    }
+
     return true;
 
 }
