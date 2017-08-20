@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v3.0.2
+------
+
+- Fixed a bug causing major disruptions in the official mobile app
+- Allow the level algorithm coefficient to be 1, instead of 1.001 previously
+- Recent rewards default now correctly refers to the admin setting value
+- Stylistic changes to improve design with Boost theme
+
 v3.0.1
 ------
 
