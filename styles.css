@@ -1,5 +1,6 @@
 .block_xp-level {
     background: url([[pix:block_xp|10]]) no-repeat;
+    background-size: 100px 100px;
     color: #fff;
     font-size: 4em;
     height: 100px;
