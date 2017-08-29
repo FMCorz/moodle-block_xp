@@ -238,7 +238,7 @@ $string['xp:myaddinstance'] = 'Add the block to my dashboard';
 $string['xp:view'] = 'View the block and its related pages';
 $string['xptogo'] = '[[{$a}]] to go';
 $string['xpgaindisabled'] = 'Points gain disabled';
-$string['youreachedlevela'] = 'You reached level {$a}!';
+$string['youreachedlevela'] = 'You have reached level {$a}!';
 $string['yourmessage'] = 'Your message';
 $string['yourownrules'] = 'Your own rules';
 
