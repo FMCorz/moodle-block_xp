@@ -152,15 +152,24 @@ class config extends moodleform {
             $mform->setDefault('block_recentactivity', $config->get('blockrecentactivity'));
             $mform->addHelpButton('block_recentactivity', 'configrecentactivity', 'block_xp');
             $mform->setType('block_recentactivity', PARAM_INT);
+
         } else {
-            // Suggest the course page, or the home page.
+            // Advise that we could not find the block.
             if ($PAGE->course->id == SITEID) {
-                $url = new \moodle_url('/', ['redirect' => 0]);
+                $fp = new \moodle_url('/', ['redirect' => 0]);
+                $mysys = new \moodle_url('/my/indexsys.php');
+                $params = [
+                    'fp' => $fp->out(false),
+                    'mysys' => $mysys->out(false)
+                ];
+                $str = 'cannotshowblockconfigsys';
             } else {
                 $url = new \moodle_url('/course/view.php', ['id' => $PAGE->course->id]);
+                $str = 'cannotshowblockconfig';
+                $params = $url->out(false);
             }
             $mform->addElement('static', 'missingblock', get_string('whoops', 'block_xp'),
-                markdown_to_html(get_string('cannotshowblockconfig', 'block_xp', $url->out(false))));
+                markdown_to_html(get_string($str, 'block_xp', $params)));
         }
 
         $mform->addElement('hidden', '__blockappearanceend');

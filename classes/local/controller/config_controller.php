@@ -74,8 +74,8 @@ class config_controller extends page_controller {
 
     protected function pre_content() {
         // Try to find an instance of our block, and thus block configuration.
-        $bifinder = \block_xp\di::get('block_instance_finder');
-        $bi = $bifinder->get_instance_in_context('xp', context_course::instance($this->courseid));
+        $bifinder = \block_xp\di::get('course_world_block_instance_finder');
+        $bi = $bifinder->get_instance_in_context('xp', $this->world->get_context());
         if (!empty($bi)) {
             $this->blockconfig = new block_config($bi);
         }

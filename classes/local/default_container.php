@@ -52,6 +52,7 @@ class default_container implements container {
         'collection_logger' => true,
         'collection_strategy' => true,
         'config' => true,
+        'course_world_block_instance_finder' => true,
         'course_world_factory' => true,
         'course_world_navigation_factory' => true,
         'db' => true,
@@ -201,6 +202,15 @@ class default_container implements container {
         return new \block_xp\local\config\admin_config(
             new \block_xp\local\config\default_admin_config()
         );
+    }
+
+    /**
+     * Get the course world block instance finder.
+     *
+     * @return course_world_instance_finder
+     */
+    protected function get_course_world_block_instance_finder() {
+        return new \block_xp\local\block\course_world_instance_finder($this->get('db'));
     }
 
     /**
