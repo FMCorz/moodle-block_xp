@@ -167,8 +167,10 @@ class default_container implements container {
      * Get the block instance finder.
      *
      * @return instance_finder
+     * @deprecated Since 3.1.0, will be removed in 3.3.0
      */
     protected function get_block_instance_finder() {
+        debugging('The generic block_instance_finder getter is deprecated, please do not use any more.', DEBUG_DEVELOPER);
         return new \block_xp\local\block\default_instance_finder($this->get('db'));
     }
 
