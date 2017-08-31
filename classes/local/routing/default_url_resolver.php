@@ -85,6 +85,12 @@ class default_url_resolver implements url_resolver {
             $relativepath = optional_param(static::ROUTE_GET_PARAM, false, PARAM_PATH);
         }
 
+        // Did we have a relative path yet?
+        if ($relativepath !== false and $relativepath !== '') {
+            return $relativepath;
+        }
+        $relativepath = false;
+
         // Then try extract file from the slasharguments.
         if (stripos($_SERVER['SERVER_SOFTWARE'], 'iis') !== false) {
             if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] !== '') {
