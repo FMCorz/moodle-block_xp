@@ -69,7 +69,7 @@ class filtered_config extends proxy_config {
      */
     public function get($name) {
         $this->validate($name);
-        parent::get($name);
+        return parent::get($name);
     }
 
     /**
