@@ -15,17 +15,39 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Rank interface.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2017 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2017090601;
-$plugin->requires   = 2014041500;
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.0.2';
+/**
+ * Rank interface.
+ *
+ * @package    block_xp
+ * @copyright  2017 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface rank {
+
+    /**
+     * Get the rank of the state.
+     *
+     * @return int
+     */
+    public function get_rank();
+
+    /**
+     * The state.
+     *
+     * @return state
+     */
+    public function get_state();
+
+}
