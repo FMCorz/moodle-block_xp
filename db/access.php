@@ -40,7 +40,7 @@ $capabilities = array(
     // Whether or not a user can earn experience point.
     'block/xp:earnxp' => array(
         'captype' => 'read',
-        'contextlevel' => CONTEXT_SYSTEM,
+        'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
             'student' => CAP_ALLOW
         ),
@@ -58,7 +58,7 @@ $capabilities = array(
     // Whether or not a user can see the block.
     'block/xp:view' => array(
         'captype' => 'read',
-        'contextlevel' => CONTEXT_SYSTEM,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
             'user' => CAP_ALLOW
         ),
