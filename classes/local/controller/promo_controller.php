@@ -155,7 +155,8 @@ class promo_controller extends route_controller {
             $message .= "\nEmail: " . $USER->email;
             $message .= "\nSite: " . $CFG->wwwroot;
 
-            $result = email_to_user($dummyuser, $USER->email, 'Level Up! Plus enquiry', $message);
+            $result = email_to_user($dummyuser, $USER->email, 'Level Up! Plus enquiry', $message, '', '', '',
+                false, $USER->email, fullname($USER));
             $url = new url($this->pageurl, ['sent' => $result ? 1 : -1]);
 
             $this->redirect($url);
