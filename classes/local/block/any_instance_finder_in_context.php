@@ -15,17 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Block any instance finder.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2017 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local\block;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2017090800;
-$plugin->requires   = 2014041500;
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.0.2';
+use context;
+
+/**
+ * Block any instance finder.
+ *
+ * @package    block_xp
+ * @copyright  2017 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface any_instance_finder_in_context {
+
+    /**
+     * Finds any instance in a context.
+     *
+     * @param string $name The block name, without 'block_'.
+     * @param context $context The context to search in.
+     * @return block_base Null when none found, else first match.
+     */
+    public function get_any_instance_in_context($name, context $context);
+
+}

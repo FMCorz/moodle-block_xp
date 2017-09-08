@@ -52,6 +52,7 @@ class default_container implements container {
         'collection_logger' => true,
         'collection_strategy' => true,
         'config' => true,
+        'course_world_block_any_instance_finder_in_context' => true,
         'course_world_block_instance_finder' => true,
         'course_world_block_instances_finder_in_context' => true,
         'course_world_factory' => true,
@@ -208,6 +209,16 @@ class default_container implements container {
     }
 
     /**
+     * Get the course world block any instance finder in context.
+     *
+     * @return course_world_instance_finder
+     */
+    protected function get_course_world_block_any_instance_finder_in_context() {
+        // We know the implementation of the following includes what we need.
+        return $this->get('course_world_block_instance_finder');
+    }
+
+    /**
      * Get the course world block instance finder.
      *
      * @return course_world_instance_finder
@@ -217,9 +228,9 @@ class default_container implements container {
     }
 
     /**
-     * Get the course world block instance finder.
+     * Get the course world block instances finder in context.
      *
-     * @return course_world_block_instances_finder_in_context
+     * @return course_world_instance_finder
      */
     protected function get_course_world_block_instances_finder_in_context() {
         // We know the implementation of the following includes what we need.
