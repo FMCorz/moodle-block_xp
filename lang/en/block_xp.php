@@ -230,6 +230,7 @@ $string['urlaccessdeprecated'] = 'Access via this URL is deprecated, please upda
 $string['usealgo'] = 'Use the algorithm';
 $string['usecustomlevelbadges'] = 'Use custom level badges';
 $string['usecustomlevelbadges_help'] = 'When set to yes, you must provide an image for each level.';
+$string['unknowneventa'] = 'Unknown event ({$a})';
 $string['when'] = 'When';
 $string['whoops'] = 'Whoops!';
 $string['wewillreplyat'] = 'We will reply at: _{$a}_.';

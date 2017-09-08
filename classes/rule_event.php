@@ -51,19 +51,29 @@ class block_xp_rule_event extends block_xp_rule_property {
      */
     public function get_description() {
         $class = $this->value;
-        $name = get_string('errorunknownevent', 'block_xp');
         $infos = self::get_event_infos($class);
 
         if ($infos !== false) {
-            $pluginmanager = core_plugin_manager::instance();
-            $plugininfo = $pluginmanager->get_plugin_info($infos['component']);
-            $name = get_string('colon', 'block_xp', (object) array(
-                'a' => $plugininfo->displayname,
+            list($type, $plugin) = core_component::normalize_component($infos['component']);
+            if ($type == 'core') {
+                $displayname = get_string('coresystem');
+            } else {
+                $pluginmanager = core_plugin_manager::instance();
+                $plugininfo = $pluginmanager->get_plugin_info($infos['component']);
+                $displayname = $infos['component'];
+                if (!empty($plugininfo)) {
+                    $displayname = $plugininfo->displayname;
+                }
+            }
+            $name = get_string('colon', 'block_xp', (object) [
+                'a' => $displayname,
                 'b' => $infos['name']
-            ));
+            ]);
+        } else {
+            $name = get_string('unknowneventa', 'block_xp', $this->value);
         }
 
-        return get_string('ruleeventdesc', 'block_xp', (object)array('eventname' => $name));
+        return get_string('ruleeventdesc', 'block_xp', ['eventname' => $name]);
     }
 
     /**
@@ -72,6 +82,9 @@ class block_xp_rule_event extends block_xp_rule_property {
      * The key 'name' is added to contain the readable name of the event.
      * It is done here because debugging is turned off and some events use
      * deprecated strings.
+     *
+     * We also add the key 'isdeprecated' which indicates whether the event
+     * is obsolete or not.
      *
      * @param  string $class The name of the event class.
      * @return array|false
@@ -90,7 +103,8 @@ class block_xp_rule_event extends block_xp_rule_property {
             $ref = new \ReflectionClass($class);
             if (!$ref->isAbstract()) {
                 $infos = $class::get_static_info();
-                $infos['name'] = $class::get_name();
+                $infos['name'] = method_exists($class, 'get_name_with_info') ? $class::get_name_with_info() : $class::get_name();
+                $infos['isdeprecated'] = method_exists($class, 'is_deprecated') ? $class::is_deprecated() : false;
             }
         }
 
@@ -116,54 +130,24 @@ class block_xp_rule_event extends block_xp_rule_property {
         $key = 'list';
 
         if (false === ($list = $cache->get($key))) {
-            $list = array();
-            $pluginmanager = core_plugin_manager::instance();
+            $list = [];
 
-            $plugintype = 'mod';
-            $pluginlist = core_component::get_plugin_list($plugintype);
-
-            // Loop over each plugin of the type.
-            foreach ($pluginlist as $plugin => $directory) {
-                $events = array();
-                $plugindirectory = $directory . '/classes/event';
-                $plugininfo = $pluginmanager->get_plugin_info($plugintype . '_' . $plugin);
-
-                // Get the plugin's files.
-                $finalfiles = array();
-                if (is_dir($plugindirectory)) {
-                    if ($handle = opendir($plugindirectory)) {
-                        $files = scandir($plugindirectory);
-                        foreach ($files as $file) {
-                            if ($file != '.' && $file != '..') {
-                                $location = substr($plugindirectory, strlen($CFG->dirroot));
-                                $name = substr($file, 0, -4);
-                                $finalfiles[$name] = $location  . '/' . $file;
-                            }
-                        }
-                    }
+            // Add some system events.
+            $eventclasses = [
+                '\\core\\event\\course_viewed'
+            ];
+            $list[] = [get_string('coresystem') => array_reduce($eventclasses, function($carry, $eventclass) {
+                $infos = self::get_event_infos($eventclass);
+                if ($infos) {
+                    $carry[$infos['eventname']] = $infos['name'];
                 }
+                return $carry;
+            }, [])];
 
-                // Loop over each file to construct, and double check the event.
-                foreach ($finalfiles as $eventname => $notused) {
-                    $class = '\\' . $plugintype . '_' . $plugin . '\\event\\' . $eventname;
-                    $infos = self::get_event_infos($class);
+            // Get module events.
+            $list = array_merge($list, self::get_events_list_from_plugintype('mod'));
 
-                    // Only keep events that are of level 'participating'.
-                    if ($infos !== false && $infos['edulevel'] == \core\event\base::LEVEL_PARTICIPATING) {
-                        $events[$infos['eventname']] = get_string('colon', 'block_xp', (object) array(
-                            'a' => $plugininfo->displayname,
-                            'b' => $infos['name']
-                        ));
-                    }
-                }
-
-                // If we found events for this plugin, we add them to the list.
-                if (!empty($events)) {
-                    $plugininfo = $pluginmanager->get_plugin_info($plugintype . '_' . $plugin);
-                    $list[] = array($plugininfo->displayname => $events);
-                }
-            }
-
+            // Save to cache.
             $cache->set($key, $list);
         }
 
@@ -178,10 +162,121 @@ class block_xp_rule_event extends block_xp_rule_property {
      */
     public function get_form($basename) {
         $o = block_xp_rule::get_form($basename);
-        $modules = html_writer::select(self::get_events_list(), $basename . '[value]', $this->value, '',
+        $eventslist = self::get_events_list();
+
+        // Append the value to the list if we cannot find it any more.
+        if (!empty($this->value) && !$this->value_in_list($this->value, $eventslist)) {
+            $eventslist[] = [get_string('other') => [$this->value => get_string('unknowneventa', 'block_xp', $this->value)]];
+        }
+
+        $modules = html_writer::select($eventslist, $basename . '[value]', $this->value, '',
             array('id' => '', 'class' => ''));
         $o .= get_string('eventis', 'block_xp', $modules);
         return $o;
+    }
+
+    /**
+     * Get the events list from a plugin.
+     *
+     * From 3.1 we could be using core_component::get_component_classes_in_namespace().
+     *
+     * @param string $component The plugin's component name.
+     * @return array
+     */
+    protected static function get_events_list_from_plugin($component) {
+        $directory = core_component::get_component_directory($component);
+        $plugindirectory = $directory . '/classes/event';
+        if (!is_dir($plugindirectory)) {
+            return [];
+        }
+
+        // Get the plugin's events.
+        $eventclasses = [];
+        $diriter = new DirectoryIterator($plugindirectory);
+        foreach ($diriter as $file) {
+            if ($file->isDot() || $file->isDir()) {
+                continue;
+            }
+
+            // It's a good idea to use the leading slashes because the event's property
+            // 'eventname' includes them as well, so for consistency sake... Also we do
+            // not check if the class exists because that would cause the class to be
+            // autoloaded which would potentially trigger debugging messages when
+            // it is deprecated.
+            $name = substr($file->getFileName(), 0, -4);
+            $classname = '\\' . $component . '\\event\\' . $name;
+            $eventclasses[] = $classname;
+        }
+
+        $pluginmanager = core_plugin_manager::instance();
+        $plugininfo = $pluginmanager->get_plugin_info($component);
+
+        // Reduce to the participating, non-deprecated event.
+        $events = array_reduce($eventclasses, function($carry, $class) use ($plugininfo) {
+            $infos = self::get_event_infos($class);
+            if (empty($infos)) {
+                // Skip rare case where infos aren't found.
+                return $carry;
+            } else if ($infos['edulevel'] != \core\event\base::LEVEL_PARTICIPATING) {
+                // Skip events that are not of level 'participating'.
+                return $carry;
+            }
+
+            $carry[$infos['eventname']] = get_string('colon', 'block_xp', [
+                'a' => $plugininfo->displayname,
+                'b' => $infos['name']
+            ]);
+            return $carry;
+        }, []);
+
+        // Order alphabetically.
+        core_collator::asort($events, core_collator::SORT_NATURAL);
+
+        return $events;
+    }
+
+    /**
+     * Get events from plugin type.
+     *
+     * @param string $plugintype Plugin type.
+     * @return array
+     */
+    protected static function get_events_list_from_plugintype($plugintype) {
+        $list = [];
+
+        // Loop over each plugin of the type.
+        $pluginlist = core_component::get_plugin_list($plugintype);
+        foreach ($pluginlist as $plugin => $directory) {
+            $component = $plugintype . '_' . $plugin;
+            $events = self::get_events_list_from_plugin($component);
+
+            // If we found events for this plugin, we add them to the list.
+            if (!empty($events)) {
+                $pluginmanager = core_plugin_manager::instance();
+                $plugininfo = $pluginmanager->get_plugin_info($component);
+                $list[] = array($plugininfo->displayname => $events);
+            }
+        }
+
+        return $list;
+    }
+
+    /**
+     * Check if the value is in the list.
+     *
+     * @param mixed $value Value.
+     * @param Traversable $list The list where the first level or keys does not count.
+     * @return bool
+     */
+    protected static function value_in_list($value, $list) {
+        foreach ($list as $optgroup) {
+            foreach ($optgroup as $values) {
+                if (array_key_exists($value, $values)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

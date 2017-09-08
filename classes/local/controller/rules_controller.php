@@ -123,16 +123,16 @@ class rules_controller extends page_controller {
     protected function get_available_rules() {
         return [
             (object) [
-                'name' => get_string('ruleproperty', 'block_xp'),
-                'rule' => new \block_xp_rule_property(),
+                'name' => get_string('ruleevent', 'block_xp'),
+                'rule' => new \block_xp_rule_event(),
             ],
             (object) [
                 'name' => get_string('rulecm', 'block_xp'),
                 'rule' => new \block_xp_rule_cm($this->courseid),
             ],
             (object) [
-                'name' => get_string('ruleevent', 'block_xp'),
-                'rule' => new \block_xp_rule_event(),
+                'name' => get_string('ruleproperty', 'block_xp'),
+                'rule' => new \block_xp_rule_property(),
             ],
             (object) [
                 'name' => get_string('ruleset', 'block_xp'),
