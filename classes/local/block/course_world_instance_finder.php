@@ -41,7 +41,7 @@ use stdClass;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_world_instance_finder implements instance_finder {
+class course_world_instance_finder implements instance_finder, instances_finder_in_context {
 
     /** @var moodle_database The DB. */
     protected $db;
@@ -137,6 +137,17 @@ class course_world_instance_finder implements instance_finder {
             return null;
         }
         return reset($candidates);
+    }
+
+    /**
+     * Get all the instances in context.
+     *
+     * @param string $name The block name.
+     * @param context $context The context of the course world.
+     * @return block_base[]
+     */
+    public function get_instances_in_context($name, context $context) {
+        return $this->get_candidates_in_context($name, $context);
     }
 
     /**

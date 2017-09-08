@@ -27,6 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 
 use action_link;
 use block_base;
+use context;
+use context_system;
 use html_writer;
 use lang_string;
 use pix_icon;
@@ -95,7 +97,27 @@ class course_block extends block_base {
      * @return bool
      */
     public function instance_delete() {
-        // It's bad, but here we assume there is only one block per course.
+        $db = \block_xp\di::get('db');
+        $adminconfig = \block_xp\di::get('config');
+
+        if ($adminconfig->get('context') == CONTEXT_SYSTEM) {
+            $context = context::instance_by_id($this->instance->parentcontextid);
+            if ($context->contextlevel == CONTEXT_USER) {
+                // Someone is removing their block from their dashboard, do nothing.
+                return;
+            }
+
+            $bifinder = \block_xp\di::get('course_world_block_instances_finder_in_context');
+            $instances = $bifinder->get_instances_in_context('xp', context_system::instance());
+            if (count($instances) > 1) {
+                // We do not want to disable points gain when we find more than one instance.
+                return;
+            }
+        }
+
+        // If we got here that's because we are either removing the block from a course,
+        // or from the front page, or from the default dashboard. It's not ideal but
+        // in that case we disable points gain.
         $world = $this->get_world($this->page->course->id);
         $world->get_config()->set('enabled', false);
         return true;
