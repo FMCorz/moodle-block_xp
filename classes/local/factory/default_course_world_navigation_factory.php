@@ -49,6 +49,8 @@ class default_course_world_navigation_factory implements course_world_navigation
      * Constructor.
      *
      * @param url_resolver $resolver The URL resolver.
+     * @param config $adminconfig Admin config.
+     * @param user_indicator $indicator The indicator.
      */
     public function __construct(url_resolver $resolver, config $adminconfig) {
         $this->resolver = $resolver;
@@ -67,6 +69,8 @@ class default_course_world_navigation_factory implements course_world_navigation
      * @return array
      */
     public function get_course_navigation(course_world $world) {
+        global $USER;
+
         $links = [];
         $courseid = $world->get_courseid();
         $urlresolver = $this->resolver;
@@ -129,10 +133,17 @@ class default_course_world_navigation_factory implements course_world_navigation
             // @codingStandardsIgnoreEnd
             if ($this->adminconfig->get('enablepromoincourses')) {
                 $star = $renderer->pix_icon('star', '', 'block_xp', ['class' => 'icon']);
+
+                $hasnew = '';
+                if (\block_xp\local\controller\promo_controller::has_new_content()) {
+                    // I'm not proud of this check, there must be a better way.
+                    $hasnew = $renderer->new_dot();
+                }
+
                 $links[] = [
                     'id' => 'promo',
                     'url' => $urlresolver->reverse('promo', ['courseid' => $courseid]),
-                    'text' => $star . get_string('navpromo', 'block_xp')
+                    'text' => $star . get_string('navpromo', 'block_xp') . $hasnew
                 ];
             }
         }

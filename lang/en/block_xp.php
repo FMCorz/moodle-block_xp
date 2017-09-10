@@ -152,13 +152,7 @@ $string['property:component'] = 'Event component';
 $string['property:crud'] = 'Event CRUD';
 $string['property:eventname'] = 'Event name';
 $string['property:target'] = 'Event target';
-$string['promocontactintro'] = 'Contact us for more information. We don\'t bite and we reply quickly!';
-$string['promocontactus'] = 'Get in touch';
-$string['promoemailusat'] = 'E-mail us at _levelup@branchup.tech_.';
-$string['promoerrorsendingemail'] = 'Ouch! We could not send the message... please e-mail us directly at: {$a}. Thanks!';
 $string['promointro'] = 'The add-on for _Level up!_ that unleashes its full potential!';
-$string['promoifpreferemailusat'] = 'Psst! If you prefer, e-mail us directly at _{$a}_.';
-$string['promoyourmessagewassent'] = 'Thank you, your message was sent. We will get back to you very shortly.';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';
 $string['rank'] = 'Rank';
 $string['ranking'] = 'Ranking';
@@ -252,3 +246,11 @@ $string['levelswillbereset'] = 'Warning! Saving this form will recalculate the l
 $string['viewtheladder'] = 'View the ladder';
 $string['xp'] = 'Experience points';
 $string['xprequired'] = 'XP required';
+
+// Deprecated since 3.1.0.
+$string['promocontactintro'] = 'Contact us for more information. We don\'t bite and we reply quickly!';
+$string['promocontactus'] = 'Get in touch';
+$string['promoemailusat'] = 'E-mail us at _levelup@branchup.tech_.';
+$string['promoerrorsendingemail'] = 'Ouch! We could not send the message... please e-mail us directly at: {$a}. Thanks!';
+$string['promoifpreferemailusat'] = 'Psst! If you prefer, e-mail us directly at _{$a}_.';
+$string['promoyourmessagewassent'] = 'Thank you, your message was sent. We will get back to you very shortly.';

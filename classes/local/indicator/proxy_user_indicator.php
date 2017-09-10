@@ -58,7 +58,7 @@ class proxy_user_indicator implements user_indicator {
      *
      * @param int $userid The user ID.
      * @param string $flag The flag name.
-     * @return int|null The flag value.
+     * @return string|null The flag value.
      */
     public function get_user_flag($userid, $flag) {
         return $this->indicator->get_user_flag($userid, $flag);
@@ -69,7 +69,7 @@ class proxy_user_indicator implements user_indicator {
      *
      * @param int $userid The user ID.
      * @param string $flag The flag name.
-     * @param int $value The flag value.
+     * @param string $value The flag value.
      */
     public function set_user_flag($userid, $flag, $value) {
         return $this->indicator->set_user_flag($userid, $flag, $value);

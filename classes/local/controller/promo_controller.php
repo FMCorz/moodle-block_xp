@@ -41,6 +41,11 @@ use block_xp\local\routing\url;
  */
 class promo_controller extends route_controller {
 
+    /** Seen flag. */
+    const SEEN_FLAG = 'promo-page-seen';
+    /** Page version. */
+    const VERSION = 20170910;
+
     /** @var string The normal route name. */
     protected $routename = 'promo';
     /** @var string The admin section name. */
@@ -113,65 +118,10 @@ class promo_controller extends route_controller {
         }
     }
 
-    /**
-     * Whether we can send e-mails.
-     *
-     * @return bool
-     */
-    protected function supports_email() {
-        global $CFG, $USER;
-        return empty($CFG->noemailever) && !empty($USER->email) && validate_email($USER->email);
-    }
-
-    protected function pre_content() {
-        global $USER, $CFG;
-
-        $this->form = new \block_xp\form\promo();
-        if (($data = $this->form->get_data()) && $this->supports_email()) {
-
-            // Get a fake user account.
-            $dummyuser = new \stdClass();
-            $dummyuser->id = \core_user::NOREPLY_USER;
-            $dummyuser->email = $this->email;
-            $dummyuser->firstname = 'Level';
-            $dummyuser->username = 'levelup';
-            $dummyuser->lastname = 'Up';
-            $dummyuser->confirmed = 1;
-            $dummyuser->suspended = 0;
-            $dummyuser->deleted = 0;
-            $dummyuser->picture = 0;
-            $dummyuser->auth = 'manual';
-            $dummyuser->firstnamephonetic = '';
-            $dummyuser->lastnamephonetic = '';
-            $dummyuser->middlename = '';
-            $dummyuser->alternatename = '';
-            $dummyuser->imagealt = '';
-
-            $message = "";
-            $message .= $data->message;
-            $message .= "\n\n";
-            $message .= "----";
-            $message .= "\nName: " . fullname($USER);
-            $message .= "\nEmail: " . $USER->email;
-            $message .= "\nSite: " . $CFG->wwwroot;
-
-            $result = email_to_user($dummyuser, $USER->email, 'Level Up! Plus enquiry', $message, '', '', '',
-                false, $USER->email, fullname($USER));
-            $url = new url($this->pageurl, ['sent' => $result ? 1 : -1]);
-
-            $this->redirect($url);
-        }
-    }
-
     protected function content() {
-        $output = \block_xp\di::get('renderer');
+        self::mark_as_seen();
 
-        $sent = $this->get_param('sent');
-        if ($sent < 0) {
-            echo $output->notification_without_close(get_string('promoerrorsendingemail', 'block_xp', $this->email), 'error');
-        } else if ($sent > 0) {
-            echo $output->notification_without_close(get_string('promoyourmessagewassent', 'block_xp'), 'success');
-        }
+        $output = \block_xp\di::get('renderer');
 
         if (!$this->is_admin_page()) {
             echo $output->heading(get_string('levelupplus', 'block_xp'));
@@ -200,6 +150,9 @@ class promo_controller extends route_controller {
 .block_xp-promo-table td:first-of-type img {
     margin-top: 20px;
 }
+.block_xp-promo-table h4 .label {
+    font-size: 14px;
+}
 </style>
 <table class="block_xp-promo-table">
     <tr>
@@ -210,6 +163,17 @@ class promo_controller extends route_controller {
             <ul>
                 <li>Support for activity completion</li>
                 <li>Support for course completion</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="{$output->pix_url('noun/favorite-mobile', 'block_xp')}" alt=""></td>
+        <td>
+            <h4>Mobile app support <span class="label label-info">New</span></h4>
+            <p>Level up! in the official Moodle Mobile app.</p>
+            <ul>
+                <li>See current level and progress</li>
+                <li>Access the leaderboard</li>
             </ul>
         </td>
     </tr>
@@ -258,11 +222,10 @@ class promo_controller extends route_controller {
     <tr>
         <td><img src="{$output->pix_url('noun/help', 'block_xp')}" alt=""></td>
         <td>
-            <h4>E-mail support</h4>
-            <p>Get direct e-mail support from our team.</p>
+            <h4>Email support</h4>
+            <p>Get direct email support from our team.</p>
             <ul>
-                <li>Report bugs for us to fix</li>
-                <li>Get help with setting up the rules and settings</li>
+                <li>Let us help if something goes wrong</li>
             </ul>
         </td>
     </tr>
@@ -278,19 +241,47 @@ class promo_controller extends route_controller {
         </td>
     </tr>
 </table>
+
+<div style="text-align: center; margin-top: 2em">
+    <p>To find out more, order or contact us:</p>
+    <p><a class="btn btn-success btn-large btn-lg" href="http://levelup.branchup.tech?utm_source=blockxp&utm_medium=promopage&utm_campaign=xppromo">
+        Visit our website
+    </a></p>
+</div>
 EOT;
 
-        echo $output->heading(get_string('promocontactus', 'block_xp'), 3);
-        echo html_writer::tag('p', get_string('promocontactintro', 'block_xp'));
+    }
 
-        if ($this->supports_email()) {
-            $this->form->display();
-            echo html_writer::tag('p', markdown_to_html(get_string('promoifpreferemailusat', 'block_xp', $this->email)));
-
-        } else {
-            echo html_writer::tag('p', markdown_to_html(get_string('promoemailusat', 'block_xp', $this->email)));
+    /**
+     * Check whether there is new content for the user.
+     *
+     * @return bool
+     */
+    public static function has_new_content() {
+        global $USER;
+        if (!isloggedin() || isguestuser()) {
+            return false;
         }
 
+        $indicator = \block_xp\di::get('user_generic_indicator');
+        $value = $indicator->get_user_flag($USER->id, self::SEEN_FLAG);
+
+        return $value < self::VERSION;
+    }
+
+    /**
+     * Mark as the page seen.
+     *
+     * @return void
+     */
+    protected static function mark_as_seen() {
+        global $USER;
+        if (!isloggedin() || isguestuser()) {
+            return false;
+        }
+
+        $indicator = \block_xp\di::get('user_generic_indicator');
+        $value = $indicator->set_user_flag($USER->id, self::SEEN_FLAG, self::VERSION);
     }
 
 }

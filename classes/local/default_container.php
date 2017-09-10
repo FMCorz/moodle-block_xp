@@ -65,6 +65,7 @@ class default_container implements container {
         'settings_maker' => true,
         'tasks_definition_maker' => true,
         'url_resolver' => true,
+        'user_generic_indicator' => true,
         'user_notice_indicator' => true,
     ];
 
@@ -361,6 +362,17 @@ class default_container implements container {
             $this->get('base_url'),
             $this->get_routes_config()
         );
+    }
+
+    /**
+     * Get the generic indicator.
+     *
+     * Generic indicator to use when no other indicators seem appropriate.
+     *
+     * @return user_indicator
+     */
+    protected function get_user_generic_indicator() {
+        return new \block_xp\local\indicator\prefs_user_indicator($this->get('db'), 'generic');
     }
 
     /**

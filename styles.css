@@ -267,6 +267,25 @@
 }
 
 /**
+ * Page navigation.
+ */
+.block_xp-page-nav a {
+    position: relative;
+}
+.block_xp-page-nav .has-new {
+    border-radius: 50%;
+    width: 7px;
+    height: 7px;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background-color: #d9534f;
+}
+.dir-rtl .block_xp-page-nav .has-new {
+    left: 4px;
+}
+
+/**
  * Dismissable notice.
  */
 .block_xp-dismissable-notice .alert {

@@ -176,7 +176,16 @@ class block_xp_renderer extends plugin_renderer_base {
             return new tabobject($link['id'], $link['url'], $link['text'], clean_param($link['text'], PARAM_NOTAGS));
         }, $links);
 
-        return $this->tabtree($tabs, $page);
+        return html_writer::div($this->tabtree($tabs, $page), 'block_xp-page-nav');
+    }
+
+    /**
+     * New dot.
+     *
+     * @return string
+     */
+    public function new_dot() {
+        return html_writer::div(html_writer::tag('span', get_string('new'), ['class' => 'accesshide']), 'has-new');
     }
 
     /**
