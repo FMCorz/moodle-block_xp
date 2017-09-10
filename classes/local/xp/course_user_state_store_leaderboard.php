@@ -219,7 +219,6 @@ class course_user_state_store_leaderboard {
         $recordset = $this->get_ranking_recordset($limit);
 
         $offset = $relativeto->get_xp();
-        // $seen = false;
         $ranking = [];
 
         foreach ($recordset as $record) {
@@ -227,12 +226,7 @@ class course_user_state_store_leaderboard {
             $rank = $state->get_xp() - $offset;
             $rankobj = new \stdClass($rank, $state);
             $ranking[] = new state_rank($rank, $state);
-            // $seen = $seen || $state->get_id() == $relativeto->get_id();
         }
-
-        // if (!$seen) {
-        //     $ranking[] = new state_rank(0, $relativeto);
-        // }
 
         $recordset->close();
         return $ranking;

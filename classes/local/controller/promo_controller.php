@@ -122,6 +122,7 @@ class promo_controller extends route_controller {
         self::mark_as_seen();
 
         $output = \block_xp\di::get('renderer');
+        $siteurl = "http://levelup.branchup.tech?utm_source=blockxp&utm_medium=promopage&utm_campaign=xppromo";
 
         if (!$this->is_admin_page()) {
             echo $output->heading(get_string('levelupplus', 'block_xp'));
@@ -244,7 +245,7 @@ class promo_controller extends route_controller {
 
 <div style="text-align: center; margin-top: 2em">
     <p>To find out more, order or contact us:</p>
-    <p><a class="btn btn-success btn-large btn-lg" href="http://levelup.branchup.tech?utm_source=blockxp&utm_medium=promopage&utm_campaign=xppromo">
+    <p><a class="btn btn-success btn-large btn-lg" href="{$siteurl}">
         Visit our website
     </a></p>
 </div>
