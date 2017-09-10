@@ -28,4 +28,4 @@ $plugin->version    = 2017091000;
 $plugin->requires   = 2014041500;
 $plugin->component  = 'block_xp';
 $plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.0.2';
+$plugin->release    = '3.1.0';

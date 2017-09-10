@@ -1,6 +1,17 @@
 Changelog
 =========
 
+v3.1.0
+------
+
+- Changes to support Moodle Mobile in _Level up! Plus_
+- Colours of default badges were revised
+- Event 'course_viewed' added to the list of events
+- Permit capability overrides at category, course and module levels
+- Stronger checks for disabling points gain when the block is removed
+- Fix routing issue with nginx
+- Minor other bug fixes and improvements
+
 v3.0.2
 ------
 
