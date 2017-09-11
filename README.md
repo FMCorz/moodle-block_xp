@@ -20,7 +20,7 @@ Features
 
 ### Additional features
 
-Purchasing the _[Level up! Plus add-on](https://github.com/FMCorz/moodle-local_xp)_ unlocks additional features. [Click here for more details](https://github.com/FMCorz/moodle-local_xp).
+Purchasing the _Level up! Plus_ add-on unlocks additional features. [Click here for more details](http://levelup.branchup.tech?utm_source=blockxp&utm_medium=github_readme&utm_campaign=github).
 
 Requirements
 ------------
