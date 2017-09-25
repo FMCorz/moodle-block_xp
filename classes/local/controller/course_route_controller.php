@@ -84,8 +84,9 @@ abstract class course_route_controller extends route_controller {
      */
     protected function page_setup() {
         global $PAGE;
+
         // Note that the context was set by require_login().
-        $PAGE->set_url($this->pageurl);
+        $PAGE->set_url($this->pageurl->get_compatible_url());
         $PAGE->set_pagelayout($this->get_page_layout());
         $PAGE->set_title($this->get_page_html_head_title());
         $PAGE->set_heading($this->get_page_title());

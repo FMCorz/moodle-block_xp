@@ -111,7 +111,7 @@ class promo_controller extends route_controller {
         global $COURSE, $PAGE;
         if (!$this->is_admin_page()) {
             // Note that the context was set by require_login().
-            $PAGE->set_url($this->pageurl);
+            $PAGE->set_url($this->pageurl->get_compatible_url());
             $PAGE->set_pagelayout('course');
             $PAGE->set_title(get_string('levelupplus', 'block_xp'));
             $PAGE->set_heading(format_string($COURSE->fullname));
