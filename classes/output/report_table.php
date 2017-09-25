@@ -304,6 +304,31 @@ class report_table extends table_sql {
     }
 
     /**
+     * Get the columns to sort by.
+     *
+     * @return array column name => SORT_... constant.
+     */
+    public function get_sort_columns() {
+        $orderby = parent::get_sort_columns();
+
+        // It should never be empty, but if it is then never mind...
+        if (!empty($orderby)) {
+
+            // Ensure that sorting by level sub sorts by xp to avoid random ordering.
+            if (array_key_exists('lvl', $orderby) && !array_key_exists('xp', $orderby)) {
+                $orderby['xp'] = $orderby['lvl'];
+            }
+
+            // Always add the user ID, to avoid random ordering.
+            if (!array_key_exists('id', $orderby)) {
+                $orderby['id'] = SORT_ASC;
+            }
+        }
+
+        return $orderby;
+    }
+
+    /**
      * Get SQL sort.
      *
      * Must be overridden because otherwise it calls the parent 'construct_order_by()'.
@@ -313,4 +338,5 @@ class report_table extends table_sql {
     public function get_sql_sort() {
         return static::construct_order_by($this->get_sort_columns(), []);
     }
+
 }
