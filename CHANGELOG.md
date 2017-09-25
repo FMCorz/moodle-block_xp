@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v3.1.1
+------
+
+- Blocks could not be added or removed from the plugin's page
+- The ordering within a level is no longer random in the report
+- The promotional notice disappears when dismissed
+
 v3.1.0
 ------
 
