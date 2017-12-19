@@ -82,9 +82,16 @@ class global_collection_strategy implements event_collection_strategy {
         } else if ($event->edulevel !== \core\event\base::LEVEL_PARTICIPATING) {
             // Ignore events that are not participating.
             return;
-        } else if (!has_capability('block/xp:earnxp', $event->get_context(), $userid)) {
-            // Skip the events if the user does not have the capability to earn XP.
-            return;
+        } else {
+            try {
+                if (!has_capability('block/xp:earnxp', $event->get_context(), $userid)) {
+                    // Skip the events if the user does not have the capability to earn XP.
+                    return;
+                }
+            } catch (\Exception $e) {
+                // Context may no longer exist.
+                return;
+            }
         }
 
         $strategy = $this->worldfactory->get_world($event->courseid)->get_collection_strategy();
