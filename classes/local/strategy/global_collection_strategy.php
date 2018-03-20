@@ -26,6 +26,7 @@
 namespace block_xp\local\strategy;
 defined('MOODLE_INTERNAL') || die();
 
+use moodle_exception;
 use block_xp\local\factory\course_world_factory;
 
 /**
@@ -82,8 +83,21 @@ class global_collection_strategy implements event_collection_strategy {
         } else if ($event->edulevel !== \core\event\base::LEVEL_PARTICIPATING) {
             // Ignore events that are not participating.
             return;
-        } else if (!has_capability('block/xp:earnxp', $event->get_context(), $userid)) {
-            // Skip the events if the user does not have the capability to earn XP.
+        } else if (!$event->get_context()) {
+            // For some reason the context does not exist...
+            return;
+        }
+
+        try {
+            // It has been reported that this can throw an exception when the context got missing
+            // but is still cached within the event object. Or something like that...
+            $canearn = has_capability('block/xp:earnxp', $event->get_context(), $userid);
+        } catch (moodle_exception $e) {
+            return;
+        }
+
+        // Skip the events if the user does not have the capability to earn XP.
+        if (!$canearn) {
             return;
         }
 
