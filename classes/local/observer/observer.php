@@ -52,10 +52,13 @@ class observer {
         $DB->delete_records('block_xp_filters', $conditions);
         $DB->delete_records('block_xp_log', $conditions);
 
-        // Notice flags, note that this is based on the internals of course_block, and user_notice_indicator.
+        // Flags. Note that this is based on the actually implementation.
         $sql = $DB->sql_like('name', ':name');
         $DB->delete_records_select('user_preferences', $sql, [
-            'name' => 'block_xp|notice|block_intro_' . $courseid
+            'name' => 'block_xp-notice-block_intro_' . $courseid
+        ]);
+        $DB->delete_records_select('user_preferences', $sql, [
+            'name' => 'block_xp_notify_level_up_' . $courseid
         ]);
 
         // Delete the files.
