@@ -56,6 +56,11 @@ Restricting access based on students' levels
 
 Have a look at this availability plugin [Level](https://github.com/FMCorz/moodle-availability_xp).
 
+Level-based enrolment
+---------------------
+
+Have a look at this enrolment plugin [Level](https://github.com/branchup/moodle-enrol_xp).
+
 How to use one block for all courses
 ------------------------------------
 
