@@ -37,6 +37,10 @@ abstract class block_xp_base_testcase extends advanced_testcase {
 
     public function setUp() {
         $this->resetAfterTest();
+        $this->reset_container();
+    }
+
+    protected function reset_container() {
         \block_xp\di::set_container(new \block_xp\local\default_container());
     }
 
