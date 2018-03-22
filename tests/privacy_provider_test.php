@@ -132,20 +132,20 @@ class block_xp_privacy_provider_testcase extends block_xp_base_testcase {
         $strategy->collect_event($e);
 
         $contextlist = provider::get_contexts_for_userid($u1->id);
-        $this->assertEquals($contextlist->get_contextids(), [
+        $this->assert_contextlist_equals($contextlist, [
             context_system::instance()->id,
             context_course::instance($c1->id)->id,
             context_course::instance($c2->id)->id,
         ]);
 
         $contextlist = provider::get_contexts_for_userid($u2->id);
-        $this->assertEquals($contextlist->get_contextids(), [
+        $this->assert_contextlist_equals($contextlist, [
             context_course::instance($c2->id)->id,
             context_course::instance($c3->id)->id,
         ]);
 
         $contextlist = provider::get_contexts_for_userid($u3->id);
-        $this->assertEquals($contextlist->get_contextids(), []);
+        $this->assert_contextlist_equals($contextlist, []);
     }
 
     public function test_delete_data_for_all_users_in_context() {
@@ -317,5 +317,12 @@ class block_xp_privacy_provider_testcase extends block_xp_base_testcase {
             $this->assertEquals(45, $log->points);
             $this->assertEquals($u1->id, $log->userid);
         }
+    }
+
+    protected function assert_contextlist_equals($contextlist, $expectedids) {
+        $contextids = array_map('intval', $contextlist->get_contextids());
+        sort($contextids);
+        sort($expectedids);
+        $this->assertEquals($expectedids, $contextids);
     }
 }
