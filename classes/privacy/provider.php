@@ -69,7 +69,7 @@ class provider implements
 
         $collection->add_database_table('block_xp_log', [
             'userid' => 'privacy:metadata:log:userid',
-            'eventname' => 'privacy:metadata:log:lvl',
+            'eventname' => 'privacy:metadata:log:eventname',
             'xp' => 'privacy:metadata:log:xp',
             'time' => 'privacy:metadata:log:time',
         ], 'privacy:metadata:log');
