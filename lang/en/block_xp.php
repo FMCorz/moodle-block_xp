@@ -214,6 +214,39 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
 </ul>
 </p>';
 $string['send'] = 'Send';
+$string['shortcode:xpbadge'] = 'The badge matching the current user\'s level.';
+$string['shortcode:xpiflevel'] = 'Display the content when the current user\'s level matches.';
+$string['shortcode:xpiflevel_help'] = '
+Refer to the examples below to format this shortcode. When a level is stricly specified, the content will be displayed regardless of the other rules.
+The _greater_ and _less than_ rules must all match for the content to be displayed. Watch out as that may sometimes result in the content to never be displayed!
+Note that teachers, or otherwise users with editing capabilities, will always see everything.
+
+```
+[xpiflevel 1 3 5]
+    Displayed if the user\'s level is exactly 1, 3 or 5.
+[/xpiflevel]
+
+[xpiflevel >3]
+    Displayed if the user\'s level is greater than 3.
+[/xpiflevel]
+
+[xpiflevel >=3]
+    Displayed if the user\'s level is greater or equal to 3.
+[/xpiflevel]
+
+[xpiflevel >=10 <20 30]
+    Displayed if the user\'s level is greater or equal to 10 AND is strictly less than 20
+    OR is exactly equal to 30.
+[/xpiflevel]
+
+[xpiflevel <=10 >=20]
+    Never displayed because the user\'s level can never be less or equal to 10 AND more or equal to 20.
+[/xpiflevel]
+```
+
+Note that these shortcodes CANNOT be nested within one another.
+';
+$string['shortcode:xpprogressbar'] = 'The current user\'s progress bar towards the next level.';
 $string['someoneelse'] = 'Someone else';
 $string['somethinghappened'] = 'Something happened';
 $string['taskcollectionloggerpurge'] = 'Purge collection logs';

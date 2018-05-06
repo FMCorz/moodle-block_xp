@@ -63,6 +63,7 @@ class default_container implements container {
         'renderer' => true,
         'router' => true,
         'settings_maker' => true,
+        'shortcodes_definition_maker' => true,
         'tasks_definition_maker' => true,
         'url_resolver' => true,
         'user_generic_indicator' => true,
@@ -341,6 +342,15 @@ class default_container implements container {
             new \block_xp\local\config\default_admin_config(),
             $this->get('url_resolver')
         );
+    }
+
+    /**
+     * Get the shortcodes definition maker.
+     *
+     * @return shortcodes_definition_maker
+     */
+    protected function get_shortcodes_definition_maker() {
+        return new \block_xp\local\shortcode\default_shortcodes_definition_maker();
     }
 
     /**

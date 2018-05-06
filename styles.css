@@ -5,7 +5,7 @@
     font-size: 4em;
     height: 100px;
     line-height: 110px;
-    margin: 10px auto;
+    margin: 10px 0;
     text-align: center;
     width: 100px;
 
@@ -77,6 +77,10 @@
 }
 
 /** Block content. */
+.block_xp .block_xp-level {
+    margin-left: auto;
+    margin-right: auto;
+}
 .block_xp .xp-total {
     text-align: center;
     margin-bottom: 5px;

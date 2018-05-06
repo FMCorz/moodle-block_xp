@@ -61,6 +61,52 @@ Level-based enrolment
 
 Have a look at this enrolment plugin [Level](https://github.com/branchup/moodle-enrol_xp).
 
+Shortcodes supported
+--------------------
+
+_What are those? Shortcodes can be used in editors throughout Moodle to include or modify the content. The plugin [Shortcodes](https://github.com/branchup/moodle-filter_shortcodes) must be installed to enable them._
+
+### xpbadge
+
+Displays the badge matching the level of current user.
+
+`[xpbadge]`
+
+### xpiflevel
+
+Displays the content within its brackets according to the user's level. When a level is stricly specified, the content will be displayed regardless of the other rules. The greater and less than rules must all match for the content to be displayed, watch out as that may sometimes result in the content to never be displayed! Note that teachers, or otherwise users with editing capabilities, will always see everything.
+
+```
+[xpiflevel 1 3 5]
+    Displayed if the user's level is exactly 1, 3 or 5.
+[/xpiflevel]
+
+[xpiflevel >3]
+    Displayed if the user's level is greater than 3.
+[/xpiflevel]
+
+[xpiflevel >=3]
+    Displayed if the user's level is greater or equal to 3.
+[/xpiflevel]
+
+[xpiflevel >=10 <20 30]
+    Displayed if the user's level is greater or equal to 10 AND is strictly less than 20
+    OR is exactly equal to 30.
+[/xpiflevel]
+
+[xpiflevel <=10 >=20]
+    Never displayed because the user's level can never be less or equal to 10 AND more or equal to 20.
+[/xpiflevel]
+```
+
+Note that these shortcodes CANNOT be nested within one another.
+
+### xpprogressbar
+
+Displays the current user's progress bar towards the next level.
+
+`xpprogressbar`
+
 How to use one block for all courses
 ------------------------------------
 
