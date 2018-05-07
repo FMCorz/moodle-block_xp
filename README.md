@@ -117,6 +117,11 @@ Todo
 
 - Awarding a badge when a student reaches a level (blocked by [MDL-39864](https://tracker.moodle.org/browse/MDL-39864))
 
+Provided by
+-----------
+
+[![Branch Up](https://branchup.tech/branch-up-logo-x30.svg)](https://branchup.tech)
+
 License
 -------
 
