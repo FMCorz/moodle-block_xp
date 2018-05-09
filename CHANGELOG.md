@@ -1,6 +1,19 @@
 Changelog
 =========
 
+v3.2.1
+------
+
+- Add support for shortcodes using [filter_shortcodes](https://github.com/branchup/moodle-filter_shortcodes)
+- Minor fixes and improvements
+
+v3.2.0
+------
+
+- Implemen privacy API (GDPR compliance)
+- Some preferences were not deleted during course deletion
+- Prevent rare exception during event collection
+
 v3.1.1
 ------
 
