@@ -69,6 +69,10 @@ class course_user_state_store_leaderboard {
      * @param int $groupid The group ID, or zero.
      */
     public function __construct(moodle_database $db, levels_info $levelsinfo, $courseid, $groupid = 0) {
+
+        debugging('The class block_xp\\local\\xp\\course_user_state_store_leaderboard is deprecated, please use ' .
+            'block_xp\\local\\leaderboard\\course_user_leaderboard instead.', DEBUG_DEVELOPER);
+
         $this->db = $db;
         $this->levelsinfo = $levelsinfo;
         $this->courseid = $courseid;
