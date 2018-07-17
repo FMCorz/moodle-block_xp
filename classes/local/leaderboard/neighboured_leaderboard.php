@@ -44,6 +44,8 @@ class neighboured_leaderboard implements leaderboard {
     protected $neighbours;
     /** @var int The object relative to this. */
     protected $objectid;
+    /** @var bool Whether to display results even when not found. */
+    protected $fallbackontop;
 
     /**
      * Constructor.
@@ -51,11 +53,15 @@ class neighboured_leaderboard implements leaderboard {
      * @param leaderboard $leaderboard The leaderboard.
      * @param int $objectid The object to be relative to.
      * @param int $groupid The group ID.
+     * @param bool $fallbackontop When true, the ranking will display some results from the top when the
+     *                            objectid is not found in the ranking. You probably want to use this
+     *                            when the ranking is viewed by a manager.
      */
-    public function __construct(leaderboard $leaderboard, $objectid, $neighbours) {
+    public function __construct(leaderboard $leaderboard, $objectid, $neighbours, $fallbackontop = false) {
         $this->leaderboard = $leaderboard;
         $this->objectid = $objectid;
         $this->neighbours = $neighbours;
+        $this->fallbackontop = $fallbackontop;
     }
 
     /**
@@ -86,7 +92,7 @@ class neighboured_leaderboard implements leaderboard {
         $neighbours = $this->neighbours;
         $pos = $this->leaderboard->get_position($this->objectid);
         if ($pos === null) {
-            return [null, 0];
+            return $this->fallbackontop ? [new limit($this->neighbours, 0), $this->neighbours] : [new limit(0, 0), 0];
         }
         $total = $this->leaderboard->get_count();
 
@@ -140,6 +146,9 @@ class neighboured_leaderboard implements leaderboard {
     public function get_ranking(limit $limit) {
         // Ignore the limit and set ours.
         list($limit, $count) = $this->get_limit_and_count();
+        if ($limit->get_count() <= 0) {
+            return [];
+        }
         return $this->leaderboard->get_ranking($limit);
     }
 
