@@ -27,6 +27,7 @@ namespace block_xp\local\iterator;
 
 defined('MOODLE_INTERNAL') || die();
 
+use ArrayIterator;
 use IteratorIterator;
 use Traversable;
 
@@ -40,7 +41,7 @@ use Traversable;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class map_iterator implements IteratorIterator {
+class map_iterator extends IteratorIterator {
 
     /** @var callable The callable. */
     protected $callback;
@@ -51,8 +52,8 @@ class map_iterator implements IteratorIterator {
      * @param Traversable $iterator The inner iterator.
      * @param callable $callback The callback
      */
-    public function __construct(Traversable $iterator, callable $callback) {
-        parent::__construct($iterator);
+    public function __construct($iterator, callable $callback) {
+        parent::__construct(is_array($iterator) ? new ArrayIterator($iterator) : $iterator);
         $this->callback = $callback;
     }
 
