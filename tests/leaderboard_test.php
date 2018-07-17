@@ -51,6 +51,7 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
             $DB,
             $world->get_levels_info(),
             $world->get_courseid(),
+            ['rank', 'fullname'],
             $ranker,
             $groupid
         );
