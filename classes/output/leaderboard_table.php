@@ -114,6 +114,16 @@ class leaderboard_table extends flexible_table {
      */
     public function out($pagesize) {
         $this->setup();
+
+        // Compute where to start from.
+        $requestedpage = optional_param($this->request[TABLE_VAR_PAGE], null, PARAM_INT);
+        if ($requestedpage === null) {
+            $mypos = $this->leaderboard->get_position($this->userid);
+            if ($mypos !== null) {
+                $this->currpage = floor($mypos / $pagesize);
+            }
+        }
+
         $this->pagesize($pagesize, $this->leaderboard->get_count());
         $ranking = $this->leaderboard->get_ranking(new limit($pagesize, (int) $this->get_page_start()));
         foreach ($ranking as $rank) {
