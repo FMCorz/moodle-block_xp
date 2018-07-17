@@ -131,6 +131,7 @@ class leaderboard_table extends flexible_table {
                 'rank' => $rank->get_rank(),
                 'state' => $rank->get_state()
             ];
+            $classes = ($this->userid == $rank->get_state()->get_id()) ? 'highlight-row' : '';
             $this->add_data_keyed([
                 'fullname' => $this->col_fullname($row),
                 'level' => $this->col_lvl($row),
@@ -138,7 +139,7 @@ class leaderboard_table extends flexible_table {
                 'rank' => $this->col_rank($row),
                 'xp' => $this->col_xp($row),
                 'userpic' => $this->col_userpic($row),
-            ]);
+            ], $classes);
         }
         $this->finish_output();
     }
