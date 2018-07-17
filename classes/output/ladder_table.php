@@ -123,6 +123,9 @@ class ladder_table extends table_sql {
         global $CFG, $USER;
         parent::__construct('block_xp_ladder');
 
+        debugging('The class block_xp\\output\\ladder_table has been deprecated, ' .
+            'please use block_xp\\output\\leaderboard_table instead.', DEBUG_DEVELOPER);
+
         if (isset($options['rankmode'])) {
             $this->rankmode = $options['rankmode'];
         }

@@ -56,6 +56,7 @@ class default_container implements container {
         'course_world_block_instance_finder' => true,
         'course_world_block_instances_finder_in_context' => true,
         'course_world_factory' => true,
+        'course_world_leaderboard_factory' => true,
         'course_world_navigation_factory' => true,
         'db' => true,
         'file_server' => true,
@@ -251,6 +252,17 @@ class default_container implements container {
             new \block_xp\local\factory\default_badge_url_resolver_course_world_factory(
                 $this->get('badge_url_resolver')
             )
+        );
+    }
+
+    /**
+     * Get the course world leaderboard factory.
+     *
+     * @return course_world_leaderboard_factory
+     */
+    protected function get_course_world_leaderboard_factory() {
+        return new \block_xp\local\factory\default_course_world_leaderboard_factory(
+            $this->get('db')
         );
     }
 

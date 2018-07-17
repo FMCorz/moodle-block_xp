@@ -56,20 +56,16 @@ class ladder_controller extends page_controller {
     }
 
     protected function get_table() {
-        $courseid = $this->courseid;
-        $table = new \block_xp\output\ladder_table(
-            $this->world,
+        global $USER;
+        $leaderboardfactory = \block_xp\di::get('course_world_leaderboard_factory');
+        $table = new \block_xp\output\leaderboard_table(
+            $leaderboardfactory->get_course_leaderboard($this->world, $this->get_groupid()),
             $this->get_renderer(),
-            $this->world->get_store(),
-            $this->get_groupid(),
             [
                 'identitymode' => $this->world->get_config()->get('identitymode'),
                 'rankmode' => $this->world->get_config()->get('rankmode'),
-                'neighboursonly' => $this->world->get_config()->get('neighbours') > 0,
-                'neighboursabove' => $this->world->get_config()->get('neighbours'),
-                'neighboursbelow' => $this->world->get_config()->get('neighbours'),
-                'additionalcols' => explode(',', $this->world->get_config()->get('laddercols')),
-            ]
+            ],
+            $USER->id
         );
         $table->define_baseurl($this->pageurl);
         return $table;
