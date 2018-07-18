@@ -239,7 +239,7 @@
 
 /** Use our own highlight because of discrepencies between various themes. Sorry themers,
     it's a nightmare to maintain a plugin for multiple themes... */
-.path-blocks-xp .highlight-row > td{
+.block_xp-table tr.highlight-row > td {
     background-color: #d9edf7;
 }
 
