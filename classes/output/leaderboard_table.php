@@ -78,13 +78,6 @@ class leaderboard_table extends flexible_table {
         global $CFG, $USER;
         parent::__construct('block_xp_ladder');
 
-        if (isset($options['rankmode'])) {
-            $this->rankmode = $options['rankmode'];
-        }
-        if (isset($options['identitymode'])) {
-            $this->identitymode = $options['identitymode'];
-        }
-
         // The user ID we're viewing the ladder for.
         $this->userid = $userid;
 
@@ -92,11 +85,26 @@ class leaderboard_table extends flexible_table {
         $this->leaderboard = $leaderboard;
         $this->xpoutput = $renderer;
 
+        // Check options.
+        if (isset($options['rankmode'])) {
+            $this->rankmode = $options['rankmode'];
+        }
+        if (isset($options['identitymode'])) {
+            $this->identitymode = $options['identitymode'];
+        }
+        if (isset($options['fence'])) {
+            $this->fence = $options['fence'];
+        }
+        $leaderboardcols = $this->leaderboard->get_columns();
+        if (isset($options['discardcolumns'])) {
+            $leaderboardcols = array_diff_key($leaderboardcols, array_flip($options['discardcolumns']));
+        }
+
         // Define columns, and headers.
-        $columns = array_keys($this->leaderboard->get_columns());
+        $columns = array_keys($leaderboardcols);
         $headers = array_map(function($header) {
             return (string) $header;
-        }, array_values($this->leaderboard->get_columns()));
+        }, array_values($leaderboardcols));
         $this->define_columns($columns);
         $this->define_headers($headers);
 
@@ -116,16 +124,23 @@ class leaderboard_table extends flexible_table {
         $this->setup();
 
         // Compute where to start from.
-        $requestedpage = optional_param($this->request[TABLE_VAR_PAGE], null, PARAM_INT);
-        if ($requestedpage === null) {
-            $mypos = $this->leaderboard->get_position($this->userid);
-            if ($mypos !== null) {
-                $this->currpage = floor($mypos / $pagesize);
+        if (empty($this->fence)) {
+            $requestedpage = optional_param($this->request[TABLE_VAR_PAGE], null, PARAM_INT);
+            if ($requestedpage === null) {
+                $mypos = $this->leaderboard->get_position($this->userid);
+                if ($mypos !== null) {
+                    $this->currpage = floor($mypos / $pagesize);
+                }
             }
+            $this->pagesize($pagesize, $this->leaderboard->get_count());
+            $limit = new limit($pagesize, (int) $this->get_page_start());
+
+        } else {
+            $this->pagesize($this->fence->get_count(), $this->fence->get_count());
+            $limit = $this->fence;
         }
 
-        $this->pagesize($pagesize, $this->leaderboard->get_count());
-        $ranking = $this->leaderboard->get_ranking(new limit($pagesize, (int) $this->get_page_start()));
+        $ranking = $this->leaderboard->get_ranking($limit);
         foreach ($ranking as $rank) {
             $row = (object) [
                 'rank' => $rank->get_rank(),

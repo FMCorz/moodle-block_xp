@@ -26,7 +26,9 @@
 namespace block_xp\local\shortcode;
 defined('MOODLE_INTERNAL') || die();
 
+use context_course;
 use block_xp\di;
+use block_xp\local\sql\limit;
 
 /**
  * Shortcode handler class.
@@ -37,6 +39,37 @@ use block_xp\di;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class handler {
+
+    /**
+     * Best guess what group ID to use.
+     *
+     * @param int $courseid The course ID.
+     * @param int $userid The user ID.
+     * @return int
+     */
+    protected static function get_group_id($courseid, $userid) {
+        $course = get_fast_modinfo($courseid)->get_course();
+        $groupmode = groups_get_course_groupmode($course);
+        $context = context_course::instance($courseid);
+        $aag = has_capability('moodle/site:accessallgroups', $context);
+
+        if ($groupmode == NOGROUPS && !$aag) {
+            $allowedgroups = [];
+            $usergroups = [];
+        } else if ($groupmode == VISIBLEGROUPS || $aag) {
+            $allowedgroups = groups_get_all_groups($course->id, 0, $course->defaultgroupingid);
+            $usergroups = groups_get_all_groups($course->id, $userid, $course->defaultgroupingid);
+        } else {
+            $allowedgroups = groups_get_all_groups($course->id, $userid, $course->defaultgroupingid);
+            $usergroups = $allowedgroups;
+        }
+
+        // If we don't have at least a group, then we can see everybody.
+        if (empty($usergroups)) {
+            return 0;
+        }
+        return reset($usergroups)->id;
+    }
 
     /**
      * Get the world from the env.
@@ -164,6 +197,83 @@ class handler {
         }
 
         return $next($content);
+    }
+
+    /**
+     * Handle the shortcode.
+     *
+     * @param string $shortcode The shortcode.
+     * @param object $args The arguments of the code.
+     * @param string|null $content The content, if the shortcode wraps content.
+     * @param object $env The filter environment (contains context, noclean and originalformat).
+     * @param Closure $next The function to pass the content through to process sub shortcodes.
+     * @return string The new content.
+     */
+    public static function xpladder($shortcode, $args, $content, $env, $next) {
+        global $PAGE, $USER;
+        $world = static::get_world_from_env($env);
+        if (!$world) {
+            return;
+        } else if (!$world->get_config('enableladder')) {
+            return;
+        }
+
+        // Compute the best group we can think of.
+        $groupid = 0;
+        if (di::get('config')->get('context') == CONTEXT_COURSE) {
+            $groupid = static::get_group_id($world->get_courseid(), $USER->id);
+        }
+
+        // Fetch the leaderboard.
+        $leaderboard = di::get('course_world_leaderboard_factory')->get_course_leaderboard($world, $groupid);
+
+        // Check the position of the user.
+        $pos = $leaderboard->get_position($USER->id);
+        if ($pos === null) {
+            if (!$world->get_access_permissions()->can_manage()) {
+                return;
+            }
+            $pos = 0;
+        }
+
+        // Determine what part of the leaderboard to show and fence it.
+        $before = 2;
+        $after = 4;
+        $offset = max(0, $pos - $before);
+        $count = $before + $after + 1;
+        $limit = new limit($count + min(0, $pos - $before), $offset);
+
+        // Output the table.
+        $baseurl = $PAGE->url;
+        $table = new \block_xp\output\leaderboard_table($leaderboard, di::get('renderer'), [
+            'fence' => $limit,
+            'rankmode' => $world->get_config()->get('rankmode'),
+            'identitymode' => $world->get_config()->get('identitymode'),
+            'discardcolumns' => !empty($args['withprogress']) ? [] : ['progress']
+        ], $USER->id);
+        $table->define_baseurl($baseurl);
+        ob_start();
+        $table->out($count);
+        $html = ob_get_contents();
+        ob_end_clean();
+
+        // Output.
+        $urlresolver = di::get('url_resolver');
+        $link = '';
+        $withlink = empty($args['hidelink']);
+        if ($withlink) {
+            $link = \html_writer::div(
+                \html_writer::link(
+                    $urlresolver->reverse('ladder', ['courseid' => $world->get_courseid()]),
+                    get_string('gotofullladder', 'block_xp')
+                ),
+                'xp-link-to-full-ladder'
+            );
+        }
+        return \html_writer::div(
+            $html . $link,
+            'shortcode-xpladder'
+        );
     }
 
     /**
