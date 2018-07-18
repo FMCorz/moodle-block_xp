@@ -217,7 +217,7 @@ class leaderboard_table extends flexible_table {
         if ($this->identitymode == course_world_config::IDENTITY_OFF && $this->userid != $row->state->get_id()) {
             $options = ['link' => false, 'alttext' => false];
         }
-        return $this->xpoutput->user_picture($row->state->get_user());
+        return $this->xpoutput->user_picture($row->state->get_user(), $options);
     }
 
 }
