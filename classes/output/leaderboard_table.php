@@ -235,4 +235,19 @@ class leaderboard_table extends flexible_table {
         return $this->xpoutput->user_picture($row->state->get_user(), $options);
     }
 
+    /**
+     * Override to rephrase.
+     *
+     * @return void
+     */
+    public function print_nothing_to_display() {
+        echo \html_writer::div(
+            \block_xp\di::get('renderer')->notification_without_close(
+                get_string('ladderempty', 'block_xp'),
+                'info'
+            ),
+            '',
+            ['style' => 'margin: 1em 0']
+        );
+    }
 }

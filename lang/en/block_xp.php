@@ -116,6 +116,7 @@ $string['keeplogs'] = 'Keep logs';
 $string['ladder'] = 'Ladder';
 $string['ladderadditionalcols'] = 'Additional columns';
 $string['ladderadditionalcols_help'] = 'This setting determines which additional columns are displayed on the ladder. Press the CTRL or CMD key while clicking to select more than one column, or to unselect a selected column.';
+$string['ladderempty'] = 'The ladder is currently empty, make sure to come back later!';
 $string['level'] = 'Level';
 $string['levelbadges'] = 'Level badges';
 $string['levelbadgesformhelp'] = 'Name the files [level].[file extension], for instance: 1.png, 2.jpg, etc... The recommended image size is 100x100.';
