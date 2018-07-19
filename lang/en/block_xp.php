@@ -239,7 +239,7 @@ Note that when a course is using groups, the ladder will best guess which group 
 ';
 $string['shortcode:xpiflevel'] = 'Display the content when the current user\'s level matches.';
 $string['shortcode:xpiflevel_help'] = '
-Refer to the examples below to format this shortcode. When a level is stricly specified, the content will be displayed regardless of the other rules.
+Refer to the examples below to format this shortcode. When a level is strictly specified, the content will be displayed regardless of the other rules.
 The _greater_ and _less than_ rules must all match for the content to be displayed. Watch out as that may sometimes result in the content to never be displayed!
 Note that teachers, or otherwise users with editing capabilities, will always see everything.
 
