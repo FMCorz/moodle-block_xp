@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v3.3.0
+------
+
+- New shortcode `xpladder` for displaying the ladder
+
 v3.2.1
 ------
 
