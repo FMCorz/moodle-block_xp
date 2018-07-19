@@ -85,7 +85,8 @@ class course_block extends block_base {
      * @return bool
      */
     public function instance_create() {
-        // Enable the capture of events for that course.
+        // Enable the capture of events for that course. Note that we are not expecting the permission
+        // to 'addinstance' or 'myaddinstance' to be given to standard users!
         $world = $this->get_world($this->page->course->id);
         $world->get_config()->set('enabled', true);
         return true;
