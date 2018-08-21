@@ -29,11 +29,14 @@ defined('MOODLE_INTERNAL') || die();
 use lang_string;
 use moodle_database;
 use block_xp\local\course_world;
+use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
 use block_xp\local\leaderboard\anonymised_leaderboard;
 use block_xp\local\leaderboard\course_user_leaderboard;
+use block_xp\local\leaderboard\leaderboard;
 use block_xp\local\leaderboard\neighboured_leaderboard;
 use block_xp\local\leaderboard\null_ranker;
+use block_xp\local\leaderboard\ranker;
 use block_xp\local\leaderboard\relative_ranker;
 
 /**
@@ -71,15 +74,30 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
         $config = $world->get_config();
 
         // How is the rank computed?
-        $ranker = null;
-        if ($config->get('rankmode') == course_world_config::RANK_OFF) {
-            $ranker = new null_ranker();
-        } else if ($config->get('rankmode') == course_world_config::RANK_REL) {
-            $ranker = new relative_ranker($world->get_store()->get_state($USER->id));
-        }
+        $ranker = $this->get_ranker($world);
 
         // Find out what columns to use.
+        $columns = $this->get_columns($world);
+
+        // Get the leaderboard.
+        $leaderboard = $this->get_leaderboard_instance($world, $groupid, $columns, $ranker);
+
+        // Wrap?
+        $leaderboard = $this->wrap_leaderboard($world, $leaderboard);
+
+        return $leaderboard;
+    }
+
+    /**
+     * Get the columns.
+     *
+     * @param course_world $world The world.
+     * @return array
+     */
+    protected function get_columns(course_world $world) {
+        $config = $world->get_config();
         $columns = [];
+
         if ($config->get('rankmode') != course_world_config::RANK_OFF) {
             if ($config->get('rankmode') == course_world_config::RANK_REL) {
                 $columns['level'] = new lang_string('level', 'block_xp');
@@ -92,6 +110,7 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
             $columns['level'] = new lang_string('level', 'block_xp');
         }
         $columns['fullname'] = new lang_string('participant', 'block_xp');
+
         $additionalcols = explode(',', $config->get('laddercols'));
         if (in_array('xp', $additionalcols)) {
             $columns['xp'] = new lang_string('total', 'block_xp');
@@ -100,8 +119,20 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
             $columns['progress'] = new lang_string('progress', 'block_xp');
         }
 
-        // Get the leaderboard.
-        $leaderboard = new course_user_leaderboard(
+        return $columns;
+    }
+
+    /**
+     * Get the leaderboard instance.
+     *
+     * @param course_world $world The world.
+     * @param int $groupid The group ID.
+     * @param array $columns The columns.
+     * @param ranker|null $ranker The ranker.
+     * @return leaderboard
+     */
+    protected function get_leaderboard_instance(course_world $world, $groupid, array $columns, ranker $ranker = null) {
+        return new course_user_leaderboard(
             $this->db,
             $world->get_levels_info(),
             $world->get_courseid(),
@@ -109,6 +140,37 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
             $ranker,
             $groupid
         );
+    }
+
+    /**
+     * Get the ranker.
+     *
+     * @param course_world $world The world.
+     * @return ranker|null
+     */
+    protected function get_ranker(course_world $world) {
+        global $USER;
+        $config = $world->get_config();
+
+        $ranker = null;
+        if ($config->get('rankmode') == course_world_config::RANK_OFF) {
+            $ranker = new null_ranker();
+        } else if ($config->get('rankmode') == course_world_config::RANK_REL) {
+            $ranker = new relative_ranker($world->get_store()->get_state($USER->id));
+        }
+        return $ranker;
+    }
+
+    /**
+     * Wrap the leaderboard if needed.
+     *
+     * @param course_world $world The world.
+     * @param leaderboard $leaderboard The leaderboard.
+     * @return leaderboard
+     */
+    protected function wrap_leaderboard(course_world $world, leaderboard $leaderboard) {
+        global $USER;
+        $config = $world->get_config();
 
         // Do we only display the neighbours?
         if ($config->get('neighbours')) {
