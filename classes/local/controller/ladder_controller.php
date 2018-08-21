@@ -55,11 +55,25 @@ class ladder_controller extends page_controller {
         $PAGE->add_body_class('block_xp-ladder');
     }
 
+    /**
+     * Get the leadeboard.
+     *
+     * @return leaderboard
+     */
+    protected function get_leaderboard() {
+        $leaderboardfactory = \block_xp\di::get('course_world_leaderboard_factory');
+        return $leaderboardfactory->get_course_leaderboard($this->world, $this->get_groupid());
+    }
+
+    /**
+     * Get the table.
+     *
+     * @return flexible_table
+     */
     protected function get_table() {
         global $USER;
-        $leaderboardfactory = \block_xp\di::get('course_world_leaderboard_factory');
         $table = new \block_xp\output\leaderboard_table(
-            $leaderboardfactory->get_course_leaderboard($this->world, $this->get_groupid()),
+            $this->get_leaderboard(),
             $this->get_renderer(),
             [
                 'identitymode' => $this->world->get_config()->get('identitymode'),
