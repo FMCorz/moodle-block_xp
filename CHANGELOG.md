@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v3.3.1
+------
+
+- Maintenance for Level up! Plus
+
 v3.3.0
 ------
 
