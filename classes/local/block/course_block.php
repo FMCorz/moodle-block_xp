@@ -33,8 +33,9 @@ use html_writer;
 use lang_string;
 use pix_icon;
 use stdClass;
-use \block_xp\output\notice;
-use \block_xp\output\dismissable_notice;
+use block_xp\local\course_world;
+use block_xp\output\notice;
+use block_xp\output\dismissable_notice;
 
 /**
  * Block class.
@@ -172,33 +173,7 @@ class course_block extends block_base {
         }
 
         // Navigation.
-        $actions = [];
-        if ($config->get('enableinfos')) {
-            $actions[] = new action_link(
-                $urlresolver->reverse('infos', ['courseid' => $courseid]),
-                get_string('navinfos', 'block_xp'), null, null,
-                new pix_icon('i/info', '', 'block_xp')
-            );
-        }
-        if ($world->get_config()->get('enableladder')) {
-            $actions[] = new action_link(
-                $urlresolver->reverse('ladder', ['courseid' => $courseid]),
-                get_string('navladder', 'block_xp'), null, null,
-                new pix_icon('i/ladder', '', 'block_xp')
-            );
-        }
-        if ($canedit) {
-            $actions[] = new action_link(
-                $urlresolver->reverse('report', ['courseid' => $courseid]),
-                get_string('navreport', 'block_xp'), null, null,
-                new pix_icon('i/report', '', 'block_xp')
-            );
-            $actions[] = new action_link(
-                $urlresolver->reverse('config', ['courseid' => $courseid]),
-                get_string('navsettings', 'block_xp'), null, null,
-                new pix_icon('i/settings', '', 'block_xp')
-            );
-        }
+        $actions = $this->get_block_navigation($world);
 
         // Introduction.
         $introduction = isset($this->config->description) ? $this->config->description : $adminconfig->get('blockdescription');
@@ -259,6 +234,49 @@ class course_block extends block_base {
         }
 
         return $this->content;
+    }
+
+    /**
+     * Get the block navigation.
+     *
+     * @param course_world $world The world.
+     * @return action_link[]
+     */
+    protected function get_block_navigation(course_world $world) {
+        $canedit = $world->get_access_permissions()->can_manage();
+        $courseid = $world->get_courseid();
+        $urlresolver = \block_xp\di::get('url_resolver');
+        $config = $world->get_config();
+        $actions = [];
+
+        if ($config->get('enableinfos')) {
+            $actions[] = new action_link(
+                $urlresolver->reverse('infos', ['courseid' => $courseid]),
+                get_string('navinfos', 'block_xp'), null, null,
+                new pix_icon('i/info', '', 'block_xp')
+            );
+        }
+        if ($config->get('enableladder')) {
+            $actions[] = new action_link(
+                $urlresolver->reverse('ladder', ['courseid' => $courseid]),
+                get_string('navladder', 'block_xp'), null, null,
+                new pix_icon('i/ladder', '', 'block_xp')
+            );
+        }
+        if ($canedit) {
+            $actions[] = new action_link(
+                $urlresolver->reverse('report', ['courseid' => $courseid]),
+                get_string('navreport', 'block_xp'), null, null,
+                new pix_icon('i/report', '', 'block_xp')
+            );
+            $actions[] = new action_link(
+                $urlresolver->reverse('config', ['courseid' => $courseid]),
+                get_string('navsettings', 'block_xp'), null, null,
+                new pix_icon('i/settings', '', 'block_xp')
+            );
+        }
+
+        return $actions;
     }
 
     /**
