@@ -44,7 +44,7 @@ class promo_controller extends route_controller {
     /** Seen flag. */
     const SEEN_FLAG = 'promo-page-seen';
     /** Page version. */
-    const VERSION = 20170910;
+    const VERSION = 20180917;
 
     /** @var string The normal route name. */
     protected $routename = 'promo';
@@ -157,6 +157,17 @@ class promo_controller extends route_controller {
 </style>
 <table class="block_xp-promo-table">
     <tr>
+        <td><img src="{$output->pix_url('noun/group', 'block_xp')}" alt=""></td>
+        <td>
+            <h4>Group leaderboards <span class="label label-info">New</span></h4>
+            <p>Rank groups of learners based on their combined points.</p>
+            <ul>
+                <li>Compatible with course groups</li>
+                <li>Collaboration and cohesion in a friendly competition</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
         <td><img src="{$output->pix_url('noun/checklist', 'block_xp')}" alt=""></td>
         <td>
             <h4>Completion rules</h4>
@@ -170,7 +181,7 @@ class promo_controller extends route_controller {
     <tr>
         <td><img src="{$output->pix_url('noun/favorite-mobile', 'block_xp')}" alt=""></td>
         <td>
-            <h4>Mobile app support <span class="label label-info">New</span></h4>
+            <h4>Mobile app support</h4>
             <p>Level up! in the official Moodle Mobile app.</p>
             <ul>
                 <li>See current level and progress</li>
