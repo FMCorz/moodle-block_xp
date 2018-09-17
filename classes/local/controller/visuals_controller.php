@@ -65,7 +65,7 @@ class visuals_controller extends page_controller {
      * @return array
      */
     final protected function get_filemanager_options() {
-        return ['subdirs' => 0, 'accepted_types' => array('.jpg', '.png')];
+        return ['subdirs' => 0, 'accepted_types' => array('.jpg', '.png', '.gif', '.svg')];
     }
 
     /**

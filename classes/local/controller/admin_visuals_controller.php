@@ -72,7 +72,7 @@ class admin_visuals_controller extends admin_route_controller {
     final protected function get_filemanager_options() {
         return [
             'subdirs' => 0,
-            'accepted_types' => array('.jpg', '.png'),
+            'accepted_types' => ['.jpg', '.png', '.svg', '.gif'],
         ];
     }
 
