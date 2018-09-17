@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v3.4.0
+------
+
+- Support GIFs and SVGs for level badges
+- Maintenance for Level up! Plus group leaderboards
+
 v3.3.1
 ------
 
