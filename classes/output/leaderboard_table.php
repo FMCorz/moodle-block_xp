@@ -142,19 +142,8 @@ class leaderboard_table extends flexible_table {
 
         $ranking = $this->leaderboard->get_ranking($limit);
         foreach ($ranking as $rank) {
-            $row = (object) [
-                'rank' => $rank->get_rank(),
-                'state' => $rank->get_state()
-            ];
             $classes = ($this->userid == $rank->get_state()->get_id()) ? 'highlight-row' : '';
-            $this->add_data_keyed([
-                'fullname' => $this->col_fullname($row),
-                'level' => $this->col_lvl($row),
-                'progress' => $this->col_progress($row),
-                'rank' => $this->col_rank($row),
-                'xp' => $this->col_xp($row),
-                'userpic' => $this->col_userpic($row),
-            ], $classes);
+            $this->add_data_keyed($this->rank_to_keyed_data($rank), $classes);
         }
         $this->finish_output();
     }
@@ -249,5 +238,26 @@ class leaderboard_table extends flexible_table {
             '',
             ['style' => 'margin: 1em 0']
         );
+    }
+
+    /**
+     * Convert a rank to keyed table data.
+     *
+     * @param rank $rank The rank object.
+     * @return array Will be passed to {@link self::add_data_keyed}.
+     */
+    protected function rank_to_keyed_data($rank) {
+        $row = (object) [
+            'rank' => $rank->get_rank(),
+            'state' => $rank->get_state()
+        ];
+        return [
+            'fullname' => $this->col_fullname($row),
+            'level' => $this->col_lvl($row),
+            'progress' => $this->col_progress($row),
+            'rank' => $this->col_rank($row),
+            'xp' => $this->col_xp($row),
+            'userpic' => $this->col_userpic($row),
+        ];
     }
 }
