@@ -11,11 +11,11 @@
 
     cursor: default;
     -webkit-touch-callout: none;
-      -webkit-user-select: none;
-       -khtml-user-select: none;
-         -moz-user-select: none;
-          -ms-user-select: none;
-              user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .block_xp-level.level-1 {
@@ -61,11 +61,11 @@
     width: auto;
 
     -webkit-touch-callout: none;
-      -webkit-user-select: none;
-       -khtml-user-select: none;
-         -moz-user-select: none;
-          -ms-user-select: none;
-              user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .block_xp-level.level-badge img {
     width: 100px;
@@ -353,8 +353,9 @@
 }
 .block-xp-filters-wrapper p,
 .block-xp-filters-wrapper ul,
-.block-xp-filters-wrapper ul.filters-list,  /** Made more specific for RTL. */
-.block-xp-filters-wrapper input[type],
+.block-xp-filters-wrapper ul.filters-list,
+/** Made more specific for RTL. */ .block-xp-filters-wrapper input[type],
+.block-xp-filters-wrapper button,
 .block-xp-filters-wrapper select {
     margin: 0;
 }
@@ -409,7 +410,7 @@
 }
 .block-xp-filters-wrapper .rule-rules .rule::before {
     border-top: 1px dotted #ccc;
-    content: "";
+    content: '';
     display: block;
     left: 0;
     position: absolute;
@@ -430,7 +431,7 @@
     border-bottom: 1px dotted #ccc;
     border-left: 1px dotted #ccc;
     border-top: 0;
-    content: "";
+    content: '';
     display: block;
     height: 20px;
     left: 0;
@@ -444,7 +445,11 @@
 .block-xp-filters-wrapper .rule-move,
 .block-xp-filters-wrapper .filter-move {
     cursor: move;
-    margin: 0 .5rem;
+    margin: 0 0.5rem;
+}
+.block-xp-filters-wrapper .filter-delete,
+.block-xp-filters-wrapper .rule-delete {
+    margin: 0 0.5rem;
 }
 .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition .rule-delete,
 .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition .rule-move {
