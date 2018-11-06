@@ -100,12 +100,12 @@ class neighboured_leaderboard implements leaderboard {
 
         // The are less people in front of us than the number of neighbours.
         if ($pos < $neighbours) {
-            $count =  $count - ($neighbours - $pos);
+            $count = $count - ($neighbours - $pos);
         }
 
         // There are less people after us than the number of neighbours.
         if ($pos > $total - $neighbours) {
-            $count =  $count - ($pos - ($total - $neighbours));
+            $count = $count - ($pos - ($total - $neighbours));
         }
 
         $offset = max(0, $pos - $neighbours);
