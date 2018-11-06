@@ -110,6 +110,7 @@ $string['gotofullladder'] = 'Go to full ladder';
 $string['hideparticipantsidentity'] = 'Hide participants identity';
 $string['hiderank'] = 'Hide rank';
 $string['incourses'] = 'In courses';
+$string['ineffective'] = 'Ineffective';
 $string['infos'] = 'Information';
 $string['invalidxp'] = 'Invalid points value';
 $string['keeplogs'] = 'Keep logs';
