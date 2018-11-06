@@ -38,7 +38,9 @@ env:
     - MOODLE_BRANCH=MOODLE_32_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_33_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_34_STABLE DB=mysqli
+    - MOODLE_BRANCH=MOODLE_35_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_36_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_36_STABLE DB=mysqli
 
 matrix:
   exclude:
@@ -50,13 +52,23 @@ matrix:
     - php: 5.4
       env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
     - php: 5.4
-      env: MOODLE_BRANCH=MOODLE_34_STABLE DB=mysqli
+      env: MOODLE_BRANCH=MOODLE_35_STABLE DB=pgsql
+    - php: 5.4
+      env: MOODLE_BRANCH=MOODLE_36_STABLE DB=pgsql
+    - php: 5.4
+      env: MOODLE_BRANCH=MOODLE_36_STABLE DB=mysqli
 
     # Exclude builds not compatible with 5.6.
     - php: 5.6
       env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
     - php: 5.6
       env: MOODLE_BRANCH=MOODLE_34_STABLE DB=mysqli
+    - php: 5.6
+      env: MOODLE_BRANCH=MOODLE_35_STABLE DB=pgsql
+    - php: 5.6
+      env: MOODLE_BRANCH=MOODLE_36_STABLE DB=pgsql
+    - php: 5.6
+      env: MOODLE_BRANCH=MOODLE_36_STABLE DB=mysqli
 
     # Exclude builds not compatible with 7.0.
     - php: 7.0
