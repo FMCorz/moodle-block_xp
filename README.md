@@ -25,7 +25,7 @@ Purchasing the _Level up! Plus_ add-on unlocks additional features. [Click here 
 Requirements
 ------------
 
-Moodle 2.7 or greater.
+Moodle 3.1 or greater.
 
 Installation
 ------------
