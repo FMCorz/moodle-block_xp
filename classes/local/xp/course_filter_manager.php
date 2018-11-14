@@ -219,4 +219,15 @@ class course_filter_manager {
         $cache = cache::make('block_xp', 'filters');
         $cache->delete('filters_' . $this->courseid);
     }
+
+    /**
+     * Removes all filters.
+     *
+     * @return void
+     */
+    public function purge() {
+        $this->db->delete_records('block_xp_filters', ['courseid' => $this->courseid]);
+        $this->invalidate_filters_cache();
+    }
+
 }

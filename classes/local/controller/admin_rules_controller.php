@@ -51,6 +51,7 @@ class admin_rules_controller extends admin_route_controller {
     protected function define_optional_params() {
         return [
             ['revert', false, PARAM_BOOL, false],
+            ['reset', false, PARAM_BOOL, false],
             ['confirm', false, PARAM_BOOL, false]
         ];
     }
@@ -62,6 +63,14 @@ class admin_rules_controller extends admin_route_controller {
         if ($this->get_param('revert') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
                 $this->filtermanager->reset();
+                $this->redirect(new url($this->pageurl));
+            }
+        }
+
+        // Reset all courses to defaults.
+        if ($this->get_param('reset') && confirm_sesskey()) {
+            if ($this->get_param('confirm')) {
+                $this->filtermanager->reset_all_courses_to_defaults();
                 $this->redirect(new url($this->pageurl));
             }
         }
@@ -181,12 +190,21 @@ class admin_rules_controller extends admin_route_controller {
      */
     protected function content() {
         $output = $this->get_renderer();
+        $forwholesite = \block_xp\di::get('config')->get('context') == CONTEXT_SYSTEM;
         echo $output->heading(get_string('defaultrules', 'block_xp'));
 
         if ($this->get_param('revert')) {
             echo $output->confirm(
                 get_string('reallyreverttopluginsdefaults', 'block_xp'),
                 new url($this->pageurl->get_compatible_url(), ['revert' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
+                new url($this->pageurl->get_compatible_url())
+            );
+            return;
+
+        } else if ($this->get_param('reset')) {
+            echo $output->confirm(
+                get_string('reallyresetallcoursestodefaults', 'block_xp'),
+                new url($this->pageurl->get_compatible_url(), ['reset' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
                 new url($this->pageurl->get_compatible_url())
             );
             return;
@@ -198,16 +216,35 @@ class admin_rules_controller extends admin_route_controller {
         echo html_writer::tag('p', get_string('admindefaultrulesintro', 'block_xp'));
         echo $output->render($widget);
 
-        // Revert button.
-        if ($this->filtermanager->is_customised()) {
+        $hasdangerzone = $this->filtermanager->is_customised() || !$forwholesite;
+        if ($hasdangerzone) {
             echo html_writer::tag('div', $output->heading(get_string('dangerzone', 'block_xp'), 3),
                 ['style' => 'margin-top: 2em']);
+        }
+
+        // Revert button.
+        if ($this->filtermanager->is_customised()) {
+
             echo html_writer::tag('p', get_string('reverttopluginsdefaultsintro', 'block_xp'));
             $url = new url($this->pageurl, ['revert' => 1, 'sesskey' => sesskey()]);
             echo html_writer::tag('p',
                 $output->single_button(
                     $url->get_compatible_url(),
                     get_string('reverttopluginsdefaults', 'block_xp'),
+                    'get'
+                )
+            );
+
+        }
+
+        // Reset courses.
+        if (!$forwholesite) {
+            echo html_writer::tag('p', markdown_to_html(get_string('resetallcoursestodefaultsintro', 'block_xp')));
+            $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
+            echo html_writer::tag('p',
+                $output->single_button(
+                    $url->get_compatible_url(),
+                    get_string('resetallcoursestodefaults', 'block_xp'),
                     'get'
                 )
             );

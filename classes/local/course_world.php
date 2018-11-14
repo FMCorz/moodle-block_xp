@@ -218,4 +218,20 @@ class course_world implements world {
         return new \block_xp\local\activity\course_log_recent_activity_repository($this->db, $this->courseid);
     }
 
+    /**
+     * Reset the filters to defaults.
+     *
+     * This API should not be public, but due to the inconsistency in the implementation
+     * of filters and how the config has an impact on it, it is cleaner to declare this
+     * method as it can act upon both the config and the filters at once.
+     *
+     * This method should only be used temporarily, it can be removed at any time!
+     *
+     * @return void
+     */
+    public function reset_filters_to_defaults() {
+        $this->get_filter_manager()->purge();
+        $this->get_config()->set('defaultfilters', course_world_config::DEFAULT_FILTERS_MISSING);
+    }
+
 }

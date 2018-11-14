@@ -26,7 +26,10 @@
 namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
+use coding_exception;
 use moodle_database;
+use block_xp\di;
+use block_xp\local\config\course_world_config;
 
 /**
  * Admin filter manager class.
@@ -139,4 +142,33 @@ class admin_filter_manager {
         unset_config(self::CUSTOMISED_CONFIG_KEY, 'block_xp');
     }
 
+    /**
+     * Reset all courses to defaults.
+     *
+     * Note: This only works if the plugin is set to be used per course.
+     *
+     * This current implementation is not safe, not efficient and is due to be
+     * changed once the filters handling has been rewritten.
+     *
+     * @return void
+     */
+    public function reset_all_courses_to_defaults() {
+        $config = di::get('config');
+        if ($config->get('context') != CONTEXT_COURSE) {
+            throw coding_exception('Cannot reset filters for all courses in current mode.');
+        }
+        $courseworldfactory = di::get('course_world_factory');
+
+        // This is dangerously hardcoded, byt let's use this for now to detect all instances to work on.
+        $sql = 'courseid > 0 AND defaultfilters != :defaultfilters';
+        $courseids = $this->db->get_fieldset_select('block_xp_config', 'courseid', $sql, [
+            'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING
+        ]);
+
+        // This is slow, but that's sort of the cleanest way.
+        foreach ($courseids as $courseid) {
+            $world = $courseworldfactory->get_world($courseid);
+            $world->reset_filters_to_defaults();
+        }
+    }
 }
