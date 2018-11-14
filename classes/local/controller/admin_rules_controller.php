@@ -140,15 +140,7 @@ class admin_rules_controller extends admin_route_controller {
             (object) [
                 'name' => get_string('ruleevent', 'block_xp'),
                 'rule' => new \block_xp_rule_event()
-            ]
-        ];
-        if ($forwholesite) {
-            $rules[] = (object) [
-                'name' => get_string('rulecm', 'block_xp'),
-                'rule' => new \block_xp_rule_cm(),
-            ];
-        }
-        $rules = array_merge($rules, [
+            ],
             (object) [
                 'name' => get_string('ruleproperty', 'block_xp'),
                 'rule' => new \block_xp_rule_property()
@@ -157,7 +149,7 @@ class admin_rules_controller extends admin_route_controller {
                 'name' => get_string('ruleset', 'block_xp'),
                 'rule' => new \block_xp_ruleset()
             ],
-        ]);
+        ];
         return $rules;
     }
 
