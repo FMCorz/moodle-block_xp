@@ -31,6 +31,7 @@ use moodle_exception;
 use moodle_url;
 use pix_icon;
 use stdClass;
+use block_xp\local\routing\url;
 
 /**
  * Rules controller class.
@@ -54,6 +55,13 @@ class rules_controller extends page_controller {
     /** @var array User filters. */
     protected $userfilters;
 
+    protected function define_optional_params() {
+        return [
+            ['reset', false, PARAM_BOOL, false],
+            ['confirm', false, PARAM_BOOL, false]
+        ];
+    }
+
     protected function post_login() {
         parent::post_login();
         $this->filtermanager = $this->world->get_filter_manager();
@@ -62,6 +70,14 @@ class rules_controller extends page_controller {
 
     protected function pre_content() {
         global $PAGE;
+
+        // Reset course rules to defaults.
+        if ($this->get_param('reset') && confirm_sesskey()) {
+            if ($this->get_param('confirm')) {
+                $this->world->reset_filters_to_defaults();
+                $this->redirect(new url($this->pageurl));
+            }
+        }
 
         // Saving the data.
         if (!empty($_POST['save'])) {
@@ -166,6 +182,15 @@ class rules_controller extends page_controller {
     protected function page_content() {
         $output = $this->get_renderer();
 
+        if ($this->get_param('reset')) {
+            echo $output->confirm(
+                get_string('reallyresetcourserulestodefaults', 'block_xp'),
+                new url($this->pageurl->get_compatible_url(), ['reset' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
+                new url($this->pageurl->get_compatible_url())
+            );
+            return;
+        }
+
         $logurl = $this->urlresolver->reverse('log', ['courseid' => $this->courseid]);
         $a = new stdClass();
         $a->list = (new moodle_url('/report/eventlist/index.php'))->out();
@@ -175,11 +200,29 @@ class rules_controller extends page_controller {
 
         echo $output->render($this->get_widget());
 
+        $this->page_danger_zone_content();
+
         // TODO Change the introduction.
-        // TODO Add revert button.
         // TODO Decide whether we want to separate the "default" rules from the rest.
         // TODO Decide whether we want to be able to "unlock" the default rules.
 
+    }
+
+    protected function page_danger_zone_content() {
+        $forwholesite = \block_xp\di::get('config')->get('context') == CONTEXT_SYSTEM;
+        $output = $this->get_renderer();
+
+        echo html_writer::tag('div', $output->heading(get_string('dangerzone', 'block_xp'), 3),
+            ['style' => 'margin-top: 2em']);
+
+        $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
+        echo html_writer::tag('p',
+            $output->single_button(
+                $url->get_compatible_url(),
+                get_string('resetcourserulestodefaults', 'block_xp'),
+                'get'
+            )
+        );
     }
 
 }
