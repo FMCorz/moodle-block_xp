@@ -22,10 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/ajax', 'block_xp/resource-selector', 'block_xp/cm-resource-selector'], function(
+define(['jquery', 'core/ajax', 'block_xp/course-resource-selector', 'block_xp/cm-resource-selector'], function(
     $,
     Ajax,
-    ResourceSelector,
+    CourseResourceSelector,
     CmResourceSelector
 ) {
     var lastUsedCourse = null;
@@ -44,29 +44,7 @@ define(['jquery', 'core/ajax', 'block_xp/resource-selector', 'block_xp/cm-resour
         var courseSearchField = container.find('.search-term-course');
         var cmSearchField = container.find('.search-term-cm');
 
-        var cs = new ResourceSelector(
-            searchResultsContents,
-            function(term) {
-                var calls = [
-                    {
-                        methodname: 'block_xp_search_courses',
-                        args: { query: term }
-                    }
-                ];
-
-                return Ajax.call(calls)[0].then(function(results) {
-                    return results.map(function(c) {
-                        return {
-                            _iscourse: true,
-                            name: c.fullname,
-                            subname: c.shortname,
-                            course: c
-                        };
-                    });
-                });
-            },
-            courseSearchField
-        );
+        var cs = new CourseResourceSelector(searchResultsContents, courseSearchField);
         cs.onResourceSelected(function(e, resource) {
             if (!resource._iscourse) {
                 return;
