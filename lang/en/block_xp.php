@@ -41,8 +41,10 @@ $string['cachedef_ruleevent_eventslist'] = 'List of some events';
 $string['cannotshowblockconfig'] = 'I would usually display the appearance settings here, but I could not find your block. To change the block\'s appearance, head back [here]({$a}) (or where you added the block), turn editing mode on, and follow the "Configure" option in the block\'s dropdown. If you cannot find the block, add it to your course again.';
 $string['cannotshowblockconfigsys'] = 'I would usually display the appearance settings here, but I could not find your block. It may be missing from the [front page]({$a->fp}) and the [default dashboard]({$a->mysys}) of your users, or present in both. To edit the settings from here, make sure it only appears in one of them.';
 $string['cheatguard'] = 'Cheat guard';
-$string['colon'] = '{$a->a}: {$a->b}';
+$string['clicktoselectcm'] = 'Click to select an activity or resource';
 $string['coefxp'] = 'Algorithm coefficient';
+$string['colon'] = '{$a->a}: {$a->b}';
+$string['cmselector'] = 'Course module selector';
 $string['configdescription'] = 'Introduction';
 $string['configdescription_help'] = 'A short introduction displayed in the block, below the student\'s level. Students have the ability to dismiss the message, in which case they won\'t see it again.';
 $string['configheader'] = 'Settings';
@@ -55,6 +57,7 @@ $string['coolthanks'] = 'Cool, thanks!';
 $string['courselog'] = 'Course log';
 $string['coursereport'] = 'Course report';
 $string['courserules'] = 'Course rules';
+$string['courseselectedcolon'] = 'Course selected:';
 $string['coursesettings'] = 'Course settings';
 $string['coursevisuals'] = 'Course visuals';
 $string['customizelevels'] = 'Customize the levels';
@@ -88,6 +91,7 @@ $string['enablexpgain'] = 'Enable points gain';
 $string['enablexpgain_help'] = 'When set to \'No\', nobody will earn points in the course. This is useful to freeze the points gained, or to enable it at a certain point in time.
 
 Please note that this can also be controlled more granularly using the capability _block/xp:earnxp_.';
+$string['entersearchterm'] = 'Enter a search term';
 $string['errorformvalues'] = 'There are some issues in the form values, please fix them.';
 $string['errorlevelsincorrect'] = 'The minimum number of levels is 2';
 $string['errornotalllevelsbadgesprovided'] = 'Not all the level badges have been provided. Missing: {$a}';
@@ -99,6 +103,7 @@ $string['event_user_leveledup'] = 'User leveled up';
 $string['eventname'] = 'Event name';
 $string['eventproperty'] = 'Event property';
 $string['eventtime'] = 'Event time';
+$string['filtermodules'] = 'Filter modules';
 $string['for1day'] = 'For 1 day';
 $string['for1month'] = 'For a month';
 $string['for1week'] = 'For a week';
@@ -196,7 +201,9 @@ $string['rule:lt'] = 'is less than';
 $string['rule:lte'] = 'is less or equal to';
 $string['rule:regex'] = 'matches the regex';
 $string['rulecm'] = 'Activity or resource';
+$string['rulecm_help'] = 'This condition is met when the event occurs in the activity or resource specified.';
 $string['rulecmdesc'] = 'The activity or resource is \'{$a->contextname}\'.';
+$string['rulecmdescwithcourse'] = 'The activity or resource is: \'{$a->contextname}\' in \'{$a->coursename}\'.';
 $string['ruleevent'] = 'Specific event';
 $string['ruleeventdesc'] = 'The event is \'{$a->eventname}\'';
 $string['ruleproperty'] = 'Event property';
@@ -216,6 +223,8 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
     <li>And the events of educational level not equal to <em>Participating</em>.</li>
 </ul>
 </p>';
+$string['searchandselectcourse'] = 'Search and select a course';
+$string['searchandselectmodule'] = 'Search and select an activity or resource';
 $string['send'] = 'Send';
 $string['shortcode:xpbadge'] = 'The badge matching the current user\'s level.';
 $string['shortcode:xpladder'] = 'Display a portion of the ladder around the current user\'s rank.';

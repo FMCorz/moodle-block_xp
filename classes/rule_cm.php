@@ -36,6 +36,9 @@ require_once($CFG->dirroot . '/course/lib.php');
  */
 class block_xp_rule_cm extends block_xp_rule_property {
 
+    /** @var config The configuration. */
+    protected $config;
+
     /**
      * Course ID used when we populate the form.
      * @var int
@@ -58,6 +61,7 @@ class block_xp_rule_cm extends block_xp_rule_property {
     public function __construct($courseid = 0, $contextid = 0) {
         global $COURSE;
         $this->courseid = empty($courseid) ? $COURSE->id : $courseid;
+        $this->config = \block_xp\di::get('config');
         parent::__construct(self::EQ, $contextid, 'contextid');
     }
 
@@ -67,14 +71,36 @@ class block_xp_rule_cm extends block_xp_rule_property {
      * @return string
      */
     public function get_description() {
-        $context = context::instance_by_id($this->value, IGNORE_MISSING);
-        $contextname = get_string('errorunknownmodule', 'block_xp');
-        if ($context) {
-            $contextname = $context->get_context_name();
+        return $this->get_display_name();
+    }
+
+    /**
+     * Get display name.
+     *
+     * @return string
+     */
+    protected function get_display_name() {
+        if (empty($this->value)) {
+            return get_string('errorunknownmodule', 'block_xp');
         }
-        return get_string('rulecmdesc', 'block_xp', (object)array(
-            'contextname' => $contextname
-        ));
+        $context = context::instance_by_id($this->value, IGNORE_MISSING);
+        if (!$context) {
+            return get_string('errorunknownmodule', 'block_xp');
+        }
+
+        $str = 'rulecmdesc';
+        $strparams = ['contextname' => $context->get_context_name(false)];
+        $coursecontext = false;
+        if ($this->config->get('context') == CONTEXT_SYSTEM) {
+            $coursecontext = $context->get_course_context(false);
+        }
+
+        if (!empty($coursecontext)) {
+            $str = 'rulecmdescwithcourse';
+            $strparams['coursename'] = $coursecontext->get_context_name(false, true);
+        }
+
+        return get_string($str, 'block_xp', (object) $strparams);
     }
 
     /**
@@ -84,9 +110,66 @@ class block_xp_rule_cm extends block_xp_rule_property {
      * @return string
      */
     public function get_form($basename) {
+        if ($this->config->get('context') == CONTEXT_SYSTEM) {
+            return $this->get_advanced_form($basename);
+        }
+        return $this->get_simple_form($basename);
+    }
+
+    /**
+     * Get advanced form.
+     *
+     * This is used when we're using one block for the whole site,
+     * we can't display all modules at once as there would be too many.
+     *
+     * @param string $basename The base name.
+     * @return string
+     */
+    protected function get_advanced_form($basename) {
+        $output = \block_xp\di::get('renderer');
+        $hascm = !empty($this->value);
+
+        $o = block_xp_rule::get_form($basename);
+        $o .= html_writer::start_tag('span', ['class' => 'block_xp-cm-rule-widget ' . ($hascm ? 'has-cm' : null)]);
+        $o .= html_writer::empty_tag('input', [
+            'name' => $basename . '[value]',
+            'class' => 'cm-rule-contextid',
+            'type' => 'hidden',
+            'value' => $this->value
+        ]);
+
+        if (!$hascm) {
+            // We can only select the CM once!
+            static::init_page_requirements();
+            $o .= html_writer::start_tag('span', ['class' => 'cm-selection']);
+            $o .= html_writer::tag('button', get_string('clicktoselectcm', 'block_xp'), ['class' => 'btn btn-warning']);
+            $o .= html_writer::end_tag('span');
+        }
+
+        $o .= html_writer::start_tag('span', ['class' => 'cm-selected']);
+        $o .= $this->get_display_name();
+        $o .= html_writer::end_tag('span');
+
+        $o .= $output->help_icon('rulecm', 'block_xp');
+        $o .= html_writer::end_tag('span');
+        return $o;
+    }
+
+    /**
+     * Get simple form.
+     *
+     * This is used when we're using one block per course, and as such
+     * can display all modules in a select box.
+     *
+     * @param string $basename The base name.
+     * @return string
+     */
+    protected function get_simple_form($basename) {
         global $COURSE;
+        $output = \block_xp\di::get('renderer');
         $options = array();
 
+        $valuefound = empty($this->value);
         $modinfo = get_fast_modinfo($this->courseid);
         $courseformat = course_get_format($this->courseid);
 
@@ -95,14 +178,46 @@ class block_xp_rule_cm extends block_xp_rule_property {
             foreach ($cmids as $cmid) {
                 $cm = $modinfo->get_cm($cmid);
                 $modules[$cm->context->id] = $cm->name;
+                $valuefound = $valuefound || $this->value == $cm->context->id;
             }
             $options[] = array($courseformat->get_section_name($sectionnum) => $modules);
+        }
+
+        if (!$valuefound) {
+            $options[] = [get_string('error') => [$this->value => get_string('errorunknownmodule', 'block_xp')]];
         }
 
         $o = block_xp_rule::get_form($basename);
         $modules = html_writer::select($options, $basename . '[value]', $this->value, '', array('id' => '', 'class' => ''));
         $o .= get_string('activityoresourceis', 'block_xp', $modules);
+        $o .= $output->help_icon('rulecm', 'block_xp');
+
         return $o;
+    }
+
+    /**
+     * Initialise the page requirements.
+     *
+     * @return void
+     */
+    protected static function init_page_requirements() {
+        global $PAGE, $COURSE;
+
+        static $alreadydone = false;
+        if ($alreadydone) {
+            return;
+        }
+        $alreadydone = true;
+
+        $args = [];
+
+        // This currently has no effect as when we use one block per course, the page always has the system context.
+        if ($COURSE->id != SITEID) {
+            $args = array_intersect_key((array) $COURSE, array_flip(['id', 'fullname', 'displayname', 'shortname', 'categoryid']));
+        }
+
+        $PAGE->requires->js_call_amd('block_xp/cm-rule', 'init', $args);
+        $PAGE->requires->strings_for_js(['cmselector', 'rulecmdescwithcourse'], 'block_xp');
     }
 
 }

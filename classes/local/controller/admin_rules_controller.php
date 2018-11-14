@@ -126,20 +126,30 @@ class admin_rules_controller extends admin_route_controller {
      * @return array
      */
     protected function get_available_rules() {
-        return [
+        $forwholesite = \block_xp\di::get('config')->get('context') == CONTEXT_SYSTEM;
+        $rules = [
+            (object) [
+                'name' => get_string('ruleevent', 'block_xp'),
+                'rule' => new \block_xp_rule_event()
+            ]
+        ];
+        if ($forwholesite) {
+            $rules[] = (object) [
+                'name' => get_string('rulecm', 'block_xp'),
+                'rule' => new \block_xp_rule_cm(),
+            ];
+        }
+        $rules = array_merge($rules, [
             (object) [
                 'name' => get_string('ruleproperty', 'block_xp'),
                 'rule' => new \block_xp_rule_property()
             ],
             (object) [
-                'name' => get_string('ruleevent', 'block_xp'),
-                'rule' => new \block_xp_rule_event()
-            ],
-            (object) [
                 'name' => get_string('ruleset', 'block_xp'),
                 'rule' => new \block_xp_ruleset()
             ],
-        ];
+        ]);
+        return $rules;
     }
 
     /**

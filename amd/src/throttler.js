@@ -1,4 +1,3 @@
-<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,17 +14,39 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Throttler.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2018 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+define([], function() {
+    /**
+     * Throttler.
+     *
+     * @param {Number} delay The delay.
+     */
+    function Throttler(delay) {
+        this.delay = delay || 300;
+        this.timeout = null;
+        this.time = new Date();
+    }
 
-$plugin->version    = 2018111301;
-$plugin->requires   = 2016052300;   // Moodle 3.1.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.4.0';
+    Throttler.prototype.cancel = function() {
+        clearTimeout(this.timeout);
+    };
+
+    Throttler.prototype.schedule = function(callback) {
+        var now = new Date();
+        if (this.time.getTime() + this.delay > now) {
+            clearTimeout(this.timeout);
+        }
+
+        this.time = now;
+        this.timeout = setTimeout(callback, this.delay);
+    };
+
+    return Throttler;
+});

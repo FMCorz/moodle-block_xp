@@ -488,6 +488,19 @@
     display: inline;
 }
 
+/**
+ * CM rule.
+ */
+.block_xp-cm-rule-widget .cm-selected {
+    display: none;
+}
+.block_xp-cm-rule-widget.has-cm .cm-selection {
+    display: none;
+}
+.block_xp-cm-rule-widget.has-cm .cm-selected {
+    display: inline;
+}
+
 /** RTL styles. */
 .dir-rtl .block-xp-filters-wrapper .filter-rules {
     margin-left: 0;
