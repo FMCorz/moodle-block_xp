@@ -442,9 +442,16 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
     /**
      * Set drag & drop for rules in a filter.
      *
+     * @param {Node} filterNode The filter container.
      * @return {Void}
      */
     setFilterRulesDnD: function(filterNode) {
+        if (!filterNode.one(SELECTORS.RULES)) {
+            // If the filter node does not contain the selector, it means that there is only one rule
+            // in it, that's the legacy rules. Therefore we ignore this.
+            return;
+        }
+
         this.rulesDnD[filterNode.generateID()] = Y.namespace('M.block_xp.Filters.DnD').init({
             additionalDropsSelector: SELECTORS.ADDRULE,
             dropBeforeSelector: SELECTORS.ADDRULE,
