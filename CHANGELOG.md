@@ -1,6 +1,17 @@
 Changelog
 =========
 
+v3.5.0
+------
+
+- Allow selection of activity from any course
+- Admins can reset the rules of all courses to the defaults
+- Teachers can reset their course's rules to the defaults
+- Increase minimum required version to Moodle 3.1
+- Fixed a rare bug in drag and drop of rules
+- Remove entry files for legacy URLs
+- Minor styles fixes in rules screen
+
 v3.4.0
 ------
 
@@ -26,7 +37,7 @@ v3.2.1
 v3.2.0
 ------
 
-- Implemen privacy API (GDPR compliance)
+- Implement privacy API (GDPR compliance)
 - Some preferences were not deleted during course deletion
 - Prevent rare exception during event collection
 
