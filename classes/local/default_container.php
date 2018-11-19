@@ -63,6 +63,7 @@ class default_container implements container {
         'observer_rules_maker' => true,
         'renderer' => true,
         'router' => true,
+        'rule_event_lister' => true,
         'settings_maker' => true,
         'shortcodes_definition_maker' => true,
         'tasks_definition_maker' => true,
@@ -342,6 +343,15 @@ class default_container implements container {
      */
     protected function get_routes_config() {
         return new \block_xp\local\routing\default_routes_config();
+    }
+
+    /**
+     * Get the rule event lister.
+     *
+     * @return event_lister
+     */
+    protected function get_rule_event_lister() {
+        return new \block_xp\local\rule\event_lister($this->get('config'));
     }
 
     /**
