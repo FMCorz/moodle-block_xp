@@ -44,7 +44,7 @@ class promo_controller extends route_controller {
     /** Seen flag. */
     const SEEN_FLAG = 'promo-page-seen';
     /** Page version. */
-    const VERSION = 20180917;
+    const VERSION = 20181122;
 
     /** @var string The normal route name. */
     protected $routename = 'promo';
@@ -157,6 +157,18 @@ class promo_controller extends route_controller {
 </style>
 <table class="block_xp-promo-table">
     <tr>
+        <td><img src="{$output->pix_url('noun/checklist', 'block_xp')}" alt=""></td>
+        <td>
+            <h4>Additional rules <span class="label label-info">New</span></h4>
+            <p>Reward your students for completing their tasks and courses.</p>
+            <ul>
+                <li>Support for activity completion</li>
+                <li>Support for course completion</li>
+                <li>Support for targetting specific courses</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
         <td><img src="{$output->pix_url('noun/group', 'block_xp')}" alt=""></td>
         <td>
             <h4>Group leaderboards <span class="label label-info">New</span></h4>
@@ -164,17 +176,6 @@ class promo_controller extends route_controller {
             <ul>
                 <li>Compatible with course groups</li>
                 <li>Collaboration and cohesion in a friendly competition</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('noun/checklist', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Completion rules</h4>
-            <p>Reward your students for completing their tasks.</p>
-            <ul>
-                <li>Support for activity completion</li>
-                <li>Support for course completion</li>
             </ul>
         </td>
     </tr>
