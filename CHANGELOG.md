@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v3.5.1
+------
+
+- Minor changes
+
 v3.5.0
 ------
 
