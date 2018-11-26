@@ -109,6 +109,7 @@ class block_xp_renderer extends plugin_renderer_base {
             $o .= $this->small_level_badge($level);
             $o .= html_writer::end_div();
         }
+        $o .= html_writer::end_div();
 
         return $o;
     }
