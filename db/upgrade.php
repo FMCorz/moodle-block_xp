@@ -425,6 +425,36 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2017082000, 'xp');
     }
 
+    if ($oldversion < 2019020301) {
+
+        // Define field instructions to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('instructions', XMLDB_TYPE_TEXT, null, null, null, null, null, 'laddercols');
+
+        // Conditionally launch add field instructions.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2019020301, 'xp');
+    }
+
+    if ($oldversion < 2019020302) {
+
+        // Define field instructions_format to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('instructions_format', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '1', 'instructions');
+
+        // Conditionally launch add field instructions_format.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2019020302, 'xp');
+    }
+
     return true;
 
 }

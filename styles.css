@@ -76,6 +76,10 @@
     height: 35px;
 }
 
+.block_xp-instructions {
+    margin-bottom: 2em;
+}
+
 /** Block content. */
 .block_xp .block_xp-level {
     margin-left: auto;
@@ -480,6 +484,8 @@
     top: 0;
     height: 15px;
 }
+
+/** Level grid */
 
 .block_xp-level-grid {
     display: flex;
