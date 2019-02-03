@@ -232,10 +232,19 @@ $string['searchandselectcourse'] = 'Search and select a course';
 $string['searchandselectmodule'] = 'Search and select an activity or resource';
 $string['send'] = 'Send';
 $string['shortcode:xpbadge'] = 'The badge matching the current user\'s level.';
-$string['shortcode:xpladder'] = 'Display a portion of the ladder around the current user\'s rank.';
+$string['shortcode:xpladder'] = 'Display a portion of the ladder.';
 $string['shortcode:xpladder_help'] = '
+By default, a portion of the ladder surrounding the current user will be displayed.
+
 ```
 [xpladder]
+```
+
+To display the top 10 students instead of the neighbours of the current user, set the parameter `top`. You can optionally set the number of users to display like so `top=20`.
+
+```
+[xpladder top]
+[xpladder top=15]
 ```
 
 A link to the full ladder will automatically be displayed below the table, if you do not want to display such link, add the argument `hidelink`.

@@ -236,12 +236,23 @@ class handler {
             $pos = 0;
         }
 
-        // Determine what part of the leaderboard to show and fence it.
-        $before = 2;
-        $after = 4;
-        $offset = max(0, $pos - $before);
-        $count = $before + $after + 1;
-        $limit = new limit($count + min(0, $pos - $before), $offset);
+        if (!empty($args['top'])) {
+            // Show the top n users.
+            if ($args['top'] === true) {
+                $count = 10;
+            } else {
+                $count = max(1, intval($args['top']));
+            }
+            $limit = new limit($count, 0);
+
+        } else {
+            // Determine what part of the leaderboard to show and fence it.
+            $before = 2;
+            $after = 4;
+            $offset = max(0, $pos - $before);
+            $count = $before + $after + 1;
+            $limit = new limit($count + min(0, $pos - $before), $offset);
+        }
 
         // Output the table.
         $baseurl = $PAGE->url;
