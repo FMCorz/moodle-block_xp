@@ -1,6 +1,17 @@
 Changelog
 =========
 
+v3.6.0
+------
+
+- Option to add arbitrary information to the information
+- The information page has been restyled
+- Added an option to change the pagination size of the ladder
+- The shortcode `xpladder` supports displaying the top users
+- Fix minor bug causing issues with some themes
+
+Some of these changes were sponsored by Xi'an Jiaotong-Liverpool University.
+
 v3.5.1
 ------
 
