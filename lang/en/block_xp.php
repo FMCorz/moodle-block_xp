@@ -173,6 +173,7 @@ $string['privacy:metadata:xp:xp'] = 'The user\'s points';
 $string['privacy:metadata:xp:lvl'] = 'The user\'s level';
 $string['privacy:metadata:xp:userid'] = 'The user';
 $string['progress'] = 'Progress';
+$string['progressbar'] = 'Progress bar';
 $string['property:action'] = 'Event action';
 $string['property:component'] = 'Event component';
 $string['property:crud'] = 'Event CRUD';
