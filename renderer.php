@@ -94,6 +94,38 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Levels grid.
+     *
+     * @param array $levels The levels.
+     * @return string
+     */
+    public function levels_grid(array $levels) {
+        $o = '';
+        $o .= html_writer::start_div('block_xp-level-grid');
+        foreach ($levels as $level) {
+            $desc = $level instanceof \block_xp\local\xp\level_with_description ? $level->get_description() : '';
+            $o .= html_writer::start_div('block_xp-level-boxed ' . ($desc ? 'block_xp-level-boxed-with-desc' : ''));
+            $o .= html_writer::start_div('block_xp-level-box');
+            $o .= html_writer::start_div('block_xp-level-no');
+            $o .= '#' . $level->get_level();
+            $o .= html_writer::end_div();
+            $o .= html_writer::start_div();
+            $o .= $this->level_badge($level);
+            $o .= html_writer::end_div();
+            $o .= html_writer::start_div();
+            $o .= $this->xp($level->get_xp_required());
+            $o .= html_writer::end_div();
+            $o .= html_writer::start_div('block_xp-level-desc');
+            $o .= $desc;
+            $o .= html_writer::end_div();
+            $o .= html_writer::end_div();
+            $o .= html_writer::end_div();
+        }
+        $o .= html_writer::end_div();
+        return $o;
+    }
+
+    /**
      * Levels preview.
      *
      * @param level[] $levels The levels.

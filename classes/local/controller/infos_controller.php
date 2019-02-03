@@ -64,22 +64,7 @@ class infos_controller extends page_controller {
         $output = $this->get_renderer();
         $levelsinfo = $this->world->get_levels_info();
 
-        $table = new flexible_table('xpinfos');
-        $table->define_baseurl($this->pageurl);
-        $table->define_columns(array('level', 'xp', 'desc'));
-        $table->define_headers(array(get_string('level', 'block_xp'), get_string('requires', 'block_xp'),
-            get_string('description', 'block_xp')));
-        $table->set_attribute('class', 'block_xp-table');
-        $table->setup();
-        $table->column_class('level', 'col-lvl block_xp');
-
-        foreach ($levelsinfo->get_levels() as $level) {
-            $desc = $level instanceof \block_xp\local\xp\level_with_description ? $level->get_description() : '';
-            $badge = $output->small_level_badge($level);
-            $table->add_data([$badge, $output->xp($level->get_xp_required()), $desc], 'level-' . $level->get_level());
-        }
-
-        $table->finish_output();
+        echo $output->levels_grid($levelsinfo->get_levels());
 
         if ($this->world->get_access_permissions()->can_manage()) {
             $levelsurl = $this->urlresolver->reverse('levels', ['courseid' => $this->courseid]);

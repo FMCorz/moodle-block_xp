@@ -481,6 +481,55 @@
     height: 15px;
 }
 
+.block_xp-level-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+.block_xp-level-grid .block_xp-level-no {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+.block_xp-level-grid .block_xp-level-boxed {
+    flex: 1 1 25%;
+    display: flex;
+    justify-content: center;
+    padding-right: 1em;
+    padding-bottom: 1em;
+    box-sizing: border-box;
+}
+.block_xp-level-grid .block_xp-level-boxed-with-desc {
+    flex-basis: 50%;
+    flex-grow: 2;
+}
+.block_xp-level-grid .block_xp-level-box {
+    position: relative;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #efefef;
+    border-radius: 5px;
+    padding: 1em;
+    display: flex;
+}
+
+.block_xp-level-grid .block_xp-level-desc {
+    margin-top: 1em;
+    font-size: 12px;
+    line-height: 16px;
+    overflow: auto;
+}
+
+@media (min-width: 768px) {
+    .block_xp-level-grid .block_xp-level-boxed {
+        max-width: 50%;
+    }
+}
+
 /** Support inline input fields. */
 .form-control.block_xp-form-control-inline {
     min-width: 0;
