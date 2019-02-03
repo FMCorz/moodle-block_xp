@@ -56,6 +56,17 @@ class ladder_controller extends page_controller {
     }
 
     /**
+     * The optional params expected.
+     *
+     * @return array
+     */
+    protected function define_optional_params() {
+        return [
+            ['pagesize', 0, PARAM_INT, true]
+        ];
+    }
+
+    /**
      * Get the leadeboard.
      *
      * @return leaderboard
@@ -81,6 +92,7 @@ class ladder_controller extends page_controller {
             ],
             $USER->id
         );
+        $table->show_pagesize_selector(true);
         $table->define_baseurl($this->pageurl);
         return $table;
     }
@@ -95,7 +107,9 @@ class ladder_controller extends page_controller {
 
     protected function page_content() {
         $this->print_group_menu();
-        echo $this->get_table()->out(20, false);
+        $pagesize = $this->get_param('pagesize');
+        $pagesize = in_array($pagesize, [20, 50, 100]) ? $pagesize : 20;
+        echo $this->get_table()->out($pagesize, false);
     }
 
 }

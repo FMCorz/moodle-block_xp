@@ -266,6 +266,33 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Page size selector.
+     *
+     * @param array $options Array of [(int) $perpage, (moodle_url) $url].
+     * @param int $current The current selectin.
+     * @return string
+     */
+    public function pagesize_selector($options, $current) {
+        $o = '';
+        $o .= html_writer::start_div('text-right');
+        $o .= html_writer::start_tag('small');
+        $o .= get_string('perpagecolon', 'block_xp') . ' ';
+
+        $options = array_values($options);
+        $lastindex = count($options) - 1;
+
+        foreach ($options as $i => $option) {
+            list($perpage, $url) = $option;
+            $o .= $current == $perpage ? $current : html_writer::link($url, (string) $perpage);
+            $o .= $i < $lastindex ? ' - ' : '';
+        }
+
+        $o .= html_writer::end_tag('small');
+        $o .= html_writer::end_div();
+        return $o;
+    }
+
+    /**
      * Override pix_url to auto-handle deprecation.
      *
      * It's just simpler than having to deal with differences between

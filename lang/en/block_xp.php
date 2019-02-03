@@ -150,6 +150,7 @@ $string['navrules'] = 'Rules';
 $string['navsettings'] = 'Settings';
 $string['navvisuals'] = 'Visuals';
 $string['participant'] = 'Participant';
+$string['perpagecolon'] = 'Per page:';
 $string['pickaconditiontype'] = 'Pick a condition type';
 $string['pluginname'] = 'Level up!';
 $string['pointsintimelinker'] = 'per';

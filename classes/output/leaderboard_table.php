@@ -28,11 +28,14 @@ namespace block_xp\output;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
 
+use html_writer;
+use paging_bar;
 use renderer_base;
 use flexible_table;
 use user_picture;
 use block_xp\local\config\course_world_config;
 use block_xp\local\leaderboard\leaderboard;
+use block_xp\local\routing\url;
 use block_xp\local\sql\limit;
 
 /**
@@ -59,6 +62,9 @@ class leaderboard_table extends flexible_table {
 
     /** @var int The rank mode. */
     protected $rankmode = course_world_config::RANK_ON;
+
+    /** @var bool Whether to show the pagesize selector. */
+    protected $showpagesizeselector = false;
 
     /**
      * Constructor.
@@ -225,6 +231,67 @@ class leaderboard_table extends flexible_table {
     }
 
     /**
+     * Start HTML.
+     *
+     * Complete override to suppress some features.
+     *
+     * @return void
+     */
+    public function start_html() {
+        $this->wrap_html_start();
+        echo html_writer::start_tag('div', array('class' => 'no-overflow'));
+        echo html_writer::start_tag('table', $this->attributes);
+    }
+
+    /**
+     * Finish HTML.
+     *
+     * @return void
+     */
+    public function finish_html() {
+        if (!$this->started_output) {
+            $this->print_nothing_to_display();
+
+        } else {
+
+            // Copied from parent method.
+            $emptyrow = array_fill(0, count($this->columns), '');
+            while ($this->currentrow < $this->pagesize) {
+                $this->print_row($emptyrow, 'emptyrow');
+            }
+            echo html_writer::end_tag('tbody');
+            echo html_writer::end_tag('table');
+            echo html_writer::end_tag('div');
+            $this->wrap_html_finish();
+            // End copy from parent method.
+
+            $url20 = new url($this->baseurl);
+            $url50 = new url($this->baseurl);
+            $url100 = new url($this->baseurl);
+            $url20->param('pagesize', 20);
+            $url50->param('pagesize', 50);
+            $url100->param('pagesize', 100);
+
+            if ($this->use_pages) {
+
+                // If there are more rows than the minimum selector, and enabled.
+                if ($this->showpagesizeselector && $this->totalrows > 20) {
+                    echo $this->xpoutput->pagesize_selector([
+                        [20, $url20],
+                        [50, $url50],
+                        [100, $url100],
+                    ], $this->pagesize);
+                }
+
+                // Paging bar as per parent method.
+                $pagingbar = new paging_bar($this->totalrows, $this->currpage, $this->pagesize, $this->baseurl);
+                $pagingbar->pagevar = $this->request[TABLE_VAR_PAGE];
+                echo $this->xpoutput->render($pagingbar);
+            }
+        }
+    }
+
+    /**
      * Override to rephrase.
      *
      * @return void
@@ -259,5 +326,17 @@ class leaderboard_table extends flexible_table {
             'xp' => $this->col_xp($row),
             'userpic' => $this->col_userpic($row),
         ];
+    }
+
+    /**
+     * Whether to display the pagesize selector.
+     *
+     * This only has effect when pagination is enabled, and there are more rows than the minimum.
+     *
+     * @param bool $value The value.
+     * @return void
+     */
+    public function show_pagesize_selector($value) {
+        $this->showpagesizeselector = $value;
     }
 }
