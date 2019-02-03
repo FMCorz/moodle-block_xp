@@ -34,6 +34,9 @@ use moodle_database;
  * This implementation stores the users flags into their user's preferences,
  * do not abuse it as it could bloat the user's preferences.
  *
+ * Note that all values are coerced to strings when saved to the
+ * database, and returned as strings when read back.
+ *
  * @package    block_xp
  * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
@@ -73,11 +76,11 @@ class prefs_user_indicator implements user_indicator {
      *
      * @param int $userid The user ID.
      * @param string $flag The flag name.
-     * @return int|null The flag value.
+     * @return string|null The flag value.
      */
     public function get_user_flag($userid, $flag) {
         $v = get_user_preferences($this->get_pref_name($flag), null, $userid);
-        return $v === null ? null : (int) $v;
+        return $v;
     }
 
     /**
@@ -85,7 +88,7 @@ class prefs_user_indicator implements user_indicator {
      *
      * @param int $userid The user ID.
      * @param string $flag The flag name.
-     * @param int $value The flag value.
+     * @param mixed $value The flag value.
      */
     public function set_user_flag($userid, $flag, $value) {
         set_user_preference($this->get_pref_name($flag), $value, $userid);

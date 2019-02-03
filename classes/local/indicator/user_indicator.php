@@ -43,7 +43,7 @@ interface user_indicator {
      *
      * @param int $userid The user ID.
      * @param string $flag The flag name.
-     * @return string|null The flag value.
+     * @return mixed|null The flag value.
      */
     public function get_user_flag($userid, $flag);
 
@@ -52,7 +52,7 @@ interface user_indicator {
      *
      * @param int $userid The user ID.
      * @param string $flag The flag name.
-     * @param string $value The flag value.
+     * @param mixed $value The flag value.
      */
     public function set_user_flag($userid, $flag, $value);
 

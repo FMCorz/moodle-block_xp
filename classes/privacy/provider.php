@@ -75,6 +75,7 @@ class provider implements
         ], 'privacy:metadata:log');
 
         $collection->add_user_preference('block_xp_notices', 'privacy:metadata:prefnotices');
+        $collection->add_user_preference('block_xp-generic-ladder-pagesize', 'privacy:metadata:prefladderpagesize');
         $collection->add_user_preference('block_xp-generic-promo-page-seen', 'privacy:metadata:prefseenpromo');
         $collection->add_user_preference('block_xp-notice-block_intro_%d', 'privacy:metadata:prefintro');
         $collection->add_user_preference('block_xp_notify_level_up_%d', 'privacy:metadata:preflevelup');
@@ -400,6 +401,9 @@ class provider implements
             } else if ($name === 'block_xp-generic-promo-page-seen') {
                 $desc = get_string('privacy:metadata:prefseenpromo', 'block_xp');
                 $value = transform::datetime($value);
+
+            } else if ($name === 'block_xp-generic-ladder-pagesize') {
+                $desc = get_string('privacy:metadata:prefladderpagesize', 'block_xp');
 
             } else if (strpos($name, 'block_xp-notice-block_intro_') === 0) {
                 $desc = get_string('privacy:metadata:prefintro', 'block_xp');

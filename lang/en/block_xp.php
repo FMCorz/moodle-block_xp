@@ -167,6 +167,7 @@ $string['privacy:metadata:prefintro'] = 'Records whether the user dismissed the 
 $string['privacy:metadata:preflevelup'] = 'Records whether the user should see the level up notification';
 $string['privacy:metadata:prefnotices'] = 'Records whether the user closed the support notice';
 $string['privacy:metadata:prefseenpromo'] = 'Records when the user viewed the promo page';
+$string['privacy:metadata:prefladderpagesize'] = 'The user\'s preferred page size when viewing the ladder';
 $string['privacy:metadata:xp'] = 'Stores the points and level of users';
 $string['privacy:metadata:xp:xp'] = 'The user\'s points';
 $string['privacy:metadata:xp:lvl'] = 'The user\'s level';

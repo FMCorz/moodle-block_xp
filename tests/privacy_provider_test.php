@@ -35,6 +35,7 @@ use core_privacy\local\request\writer;
 use block_xp\di;
 use block_xp\local\config\course_world_config;
 use block_xp\local\controller\promo_controller;
+use block_xp\local\controller\ladder_controller;
 use block_xp\privacy\provider;
 
 /**
@@ -65,7 +66,7 @@ class block_xp_privacy_provider_testcase extends block_xp_base_testcase {
 
     public function test_get_metadata() {
         $data = provider::get_metadata(new collection('block_xp'));
-        $this->assertCount(6, $data->get_collection());
+        $this->assertCount(7, $data->get_collection());
     }
 
     public function test_export_user_prefs() {
@@ -79,6 +80,7 @@ class block_xp_privacy_provider_testcase extends block_xp_base_testcase {
         $genericindic = di::get('user_generic_indicator');
 
         $genericindic->set_user_flag($u1->id, promo_controller::SEEN_FLAG, 1);
+        $genericindic->set_user_flag($u1->id, ladder_controller::PAGE_SIZE_FLAG, 50);
         $noticeindic->set_user_flag($u1->id, 'block_intro_' . $c1->id, 1);
         $noticeindic->set_user_flag($u2->id, 'block_intro_' . $c1->id, 1);
         set_user_preference('block_xp_notify_level_up_' . $c2->id, 1, $u1->id);
@@ -93,6 +95,7 @@ class block_xp_privacy_provider_testcase extends block_xp_base_testcase {
 
         $this->assertTrue(in_array('block_xp_notices', $prefkeys));
         $this->assertTrue(in_array('block_xp-generic-' . promo_controller::SEEN_FLAG, $prefkeys));
+        $this->assertTrue(in_array('block_xp-generic-' . ladder_controller::PAGE_SIZE_FLAG, $prefkeys));
         $this->assertTrue(in_array('block_xp_notify_level_up_' . $c2->id, $prefkeys));
         $this->assertFalse(in_array('block_xp_notify_level_up_' . $c1->id, $prefkeys));
         $this->assertTrue(in_array('block_xp-notice-block_intro_' . $c1->id, $prefkeys));
