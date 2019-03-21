@@ -331,6 +331,7 @@ $string['whoops'] = 'Whoops!';
 $string['wewillreplyat'] = 'We will reply at: _{$a}_.';
 $string['xp:addinstance'] = 'Add a new block';
 $string['xp:earnxp'] = 'Earning points';
+$string['xp:manage'] = 'Manage all aspects of experience points';
 $string['xp:myaddinstance'] = 'Add the block to my dashboard';
 $string['xp:view'] = 'View the block and its related pages';
 $string['xptogo'] = '[[{$a}]] to go';

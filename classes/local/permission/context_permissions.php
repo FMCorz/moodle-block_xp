@@ -67,7 +67,7 @@ class context_permissions implements access_permissions {
      * @return bool
      */
     public function can_manage($userid = null) {
-        return has_capability('block/xp:addinstance', $this->context, $userid);
+        return has_capability('block/xp:manage', $this->context, $userid);
     }
 
     /**
@@ -89,6 +89,6 @@ class context_permissions implements access_permissions {
      * @throws required_capability_exception
      */
     public function require_manage($userid = null) {
-        return require_capability('block/xp:addinstance', $this->context, $userid);
+        return require_capability('block/xp:manage', $this->context, $userid);
     }
 }

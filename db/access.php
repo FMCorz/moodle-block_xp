@@ -37,6 +37,17 @@ $capabilities = array(
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
 
+    // Whether or not the user can manage all aspects of the block.
+    'block/xp:manage' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+        'clonepermissionsfrom' => 'block/xp:addinstance'
+    ),
+
     // Whether or not a user can earn experience point.
     'block/xp:earnxp' => array(
         'captype' => 'read',
