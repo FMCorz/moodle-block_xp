@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v3.6.1
+------
+
+- New permission `block/xp:manage` for more granular management control
+- Include instructions from information page in backups
+- Include ladder columns setting in backups
+
 v3.6.0
 ------
 
