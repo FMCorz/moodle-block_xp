@@ -45,7 +45,8 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
         $xpconfig = new backup_nested_element('config', array('courseid'), array(
             'enabled', 'levels', 'lastlogpurge', 'enableladder', 'enableinfos', 'levelsdata',
             'enablelevelupnotif', 'enablecustomlevelbadges', 'maxactionspertime', 'timeformaxactions', 'timebetweensameactions',
-            'identitymode', 'rankmode', 'neighbours', 'enablecheatguard', 'defaultfilters'
+            'identitymode', 'rankmode', 'neighbours', 'enablecheatguard', 'defaultfilters', 'laddercols', 'instructions',
+            'instructions_format'
         ));
         $xpfilters = new backup_nested_element('filters');
         $xpfilter = new backup_nested_element('filter', array('courseid'), array('ruledata', 'points', 'sortorder'));
