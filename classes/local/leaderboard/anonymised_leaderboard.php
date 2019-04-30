@@ -28,15 +28,17 @@ defined('MOODLE_INTERNAL') || die();
 
 use block_xp\local\iterator\map_iterator;
 use block_xp\local\sql\limit;
+use block_xp\local\xp\anonymised_state;
 use block_xp\local\xp\levels_info;
 use block_xp\local\xp\rank;
 use block_xp\local\xp\state_rank;
+use block_xp\local\xp\state_with_subject;
 use block_xp\local\xp\user_state;
 
 /**
  * Anonymised leaderboard.
  *
- * This currenly only handles user_state.
+ * This currenly only handles user_state, and state_with_subject.
  *
  * @package    block_xp
  * @copyright  2018 Frédéric Massart
@@ -53,6 +55,8 @@ class anonymised_leaderboard implements leaderboard {
     protected $exceptids;
     /** @var stdClass The user to replace with. */
     protected $anonymous;
+    /** @var string The name to user. */
+    protected $name;
 
     /**
      * Constructor.
@@ -61,12 +65,14 @@ class anonymised_leaderboard implements leaderboard {
      * @param levels_info $levelsinfo The levels info.
      * @param object $anonymous The anonymous object to use instead.
      * @param array $exceptids The IDs not to anonymise.
+     * @param string $name The name to use when anonymising non-user_state states.
      */
-    public function __construct(leaderboard $leaderboard, levels_info $levelsinfo, $anonymous, $exceptids = []) {
+    public function __construct(leaderboard $leaderboard, levels_info $levelsinfo, $anonymous, $exceptids = [], $name = '?') {
         $this->leaderboard = $leaderboard;
         $this->anonymous = $anonymous;
         $this->exceptids = $exceptids;
         $this->levelsinfo = $levelsinfo;
+        $this->name = $name;
     }
 
     /**
@@ -77,12 +83,25 @@ class anonymised_leaderboard implements leaderboard {
      */
     protected function anonymise_rank(rank $rank) {
         $state = $rank->get_state();
-        if ($state instanceof user_state && !in_array($state->get_id(), $this->exceptids)) {
+
+        $keepasis = in_array($state->get_id(), $this->exceptids);
+        if ($keepasis) {
+            return $rank;
+        }
+
+        if ($state instanceof user_state) {
             $rank = new state_rank(
                 $rank->get_rank(),
                 new user_state($this->anonymous, $state->get_xp(), $this->levelsinfo)
             );
+
+        } else if ($state instanceof state_with_subject) {
+            $rank = new state_rank(
+                $rank->get_rank(),
+                new anonymised_state($state, $this->name)
+            );
         }
+
         return $rank;
     }
 
