@@ -187,12 +187,18 @@ $string['participatetolevelup'] = 'Participate in the course to gain experience 
 $string['rank'] = 'Rank';
 $string['ranking'] = 'Ranking';
 $string['ranking_help'] = 'The rank is the absolute position of the current user in the ladder. The relative rank is the difference in experience points between a user and their neighbours.';
-$string['recentrewards'] = 'Recent rewards';
+$string['reallydeleteuserstate'] = 'Deleting a user is only useful to remove them from the ladder. For any other reasons, we recommend setting their points to 0 instead. Note that deleting them does not affect their ability to earn points in the future.
+
+Importantly, when are using _Level up!_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level up!_ per course, the student may still appear in the report if they are enrolled in the course.
+
+
+Do you really want to delete the points of this user?';
 $string['reallyresetallcoursestodefaults'] = 'Really reset all courses rules to the default rules? This action is not reversible.';
 $string['reallyresetcourserulestodefaults'] = 'Really reset the course rules to the default rules? This action is not reversible.';
 $string['reallyresetdata'] = 'Really reset the levels and points of everyone in this course?';
 $string['reallyresetgroupdata'] = 'Really reset the levels and points of everyone in this group?';
 $string['reallyreverttopluginsdefaults'] = 'Really reset the default rules to the defaults suggested by the plugin? This action is not reversible.';
+$string['recentrewards'] = 'Recent rewards';
 $string['resetcoursedata'] = 'Reset course data';
 $string['resetallcoursestodefaults'] = 'Reset all courses to defaults';
 $string['resetallcoursestodefaultsintro'] = 'Click the button below to reset all courses to the above defaults.';

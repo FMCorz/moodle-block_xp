@@ -47,7 +47,7 @@ use block_xp\local\reason\reason;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_user_state_store implements course_state_store,
-        state_store_with_reason {
+        state_store_with_reason, state_store_with_delete {
 
     /** @var moodle_database The database. */
     protected $db;
@@ -102,6 +102,19 @@ class course_user_state_store implements course_state_store,
         ];
 
         return $this->make_state_from_record($this->db->get_record_sql($sql, $params, MUST_EXIST));
+    }
+
+    /**
+     * Delete a state.
+     *
+     * @param int $id The object ID.
+     * @return void
+     */
+    public function delete($id) {
+        $params = [];
+        $params['userid'] = $id;
+        $params['courseid'] = $this->courseid;
+        $this->db->delete_records($this->table, $params);
     }
 
     /**

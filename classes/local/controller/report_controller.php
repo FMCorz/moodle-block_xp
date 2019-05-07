@@ -56,6 +56,7 @@ class report_controller extends page_controller {
             ['resetdata', 0, PARAM_INT, false],
             ['action', null, PARAM_ALPHA],
             ['confirm', 0, PARAM_INT, false],
+            ['delete', 0, PARAM_INT, false],
             ['page', 0, PARAM_INT],     // To keep the table page in URL.
         ];
     }
@@ -77,9 +78,10 @@ class report_controller extends page_controller {
             }
         }
 
-        // Use edit form.
         $userid = $this->get_param('userid');
         $action = $this->get_param('action');
+
+        // Use edit form.
         if ($action === 'edit' && !empty($userid)) {
             $form = $this->get_form($userid);
             $nexturl = new url($this->pageurl, ['userid' => null]);
@@ -87,6 +89,15 @@ class report_controller extends page_controller {
                 $this->world->get_store()->set($userid, $data->xp);
                 $this->redirect($nexturl);
             } else if ($form->is_cancelled()) {
+                $this->redirect($nexturl);
+            }
+        }
+
+        // Delete user.
+        if ($this->get_param('delete')) {
+            if ($this->get_param('confirm') && confirm_sesskey()) {
+                $nexturl = new url($this->pageurl, ['userid' => null]);
+                $this->world->get_store()->delete($userid);
                 $this->redirect($nexturl);
             }
         }
@@ -135,6 +146,16 @@ class report_controller extends page_controller {
                 new url($this->pageurl->get_compatible_url(), ['resetdata' => 1, 'confirm' => 1,
                     'sesskey' => sesskey(), 'group' => $groupid]),
                 new url($this->pageurl->get_compatible_url())
+            );
+            return;
+        }
+
+        // Confirming delete data.
+        if ($this->get_param('delete')) {
+            echo $this->get_renderer()->confirm(
+                markdown_to_html(get_string('reallydeleteuserstate', 'block_xp')),
+                new url($this->pageurl->get_compatible_url(), ['delete' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
+                new url($this->pageurl->get_compatible_url(), ['userid' => null])
             );
             return;
         }

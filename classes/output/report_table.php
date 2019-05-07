@@ -221,12 +221,17 @@ class report_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_actions($row) {
-        $url = new moodle_url($this->baseurl);
-        $url->params([
-            'action' => 'edit',
-            'userid' => $row->id
-        ]);
-        return $this->renderer->action_icon($url, new pix_icon('t/edit', get_string('edit')));
+        $actions = [];
+
+        $url = new moodle_url($this->baseurl, ['action' => 'edit', 'userid' => $row->id]);
+        $actions[] = $this->renderer->action_icon($url, new pix_icon('t/edit', get_string('edit')));
+
+        if (isset($row->xp)) {
+            $url = new moodle_url($this->baseurl, ['delete' => 1, 'userid' => $row->id]);
+            $actions[] = $this->renderer->action_icon($url, new pix_icon('t/delete', get_string('delete')));
+        }
+
+        return implode(' ', $actions);
     }
 
     /**
@@ -236,7 +241,7 @@ class report_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_lvl($row) {
-        return isset($row->lvl) ? $row->lvl : 1;
+        return isset($row->xp) ? $row->lvl : '-';
     }
 
     /**
@@ -256,8 +261,7 @@ class report_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_xp($row) {
-        $xp = isset($row->xp) ? $row->xp : 0;
-        return $this->renderer->xp($xp);
+        return isset($row->xp) ? $this->renderer->xp($row->xp) : '-';
     }
 
     /**
