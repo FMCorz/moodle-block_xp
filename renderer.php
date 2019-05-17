@@ -733,7 +733,7 @@ EOT
         } else if ($diff < DAYSECS * 7 * 0.7) {
             $ago = get_string('tinytimedays', 'block_xp', round($diff / DAYSECS));
         } else if ($diff < DAYSECS * 30 * 0.7) {
-            $ago = get_string('tinytimeweeks', 'block_xp', round($diff / DAYSECS * 7));
+            $ago = get_string('tinytimeweeks', 'block_xp', round($diff / (DAYSECS * 7)));
         } else if ($diff < DAYSECS * 365) {
             $ago = userdate($dt->getTimestamp(), get_string('tinytimewithinayearformat', 'block_xp'));
         } else {
