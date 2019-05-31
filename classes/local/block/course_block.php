@@ -142,6 +142,7 @@ class course_block extends block_base {
         $this->content->footer = '';
 
         $world = $this->get_world($this->page->course->id);
+        $context = $world->get_context();
         $canview = $world->get_access_permissions()->can_access();
         $canedit = $world->get_access_permissions()->can_manage();
 
@@ -176,7 +177,9 @@ class course_block extends block_base {
         $actions = $this->get_block_navigation($world);
 
         // Introduction.
-        $introduction = isset($this->config->description) ? $this->config->description : $adminconfig->get('blockdescription');
+        $introduction = isset($this->config->description) ?
+            format_string($this->config->description, true, ['context' => $context]) : // @codingStandardsIgnoreLine.
+            format_string($adminconfig->get('blockdescription'), true, ['context' => $context]);
         $introname = 'block_intro_' . $courseid;
         if (empty($introduction)) {
             // The intro is empty, no need for further checks then...
@@ -298,10 +301,12 @@ class course_block extends block_base {
      */
     public function specialization() {
         parent::specialization();
+        $world = $this->get_world($this->page->course->id);
+        $context = $world->get_context();
         if (!empty($this->config->title)) {
-            $this->title = $this->config->title;
+            $this->title = format_string($this->config->title, true, ['context' => $context]);
         } else {
-            $this->title = \block_xp\di::get('config')->get('blocktitle');
+            $this->title = format_string(\block_xp\di::get('config')->get('blocktitle'), true, ['context' => $context]);
         }
     }
 
