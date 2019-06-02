@@ -84,21 +84,21 @@ Feature: A report displays students' progress
     And I press "Continue"
     And the following should exist in the "generaltable" table:
       | Full name   | Level | Total |
-      | Student Two | 1     | 0     |
+      | Student Two | -     | -     |
     And I set the field "Visible groups" to "All participants"
     And I click on "Go" "button" in the "#selectgroup" "css_element"
     And the following should exist in the "generaltable" table:
       | Full name     | Level | Total |
       | Student One   | 1     | 63    |
-      | Student Two   | 1     | 0     |
+      | Student Two   | -     | -     |
       | Student Three | 1     | 9     |
     And I press "Reset course data"
     And I press "Continue"
     And the following should exist in the "generaltable" table:
       | Full name     | Level | Total |
-      | Student One   | 1     | 0     |
-      | Student Two   | 1     | 0     |
-      | Student Three | 1     | 0     |
+      | Student One   | -     | -     |
+      | Student Two   | -     | -     |
+      | Student Three | -     | -     |
 
   Scenario: Use the report to edit a student's total
     Given the following "users" exist:
@@ -122,8 +122,8 @@ Feature: A report displays students' progress
     And I click on "Report" "link" in the "Level up!" "block"
     And the following should exist in the "generaltable" table:
       | Full name     | Level | Total |
-      | Student One   | 1     | 0     |
-      | Student Two   | 1     | 0     |
+      | Student One   | -     | -     |
+      | Student Two   | -     | -     |
     # Click on the edit button for Student One.
     And I follow edit for "Student One" in XP report
     # And I click on "td[normalize-space(.)='Student One']/parent::tr/descendant::img[@title='Edit']/parent::a" "xpath"
@@ -132,4 +132,4 @@ Feature: A report displays students' progress
     Then the following should exist in the "generaltable" table:
       | Full name     | Level | Total |
       | Student One   | 4     | 512   |
-      | Student Two   | 1     | 0     |
+      | Student Two   | -     | -     |
