@@ -1,6 +1,17 @@
 Changelog
 =========
 
+v3.7.0
+------
+
+- Levels can be given a custom name
+- Added ability to completely remove the points of a user
+- Added filter support (e.g. multi lang) to block description and title - David Bogner
+- The report displays a hyphen as level for users that do not have any points
+- Minor bug fixes and improvements
+
+Some of these changes were sponsored by Xi'an Jiaotong-Liverpool University.
+
 v3.6.1
 ------
 
