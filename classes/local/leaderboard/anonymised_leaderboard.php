@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 use block_xp\local\iterator\map_iterator;
 use block_xp\local\sql\limit;
 use block_xp\local\xp\anonymised_state;
+use block_xp\local\xp\anonymised_user_state;
 use block_xp\local\xp\levels_info;
 use block_xp\local\xp\rank;
 use block_xp\local\xp\state_rank;
@@ -92,7 +93,7 @@ class anonymised_leaderboard implements leaderboard {
         if ($state instanceof user_state) {
             $rank = new state_rank(
                 $rank->get_rank(),
-                new user_state($this->anonymous, $state->get_xp(), $this->levelsinfo)
+                new anonymised_user_state($state, $this->anonymous)
             );
 
         } else if ($state instanceof state_with_subject) {
