@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Level.
+ * Described level.
  *
  * @package    block_xp
  * @copyright  2017 Frédéric Massart
@@ -29,14 +29,14 @@ defined('MOODLE_INTERNAL') || die();
 use context;
 
 /**
- * Level with description.
+ * Described level.
  *
  * @package    block_xp
  * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class described_level implements level, level_with_description {
+class described_level implements level, level_with_description, level_with_name {
 
     /** @var int The level. */
     protected $level;
@@ -44,17 +44,21 @@ class described_level implements level, level_with_description {
     protected $xprequired;
     /** @var string The level description. */
     protected $desc;
+    /** @var string The level name. */
+    protected $name;
     /**
      * Constructor.
      *
      * @param int $level The level.
      * @param int $xprequired The XP required.
      * @param string $desc The description.
+     * @param string|null $name The name.
      */
-    public function __construct($level, $xprequired, $desc) {
+    public function __construct($level, $xprequired, $desc, $name = null) {
         $this->level = $level;
         $this->xprequired = $xprequired;
         $this->desc = $desc;
+        $this->name = $name;
     }
 
     /**
@@ -73,6 +77,15 @@ class described_level implements level, level_with_description {
      */
     public function get_description() {
         return $this->desc;
+    }
+
+    /**
+     * Get a human readable description of the level.
+     *
+     * @return string
+     */
+    public function get_name() {
+        return $this->name === null ? '' : $this->name;
     }
 
     /**

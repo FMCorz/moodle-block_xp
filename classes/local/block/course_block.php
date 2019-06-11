@@ -34,6 +34,7 @@ use lang_string;
 use pix_icon;
 use stdClass;
 use block_xp\local\course_world;
+use block_xp\local\xp\level_with_name;
 use block_xp\output\notice;
 use block_xp\output\dismissable_notice;
 
@@ -220,10 +221,11 @@ class course_block extends block_base {
             $service->mark_as_notified($USER->id);
 
             $level = $state->get_level();
+            $name = $level instanceof level_with_name ? $level->get_name() : null;
             $args = array(
                 'badge' => $renderer->level_badge($level),
-                'headline' => get_string('youreachedlevela', 'block_xp', $level->get_level()),
                 'level' => $level->get_level(),
+                'name' => $name,
             );
 
             $PAGE->requires->yui_module('moodle-block_xp-notification', 'Y.M.block_xp.Notification.init', array($args));
@@ -231,6 +233,9 @@ class course_block extends block_base {
                 array(
                     'coolthanks',
                     'congratulationsyouleveledup',
+                    'youreachedlevela',
+                    'youreachedlevel',
+                    'levelx'
                 ),
                 'block_xp'
             );

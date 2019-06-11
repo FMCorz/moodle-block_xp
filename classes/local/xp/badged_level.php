@@ -46,9 +46,10 @@ class badged_level extends described_level implements level_with_badge {
      * @param int $xprequired The XP required.
      * @param string $desc The description.
      * @param badge_url_resolver $resolver The URL resolver.
+     * @param string|null $name The name.
      */
-    public function __construct($level, $xprequired, $desc, badge_url_resolver $resolver) {
-        parent::__construct($level, $xprequired, $desc);
+    public function __construct($level, $xprequired, $desc, badge_url_resolver $resolver, $name = null) {
+        parent::__construct($level, $xprequired, $desc, $name);
         $this->resolver = $resolver;
     }
 

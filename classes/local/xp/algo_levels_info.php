@@ -163,9 +163,12 @@ class algo_levels_info implements levels_info {
             'xp' => array_map(function($level) {
                 return $level->get_xp_required();
             }, $this->get_levels()),
-            'desc' => array_map(function($level) {
-                return $level->get_description();
-            }, $this->get_levels()),
+            'name' => array_filter(array_map(function($level) {
+                return $level instanceof level_with_name ? $level->get_name() : null;
+            }, $this->get_levels())),
+            'desc' => array_filter(array_map(function($level) {
+                return $level instanceof level_with_description ? $level->get_description() : null;
+            }, $this->get_levels())),
             'base' => $this->base,
             'coef' => $this->coef,
             'usealgo' => $this->usealgo,
@@ -183,10 +186,11 @@ class algo_levels_info implements levels_info {
         $this->levels = array_reduce(array_keys($data['xp']), function($carry, $key) use ($data, $resolver) {
             $level = $key;
             $desc = isset($data['desc'][$key]) ? $data['desc'][$key] : null;
+            $name = isset($data['name'][$key]) ? $data['name'][$key] : null;
             if (!$resolver) {
-                $obj = new described_level($level, $data['xp'][$key], $desc);
+                $obj = new described_level($level, $data['xp'][$key], $desc, $name);
             } else {
-                $obj = new badged_level($level, $data['xp'][$key], $desc, $resolver);
+                $obj = new badged_level($level, $data['xp'][$key], $desc, $resolver, $name);
             }
             $carry[$level] = $obj;
             return $carry;
@@ -206,7 +210,8 @@ class algo_levels_info implements levels_info {
             'base' => self::DEFAULT_BASE,
             'coef' => self::DEFAULT_COEF,
             'xp' => self::get_xp_with_algo(self::DEFAULT_COUNT, self::DEFAULT_BASE, self::DEFAULT_COEF),
-            'desc' => []
+            'name' => [],
+            'desc' => [],
         ], $resolver);
     }
 

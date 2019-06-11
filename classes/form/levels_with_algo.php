@@ -28,6 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
 use moodleform;
+use block_xp\local\xp\level_with_name;
+use block_xp\local\xp\level_with_description;
 
 /**
  * Block XP levels form class.
@@ -78,6 +80,16 @@ class levels_with_algo extends moodleform {
         $mform->addElement('header', 'hdrlevel1', get_string('levelx', 'block_xp', 1));
         $mform->addElement('static', 'lvlxp_1', get_string('pointsrequired', 'block_xp'), 0);
 
+        $mform->addElement('text', 'lvlname_1', get_string('levelname', 'block_xp'), ['maxlength' => 40]);
+        $mform->addRule('lvlname_1', get_string('maximumchars', '', 40), 'maxlength', 40);
+        $mform->setType('lvlname_1', PARAM_NOTAGS);
+        $mform->addHelpButton('lvlname_1', 'levelname', 'block_xp');
+
+        $mform->addElement('text', 'lvldesc_1', get_string('leveldesc', 'block_xp'), ['maxlength' => 255]);
+        $mform->addRule('lvldesc_1', get_string('maximumchars', '', 255), 'maxlength', 255);
+        $mform->setType('lvldesc_1', PARAM_NOTAGS);
+        $mform->addHelpButton('lvldesc_1', 'leveldesc', 'block_xp');
+
         $mform->addelement('hidden', 'insertlevelshere');
         $mform->setType('insertlevelshere', PARAM_BOOL);
 
@@ -114,7 +126,12 @@ class levels_with_algo extends moodleform {
                 $mform->setConstant('lvlxp_' . $i, $defaultlevels[$i]);
             }
 
-            $el =& $mform->createElement('text', 'lvldesc_' . $i, get_string('leveldesc', 'block_xp'));
+            $el =& $mform->createElement('text', 'lvlname_' . $i, get_string('levelname', 'block_xp'), ['maxlength' => 40]);
+            $mform->insertElementBefore($el, 'insertlevelshere');
+            $mform->addRule('lvlname_' . $i, get_string('maximumchars', '', 40), 'maxlength', 40);
+            $mform->setType('lvlname_' . $i, PARAM_NOTAGS);
+
+            $el =& $mform->createElement('text', 'lvldesc_' . $i, get_string('leveldesc', 'block_xp'), ['maxlength' => 255]);
             $mform->insertElementBefore($el, 'insertlevelshere');
             $mform->addRule('lvldesc_' . $i, get_string('maximumchars', '', 255), 'maxlength', 255);
             $mform->setType('lvldesc_' . $i, PARAM_NOTAGS);
@@ -140,13 +157,18 @@ class levels_with_algo extends moodleform {
             'xp' => [
                 '1' => 0
             ],
-            'desc' => [
-                '1' => ''
-            ]
+            'desc' => [],
+            'name' => []
         ];
-        for ($i = 2; $i <= $data->levels; $i++) {
-            $newdata['xp'][$i] = $data->{'lvlxp_' . $i};
-            $newdata['desc'][$i] = $data->{'lvldesc_' . $i};
+
+        $keys = ['xp', 'desc', 'name'];
+        for ($i = 1; $i <= $data->levels; $i++) {
+            foreach ($keys as $key) {
+                $datakey = 'lvl' . $key . '_' . $i;
+                if (!empty($data->{$datakey})) {
+                    $newdata[$key][$i] = $data->{$datakey};
+                }
+            }
         }
 
         return new \block_xp\local\xp\algo_levels_info($newdata);
@@ -168,11 +190,9 @@ class levels_with_algo extends moodleform {
             'basexp' => $levels->get_base(),
         ];
         foreach ($levels->get_levels() as $level) {
-            if ($level->get_level() <= 1) {
-                continue;
-            }
             $data['lvlxp_' . $level->get_level()] = $level->get_xp_required();
-            $data['lvldesc_' . $level->get_level()] = $level->get_description();
+            $data['lvldesc_' . $level->get_level()] = $level instanceof level_with_description ? $level->get_description() : '';
+            $data['lvlname_' . $level->get_level()] =  $level instanceof level_with_name ? $level->get_name() : '';
         }
         $this->set_data($data);
     }

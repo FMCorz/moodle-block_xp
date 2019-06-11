@@ -29,6 +29,7 @@ use block_xp\local\activity\activity;
 use block_xp\local\routing\url_resolver;
 use block_xp\local\xp\level;
 use block_xp\local\xp\level_with_badge;
+use block_xp\local\xp\level_with_name;
 use block_xp\local\xp\state;
 use block_xp\output\xp_widget;
 
@@ -94,17 +95,48 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Level name.
+     *
+     * @param level $level The level.
+     * @param bool $force When forced, there will always be an name displayed.
+     * @return string
+     */
+    public function level_name(level $level, $force = false) {
+        $name = $level instanceof level_with_name ? $level->get_name() : null;
+        if (empty($name) && $force) {
+            $name = get_string('levelx', 'block_xp', $level->get_level());
+        }
+        if (empty($name)) {
+            return '';
+        }
+        return html_writer::tag('div', $name, ['class' => 'level-name']);
+    }
+
+
+    /**
      * Levels grid.
      *
      * @param array $levels The levels.
      * @return string
      */
     public function levels_grid(array $levels) {
+
+        // If at least one level has a custom name, we will always show the name.
+        $alwaysshowname = array_reduce($levels, function($carry, $level) {
+            $name = $level instanceof \block_xp\local\xp\level_with_name ? $level->get_name() : '';
+            return $carry + !empty($name) ? 1 : 0;
+        }, 0) > 0;
+
         $o = '';
         $o .= html_writer::start_div('block_xp-level-grid');
         foreach ($levels as $level) {
             $desc = $level instanceof \block_xp\local\xp\level_with_description ? $level->get_description() : '';
-            $o .= html_writer::start_div('block_xp-level-boxed ' . ($desc ? 'block_xp-level-boxed-with-desc' : ''));
+            $classes = ['block_xp-level-boxed'];
+            if ($desc) {
+                $classes[] = 'block_xp-level-boxed-with-desc';
+            }
+
+            $o .= html_writer::start_div(implode(' ', $classes));
             $o .= html_writer::start_div('block_xp-level-box');
             $o .= html_writer::start_div('block_xp-level-no');
             $o .= '#' . $level->get_level();
@@ -112,6 +144,7 @@ class block_xp_renderer extends plugin_renderer_base {
             $o .= html_writer::start_div();
             $o .= $this->level_badge($level);
             $o .= html_writer::end_div();
+            $o .= $this->level_name($level, $alwaysshowname);
             $o .= html_writer::start_div();
             $o .= $this->xp($level->get_xp_required());
             $o .= html_writer::end_div();
@@ -597,9 +630,12 @@ EOT
      * Returns the progress bar rendered.
      *
      * @param state $state The renderable object.
+     * @param bool $showpercentagetogo Show the percentage to go.
      * @return string HTML produced.
      */
-    public function progress_bar(state $state) {
+    public function progress_bar(state $state, $percentagetogo = false) {
+        global $CFG;
+
         $classes = ['block_xp-level-progress'];
         $pc = $state->get_ratio_in_level() * 100;
         if ($pc != 0) {
@@ -607,7 +643,6 @@ EOT
         }
 
         $html = '';
-        $remaining = $state->get_total_xp_in_level() - $state->get_xp_in_level();
 
         $html .= html_writer::start_tag('div', ['class' => implode(' ', $classes)]);
 
@@ -616,7 +651,19 @@ EOT
         $html .= html_writer::tag('div', '', ['style' => "width: {$pc}%;", 'class' => 'xp-bar']);
         $html .= html_writer::end_tag('div');
 
-        $togo = get_string('xptogo', 'block_xp', $this->xp($remaining));
+        $thingtogo = $this->xp($state->get_total_xp_in_level() - $state->get_xp_in_level());
+        if ($percentagetogo) {
+            $value = format_float(max(0, 100 - $pc), 1);
+            // Quick hack to support localisation of percentages without having to define a new language
+            // string for older versions. When the string is not available, we provide a sensible fallback.
+            if ($CFG->branch >= 36) {
+                $thingtogo = get_string('percents', 'core', $value);
+            } else {
+                $thingtogo = $value . '%';
+            }
+        }
+        $togo = get_string('xptogo', 'block_xp', $thingtogo);
+
         $span = html_writer::start_tag('span', ['class' => 'xp-togo-txt']);
         if (strpos($togo, '[[') !== false && strpos($togo, ']]')) {
             $togo = $span . $togo . '</span>';
@@ -685,6 +732,9 @@ EOT
 
         // Badge.
         $o .= $this->level_badge($widget->state->get_level());
+
+        // Level name.
+        $o .= $this->level_name($widget->state->get_level());
 
         // Total XP.
         $xp = $widget->state->get_xp();

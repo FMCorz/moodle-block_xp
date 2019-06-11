@@ -67,6 +67,12 @@
     -ms-user-select: none;
     user-select: none;
 }
+.block_xp-level.level-badge {
+    line-height: 100px;
+}
+.block_xp-level.level-badge.small {
+    line-height: 35px;
+}
 .block_xp-level.level-badge img {
     width: 100px;
 }
@@ -84,6 +90,11 @@
 .block_xp .block_xp-level {
     margin-left: auto;
     margin-right: auto;
+}
+.block_xp .level-name {
+    text-align: center;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 .block_xp .xp-total {
     text-align: center;
@@ -328,6 +339,11 @@
     font-size: 1.4em;
     font-weight: bold;
 }
+.block_xp-notification .level-name {
+    margin-top: 1em;
+    font-size: 16px;
+    font-weight: bold;
+}
 .block_xp-notification .moodle-dialogue-ft button {
     /* Helps centering the button in the dialogue */
     margin-left: 0;
@@ -521,6 +537,12 @@
     border-radius: 5px;
     padding: 1em;
     display: flex;
+}
+
+.block_xp-level-grid .level-name {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
 }
 
 .block_xp-level-grid .block_xp-level-desc {

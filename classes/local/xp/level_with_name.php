@@ -15,17 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Level with name interface.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2019 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2019061100;
-$plugin->requires   = 2016052300;   // Moodle 3.1.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.6.1';
+/**
+ * Level with name interface.
+ *
+ * @package    block_xp
+ * @copyright  2019 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface level_with_name extends level {
+
+    /**
+     * Get the name of the level.
+     *
+     * Note that this can return an empty string.
+     *
+     * @return string
+     */
+    public function get_name();
+
+}
