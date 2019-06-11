@@ -192,7 +192,7 @@ class levels_with_algo extends moodleform {
         foreach ($levels->get_levels() as $level) {
             $data['lvlxp_' . $level->get_level()] = $level->get_xp_required();
             $data['lvldesc_' . $level->get_level()] = $level instanceof level_with_description ? $level->get_description() : '';
-            $data['lvlname_' . $level->get_level()] =  $level instanceof level_with_name ? $level->get_name() : '';
+            $data['lvlname_' . $level->get_level()] = $level instanceof level_with_name ? $level->get_name() : '';
         }
         $this->set_data($data);
     }
