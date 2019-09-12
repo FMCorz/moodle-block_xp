@@ -114,6 +114,14 @@ abstract class block_xp_rule implements renderable {
     abstract public function match($subject);
 
     /**
+     * Update the rule after a restore.
+     *
+     * @return void
+     */
+    public function update_after_restore($restoreid, $courseid, base_logger $logger) {
+    }
+
+    /**
      * Validate the data.
      *
      * @param array $data The data to validate.

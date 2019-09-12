@@ -212,4 +212,15 @@ class block_xp_ruleset extends block_xp_rule {
         }
         return true;
     }
+
+    /**
+     * Update the rule after a restore.
+     *
+     * @return void
+     */
+    public function update_after_restore($restoreid, $courseid, base_logger $logger) {
+        foreach ($this->rules as $rule) {
+            $rule->update_after_restore($restoreid, $courseid, $logger);
+        }
+    }
 }

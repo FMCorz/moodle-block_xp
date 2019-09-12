@@ -196,6 +196,22 @@ class block_xp_rule_cm extends block_xp_rule_property {
     }
 
     /**
+     * Update the rule after a restore.
+     *
+     * @return void
+     */
+    public function update_after_restore($restoreid, $courseid, base_logger $logger) {
+        if (!empty($this->value)) {
+            $newid = restore_dbops::get_backup_ids_record($restoreid, 'context', $this->value);
+            if (!$newid || !$newid->newitemid) {
+                $logger->process("Could not find mapping for context {$this->value}", backup::LOG_WARNING);
+                return;
+            }
+            $this->value = (int) $newid->newitemid;
+        }
+    }
+
+    /**
      * Initialise the page requirements.
      *
      * @return void

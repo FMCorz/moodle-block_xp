@@ -277,6 +277,25 @@ class block_xp_filter implements renderable {
     }
 
     /**
+     * Update after a restore.
+     *
+     * @return void
+     */
+    public function update_after_restore($restoreid, $courseid, base_logger $logger) {
+        if (!$this->rule) {
+            $this->load_rule();
+        }
+
+        $this->rule->update_after_restore($restoreid, $courseid, $logger);
+
+        $newdata = json_encode($this->rule->export());
+        if ($newdata !== $this->ruledata) {
+            $this->ruledata = $newdata;
+            $this->save();
+        }
+    }
+
+    /**
      * Validate the data of this filter.
      *
      * @param array $data Data to validate.

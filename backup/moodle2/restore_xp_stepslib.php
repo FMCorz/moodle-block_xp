@@ -137,4 +137,30 @@ class restore_xp_block_structure_step extends restore_structure_step {
         $this->add_related_files('block_xp', 'badges', null, $this->task->get_old_course_contextid());
     }
 
+    /**
+     * After restore.
+     */
+    protected function after_restore() {
+        global $DB;
+        $courseid = $this->get_courseid();
+
+        // Update each filter (the rules).
+        $filters = $DB->get_recordset('block_xp_filters', ['courseid' => $courseid]);
+        foreach ($filters as $filter) {
+            $filter = block_xp_filter::load_from_data($filter);
+            $filter->update_after_restore($this->get_restoreid(), $courseid, $this->get_logger());
+        }
+        $filters->close();
+
+        // Attempt to purge the filters cache. It should not be needed, but just in case.
+        try {
+            $factory = block_xp\di::get('course_world_factory');
+            $world = $factory->get_world($courseid);
+            $filtermanager = $world->get_filter_manager();
+            $filtermanager->invalidate_filters_cache();
+        } catch (Exception $e) {
+            $this->log("block_xp: Could not invalidate filter cache", backup::LOG_DEBUG);
+        }
+    }
+
 }
