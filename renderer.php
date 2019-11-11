@@ -324,6 +324,9 @@ class block_xp_renderer extends plugin_renderer_base {
             if (method_exists($notification, 'set_show_closebutton')) {
                 $notification->set_show_closebutton(false);
             }
+            if (method_exists($notification, 'set_announce')) {
+                $notification->set_announce(false);
+            }
             return $this->render($notification);
         }
 
