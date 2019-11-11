@@ -214,7 +214,7 @@ class handler {
         $world = static::get_world_from_env($env);
         if (!$world) {
             return;
-        } else if (!$world->get_config('enableladder')) {
+        } else if (!$world->get_config()->get('enableladder')) {
             return;
         }
 
