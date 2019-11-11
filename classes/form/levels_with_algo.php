@@ -85,7 +85,7 @@ class levels_with_algo extends moodleform {
         $mform->setType('lvlname_1', PARAM_NOTAGS);
         $mform->addHelpButton('lvlname_1', 'levelname', 'block_xp');
 
-        $mform->addElement('text', 'lvldesc_1', get_string('leveldesc', 'block_xp'), ['maxlength' => 255]);
+        $mform->addElement('text', 'lvldesc_1', get_string('leveldesc', 'block_xp'), ['maxlength' => 255, 'size' => 50]);
         $mform->addRule('lvldesc_1', get_string('maximumchars', '', 255), 'maxlength', 255);
         $mform->setType('lvldesc_1', PARAM_NOTAGS);
         $mform->addHelpButton('lvldesc_1', 'leveldesc', 'block_xp');
@@ -131,7 +131,8 @@ class levels_with_algo extends moodleform {
             $mform->addRule('lvlname_' . $i, get_string('maximumchars', '', 40), 'maxlength', 40);
             $mform->setType('lvlname_' . $i, PARAM_NOTAGS);
 
-            $el =& $mform->createElement('text', 'lvldesc_' . $i, get_string('leveldesc', 'block_xp'), ['maxlength' => 255]);
+            $el =& $mform->createElement('text', 'lvldesc_' . $i, get_string('leveldesc', 'block_xp'),
+                ['maxlength' => 255, 'size' => 50]);
             $mform->insertElementBefore($el, 'insertlevelshere');
             $mform->addRule('lvldesc_' . $i, get_string('maximumchars', '', 255), 'maxlength', 255);
             $mform->setType('lvldesc_' . $i, PARAM_NOTAGS);
