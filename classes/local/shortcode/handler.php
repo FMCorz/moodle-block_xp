@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 use context_course;
 use block_xp\di;
 use block_xp\local\sql\limit;
+use block_xp\local\xp\level_with_name;
 
 /**
  * Shortcode handler class.
@@ -285,6 +286,39 @@ class handler {
             $html . $link,
             'shortcode-xpladder'
         );
+    }
+
+    /**
+     * Handle the shortcode.
+     *
+     * @param string $shortcode The shortcode.
+     * @param object $args The arguments of the code.
+     * @param string|null $content The content, if the shortcode wraps content.
+     * @param object $env The filter environment (contains context, noclean and originalformat).
+     * @param Closure $next The function to pass the content through to process sub shortcodes.
+     * @return string The new content.
+     */
+    public static function xplevelname($shortcode, $args, $content, $env, $next) {
+        global $USER;
+        $world = static::get_world_from_env($env);
+        if (!$world) {
+            return;
+        }
+        $levelsinfo = $world->get_levels_info();
+
+        if (!empty($args['level'])) {
+            $levelno = intval($args['level']);
+            if (!$levelno || $levelno > $levelsinfo->get_count()) {
+                return '';
+            }
+            $level = $levelsinfo->get_level($levelno);
+        } else {
+            $state = $world->get_store()->get_state($USER->id);
+            $level = $state->get_level();
+        }
+
+        $name = $level instanceof level_with_name ? $level->get_name() : null;
+        return empty($name) ? get_string('levelx', 'block_xp', $level->get_level()) : $name;
     }
 
     /**

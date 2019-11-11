@@ -307,6 +307,18 @@ Note that teachers, or otherwise users with editing capabilities, will always se
 
 Note that these shortcodes CANNOT be nested within one another.
 ';
+$string['shortcode:xplevelname'] = 'Display the level name.';
+$string['shortcode:xplevelname_help'] = '
+By default the tag displays the name of the current user\'s level.
+Alternatively, you can use the `level` argument to display the name of a specific level.
+
+```
+[xplevelname]
+[xplevelname level=5]
+```
+
+If the `level` argument is provided and the level does not exist, nothing will be displayed.
+';
 $string['shortcode:xpprogressbar'] = 'The current user\'s progress bar towards the next level.';
 $string['someoneelse'] = 'Someone else';
 $string['somethinghappened'] = 'Something happened';

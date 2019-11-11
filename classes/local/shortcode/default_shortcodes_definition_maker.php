@@ -56,6 +56,10 @@ class default_shortcodes_definition_maker implements shortcodes_definition_maker
                 'callback' => 'block_xp\local\shortcode\handler::xpladder',
                 'description' => 'shortcode:xpladder'
             ],
+            'xplevelname' => [
+                'callback' => 'block_xp\local\shortcode\handler::xplevelname',
+                'description' => 'shortcode:xplevelname'
+            ],
             'xpprogressbar' => [
                 'callback' => 'block_xp\local\shortcode\handler::xpprogressbar',
                 'description' => 'shortcode:xpprogressbar'
