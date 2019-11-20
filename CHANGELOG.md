@@ -1,6 +1,26 @@
 Changelog
 =========
 
+v3.8.0
+------
+
+New features
+
+- Include support for the shortcode `xplevelname`
+- Compatibility with Moodle 3.8
+
+Bug fixes
+
+- Restored rules are now updating their internal configuration
+- Shortcode `xpladder` would display even when ladder is disabled
+- Minor fixes to notification behat test
+- Other minor bug fixes and improvements
+
+Quality of life
+
+- Increased the size of the description field in levels form
+- Prevent the notices from being announced to screen readers
+
 v3.7.0
 ------
 
