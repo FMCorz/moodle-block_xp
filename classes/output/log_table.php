@@ -63,7 +63,7 @@ class log_table extends table_sql {
         $this->define_columns(array(
             'time',
             'fullname',
-            'reward',
+            'xp',
             'eventname'
         ));
         $this->define_headers(array(
@@ -116,7 +116,7 @@ class log_table extends table_sql {
      * @param stdClass $row The row.
      * @return string
      */
-    protected function col_reward($row) {
+    protected function col_xp($row) {
         return $this->renderer->xp($row->xp);
     }
 
