@@ -175,39 +175,78 @@ class course_world_collection_strategy implements event_collection_strategy {
         $actiontime = $config->get('timebetweensameactions');
         $actionkey = $event->eventname . ':' . $event->contextid . ':' . $event->objectid . ':' . $event->relateduserid;
 
-        // Init the session variable.
         if (!isset($SESSION->block_xp_cheatguard)) {
-            $SESSION->block_xp_cheatguard = array();
+            // Init the session variable.
+            $SESSION->block_xp_cheatguard = [];
+        } else {
+            // Ensure that all entries are arrays, they may not be when we just upgraded the plugin.
+            $SESSION->block_xp_cheatguard = array_map(function($entry) {
+                return is_array($entry) ? $entry : [$entry];
+            }, $SESSION->block_xp_cheatguard);
         }
 
-        // Actions per time.
-        if (count($SESSION->block_xp_cheatguard) > $maxactions) {
-            $actions = array_reverse($SESSION->block_xp_cheatguard, true);
-            $count = 0;
-            foreach ($actions as $action => $time) {
-                $count++;
-                if ($count > $maxactions && $time > $now - $actiontime) {
-                    // Too many actions within $actiontime.
-                    return false;
-                }
-            }
+        // Perform the check.
+        if (!static::is_action_accepted($actionkey, $now, $SESSION->block_xp_cheatguard, $maxactions, $maxtime, $actiontime)) {
+            return false;
         }
 
-        if (isset($SESSION->block_xp_cheatguard[$actionkey])) {
-            if ($SESSION->block_xp_cheatguard[$actionkey] > $now - $actiontime) {
-                // The key was found and the time has not expired, cheater spotted.
+        // Move the action at the end of the array.
+        $times = isset($SESSION->block_xp_cheatguard[$actionkey]) ? $SESSION->block_xp_cheatguard[$actionkey] : [];
+        unset($SESSION->block_xp_cheatguard[$actionkey]);
+        $SESSION->block_xp_cheatguard[$actionkey] = $times;
+
+        // Log the time at which this event happened.
+        $SESSION->block_xp_cheatguard[$actionkey][] = time();
+
+        // Limit the timestamps of each action to a maximum of $maxcount within the timeframe desired or
+        // the last 15min. We want to keep at least 15 min so that when teachers are testing changes,
+        // they do not get confused because actions they had just performed no longer gets blocked.
+        $timethreshold = $now - max([$maxtime, $actiontime, 900]);
+        $SESSION->block_xp_cheatguard = array_filter(array_map(function($times) use ($maxcount, $timethreshold) {
+            return array_slice(array_filter($times, function($time) use ($timethreshold) {
+                return $time > $timethreshold;
+            }), -$maxcount);
+        }, $SESSION->block_xp_cheatguard));
+
+        // Limit the array of events to $maxcount, we do not want to flood the session for no reason.
+        $SESSION->block_xp_cheatguard = array_slice($SESSION->block_xp_cheatguard, -$maxcount, null, true);
+
+        return true;
+    }
+
+    /**
+     * Is action accepted.
+     *
+     * @param string $action The action key.
+     * @param int $now Timestamp of now.
+     * @param array $log Array where keys are actions, and values are timestamp arrays.
+     * @param int $maxactions The maximum number of actions.
+     * @param int $maxintime The time during which the maximum number of action is allowed.
+     * @param int $timebetweenrepeats The time between repeated actions.
+     * @return bool
+     */
+    public static function is_action_accepted($action, $now, array $log, $maxactions, $maxintime, $timebetweenrepeats) {
+
+        if ($maxactions > 0 && $maxintime > 0) {
+            $timethreshold = $now - $maxintime;
+            $actionsintimeframe = array_reduce($log, function($carry, $times) use ($timethreshold) {
+                return $carry + array_reduce($times, function($carry, $time) use ($timethreshold) {
+                    return $carry + ($time > $timethreshold ? 1 : 0);
+                });
+            }, 0);
+            if ($actionsintimeframe >= $maxactions) {
                 return false;
             }
         }
 
-        // Unset the value to re-add it at the end of the array.
-        unset($SESSION->block_xp_cheatguard[$actionkey]);
+        if ($timebetweenrepeats > 0) {
+            $timethreshold = $now - $timebetweenrepeats;
+            $times = isset($log[$action]) ? $log[$action] : [];
+            if (!empty($times) && max($times) > $timethreshold) {
+                return false;
+            }
+        }
 
-        // Log the time at which this event happened.
-        $SESSION->block_xp_cheatguard[$actionkey] = time();
-
-        // Limit the array of events to $maxcount, we do not want to flood the session for no reason.
-        $SESSION->block_xp_cheatguard = array_slice($SESSION->block_xp_cheatguard, -$maxcount, null, true);
         return true;
     }
 
