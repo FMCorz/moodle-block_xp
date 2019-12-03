@@ -368,8 +368,16 @@
  *
  * Note: We find the very first rule using .filter-rules > .rule
  */
+.block-xp-filters-group .block-xp-filters-submit-actions  {
+    margin-top: 2em;
+}
+.block-xp-filters-group h4:not(:first-of-type) {
+    margin-top: 1em;
+}
 .block-xp-filters-wrapper ul {
     list-style: none;
+    padding-left: 0;
+    padding-right: 0;
 }
 .block-xp-filters-wrapper p,
 .block-xp-filters-wrapper ul,

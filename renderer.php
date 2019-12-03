@@ -562,12 +562,14 @@ EOT
      * @return string
      */
     public function render_filters_widget(renderable $widget) {
+        $containerid = html_writer::random_id();
+
         if ($widget->editable) {
             $templatefilter = $this->render($widget->filter);
 
             $templatetypes = [];
             foreach ($widget->rules as $rule) {
-                $templatetypes[uniqid()] = [
+                $templatetypes[] = [
                     'name' => $rule->name,
                     'template' => $this->render($rule->rule, ['iseditable' => true, 'basename' => 'XXXXX'])
                 ];
@@ -575,19 +577,17 @@ EOT
 
             // Prepare Javascript.
             $this->page->requires->yui_module('moodle-block_xp-filters', 'Y.M.block_xp.Filters.init', [[
+                'containerSelector' => '#' . $containerid,
                 'filter' => $templatefilter,
                 'rules' => $templatetypes
             ]]);
             $this->page->requires->strings_for_js(array('pickaconditiontype'), 'block_xp');
         }
 
-        echo html_writer::start_div('block-xp-filters-wrapper');
+        echo html_writer::start_div('block-xp-filters-wrapper', ['id' => $containerid]);
 
         $addlink = '';
         if ($widget->editable) {
-            echo html_writer::start_tag('form', ['method' => 'POST', 'class' => 'block-xp-filters']);
-            echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
-
             $addlink = html_writer::start_tag('li', ['class' => 'filter-add']);
             $addlink .= $this->action_link('#', get_string('addarule', 'block_xp'), null, null,
                 new pix_icon('t/add', '', '', ['class' => 'iconsmall']));
@@ -605,16 +605,50 @@ EOT
 
         echo html_writer::end_tag('ul');
 
-        if ($widget->editable) {
-            echo html_writer::start_tag('p');
-            echo html_writer::empty_tag('input', ['value' => get_string('savechanges'), 'type' => 'submit', 'name' => 'save',
-                'class' => 'btn btn-primary']);
-            echo ' ';
-            echo html_writer::empty_tag('input', ['value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel',
-                'class' => 'btn btn-default']);
-            echo html_writer::end_tag('p');
-            echo html_writer::end_tag('form');
+        echo html_writer::end_div();
+    }
+
+    /**
+     * Render the filters widget group.
+     *
+     * @param rendererable $group The group.
+     * @return string
+     */
+    public function render_filters_widget_element(renderable $element) {
+        if (!empty($element->title)) {
+            $title = $element->title . ($element->helpicon ? $this->render($element->helpicon) : '');
+            echo html_writer::tag('h4', $title);
+            if (!empty($element->description)) {
+                echo $element->description;
+            }
         }
+        $this->render($element->widget);
+    }
+
+    /**
+     * Render the filters widget group.
+     *
+     * @param rendererable $group The group.
+     * @return string
+     */
+    public function render_filters_widget_group(renderable $group) {
+        echo html_writer::start_div('block-xp-filters-group');
+        echo html_writer::start_tag('form', ['method' => 'POST', 'class' => 'block-xp-filters']);
+        echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+
+        $elements = $group->elements;
+        foreach ($elements as $element) {
+            echo $this->render($element);
+        }
+
+        echo html_writer::start_tag('p', ['class' => 'block-xp-filters-submit-actions']);
+        echo html_writer::empty_tag('input', ['value' => get_string('savechanges'), 'type' => 'submit', 'name' => 'save',
+            'class' => 'btn btn-primary']);
+        echo ' ';
+        echo html_writer::empty_tag('input', ['value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel',
+            'class' => 'btn btn-default']);
+        echo html_writer::end_tag('p');
+        echo html_writer::end_tag('form');
 
         echo html_writer::end_div();
     }

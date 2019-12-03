@@ -82,8 +82,7 @@ class rules_controller extends page_controller {
         // Saving the data.
         if (!empty($_POST['save'])) {
             require_sesskey();
-            $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
-            $this->save_filters($filters);
+            $this->handle_save();
             $this->redirect(null, get_string('changessaved'));
 
         } else if (!empty($_POST['cancel'])) {
@@ -91,20 +90,28 @@ class rules_controller extends page_controller {
         }
     }
 
-    protected function save_filters($filters) {
+    protected function handle_save() {
+        $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
+        $this->userfilters = $this->save_filters($filters, $this->userfilters);
+    }
+
+    protected function save_filters($filters, $existingfilters, $category = null) {
         $filterids = array();
         foreach ($filters as $filterdata) {
             $data = $filterdata;
             $data['ruledata'] = json_encode($data['rule'], true);
             unset($data['rule']);
             $data['courseid'] = $this->courseid;
+            if ($category !== null) {
+                $data['category'] = $category;
+            }
 
             if (!\block_xp_filter::validate_data($data)) {
                 throw new moodle_exception('Data could not be validated');
             }
 
             $filter = \block_xp_filter::load_from_data($data);
-            if ($filter->get_id() && !array_key_exists($filter->get_id(), $this->userfilters)) {
+            if ($filter->get_id() && !array_key_exists($filter->get_id(), $existingfilters)) {
                 throw new moodle_exception('Invalid filter ID');
             }
 
@@ -113,14 +120,20 @@ class rules_controller extends page_controller {
         }
 
         // Check for filters to be deleted.
-        foreach ($this->userfilters as $filterid => $filter) {
+        foreach ($existingfilters as $filterid => $filter) {
             if (!array_key_exists($filterid, $filterids)) {
                 $filter->delete();
             }
-            unset($this->userfilters[$filterid]);
+            unset($existingfilters[$filterid]);
         }
 
-        $this->filtermanager->invalidate_filters_cache();
+        if ($category !== null) {
+            $this->filtermanager->invalidate_filters_cache($category);
+        } else {
+            $this->filtermanager->invalidate_filters_cache();
+        }
+
+        return $existingfilters;
     }
 
     protected function get_page_html_head_title() {
@@ -167,16 +180,30 @@ class rules_controller extends page_controller {
     }
 
     /**
-     * Get widget.
+     * Get events widget element.
      *
      * @return renderable
      */
-    protected function get_widget() {
-        return new \block_xp\output\filters_widget(
-            $this->get_default_filter(),
-            $this->get_available_rules(),
-            $this->userfilters
+    protected function get_events_widget_element() {
+        return new \block_xp\output\filters_widget_element(
+            new \block_xp\output\filters_widget(
+                $this->get_default_filter(),
+                $this->get_available_rules(),
+                $this->userfilters
+            ),
+            get_string('eventsrules', 'block_xp'),
+            null,
+            new \help_icon('eventsrules', 'block_xp')
         );
+    }
+
+    /**
+     * Get widget group.
+     *
+     * @return renderable
+     */
+    protected function get_widget_group() {
+        return new \block_xp\output\filters_widget_group([$this->get_events_widget_element()]);
     }
 
     protected function page_content() {
@@ -191,21 +218,17 @@ class rules_controller extends page_controller {
             return;
         }
 
-        $logurl = $this->urlresolver->reverse('log', ['courseid' => $this->courseid]);
-        $a = new stdClass();
-        $a->list = (new moodle_url('/report/eventlist/index.php'))->out();
-        $a->log = $logurl->out();
-        $a->doc = (new moodle_url('https://docs.moodle.org/dev/Event_2'))->out();
-        echo get_string('rulesformhelp', 'block_xp', $a);
-
-        echo $output->render($this->get_widget());
-
+        $this->page_rules_content();
         $this->page_danger_zone_content();
 
         // TODO Change the introduction.
         // TODO Decide whether we want to separate the "default" rules from the rest.
         // TODO Decide whether we want to be able to "unlock" the default rules.
+    }
 
+    protected function page_rules_content() {
+        $output = $this->get_renderer();
+        echo $output->render($this->get_widget_group());
     }
 
     protected function page_danger_zone_content() {

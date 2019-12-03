@@ -41,6 +41,8 @@ use renderable;
  */
 class filters_widget implements renderable {
 
+    /** @var bool Whether we can add more filters to this widget. */
+    public $canaddmore = true;
     /** @var bool Editable? */
     public $editable = true;
     /** @var block_xp_filter An empty filter to get a template from. */
@@ -59,12 +61,15 @@ class filters_widget implements renderable {
      *                     - (block_xp_rule) rule
      * @param block_xp_filter[] $filters The contained filters.
      * @param bool $editable Whether this is editable.
+     * @param array $options Additional options.
      */
-    public function __construct(block_xp_filter $filter = null, array $rules = [], array $filters = [], $editable = true) {
+    public function __construct(block_xp_filter $filter = null, array $rules = [], array $filters = [], $editable = true,
+            array $options = []) {
         $this->editable = $editable;
         $this->filter = $filter;
         $this->rules = $rules;
         $this->filters = $filters;
+        $this->canaddmore = isset($options['canaddmore']) ? $options['canaddmore'] : true;
 
         // Internal validation is rather bad, we could do better.
         if ($editable) {

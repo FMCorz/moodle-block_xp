@@ -48,8 +48,6 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
 
     /**
      * Initializer.
-     *
-     * @return {Void}
      */
     initializer: function() {
         this.groups = this.get('groups');
@@ -93,10 +91,13 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
     },
 
     global_drop_over: function(e) {
+
+        console.log(e);
         // Check that drop object belong to correct group.
         if (!e.drop || !e.drop.inGroup(this.groups)) {
             return;
         }
+        console.log(e, 1);
 
         // Get a reference to our drag and drop nodes.
         var drag = e.drag.get('node'),
@@ -108,7 +109,9 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
         if (this.get('dropBeforeSelector') && drop.test(this.get('dropBeforeSelector'))) {
             drop.get('parentNode').insertBefore(drag, drop);
             this.drop_over(e);
+            console.log(e, 2);
         } else {
+            console.log(e, 3);
             DND.superclass.global_drop_over.apply(this, arguments);
         }
     },
@@ -142,8 +145,6 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
 
     /**
      * Sync the drop targets.
-     *
-     * @return {Void}
      */
     syncTargets: function() {
         this.delegate.syncTargets();

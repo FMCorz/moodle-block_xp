@@ -51,6 +51,12 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
     addFilterLink: null,
 
     /**
+     * Whether we can manually add more filters.
+     * @type {Bool}
+     */
+    canAddFilter: false,
+
+    /**
      * The main container.
      * @type {Node}
      */
@@ -83,23 +89,26 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
 
     /**
      * Initializer.
-     *
-     * @return {Void}
      */
     initializer: function() {
-        this.container = Y.one(SELECTORS.CONTAINER);
+        this.container = Y.one(this.get('containerSelector'));
         this.container.delegate('click', this.addNewFilter, SELECTORS.ADDFILTERBTN, this);
         this.container.delegate('click', this.addNewRule, SELECTORS.ADDRULEBTN, this);
         this.container.delegate('click', this.deleteFilter, SELECTORS.DELETEFILTERBTN, this);
         this.container.delegate('click', this.deleteRule, SELECTORS.DELETERULEBTN, this);
-        this.addFilterLink = this.container.one(SELECTORS.ADDFILTER).cloneNode(true);
+
+        var addFilterLink = this.container.one(SELECTORS.ADDFILTER);
+        if (addFilterLink !== null) {
+            this.addFilterLink = this.container.one(SELECTORS.ADDFILTER).cloneNode(true);
+            this.canAddFilter = true;
+        }
 
         this.prepareRuleDialog();
 
         this.filterDnD = Y.namespace('M.block_xp.Filters.DnD').init({
             containerClass: CSS.FILTERSLIST,
-            containerSelector: SELECTORS.FILTERSLIST,
-            groups: ['filters'],
+            containerSelector: this.get('containerSelector') + ' ' + SELECTORS.FILTERSLIST,
+            groups: ['filters_' + this.container.generateID()],
             handleSelector: SELECTORS.FILTERMOVE,
             nodeClass: CSS.FILTER,
             nodeSelector: SELECTORS.FILTER
@@ -123,7 +132,6 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * Callback when clicking to add a new filter.
      *
      * @param {EventFacade} e
-     * @return {Void}
      */
     addNewFilter: function(e) {
         var link = e.currentTarget.get('parentNode'),
@@ -131,7 +139,9 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
 
         e.preventDefault();
 
-        link.insert(this.addFilterLink.cloneNode(true), 'after');
+        if (this.canAddFilter) {
+            link.insert(this.addFilterLink.cloneNode(true), 'after');
+        }
         link.insert(filterNode, 'after');
 
         this.fixFilterSortorder();
@@ -143,7 +153,6 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * Callback when clicking to add a new rule.
      *
      * @param {EventFacade} e
-     * @return {Void}
      */
     addNewRule: function(e) {
         e.preventDefault();
@@ -160,7 +169,6 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * Delete a rule.
      *
      * @param  {EventFacade} e
-     * @return {Void}
      */
     deleteFilter: function(e) {
         e.preventDefault();
@@ -180,7 +188,6 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * Delete a rule.
      *
      * @param  {EventFacade} e
-     * @return {Void}
      */
     deleteRule: function(e) {
         e.preventDefault();
@@ -200,10 +207,12 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
 
     /**
      * Check and fix the presence of the links to add a filter.
-     *
-     * @return {Void}
      */
     fixAddFilterLink: function() {
+        if (!this.canAddFilter) {
+            return;
+        }
+
         var nodes = this.container.all(SELECTORS.FILTERSLISTNODES),
             lastNode,
             count = nodes.size();
@@ -248,8 +257,6 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
 
     /**
      * Fix the sortorder of the filters.
-     *
-     * @return {Void}
      */
     fixFilterSortorder: function() {
         var filters = this.container.all(SELECTORS.FILTER),
@@ -346,7 +353,6 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      *
      * @param  {EventFacacde} e
      * @param  {String} ruleId Matching the key of our rules attribute.
-     * @return {Void}
      */
     newRulePicked: function(e, ruleId) {
         var rule = this.get('rules')[ruleId],
@@ -362,8 +368,6 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
 
     /**
      * Prepare the rule picker dialog.
-     *
-     * @return {Void}
      */
     prepareRuleDialog: function() {
         var rules = [];
@@ -383,7 +387,6 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * Set drag & drop for rules in a filter.
      *
      * @param {Node} filterNode The filter container.
-     * @return {Void}
      */
     setFilterRulesDnD: function(filterNode) {
         if (!filterNode.one(SELECTORS.RULES)) {
@@ -427,6 +430,16 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
 }, {
     NAME: NAME,
     ATTRS: {
+
+        /**
+         * Selector for the main container.
+         *
+         * @type {Object}
+         */
+        containerSelector: {
+            validator: Y.Lang.isString,
+            value: null
+        },
 
         /**
          * Template for a new filter.

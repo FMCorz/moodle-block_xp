@@ -100,8 +100,19 @@ $string['errornotalllevelsbadgesprovided'] = 'Not all the level badges have been
 $string['errorunknownevent'] = 'Error: unknown event';
 $string['errorunknownmodule'] = 'Error: unknown module';
 $string['errorxprequiredlowerthanpreviouslevel'] = 'The points required are lower than or equal to the previous level.';
-$string['eventis'] = 'The event is {$a}';
+$string['eventsrules'] = 'Events rules';
+$string['eventsrules_help'] = 'This plugin is making use of the events to attribute points to actions performed by the students.
+You can use the form below to add your own rules and modify the default ones.
+
+It is advised to check the plugin\'s _Log_ page to identify which events are triggered as students perform actions in the course.
+
+Additional resources:
+
+- [How are experience points calculated?](https://levelup.branchup.tech/docs/article/how-are-experience-points-calculated)
+- [Troubleshooting rules](https://levelup.branchup.tech/docs/article/event-rule-not-working)
+';
 $string['event_user_leveledup'] = 'User leveled up';
+$string['eventis'] = 'The event is {$a}';
 $string['eventname'] = 'Event name';
 $string['eventproperty'] = 'Event property';
 $string['eventtime'] = 'Event time';
@@ -194,7 +205,6 @@ $string['reallydeleteuserstate'] = 'Deleting a user is only useful to remove the
 
 Importantly, when are using _Level up!_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level up!_ per course, the student may still appear in the report if they are enrolled in the course.
 
-
 Do you really want to delete the points of this user?';
 $string['reallyresetallcoursestodefaults'] = 'Really reset all courses rules to the default rules? This action is not reversible.';
 $string['reallyresetcourserulestodefaults'] = 'Really reset the course rules to the default rules? This action is not reversible.';
@@ -232,17 +242,6 @@ $string['ruleset'] = 'Set of conditions';
 $string['ruleset:all'] = 'ALL of the conditions are true';
 $string['ruleset:any'] = 'ANY of the conditions are true';
 $string['ruleset:none'] = 'NONE of the conditions are true';
-$string['rulesformhelp'] = '<p>This plugin is making use of the events to attribute points to actions performed by the students. You can use the form below to add your own rules and view the default ones.</p>
-<p>It is advised to check the plugin\'s <a href="{$a->log}">log</a> to identify what events are triggered as you perform actions in the course, and also to read more about events themselves: <a href="{$a->list}">list of all events</a>, <a href="{$a->doc}">developer documentation</a>.</p>
-<p>Finally, please note that the plugin always ignores:
-<ul>
-    <li>The actions performed by administrators, guests or non-logged in users.</li>
-    <li>The actions performed by users not having the capability <em>block/xp:earnxp</em>.</li>
-    <li>Repeated actions within a short time interval, to prevent cheating.</li>
-    <li>Events that are flagged as <em>anonymous</em>, e.g. in an anonymous Feedback.</li>
-    <li>And the events of educational level not equal to <em>Participating</em>.</li>
-</ul>
-</p>';
 $string['searchandselectcourse'] = 'Search and select a course';
 $string['searchandselectmodule'] = 'Search and select an activity or resource';
 $string['send'] = 'Send';
@@ -378,3 +377,16 @@ $string['promoemailusat'] = 'E-mail us at _levelup@branchup.tech_.';
 $string['promoerrorsendingemail'] = 'Ouch! We could not send the message... please e-mail us directly at: {$a}. Thanks!';
 $string['promoifpreferemailusat'] = 'Psst! If you prefer, e-mail us directly at _{$a}_.';
 $string['promoyourmessagewassent'] = 'Thank you, your message was sent. We will get back to you very shortly.';
+
+// Deprecated since 3.8.1.
+$string['rulesformhelp'] = '<p>This plugin is making use of the events to attribute points to actions performed by the students. You can use the form below to add your own rules and view the default ones.</p>
+<p>It is advised to check the plugin\'s <a href="{$a->log}">log</a> to identify what events are triggered as you perform actions in the course, and also to read more about events themselves: <a href="{$a->list}">list of all events</a>, <a href="{$a->doc}">developer documentation</a>.</p>
+<p>Finally, please note that the plugin always ignores:
+<ul>
+    <li>The actions performed by administrators, guests or non-logged in users.</li>
+    <li>The actions performed by users not having the capability <em>block/xp:earnxp</em>.</li>
+    <li>Repeated actions within a short time interval, to prevent cheating.</li>
+    <li>Events that are flagged as <em>anonymous</em>, e.g. in an anonymous Feedback.</li>
+    <li>And the events of educational level not equal to <em>Participating</em>.</li>
+</ul>
+</p>';
