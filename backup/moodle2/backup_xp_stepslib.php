@@ -49,7 +49,7 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
             'instructions_format'
         ));
         $xpfilters = new backup_nested_element('filters');
-        $xpfilter = new backup_nested_element('filter', array('courseid'), array('ruledata', 'points', 'sortorder'));
+        $xpfilter = new backup_nested_element('filter', array('courseid'), array('ruledata', 'points', 'sortorder', 'category'));
         $xplevels = new backup_nested_element('xps');
         $xplevel = new backup_nested_element('xp', array('courseid'), array('userid', 'xp', 'lvl'));
         $xplogs = new backup_nested_element('logs');

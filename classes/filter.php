@@ -35,6 +35,11 @@ defined('MOODLE_INTERNAL') || die();
  */
 class block_xp_filter implements renderable {
 
+    /** The category for events filters. */
+    const CATEGORY_EVENTS = 0;
+    /** The category for grades filters. */
+    const CATEGORY_GRADES = 1;
+
     /**
      * The course ID.
      *
@@ -88,6 +93,9 @@ class block_xp_filter implements renderable {
      */
     protected $sortorder = 0;
 
+    /** @var int The category constant, defaults to CATEGORY_EVENTS */
+    protected $category = 0;
+
     /**
      * Constructor.
      *
@@ -120,6 +128,7 @@ class block_xp_filter implements renderable {
         $record->points = $this->points;
         $record->ruledata = $this->ruledata;
         $record->sortorder = $this->sortorder;
+        $record->category = $this->category;
         return $record;
     }
 
@@ -130,6 +139,18 @@ class block_xp_filter implements renderable {
      */
     public function is_editable() {
         return $this->editable;
+    }
+
+    /**
+     * Return the category the filter belongs to.
+     *
+     * This is not a course category, this is a mean to use filters
+     * for different purposes, but stored in the same table.
+     *
+     * @return int
+     */
+    public function get_category() {
+        return $this->category;
     }
 
     /**
@@ -315,6 +336,10 @@ class block_xp_filter implements renderable {
         }
         if (isset($data['id'])) {
             $valid = $valid && clean_param($data['id'], PARAM_INT) == $data['id'];
+        }
+        if (isset($data['category'])) {
+            $valid = $valid && clean_param($data['category'], PARAM_INT) == $data['category'];
+            $value = $valid && in_array($data['category'], [self::CATEGORY_EVENTS, self::CATEGORY_GRADES]);
         }
         if (isset($data['ruledata'])) {
             $ruledata = json_decode($data['ruledata'], true);

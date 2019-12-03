@@ -42,6 +42,8 @@ class course_filter_manager {
     protected $courseid;
     /** @var moodle_database The DB. */
     protected $db;
+    /** @var cache The cache store. */
+    protected $cache;
 
     /**
      * Constructor.
@@ -52,6 +54,7 @@ class course_filter_manager {
     public function __construct(moodle_database $db, $courseid) {
         $this->db = $db;
         $this->courseid = $courseid;
+        $this->cache = cache::make('block_xp', 'filters');
     }
 
     /**
@@ -83,18 +86,28 @@ class course_filter_manager {
     }
 
     /**
+     * Get the cache key.
+     *
+     * @param int $category The category constant.
+     * @return string
+     */
+    public function get_cache_key($category) {
+        return 'filters_' . $this->courseid . '_' . $category;
+    }
+
+    /**
      * Get the filters.
      *
+     * @param int $category The filter category, see block_xp_filter::CATEGORY_* constants.
      * @return array of filters.
      */
-    public function get_filters() {
-        $cache = cache::make('block_xp', 'filters');
-        $key = 'filters_' . $this->courseid;
-        if (false === ($filters = $cache->get($key))) {
+    public function get_filters($category = \block_xp_filter::CATEGORY_EVENTS) {
+        $key = $this->get_cache_key($category);
+        if (false === ($filters = $this->cache->get($key))) {
             // TODO Caching is unsafe, we should not be serializing the object when
             // we have a mechanism for exporting them...
-            $filters = $this->get_user_filters();
-            $cache->set($key, $filters);
+            $filters = $this->get_user_filters($category);
+            $this->cache->set($key, $filters);
         }
         return $filters;
     }
@@ -166,11 +179,12 @@ class course_filter_manager {
     /**
      * Get the filters defined by the user.
      *
+     * @param int $category The filter category, see block_xp_filter::CATEGORY_* constants.
      * @return array Of filter data from the DB, though properties is already json_decoded.
      */
-    public function get_user_filters() {
-        $results = $this->db->get_recordset('block_xp_filters', array('courseid' => $this->courseid),
-            'sortorder ASC, id ASC');
+    public function get_user_filters($category = \block_xp_filter::CATEGORY_EVENTS) {
+        $results = $this->db->get_recordset('block_xp_filters', ['courseid' => $this->courseid,
+            'category' => $category], 'sortorder ASC, id ASC');
         $filters = array();
         foreach ($results as $key => $filter) {
             $filters[$filter->id] = \block_xp_filter::load_from_data($filter);
@@ -215,9 +229,8 @@ class course_filter_manager {
      *
      * @return void
      */
-    public function invalidate_filters_cache() {
-        $cache = cache::make('block_xp', 'filters');
-        $cache->delete('filters_' . $this->courseid);
+    public function invalidate_filters_cache($category = \block_xp_filter::CATEGORY_EVENTS) {
+        $this->cache->delete($this->get_cache_key($category));
     }
 
     /**
@@ -227,7 +240,9 @@ class course_filter_manager {
      */
     public function purge() {
         $this->db->delete_records('block_xp_filters', ['courseid' => $this->courseid]);
-        $this->invalidate_filters_cache();
+        // Ideally we shouldn't be clearing all courses' cache, but that is the simplest way
+        // to ensure that all the categories of filters are invalidated within this course.
+        $this->cache->purge();
     }
 
 }
