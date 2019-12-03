@@ -135,8 +135,13 @@ class external extends external_api {
         $courseid = $params['courseid'];
         $query = core_text::strtolower(trim($params['query']));
 
-        $context = context_course::instance($courseid);
-        self::validate_context($context);
+        // We fetch the world, but do not update the $courseid as per world::get_courseid, because
+        // if we are using the plugin for the whole site, then users should be able to search in
+        // any course. And if we're using the plugin per course, then they need permissions within
+        // that course.
+        $world = di::get('course_world_factory')->get_world($courseid);
+        self::validate_context($world->get_context());
+        $world->get_access_permissions()->require_manage();
 
         $modinfo = get_fast_modinfo($courseid);
         $courseformat = course_get_format($courseid);
