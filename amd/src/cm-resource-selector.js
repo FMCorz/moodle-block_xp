@@ -63,7 +63,7 @@ define(['jquery', 'core/ajax', 'block_xp/throttler', 'block_xp/resource-selector
             .fail(function() {
                 this.resources = [];
                 this.displayEmptyResults();
-            });
+            }.bind(this));
     };
 
     CmResourceSelector.prototype.fetchAllForCourse = function(courseId) {
