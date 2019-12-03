@@ -44,7 +44,7 @@ class promo_controller extends route_controller {
     /** Seen flag. */
     const SEEN_FLAG = 'promo-page-seen';
     /** Page version. */
-    const VERSION = 20181122;
+    const VERSION = 20191203;
 
     /** @var string The normal route name. */
     protected $routename = 'promo';
@@ -133,6 +133,8 @@ class promo_controller extends route_controller {
         echo $output->heading(get_string('discoverlevelupplus', 'block_xp'), 3);
         echo markdown_to_html(get_string('promointro', 'block_xp'));
 
+        $new = '<span class="label label-info">New</span>';
+
         echo <<<EOT
 <style>
 .block_xp-promo-table td:first-of-type {
@@ -159,22 +161,33 @@ class promo_controller extends route_controller {
     <tr>
         <td><img src="{$output->pix_url('noun/checklist', 'block_xp')}" alt=""></td>
         <td>
-            <h4>Additional rules <span class="label label-info">New</span></h4>
+            <h4>Additional rules</h4>
             <p>Reward your students for completing their tasks and courses.</p>
             <ul>
                 <li>Support for activity completion</li>
                 <li>Support for course completion</li>
-                <li>Support for targetting specific courses</li>
+                <li>Support for targeting specific courses</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="{$output->pix_url('noun/grade', 'block_xp')}" alt=""></td>
+        <td>
+            <h4>Grade-based rewards $new</h4>
+            <p>Reward students for their performance.</p>
+            <ul>
+                <li>Grades can directly contribute to students' points</li>
+                <li>Our powerful interface helps you define which grades count</li>
             </ul>
         </td>
     </tr>
     <tr>
         <td><img src="{$output->pix_url('noun/group', 'block_xp')}" alt=""></td>
         <td>
-            <h4>Group leaderboards <span class="label label-info">New</span></h4>
+            <h4>Team leaderboards</h4>
             <p>Rank groups of learners based on their combined points.</p>
             <ul>
-                <li>Compatible with course groups</li>
+                <li>Compatible with groups and cohorts</li>
                 <li>Collaboration and cohesion in a friendly competition</li>
             </ul>
         </td>
@@ -183,7 +196,7 @@ class promo_controller extends route_controller {
         <td><img src="{$output->pix_url('noun/favorite-mobile', 'block_xp')}" alt=""></td>
         <td>
             <h4>Mobile app support</h4>
-            <p>Level up! in the official Moodle Mobile app.</p>
+            <p>Access Level up! in the official Moodle Mobile app.</p>
             <ul>
                 <li>See current level and progress</li>
                 <li>Access the leaderboard</li>
@@ -194,10 +207,10 @@ class promo_controller extends route_controller {
         <td><img src="{$output->pix_url('noun/privacy', 'block_xp')}" alt=""></td>
         <td>
             <h4>Improved cheat guard</h4>
-            <p>Better control over your students' rewards.</p>
+            <p>Get better control of students' rewards.</p>
             <ul>
-                <li>Limit your students' rewards per day (or any other time window)</li>
-                <li>More resilient to students' trickeries</li>
+                <li>Limit your students' rewards per day (or any other time limit you want to set)</li>
+                <li>Be on top of potential false student activities</li>
             </ul>
         </td>
     </tr>
@@ -205,7 +218,7 @@ class promo_controller extends route_controller {
         <td><img src="{$output->pix_url('level', 'block_xp')}" alt=""></td>
         <td>
             <h4>Additional badges</h4>
-            <p>Make your learners feel at home with new looks.</p>
+            <p>Celebrate learners achievements with more badges.</p>
             <ul>
                 <li>Three new sets of level badges</li>
             </ul>
@@ -214,8 +227,8 @@ class promo_controller extends route_controller {
     <tr>
         <td><img src="{$output->pix_url('noun/carrots', 'block_xp')}" alt=""></td>
         <td>
-            <h4>Give them carrots!</h4>
-            <p>Reward your students with something other than experience points.</p>
+            <h4>Dangle a carrot!</h4>
+            <p>Motivate & reward your students with something other than experience points.</p>
             <ul>
                 <li>Carrots, gems, thumbs up, reputation points...</li>
                 <li>It's your call, use any symbol you want!</li>
@@ -236,9 +249,9 @@ class promo_controller extends route_controller {
         <td><img src="{$output->pix_url('noun/help', 'block_xp')}" alt=""></td>
         <td>
             <h4>Email support</h4>
-            <p>Get direct email support from our team.</p>
+            <p>Let us help if something goes wrong</p>
             <ul>
-                <li>Let us help if something goes wrong</li>
+                <li>Get direct email support from our team.</li>
             </ul>
         </td>
     </tr>
@@ -249,16 +262,15 @@ class promo_controller extends route_controller {
             <p>Purchasing the add-on directly contributes to the plugin's development.</p>
             <ul>
                 <li>Bugs will be fixed</li>
-                <li>Features will be added</li>
+                <li>Requested features will be added</li>
             </ul>
         </td>
     </tr>
 </table>
 
 <div style="text-align: center; margin-top: 2em">
-    <p>To find out more, order or contact us:</p>
     <p><a class="btn btn-success btn-large btn-lg" href="{$siteurl}">
-        Visit our website
+        Get Level up! Plus now!
     </a></p>
 </div>
 EOT;
