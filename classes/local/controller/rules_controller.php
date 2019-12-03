@@ -218,12 +218,20 @@ class rules_controller extends page_controller {
             return;
         }
 
+        $this->page_plus_promo_content();
         $this->page_rules_content();
         $this->page_danger_zone_content();
+    }
 
-        // TODO Change the introduction.
-        // TODO Decide whether we want to separate the "default" rules from the rest.
-        // TODO Decide whether we want to be able to "unlock" the default rules.
+    protected function page_plus_promo_content() {
+        $config = \block_xp\di::get('config');
+        if ($config->get('enablepromoincourses')) {
+            $promourl = $this->urlresolver->reverse('promo', ['courseid' => $this->courseid]);
+            echo $this->get_renderer()->notification_without_close(
+                get_string('promorulesdidyouknow', 'block_xp', ['url' => $promourl->out(false)]),
+                \core\output\notification::NOTIFY_INFO
+            );
+        }
     }
 
     protected function page_rules_content() {

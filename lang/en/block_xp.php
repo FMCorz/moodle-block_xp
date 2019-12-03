@@ -197,6 +197,7 @@ $string['property:crud'] = 'Event CRUD';
 $string['property:eventname'] = 'Event name';
 $string['property:target'] = 'Event target';
 $string['promointro'] = 'The add-on for _Level up!_ that unleashes its full potential!';
+$string['promorulesdidyouknow'] = 'Did you know that with <em>Level up! Plus</em> students can receive points for <em>completing courses</em> and <em>activities</em>, or even receive points according to their <em>grades</em>? <a href="{$a->url}">Discover more here</a>.';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';
 $string['rank'] = 'Rank';
 $string['ranking'] = 'Ranking';
