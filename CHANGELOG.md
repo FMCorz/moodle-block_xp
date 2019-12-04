@@ -1,6 +1,24 @@
 Changelog
 =========
 
+v3.8.1
+------
+
+Bug fixes
+
+- The cheat guard miscounted the max of actions in time frame
+- Sorting the logs by points raised a database error
+- The manage permission is now required to search courses in the course rule
+- Missing bind when handling exception in module resource selector
+
+Quality of life
+
+- Display a warning when the plugin configuration and URLs mismatch
+
+Technical changes
+
+- Changes to filters and rules to support grade-based rewards in _Level up! Plus_
+
 v3.8.0
 ------
 
