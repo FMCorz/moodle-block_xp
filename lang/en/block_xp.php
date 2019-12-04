@@ -94,6 +94,8 @@ $string['enablexpgain_help'] = 'When set to \'No\', nobody will earn points in t
 
 Please note that this can also be controlled more granularly using the capability _block/xp:earnxp_.';
 $string['entersearchterm'] = 'Enter a search term';
+$string['errorcontextcoursemismatchforwholesite'] = 'The URL of this <em>Level up!</em> page does not match the current plugin configuration. Your current configuration declares <em>Level up!</em> to be used \'For the whole site\', however this page expected it to be used \'Per course\'. Please <a href="{$a->nexturl}">click here</a> to navigate to the right page. Search for the admin setting \'block_xp_context\' if you wish to change your configuration.';
+$string['errorcontextcoursemismatchpercourse'] = 'The URL of this <em>Level up!</em> page does not match the current plugin configuration. Your current configuration declares <em>Level up!</em> to be used \'Per course\', but this page expects it to be used \'For the whole site\'. It most likely originates from a <em>block</em> that was added to the dashboard or front page while in a different configuration. You should remove the block from the latter pages, and only use the block from within individual courses.';
 $string['errorformvalues'] = 'There are some issues in the form values, please fix them.';
 $string['errorlevelsincorrect'] = 'The minimum number of levels is 2';
 $string['errornotalllevelsbadgesprovided'] = 'Not all the level badges have been provided. Missing: {$a}';

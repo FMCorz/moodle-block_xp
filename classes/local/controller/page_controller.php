@@ -28,6 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
 use moodle_exception;
+use block_xp\di;
+use core\output\notification;
 
 /**
  * Page controller class.
@@ -95,7 +97,28 @@ abstract class page_controller extends course_route_controller {
      */
     protected function content() {
         $output = $this->get_renderer();
+
+        // Warn users that they are not where they should be.
+        if ($this->world->get_access_permissions()->can_manage()) {
+            $isforwholesite = di::get('config')->get('context') == CONTEXT_SYSTEM;
+            $requestedcourseid = $this->get_param('courseid');
+
+            if (!$isforwholesite && $requestedcourseid == SITEID) {
+                // In per-course, but requesting front page.
+                echo $output->notification_without_close(get_string('errorcontextcoursemismatchpercourse', 'block_xp'),
+                    notification::NOTIFY_WARNING);
+
+            } else if ($isforwholesite && $requestedcourseid != SITEID) {
+                // In for whole site, but requesting individual course.
+                $nexturl = $this->urlresolver->reverse($this->get_route_name(), ['courseid' => $this->courseid]);
+                echo $output->notification_without_close(get_string('errorcontextcoursemismatchforwholesite', 'block_xp',
+                    ['nexturl' => $nexturl->out(false)]), notification::NOTIFY_WARNING);
+                return;
+            }
+        }
+
         echo $output->heading($this->get_page_heading());
+
         $this->page_navigation();
         $this->page_notices();
         $this->page_content();
