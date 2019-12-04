@@ -78,8 +78,7 @@ class admin_rules_controller extends admin_route_controller {
         // Saving the data.
         if (!empty($_POST['save'])) {
             require_sesskey();
-            $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
-            $this->save_filters($filters);
+            $this->handle_save();
             $this->redirect(null, get_string('changessaved'));
 
         } else if (!empty($_POST['cancel'])) {
@@ -88,20 +87,33 @@ class admin_rules_controller extends admin_route_controller {
     }
 
     /**
+     * Handle save.
+     *
+     * @return void
+     */
+    protected function handle_save() {
+        $category = \block_xp_filter::CATEGORY_EVENTS;
+        $filters = isset($_POST['filters']) ? $_POST['filters'] : [];
+        $this->save_filters($filters, $this->filtermanager->get_filters($category), $category);
+    }
+
+    /**
      * Save the filters.
      *
      * @param array $filters Filters data.
+     * @param int $category The category constant.
      * @return void
      */
-    protected function save_filters($filters) {
-        $existingfilters = $this->filtermanager->get_filters();
-
+    protected function save_filters($filters, $existingfilters, $category = null) {
         $filterids = array();
         foreach ($filters as $filterdata) {
             $data = $filterdata;
             $data['ruledata'] = json_encode($data['rule'], true);
             unset($data['rule']);
             $data['courseid'] = 0;
+            if ($category !== null) {
+                $data['category'] = $category;
+            }
 
             if (!\block_xp_filter::validate_data($data)) {
                 throw new coding_exception('Data could not be validated');
@@ -163,16 +175,43 @@ class admin_rules_controller extends admin_route_controller {
     }
 
     /**
-     * Get widget.
+     * Get events widget element.
      *
      * @return renderable
      */
-    protected function get_widget() {
-        return new \block_xp\output\filters_widget(
-            $this->get_default_filter(),
-            $this->get_available_rules(),
-            $this->filtermanager->get_filters()
+    protected function get_events_widget_element() {
+        return new \block_xp\output\filters_widget_element(
+            new \block_xp\output\filters_widget(
+                $this->get_default_filter(),
+                $this->get_available_rules(),
+                $this->filtermanager->get_filters()
+            ),
+            get_string('eventsrules', 'block_xp'),
+            null,
+            new \help_icon('eventsrules', 'block_xp')
         );
+    }
+
+    /**
+     * Get widget group.
+     *
+     * @return renderable
+     */
+    protected function get_widget_group() {
+        return new \block_xp\output\filters_widget_group([$this->get_events_widget_element()]);
+    }
+
+    protected function page_plus_promo_content() {
+        $promourl = $this->urlresolver->reverse('admin/promo');
+        echo $this->get_renderer()->notification_without_close(
+            get_string('promorulesdidyouknow', 'block_xp', ['url' => $promourl->out(false)]),
+            \core\output\notification::NOTIFY_INFO
+        );
+    }
+
+    protected function page_rules_content() {
+        $output = $this->get_renderer();
+        echo $output->render($this->get_widget_group());
     }
 
     /**
@@ -202,11 +241,9 @@ class admin_rules_controller extends admin_route_controller {
             return;
         }
 
-        // Preparing form.
-        $widget = $this->get_widget();
-
+        $this->page_plus_promo_content();
         echo html_writer::tag('p', get_string('admindefaultrulesintro', 'block_xp'));
-        echo $output->render($widget);
+        $this->page_rules_content();
 
         $hasdangerzone = $this->filtermanager->is_customised() || !$forwholesite;
         if ($hasdangerzone) {

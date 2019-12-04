@@ -221,7 +221,7 @@ class course_filter_manager {
      */
     public function import_default_filters() {
         $fm = new admin_filter_manager($this->db);
-        $this->import_filters($fm->get_filters());
+        $this->import_filters($fm->get_all_filters());
     }
 
     /**

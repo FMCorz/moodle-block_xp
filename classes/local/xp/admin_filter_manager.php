@@ -57,11 +57,36 @@ class admin_filter_manager {
     }
 
     /**
+     * Get all the filters.
+     *
+     * @return block_xp_filter[]
+     */
+    public function get_all_filters() {
+        if (!$this->is_customised()) {
+            // Early bail. We assume that we do not have any default filters for other categories.
+            return $this->get_default_filters(\block_xp_filter::CATEGORY_EVENTS);
+        }
+
+        $results = $this->db->get_recordset('block_xp_filters', ['courseid' => 0], 'sortorder ASC, id ASC');
+        $filters = [];
+        foreach ($results as $key => $filter) {
+            $filters[$filter->id] = \block_xp_filter::load_from_data($filter);
+        }
+        $results->close();
+        return $filters;
+    }
+
+    /**
      * Default admin filters.
      *
-     * @return void
+     * @param int $category The category.
+     * @return block_xp_filter[]
      */
-    protected function get_default_filters() {
+    protected function get_default_filters($category = \block_xp_filter::CATEGORY_EVENTS) {
+        if ($category != \block_xp_filter::CATEGORY_EVENTS) {
+            return [];
+        }
+
         $d = new \block_xp_rule_property(\block_xp_rule_base::EQ, 'd', 'crud');
         $c = new \block_xp_rule_property(\block_xp_rule_base::EQ, 'c', 'crud');
         $r = new \block_xp_rule_property(\block_xp_rule_base::EQ, 'r', 'crud');
@@ -97,15 +122,17 @@ class admin_filter_manager {
     /**
      * Get the filters defined by the admin.
      *
+     * @param int $category The matching category.
      * @return block_xp_filter[]
      */
-    public function get_filters() {
+    public function get_filters($category = \block_xp_filter::CATEGORY_EVENTS) {
         if (!$this->is_customised()) {
             // Early bail, saving one query.
-            return $this->get_default_filters();
+            return $this->get_default_filters($category);
         }
 
-        $results = $this->db->get_recordset('block_xp_filters', ['courseid' => 0], 'sortorder ASC, id ASC');
+        $results = $this->db->get_recordset('block_xp_filters', ['courseid' => 0, 'category' => $category],
+            'sortorder ASC, id ASC');
         $filters = [];
         foreach ($results as $key => $filter) {
             $filters[$filter->id] = \block_xp_filter::load_from_data($filter);
