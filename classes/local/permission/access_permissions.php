@@ -53,6 +53,14 @@ interface access_permissions {
     public function can_manage($userid = null);
 
     /**
+     * Whether the user can view the logs.
+     *
+     * @param int $userid The user ID.
+     * @throws required_capability_exception
+     */
+    public function can_view_logs($userid = null);
+
+    /**
      * Requires for user to be able to access the content.
      *
      * @param int $userid The user ID.
@@ -67,4 +75,12 @@ interface access_permissions {
      * @throws required_capability_exception
      */
     public function require_manage($userid = null);
+
+    /**
+     * Requires for user to be able to view the logs.
+     *
+     * @param int $userid The user ID.
+     * @throws required_capability_exception
+     */
+    public function require_view_logs($userid = null);
 }

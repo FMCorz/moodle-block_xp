@@ -50,6 +50,10 @@ class log_controller extends page_controller {
         return $table;
     }
 
+    protected function permissions_checks() {
+        $this->world->get_access_permissions()->require_view_logs();
+    } 
+
     protected function get_page_html_head_title() {
         return get_string('courselog', 'block_xp');
     }

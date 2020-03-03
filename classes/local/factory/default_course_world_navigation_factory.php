@@ -90,17 +90,20 @@ class default_course_world_navigation_factory implements course_world_navigation
                 'text' => get_string('navladder', 'block_xp')
             ];
         }
-
+        //show viewlogs   
+        if ($world->get_access_permissions()->can_view_logs()) {
+            $links[] = [
+                'id' => 'log',
+                'url' => $urlresolver->reverse('log', ['courseid' => $courseid]),
+                'text' => get_string('navlog', 'block_xp')
+            ];
+        }
+        
         if ($world->get_access_permissions()->can_manage()) {
             $links[] = [
                 'id' => 'report',
                 'url' => $urlresolver->reverse('report', ['courseid' => $courseid]),
                 'text' => get_string('navreport', 'block_xp')
-            ];
-            $links[] = [
-                'id' => 'log',
-                'url' => $urlresolver->reverse('log', ['courseid' => $courseid]),
-                'text' => get_string('navlog', 'block_xp')
             ];
             $links[] = [
                 'id' => 'levels',

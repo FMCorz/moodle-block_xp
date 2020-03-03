@@ -71,6 +71,16 @@ class context_permissions implements access_permissions {
     }
 
     /**
+     * Whether the user can view the logs.
+     *
+     * @param int $userid The user ID.
+     * @throws required_capability_exception
+     */
+    public function can_view_logs($userid = null) {
+        return has_capability('block/xp:viewlogs', $this->context, $userid);
+    }
+
+    /**
      * Requires for user to be able to access the content.
      *
      * @param int $userid The user ID.
@@ -90,5 +100,15 @@ class context_permissions implements access_permissions {
      */
     public function require_manage($userid = null) {
         return require_capability('block/xp:manage', $this->context, $userid);
+    }
+
+    /**
+     * Requires for user to be able to view the logs.
+     *
+     * @param int $userid The user ID.
+     * @throws required_capability_exception
+     */
+    public function require_view_logs($userid = null) {
+        return require_capability('block/xp:viewlogs', $this->context, $userid);
     }
 }
