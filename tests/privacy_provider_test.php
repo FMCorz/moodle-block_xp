@@ -31,7 +31,9 @@ require_once(__DIR__ . '/fixtures/events.php');
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\writer;
+use core_privacy\local\request\userlist;
 use block_xp\di;
 use block_xp\local\config\course_world_config;
 use block_xp\local\controller\promo_controller;
@@ -159,6 +161,61 @@ class block_xp_privacy_provider_testcase extends block_xp_base_testcase {
         $this->assert_contextlist_equals($contextlist, []);
     }
 
+    public function test_get_users_in_context() {
+        $dg = $this->getDataGenerator();
+        $c1 = $dg->create_course();
+        $c2 = $dg->create_course();
+        $c3 = $dg->create_course();
+        $u1 = $dg->create_user();
+        $u2 = $dg->create_user();
+        $u3 = $dg->create_user();
+
+        // Set the system first to create a context_system context.
+        $config = di::get('config');
+        $config->set('context', CONTEXT_SYSTEM);
+
+        $world = $this->get_world(SITEID);
+        $strategy = $world->get_collection_strategy();
+        $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c1->id));
+        $strategy->collect_event($e);
+        $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u3->id, 'courseid' => $c1->id));
+        $strategy->collect_event($e);
+
+        // Set back to course mode to get data on both sides.
+        $this->reset_container(); // We should not have to do this really...
+        $config = di::get('config');
+        $config->set('context', CONTEXT_COURSE);
+
+        $world = $this->get_world($c1->id);
+        $strategy = $world->get_collection_strategy();
+        $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c1->id));
+        $strategy->collect_event($e);
+
+        $world = $this->get_world($c2->id);
+        $strategy = $world->get_collection_strategy();
+        $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c2->id));
+        $strategy->collect_event($e);
+        $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u2->id, 'courseid' => $c2->id));
+        $strategy->collect_event($e);
+
+
+        $userlist = new userlist(context_system::instance(), 'block_xp');
+        $contextlist = provider::get_users_in_context($userlist);
+        $this->assert_userlist_equals($userlist, [$u1->id, $u3->id]);
+
+        $userlist = new userlist(context_course::instance($c1->id), 'block_xp');
+        $contextlist = provider::get_users_in_context($userlist);
+        $this->assert_userlist_equals($userlist, [$u1->id]);
+
+        $userlist = new userlist(context_course::instance($c2->id), 'block_xp');
+        $contextlist = provider::get_users_in_context($userlist);
+        $this->assert_userlist_equals($userlist, [$u1->id, $u2->id]);
+
+        $userlist = new userlist(context_course::instance($c3->id), 'block_xp');
+        $contextlist = provider::get_users_in_context($userlist);
+        $this->assert_userlist_equals($userlist, []);
+    }
+
     public function test_delete_data_for_all_users_in_context() {
         $db = di::get('db');
         $dg = $this->getDataGenerator();
@@ -270,6 +327,71 @@ class block_xp_privacy_provider_testcase extends block_xp_base_testcase {
         $this->assertNotNull(get_user_preferences('block_xp_notify_level_up_' . $c2->id, null, $u2->id));
     }
 
+    public function test_delete_data_for_users() {
+        $db = di::get('db');
+        $dg = $this->getDataGenerator();
+        $c1 = $dg->create_course();
+        $c2 = $dg->create_course();
+        $u1 = $dg->create_user();
+        $u2 = $dg->create_user();
+        $u3 = $dg->create_user();
+
+        $world = $this->get_world($c1->id);
+        $strategy = $world->get_collection_strategy();
+        $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c1->id));
+        $strategy->collect_event($e);
+        $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u2->id, 'courseid' => $c1->id));
+        $strategy->collect_event($e);
+        $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u3->id, 'courseid' => $c1->id));
+        $strategy->collect_event($e);
+        set_user_preference('block_xp_notify_level_up_' . $c1->id, 1, $u1->id);
+        set_user_preference('block_xp_notify_level_up_' . $c1->id, 1, $u2->id);
+        set_user_preference('block_xp_notify_level_up_' . $c1->id, 1, $u3->id);
+
+        $this->assertNotEquals(0, $world->get_store()->get_state($u1->id)->get_xp());
+        $this->assertNotEquals(0, $world->get_store()->get_state($u2->id)->get_xp());
+        $this->assertNotEquals(0, $world->get_store()->get_state($u3->id)->get_xp());
+        $this->assertTrue($db->record_exists('block_xp_log', ['courseid' => $c1->id]));
+        $this->assertNotNull(get_user_preferences('block_xp_notify_level_up_' . $c1->id, null, $u1->id));
+        $this->assertNotNull(get_user_preferences('block_xp_notify_level_up_' . $c1->id, null, $u2->id));
+        $this->assertNotNull(get_user_preferences('block_xp_notify_level_up_' . $c1->id, null, $u3->id));
+
+        $world = $this->get_world($c2->id);
+        $strategy = $world->get_collection_strategy();
+        $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u1->id, 'courseid' => $c2->id));
+        $strategy->collect_event($e);
+        $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u2->id, 'courseid' => $c2->id));
+        $strategy->collect_event($e);
+        set_user_preference('block_xp_notify_level_up_' . $c2->id, 1, $u1->id);
+        set_user_preference('block_xp_notify_level_up_' . $c2->id, 1, $u2->id);
+
+        $this->assertNotEquals(0, $world->get_store()->get_state($u1->id)->get_xp());
+        $this->assertNotEquals(0, $world->get_store()->get_state($u2->id)->get_xp());
+        $this->assertTrue($db->record_exists('block_xp_log', ['courseid' => $c2->id]));
+        $this->assertNotNull(get_user_preferences('block_xp_notify_level_up_' . $c2->id, null, $u1->id));
+        $this->assertNotNull(get_user_preferences('block_xp_notify_level_up_' . $c2->id, null, $u2->id));
+
+        $userlist = new approved_userlist(context_course::instance($c1->id), 'block_xp', [$u1->id, $u2->id]);
+        provider::delete_data_for_users($userlist);
+
+        $world = $this->get_world($c1->id);
+        $this->assertEquals(0, $world->get_store()->get_state($u1->id)->get_xp());
+        $this->assertEquals(0, $world->get_store()->get_state($u1->id)->get_xp());
+        $this->assertNotEquals(0, $world->get_store()->get_state($u3->id)->get_xp());
+        $this->assertFalse($db->record_exists('block_xp_log', ['courseid' => $c1->id, 'userid' => $u1->id]));
+        $this->assertFalse($db->record_exists('block_xp_log', ['courseid' => $c1->id, 'userid' => $u2->id]));
+        $this->assertNull(get_user_preferences('block_xp_notify_level_up_' . $c1->id, null, $u1->id));
+        $this->assertNull(get_user_preferences('block_xp_notify_level_up_' . $c1->id, null, $u2->id));
+        $this->assertNotNull(get_user_preferences('block_xp_notify_level_up_' . $c1->id, null, $u3->id));
+
+        $world = $this->get_world($c2->id);
+        $this->assertNotEquals(0, $world->get_store()->get_state($u1->id)->get_xp());
+        $this->assertNotEquals(0, $world->get_store()->get_state($u2->id)->get_xp());
+        $this->assertTrue($db->record_exists('block_xp_log', ['courseid' => $c2->id, 'userid' => $u1->id]));
+        $this->assertNotNull(get_user_preferences('block_xp_notify_level_up_' . $c2->id, null, $u1->id));
+        $this->assertNotNull(get_user_preferences('block_xp_notify_level_up_' . $c2->id, null, $u2->id));
+    }
+
     public function test_export_data_for_user() {
         $db = di::get('db');
         $dg = $this->getDataGenerator();
@@ -335,5 +457,12 @@ class block_xp_privacy_provider_testcase extends block_xp_base_testcase {
         sort($contextids);
         sort($expectedids);
         $this->assertEquals($expectedids, $contextids);
+    }
+
+    protected function assert_userlist_equals($userlist, $expectedids) {
+        $userids = array_map('intval', $userlist->get_userids());
+        sort($userids);
+        sort($expectedids);
+        $this->assertEquals($expectedids, $userids);
     }
 }

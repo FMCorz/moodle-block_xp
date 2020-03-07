@@ -31,8 +31,11 @@ use context_course;
 use context_system;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\transform;
+use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
+use block_xp\local\provider\addon_userlist_provider;
 
 /**
  * Data provider class.
@@ -49,6 +52,7 @@ use core_privacy\local\request\writer;
 class provider implements
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider,
+    \core_privacy\local\request\core_userlist_provider ,
     \core_privacy\local\request\user_preference_provider {
 
     use \core_privacy\local\legacy_polyfill;
@@ -132,6 +136,27 @@ class provider implements
         }
 
         return $contextlist;
+    }
+
+    /**
+     * Get the list of users who have data within a context.
+     *
+     * @param userlist $userlist The userlist containing the list of users.
+     */
+    public static function get_users_in_context(userlist $userlist) {
+        $courseid = static::get_courseid_from_context($userlist->get_context());
+        if (!$courseid) {
+          return;
+        }
+
+        $userlist->add_from_sql('userid', 'SELECT userid FROM {block_xp} WHERE courseid = ?', [$courseid]);
+
+        // Defer to the add-on.
+        if ($addon = static::get_addon()) {
+            if ($addon instanceof addon_userlist_provider) {
+                $addon::add_addon_users_in_context($userlist);
+            }
+        }
     }
 
     /**
@@ -283,6 +308,45 @@ class provider implements
         // Defer to the add-on.
         if ($addon = static::get_addon()) {
             $addon::delete_addon_data_for_user($contextlist);
+        }
+    }
+
+    /**
+     * Delete multiple users within a single context.
+     *
+     * @param approved_userlist $userlist The approved context and user information to delete information for.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist) {
+        $db = \block_xp\di::get('db');
+        $userids = $userlist->get_userids();
+        if (empty($userids)) {
+            return;
+        }
+
+        // Get the corresponding course ID.
+        $context = $userlist->get_context();
+        $courseid = static::get_courseid_from_context($context);
+        if (!$courseid) {
+           return;
+        }
+
+        // Delete all the things.
+        list($insql, $inparams) = $db->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+        $sql = "courseid = :courseid AND userid $insql";
+        $params = ['courseid' => $courseid] + $inparams;
+        $db->delete_records_select('block_xp', $sql, $params);
+        $db->delete_records_select('block_xp_log', $sql, $params);
+
+        // Delete the user preferences in the context.
+        foreach ($userids as $userid) {
+            static::delete_preferences_for_user_in_context($userid, $context);
+        }
+
+        // Defer to the add-on.
+        if ($addon = static::get_addon()) {
+            if ($addon instanceof addon_userlist_provider) {
+                $addon::delete_addon_data_for_users($userlist);
+            }
         }
     }
 
