@@ -286,6 +286,13 @@
 }
 
 /**
+ * Report table.
+ */
+.block_xp-report-table td {
+    vertical-align: middle !important; /* stylelint-disable-line declaration-no-important */
+}
+
+/**
  * Page navigation.
  */
 .block_xp-page-nav a {
