@@ -207,7 +207,7 @@ $string['ranking'] = 'Ranking';
 $string['ranking_help'] = 'The rank is the absolute position of the current user in the ladder. The relative rank is the difference in experience points between a user and their neighbours.';
 $string['reallydeleteuserstate'] = 'Deleting a user is only useful to remove them from the ladder. For any other reasons, we recommend setting their points to 0 instead. Note that deleting them does not affect their ability to earn points in the future.
 
-Importantly, when are using _Level up!_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level up!_ per course, the student may still appear in the report if they are enrolled in the course.
+Importantly, when using _Level up!_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level up!_ per course, the student may still appear in the report if they are enrolled in the course.
 
 Do you really want to delete the points of this user?';
 $string['reallyresetallcoursestodefaults'] = 'Really reset all courses rules to the default rules? This action is not reversible.';
