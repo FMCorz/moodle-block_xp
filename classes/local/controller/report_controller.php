@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use core_user;
 use html_writer;
+use single_button;
 use block_xp\local\routing\url;
 
 /**
@@ -135,6 +136,38 @@ class report_controller extends page_controller {
         return $this->table;
     }
 
+    /**
+     * Get the bottom action buttons.
+     *
+     * @return single_button[]
+     */
+    protected function get_bottom_action_buttons() {
+        $actions = [];
+
+        // Make sure that we can reset for a group only.
+        $groupid = $this->get_groupid();
+        $strreset = null;
+        if (empty($groupid)) {
+            $strreset = get_string('resetcoursedata', 'block_xp');
+        } else if ($this->world->get_store() instanceof \block_xp\local\xp\course_state_store) {
+            $strreset = get_string('resetgroupdata', 'block_xp');
+        }
+
+        if (!empty($strreset)) {
+            $actions[] = new single_button(
+                new url($this->pageurl->get_compatible_url(), [
+                    'resetdata' => 1,
+                    'sesskey' => sesskey(),
+                    'group' => $groupid
+                ]),
+                $strreset,
+                'get'
+            );
+        }
+
+        return $actions;
+    }
+
     protected function page_content() {
         $output = $this->get_renderer();
         $groupid = $this->get_groupid();
@@ -171,26 +204,12 @@ class report_controller extends page_controller {
         $this->print_group_menu();
         echo $this->get_table()->out(20, true);
 
-        // Make sure that we can reset for a group only.
-        $strreset = null;
-        if (empty($groupid)) {
-            $strreset = get_string('resetcoursedata', 'block_xp');
-        } else if ($this->world->get_store() instanceof \block_xp\local\xp\course_state_store) {
-            $strreset = get_string('resetgroupdata', 'block_xp');
-        }
-
-        if (!empty($strreset)) {
-            echo html_writer::tag('p',
-                $output->single_button(
-                    new url($this->pageurl->get_compatible_url(), [
-                        'resetdata' => 1,
-                        'sesskey' => sesskey(),
-                        'group' => $groupid
-                    ]),
-                    $strreset,
-                    'get'
-                )
-            );
+        // Output the bottom actions.
+        $actions = $this->get_bottom_action_buttons();
+        if (!empty($actions)) {
+            echo html_writer::tag('p', implode('', array_map(function($button) use ($output) {
+                return $output->render($button);
+            }, $actions)));
         }
     }
 
