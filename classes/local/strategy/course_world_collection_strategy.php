@@ -117,28 +117,7 @@ class course_world_collection_strategy implements event_collection_strategy {
         // Collect.
         // No need to go through the following if the user did not gain XP.
         if ($points > 0) {
-
-            // TODO Implement level-up check differently.
-            $initiallevel = $this->store->get_state($userid)->get_level()->get_level();
             $this->store->increase_with_reason($userid, $points, $reason);
-            $level = $this->store->get_state($userid)->get_level()->get_level();
-
-            if ($initiallevel != $level) {
-                $params = array(
-                    'context' => $this->context,
-                    'relateduserid' => $userid,
-                    'other' => array(
-                        'level' => $level
-                    )
-                );
-                $lupevent = \block_xp\event\user_leveledup::create($params);
-                $lupevent->trigger();
-            }
-
-            if ($level > $initiallevel && $config->get('enablelevelupnotif')) {
-                $this->levelupnotifificationservice->notify($userid);
-            }
-
         } else {
             // We still want to log the thing.
             $this->logger->log_reason($userid, $points, $reason);

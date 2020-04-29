@@ -185,13 +185,25 @@ class course_world implements world {
         return new \block_xp\local\notification\course_level_up_notification_service($this->courseid);
     }
 
+    /**
+     * Get the level up state store observer.
+     *
+     * @return \block_xp\local\observer\default_level_up_state_store_observer
+     */
+    protected function get_level_up_state_store_observer() {
+        // TODO We could put that somewhere else.
+        return new \block_xp\local\observer\default_level_up_state_store_observer($this->context, $this->config,
+            $this->get_level_up_notification_service());
+    }
+
     public function get_store() {
         if (!$this->store) {
             $this->store = new \block_xp\local\xp\course_user_state_store(
                 $this->db,
                 $this->get_levels_info(),
                 $this->get_courseid(),
-                $this->get_collection_logger()
+                $this->get_collection_logger(),
+                $this->get_level_up_state_store_observer()
             );
         }
         return $this->store;

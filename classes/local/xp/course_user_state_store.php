@@ -32,6 +32,7 @@ use stdClass;
 use user_picture;
 use block_xp\local\logger\collection_logger_with_group_reset;
 use block_xp\local\logger\reason_collection_logger;
+use block_xp\local\observer\level_up_state_store_observer;
 use block_xp\local\reason\reason;
 
 /**
@@ -66,13 +67,16 @@ class course_user_state_store implements course_state_store,
      * @param moodle_database $db The DB.
      * @param levels_info $levelsinfo The levels info.
      * @param int $courseid The course ID.
+     * @param logger $logger The reason logger.
+     * @param level_up_state_store_observer $observer The observer.
      */
     public function __construct(moodle_database $db, levels_info $levelsinfo, $courseid,
-            reason_collection_logger $logger) {
+            reason_collection_logger $logger, level_up_state_store_observer $observer = null) {
         $this->db = $db;
         $this->levelsinfo = $levelsinfo;
         $this->courseid = $courseid;
         $this->logger = $logger;
+        $this->observer = $observer;
     }
 
     /**
@@ -137,7 +141,13 @@ class course_user_state_store implements course_state_store,
      * @param int $amount The amount.
      */
     public function increase($id, $amount) {
+        $prexp = 0;
+        $postxp = $amount;
+
         if ($record = $this->exists($id)) {
+            $prexp = $record->xp;
+            $postxp = $prexp + $amount;
+
             $sql = "UPDATE {{$this->table}}
                        SET xp = xp + :xp
                      WHERE courseid = :courseid
@@ -158,6 +168,8 @@ class course_user_state_store implements course_state_store,
         } else {
             $this->insert($id, $amount);
         }
+
+        $this->observe_increase($id, $prexp, $postxp);
     }
 
     /**
@@ -199,6 +211,46 @@ class course_user_state_store implements course_state_store,
         context_helper::preload_from_record($record);
         $xp = !empty($record->xp) ? $record->xp : 0;
         return new user_state($user, $xp, $this->levelsinfo);
+    }
+
+    /**
+     * Observe when increased.
+     *
+     * @param int $id The recipient.
+     * @param int $beforexp The points before.
+     * @param int $afterxp The points after.
+     * @return void
+     */
+    protected function observe_increase($id, $beforexp, $afterxp) {
+        if (!$this->observer){
+            return;
+        }
+
+        $beforelevel = $this->levelsinfo->get_level_from_xp($beforexp);
+        $afterlevel = $this->levelsinfo->get_level_from_xp($afterxp);
+        if ($beforelevel->get_level() < $afterlevel->get_level()) {
+            $this->observer->leveled_up($this, $id, $beforelevel, $afterlevel);
+        }
+    }
+
+    /**
+     * Observe when set.
+     *
+     * @param int $id The recipient.
+     * @param int $beforexp The points before.
+     * @param int $afterxp The points after.
+     * @return void
+     */
+    protected function observe_set($id, $beforexp, $afterxp) {
+        if (!$this->observer){
+            return;
+        }
+
+        $beforelevel = $this->levelsinfo->get_level_from_xp($beforexp);
+        $afterlevel = $this->levelsinfo->get_level_from_xp($afterxp);
+        if ($beforelevel->get_level() < $afterlevel->get_level()) {
+            $this->observer->leveled_up($this, $id, $beforelevel, $afterlevel);
+        }
     }
 
     /**
@@ -264,7 +316,12 @@ class course_user_state_store implements course_state_store,
      * @param int $amount The amount.
      */
     public function set($id, $amount) {
-        if ($this->exists($id)) {
+        $prexp = 0;
+        $postxp = $amount;
+
+        if ($record = $this->exists($id)) {
+            $prexp = $record->xp;
+            $postxp = $prexp + $amount;
 
             $sql = "UPDATE {{$this->table}}
                        SET xp = :xp,
@@ -281,6 +338,8 @@ class course_user_state_store implements course_state_store,
         } else {
             $this->insert($id, $amount);
         }
+
+        $this->observe_set($id, $prexp, $postxp);
     }
 
     /**
