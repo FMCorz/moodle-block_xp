@@ -44,7 +44,7 @@ class promo_controller extends route_controller {
     /** Seen flag. */
     const SEEN_FLAG = 'promo-page-seen';
     /** Page version. */
-    const VERSION = 20191203;
+    const VERSION = 20200430;
 
     /** @var string The normal route name. */
     protected $routename = 'promo';
@@ -173,11 +173,22 @@ class promo_controller extends route_controller {
     <tr>
         <td><img src="{$output->pix_url('noun/grade', 'block_xp')}" alt=""></td>
         <td>
-            <h4>Grade-based rewards $new</h4>
+            <h4>Grade-based rewards</h4>
             <p>Reward students for their performance.</p>
             <ul>
                 <li>Grades can directly contribute to students' points</li>
                 <li>Our powerful interface helps you define which grades count</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="{$output->pix_url('noun/manual', 'block_xp')}" alt=""></td>
+        <td>
+            <h4>Issue individual rewards $new</h4>
+            <p>Manually award points to specific students.</p>
+            <ul>
+                <li>A great way to reward offline or punctual actions</li>
+                <li>Use our import feature to award points from a spreadsheet</li>
             </ul>
         </td>
     </tr>
@@ -215,6 +226,18 @@ class promo_controller extends route_controller {
         </td>
     </tr>
     <tr>
+        <td><img src="{$output->pix_url('noun/export', 'block_xp')}" alt=""></td>
+        <td>
+            <h4>Import, export &amp; report $new</h4>
+            <p>Better control and information about your students' actions.</p>
+            <ul>
+                <li>Export the report to look at it in more details</li>
+                <li>Allocate points in bulk from an imported CSV file</li>
+                <li>Track the events with logs containing human-friendly descriptions and originating locations</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
         <td><img src="{$output->pix_url('level', 'block_xp')}" alt=""></td>
         <td>
             <h4>Additional badges</h4>
@@ -232,16 +255,6 @@ class promo_controller extends route_controller {
             <ul>
                 <li>Carrots, gems, thumbs up, reputation points...</li>
                 <li>It's your call, use any symbol you want!</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('noun/export', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Export the report</h4>
-            <p>Export the report to look at it in more detail.</p>
-            <ul>
-                <li>Various formats supported: Excel, CSV, OpenDocument, and more</li>
             </ul>
         </td>
     </tr>
