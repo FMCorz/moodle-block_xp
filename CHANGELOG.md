@@ -1,6 +1,26 @@
 Changelog
 =========
 
+v3.9.0
+------
+
+New features
+
+- Support additional Privacy API requirement (core_userlist_provider)
+
+Bug fixes
+
+- Fixed vertical alignment of content in report table
+
+Quality of life
+
+- Report and logs display a nicer notice when page is empty
+
+Technical changes
+
+- Level change is identified from within the state store
+- Report controller to support additional actions from add-on
+
 v3.8.1
 ------
 
