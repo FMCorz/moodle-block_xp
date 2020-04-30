@@ -20,7 +20,7 @@ Features
 
 ### Additional features
 
-Purchasing the _Level up! Plus_ add-on unlocks additional features. [Click here for more details](http://levelup.branchup.tech?utm_source=blockxp&utm_medium=github_readme&utm_campaign=github).
+Purchasing the _Level up! Plus_ add-on unlocks additional features. [Click here for more details](https://levelup.plus?ref=readme).
 
 Requirements
 ------------
@@ -30,14 +30,14 @@ Moodle 3.1 or greater.
 Installation
 ------------
 
-Simply install the plugin and add the block to a course page. More details are available here: [Level up! documentation](https://levelup.branchup.tech/docs/topic/installation)
+Simply install the plugin and add the block to a course page. More details are available here: [Level up! documentation](https://levelup.plus/docs/topic/installation?ref=readme)
 
 The plugin can also be installed using [composer](https://getcomposer.org/) at [fmcorz/moodle-block_xp](https://packagist.org/packages/fmcorz/moodle-block_xp).
 
 How are experience points calculated?
 -------------------------------------
 
-Have a look at this [documentation page](https://levelup.branchup.tech/docs/article/how-are-experience-points-calculated).
+Have a look at this [documentation page](https://levelup.plus/docs/article/how-are-experience-points-calculated?ref=readme).
 
 Restricting access based on students' levels
 --------------------------------------------
@@ -54,7 +54,7 @@ Shortcodes
 
 _What are those? Shortcodes can be used in editors throughout Moodle to include or modify the content. The plugin [Shortcodes](https://github.com/branchup/moodle-filter_shortcodes) must be installed to enable them._
 
-Check the [list of supported shortcodes](https://levelup.branchup.tech/docs/article/using-shortcodes).
+Check the [list of supported shortcodes](https://levelup.plus/docs/article/using-shortcodes?ref=readme).
 
 How to use one block for all courses
 ------------------------------------
@@ -69,7 +69,7 @@ Todo
 Provided by
 -----------
 
-[![Branch Up](https://branchup.tech/branch-up-logo-x30.svg)](https://branchup.tech)
+[![Branch Up](https://branchup.tech/branch-up-logo-x30.svg)](https://branchup.tech?ref=levelup_readme)
 
 License
 -------

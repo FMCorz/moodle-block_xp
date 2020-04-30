@@ -110,8 +110,8 @@ It is advised to check the plugin\'s _Log_ page to identify which events are tri
 
 Additional resources:
 
-- [How are experience points calculated?](https://levelup.branchup.tech/docs/article/how-are-experience-points-calculated)
-- [Troubleshooting rules](https://levelup.branchup.tech/docs/article/event-rule-not-working)
+- [How are experience points calculated?](https://levelup.plus/docs/article/how-are-experience-points-calculated?ref=blockxp_help)
+- [Troubleshooting rules](https://levelup.plus/docs/article/event-rule-not-working?ref=blockxp_help)
 ';
 $string['event_user_leveledup'] = 'User leveled up';
 $string['eventis'] = 'The event is {$a}';
