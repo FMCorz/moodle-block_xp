@@ -485,6 +485,14 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2019120300, 'xp');
     }
 
-    return true;
+    if ($oldversion < 2020043001) {
 
+        // For the first time since 2015, display previously dismissed notices.
+        $DB->delete_records('user_preferences', ['name' => 'block_xp_notices']);
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2020043001, 'xp');
+    }
+
+    return true;
 }
