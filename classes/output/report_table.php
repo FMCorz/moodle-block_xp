@@ -322,12 +322,12 @@ class report_table extends table_sql {
 
             // Ensure that sorting by level sub sorts by xp to avoid random ordering.
             if (array_key_exists('lvl', $orderby) && !array_key_exists('xp', $orderby)) {
-                $orderby['xp'] = $orderby['lvl'];
+                $orderby[] = array('xp' => $orderby['lvl']);
             }
 
             // Always add the user ID, to avoid random ordering.
             if (!array_key_exists('id', $orderby)) {
-                $orderby['id'] = SORT_ASC;
+                $orderby[] = array('id' => SORT_ASC);
             }
         }
 
