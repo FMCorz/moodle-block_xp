@@ -62,9 +62,9 @@ class default_settings_maker implements settings_maker {
      *
      * @param config $defaults The config object to get the defaults from.
      * @param url_resolver $urlresolver The URL resolver.
-     * @param config $configlocked The repository of locked config.
+     * @param config|null $configlocked The repository of locked config.
      */
-    public function __construct(config $defaults, url_resolver $urlresolver, config $configlocked) {
+    public function __construct(config $defaults, url_resolver $urlresolver, config $configlocked = null) {
         $this->defaults = $defaults;
         $this->urlresolver = $urlresolver;
         $this->configlocked = $configlocked;
@@ -98,7 +98,7 @@ class default_settings_maker implements settings_maker {
         $settingspage = new admin_settingpage('block_xp_default_settings', get_string('defaultsettings', 'block_xp'));
         if ($env->is_full_tree()) {
             array_map(function($setting) use ($settingspage) {
-                if ($this->configlocked->has($setting->name)) {
+                if ($this->configlocked && $this->configlocked->has($setting->name)) {
                     $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
                 }
                 $settingspage->add($setting);
