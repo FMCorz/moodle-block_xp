@@ -632,8 +632,14 @@ EOT
      * @return string
      */
     public function render_filters_widget_group(renderable $group) {
+        $formid = html_writer::random_id();
+
+        $this->page->requires->string_for_js('changesmadereallygoaway', 'moodle');
+        $this->page->requires->yui_module('moodle-core-formchangechecker', 'M.core_formchangechecker.init',
+            [['formid' => $formid]]);
+
         echo html_writer::start_div('block-xp-filters-group');
-        echo html_writer::start_tag('form', ['method' => 'POST', 'class' => 'block-xp-filters']);
+        echo html_writer::start_tag('form', ['method' => 'POST', 'class' => 'block-xp-filters', 'id' => $formid]);
         echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
 
         $elements = $group->elements;
