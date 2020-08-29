@@ -352,12 +352,29 @@ class report_table extends table_sql {
      */
     public function print_nothing_to_display() {
         $issite = di::get('config')->get('context') == CONTEXT_SYSTEM && $this->world->get_courseid() == SITEID;
+        $hasfilters = false;
+        $showfilters = false;
+
+        if ($this->can_be_reset()) {
+            $hasfilters = true;
+            $showfilters = true;
+        }
+
+        // Render button to allow user to reset table preferences, and the initial bars if some filters
+        // are used. If none of the filters are used and there is nothing to display it just means that
+        // the course is empty and thus we do not show anything but a message.
+        echo $this->render_reset_button();
+        if ($showfilters) {
+            $this->print_initials_bar();
+        }
+
+        $message = get_string($issite ? 'reportisempty' : 'reportisemptyenrolstudents', 'block_xp');
+        if ($hasfilters) {
+            $message = get_string('nothingtodisplay', 'core');
+        }
 
         echo \html_writer::div(
-            \block_xp\di::get('renderer')->notification_without_close(
-                get_string($issite ? 'reportisempty' : 'reportisemptyenrolstudents', 'block_xp'),
-                'info'
-            ),
+            \block_xp\di::get('renderer')->notification_without_close($message, 'info'),
             '',
             ['style' => 'margin: 1em 0']
         );
