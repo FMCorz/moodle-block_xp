@@ -27,6 +27,7 @@ namespace block_xp\local\controller;
 defined('MOODLE_INTERNAL') || die();
 
 use context_course;
+use html_writer;
 use block_xp\local\config\block_config;
 
 /**
@@ -125,6 +126,15 @@ class config_controller extends page_controller {
     protected function page_content() {
         $form = $this->get_form();
         $form->display();
+        $this->page_note();
+    }
+
+    protected function page_note() {
+        $configlocked = \block_xp\di::get('config_locked');
+        $thoselocked = array_filter($configlocked->get_all());
+        if ($thoselocked) {
+            echo html_writer::tag('p', html_writer::tag('small', get_string('notesomesettingslocked', 'block_xp')));
+        }
     }
 
 }

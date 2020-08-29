@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 use admin_category;
 use admin_settingpage;
 use admin_externalpage;
+use admin_setting_flag;
 use admin_setting_heading;
 use admin_setting_configcheckbox;
 use admin_setting_configmultiselect;
@@ -53,16 +54,20 @@ class default_settings_maker implements settings_maker {
     protected $defaults;
     /** @var url_resolver The URL resolver. */
     protected $urlresolver;
+    /** @var config The repository of locked config. */
+    protected $configlocked;
 
     /**
      * Constructor.
      *
      * @param config $defaults The config object to get the defaults from.
      * @param url_resolver $urlresolver The URL resolver.
+     * @param config $configlocked The repository of locked config.
      */
-    public function __construct(config $defaults, url_resolver $urlresolver) {
+    public function __construct(config $defaults, url_resolver $urlresolver, config $configlocked) {
         $this->defaults = $defaults;
         $this->urlresolver = $urlresolver;
+        $this->configlocked = $configlocked;
     }
 
     /**
@@ -93,6 +98,9 @@ class default_settings_maker implements settings_maker {
         $settingspage = new admin_settingpage('block_xp_default_settings', get_string('defaultsettings', 'block_xp'));
         if ($env->is_full_tree()) {
             array_map(function($setting) use ($settingspage) {
+                if ($this->configlocked->has($setting->name)) {
+                    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
+                }
                 $settingspage->add($setting);
             }, $this->get_default_settings());
         }

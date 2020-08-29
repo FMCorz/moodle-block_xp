@@ -52,6 +52,7 @@ class default_container implements container {
         'collection_logger' => true,
         'collection_strategy' => true,
         'config' => true,
+        'config_locked' => true,
         'course_world_block_any_instance_finder_in_context' => true,
         'course_world_block_instance_finder' => true,
         'course_world_block_instances_finder_in_context' => true,
@@ -213,6 +214,17 @@ class default_container implements container {
     }
 
     /**
+     * Get global config about locked settings.
+     *
+     * @return config
+     */
+    protected function get_config_locked() {
+        return new \block_xp\local\config\mdl_locked_config('block_xp', [
+            'identitymode'
+        ]);
+    }
+
+    /**
      * Get the course world block any instance finder in context.
      *
      * @return course_world_instance_finder
@@ -252,7 +264,8 @@ class default_container implements container {
             $this->get('db'),
             new \block_xp\local\factory\default_badge_url_resolver_course_world_factory(
                 $this->get('badge_url_resolver')
-            )
+            ),
+            $this->get('config_locked')
         );
     }
 
@@ -362,7 +375,8 @@ class default_container implements container {
     protected function get_settings_maker() {
         return new \block_xp\local\setting\default_settings_maker(
             new \block_xp\local\config\default_admin_config(),
-            $this->get('url_resolver')
+            $this->get('url_resolver'),
+            $this->get('config_locked')
         );
     }
 

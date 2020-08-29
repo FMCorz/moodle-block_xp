@@ -179,6 +179,23 @@ class config extends moodleform {
     }
 
     /**
+     * Definition after data.
+     *
+     * @return void
+     */
+    public function definition_after_data() {
+        $mform = $this->_form;
+
+        // Lock the settings that have been locked by an admin. We do this in definition_after_data
+        // because as we support Moodle 3.1 in which self::after_definition() is not available.
+        $configlocked = \block_xp\di::get('config_locked');
+        foreach ($configlocked->get_all() as $key => $islocked) {
+            if (!$islocked || !$mform->elementExists($key)) continue;
+            $mform->hardFreeze($key);
+        }
+    }
+
+    /**
      * Get the data.
      *
      * @return stdClass
