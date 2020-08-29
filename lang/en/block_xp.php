@@ -360,6 +360,7 @@ $string['xp:earnxp'] = 'Earning points';
 $string['xp:manage'] = 'Manage all aspects of experience points';
 $string['xp:myaddinstance'] = 'Add the block to my dashboard';
 $string['xp:view'] = 'View the block and its related pages';
+$string['xp:viewlogs'] = 'View the logs';
 $string['xptogo'] = '[[{$a}]] to go';
 $string['xpgaindisabled'] = 'Points gain disabled';
 $string['youreachedlevel'] = 'You have reached the level:';
