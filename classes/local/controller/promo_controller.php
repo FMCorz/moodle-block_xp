@@ -221,7 +221,8 @@ class promo_controller extends route_controller {
             <p>Get better control of students' rewards.</p>
             <ul>
                 <li>Limit your students' rewards per day (or any other time limit you want to set)</li>
-                <li>Be on top of potential false student activities</li>
+                <li>Get peace of mind with a more robust and resilient anti-cheat</li>
+                <li>Increase the time limits to greater values</li>
             </ul>
         </td>
     </tr>

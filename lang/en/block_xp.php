@@ -82,7 +82,10 @@ $string['displayrank'] = 'Display rank';
 $string['displayrelativerank'] = 'Display a relative rank';
 $string['editinstructions'] = 'Edit information';
 $string['enablecheatguard'] = 'Enable cheat guard';
-$string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive mechanism for preventing students to abuse the system using obvious techniques, such as refreshing the same page endlessly, or repeating the same action over and over again.';
+$string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive mechanism for preventing students to abuse the system using obvious techniques, such as refreshing the same page endlessly, or repeating the same action over and over again.
+
+[More info](https://levelup.plus/docs/article/level-up-cheat-guard?ref=blockxp_help)
+';
 $string['enableinfos'] = 'Enable info page';
 $string['enableinfos_help'] = 'When set to \'No\', students will not be able to view the information page.';
 $string['enableladder'] = 'Enable the ladder';
@@ -200,6 +203,7 @@ $string['property:component'] = 'Event component';
 $string['property:crud'] = 'Event CRUD';
 $string['property:eventname'] = 'Event name';
 $string['property:target'] = 'Event target';
+$string['promocheatguard'] = 'This cheat guard is not designed to cover long time frames. Please consider upgrading to <em>Level up! Plus</em> to unlock greater time frames and other features. <a href="{$a->url}">Read more here</a>.';
 $string['promointro'] = 'The add-on for _Level up!_ with features that can encourage learners to achieve their full potential!';
 $string['promorulesdidyouknow'] = 'Did you know that with <em>Level up! Plus</em> students can receive points for <em>completing courses</em> and <em>activities</em>, or even receive points according to their <em>grades</em>? <a href="{$a->url}">Discover more here</a>.';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';

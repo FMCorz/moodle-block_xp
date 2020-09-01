@@ -54,9 +54,20 @@ class config_controller extends page_controller {
      * @return moodleform
      */
     protected function define_form($withblockconfig = false) {
-        return new \block_xp\form\config($this->pageurl->out(false), [
-            'showblockconfig' => $withblockconfig
-        ]);
+        return new \block_xp\form\config($this->pageurl->out(false), $this->define_form_customdata());
+    }
+
+    /**
+     * Define form custom data.
+     *
+     * @return array
+     */
+    protected function define_form_customdata() {
+        return [
+            'showblockconfig' => !empty($this->blockconfig),
+            'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $this->courseid]),
+            'world' => $this->world,
+        ];
     }
 
     /**
