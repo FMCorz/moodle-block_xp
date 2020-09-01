@@ -325,7 +325,7 @@ EOT;
         }
 
         if (!$localxp->is_installed_and_upgraded()) {
-            echo $output->notification_without_close('installationerror', 'error');
+            echo $output->notification_without_close(get_string('addoninstallationerror', 'block_xp'), 'error');
             return;
         }
 
