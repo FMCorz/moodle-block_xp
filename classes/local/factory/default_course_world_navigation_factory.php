@@ -136,8 +136,13 @@ class default_course_world_navigation_factory implements course_world_navigation
             //   $CFG->forced_plugin_settings = ['block_xp' => ['enablepromoincourses' => 0]];
             //
             // @codingStandardsIgnoreEnd
-            if ($this->adminconfig->get('enablepromoincourses')) {
+            $pluginman = \core_plugin_manager::instance();
+            $localxp = $pluginman->get_plugin_info('local_xp');
+            if ($this->adminconfig->get('enablepromoincourses') || $localxp) {
                 $star = $renderer->pix_icon('star', '', 'block_xp', ['class' => 'icon']);
+                if ($localxp) {
+                    $star = '';
+                }
 
                 $hasnew = '';
                 if (\block_xp\local\controller\promo_controller::has_new_content()) {

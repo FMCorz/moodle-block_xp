@@ -125,8 +125,10 @@ class default_settings_maker implements settings_maker {
         $settings->add($catname, $settingspage);
 
         // Add the promo page.
+        $pluginman = \core_plugin_manager::instance();
+        $localxp = $pluginman->get_plugin_info('local_xp');
         $settingspage = new admin_externalpage('block_xp_promo',
-            '⭐ ' . get_string('navpromo', 'block_xp'),
+            ($localxp ? '' : '⭐ ') . get_string('navpromo', 'block_xp'),
             $this->urlresolver->reverse('admin/promo'));
         $settings->add($catname, $settingspage);
 

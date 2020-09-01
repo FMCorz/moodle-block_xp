@@ -121,8 +121,24 @@ class promo_controller extends route_controller {
     protected function content() {
         self::mark_as_seen();
 
+        $pluginman = \core_plugin_manager::instance();
+        $localxp = $pluginman->get_plugin_info('local_xp');
+        if ($localxp) {
+            $this->content_installed();
+            return;
+        }
+
+        $this->content_not_installed();
+    }
+
+    /**
+     * Content when not installed.
+     *
+     * @return void
+     */
+    protected function content_not_installed() {
         $output = \block_xp\di::get('renderer');
-        $siteurl = "http://levelup.plus?utm_source=plugin_promopage";
+        $siteurl = "https://levelup.plus?ref=plugin_promopage";
 
         if (!$this->is_admin_page()) {
             echo $output->heading(get_string('levelupplus', 'block_xp'));
@@ -291,6 +307,48 @@ EOT;
 
     }
 
+    protected function content_installed() {
+        $output = \block_xp\di::get('renderer');
+        $siteurl = new url('https://levelup.plus?ref=localxp_promopage');
+        $docsurl = new url('https://levelup.plus/docs?ref=localxp_promopage');
+        $recoverurl = new url('https://levelup.plus/recover?ref=localxp_promopage');
+        $releasenotesurl = new url('https://levelup.plus/docs/topic/release-notes?ref=localxp_promopage');
+        $upgradeurl = new url('https://levelup.plus/docs/article/upgrading-level-up?ref=localxp_promopage');
+        $outofsyncurl = new url('https://levelup.plus/docs/article/plugins-out-of-sync?ref=localxp_promopage');
+        $pluginman = \core_plugin_manager::instance();
+        $localxp = $pluginman->get_plugin_info('local_xp');
+
+
+        if (!$this->is_admin_page()) {
+            echo $output->heading(get_string('levelupplus', 'block_xp'));
+            echo $output->course_world_navigation($this->world, $this->routename);
+        }
+
+        if (!$localxp->is_installed_and_upgraded()) {
+            echo $output->notification_without_close('installationerror', 'error');
+            return;
+        }
+
+        if (self::versions_out_of_sync()) {
+            echo $output->notification_without_close(markdown_to_html(get_string('pluginsoutofsync', 'block_xp', [
+                'url' => $outofsyncurl->out(false)
+            ])), 'error');
+        }
+
+        echo $output->heading(get_string('thankyou', 'block_xp'), 3);
+        echo markdown_to_html(get_string('promointroinstalled', 'block_xp'));
+
+        echo html_writer::tag('p', get_string('version', 'core') . ' ' . $localxp->release);
+
+        echo $output->heading(get_string('additionalresources', 'block_xp'), 4);
+        echo html_writer::start_tag('ul');
+        echo html_writer::tag('li', html_writer::link($docsurl, get_string('documentation', 'block_xp')));
+        echo html_writer::tag('li', html_writer::link($releasenotesurl, get_string('releasenotes', 'block_xp')));
+        echo html_writer::tag('li', html_writer::link($upgradeurl, get_string('upgradingplugins', 'block_xp')));
+
+        echo html_writer::end_tag('ul');
+    }
+
     /**
      * Check whether there is new content for the user.
      *
@@ -305,7 +363,7 @@ EOT;
         $indicator = \block_xp\di::get('user_generic_indicator');
         $value = $indicator->get_user_flag($USER->id, self::SEEN_FLAG);
 
-        return $value < self::VERSION;
+        return $value < self::VERSION || self::versions_out_of_sync();
     }
 
     /**
@@ -323,4 +381,30 @@ EOT;
         $value = $indicator->set_user_flag($USER->id, self::SEEN_FLAG, self::VERSION);
     }
 
+    /**
+     * Check whether the versions are out of sync.
+     *
+     * @return bool
+     */
+    protected static function versions_out_of_sync() {
+        global $USER;
+
+        if (!isloggedin() || isguestuser()) {
+            return false;
+        }
+
+        $pluginman = \core_plugin_manager::instance();
+        $blockxp = $pluginman->get_plugin_info('block_xp');
+        $localxp = $pluginman->get_plugin_info('local_xp');
+        if (!$localxp || !$localxp->is_installed_and_upgraded()) {
+            return false;
+        } else if (!$blockxp || !$blockxp->is_installed_and_upgraded()) {
+            return false;
+        }
+
+        // Versions should have the same date.
+        $blockxpversion = floor($blockxp->versiondb / 100);
+        $localxpversion = floor($localxp->versiondb / 100);
+        return $blockxpversion > $localxpversion;
+    }
 }
