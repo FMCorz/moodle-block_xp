@@ -1,6 +1,26 @@
 Changelog
 =========
 
+v3.10.0
+-------
+
+New features
+
+- Administrators can enforce the anonymity of the leaderboard
+- An additional capability to control access to the logs was added
+
+Bug fixes
+
+- The report could be stuck in an empty state after using some filters
+
+Quality of life
+
+- Display a warning when leaving the rules page without saving
+- Inform users when the cheat guard settings may become ineffective
+- Keep promo page visible when the add-on has been installed
+
+_Level up! Plus_ users may be required to upgrade the add-on for some of these changes to take effect.
+
 v3.9.0
 ------
 
