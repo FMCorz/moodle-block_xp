@@ -76,6 +76,20 @@ abstract class block_xp_rule implements renderable {
     }
 
     /**
+     * Get the renderer.
+     *
+     * Somes rules seem to be making use of the renderer, but the renderer should
+     * not be initialised with the object, so we it's best that we provide a
+     * method to get the renderer instead of letting each rule decide of the best
+     * way to load it.
+     *
+     * @return renderer_base
+     */
+    protected function get_renderer() {
+        return \block_xp\di::get('renderer');
+    }
+
+    /**
      * Export the properties and their values.
      *
      * This must return all the values required by the {@link self::import()} method.
