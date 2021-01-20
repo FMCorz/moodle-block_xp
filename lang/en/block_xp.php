@@ -125,10 +125,6 @@ $string['eventname'] = 'Event name';
 $string['eventproperty'] = 'Event property';
 $string['eventtime'] = 'Event time';
 $string['filtermodules'] = 'Filter modules';
-$string['for1day'] = 'For 1 day';
-$string['for1month'] = 'For a month';
-$string['for1week'] = 'For a week';
-$string['for3days'] = 'For 3 days';
 $string['forever'] = 'Forever';
 $string['forthewholesite'] = 'For the whole site';
 $string['give'] = 'give';
@@ -412,3 +408,9 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
     <li>And the events of educational level not equal to <em>Participating</em>.</li>
 </ul>
 </p>';
+
+// Deprecated since 3.10.1
+$string['for1day'] = 'For 1 day';
+$string['for1month'] = 'For a month';
+$string['for1week'] = 'For a week';
+$string['for3days'] = 'For 3 days';

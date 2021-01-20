@@ -163,10 +163,10 @@ class default_settings_maker implements settings_maker {
             get_string('keeplogs', 'block_xp'), '',
             $this->defaults->get('keeplogs'), [
                 '0' => get_string('forever', 'block_xp'),
-                '1' => get_string('for1day', 'block_xp'),
-                '3' => get_string('for3days', 'block_xp'),
-                '7' => get_string('for1week', 'block_xp'),
-                '30' => get_string('for1month', 'block_xp'),
+                '1' => get_string('numday', 'core', 1),
+                '3' => get_string('numdays', 'core', 3),
+                '7' => get_string('numweek', 'core', 1),
+                '30' => get_string('nummonth', 'core', 1),
             ]
         ));
 
