@@ -1,6 +1,15 @@
 Changelog
 =========
 
+v3.10.1
+-------
+
+Technical changes
+
+- Rules base class includes the get_renderer method for children classes to use
+- Switched to using numday, numweek, etc. language strings for durations in log settings
+- Travis configuration changes
+
 v3.10.0
 -------
 
