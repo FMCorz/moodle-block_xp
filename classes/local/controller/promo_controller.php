@@ -318,7 +318,6 @@ EOT;
         $pluginman = \core_plugin_manager::instance();
         $localxp = $pluginman->get_plugin_info('local_xp');
 
-
         if (!$this->is_admin_page()) {
             echo $output->heading(get_string('levelupplus', 'block_xp'));
             echo $output->course_world_navigation($this->world, $this->routename);

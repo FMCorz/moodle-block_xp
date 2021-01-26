@@ -222,7 +222,7 @@ class course_user_state_store implements course_state_store,
      * @return void
      */
     protected function observe_increase($id, $beforexp, $afterxp) {
-        if (!$this->observer){
+        if (!$this->observer) {
             return;
         }
 
@@ -242,7 +242,7 @@ class course_user_state_store implements course_state_store,
      * @return void
      */
     protected function observe_set($id, $beforexp, $afterxp) {
-        if (!$this->observer){
+        if (!$this->observer) {
             return;
         }
 

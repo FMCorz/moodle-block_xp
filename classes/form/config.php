@@ -139,9 +139,9 @@ class config extends moodleform {
             }
 
             if ($timeframe > HOURSECS * 6) {
-                $mform->addElement('static', '', '', $renderer->notification_without_close(get_string('promocheatguard', 'block_xp', [
-                    'url' => $promourl->out()
-                ]), 'warning'));
+                $mform->addElement('static', '', '', $renderer->notification_without_close(
+                    get_string('promocheatguard', 'block_xp', ['url' => $promourl->out()]
+                ), 'warning'));
             }
         }
 
@@ -211,7 +211,9 @@ class config extends moodleform {
         // because as we support Moodle 3.1 in which self::after_definition() is not available.
         $configlocked = \block_xp\di::get('config_locked');
         foreach ($configlocked->get_all() as $key => $islocked) {
-            if (!$islocked || !$mform->elementExists($key)) continue;
+            if (!$islocked || !$mform->elementExists($key)) {
+                continue;
+            }
             $mform->hardFreeze($key);
         }
     }

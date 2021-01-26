@@ -198,7 +198,6 @@ class block_xp_privacy_provider_testcase extends block_xp_base_testcase {
         $e = \block_xp\event\something_happened::mock(array('crud' => 'c', 'userid' => $u2->id, 'courseid' => $c2->id));
         $strategy->collect_event($e);
 
-
         $userlist = new userlist(context_system::instance(), 'block_xp');
         $contextlist = provider::get_users_in_context($userlist);
         $this->assert_userlist_equals($userlist, [$u1->id, $u3->id]);
