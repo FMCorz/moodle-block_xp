@@ -182,7 +182,7 @@ class block_xp_config_testcase extends block_xp_base_testcase {
         } catch (coding_exception $e) {}
 
         // Test filtering excluded.
-        $config = new filtered_config($master, [], ['testa']);
+        $config = new filtered_config($master, null, ['testa']);
         $this->assertFalse($config->has('testa'));
         $this->assertTrue($config->has('testb'));
         $this->assertTrue($config->has('testc'));
