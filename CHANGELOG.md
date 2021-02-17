@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v3.10.2
+-------
+
+Bug fixes
+
+- The filtered_config class did not work with excluded keys
+
 v3.10.1
 -------
 
