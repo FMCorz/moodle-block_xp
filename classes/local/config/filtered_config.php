@@ -43,7 +43,7 @@ class filtered_config extends proxy_config {
     /** @var array Array where keys are keys to exclude. */
     private $excludedkeys = [];
     /** @var bool Whether or not to check the allowed keys. */
-    private $checkallowed = true;
+    private $checkallowed = false;
 
     /**
      * Constructor.

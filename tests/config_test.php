@@ -151,4 +151,61 @@ class block_xp_config_testcase extends block_xp_base_testcase {
 
     }
 
+    public function test_filtered_config() {
+        $data = [
+            'testa' => 'abc',
+            'testb' => 'def',
+            'testc' => 'ghk',
+        ];
+        $master = new static_config($data);
+
+        // Test filtering nothing.
+        $config = new filtered_config($master);
+        $this->assertTrue($config->has('testa'));
+        $this->assertTrue($config->has('testb'));
+        $this->assertTrue($config->has('testc'));
+        $this->assertEquals($data, $config->get_all());
+        $this->assertEquals('abc', $config->get('testa'));
+        $this->assertEquals('def', $config->get('testb'));
+        $this->assertEquals('ghk', $config->get('testc'));
+
+        // Test filtering allowed.
+        $config = new filtered_config($master, ['testb', 'testc']);
+        $this->assertFalse($config->has('testa'));
+        $this->assertTrue($config->has('testb'));
+        $this->assertTrue($config->has('testc'));
+        $this->assertEquals(['testb' => 'def', 'testc' => 'ghk'], $config->get_all());
+        $this->assertEquals('def', $config->get('testb'));
+        $this->assertEquals('ghk', $config->get('testc'));
+        try {
+            $this->assertEquals('abc', $config->get('testa'));
+        } catch (coding_exception $e) {}
+
+        // Test filtering excluded.
+        $config = new filtered_config($master, [], ['testa']);
+        $this->assertFalse($config->has('testa'));
+        $this->assertTrue($config->has('testb'));
+        $this->assertTrue($config->has('testc'));
+        $this->assertEquals(['testb' => 'def', 'testc' => 'ghk'], $config->get_all());
+        $this->assertEquals('def', $config->get('testb'));
+        $this->assertEquals('ghk', $config->get('testc'));
+        try {
+            $this->assertEquals('abc', $config->get('testa'));
+        } catch (coding_exception $e) {}
+
+        // Test filtering allowed and excluded.
+        $config = new filtered_config($master, ['testa', 'testb'], ['testa']);
+        $this->assertFalse($config->has('testa'));
+        $this->assertTrue($config->has('testb'));
+        $this->assertFalse($config->has('testc'));
+        $this->assertEquals(['testb' => 'def'], $config->get_all());
+        $this->assertEquals('def', $config->get('testb'));
+        try {
+            $this->assertEquals('abc', $config->get('testa'));
+        } catch (coding_exception $e) {}
+        try {
+            $this->assertEquals('ghk', $config->get('testc'));
+        } catch (coding_exception $e) {}
+    }
+
 }
