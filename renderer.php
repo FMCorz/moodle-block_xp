@@ -805,6 +805,24 @@ EOT
     }
 
     /**
+     * Rules page loading check init.
+     *
+     * @return html
+     */
+    public function rules_page_loading_check_init() {
+        return $this->render_from_template('block_xp/rules-page-loading-error', []);
+    }
+
+    /**
+     * Rules page loading check success.
+     *
+     * @return html
+     */
+    public function rules_page_loading_check_success() {
+        return $this->render_from_template('block_xp/rules-page-loading-success', []);
+    }
+
+    /**
      * Tiny time ago string.
      *
      * @param DateTime $dt The date object.
