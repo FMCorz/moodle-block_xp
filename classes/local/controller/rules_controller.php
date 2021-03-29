@@ -210,8 +210,6 @@ class rules_controller extends page_controller {
         global $PAGE;
         $output = $this->get_renderer();
 
-        echo $output->rules_page_loading_check_init();
-
         if ($this->get_param('reset')) {
             echo $output->confirm(
                 get_string('reallyresetcourserulestodefaults', 'block_xp'),
@@ -221,10 +219,10 @@ class rules_controller extends page_controller {
             return;
         }
 
+        echo $output->rules_page_loading_check_init();
         $this->page_plus_promo_content();
         $this->page_rules_content();
         $this->page_danger_zone_content();
-
         echo $output->rules_page_loading_check_success();
     }
 
