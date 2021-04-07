@@ -29,14 +29,14 @@ YUI.add('moodle-block_xp-rulepicker', function (Y, NAME) {
  * @module moodle-block_xp-rulepicker
  */
 
-var NAME = 'moodle-block_xp-rulepicker';
 var COMPONENT = 'block_xp';
 var CSS = {
+    INFO: 'info',
     PREFIX: 'block_xp-rulepicker',
     RULE: 'rule',
 };
 var SELECTORS = {
-    RULE: '.rule button'
+    RULE: '.rule'
 };
 
 /**
@@ -83,8 +83,14 @@ Y.namespace('M.block_xp').RulePicker = Y.extend(PICKER, M.core.dialogue, {
 
         html = '<div>';
         html += ' {{#rules}}';
-        html += ' <div class="{{../CSS.RULE}}">';
-        html += '  <button data-id="{{id}}" class="btn btn-default">{{name}}</button>';
+        html += ' <div class="{{../CSS.RULE}}" data-id="{{id}}" tabindex="0" role="button" ';
+        html += '      aria-describedby="block_xp_rulepicker_rule_title_{{id}}">';
+        html += '   <h3 id="block_xp_rulepicker_rule_title_{{id}}">{{ name }}</h3>';
+        html += '   {{#info}}';
+        html += '   <div class="{{../../CSS.INFO}}">';
+        html += '     {{ . }}';
+        html += '   </div>';
+        html += '   {{/info}}';
         html += ' </div>';
         html += ' {{/rules}}';
         html += '</div>';
@@ -107,6 +113,7 @@ Y.namespace('M.block_xp').RulePicker = Y.extend(PICKER, M.core.dialogue, {
 
         // When a rule is picked.
         this.get('boundingBox').delegate('click', this.picked, SELECTORS.RULE, this);
+        this.get('boundingBox').delegate('key', this.picked, '32, 13', SELECTORS.RULE, this);
 
         this.prepared = true;
     }
@@ -142,6 +149,10 @@ Y.Base.modifyAttrs(Y.namespace('M.block_xp.RulePicker'), {
 
     visible: {
         value: false
+    },
+
+    width: {
+        value: '500px'
     }
 
 });

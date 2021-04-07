@@ -363,11 +363,22 @@
 .block_xp-rulepicker-hidden {
     display: none;
 }
-.block_xp-rulepicker-content {
-    text-align: center;
-}
 .block_xp-rulepicker-content .rule {
-    margin-bottom: 5px;
+    cursor: pointer;
+    padding: .5rem;
+}
+.block_xp-rulepicker-content .rule:focus,
+.block_xp-rulepicker-content .rule:hover {
+    background-color: #efefef;
+}
+.block_xp-rulepicker-content .rule h3 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin: 0 !important;
+}
+.block_xp-rulepicker-content .rule .info {
+    margin-top: .5rem;
+    font-size: .875rem;
 }
 
 /**

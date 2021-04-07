@@ -571,6 +571,7 @@ EOT
             foreach ($widget->rules as $rule) {
                 $templatetypes[] = [
                     'name' => $rule->name,
+                    'info' => !empty($rule->info) ? $rule->info : null,
                     'template' => $this->render($rule->rule, ['iseditable' => true, 'basename' => 'XXXXX'])
                 ];
             }

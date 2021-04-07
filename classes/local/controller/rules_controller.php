@@ -153,18 +153,22 @@ class rules_controller extends page_controller {
         return [
             (object) [
                 'name' => get_string('ruleevent', 'block_xp'),
+                'info' => get_string('ruleeventinfo', 'block_xp'),
                 'rule' => new \block_xp_rule_event(),
             ],
             (object) [
                 'name' => get_string('rulecm', 'block_xp'),
+                'info' => get_string('rulecminfo', 'block_xp'),
                 'rule' => new \block_xp_rule_cm($this->courseid),
             ],
             (object) [
                 'name' => get_string('ruleproperty', 'block_xp'),
+                'info' => get_string('rulepropertyinfo', 'block_xp'),
                 'rule' => new \block_xp_rule_property(),
             ],
             (object) [
                 'name' => get_string('ruleset', 'block_xp'),
+                'info' => get_string('rulesetinfo', 'block_xp'),
                 'rule' => new \block_xp_ruleset(),
             ]
         ];

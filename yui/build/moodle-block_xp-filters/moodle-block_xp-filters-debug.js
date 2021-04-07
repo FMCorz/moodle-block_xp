@@ -29,7 +29,6 @@ YUI.add('moodle-block_xp-filters', function (Y, NAME) {
  * @module moodle-block_xp-filters
  */
 
-var COMPONENT = 'block_xp';
 var CSS = {
     ADDFILTER: 'filter-add',
     FILTER: 'filter',
@@ -86,8 +85,6 @@ var SELECTORS = {
 /**
  * @module moodle-block_xp-filters
  */
-
-var NAME = 'moodle-block_xp-filters';
 
 /**
  * Filters.
@@ -434,7 +431,8 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
         Y.Object.each(this.get('rules'), function(v, k) {
             rules.push({
                 id: k,
-                name: v.name
+                name: v.name,
+                info: v.info
             });
         }, this);
         this.rulepicker = Y.namespace('M.block_xp.RulePicker').init({
@@ -525,9 +523,10 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
          *
          * The keys of the object must be a rule identifier.
          *
-         * Each entry must contain the following keys:
-         * - String name
-         * - String template
+         * Each entry contains the following keys:
+         * - String name: The name of the rule.
+         * - String template: The HTML of the template.
+         * - String info (optional): Information about the rule.
          *
          * @type {Object}
          */
@@ -645,12 +644,10 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
 
     global_drop_over: function(e) {
 
-        console.log(e);
         // Check that drop object belong to correct group.
         if (!e.drop || !e.drop.inGroup(this.groups)) {
             return;
         }
-        console.log(e, 1);
 
         // Get a reference to our drag and drop nodes.
         var drag = e.drag.get('node'),
@@ -662,9 +659,7 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
         if (this.get('dropBeforeSelector') && drop.test(this.get('dropBeforeSelector'))) {
             drop.get('parentNode').insertBefore(drag, drop);
             this.drop_over(e);
-            console.log(e, 2);
         } else {
-            console.log(e, 3);
             DND.superclass.global_drop_over.apply(this, arguments);
         }
     },

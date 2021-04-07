@@ -372,7 +372,8 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
         Y.Object.each(this.get('rules'), function(v, k) {
             rules.push({
                 id: k,
-                name: v.name
+                name: v.name,
+                info: v.info
             });
         }, this);
         this.rulepicker = Y.namespace('M.block_xp.RulePicker').init({
@@ -463,9 +464,10 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
          *
          * The keys of the object must be a rule identifier.
          *
-         * Each entry must contain the following keys:
-         * - String name
-         * - String template
+         * Each entry contains the following keys:
+         * - String name: The name of the rule.
+         * - String template: The HTML of the template.
+         * - String info (optional): Information about the rule.
          *
          * @type {Object}
          */
