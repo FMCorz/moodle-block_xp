@@ -582,7 +582,8 @@ EOT
                 'filter' => $templatefilter,
                 'rules' => $templatetypes
             ]]);
-            $this->page->requires->strings_for_js(array('pickaconditiontype'), 'block_xp');
+            $this->page->requires->strings_for_js(['pickaconditiontype', 'deleterule', 'deletecondition'], 'block_xp');
+            $this->page->requires->strings_for_js(['areyousure'], 'core');
         }
 
         echo html_writer::start_div('block-xp-filters-wrapper', ['id' => $containerid]);
