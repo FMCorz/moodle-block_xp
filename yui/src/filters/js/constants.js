@@ -27,7 +27,6 @@
  * @module moodle-block_xp-filters
  */
 
-var COMPONENT = 'block_xp';
 var CSS = {
     ADDFILTER: 'filter-add',
     FILTER: 'filter',

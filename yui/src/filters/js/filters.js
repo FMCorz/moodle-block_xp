@@ -27,8 +27,6 @@
  * @module moodle-block_xp-filters
  */
 
-var NAME = 'moodle-block_xp-filters';
-
 /**
  * Filters.
  *

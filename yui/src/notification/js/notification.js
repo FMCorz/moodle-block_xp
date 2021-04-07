@@ -27,7 +27,6 @@
  * @module moodle-block_xp-notification
  */
 
-var NAME = 'moodle-block_xp-notification';
 var COMPONENT = 'block_xp';
 var CSS = {
     BADGE: 'level-badge',
@@ -61,6 +60,7 @@ Y.namespace('M.block_xp').Notification = Y.extend(NOTIFICATION, M.core.dialogue,
     display: function() {
         var footerTpl,
             content,
+            hasName,
             headline,
             name,
             tpl,

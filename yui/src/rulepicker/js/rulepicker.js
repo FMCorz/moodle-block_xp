@@ -27,7 +27,6 @@
  * @module moodle-block_xp-rulepicker
  */
 
-var NAME = 'moodle-block_xp-rulepicker';
 var COMPONENT = 'block_xp';
 var CSS = {
     PREFIX: 'block_xp-rulepicker',
