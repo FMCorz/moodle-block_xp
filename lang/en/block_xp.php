@@ -24,6 +24,19 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['setpoints'] = 'Set points';
+$string['usingalgo'] = 'Using algorithm';
+$string['manually'] = 'Manually';
+$string['nodescription'] = 'No description';
+$string['name'] = 'Name';
+$string['noname'] = 'No name';
+$string['pointsrequiredforleveln'] = 'Points required for level {$a}';
+$string['descriptionofleveln'] = 'Description of level {$a}';
+$string['grid'] = 'Grid';
+$string['list'] = 'List';
+$string['nameofleveln'] = 'Name of level {$a}';
+$string['viewas'] = 'View as';
+
 $string['actions'] = 'Actions';
 $string['activityoresourceis'] = 'The activity or resource is {$a}';
 $string['addacondition'] = 'Add a condition';

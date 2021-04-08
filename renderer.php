@@ -723,6 +723,42 @@ EOT
     }
 
     /**
+     * Initialise a react module.
+     *
+     * @param string $module The AMD name of the module.
+     * @param object|array $props The props.
+     * @return void
+     */
+    public function react_module($module, $props) {
+        global $CFG;
+
+        $id = html_writer::random_id('block_xp-react-app');
+        $propsid = html_writer::random_id('block_xp-react-app-props');
+        $iconname = $CFG->branch >= 32 ? 'y/loading' : 'i/loading';
+
+        $o = '';
+        $o .= html_writer::start_div('block_xp block_xp-react', ['id' => $id]);
+        $o .= html_writer::start_div('block_xp-react-loading');
+        $o .= html_writer::start_div();
+        $o .= $this->render(new pix_icon($iconname, 'loading'));
+        $o .= ' ' . get_string('loadinghelp');
+        $o .= html_writer::end_div();
+        $o .= html_writer::end_div();
+        $o .= html_writer::end_div();
+
+        $jsonprops = json_encode($props, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
+        $o .= html_writer::tag('script', $jsonprops, ['id' => $propsid, 'type' => 'application/json']);
+
+        $this->page->requires->js_amd_inline("
+            require(['block_xp/launcher'], function(launcher) {
+                launcher('$module', '$id', '$propsid');
+            });
+        ");
+
+        return $o;
+    }
+
+    /**
      * Recent activity.
      *
      * @param activity[] $activity The activity entries.

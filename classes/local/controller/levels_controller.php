@@ -24,6 +24,13 @@
  */
 
 namespace block_xp\local\controller;
+
+use block_xp\local\xp\algo_levels_info;
+use block_xp\local\xp\level_with_badge;
+use block_xp\local\xp\level_with_description;
+use block_xp\local\xp\level_with_name;
+use coding_exception;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -43,6 +50,8 @@ class levels_controller extends page_controller {
     protected $form;
 
     protected function pre_content() {
+        global $PAGE;
+
         $levelsinfo = $this->world->get_levels_info();
 
         $redirectto = null;
@@ -91,12 +100,49 @@ class levels_controller extends page_controller {
         return get_string('levels', 'block_xp');
     }
 
-    protected function page_content() {
-        $form = $this->get_form();
-        if ($form->is_submitted() && !$form->is_validated() && !$form->no_submit_button_pressed()) {
-            echo $this->get_renderer()->notification(get_string('errorformvalues', 'block_xp'));
+    protected function get_react_module() {
+        $world = $this->world;
+        $courseid = $world->get_courseid();
+
+        $levelsinfo = $world->get_levels_info();
+        if (!$levelsinfo instanceof algo_levels_info) {
+            throw new coding_exception("Expecting algo_levels_info class");
         }
-        $form->display();
+        $levelsinfoserialized = [
+            'count' => $levelsinfo->get_count(),
+            'levels' => array_values(array_map(function($level) {
+                $url = $level instanceof level_with_badge ? $level->get_badge_url() : null;
+                return [
+                    'level' => $level->get_level(),
+                    'xprequired' => $level->get_xp_required(),
+                    'badgeurl' => $url ? $this->urlnormalizer->normalize($url) : $url,
+                    'name' => $level instanceof level_with_name ? $level->get_name() : null,
+                    'description' => $level instanceof level_with_description ? $level->get_description() : null
+                ];
+            }, $levelsinfo->get_levels())),
+            'algo' => $levelsinfo instanceof algo_levels_info ? [
+                'enabled' => $levelsinfo->get_use_algo(),
+                'base' => $levelsinfo->get_base(),
+                'coef' => $levelsinfo->get_coef()
+            ] : null
+        ];
+
+        return [
+            'block_xp/ui-levels-lazy',
+            [
+                'courseId' => $courseid,
+                'levelsInfo' => $levelsinfoserialized,
+                // 'draftItemId' => $draftitemid,
+                // 'levelsWithFile' => $levelswithfile,
+                // 'maxBytes' => $maxbytes
+            ]
+        ];
+    }
+
+    protected function page_content() {
+        $output = $this->get_renderer();
+        list($module, $props) = $this->get_react_module();
+        echo $output->react_module($module, $props);
     }
 
 }
