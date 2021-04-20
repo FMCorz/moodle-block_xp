@@ -100,8 +100,11 @@ class course_user_leaderboard implements leaderboard {
             $params['groupid'] = $groupid;
         }
 
+        // We rename the user ID from fields() to 'useridunused' because the xp table
+        // already contains the user ID as 'userid and Oracle would complain if we select
+        // the same field twice with the same alias.
         $this->fields = 'x.*, ' .
-            user_picture::fields('u', null, 'userid') . ', ' .
+            user_picture::fields('u', null, 'useridunused') . ', ' .
             context_helper::get_preload_record_columns_sql('ctx');
         $this->from = "{{$this->table}} x
                        $groupsql
