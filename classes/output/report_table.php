@@ -36,10 +36,10 @@ use pix_icon;
 use renderer_base;
 use stdClass;
 use table_sql;
-use user_picture;
 use block_xp\di;
 use block_xp\local\course_world;
 use block_xp\local\xp\course_user_state_store;
+use block_xp\local\utils\user_utils;
 
 /**
  * Block XP report table class.
@@ -149,7 +149,7 @@ class report_table extends table_sql {
 
         // Define SQL.
         $this->sql = new stdClass();
-        $this->sql->fields = user_picture::fields('u') . ', COALESCE(x.lvl, 1) AS lvl, x.xp, ' .
+        $this->sql->fields = user_utils::picture_fields('u') . ', COALESCE(x.lvl, 1) AS lvl, x.xp, ' .
             context_helper::get_preload_record_columns_sql('ctx');
         $this->sql->from = "{user} u
                        JOIN {context} ctx

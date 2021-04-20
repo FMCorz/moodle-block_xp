@@ -30,6 +30,7 @@ require_once($CFG->libdir . '/tablelib.php');
 use stdClass;
 use table_sql;
 use block_xp\local\course_world;
+use block_xp\local\utils\user_utils;
 
 /**
  * Block XP log table class.
@@ -90,7 +91,7 @@ class log_table extends table_sql {
 
         // Define SQL.
         $this->sql = new stdClass();
-        $this->sql->fields = 'x.*, ' . get_all_user_name_fields(true, 'u');
+        $this->sql->fields = 'x.*, ' . user_utils::name_fields('u');
         $this->sql->from = $sqlfrom;
         $this->sql->where = 'courseid = :courseid';
         $this->sql->params = array_merge(array('courseid' => $courseid), $sqlparams);

@@ -32,7 +32,6 @@ use html_writer;
 use paging_bar;
 use renderer_base;
 use flexible_table;
-use user_picture;
 use block_xp\local\config\course_world_config;
 use block_xp\local\leaderboard\leaderboard;
 use block_xp\local\routing\url;

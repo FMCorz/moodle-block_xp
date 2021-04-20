@@ -29,11 +29,11 @@ defined('MOODLE_INTERNAL') || die();
 use context_helper;
 use moodle_database;
 use stdClass;
-use user_picture;
 use block_xp\local\logger\collection_logger_with_group_reset;
 use block_xp\local\logger\reason_collection_logger;
 use block_xp\local\observer\level_up_state_store_observer;
 use block_xp\local\reason\reason;
+use block_xp\local\utils\user_utils;
 
 /**
  * User state course store.
@@ -86,7 +86,7 @@ class course_user_state_store implements course_state_store,
      * @return state
      */
     public function get_state($id) {
-        $userfields = user_picture::fields('u', null, 'userid');
+        $userfields = user_utils::picture_fields('u', 'userid');
         $contextfields = context_helper::get_preload_record_columns_sql('ctx');
 
         $sql = "SELECT u.id, x.userid, x.xp, $userfields, $contextfields
@@ -207,7 +207,7 @@ class course_user_state_store implements course_state_store,
      * @return user_state
      */
     public function make_state_from_record(stdClass $record, $useridfield = 'userid') {
-        $user = user_picture::unalias($record, null, $useridfield);
+        $user = user_utils::unalias_picture_fields($record, $useridfield);
         context_helper::preload_from_record($record);
         $xp = !empty($record->xp) ? $record->xp : 0;
         return new user_state($user, $xp, $this->levelsinfo);
