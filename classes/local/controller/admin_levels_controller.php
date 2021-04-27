@@ -24,9 +24,14 @@
  */
 
 namespace block_xp\local\controller;
-defined('MOODLE_INTERNAL') || die();
 
+use block_xp;
 use block_xp\local\config\config;
+use block_xp\local\serializer\level_serializer;
+use block_xp\local\serializer\levels_info_serializer;
+use block_xp\local\serializer\url_serializer;
+
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Admin levels controller class.
@@ -50,45 +55,31 @@ class admin_levels_controller extends admin_route_controller {
         $this->config = \block_xp\di::get('config');
     }
 
-    protected function pre_content() {
-        $data = json_decode($this->config->get('levelsdata'), true);
-        if (!$data) {
-            $levelsinfo = \block_xp\local\xp\algo_levels_info::make_from_defaults();
-        } else {
-            $levelsinfo = new \block_xp\local\xp\algo_levels_info($data);
-        }
-
-        $form = $this->get_form();
-        $form->set_data_from_levels($levelsinfo);
-
-        if ($newlevelsinfo = $form->get_levels_from_data()) {
-            $this->config->set('levelsdata', json_encode($newlevelsinfo->jsonSerialize()));
-            $this->redirect(null, get_string('valuessaved', 'block_xp'));
-
-        } else if ($form->is_cancelled()) {
-
-            $this->redirect();
-        }
-    }
-
-    protected function get_form() {
-        if (!$this->form) {
-            $this->form = new \block_xp\form\levels_with_algo($this->pageurl->out(false));
-        }
-        return $this->form;
-    }
-
     protected function content() {
-        $form = $this->get_form();
         $output = $this->get_renderer();
-
         echo $output->heading(get_string('defaultlevels', 'block_xp'));
-
-        if ($form->is_submitted() && !$form->is_validated() && !$form->no_submit_button_pressed()) {
-            echo $output->notification(get_string('errorformvalues', 'block_xp'));
-        }
-
-        $form->display();
+        list($module, $props) = $this->get_react_module();
+        echo $output->react_module($module, $props);
     }
 
+    protected function get_react_module() {
+        $config = block_xp\di::get('config');
+
+        $data = json_decode($config->get('levelsdata'), true);
+        $resolver = \block_xp\di::get('badge_url_resolver');
+        if (!$data) {
+            $levelsinfo = \block_xp\local\xp\algo_levels_info::make_from_defaults($resolver);
+        } else {
+            $levelsinfo = new \block_xp\local\xp\algo_levels_info($data, $resolver);
+        }
+
+        $serializer = new levels_info_serializer(new level_serializer(new url_serializer()));
+        return [
+            'block_xp/ui-levels-lazy',
+            [
+                'courseId' => 0,
+                'levelsInfo' => $serializer->serialize($levelsinfo),
+            ]
+        ];
+    }
 }

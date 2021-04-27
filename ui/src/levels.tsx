@@ -176,16 +176,18 @@ const initState = ({ levelsInfo }: { levelsInfo: LevelsInfo }): State => {
   };
 };
 
-const App = ({ courseId, levelsInfo }: { courseId: string; levelsInfo: LevelsInfo }) => {
+const App = ({ courseId, levelsInfo }: { courseId: number; levelsInfo: LevelsInfo }) => {
   const [state, dispatch] = useReducer(reducer, { levelsInfo }, initState);
   const levels = state.levels.slice(0, state.nblevels);
   const mutation = useMutation(
     () => {
+      // An falsy course ID means admin config.
+      let method = courseId ? 'block_xp_set_levels_info' : 'block_xp_set_default_levels_info';
       return getModule('core/ajax').call([
         {
-          methodname: 'block_xp_set_levels_info',
+          methodname: method,
           args: {
-            courseid: courseId,
+            courseid: courseId ? courseId : undefined,
             levels: levels.map((level) => {
               return {
                 level: level.level,

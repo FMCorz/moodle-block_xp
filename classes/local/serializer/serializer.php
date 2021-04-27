@@ -15,17 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Serializer interface.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2021 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local\serializer;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2021042700;
-$plugin->requires   = 2016052300;   // Moodle 3.1.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.10.2';
+/**
+ * Serializer interface.
+ *
+ * @package    block_xp
+ * @copyright  2021 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface serializer {
+
+    /**
+     * Serialize.
+     *
+     * @param mixed $thing The thing to normalize.
+     * @return array|scalar
+     */
+    public function serialize($thing);
+
+}

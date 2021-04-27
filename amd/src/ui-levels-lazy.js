@@ -6138,11 +6138,13 @@ var App = function (_a) {
     var _b = react_1.useReducer(reducer, { levelsInfo: levelsInfo }, initState), state = _b[0], dispatch = _b[1];
     var levels = state.levels.slice(0, state.nblevels);
     var mutation = react_query_1.useMutation(function () {
+        // An falsy course ID means admin config.
+        var method = courseId ? 'block_xp_set_levels_info' : 'block_xp_set_default_levels_info';
         return moodle_1.getModule('core/ajax').call([
             {
-                methodname: 'block_xp_set_levels_info',
+                methodname: method,
                 args: {
-                    courseid: courseId,
+                    courseid: courseId ? courseId : undefined,
                     levels: levels.map(function (level) {
                         return {
                             level: level.level,

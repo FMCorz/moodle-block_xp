@@ -37,6 +37,7 @@ use block_xp\local\xp\level_with_description;
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since 3.10.0. Use external service instead.
  */
 class levels_with_algo extends moodleform {
 
@@ -50,6 +51,8 @@ class levels_with_algo extends moodleform {
      */
     public function definition() {
         global $OUTPUT;
+
+        debugging('The class \block_xp\form\levels_with_algo is deprecated.', DEBUG_DEVELOPER);
 
         $mform = $this->_form;
         $config = isset($this->_customdata['config']) ? $this->_customdata['config'] : null;

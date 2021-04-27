@@ -40,6 +40,13 @@ $functions = [
         'type' => 'read',
         'ajax' => true
     ],
+    'block_xp_set_default_levels_info' => [
+        'classname' => 'block_xp\external',
+        'methodname' => 'set_default_levels_info',
+        'description' => 'Set the default levels info',
+        'type' => 'write',
+        'ajax' => true,
+    ],
     'block_xp_set_levels_info' => [
         'classname' => 'block_xp\external',
         'methodname' => 'set_levels_info',
