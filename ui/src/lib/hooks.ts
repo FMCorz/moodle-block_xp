@@ -1,5 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
-import { getString, hasString, loadString, getModule, loadStrings } from './moodle';
+import React, { useEffect, useMemo, useState } from 'react';
+import { getString, hasString, loadString, getModule, loadStrings, isBehatRunning } from './moodle';
+
+export const useUnloadCheck = (isDirty: boolean) => {
+  const str = useString('changesmadereallygoaway', 'core');
+
+  useEffect(() => {
+    const fn = (e: BeforeUnloadEvent) => {
+      if (!isDirty || isBehatRunning()) {
+        return;
+      }
+      e.preventDefault();
+      e.returnValue = str;
+      return str;
+    };
+
+    window.addEventListener('beforeunload', fn);
+    return () => {
+      window.removeEventListener('beforeunload', fn);
+    };
+  });
+};
 
 export const useString = (id: string, component: string = 'block_xp', a?: any) => {
   const wasKnownAtMount = useMemo(() => hasString(id, component), [id, component]);

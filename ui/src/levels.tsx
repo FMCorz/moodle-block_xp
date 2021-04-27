@@ -6,7 +6,7 @@ import LevelsGrid from './components/LevelsGrid';
 import LevelsList from './components/LevelsList';
 import NumberInput from './components/NumberInput';
 import Str from './components/Str';
-import { useStrings } from './lib/hooks';
+import { useStrings, useUnloadCheck } from './lib/hooks';
 import {
   computeRequiredPoints,
   getMinimumPointsAtLevel,
@@ -179,6 +179,7 @@ const initState = ({ levelsInfo }: { levelsInfo: LevelsInfo }): State => {
 const App = ({ courseId, levelsInfo }: { courseId: number; levelsInfo: LevelsInfo }) => {
   const [state, dispatch] = useReducer(reducer, { levelsInfo }, initState);
   const levels = state.levels.slice(0, state.nblevels);
+  useUnloadCheck(state.pendingSave);
   const mutation = useMutation(
     () => {
       // An falsy course ID means admin config.

@@ -6137,6 +6137,7 @@ var App = function (_a) {
     var courseId = _a.courseId, levelsInfo = _a.levelsInfo;
     var _b = react_1.useReducer(reducer, { levelsInfo: levelsInfo }, initState), state = _b[0], dispatch = _b[1];
     var levels = state.levels.slice(0, state.nblevels);
+    hooks_1.useUnloadCheck(state.pendingSave);
     var mutation = react_query_1.useMutation(function () {
         // An falsy course ID means admin config.
         var method = courseId ? 'block_xp_set_levels_info' : 'block_xp_set_default_levels_info';
@@ -6287,9 +6288,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.useStrings = exports.useString = void 0;
+exports.useStrings = exports.useString = exports.useUnloadCheck = void 0;
 var react_1 = __webpack_require__(7294);
 var moodle_1 = __webpack_require__(3422);
+var useUnloadCheck = function (isDirty) {
+    var str = exports.useString('changesmadereallygoaway', 'core');
+    react_1.useEffect(function () {
+        var fn = function (e) {
+            if (!isDirty || moodle_1.isBehatRunning()) {
+                return;
+            }
+            e.preventDefault();
+            e.returnValue = str;
+            return str;
+        };
+        window.addEventListener('beforeunload', fn);
+        return function () {
+            window.removeEventListener('beforeunload', fn);
+        };
+    });
+};
+exports.useUnloadCheck = useUnloadCheck;
 var useString = function (id, component, a) {
     if (component === void 0) { component = 'block_xp'; }
     var wasKnownAtMount = react_1.useMemo(function () { return moodle_1.hasString(id, component); }, [id, component]);
@@ -6469,7 +6488,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.setModule = exports.makeDependenciesDefinition = exports.loadStrings = exports.loadString = exports.imageUrl = exports.getModule = exports.hasString = exports.getUrl = exports.getString = void 0;
+exports.setModule = exports.makeDependenciesDefinition = exports.loadStrings = exports.loadString = exports.isBehatRunning = exports.imageUrl = exports.getModule = exports.hasString = exports.getUrl = exports.getString = void 0;
 var utils_1 = __webpack_require__(6926);
 var M = window.M;
 var modules = {};
@@ -6496,6 +6515,10 @@ function imageUrl(name, component) {
     return M.util.image_url(name, component);
 }
 exports.imageUrl = imageUrl;
+function isBehatRunning() {
+    return M.cfg.behatsiterunning;
+}
+exports.isBehatRunning = isBehatRunning;
 var loadStringCache = utils_1.fifoCache(64);
 function loadString(id, component) {
     return __awaiter(this, void 0, void 0, function () {

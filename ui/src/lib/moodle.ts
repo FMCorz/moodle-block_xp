@@ -26,6 +26,10 @@ export function imageUrl(name: string, component: string) {
   return M.util.image_url(name, component);
 }
 
+export function isBehatRunning() {
+  return M.cfg.behatsiterunning;
+}
+
 let loadStringCache = fifoCache<Promise<any>>(64);
 
 export async function loadString(id: string, component: string) {
