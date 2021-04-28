@@ -1,6 +1,20 @@
 Changelog
 =========
 
+v3.11.2
+-------
+
+Bug fixes
+
+- Some CSS styles were not applied for some older Moodle versions
+
+v3.11.1
+-------
+
+Quality of life
+
+- Update information in promotional page
+
 v3.11.0
 -------
 
