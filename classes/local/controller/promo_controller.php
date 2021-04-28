@@ -44,7 +44,7 @@ class promo_controller extends route_controller {
     /** Seen flag. */
     const SEEN_FLAG = 'promo-page-seen';
     /** Page version. */
-    const VERSION = 20200430;
+    const VERSION = 20210428;
 
     /** @var string The normal route name. */
     protected $routename = 'promo';
@@ -149,7 +149,7 @@ class promo_controller extends route_controller {
         echo $output->heading(get_string('discoverlevelupplus', 'block_xp'), 3);
         echo markdown_to_html(get_string('promointro', 'block_xp'));
 
-        $new = '<span class="label label-info">New</span>';
+        $new = '🆕';
 
         echo <<<EOT
 <style>
@@ -177,12 +177,13 @@ class promo_controller extends route_controller {
     <tr>
         <td><img src="{$output->pix_url('noun/checklist', 'block_xp')}" alt=""></td>
         <td>
-            <h4>Additional rules</h4>
+            <h4>Additional rules $new</h4>
             <p>Reward your students for completing their tasks and courses.</p>
             <ul>
                 <li>Support for activity completion</li>
                 <li>Support for course completion</li>
-                <li>Support for targeting specific courses</li>
+                <li>Target specific courses</li>
+                <li>Target activities by name $new</li>
             </ul>
         </td>
     </tr>
@@ -200,7 +201,7 @@ class promo_controller extends route_controller {
     <tr>
         <td><img src="{$output->pix_url('noun/manual', 'block_xp')}" alt=""></td>
         <td>
-            <h4>Issue individual rewards $new</h4>
+            <h4>Issue individual rewards</h4>
             <p>Manually award points to specific students.</p>
             <ul>
                 <li>A great way to reward offline or punctual actions</li>
@@ -249,6 +250,7 @@ class promo_controller extends route_controller {
             <p>Better control and information about your students' actions.</p>
             <ul>
                 <li>Export the report to look at it in more details</li>
+                <li>Export the logs to look at them in more details $new</li>
                 <li>Allocate points in bulk from an imported CSV file</li>
                 <li>Track the events with logs containing human-friendly descriptions and originating locations</li>
             </ul>
