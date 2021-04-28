@@ -112,6 +112,7 @@
 }
 .block_xp .xp-bg-gray-100 {
     --tw-bg-opacity: 1;
+    background-color: #f3f4f6;
     background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
 }
 .block_xp .xp-p-4 {
@@ -768,6 +769,7 @@
 }
 .block_xp .odd\:xp-bg-gray-100:nth-child(odd) {
     --tw-bg-opacity: 1;
+    background-color: #f3f4f6;
     background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
 }
 @media (min-width: 768px) {

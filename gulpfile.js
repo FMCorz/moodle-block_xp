@@ -3,8 +3,6 @@
 const gulp = require('gulp');
 const exec = require('child_process').exec;
 const postcss = require('gulp-postcss');
-const tailwindcss = require('tailwindcss');
-const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 
 const webpackDevConfig = require('./webpack.dev.js');
@@ -32,7 +30,7 @@ function tailwindBuild(cb) {
   // Build Tailwind. This behaves differently depending on NODE_ENV.
   return gulp
     .src(cssPaths)
-    .pipe(postcss([tailwindcss, autoprefixer]))
+    .pipe(postcss())
     .pipe(gulp.dest('.'));
 }
 
