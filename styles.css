@@ -492,6 +492,10 @@
 .block_xp-rulepicker-content .rule {
     cursor: pointer;
     padding: .5rem;
+    border-bottom: 1px solid #efefef;
+}
+.block_xp-rulepicker-content .rule:last-child {
+    border-bottom-width: 0;
 }
 .block_xp-rulepicker-content .rule:focus,
 .block_xp-rulepicker-content .rule:hover {
