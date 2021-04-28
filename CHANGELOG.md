@@ -1,6 +1,28 @@
 Changelog
 =========
 
+v3.11.0
+-------
+
+New features
+
+- Complete revamp of the user interface to setup the levels
+- Rule picker redesigned to include a description of each rule
+
+Quality of life
+
+- Confirmation asked when deleting a rule or condition with children
+- A help message is displayed when other plugins cause the rules screen to crash
+
+Bug fixes
+
+- The leaderboard was not accessible when using Oracle
+- The filters on the log table could not be removed when empty
+
+Technical changes
+
+- Compatibility with Moodle 3.11
+
 v3.10.2
 -------
 
