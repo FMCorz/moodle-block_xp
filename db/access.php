@@ -29,7 +29,7 @@ $capabilities = array(
     // Whether or not the user can add the block.
     'block/xp:addinstance' => array(
         'captype' => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
+        'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => array(
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
