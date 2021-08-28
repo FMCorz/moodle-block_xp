@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-  target: 'es5',
+  target: ['web', 'es5'],
   entry: {
     'ui-levels': './ui/src/levels.tsx',
   },

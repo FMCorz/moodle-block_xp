@@ -3,62 +3,6 @@
 define(function() { return /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 2122:
-/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": function() { return /* binding */ _extends; }
-/* harmony export */ });
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-/***/ }),
-
-/***/ 3552:
-/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  "Z": function() { return /* binding */ _inheritsLoose; }
-});
-
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js
-function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-
-  return _setPrototypeOf(o, p);
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
-
-function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
-  _setPrototypeOf(subClass, superClass);
-}
-
-/***/ }),
-
 /***/ 7418:
 /***/ (function(module) {
 
@@ -1612,7 +1556,7 @@ module.exports =
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "j": function() { return /* binding */ focusManager; }
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3552);
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1721);
 /* harmony import */ var _subscribable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2943);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2288);
 
@@ -1728,7 +1672,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "isCancelledError": function() { return /* reexport safe */ _retryer__WEBPACK_IMPORTED_MODULE_0__.DV; }
 /* harmony export */ });
 /* harmony import */ var _retryer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1216);
-/* harmony import */ var _queryCache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(739);
+/* harmony import */ var _queryCache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2122);
 /* harmony import */ var _queryClient__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8328);
 /* harmony import */ var _queryObserver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4254);
 /* harmony import */ var _queriesObserver__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4119);
@@ -1780,9 +1724,10 @@ function infiniteQueryBehavior() {
   return {
     onFetch: function onFetch(context) {
       context.fetchFn = function () {
-        var _context$fetchOptions, _context$fetchOptions2, _context$state$data, _context$state$data2;
+        var _context$fetchOptions, _context$fetchOptions2, _context$fetchOptions3, _context$fetchOptions4, _context$state$data, _context$state$data2;
 
-        var fetchMore = (_context$fetchOptions = context.fetchOptions) == null ? void 0 : (_context$fetchOptions2 = _context$fetchOptions.meta) == null ? void 0 : _context$fetchOptions2.fetchMore;
+        var refetchPage = (_context$fetchOptions = context.fetchOptions) == null ? void 0 : (_context$fetchOptions2 = _context$fetchOptions.meta) == null ? void 0 : _context$fetchOptions2.refetchPage;
+        var fetchMore = (_context$fetchOptions3 = context.fetchOptions) == null ? void 0 : (_context$fetchOptions4 = _context$fetchOptions3.meta) == null ? void 0 : _context$fetchOptions4.fetchMore;
         var pageParam = fetchMore == null ? void 0 : fetchMore.pageParam;
         var isFetchingNextPage = (fetchMore == null ? void 0 : fetchMore.direction) === 'forward';
         var isFetchingPreviousPage = (fetchMore == null ? void 0 : fetchMore.direction) === 'backward';
@@ -1793,6 +1738,11 @@ function infiniteQueryBehavior() {
 
         var queryFn = context.options.queryFn || function () {
           return Promise.reject('Missing queryFn');
+        };
+
+        var buildNewPages = function buildNewPages(pages, param, page, previous) {
+          newPageParams = previous ? [param].concat(newPageParams) : [].concat(newPageParams, [param]);
+          return previous ? [page].concat(pages) : [].concat(pages, [page]);
         }; // Create function to fetch a page
 
 
@@ -1811,8 +1761,7 @@ function infiniteQueryBehavior() {
           };
           var queryFnResult = queryFn(queryFnContext);
           var promise = Promise.resolve(queryFnResult).then(function (page) {
-            newPageParams = previous ? [param].concat(newPageParams) : [].concat(newPageParams, [param]);
-            return previous ? [page].concat(pages) : [].concat(pages, [page]);
+            return buildNewPages(pages, param, page, previous);
           });
 
           if ((0,_retryer__WEBPACK_IMPORTED_MODULE_0__/* .isCancelable */ .LE)(queryFnResult)) {
@@ -1843,14 +1792,22 @@ function infiniteQueryBehavior() {
             else {
                 (function () {
                   newPageParams = [];
-                  var manual = typeof context.options.getNextPageParam === 'undefined'; // Fetch first page
+                  var manual = typeof context.options.getNextPageParam === 'undefined';
+                  var shouldFetchFirstPage = refetchPage && oldPages[0] ? refetchPage(oldPages[0], 0, oldPages) : true; // Fetch first page
 
-                  promise = fetchPage([], manual, oldPageParams[0]); // Fetch remaining pages
+                  promise = shouldFetchFirstPage ? fetchPage([], manual, oldPageParams[0]) : Promise.resolve(buildNewPages([], oldPageParams[0], oldPages[0])); // Fetch remaining pages
 
                   var _loop = function _loop(i) {
                     promise = promise.then(function (pages) {
-                      var param = manual ? oldPageParams[i] : getNextPageParam(context.options, pages);
-                      return fetchPage(pages, manual, param);
+                      var shouldFetchNextPage = refetchPage && oldPages[i] ? refetchPage(oldPages[i], i, oldPages) : true;
+
+                      if (shouldFetchNextPage) {
+                        var _param2 = manual ? oldPageParams[i] : getNextPageParam(context.options, pages);
+
+                        return fetchPage(pages, manual, _param2);
+                      }
+
+                      return Promise.resolve(buildNewPages(pages, oldPageParams[i], oldPages[i]));
                     });
                   };
 
@@ -1919,8 +1876,8 @@ function hasPreviousPage(options, pages) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "c": function() { return /* binding */ InfiniteQueryObserver; }
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2122);
-/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3552);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7462);
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1721);
 /* harmony import */ var _queryObserver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4254);
 /* harmony import */ var _infiniteQueryBehavior__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6997);
 
@@ -2040,7 +1997,7 @@ function setLogger(newLogger) {
 /* harmony export */   "m": function() { return /* binding */ Mutation; },
 /* harmony export */   "R": function() { return /* binding */ getDefaultState; }
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2122);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7462);
 /* harmony import */ var _logger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1909);
 /* harmony import */ var _notifyManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(101);
 /* harmony import */ var _retryer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1216);
@@ -2128,7 +2085,9 @@ var Mutation = /*#__PURE__*/function () {
     return promise.then(function () {
       return _this.executeMutation();
     }).then(function (result) {
-      data = result;
+      data = result; // Notify cache callback
+
+      _this.mutationCache.config.onSuccess == null ? void 0 : _this.mutationCache.config.onSuccess(data, _this.state.variables, _this.state.context, _this);
     }).then(function () {
       return _this.options.onSuccess == null ? void 0 : _this.options.onSuccess(data, _this.state.variables, _this.state.context);
     }).then(function () {
@@ -2142,10 +2101,7 @@ var Mutation = /*#__PURE__*/function () {
       return data;
     }).catch(function (error) {
       // Notify cache callback
-      if (_this.mutationCache.config.onError) {
-        _this.mutationCache.config.onError(error, _this.state.variables, _this.state.context, _this);
-      } // Log error
-
+      _this.mutationCache.config.onError == null ? void 0 : _this.mutationCache.config.onError(error, _this.state.variables, _this.state.context, _this); // Log error
 
       (0,_logger__WEBPACK_IMPORTED_MODULE_2__/* .getLogger */ .j)().error(error);
       return Promise.resolve().then(function () {
@@ -2284,7 +2240,7 @@ function reducer(state, action) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "L": function() { return /* binding */ MutationCache; }
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3552);
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1721);
 /* harmony import */ var _notifyManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(101);
 /* harmony import */ var _mutation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1262);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2288);
@@ -2409,8 +2365,8 @@ var MutationCache = /*#__PURE__*/function (_Subscribable) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "X": function() { return /* binding */ MutationObserver; }
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2122);
-/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3552);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7462);
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1721);
 /* harmony import */ var _mutation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1262);
 /* harmony import */ var _notifyManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(101);
 /* harmony import */ var _subscribable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2943);
@@ -2659,7 +2615,7 @@ var notifyManager = new NotifyManager();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "N": function() { return /* binding */ onlineManager; }
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3552);
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1721);
 /* harmony import */ var _subscribable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2943);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2288);
 
@@ -2758,7 +2714,7 @@ var onlineManager = new OnlineManager();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "y": function() { return /* binding */ QueriesObserver; }
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3552);
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1721);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2288);
 /* harmony import */ var _notifyManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(101);
 /* harmony import */ var _queryObserver__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4254);
@@ -2827,16 +2783,24 @@ var QueriesObserver = /*#__PURE__*/function (_Subscribable) {
   _proto.getOptimisticResult = function getOptimisticResult(queries) {
     var _this3 = this;
 
-    return queries.map(function (options) {
+    return queries.map(function (options, index) {
       var defaultedOptions = _this3.client.defaultQueryObserverOptions(options);
 
-      return _this3.getObserver(defaultedOptions).getOptimisticResult(defaultedOptions);
+      return _this3.getObserver(defaultedOptions, index).getOptimisticResult(defaultedOptions);
     });
   };
 
-  _proto.getObserver = function getObserver(options) {
+  _proto.getObserver = function getObserver(options, index) {
+    var _currentObserver;
+
     var defaultedOptions = this.client.defaultQueryObserverOptions(options);
-    return this.observersMap[defaultedOptions.queryHash] || new _queryObserver__WEBPACK_IMPORTED_MODULE_1__/* .QueryObserver */ .z(this.client, defaultedOptions);
+    var currentObserver = this.observersMap[defaultedOptions.queryHash];
+
+    if (!currentObserver && defaultedOptions.keepPreviousData) {
+      currentObserver = this.observers[index];
+    }
+
+    return (_currentObserver = currentObserver) != null ? _currentObserver : new _queryObserver__WEBPACK_IMPORTED_MODULE_1__/* .QueryObserver */ .z(this.client, defaultedOptions);
   };
 
   _proto.updateObservers = function updateObservers(notifyOptions) {
@@ -2845,7 +2809,7 @@ var QueriesObserver = /*#__PURE__*/function (_Subscribable) {
     _notifyManager__WEBPACK_IMPORTED_MODULE_2__/* .notifyManager.batch */ .V.batch(function () {
       var hasIndexChange = false;
       var prevObservers = _this4.observers;
-      var prevOberversMap = _this4.observersMap;
+      var prevObserversMap = _this4.observersMap;
       var newResult = [];
       var newObservers = [];
       var newObserversMap = {};
@@ -2855,9 +2819,9 @@ var QueriesObserver = /*#__PURE__*/function (_Subscribable) {
 
         var queryHash = defaultedOptions.queryHash;
 
-        var observer = _this4.getObserver(defaultedOptions);
+        var observer = _this4.getObserver(defaultedOptions, i);
 
-        if (prevOberversMap[queryHash]) {
+        if (prevObserversMap[queryHash] || defaultedOptions.keepPreviousData) {
           observer.setOptions(defaultedOptions, notifyOptions);
         }
 
@@ -2919,7 +2883,7 @@ var QueriesObserver = /*#__PURE__*/function (_Subscribable) {
 
 /***/ }),
 
-/***/ 739:
+/***/ 2122:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2930,11 +2894,11 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js + 1 modules
-var inheritsLoose = __webpack_require__(3552);
+var inheritsLoose = __webpack_require__(1721);
 // EXTERNAL MODULE: ./node_modules/react-query/es/core/utils.js
 var utils = __webpack_require__(2288);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-var esm_extends = __webpack_require__(2122);
+var esm_extends = __webpack_require__(7462);
 // EXTERNAL MODULE: ./node_modules/react-query/es/core/notifyManager.js
 var notifyManager = __webpack_require__(101);
 // EXTERNAL MODULE: ./node_modules/react-query/es/core/logger.js
@@ -3151,6 +3115,10 @@ var Query = /*#__PURE__*/function () {
     }
   };
 
+  _proto.getObserversCount = function getObserversCount() {
+    return this.observers.length;
+  };
+
   _proto.invalidate = function invalidate() {
     if (!this.state.isInvalidated) {
       this.dispatch({
@@ -3191,11 +3159,12 @@ var Query = /*#__PURE__*/function () {
       if (observer) {
         this.setOptions(observer.options);
       }
-    } // Create query function context
+    }
 
+    var queryKey = (0,utils/* ensureQueryKeyArray */.mc)(this.queryKey); // Create query function context
 
     var queryFnContext = {
-      queryKey: this.queryKey,
+      queryKey: queryKey,
       pageParam: undefined
     }; // Create fetch function
 
@@ -3207,7 +3176,7 @@ var Query = /*#__PURE__*/function () {
     var context = {
       fetchOptions: fetchOptions,
       options: this.options,
-      queryKey: this.queryKey,
+      queryKey: queryKey,
       state: this.state,
       fetchFn: fetchFn
     };
@@ -3234,8 +3203,10 @@ var Query = /*#__PURE__*/function () {
     this.retryer = new retryer/* Retryer */.m4({
       fn: context.fetchFn,
       onSuccess: function onSuccess(data) {
-        _this2.setData(data); // Remove query after fetching if cache time is 0
+        _this2.setData(data); // Notify cache callback
 
+
+        _this2.cache.config.onSuccess == null ? void 0 : _this2.cache.config.onSuccess(data, _this2); // Remove query after fetching if cache time is 0
 
         if (_this2.cacheTime === 0) {
           _this2.optionalRemove();
@@ -3252,10 +3223,7 @@ var Query = /*#__PURE__*/function () {
 
         if (!(0,retryer/* isCancelledError */.DV)(error)) {
           // Notify cache callback
-          if (_this2.cache.config.onError) {
-            _this2.cache.config.onError(error, _this2);
-          } // Log error
-
+          _this2.cache.config.onError == null ? void 0 : _this2.cache.config.onError(error, _this2); // Log error
 
           (0,logger/* getLogger */.j)().error(error);
         } // Remove query after fetching if cache time is 0
@@ -3557,9 +3525,9 @@ var QueryCache = /*#__PURE__*/function (_Subscribable) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "S": function() { return /* binding */ QueryClient; }
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2122);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7462);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2288);
-/* harmony import */ var _queryCache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(739);
+/* harmony import */ var _queryCache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2122);
 /* harmony import */ var _mutationCache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8133);
 /* harmony import */ var _focusManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9852);
 /* harmony import */ var _onlineManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(68);
@@ -3636,10 +3604,30 @@ var QueryClient = /*#__PURE__*/function () {
     return (_this$queryCache$find = this.queryCache.find(queryKey, filters)) == null ? void 0 : _this$queryCache$find.state.data;
   };
 
+  _proto.getQueriesData = function getQueriesData(queryKeyOrFilters) {
+    return this.getQueryCache().findAll(queryKeyOrFilters).map(function (_ref) {
+      var queryKey = _ref.queryKey,
+          state = _ref.state;
+      var data = state.data;
+      return [queryKey, data];
+    });
+  };
+
   _proto.setQueryData = function setQueryData(queryKey, updater, options) {
     var parsedOptions = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .parseQueryArgs */ ._v)(queryKey);
     var defaultedOptions = this.defaultQueryOptions(parsedOptions);
     return this.queryCache.build(this, defaultedOptions).setData(updater, options);
+  };
+
+  _proto.setQueriesData = function setQueriesData(queryKeyOrFilters, updater, options) {
+    var _this2 = this;
+
+    return _notifyManager__WEBPACK_IMPORTED_MODULE_6__/* .notifyManager.batch */ .V.batch(function () {
+      return _this2.getQueryCache().findAll(queryKeyOrFilters).map(function (_ref2) {
+        var queryKey = _ref2.queryKey;
+        return [queryKey, _this2.setQueryData(queryKey, updater, options)];
+      });
+    });
   };
 
   _proto.getQueryState = function getQueryState(queryKey, filters) {
@@ -3661,7 +3649,7 @@ var QueryClient = /*#__PURE__*/function () {
   };
 
   _proto.resetQueries = function resetQueries(arg1, arg2, arg3) {
-    var _this2 = this;
+    var _this3 = this;
 
     var _parseFilterArgs3 = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .parseFilterArgs */ .I6)(arg1, arg2, arg3),
         filters = _parseFilterArgs3[0],
@@ -3677,12 +3665,12 @@ var QueryClient = /*#__PURE__*/function () {
       queryCache.findAll(filters).forEach(function (query) {
         query.reset();
       });
-      return _this2.refetchQueries(refetchFilters, options);
+      return _this3.refetchQueries(refetchFilters, options);
     });
   };
 
   _proto.cancelQueries = function cancelQueries(arg1, arg2, arg3) {
-    var _this3 = this;
+    var _this4 = this;
 
     var _parseFilterArgs4 = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .parseFilterArgs */ .I6)(arg1, arg2, arg3),
         filters = _parseFilterArgs4[0],
@@ -3694,7 +3682,7 @@ var QueryClient = /*#__PURE__*/function () {
     }
 
     var promises = _notifyManager__WEBPACK_IMPORTED_MODULE_6__/* .notifyManager.batch */ .V.batch(function () {
-      return _this3.queryCache.findAll(filters).map(function (query) {
+      return _this4.queryCache.findAll(filters).map(function (query) {
         return query.cancel(cancelOptions);
       });
     });
@@ -3702,37 +3690,45 @@ var QueryClient = /*#__PURE__*/function () {
   };
 
   _proto.invalidateQueries = function invalidateQueries(arg1, arg2, arg3) {
-    var _filters$refetchActiv,
-        _this4 = this;
+    var _ref3,
+        _filters$refetchActiv,
+        _filters$refetchInact,
+        _this5 = this;
 
     var _parseFilterArgs5 = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .parseFilterArgs */ .I6)(arg1, arg2, arg3),
         filters = _parseFilterArgs5[0],
         options = _parseFilterArgs5[1];
 
     var refetchFilters = (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_5__/* .default */ .Z)({}, filters, {
-      active: (_filters$refetchActiv = filters.refetchActive) != null ? _filters$refetchActiv : true,
-      inactive: filters.refetchInactive
+      // if filters.refetchActive is not provided and filters.active is explicitly false,
+      // e.g. invalidateQueries({ active: false }), we don't want to refetch active queries
+      active: (_ref3 = (_filters$refetchActiv = filters.refetchActive) != null ? _filters$refetchActiv : filters.active) != null ? _ref3 : true,
+      inactive: (_filters$refetchInact = filters.refetchInactive) != null ? _filters$refetchInact : false
     });
 
     return _notifyManager__WEBPACK_IMPORTED_MODULE_6__/* .notifyManager.batch */ .V.batch(function () {
-      _this4.queryCache.findAll(filters).forEach(function (query) {
+      _this5.queryCache.findAll(filters).forEach(function (query) {
         query.invalidate();
       });
 
-      return _this4.refetchQueries(refetchFilters, options);
+      return _this5.refetchQueries(refetchFilters, options);
     });
   };
 
   _proto.refetchQueries = function refetchQueries(arg1, arg2, arg3) {
-    var _this5 = this;
+    var _this6 = this;
 
     var _parseFilterArgs6 = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .parseFilterArgs */ .I6)(arg1, arg2, arg3),
         filters = _parseFilterArgs6[0],
         options = _parseFilterArgs6[1];
 
     var promises = _notifyManager__WEBPACK_IMPORTED_MODULE_6__/* .notifyManager.batch */ .V.batch(function () {
-      return _this5.queryCache.findAll(filters).map(function (query) {
-        return query.fetch();
+      return _this6.queryCache.findAll(filters).map(function (query) {
+        return query.fetch(undefined, {
+          meta: {
+            refetchPage: filters == null ? void 0 : filters.refetchPage
+          }
+        });
       });
     });
     var promise = Promise.all(promises).then(_utils__WEBPACK_IMPORTED_MODULE_4__/* .noop */ .ZT);
@@ -3771,10 +3767,10 @@ var QueryClient = /*#__PURE__*/function () {
   };
 
   _proto.cancelMutations = function cancelMutations() {
-    var _this6 = this;
+    var _this7 = this;
 
     var promises = _notifyManager__WEBPACK_IMPORTED_MODULE_6__/* .notifyManager.batch */ .V.batch(function () {
-      return _this6.mutationCache.getAll().map(function (mutation) {
+      return _this7.mutationCache.getAll().map(function (mutation) {
         return mutation.cancel();
       });
     });
@@ -3898,13 +3894,15 @@ var QueryClient = /*#__PURE__*/function () {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "z": function() { return /* binding */ QueryObserver; }
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2122);
-/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3552);
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2288);
-/* harmony import */ var _notifyManager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(101);
-/* harmony import */ var _focusManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9852);
-/* harmony import */ var _subscribable__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2943);
-/* harmony import */ var _logger__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1909);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7462);
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1721);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2288);
+/* harmony import */ var _notifyManager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(101);
+/* harmony import */ var _focusManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9852);
+/* harmony import */ var _subscribable__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2943);
+/* harmony import */ var _logger__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1909);
+/* harmony import */ var _retryer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1216);
+
 
 
 
@@ -4063,7 +4061,11 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
   };
 
   _proto.refetch = function refetch(options) {
-    return this.fetch(options);
+    return this.fetch((0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__/* .default */ .Z)({}, options, {
+      meta: {
+        refetchPage: options == null ? void 0 : options.refetchPage
+      }
+    }));
   };
 
   _proto.fetchOptimistic = function fetchOptimistic(options) {
@@ -4093,7 +4095,7 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
     var promise = this.currentQuery.fetch(this.options, fetchOptions);
 
     if (!(fetchOptions == null ? void 0 : fetchOptions.throwOnError)) {
-      promise = promise.catch(_utils__WEBPACK_IMPORTED_MODULE_1__/* .noop */ .ZT);
+      promise = promise.catch(_utils__WEBPACK_IMPORTED_MODULE_2__/* .noop */ .ZT);
     }
 
     return promise;
@@ -4104,11 +4106,11 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
 
     this.clearStaleTimeout();
 
-    if (_utils__WEBPACK_IMPORTED_MODULE_1__/* .isServer */ .sk || this.currentResult.isStale || !(0,_utils__WEBPACK_IMPORTED_MODULE_1__/* .isValidTimeout */ .PN)(this.options.staleTime)) {
+    if (_utils__WEBPACK_IMPORTED_MODULE_2__/* .isServer */ .sk || this.currentResult.isStale || !(0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .isValidTimeout */ .PN)(this.options.staleTime)) {
       return;
     }
 
-    var time = (0,_utils__WEBPACK_IMPORTED_MODULE_1__/* .timeUntilStale */ .Kp)(this.currentResult.dataUpdatedAt, this.options.staleTime); // The timeout is sometimes triggered 1 ms before the stale time expiration.
+    var time = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .timeUntilStale */ .Kp)(this.currentResult.dataUpdatedAt, this.options.staleTime); // The timeout is sometimes triggered 1 ms before the stale time expiration.
     // To mitigate this issue we always add 1 ms to the timeout.
 
     var timeout = time + 1;
@@ -4124,12 +4126,12 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
 
     this.clearRefetchInterval();
 
-    if (_utils__WEBPACK_IMPORTED_MODULE_1__/* .isServer */ .sk || this.options.enabled === false || !(0,_utils__WEBPACK_IMPORTED_MODULE_1__/* .isValidTimeout */ .PN)(this.options.refetchInterval)) {
+    if (_utils__WEBPACK_IMPORTED_MODULE_2__/* .isServer */ .sk || this.options.enabled === false || !(0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .isValidTimeout */ .PN)(this.options.refetchInterval)) {
       return;
     }
 
     this.refetchIntervalId = setInterval(function () {
-      if (_this7.options.refetchIntervalInBackground || _focusManager__WEBPACK_IMPORTED_MODULE_2__/* .focusManager.isFocused */ .j.isFocused()) {
+      if (_this7.options.refetchIntervalInBackground || _focusManager__WEBPACK_IMPORTED_MODULE_3__/* .focusManager.isFocused */ .j.isFocused()) {
         _this7.executeFetch();
       }
     }, this.options.refetchInterval);
@@ -4204,12 +4206,12 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
             data = options.select(state.data);
 
             if (options.structuralSharing !== false) {
-              data = (0,_utils__WEBPACK_IMPORTED_MODULE_1__/* .replaceEqualDeep */ .Q$)(prevResult == null ? void 0 : prevResult.data, data);
+              data = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .replaceEqualDeep */ .Q$)(prevResult == null ? void 0 : prevResult.data, data);
             }
 
             this.previousSelectError = null;
           } catch (selectError) {
-            (0,_logger__WEBPACK_IMPORTED_MODULE_3__/* .getLogger */ .j)().error(selectError);
+            (0,_logger__WEBPACK_IMPORTED_MODULE_4__/* .getLogger */ .j)().error(selectError);
             error = selectError;
             this.previousSelectError = selectError;
             errorUpdatedAt = Date.now();
@@ -4222,13 +4224,31 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
         } // Show placeholder data if needed
 
 
-    if (typeof options.placeholderData !== 'undefined' && typeof data === 'undefined' && status === 'loading') {
+    if (typeof options.placeholderData !== 'undefined' && typeof data === 'undefined' && (status === 'loading' || status === 'idle')) {
       var placeholderData; // Memoize placeholder data
 
       if ((prevResult == null ? void 0 : prevResult.isPlaceholderData) && options.placeholderData === (prevResultOptions == null ? void 0 : prevResultOptions.placeholderData)) {
         placeholderData = prevResult.data;
       } else {
         placeholderData = typeof options.placeholderData === 'function' ? options.placeholderData() : options.placeholderData;
+
+        if (options.select && typeof placeholderData !== 'undefined') {
+          try {
+            placeholderData = options.select(placeholderData);
+
+            if (options.structuralSharing !== false) {
+              placeholderData = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .replaceEqualDeep */ .Q$)(prevResult == null ? void 0 : prevResult.data, placeholderData);
+            }
+
+            this.previousSelectError = null;
+          } catch (selectError) {
+            (0,_logger__WEBPACK_IMPORTED_MODULE_4__/* .getLogger */ .j)().error(selectError);
+            error = selectError;
+            this.previousSelectError = selectError;
+            errorUpdatedAt = Date.now();
+            status = 'error';
+          }
+        }
       }
 
       if (typeof placeholderData !== 'undefined') {
@@ -4304,7 +4324,7 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
     this.currentResultState = this.currentQuery.state;
     this.currentResultOptions = this.options; // Only notify if something has changed
 
-    if ((0,_utils__WEBPACK_IMPORTED_MODULE_1__/* .shallowEqualObjects */ .VS)(this.currentResult, prevResult)) {
+    if ((0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .shallowEqualObjects */ .VS)(this.currentResult, prevResult)) {
       return;
     } // Determine which callbacks to trigger
 
@@ -4317,7 +4337,7 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
       defaultNotifyOptions.listeners = true;
     }
 
-    this.notify((0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_4__/* .default */ .Z)({}, defaultNotifyOptions, notifyOptions));
+    this.notify((0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__/* .default */ .Z)({}, defaultNotifyOptions, notifyOptions));
   };
 
   _proto.updateQuery = function updateQuery() {
@@ -4343,7 +4363,7 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
 
     if (action.type === 'success') {
       notifyOptions.onSuccess = true;
-    } else if (action.type === 'error') {
+    } else if (action.type === 'error' && !(0,_retryer__WEBPACK_IMPORTED_MODULE_5__/* .isCancelledError */ .DV)(action.error)) {
       notifyOptions.onError = true;
     }
 
@@ -4357,7 +4377,7 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
   _proto.notify = function notify(notifyOptions) {
     var _this8 = this;
 
-    _notifyManager__WEBPACK_IMPORTED_MODULE_5__/* .notifyManager.batch */ .V.batch(function () {
+    _notifyManager__WEBPACK_IMPORTED_MODULE_6__/* .notifyManager.batch */ .V.batch(function () {
       // First trigger the configuration callbacks
       if (notifyOptions.onSuccess) {
         _this8.options.onSuccess == null ? void 0 : _this8.options.onSuccess(_this8.currentResult.data);
@@ -4385,7 +4405,7 @@ var QueryObserver = /*#__PURE__*/function (_Subscribable) {
   };
 
   return QueryObserver;
-}(_subscribable__WEBPACK_IMPORTED_MODULE_6__/* .Subscribable */ .l);
+}(_subscribable__WEBPACK_IMPORTED_MODULE_7__/* .Subscribable */ .l);
 
 function shouldLoadOnMount(query, options) {
   return options.enabled !== false && !query.state.dataUpdatedAt && !(query.state.status === 'error' && options.retryOnMount === false);
@@ -4408,7 +4428,7 @@ function _shouldFetchOnWindowFocus(query, options) {
 }
 
 function shouldFetchOptionally(query, prevQuery, options, prevOptions) {
-  return options.enabled !== false && (query !== prevQuery || prevOptions.enabled === false) && isStale(query, options);
+  return options.enabled !== false && (query !== prevQuery || prevOptions.enabled === false) && (query.state.status !== 'error' || prevOptions.enabled === false) && isStale(query, options);
 }
 
 function isStale(query, options) {
@@ -4647,12 +4667,14 @@ var Subscribable = /*#__PURE__*/function () {
 /* harmony export */   "ZT": function() { return /* binding */ noop; },
 /* harmony export */   "SE": function() { return /* binding */ functionalUpdate; },
 /* harmony export */   "PN": function() { return /* binding */ isValidTimeout; },
+/* harmony export */   "mc": function() { return /* binding */ ensureQueryKeyArray; },
 /* harmony export */   "e5": function() { return /* binding */ difference; },
 /* harmony export */   "Rc": function() { return /* binding */ replaceAt; },
 /* harmony export */   "Kp": function() { return /* binding */ timeUntilStale; },
 /* harmony export */   "_v": function() { return /* binding */ parseQueryArgs; },
 /* harmony export */   "lV": function() { return /* binding */ parseMutationArgs; },
 /* harmony export */   "I6": function() { return /* binding */ parseFilterArgs; },
+/* harmony export */   "cb": function() { return /* binding */ parseMutationFilterArgs; },
 /* harmony export */   "_x": function() { return /* binding */ matchQuery; },
 /* harmony export */   "X7": function() { return /* binding */ matchMutation; },
 /* harmony export */   "Rm": function() { return /* binding */ hashQueryKeyByOptions; },
@@ -4664,8 +4686,8 @@ var Subscribable = /*#__PURE__*/function () {
 /* harmony export */   "Gh": function() { return /* binding */ sleep; },
 /* harmony export */   "A4": function() { return /* binding */ scheduleMicrotask; }
 /* harmony export */ });
-/* unused harmony exports ensureArray, stableValueHash, partialDeepEqual, isPlainObject, isQueryKey */
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2122);
+/* unused harmony exports mapQueryStatusFilter, stableValueHash, partialDeepEqual, isPlainObject, isQueryKey */
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7462);
 
 // TYPES
 // UTILS
@@ -4679,7 +4701,7 @@ function functionalUpdate(updater, input) {
 function isValidTimeout(value) {
   return typeof value === 'number' && value >= 0 && value !== Infinity;
 }
-function ensureArray(value) {
+function ensureQueryKeyArray(value) {
   return Array.isArray(value) ? value : [value];
 }
 function difference(array1, array2) {
@@ -4738,6 +4760,23 @@ function parseFilterArgs(arg1, arg2, arg3) {
     queryKey: arg1
   }), arg3] : [arg1 || {}, arg2];
 }
+function parseMutationFilterArgs(arg1, arg2) {
+  return isQueryKey(arg1) ? (0,_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z)({}, arg2, {
+    mutationKey: arg1
+  }) : arg1;
+}
+function mapQueryStatusFilter(active, inactive) {
+  if (active === true && inactive === true || active == null && inactive == null) {
+    return 'all';
+  } else if (active === false && inactive === false) {
+    return 'none';
+  } else {
+    // At this point, active|inactive can only be true|false or false|true
+    // so, when only one value is provided, the missing one has to be the negated value
+    var isActive = active != null ? active : !inactive;
+    return isActive ? 'active' : 'inactive';
+  }
+}
 function matchQuery(filters, query) {
   var active = filters.active,
       exact = filters.exact,
@@ -4757,16 +4796,20 @@ function matchQuery(filters, query) {
     }
   }
 
-  var isActive;
+  var queryStatusFilter = mapQueryStatusFilter(active, inactive);
 
-  if (inactive === false || active && !inactive) {
-    isActive = true;
-  } else if (active === false || inactive && !active) {
-    isActive = false;
-  }
-
-  if (typeof isActive === 'boolean' && query.isActive() !== isActive) {
+  if (queryStatusFilter === 'none') {
     return false;
+  } else if (queryStatusFilter !== 'all') {
+    var isActive = query.isActive();
+
+    if (queryStatusFilter === 'active' && !isActive) {
+      return false;
+    }
+
+    if (queryStatusFilter === 'inactive' && isActive) {
+      return false;
+    }
   }
 
   if (typeof stale === 'boolean' && query.isStale() !== stale) {
@@ -4822,7 +4865,7 @@ function hashQueryKeyByOptions(queryKey, options) {
  */
 
 function hashQueryKey(queryKey) {
-  var asArray = Array.isArray(queryKey) ? queryKey : [queryKey];
+  var asArray = ensureQueryKeyArray(queryKey);
   return stableValueHash(asArray);
 }
 /**
@@ -4842,7 +4885,7 @@ function stableValueHash(value) {
  */
 
 function partialMatchKey(a, b) {
-  return partialDeepEqual(ensureArray(a), ensureArray(b));
+  return partialDeepEqual(ensureQueryKeyArray(a), ensureQueryKeyArray(b));
 }
 /**
  * Checks if `b` partially matches with `a`.
@@ -4986,7 +5029,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 /* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(458);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _react__WEBPACK_IMPORTED_MODULE_1__) if(["default","CancelledError","InfiniteQueryObserver","MutationCache","MutationObserver","QueriesObserver","QueryCache","QueryClient","QueryObserver","focusManager","hashQueryKey","isCancelledError","isError","notifyManager","onlineManager","setLogger"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = function(key) { return _react__WEBPACK_IMPORTED_MODULE_1__[key]; }.bind(0, __WEBPACK_IMPORT_KEY__)
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _react__WEBPACK_IMPORTED_MODULE_1__) if(["default","CancelledError","QueryCache","QueryClient","QueryObserver","QueriesObserver","InfiniteQueryObserver","MutationCache","MutationObserver","setLogger","notifyManager","focusManager","onlineManager","hashQueryKey","isError","isCancelledError"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = function(key) { return _react__WEBPACK_IMPORTED_MODULE_1__[key]; }.bind(0, __WEBPACK_IMPORT_KEY__)
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 
 
@@ -5244,17 +5287,16 @@ function useBaseQuery(options, Observer) {
     }
   }
 
-  var obsRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef();
+  var _React$useState2 = react__WEBPACK_IMPORTED_MODULE_0__.useState(function () {
+    return new Observer(queryClient, defaultedOptions);
+  }),
+      observer = _React$useState2[0];
 
-  if (!obsRef.current) {
-    obsRef.current = new Observer(queryClient, defaultedOptions);
-  }
-
-  var result = obsRef.current.getOptimisticResult(defaultedOptions);
+  var result = observer.getOptimisticResult(defaultedOptions);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
     mountedRef.current = true;
     errorResetBoundary.clearReset();
-    var unsubscribe = obsRef.current.subscribe(_core_notifyManager__WEBPACK_IMPORTED_MODULE_3__/* .notifyManager.batchCalls */ .V.batchCalls(function () {
+    var unsubscribe = observer.subscribe(_core_notifyManager__WEBPACK_IMPORTED_MODULE_3__/* .notifyManager.batchCalls */ .V.batchCalls(function () {
       if (mountedRef.current) {
         forceUpdate(function (x) {
           return x + 1;
@@ -5263,22 +5305,22 @@ function useBaseQuery(options, Observer) {
     })); // Update result to make sure we did not miss any query updates
     // between creating the observer and subscribing to it.
 
-    obsRef.current.updateResult();
+    observer.updateResult();
     return function () {
       mountedRef.current = false;
       unsubscribe();
     };
-  }, [errorResetBoundary]);
+  }, [errorResetBoundary, observer]);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
     // Do not notify on updates because of changes in the options because
     // these changes should already be reflected in the optimistic result.
-    obsRef.current.setOptions(defaultedOptions, {
+    observer.setOptions(defaultedOptions, {
       listeners: false
     });
-  }, [defaultedOptions]); // Handle suspense
+  }, [defaultedOptions, observer]); // Handle suspense
 
   if (defaultedOptions.suspense && result.isLoading) {
-    throw obsRef.current.fetchOptimistic(defaultedOptions).then(function (_ref) {
+    throw observer.fetchOptimistic(defaultedOptions).then(function (_ref) {
       var data = _ref.data;
       defaultedOptions.onSuccess == null ? void 0 : defaultedOptions.onSuccess(data);
       defaultedOptions.onSettled == null ? void 0 : defaultedOptions.onSettled(data, null);
@@ -5290,13 +5332,13 @@ function useBaseQuery(options, Observer) {
   } // Handle error boundary
 
 
-  if ((defaultedOptions.suspense || defaultedOptions.useErrorBoundary) && result.isError) {
+  if ((defaultedOptions.suspense || defaultedOptions.useErrorBoundary) && result.isError && !result.isFetching) {
     throw result.error;
   } // Handle result property usage tracking
 
 
   if (defaultedOptions.notifyOnChangeProps === 'tracked') {
-    result = obsRef.current.trackResult(result);
+    result = observer.trackResult(result);
   }
 
   return result;
@@ -5384,14 +5426,17 @@ function useIsFetching(arg1, arg2) {
 /* harmony export */   "B": function() { return /* binding */ useIsMutating; }
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7294);
-/* harmony import */ var _core_notifyManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(101);
-/* harmony import */ var _QueryClientProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4921);
+/* harmony import */ var _core_notifyManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(101);
+/* harmony import */ var _core_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2288);
+/* harmony import */ var _QueryClientProvider__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4921);
 
 
 
-function useIsMutating(filters) {
+
+function useIsMutating(arg1, arg2) {
   var mountedRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(false);
-  var queryClient = (0,_QueryClientProvider__WEBPACK_IMPORTED_MODULE_1__/* .useQueryClient */ .N)();
+  var filters = (0,_core_utils__WEBPACK_IMPORTED_MODULE_1__/* .parseMutationFilterArgs */ .cb)(arg1, arg2);
+  var queryClient = (0,_QueryClientProvider__WEBPACK_IMPORTED_MODULE_2__/* .useQueryClient */ .N)();
 
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(queryClient.isMutating(filters)),
       isMutating = _React$useState[0],
@@ -5403,7 +5448,7 @@ function useIsMutating(filters) {
   isMutatingRef.current = isMutating;
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
     mountedRef.current = true;
-    var unsubscribe = queryClient.getMutationCache().subscribe(_core_notifyManager__WEBPACK_IMPORTED_MODULE_2__/* .notifyManager.batchCalls */ .V.batchCalls(function () {
+    var unsubscribe = queryClient.getMutationCache().subscribe(_core_notifyManager__WEBPACK_IMPORTED_MODULE_3__/* .notifyManager.batchCalls */ .V.batchCalls(function () {
       if (mountedRef.current) {
         var newIsMutating = queryClient.isMutating(filtersRef.current);
 
@@ -5429,7 +5474,7 @@ function useIsMutating(filters) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "D": function() { return /* binding */ useMutation; }
 /* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2122);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7462);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7294);
 /* harmony import */ var _core_notifyManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(101);
 /* harmony import */ var _core_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2288);
@@ -5516,16 +5561,16 @@ function useQueries(queries) {
     defaultedOptions.optimisticResults = true;
     return defaultedOptions;
   });
-  var obsRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef();
 
-  if (!obsRef.current) {
-    obsRef.current = new _core_queriesObserver__WEBPACK_IMPORTED_MODULE_2__/* .QueriesObserver */ .y(queryClient, defaultedQueries);
-  }
+  var _React$useState2 = react__WEBPACK_IMPORTED_MODULE_0__.useState(function () {
+    return new _core_queriesObserver__WEBPACK_IMPORTED_MODULE_2__/* .QueriesObserver */ .y(queryClient, defaultedQueries);
+  }),
+      observer = _React$useState2[0];
 
-  var result = obsRef.current.getOptimisticResult(defaultedQueries);
+  var result = observer.getOptimisticResult(defaultedQueries);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
     mountedRef.current = true;
-    var unsubscribe = obsRef.current.subscribe(_core_notifyManager__WEBPACK_IMPORTED_MODULE_3__/* .notifyManager.batchCalls */ .V.batchCalls(function () {
+    var unsubscribe = observer.subscribe(_core_notifyManager__WEBPACK_IMPORTED_MODULE_3__/* .notifyManager.batchCalls */ .V.batchCalls(function () {
       if (mountedRef.current) {
         forceUpdate(function (x) {
           return x + 1;
@@ -5536,14 +5581,14 @@ function useQueries(queries) {
       mountedRef.current = false;
       unsubscribe();
     };
-  }, []);
+  }, [observer]);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
     // Do not notify on updates because of changes in the options because
     // these changes should already be reflected in the optimistic result.
-    obsRef.current.setQueries(defaultedQueries, {
+    observer.setQueries(defaultedQueries, {
       listeners: false
     });
-  }, [defaultedQueries]);
+  }, [defaultedQueries, observer]);
   return result;
 }
 
@@ -5672,7 +5717,7 @@ var Spinner_1 = __importDefault(__webpack_require__(5811));
 var Str_1 = __importDefault(__webpack_require__(430));
 var SaveButton = function (_a) {
     var onClick = _a.onClick, disabled = _a.disabled, label = _a.label, _b = _a.mutation, mutation = _b === void 0 ? {} : _b, _c = _a.statePosition, statePosition = _c === void 0 ? 'after' : _c;
-    var getStr = hooks_1.useStrings(['changessaved', 'error'], 'core');
+    var getStr = (0, hooks_1.useStrings)(['changessaved', 'error'], 'core');
     var isLoading = mutation.isLoading, isSuccess = mutation.isSuccess, isError = mutation.isError;
     var isStateBefore = statePosition === 'before';
     var state = (react_1.default.createElement("div", { className: "xp-w-8 xp-flex " + (isStateBefore ? 'xp-mr-4 xp-justify-end' : 'xp-ml-4'), "aria-live": "assertive" },
@@ -5745,7 +5790,7 @@ var react_1 = __importDefault(__webpack_require__(7294));
 var hooks_1 = __webpack_require__(7909);
 var Level = function (_a) {
     var level = _a.level, small = _a.small;
-    var label = hooks_1.useString('levelx', 'block_xp', level.level);
+    var label = (0, hooks_1.useString)('levelx', 'block_xp', level.level);
     var classes = 'block_xp-level level-' + level.level + (small ? ' small' : '');
     if (level.badgeurl) {
         return (react_1.default.createElement("div", { className: classes + ' level-badge', "aria-label": label },
@@ -5777,7 +5822,7 @@ var Str_1 = __importDefault(__webpack_require__(430));
 var LevelsGrid = function (_a) {
     var algoEnabled = _a.algoEnabled, levels = _a.levels, onDescChange = _a.onDescChange, onNameChange = _a.onNameChange, onPointsChange = _a.onPointsChange;
     return (react_1.default.createElement("div", { className: "xp-flex xp-flex-wrap xp--ml-4" }, levels.map(function (level) {
-        return (react_1.default.createElement(LevelTile, { key: level.level, level: level, minPoints: levels_1.getMinimumPointsForLevel(levels, level), pointsEditable: level.level > 1 && !algoEnabled, onDescChange: function (nb) { return onDescChange(level, nb); }, onNameChange: function (nb) { return onNameChange(level, nb); }, onPointsChange: function (nb) { return onPointsChange(level, nb); } }));
+        return (react_1.default.createElement(LevelTile, { key: level.level, level: level, minPoints: (0, levels_1.getMinimumPointsForLevel)(levels, level), pointsEditable: level.level > 1 && !algoEnabled, onDescChange: function (nb) { return onDescChange(level, nb); }, onNameChange: function (nb) { return onNameChange(level, nb); }, onPointsChange: function (nb) { return onPointsChange(level, nb); } }));
     })));
 };
 var Field = function (_a) {
@@ -5791,8 +5836,8 @@ var Field = function (_a) {
 };
 var LevelTile = function (_a) {
     var minPoints = _a.minPoints, level = _a.level, pointsEditable = _a.pointsEditable, onPointsChange = _a.onPointsChange, onNameChange = _a.onNameChange, onDescChange = _a.onDescChange;
-    var getStr = hooks_1.useStrings(['noname', 'nodescription', 'pointsrequired', 'description', 'name']);
-    var leveln = hooks_1.useString('leveln', 'block_xp', level.level);
+    var getStr = (0, hooks_1.useStrings)(['noname', 'nodescription', 'pointsrequired', 'description', 'name']);
+    var leveln = (0, hooks_1.useString)('leveln', 'block_xp', level.level);
     return (react_1.default.createElement("div", { className: "xp-flex-none md:xp-w-1/3 lg:xp-w-1/4 xp-w-1/2 xp-pl-4 xp-mb-4" },
         react_1.default.createElement("div", { className: "xp-bg-gray-100 xp-p-4 xp-pt-2 xp-rounded" },
             react_1.default.createElement("div", { className: "xp-flex xp-flex-col xp-items-center" },
@@ -5843,7 +5888,7 @@ var LevelsList = function (_a) {
             react_1.default.createElement("div", { className: "xp-px-2 xp-py-1 xp-table-cell xp-align-middle" },
                 react_1.default.createElement(Str_1.default, { id: "leveldesc" }))),
         levels.map(function (level) {
-            return (react_1.default.createElement(LevelRow, { level: level, minPoints: levels_1.getMinimumPointsForLevel(levels, level), pointsEditable: level.level > 1 && !algoEnabled, onDescChange: function (nb) { return onDescChange(level, nb); }, onNameChange: function (nb) { return onNameChange(level, nb); }, onPointsChange: function (nb) { return onPointsChange(level, nb); } }));
+            return (react_1.default.createElement(LevelRow, { level: level, minPoints: (0, levels_1.getMinimumPointsForLevel)(levels, level), pointsEditable: level.level > 1 && !algoEnabled, onDescChange: function (nb) { return onDescChange(level, nb); }, onNameChange: function (nb) { return onNameChange(level, nb); }, onPointsChange: function (nb) { return onPointsChange(level, nb); } }));
         })));
 };
 var Field = function (_a) {
@@ -5857,7 +5902,7 @@ var Field = function (_a) {
 };
 var LevelRow = function (_a) {
     var minPoints = _a.minPoints, level = _a.level, pointsEditable = _a.pointsEditable, onPointsChange = _a.onPointsChange, onNameChange = _a.onNameChange, onDescChange = _a.onDescChange;
-    var getStr = hooks_1.useStrings(['noname', 'nodescription', 'pointsrequired', 'description', 'name']);
+    var getStr = (0, hooks_1.useStrings)(['noname', 'nodescription', 'pointsrequired', 'description', 'name']);
     return (react_1.default.createElement("div", { className: "xp-table-row odd:xp-bg-gray-100" },
         react_1.default.createElement("div", { className: "xp-px-2 xp-py-1 xp-table-cell xp-align-middle" },
             react_1.default.createElement(Level_1.default, { level: level, small: true })),
@@ -5937,7 +5982,7 @@ var react_1 = __importDefault(__webpack_require__(7294));
 var moodle_1 = __webpack_require__(3422);
 var Pix = function (_a) {
     var id = _a.id, _b = _a.component, component = _b === void 0 ? 'block_xp' : _b, className = _a.className, _c = _a.alt, alt = _c === void 0 ? '' : _c;
-    return react_1.default.createElement("img", { src: moodle_1.imageUrl(id, component), alt: alt, className: className });
+    return react_1.default.createElement("img", { src: (0, moodle_1.imageUrl)(id, component), alt: alt, className: className });
 };
 exports.default = Pix;
 
@@ -5958,7 +6003,7 @@ var hooks_1 = __webpack_require__(7909);
 var Pix_1 = __importDefault(__webpack_require__(9803));
 var Spinner = function (_a) {
     var className = _a.className;
-    var alt = hooks_1.useString('loadinghelp', 'core');
+    var alt = (0, hooks_1.useString)('loadinghelp', 'core');
     return react_1.default.createElement(Pix_1.default, { id: "y/loading", component: "core", className: className, alt: alt });
 };
 exports.default = Spinner;
@@ -5979,7 +6024,7 @@ var react_1 = __importDefault(__webpack_require__(7294));
 var hooks_1 = __webpack_require__(7909);
 var Str = function (_a) {
     var id = _a.id, _b = _a.component, component = _b === void 0 ? 'block_xp' : _b, a = _a.a;
-    var str = hooks_1.useString(id, component, a);
+    var str = (0, hooks_1.useString)(id, component, a);
     return react_1.default.createElement(react_1.default.Fragment, null, str || ' ');
 };
 exports.default = Str;
@@ -6046,12 +6091,12 @@ var updateLevelPoints = function (state) {
     if (!state.algo.enabled) {
         return __assign(__assign({}, state), { levels: state.levels.reduce(function (carry, level, i) {
                 return carry.concat([
-                    __assign(__assign({}, level), { xprequired: Math.max(level.xprequired, levels_1.getMinimumPointsForLevel(carry.concat([level]), level)) }),
+                    __assign(__assign({}, level), { xprequired: Math.max(level.xprequired, (0, levels_1.getMinimumPointsForLevel)(carry.concat([level]), level)) }),
                 ]);
             }, []) });
     }
     return __assign(__assign({}, state), { levels: state.levels.map(function (level) {
-            return __assign(__assign({}, level), { xprequired: levels_1.computeRequiredPoints(level.level, state.algo.base, state.algo.coef) });
+            return __assign(__assign({}, level), { xprequired: (0, levels_1.computeRequiredPoints)(level.level, state.algo.base, state.algo.coef) });
         }) });
 };
 var reducer = function (state, _a) {
@@ -6084,11 +6129,11 @@ var reducer = function (state, _a) {
                     return __assign(__assign({}, level), { name: payload.name || null });
                 }) }));
         case 'levelPointsChange':
-            nextLevel = levels_1.getNextLevel(state.levels, payload.level, state.nblevels);
+            nextLevel = (0, levels_1.getNextLevel)(state.levels, payload.level, state.nblevels);
             if (isNaN(payload.points) || payload.points <= 2 || payload.points >= Infinity) {
                 return state;
             }
-            else if (payload.points <= levels_1.getPreviousLevel(state.levels, payload.level).xprequired) {
+            else if (payload.points <= (0, levels_1.getPreviousLevel)(state.levels, payload.level).xprequired) {
                 return state;
             }
             return markPendingSave(updateLevelPoints(__assign(__assign({}, state), { levels: state.levels.map(function (level) {
@@ -6109,8 +6154,8 @@ var reducer = function (state, _a) {
                         description: null,
                         badgeurl: null,
                         xprequired: state.algo.enabled
-                            ? levels_1.computeRequiredPoints(l, state.algo.base, state.algo.coef)
-                            : levels_1.getMinimumPointsAtLevel(state.levels, l),
+                            ? (0, levels_1.computeRequiredPoints)(l, state.algo.base, state.algo.coef)
+                            : (0, levels_1.getMinimumPointsAtLevel)(state.levels, l),
                         hasFile: false,
                     };
                 })) }));
@@ -6135,13 +6180,13 @@ var initState = function (_a) {
 };
 var App = function (_a) {
     var courseId = _a.courseId, levelsInfo = _a.levelsInfo;
-    var _b = react_1.useReducer(reducer, { levelsInfo: levelsInfo }, initState), state = _b[0], dispatch = _b[1];
+    var _b = (0, react_1.useReducer)(reducer, { levelsInfo: levelsInfo }, initState), state = _b[0], dispatch = _b[1];
     var levels = state.levels.slice(0, state.nblevels);
-    hooks_1.useUnloadCheck(state.pendingSave);
-    var mutation = react_query_1.useMutation(function () {
+    (0, hooks_1.useUnloadCheck)(state.pendingSave);
+    var mutation = (0, react_query_1.useMutation)(function () {
         // An falsy course ID means admin config.
         var method = courseId ? 'block_xp_set_levels_info' : 'block_xp_set_default_levels_info';
-        return moodle_1.getModule('core/ajax').call([
+        return (0, moodle_1.getModule)('core/ajax').call([
             {
                 methodname: method,
                 args: {
@@ -6150,8 +6195,8 @@ var App = function (_a) {
                         return {
                             level: level.level,
                             xprequired: level.xprequired,
-                            name: utils_1.stripTags(level.name || ''),
-                            description: utils_1.stripTags(level.description || ''),
+                            name: (0, utils_1.stripTags)(level.name || ''),
+                            description: (0, utils_1.stripTags)(level.description || ''),
                         };
                     }),
                     algo: state.algo,
@@ -6164,7 +6209,7 @@ var App = function (_a) {
         },
     });
     // Reset mutation after success.
-    react_1.useEffect(function () {
+    (0, react_1.useEffect)(function () {
         if (!mutation.isSuccess) {
             return;
         }
@@ -6199,7 +6244,7 @@ var MenuItem = function (_a) {
 };
 var Menu = function (_a) {
     var algo = _a.algo, canSave = _a.canSave, view = _a.view, mutation = _a.mutation, nbLevels = _a.nbLevels, onAlgoEnabledChange = _a.onAlgoEnabledChange, onAlgoBaseChange = _a.onAlgoBaseChange, onAlgoCoefChange = _a.onAlgoCoefChange, onNbLevelsChange = _a.onNbLevelsChange, onViewChange = _a.onViewChange, onSave = _a.onSave;
-    var getStr = hooks_1.useStrings(['grid', 'list', 'usingalgo', 'manually']);
+    var getStr = (0, hooks_1.useStrings)(['grid', 'list', 'usingalgo', 'manually']);
     return (react_1.default.createElement("div", { className: "xp-flex xp-flex-col md:xp-flex-row" },
         react_1.default.createElement("div", { className: "xp-flex xp-flex-col xp-flex-wrap xp-order-2 md:xp-order-none md:xp-flex-row" },
             react_1.default.createElement(MenuItem, { label: react_1.default.createElement("label", { htmlFor: "bxpViewAs", className: "xp-m-0" },
@@ -6231,7 +6276,7 @@ var Menu = function (_a) {
 var queryClient = new react_query_1.QueryClient({
     defaultOptions: {
         mutations: {
-            onError: function (err) { return moodle_1.getModule('core/notification').exception(err); },
+            onError: function (err) { return (0, moodle_1.getModule)('core/notification').exception(err); },
         },
     },
 });
@@ -6240,7 +6285,7 @@ function startApp(node, props) {
         react_1.default.createElement(App, __assign({}, props))), node);
 }
 exports.startApp = startApp;
-var dependencies = moodle_1.makeDependenciesDefinition(['core/str', 'core/ajax', 'core/notification']);
+var dependencies = (0, moodle_1.makeDependenciesDefinition)(['core/str', 'core/ajax', 'core/notification']);
 exports.dependencies = dependencies;
 
 
@@ -6292,10 +6337,10 @@ exports.useStrings = exports.useString = exports.useUnloadCheck = void 0;
 var react_1 = __webpack_require__(7294);
 var moodle_1 = __webpack_require__(3422);
 var useUnloadCheck = function (isDirty) {
-    var str = exports.useString('changesmadereallygoaway', 'core');
-    react_1.useEffect(function () {
+    var str = (0, exports.useString)('changesmadereallygoaway', 'core');
+    (0, react_1.useEffect)(function () {
         var fn = function (e) {
-            if (!isDirty || moodle_1.isBehatRunning()) {
+            if (!isDirty || (0, moodle_1.isBehatRunning)()) {
                 return;
             }
             e.preventDefault();
@@ -6311,14 +6356,14 @@ var useUnloadCheck = function (isDirty) {
 exports.useUnloadCheck = useUnloadCheck;
 var useString = function (id, component, a) {
     if (component === void 0) { component = 'block_xp'; }
-    var wasKnownAtMount = react_1.useMemo(function () { return moodle_1.hasString(id, component); }, [id, component]);
-    var _a = react_1.useState(false), isLoaded = _a[0], setLoaded = _a[1];
+    var wasKnownAtMount = (0, react_1.useMemo)(function () { return (0, moodle_1.hasString)(id, component); }, [id, component]);
+    var _a = (0, react_1.useState)(false), isLoaded = _a[0], setLoaded = _a[1];
     // When the string changes, remove the promise.
-    react_1.useEffect(function () {
+    (0, react_1.useEffect)(function () {
         setLoaded(false);
     }, [id, component]);
     // Load the string when it is unknown.
-    react_1.useEffect(function () {
+    (0, react_1.useEffect)(function () {
         if (wasKnownAtMount || isLoaded) {
             return;
         }
@@ -6329,7 +6374,7 @@ var useString = function (id, component, a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, moodle_1.loadString(id, component)];
+                        return [4 /*yield*/, (0, moodle_1.loadString)(id, component)];
                     case 1:
                         _a.sent();
                         if (!cancelled) {
@@ -6347,20 +6392,20 @@ var useString = function (id, component, a) {
             cancelled = true;
         };
     });
-    return moodle_1.hasString(id, component) ? moodle_1.getString(id, component, a) : '';
+    return (0, moodle_1.hasString)(id, component) ? (0, moodle_1.getString)(id, component, a) : '';
 };
 exports.useString = useString;
 var useStrings = function (ids, component) {
     if (component === void 0) { component = 'block_xp'; }
     var idsForKey = ids.join(',');
-    var allKnownAtMount = react_1.useMemo(function () { return ids.every(function (id) { return moodle_1.hasString(id, component); }); }, [idsForKey, component]);
-    var _a = react_1.useState(false), isLoaded = _a[0], setLoaded = _a[1];
+    var allKnownAtMount = (0, react_1.useMemo)(function () { return ids.every(function (id) { return (0, moodle_1.hasString)(id, component); }); }, [idsForKey, component]);
+    var _a = (0, react_1.useState)(false), isLoaded = _a[0], setLoaded = _a[1];
     // When the string changes, remove the promise.
-    react_1.useEffect(function () {
+    (0, react_1.useEffect)(function () {
         setLoaded(false);
     }, [idsForKey, component]);
     // Load the string when it is unknown.
-    react_1.useEffect(function () {
+    (0, react_1.useEffect)(function () {
         if (allKnownAtMount || isLoaded) {
             return;
         }
@@ -6371,7 +6416,7 @@ var useStrings = function (ids, component) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, moodle_1.loadStrings(ids, component)];
+                        return [4 /*yield*/, (0, moodle_1.loadStrings)(ids, component)];
                     case 1:
                         _a.sent();
                         if (!cancelled) {
@@ -6389,7 +6434,7 @@ var useStrings = function (ids, component) {
             cancelled = true;
         };
     });
-    return function (id, a) { return (moodle_1.hasString(id, component) ? moodle_1.getString(id, component, a) : ''); };
+    return function (id, a) { return ((0, moodle_1.hasString)(id, component) ? (0, moodle_1.getString)(id, component, a) : ''); };
 };
 exports.useStrings = useStrings;
 
@@ -6424,11 +6469,11 @@ var getMinimumPointsForLevel = function (levels, level) {
     if (level.level === 1 || !levels.length) {
         return 0;
     }
-    return exports.getPreviousLevel(levels, level).xprequired + 1;
+    return (0, exports.getPreviousLevel)(levels, level).xprequired + 1;
 };
 exports.getMinimumPointsForLevel = getMinimumPointsForLevel;
 var getMinimumPointsAtLevel = function (levels, level) {
-    var l = exports.getLevel(levels, level - 1);
+    var l = (0, exports.getLevel)(levels, level - 1);
     return l ? l.xprequired + 1 : 0;
 };
 exports.getMinimumPointsAtLevel = getMinimumPointsAtLevel;
@@ -6519,7 +6564,7 @@ function isBehatRunning() {
     return M.cfg.behatsiterunning;
 }
 exports.isBehatRunning = isBehatRunning;
-var loadStringCache = utils_1.fifoCache(64);
+var loadStringCache = (0, utils_1.fifoCache)(64);
 function loadString(id, component) {
     return __awaiter(this, void 0, void 0, function () {
         var cacheKey, promise;
@@ -6616,6 +6661,62 @@ var stripTags = function (html) {
 };
 exports.stripTags = stripTags;
 
+
+/***/ }),
+
+/***/ 7462:
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Z": function() { return /* binding */ _extends; }
+/* harmony export */ });
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+/***/ }),
+
+/***/ 1721:
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "Z": function() { return /* binding */ _inheritsLoose; }
+});
+
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
+
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  _setPrototypeOf(subClass, superClass);
+}
 
 /***/ })
 
