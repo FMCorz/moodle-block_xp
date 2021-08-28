@@ -61,7 +61,7 @@ class static_routes_config implements routes_config {
      */
     public function get_route($name) {
         if (!isset($this->routes[$name])) {
-            throw new coding_exception('Unknown route.');
+            throw new coding_exception('Unknown route named: ' . $name);
         }
         return $this->routes[$name];
     }
