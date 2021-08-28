@@ -23,163 +23,163 @@
  */
 
 define(['jquery', 'core/ajax', 'block_xp/throttler'], function($, Ajax, Throttler) {
-  /**
-   * Resource selector.
-   *
-   * @param {String|jQuery} container The container of the contents.
-   * @param {Function} searchFunction The search function.
-   * @param {jQuery} searchTermFieldNode The input field in which the use searches.
-   */
-  function ResourceSelector(container, searchFunction, searchTermFieldNode) {
-    this._eventNode = $('<div>');
-    this.container = $(container);
+    /**
+     * Resource selector.
+     *
+     * @param {String|jQuery} container The container of the contents.
+     * @param {Function} searchFunction The search function.
+     * @param {jQuery} searchTermFieldNode The input field in which the use searches.
+    */
+    function ResourceSelector(container, searchFunction, searchTermFieldNode) {
+        this._eventNode = $('<div>');
+        this.container = $(container);
 
-    this.searchId = 0;
-    this.searchTermNode = searchTermFieldNode;
+        this.searchId = 0;
+        this.searchTermNode = searchTermFieldNode;
 
-    this.resultsContainer = container.find('tbody');
-    this.emptyResultsNode = container.find('.results-empty');
-    this.searchingResultsNode = container.find('.searching-results');
-    this.searchResultsNode = container.find('.search-results');
+        this.resultsContainer = container.find('tbody');
+        this.emptyResultsNode = container.find('.results-empty');
+        this.searchingResultsNode = container.find('.searching-results');
+        this.searchResultsNode = container.find('.search-results');
 
-    this.resourceTemplateNode = container.find('.resource-template');
-    this.resourceTemplateNode.hide();
-    this.resourceTemplate = this.resourceTemplateNode.clone();
-    this.resourceTemplate.removeClass('resource-template');
-    this.resourceTemplate.show();
+        this.resourceTemplateNode = container.find('.resource-template');
+        this.resourceTemplateNode.hide();
+        this.resourceTemplate = this.resourceTemplateNode.clone();
+        this.resourceTemplate.removeClass('resource-template');
+        this.resourceTemplate.show();
 
-    this.throttler = new Throttler(300);
-    this.searchFunction = searchFunction;
-    this._setEventListeners();
-    this.minChars = 3;
-  }
-
-  ResourceSelector.prototype.clear = function() {
-    this.resultsContainer.empty();
-  };
-
-  ResourceSelector.prototype.displayEmptyResults = function() {
-    this.searchingResultsNode.hide();
-    this.emptyResultsNode.show();
-    this.searchResultsNode.hide();
-  };
-
-  ResourceSelector.prototype.displayNothing = function() {
-    this.searchingResultsNode.hide();
-    this.emptyResultsNode.hide();
-    this.searchResultsNode.hide();
-  };
-
-  ResourceSelector.prototype.displayResults = function(resources) {
-    if (!resources || !resources.length) {
-      this.displayEmptyResults();
-      return;
+        this.throttler = new Throttler(300);
+        this.searchFunction = searchFunction;
+        this._setEventListeners();
+        this.minChars = 3;
     }
 
-    this._publishResults(resources);
-    this.searchingResultsNode.hide();
-    this.emptyResultsNode.hide();
-    this.searchResultsNode.show();
-  };
+    ResourceSelector.prototype.clear = function() {
+        this.resultsContainer.empty();
+    };
 
-  ResourceSelector.prototype.displaySearching = function() {
-    this.searchingResultsNode.show();
-    this.emptyResultsNode.hide();
-    this.searchResultsNode.hide();
-  };
+    ResourceSelector.prototype.displayEmptyResults = function() {
+        this.searchingResultsNode.hide();
+        this.emptyResultsNode.show();
+        this.searchResultsNode.hide();
+    };
 
-  /**
+    ResourceSelector.prototype.displayNothing = function() {
+        this.searchingResultsNode.hide();
+        this.emptyResultsNode.hide();
+        this.searchResultsNode.hide();
+    };
+
+    ResourceSelector.prototype.displayResults = function(resources) {
+        if (!resources || !resources.length) {
+            this.displayEmptyResults();
+            return;
+        }
+
+        this._publishResults(resources);
+        this.searchingResultsNode.hide();
+        this.emptyResultsNode.hide();
+        this.searchResultsNode.show();
+    };
+
+    ResourceSelector.prototype.displaySearching = function() {
+        this.searchingResultsNode.show();
+        this.emptyResultsNode.hide();
+        this.searchResultsNode.hide();
+    };
+
+    /**
    * Get resources.
    *
    * @param {String} term The term to get the results from.
    * @return {Promise}
    */
-  ResourceSelector.prototype.getResources = function(term) {
-    return $.when(this.searchFunction(term));
-  };
+    ResourceSelector.prototype.getResources = function(term) {
+        return $.when(this.searchFunction(term));
+    };
 
-  ResourceSelector.prototype.onResourceSelected = function(callback) {
-    this._eventNode.on('resource-selected', callback);
-  };
+    ResourceSelector.prototype.onResourceSelected = function(callback) {
+        this._eventNode.on('resource-selected', callback);
+    };
 
-  ResourceSelector.prototype.search = function(term) {
-    this.searchId += 1;
-    this._performSearch(term, this.searchId);
-  };
+    ResourceSelector.prototype.search = function(term) {
+        this.searchId += 1;
+        this._performSearch(term, this.searchId);
+    };
 
-  ResourceSelector.prototype.setMinChars = function(minChars) {
-    this.minChars = minChars;
-  };
+    ResourceSelector.prototype.setMinChars = function(minChars) {
+        this.minChars = minChars;
+    };
 
-  ResourceSelector.prototype._onSearchTermKeyUp = function(e) {
-    var term = e.target.value;
-    if (typeof term !== 'string' || term.length < this.minChars) {
-      this.searchingResultsNode.hide();
-      this.throttler.cancel();
-      return;
-    }
-
-    this.displaySearching();
-    this.searchId += 1;
-    this.throttler.schedule(this._performSearchFactory(term, this.searchId));
-  };
-
-  ResourceSelector.prototype._onSelect = function(e) {
-    e.preventDefault();
-    var resource = $(e.target)
-      .closest('.resource-node')
-      .data('resource');
-    if (!resource) {
-      return;
-    }
-    this._eventNode.trigger('resource-selected', resource);
-  };
-
-  ResourceSelector.prototype._performSearchFactory = function(term, searchId) {
-    return function() {
-      this._performSearch(term, searchId);
-    }.bind(this);
-  };
-
-  ResourceSelector.prototype._performSearch = function(term, scheduledSearchId) {
-    return this.getResources(term)
-      .then(
-        function(data) {
-          if (this.searchId != scheduledSearchId) {
+    ResourceSelector.prototype._onSearchTermKeyUp = function(e) {
+        var term = e.target.value;
+        if (typeof term !== 'string' || term.length < this.minChars) {
+            this.searchingResultsNode.hide();
+            this.throttler.cancel();
             return;
-          }
-          this.displayResults(data);
-        }.bind(this)
-      )
-      .fail(
-        function() {
-          this.displayEmptyResults();
-        }.bind(this)
-      );
-  };
-
-  ResourceSelector.prototype._publishResults = function(resources) {
-    this.clear();
-
-    resources.forEach(
-      function(resource) {
-        var node = this.resourceTemplate.clone();
-        node.find('.resource-name').text(resource.name);
-        if (resource.subname) {
-          node.find('.resource-subname').text(resource.subname);
-        } else {
-          node.find('.resource-subname').hide();
         }
-        node.data('resource', resource);
-        this.resultsContainer.append(node);
-      }.bind(this)
-    );
-  };
 
-  ResourceSelector.prototype._setEventListeners = function() {
-    this.searchTermNode.on('keyup', this._onSearchTermKeyUp.bind(this));
-    this.searchResultsNode.on('click', 'button', this._onSelect.bind(this));
-  };
+        this.displaySearching();
+        this.searchId += 1;
+        this.throttler.schedule(this._performSearchFactory(term, this.searchId));
+    };
 
-  return ResourceSelector;
+    ResourceSelector.prototype._onSelect = function(e) {
+        e.preventDefault();
+        var resource = $(e.target)
+            .closest('.resource-node')
+            .data('resource');
+        if (!resource) {
+            return;
+        }
+        this._eventNode.trigger('resource-selected', resource);
+    };
+
+    ResourceSelector.prototype._performSearchFactory = function(term, searchId) {
+        return function() {
+            this._performSearch(term, searchId);
+        }.bind(this);
+    };
+
+    ResourceSelector.prototype._performSearch = function(term, scheduledSearchId) {
+        return this.getResources(term)
+            .then(
+                function(data) {
+                    if (this.searchId != scheduledSearchId) {
+                        return;
+                    }
+                    this.displayResults(data);
+                }.bind(this)
+            )
+            .fail(
+                function() {
+                    this.displayEmptyResults();
+                }.bind(this)
+            );
+    };
+
+    ResourceSelector.prototype._publishResults = function(resources) {
+        this.clear();
+
+        resources.forEach(
+            function(resource) {
+                var node = this.resourceTemplate.clone();
+                node.find('.resource-name').text(resource.name);
+                if (resource.subname) {
+                    node.find('.resource-subname').text(resource.subname);
+                } else {
+                    node.find('.resource-subname').hide();
+                }
+                node.data('resource', resource);
+                this.resultsContainer.append(node);
+            }.bind(this)
+        );
+    };
+
+    ResourceSelector.prototype._setEventListeners = function() {
+        this.searchTermNode.on('keyup', this._onSearchTermKeyUp.bind(this));
+        this.searchResultsNode.on('click', 'button', this._onSelect.bind(this));
+    };
+
+    return ResourceSelector;
 });
