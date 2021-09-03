@@ -26,6 +26,7 @@
 namespace block_xp\local;
 defined('MOODLE_INTERNAL') || die();
 
+use context;
 use context_course;
 use context_system;
 use moodle_database;
@@ -65,6 +66,8 @@ class course_world implements world {
     protected $filtermanager;
     /** @var badge_url_resolver_course_world_factory The resolver factory. */
     protected $urlresolverfactory;
+    /** @var object Observer object cache. */
+    protected $statestoreobserver;
 
     /**
      * Constructor.
@@ -178,7 +181,7 @@ class course_world implements world {
     /**
      * Get level up notification service.
      *
-     * @return course_level_up_notification_service
+     * @return notification\course_level_up_notification_service
      */
     public function get_level_up_notification_service() {
         // TODO We could put that somewhere else.
@@ -188,12 +191,32 @@ class course_world implements world {
     /**
      * Get the level up state store observer.
      *
-     * @return \block_xp\local\observer\default_level_up_state_store_observer
+     * @return \block_xp\local\observer\level_up_state_store_observer
      */
     protected function get_level_up_state_store_observer() {
-        // TODO We could put that somewhere else.
-        return new \block_xp\local\observer\default_level_up_state_store_observer($this->context, $this->config,
-            $this->get_level_up_notification_service());
+        return $this->get_state_store_observer();
+    }
+
+    /**
+     * Get the points increase state store observer.
+     *
+     * @return \block_xp\local\observer\points_increased_state_store_observer
+     */
+    protected function get_points_increased_state_store_observer() {
+        return $this->get_state_store_observer();
+    }
+
+    /**
+     * Get the state store observer.
+     *
+     * @return object
+     */
+    protected function get_state_store_observer() {
+        if (!$this->statestoreobserver) {
+            $this->statestoreobserver = new \block_xp\local\observer\default_state_store_observer($this->context, $this->config,
+                $this->get_level_up_notification_service());
+        }
+        return $this->statestoreobserver;
     }
 
     public function get_store() {
@@ -203,7 +226,8 @@ class course_world implements world {
                 $this->get_levels_info(),
                 $this->get_courseid(),
                 $this->get_collection_logger(),
-                $this->get_level_up_state_store_observer()
+                $this->get_level_up_state_store_observer(),
+                $this->get_points_increased_state_store_observer()
             );
         }
         return $this->store;
@@ -212,7 +236,7 @@ class course_world implements world {
     /**
      * Get logger.
      *
-     * @return course_user_event_collection_logger
+     * @return logger\course_user_event_collection_logger
      */
     private function get_collection_logger() {
         if (!$this->logger) {

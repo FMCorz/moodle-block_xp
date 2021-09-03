@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Level up state store observer.
+ * Points increase state store observer.
  *
  * @package    block_xp
- * @copyright  2020 Frédéric Massart
+ * @copyright  2021 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,14 +26,26 @@
 namespace block_xp\local\observer;
 defined('MOODLE_INTERNAL') || die();
 
+use block_xp\local\xp\state_store;
+
 /**
- * Level up state store observer.
+ * Points increase state store observer.
  *
  * @package    block_xp
- * @copyright  2020 Frédéric Massart
+ * @copyright  2021 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since Level up! 3.12, please use default_state_store_observer instead.
  */
-class default_level_up_state_store_observer extends default_state_store_observer {
+interface points_increased_state_store_observer {
+
+    /**
+     * The recipient points increased.
+     *
+     * @param state_store $store The store.
+     * @param int $id The recipient.
+     * @param int $pointsamount The amount of points, always greater than 0.
+     * @return void
+     */
+    public function points_increased(state_store $store, $id, $pointsamount);
+
 }

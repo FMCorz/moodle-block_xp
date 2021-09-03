@@ -32,6 +32,7 @@ use stdClass;
 use block_xp\local\logger\collection_logger_with_group_reset;
 use block_xp\local\logger\reason_collection_logger;
 use block_xp\local\observer\level_up_state_store_observer;
+use block_xp\local\observer\points_increased_state_store_observer;
 use block_xp\local\reason\reason;
 use block_xp\local\utils\user_utils;
 
@@ -60,6 +61,10 @@ class course_user_state_store implements course_state_store,
     protected $table = 'block_xp';
     /** @var reason_collection_logger The logger. */
     protected $logger;
+    /** @var level_up_state_store_observer he observer. */
+    protected $observer;
+    /** @var points_increased_state_store_observer The observer. */
+    protected $pointsobserver;
 
     /**
      * Constructor.
@@ -69,14 +74,17 @@ class course_user_state_store implements course_state_store,
      * @param int $courseid The course ID.
      * @param logger $logger The reason logger.
      * @param level_up_state_store_observer $observer The observer.
+     * @param points_increased_state_store_observer $pointsobserver The observer.
      */
     public function __construct(moodle_database $db, levels_info $levelsinfo, $courseid,
-            reason_collection_logger $logger, level_up_state_store_observer $observer = null) {
+            reason_collection_logger $logger, level_up_state_store_observer $observer = null,
+            points_increased_state_store_observer $pointsobserver = null) {
         $this->db = $db;
         $this->levelsinfo = $levelsinfo;
         $this->courseid = $courseid;
         $this->logger = $logger;
         $this->observer = $observer;
+        $this->pointsobserver = $pointsobserver;
     }
 
     /**
@@ -222,14 +230,18 @@ class course_user_state_store implements course_state_store,
      * @return void
      */
     protected function observe_increase($id, $beforexp, $afterxp) {
-        if (!$this->observer) {
-            return;
+        $xpgained = $afterxp - $beforexp;
+
+        if ($this->observer) {
+            $beforelevel = $this->levelsinfo->get_level_from_xp($beforexp);
+            $afterlevel = $this->levelsinfo->get_level_from_xp($afterxp);
+            if ($beforelevel->get_level() < $afterlevel->get_level()) {
+                $this->observer->leveled_up($this, $id, $beforelevel, $afterlevel);
+            }
         }
 
-        $beforelevel = $this->levelsinfo->get_level_from_xp($beforexp);
-        $afterlevel = $this->levelsinfo->get_level_from_xp($afterxp);
-        if ($beforelevel->get_level() < $afterlevel->get_level()) {
-            $this->observer->leveled_up($this, $id, $beforelevel, $afterlevel);
+        if ($this->pointsobserver && $xpgained > 0) {
+            $this->pointsobserver->points_increased($this, $id, $xpgained);
         }
     }
 
