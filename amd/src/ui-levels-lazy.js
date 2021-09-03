@@ -5830,19 +5830,19 @@ var Field = function (_a) {
     return (react_1.default.createElement("label", { className: "xp-m-0 xp-font-normal" },
         react_1.default.createElement("div", { className: "" },
             react_1.default.createElement("div", { className: "xp-sr-only" },
-                react_1.default.createElement(Str_1.default, { id: "leveln", a: level.level })),
+                react_1.default.createElement(Str_1.default, { id: "levelx", a: level.level })),
             label),
         children));
 };
 var LevelTile = function (_a) {
     var minPoints = _a.minPoints, level = _a.level, pointsEditable = _a.pointsEditable, onPointsChange = _a.onPointsChange, onNameChange = _a.onNameChange, onDescChange = _a.onDescChange;
     var getStr = (0, hooks_1.useStrings)(['noname', 'nodescription', 'pointsrequired', 'description', 'name']);
-    var leveln = (0, hooks_1.useString)('leveln', 'block_xp', level.level);
+    var levelx = (0, hooks_1.useString)('levelx', 'block_xp', level.level);
     return (react_1.default.createElement("div", { className: "xp-flex-none md:xp-w-1/3 lg:xp-w-1/4 xp-w-1/2 xp-pl-4 xp-mb-4" },
         react_1.default.createElement("div", { className: "xp-bg-gray-100 xp-p-4 xp-pt-2 xp-rounded" },
             react_1.default.createElement("div", { className: "xp-flex xp-flex-col xp-items-center" },
                 react_1.default.createElement("div", null,
-                    react_1.default.createElement("div", { className: "xp-sr-only" }, leveln),
+                    react_1.default.createElement("div", { className: "xp-sr-only" }, levelx),
                     react_1.default.createElement(Level_1.default, { level: level })),
                 react_1.default.createElement("div", { className: "xp-w-full xp-mb-2" },
                     react_1.default.createElement(Field, { level: level, label: getStr('name') },
@@ -5895,7 +5895,7 @@ var Field = function (_a) {
     var level = _a.level, label = _a.label, children = _a.children;
     return (react_1.default.createElement("label", { className: "xp-m-0 xp-font-normal xp-w-full" },
         react_1.default.createElement("div", { className: "xp-sr-only" },
-            react_1.default.createElement(Str_1.default, { id: "leveln", a: level.level }),
+            react_1.default.createElement(Str_1.default, { id: "levelx", a: level.level }),
             " ",
             label),
         children));
