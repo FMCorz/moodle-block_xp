@@ -15,17 +15,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Points increase state store observer.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2021 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local\observer;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2021121101;
-$plugin->requires   = 2016052300;   // Moodle 3.1.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.11.3';
+use block_xp\local\xp\state_store;
+
+/**
+ * Points increase state store observer.
+ *
+ * @package    block_xp
+ * @copyright  2021 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface points_increased_state_store_observer {
+
+    /**
+     * The recipient points increased.
+     *
+     * @param state_store $store The store.
+     * @param int $id The recipient.
+     * @param int $pointsamount The amount of points, always greater than 0.
+     * @return void
+     */
+    public function points_increased(state_store $store, $id, $pointsamount);
+
+}
