@@ -161,10 +161,17 @@ class leaderboard_table extends flexible_table {
      */
     public function col_fullname($row) {
         $o = $this->col_userpic($row);
+
+        $canlink = $this->identitymode == course_world_config::IDENTITY_ON || $row->state->get_id() == $this->userid;
         if ($this->identitymode == course_world_config::IDENTITY_OFF && $row->state->get_id() != $this->userid) {
             $o .= get_string('someoneelse', 'block_xp');
+
         } else {
-            $o .= parent::col_fullname($row->state->get_user());
+            if ($canlink) {
+                $o .= parent::col_fullname($row->state->get_user());
+            } else {
+                $o .= fullname($row->state->get_user());
+            }
         }
         return $o;
     }
@@ -223,7 +230,8 @@ class leaderboard_table extends flexible_table {
      */
     public function col_userpic($row) {
         $options = [];
-        if ($this->identitymode == course_world_config::IDENTITY_OFF && $this->userid != $row->state->get_id()) {
+        $canlink = $this->identitymode == course_world_config::IDENTITY_ON || $this->userid == $row->state->get_id();
+        if (!$canlink) {
             $options = ['link' => false, 'alttext' => false];
         }
         return $this->xpoutput->user_picture($row->state->get_user(), $options);
