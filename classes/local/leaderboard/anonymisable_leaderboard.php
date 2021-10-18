@@ -28,56 +28,34 @@ defined('MOODLE_INTERNAL') || die();
 
 use block_xp\local\iterator\map_iterator;
 use block_xp\local\sql\limit;
-use block_xp\local\xp\anonymised_state;
-use block_xp\local\xp\anonymised_user_state;
-use block_xp\local\xp\levels_info;
 use block_xp\local\xp\rank;
+use block_xp\local\xp\state_anonymiser;
 use block_xp\local\xp\state_rank;
-use block_xp\local\xp\state_with_subject;
-use block_xp\local\xp\user_state;
 
 /**
- * Anonymised leaderboard.
- *
- * This currenly only handles user_state, and state_with_subject.
+ * Anonymisable leaderboard.
  *
  * @package    block_xp
  * @copyright  2018 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since v3.12.0, use anonymisable_leaderboard instead.
  */
-class anonymised_leaderboard implements leaderboard {
+class anonymisable_leaderboard implements leaderboard {
 
     /** @var leaderboard The leaderboard to anonymise. */
     protected $leaderboard;
-    /** @var levels_info The levels info. */
-    protected $levelsinfo;
-    /** @var int[] The object IDs not to anonymise. */
-    protected $exceptids;
-    /** @var stdClass The user to replace with. */
-    protected $anonymous;
-    /** @var string The name to user. */
-    protected $name;
+    /** @var state_anonymiser The anonymiser. */
+    protected $anonymiser;
 
     /**
      * Constructor.
      *
      * @param leaderboard $leaderboard The leaderboard.
-     * @param levels_info $levelsinfo The levels info.
-     * @param object $anonymous The anonymous object to use instead.
-     * @param array $exceptids The IDs not to anonymise.
-     * @param string $name The name to use when anonymising non-user_state states.
+     * @param state_anonymiser $anonymiser The anonymiser.
      */
-    public function __construct(leaderboard $leaderboard, levels_info $levelsinfo, $anonymous, $exceptids = [], $name = '?') {
-
-        debugging('The class anonymised_leaderboard is deprecated, use anonymisable_leaderboard instead.', DEBUG_DEVELOPER);
-
+    public function __construct(leaderboard $leaderboard, state_anonymiser $anonymiser) {
         $this->leaderboard = $leaderboard;
-        $this->anonymous = $anonymous;
-        $this->exceptids = $exceptids;
-        $this->levelsinfo = $levelsinfo;
-        $this->name = $name;
+        $this->anonymiser = $anonymiser;
     }
 
     /**
@@ -87,27 +65,7 @@ class anonymised_leaderboard implements leaderboard {
      * @return rank
      */
     protected function anonymise_rank(rank $rank) {
-        $state = $rank->get_state();
-
-        $keepasis = in_array($state->get_id(), $this->exceptids);
-        if ($keepasis) {
-            return $rank;
-        }
-
-        if ($state instanceof user_state) {
-            $rank = new state_rank(
-                $rank->get_rank(),
-                new anonymised_user_state($state, $this->anonymous)
-            );
-
-        } else if ($state instanceof state_with_subject) {
-            $rank = new state_rank(
-                $rank->get_rank(),
-                new anonymised_state($state, $this->name)
-            );
-        }
-
-        return $rank;
+        return new state_rank($rank->get_rank(), $this->anonymiser->anonymise_state($rank->get_state()));
     }
 
     /**

@@ -15,17 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * State anonymiser.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2021 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2021121102;
-$plugin->requires   = 2016052300;   // Moodle 3.1.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.11.3';
+/**
+ * State anonymiser.
+ *
+ * @package    block_xp
+ * @copyright  2021 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface state_anonymiser {
+
+    /**
+     * Return an anonymised state.
+     *
+     * @return state
+     */
+    public function anonymise_state(state $state);
+
+}

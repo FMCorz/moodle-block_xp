@@ -26,6 +26,9 @@
 namespace block_xp\local;
 defined('MOODLE_INTERNAL') || die();
 
+use block_xp\local\xp\levels_info;
+use block_xp\local\xp\state_store;
+
 /**
  * World interface.
  *
@@ -41,28 +44,28 @@ interface world {
     /**
      * Get the access permissions.
      *
-     * @return block_xp\local\permission\access_permissions
+     * @return \block_xp\local\permission\access_permissions
      */
     public function get_access_permissions();
 
     /**
      * Get the config.
      *
-     * @return block_xp\local\config\config
+     * @return \block_xp\local\config\config
      */
     public function get_config();
 
     /**
      * Return the collection strategy.
      *
-     * @return block_xp\local\strategy\collection_strategy
+     * @return \block_xp\local\strategy\collection_strategy
      */
     public function get_collection_strategy();
 
     /**
      * Get levels info.
      *
-     * @return block_xp\local\xp\levels_info
+     * @return levels_info
      */
     public function get_levels_info();
 

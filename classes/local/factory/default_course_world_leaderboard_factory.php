@@ -29,15 +29,16 @@ defined('MOODLE_INTERNAL') || die();
 use lang_string;
 use moodle_database;
 use block_xp\local\course_world;
-use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
-use block_xp\local\leaderboard\anonymised_leaderboard;
+use block_xp\local\leaderboard\anonymisable_leaderboard;
 use block_xp\local\leaderboard\course_user_leaderboard;
 use block_xp\local\leaderboard\leaderboard;
 use block_xp\local\leaderboard\neighboured_leaderboard;
 use block_xp\local\leaderboard\null_ranker;
 use block_xp\local\leaderboard\ranker;
 use block_xp\local\leaderboard\relative_ranker;
+use block_xp\local\xp\full_anonymiser;
+use block_xp\local\xp\state_anonymiser;
 
 /**
  * Default course world leaderboard factory.
@@ -62,16 +63,31 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
     }
 
     /**
+     * Get the anonymiser.
+     *
+     * @param course_world $world The world.
+     * @return state_anonymiser|null
+     */
+    protected function get_anonymiser(course_world $world) {
+        global $USER;
+        $config = $world->get_config();
+
+        $anonymiser = null;
+        if ($config->get('identitymode') == course_world_config::IDENTITY_OFF) {
+            $anonymiser = new full_anonymiser(guest_user(), [$USER->id]);
+        }
+
+        return $anonymiser;
+    }
+
+    /**
      * Get the leaderboard.
      *
      * @param course_world $world The world.
      * @param course_world $groupid The group ID, or 0 for none or all participants.
-     * @return block_xp\local\leaderboard\leaderboard
+     * @return leaderboard
      */
     public function get_course_leaderboard(course_world $world, $groupid = 0) {
-        global $USER;
-
-        $config = $world->get_config();
 
         // How is the rank computed?
         $ranker = $this->get_ranker($world);
@@ -84,6 +100,12 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
 
         // Wrap?
         $leaderboard = $this->wrap_leaderboard($world, $leaderboard);
+
+        // Is the leaderboard anonymised?
+        $anonymiser = $this->get_anonymiser($world);
+        if ($anonymiser) {
+            $leaderboard = new anonymisable_leaderboard($leaderboard, $anonymiser);
+        }
 
         return $leaderboard;
     }
@@ -176,11 +198,6 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
         if ($config->get('neighbours')) {
             $leaderboard = new neighboured_leaderboard($leaderboard, $USER->id, $config->get('neighbours'),
                 $world->get_access_permissions()->can_manage());
-        }
-
-        // Is the leaderboard anonymous?
-        if ($config->get('identitymode') == course_world_config::IDENTITY_OFF) {
-            $leaderboard = new anonymised_leaderboard($leaderboard, $world->get_levels_info(), guest_user(), [$USER->id]);
         }
 
         return $leaderboard;

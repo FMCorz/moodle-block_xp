@@ -28,12 +28,13 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once(__DIR__ . '/base_testcase.php');
 
-use block_xp\local\leaderboard\anonymised_leaderboard;
+use block_xp\local\leaderboard\anonymisable_leaderboard;
 use block_xp\local\leaderboard\course_user_leaderboard;
 use block_xp\local\leaderboard\neighboured_leaderboard;
 use block_xp\local\leaderboard\relative_ranker;
 use block_xp\local\leaderboard\null_ranker;
 use block_xp\local\sql\limit;
+use block_xp\local\xp\full_anonymiser;
 
 /**
  * Leaderboard testcase.
@@ -221,7 +222,7 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
     /**
      * Anonymised leaderboard.
      */
-    public function test_anonymised_leaderboard() {
+    public function test_anonymisable_leaderboard() {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
 
@@ -241,10 +242,10 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
         $this->assertEquals($u3->firstname, $lb->get_rank($u3->id)->get_state()->get_user()->firstname);
 
         $guest = guest_user();
-        $alb = new anonymised_leaderboard($lb, $world1->get_levels_info(), $guest, [$u2->id]);
-        $this->assertEquals($guest->firstname, $alb->get_rank($u1->id)->get_state()->get_user()->firstname);
-        $this->assertEquals($u2->firstname, $alb->get_rank($u2->id)->get_state()->get_user()->firstname);
-        $this->assertEquals($guest->firstname, $alb->get_rank($u3->id)->get_state()->get_user()->firstname);
+        $alb = new anonymisable_leaderboard($lb, new full_anonymiser($guest, [$u2->id]));
+        $this->assertFalse(core_text::strpos($alb->get_rank($u1->id)->get_state()->get_name(), $u1->firstname) !== false);
+        $this->assertTrue(core_text::strpos($alb->get_rank($u2->id)->get_state()->get_name(), $u2->firstname) !== false);
+        $this->assertFalse(core_text::strpos($alb->get_rank($u3->id)->get_state()->get_name(), $u3->firstname) !== false);
         $this->assert_ranking($alb->get_ranking(new limit(0, 0)), [[$guest, 1], [$u2, 2], [$guest, 3]]);
     }
 
