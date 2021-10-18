@@ -28,14 +28,16 @@ namespace block_xp\output;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
 
-use html_writer;
-use paging_bar;
-use renderer_base;
-use flexible_table;
 use block_xp\local\config\course_world_config;
 use block_xp\local\leaderboard\leaderboard;
 use block_xp\local\routing\url;
 use block_xp\local\sql\limit;
+use block_xp\local\xp\state_with_subject;
+use flexible_table;
+use html_writer;
+use paging_bar;
+use renderer_base;
+use user_picture;
 
 /**
  * Leaderboard table.
@@ -162,17 +164,21 @@ class leaderboard_table extends flexible_table {
     public function col_fullname($row) {
         $o = $this->col_userpic($row);
 
-        $canlink = $this->identitymode == course_world_config::IDENTITY_ON || $row->state->get_id() == $this->userid;
-        if ($this->identitymode == course_world_config::IDENTITY_OFF && $row->state->get_id() != $this->userid) {
-            $o .= get_string('someoneelse', 'block_xp');
-
-        } else {
-            if ($canlink) {
-                $o .= parent::col_fullname($row->state->get_user());
-            } else {
-                $o .= fullname($row->state->get_user());
-            }
+        $link = null;
+        $name = null;
+        $state = $row->state;
+        if ($state instanceof state_with_subject) {
+            $link = $state->get_link();
+            $name = $state->get_name();
         }
+
+        $name = empty($name) ? '?' : $name;
+        if ($link) {
+            $o .= html_writer::link($link->out(false), $name);
+        } else {
+            $o .= $name;
+        }
+
         return $o;
     }
 
@@ -229,12 +235,14 @@ class leaderboard_table extends flexible_table {
      * @return string Output produced.
      */
     public function col_userpic($row) {
-        $options = [];
-        $canlink = $this->identitymode == course_world_config::IDENTITY_ON || $this->userid == $row->state->get_id();
-        if (!$canlink) {
-            $options = ['link' => false, 'alttext' => false];
+        $picture = null;
+        $link = null;
+        $state = $row->state;
+        if ($state instanceof state_with_subject) {
+            $picture = $state->get_picture();
+            $link = $state->get_link();
         }
-        return $this->xpoutput->user_picture($row->state->get_user(), $options);
+        return $this->xpoutput->user_avatar($picture, $link);
     }
 
     /**

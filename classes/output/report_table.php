@@ -40,6 +40,7 @@ use block_xp\di;
 use block_xp\local\course_world;
 use block_xp\local\xp\course_user_state_store;
 use block_xp\local\utils\user_utils;
+use block_xp\local\xp\state_with_subject;
 
 /**
  * Block XP report table class.
@@ -273,7 +274,13 @@ class report_table extends table_sql {
      * @return string Output produced.
      */
     protected function col_userpic($row) {
-        return $this->renderer->user_picture($row->state->get_user());
+        $picture = null;
+        $link = null;
+        if ($row->state instanceof state_with_subject) {
+            $picture = $row->state->get_picture();
+            $link = $row->state->get_link();
+        }
+        return $this->renderer->user_avatar($picture, $link);
     }
 
     /**

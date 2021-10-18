@@ -314,6 +314,6 @@ class course_user_leaderboard implements leaderboard {
         $user = user_utils::unalias_picture_fields($record, $useridfield);
         context_helper::preload_from_record($record);
         $xp = !empty($record->xp) ? $record->xp : 0;
-        return new user_state($user, $xp, $this->levelsinfo);
+        return new user_state($user, $xp, $this->levelsinfo, $this->courseid);
     }
 }
