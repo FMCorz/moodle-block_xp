@@ -72,20 +72,6 @@ class course_filter_manager {
     }
 
     /**
-     * Get all the filter objects.
-     *
-     * Positive indexes are user filters, negatives are static ones.
-     * Do not reorder this array, it is ordered by priority.
-     *
-     * @return array of filters.
-     * @deprecated Since 3.0.0
-     */
-    public function get_all_filters() {
-        debugging('The method get_all_filters() is deprecated, use get_filters() instead.', DEBUG_DEVELOPER);
-        return $this->get_filters();
-    }
-
-    /**
      * Get the cache key.
      *
      * @param int $category The category constant.
