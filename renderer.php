@@ -26,7 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 use block_xp\local\course_world;
 use block_xp\local\activity\activity;
-use block_xp\local\routing\url_resolver;
 use block_xp\local\xp\level;
 use block_xp\local\xp\level_with_badge;
 use block_xp\local\xp\level_with_name;
@@ -890,6 +889,46 @@ EOT
         }
 
         return $ago;
+    }
+
+    /**
+     * Renders a user's avatar.
+     *
+     * This is similar to user_picture, except that it takes a URL
+     * as argument instead of taking a user. It's expected to be used
+     * alongside text that describes the user, so that the avatar does
+     * not need to be announced to screen readers.
+     *
+     * This always returns an image.
+     *
+     * @param moodle_url|null $url The URL.
+     * @param moodle_url|null $link The link.
+     * @return string
+     */
+    public function user_avatar(moodle_url $url = null, moodle_url $link = null) {
+        if (!$url) {
+            $pic = new user_picture(guest_user());
+            $pic->size = 1;
+            $url = $pic->get_url($this->page);
+        }
+
+        // Simulate the behaviour of user_picture.
+        $img = html_writer::empty_tag('img', [
+            'src' => $url->out(false),
+            'role' => 'presentation',
+            'class' => 'userpicture',
+            'width' => 35,
+            'height' => 35,
+            'alt' => '',
+        ]);
+
+        if ($link) {
+            return html_writer::link($link->out(false), $img, [
+                'class' => 'd-inline-block aabtn'
+            ]);
+        }
+
+        return $img;
     }
 
     /**

@@ -59,6 +59,18 @@ class anonymised_user_state extends user_state {
         return $this->anonuser->id;
     }
 
+    public function get_link() {
+        return null;
+    }
+
+    public function get_name() {
+        return get_string('someoneelse', 'block_xp');
+    }
+
+    public function get_picture() {
+        return null;
+    }
+
     public function get_level() {
         return $this->state->get_level();
     }
