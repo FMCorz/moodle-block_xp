@@ -34,7 +34,6 @@ use stdClass;
 use block_xp\local\iterator\map_recordset;
 use block_xp\local\sql\limit;
 use block_xp\local\utils\user_utils;
-use block_xp\local\xp\course_user_state_store;
 use block_xp\local\xp\levels_info;
 use block_xp\local\xp\state_rank;
 use block_xp\local\xp\user_state;

@@ -15,65 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * World interface.
+ * State anonymiser.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart
+ * @copyright  2021 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_xp\local;
+namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
-use block_xp\local\xp\levels_info;
-use block_xp\local\xp\state_store;
-
 /**
- * World interface.
- *
- * The thing in which things are collecting experience.
+ * State anonymiser.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart
+ * @copyright  2021 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface world {
+interface state_anonymiser {
 
     /**
-     * Get the access permissions.
+     * Return an anonymised state.
      *
-     * @return \block_xp\local\permission\access_permissions
+     * @return state
      */
-    public function get_access_permissions();
-
-    /**
-     * Get the config.
-     *
-     * @return \block_xp\local\config\config
-     */
-    public function get_config();
-
-    /**
-     * Return the collection strategy.
-     *
-     * @return \block_xp\local\strategy\collection_strategy
-     */
-    public function get_collection_strategy();
-
-    /**
-     * Get levels info.
-     *
-     * @return levels_info
-     */
-    public function get_levels_info();
-
-    /**
-     * Get the state store.
-     *
-     * @return state_store
-     */
-    public function get_store();
+    public function anonymise_state(state $state);
 
 }
