@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use block_xp\local\course_world;
 use block_xp\local\activity\activity;
+use block_xp\local\utils\user_utils;
 use block_xp\local\xp\level;
 use block_xp\local\xp\level_with_badge;
 use block_xp\local\xp\level_with_name;
@@ -43,6 +44,18 @@ class block_xp_renderer extends plugin_renderer_base {
 
     /** @var string Notices flag. */
     protected $noticesflag = 'block_xp_notices';
+
+    /**
+     * Get a user's picture.
+     *
+     * @param object $user The user.
+     * @param moodle_url The URL to the picture.
+     */
+    public function get_user_picture($user) {
+        $pic = new user_picture($user);
+        $pic->size = 1;
+        return $pic->get_url($this->page);
+    }
 
     /**
      * Print a level's badge.
@@ -907,9 +920,7 @@ EOT
      */
     public function user_avatar(moodle_url $url = null, moodle_url $link = null) {
         if (!$url) {
-            $pic = new user_picture(guest_user());
-            $pic->size = 1;
-            $url = $pic->get_url($this->page);
+            $url = user_utils::default_picture();
         }
 
         // Simulate the behaviour of user_picture.

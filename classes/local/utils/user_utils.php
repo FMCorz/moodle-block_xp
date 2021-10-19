@@ -26,6 +26,7 @@
 namespace block_xp\local\utils;
 defined('MOODLE_INTERNAL') || die();
 
+use block_xp\di;
 use stdClass;
 
 /**
@@ -37,6 +38,15 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class user_utils {
+
+    /**
+     * Get the default picture URL.
+     *
+     * @return \moodle_url The URL.
+     */
+    public static function default_picture() {
+        return di::get('renderer')->pix_url('u/f1');
+    }
 
     /**
      * Get all the name fields.
@@ -99,6 +109,16 @@ class user_utils {
      */
     public static function unalias_picture_fields(stdClass $record, $idalias = 'id', $fieldprefix = '') {
         return \user_picture::unalias($record, null, $idalias, $fieldprefix);
+    }
+
+    /**
+     * Get the default picture URL.
+     *
+     * @param object $user The user.
+     * @return \moodle_url The URL.
+     */
+    public static function user_picture($user) {
+        return di::get('renderer')->get_user_picture($user);
     }
 
 }

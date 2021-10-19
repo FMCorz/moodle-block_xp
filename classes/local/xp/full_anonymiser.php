@@ -26,6 +26,8 @@
 namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
+use moodle_url;
+
 /**
  * Full anonymiser.
  *
@@ -38,6 +40,8 @@ class full_anonymiser implements state_anonymiser {
 
     /** @var string The name to use. */
     protected $altname;
+    /** @var moodle_url The name to use. */
+    protected $altpic;
     /** @var \stdClass The user to replace with. */
     protected $anonuser;
     /** @var int[] The object IDs not to anonymise. */
@@ -49,11 +53,13 @@ class full_anonymiser implements state_anonymiser {
      * @param object $anonuser The user to use.
      * @param int[] $exceptids The object IDS to skip.
      * @param string $altname The name to use.
+     * @param moodle_url $altpic The pic to use.
      */
-    public function __construct($anonuser, $exceptids = [], $altname = '?') {
+    public function __construct($anonuser, $exceptids = [], $altname = '?', $altpic = null) {
         $this->exceptids = $exceptids;
         $this->anonuser = $anonuser;
         $this->altname = $altname;
+        $this->altpic = $altpic;
     }
 
     /**
@@ -71,7 +77,7 @@ class full_anonymiser implements state_anonymiser {
             return new anonymised_user_state($state, $this->anonuser);
         }
 
-        return new anonymised_state($state, $this->altname);
+        return new anonymised_state($state, $this->altname, $this->altpic);
     }
 
 }

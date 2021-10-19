@@ -26,6 +26,8 @@
 namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
+use moodle_url;
+
 /**
  * State with subject interface.
  *
@@ -41,7 +43,7 @@ interface state_with_subject extends state {
     /**
      * Get the link to the subject.
      *
-     * @return url|null
+     * @return moodle_url|null
      */
     public function get_link();
 
@@ -55,7 +57,7 @@ interface state_with_subject extends state {
     /**
      * Get the picture as a URL.
      *
-     * @return url|null
+     * @return moodle_url|null
      */
     public function get_picture();
 

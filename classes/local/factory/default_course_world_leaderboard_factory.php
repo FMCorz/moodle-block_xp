@@ -37,6 +37,7 @@ use block_xp\local\leaderboard\neighboured_leaderboard;
 use block_xp\local\leaderboard\null_ranker;
 use block_xp\local\leaderboard\ranker;
 use block_xp\local\leaderboard\relative_ranker;
+use block_xp\local\utils\user_utils;
 use block_xp\local\xp\full_anonymiser;
 use block_xp\local\xp\state_anonymiser;
 
@@ -74,7 +75,7 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
 
         $anonymiser = null;
         if ($config->get('identitymode') != course_world_config::IDENTITY_ON) {
-            $anonymiser = new full_anonymiser(guest_user(), [$USER->id]);
+            $anonymiser = new full_anonymiser(guest_user(), [$USER->id], '?', user_utils::default_picture());
         }
 
         return $anonymiser;
