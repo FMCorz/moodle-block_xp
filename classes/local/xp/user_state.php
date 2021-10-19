@@ -26,6 +26,7 @@
 namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
+use block_xp\local\utils\user_utils;
 use moodle_url;
 use renderable;
 use stdClass;
@@ -93,10 +94,7 @@ class user_state implements renderable, state, state_with_subject {
     }
 
     public function get_picture() {
-        global $PAGE;
-        $pic = new user_picture($this->user);
-        $pic->size = 1;
-        return $pic->get_url($PAGE);
+        return user_utils::user_picture($this->user);
     }
 
     public function get_ratio_in_level() {

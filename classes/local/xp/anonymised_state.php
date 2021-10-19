@@ -26,6 +26,8 @@
 namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
+use moodle_url;
+
 /**
  * Anonymise a state.
  *
@@ -38,6 +40,8 @@ class anonymised_state implements state_with_subject {
 
     /** @var string The name. */
     protected $name;
+    /** @var moodle_url|null The pic. */
+    protected $pic;
     /** @var state_with_subject The state. */
     protected $state;
 
@@ -46,10 +50,12 @@ class anonymised_state implements state_with_subject {
      *
      * @param state_with_subject $state The state to anonymise.
      * @param string $name The new name.
+     * @param moodle_url $pic The new pic.
      */
-    public function __construct(state_with_subject $state, $name) {
+    public function __construct(state_with_subject $state, $name, $pic = null) {
         $this->state = $state;
         $this->name = $name;
+        $this->pic = $pic;
     }
 
     /**
@@ -73,7 +79,7 @@ class anonymised_state implements state_with_subject {
     /**
      * Get the link to the subject.
      *
-     * @return url|null
+     * @return moodle_url|null
      */
     public function get_link() {
         return null;
@@ -91,10 +97,10 @@ class anonymised_state implements state_with_subject {
     /**
      * Get the picture as a URL.
      *
-     * @return url|null
+     * @return moodle_url|null
      */
     public function get_picture() {
-        return null;
+        return $this->pic;
     }
 
     /**
