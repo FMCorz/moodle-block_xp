@@ -44,6 +44,8 @@ abstract class course_route_controller extends route_controller {
     protected $courseid;
     /** @var bool Whether the page supports groups. */
     protected $supportsgroups = false;
+    /** @var \block_xp\local\course_world */
+    protected $world;
 
     /** @var int The group ID. */
     private $groupid;

@@ -43,9 +43,9 @@ abstract class route_controller implements controller {
     protected $request;
     /** @var url The page URL, not relative to the router. */
     protected $pageurl;
-    /** @var renderer_base A renderer. */
+    /** @var \renderer_base A renderer. */
     protected $renderer;
-    /** @var url_resolver URL resolver. */
+    /** @var \block_xp\local\routing\url_resolver URL resolver. */
     protected $urlresolver;
 
     /** @var array The combined request and optional parameters. */
@@ -107,7 +107,7 @@ abstract class route_controller implements controller {
     /**
      * Add here all permissions checks related to accessing the page.
      *
-     * @throws moodle_exception When the conditions are not met.
+     * @throws \moodle_exception When the conditions are not met.
      * @return void
      */
     abstract protected function permissions_checks();
@@ -184,7 +184,7 @@ abstract class route_controller implements controller {
     /**
      * Get the renderer.
      *
-     * @return renderer_base.
+     * @return \renderer_base
      */
     protected function get_renderer() {
         if (!$this->renderer) {
