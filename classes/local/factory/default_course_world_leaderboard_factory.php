@@ -73,7 +73,7 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
         $config = $world->get_config();
 
         $anonymiser = null;
-        if ($config->get('identitymode') == course_world_config::IDENTITY_OFF) {
+        if ($config->get('identitymode') != course_world_config::IDENTITY_ON) {
             $anonymiser = new full_anonymiser(guest_user(), [$USER->id]);
         }
 
