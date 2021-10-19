@@ -130,8 +130,11 @@ class leaderboard_table extends flexible_table {
     public function out($pagesize) {
         $this->setup();
 
-        // Compute where to start from.
-        if (empty($this->fence)) {
+        if ($this->is_downloading()) {
+            $limit = new limit(0);
+
+        } else if (empty($this->fence)) {
+            // Compute where to start from.
             $requestedpage = optional_param($this->request[TABLE_VAR_PAGE], null, PARAM_INT);
             if ($requestedpage === null) {
                 $mypos = $this->leaderboard->get_position($this->userid);
@@ -253,6 +256,10 @@ class leaderboard_table extends flexible_table {
      * @return void
      */
     public function start_html() {
+        if (in_array(TABLE_P_TOP, $this->showdownloadbuttonsat)) {
+            echo $this->download_buttons();
+        }
+
         $this->wrap_html_start();
         echo html_writer::start_tag('div', array('class' => 'no-overflow'));
         echo html_writer::start_tag('table', $this->attributes);
@@ -278,6 +285,11 @@ class leaderboard_table extends flexible_table {
             echo html_writer::end_tag('table');
             echo html_writer::end_tag('div');
             $this->wrap_html_finish();
+
+            // Paging bar.
+            if (in_array(TABLE_P_BOTTOM, $this->showdownloadbuttonsat)) {
+                echo $this->download_buttons();
+            }
             // End copy from parent method.
 
             $url20 = new url($this->baseurl);
