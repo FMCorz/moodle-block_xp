@@ -16,7 +16,6 @@
 /**
  * Course module rule.
  *
- * @package    block_xp
  * @author     Frédéric Massart <fred@branchup.tech>
  * @copyright  2018 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
