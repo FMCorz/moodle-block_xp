@@ -1,6 +1,17 @@
 Changelog
 =========
 
+v3.11.3
+-------
+
+Quality of life
+
+- Changed `addinstance` capability to support block_context
+
+Bug fixes
+
+- Fixed invalid reference to language string in levels page
+
 v3.11.2
 -------
 
