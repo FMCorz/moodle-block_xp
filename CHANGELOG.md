@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v3.11.4
+-------
+
+Bug fixes
+
+- Class block_edit_form not found in rare occasions
+
 v3.11.3
 -------
 
