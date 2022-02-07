@@ -27,6 +27,9 @@ defined('MOODLE_INTERNAL') || die();
 
 use block_edit_form;
 
+// Workaround code that would have been written in a way that does not load the form.
+require_once($CFG->dirroot . '/blocks/edit_form.php');
+
 /**
  * Block XP edit form class.
  *
