@@ -26,10 +26,10 @@
 namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
-use coding_exception;
 use moodle_database;
 use block_xp\di;
 use block_xp\local\config\course_world_config;
+use coding_exception;
 
 /**
  * Admin filter manager class.

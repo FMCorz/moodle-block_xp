@@ -32,7 +32,6 @@ use block_xp\local\logger\reason_collection_logger;
 use block_xp\local\notification\course_level_up_notification_service;
 use block_xp\local\reason\event_name_reason;
 use block_xp\local\xp\course_filter_manager;
-use block_xp\local\xp\levels_info;
 use block_xp\local\xp\course_user_state_store;
 
 /**

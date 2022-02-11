@@ -26,9 +26,6 @@
 namespace block_xp\local\activity;
 defined('MOODLE_INTERNAL') || die();
 
-use lang_string;
-use moodle_database;
-
 /**
  * Recent user activity repository interface.
  *

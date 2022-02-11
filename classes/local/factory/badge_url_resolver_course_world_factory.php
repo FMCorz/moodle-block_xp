@@ -42,7 +42,7 @@ interface badge_url_resolver_course_world_factory {
      * Get the URL resolver.
      *
      * @param course_world $world The world.
-     * @return block_xp\local\xp\badge_url_resolver
+     * @return \block_xp\local\xp\badge_url_resolver
      */
     public function get_url_resolver(course_world $world);
 

@@ -137,7 +137,7 @@ class course_world implements world {
     /**
      * Get filter manager.
      *
-     * @return course_filter_manager
+     * @return xp\course_filter_manager
      */
     public function get_filter_manager() {
         if (!$this->filtermanager) {

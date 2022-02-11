@@ -42,7 +42,7 @@ class default_url_resolver implements url_resolver {
     /** The GET argument for routing without $CFG->slasharguments. */
     const ROUTE_GET_PARAM = '_r';
 
-    /** @var string The base URL. */
+    /** @var moodle_url The base URL. */
     protected $baseurl;
     /** @var routes_config The routes config. */
     protected $routesconfig;

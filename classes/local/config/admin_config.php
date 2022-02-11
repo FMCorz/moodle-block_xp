@@ -26,8 +26,6 @@
 namespace block_xp\local\config;
 defined('MOODLE_INTERNAL') || die();
 
-use coding_exception;
-
 /**
  * Admin config.
  *

@@ -26,7 +26,6 @@ namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
 use cache;
-use coding_exception;
 use moodle_database;
 
 /**

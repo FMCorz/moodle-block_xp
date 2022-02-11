@@ -26,8 +26,6 @@
 namespace block_xp\local\config;
 defined('MOODLE_INTERNAL') || die();
 
-use coding_exception;
-
 /**
  * Mapped config.
  *
@@ -51,8 +49,6 @@ class mapped_config extends proxy_config {
 
     /** @var array The mappings. */
     private $mappings;
-    /** @var array The reversed mappings. */
-    private $outboundmappings;
 
     /**
      * Constructor.

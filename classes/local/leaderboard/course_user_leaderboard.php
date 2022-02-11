@@ -26,7 +26,6 @@
 namespace block_xp\local\leaderboard;
 defined('MOODLE_INTERNAL') || die();
 
-use coding_exception;
 use context_helper;
 use course_modinfo;
 use moodle_database;
@@ -35,6 +34,7 @@ use block_xp\local\iterator\map_recordset;
 use block_xp\local\sql\limit;
 use block_xp\local\utils\user_utils;
 use block_xp\local\xp\levels_info;
+use block_xp\local\xp\state;
 use block_xp\local\xp\state_rank;
 use block_xp\local\xp\user_state;
 
@@ -271,7 +271,7 @@ class course_user_leaderboard implements leaderboard {
      * Get ranking recordset.
      *
      * @param limit $limit The limit.
-     * @return moodle_recordset
+     * @return \moodle_recordset
      */
     protected function get_ranking_recordset(limit $limit) {
         $sql = "SELECT {$this->fields}

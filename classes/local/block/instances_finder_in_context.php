@@ -43,7 +43,7 @@ interface instances_finder_in_context {
      *
      * @param string $name The block name, without 'block_'.
      * @param context $context The context to search in.
-     * @return block_base[]
+     * @return \block_base[]
      */
     public function get_instances_in_context($name, context $context);
 

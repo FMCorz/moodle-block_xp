@@ -26,8 +26,6 @@
 namespace block_xp\local\xp;
 defined('MOODLE_INTERNAL') || die();
 
-use context;
-
 /**
  * Described level.
  *

@@ -115,7 +115,7 @@ class default_container implements container {
     /**
      * Get the routes config.
      *
-     * @return routes_config
+     * @return routing\routes_config
      */
     protected function get_ajax_routes_config() {
         return new \block_xp\local\routing\ajax_routes_config();
@@ -340,7 +340,7 @@ class default_container implements container {
     /**
      * Get the routes config.
      *
-     * @return routes_config
+     * @return routing\routes_config
      */
     protected function get_routes_config() {
         return new \block_xp\local\routing\default_routes_config();

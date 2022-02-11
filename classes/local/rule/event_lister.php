@@ -28,7 +28,6 @@
 namespace block_xp\local\rule;
 defined('MOODLE_INTERNAL') || die();
 
-use ReflectionClass;
 use DirectoryIterator;
 use cache;
 use core_collator;

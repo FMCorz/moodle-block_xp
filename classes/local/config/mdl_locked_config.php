@@ -26,8 +26,6 @@
 namespace block_xp\local\config;
 defined('MOODLE_INTERNAL') || die();
 
-use coding_exception;
-
 /**
  * Moodle locked config.
  *
@@ -50,7 +48,7 @@ class mdl_locked_config extends mdl_config {
      * Constructor.
      *
      * @param string $component The component.
-     * @param string $keys The setting names that are lockable.
+     * @param string[] $keys The setting names that are lockable.
      */
     public function __construct($component, array $keys) {
         parent::__construct($component, new static_config(array_reduce($keys, function($carry, $key) {

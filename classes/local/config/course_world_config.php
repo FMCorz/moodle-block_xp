@@ -26,9 +26,7 @@
 namespace block_xp\local\config;
 defined('MOODLE_INTERNAL') || die();
 
-use coding_exception;
 use moodle_database;
-use stdClass;
 
 /**
  * Course world config.
