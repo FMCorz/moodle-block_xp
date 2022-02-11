@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * block_xp user leveled up event.
+ * User leveled up event.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
@@ -26,7 +26,7 @@ namespace block_xp\event;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * block_xp user leveled up event class.
+ * User leveled up event class.
  *
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
@@ -40,7 +40,7 @@ class user_leveledup extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return 'The user witih ID ' . $this->userid . ' level up to level ' . $this->other['level'] . '.';
+        return 'The user with ID ' . $this->relateduserid . ' leveled up to level ' . $this->other['level'] . '.';
     }
 
     /**
