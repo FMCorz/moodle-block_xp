@@ -114,7 +114,7 @@ class prefs_user_indicator implements user_indicator {
     public function unset_users_flag($flag) {
         $records = $this->db->get_recordset('table', ['name' => $this->get_pref_name($flag)], '', 'userid');
         foreach ($records as $record) {
-            $this->unset_user_flag($userid, $flag);
+            $this->unset_user_flag($record->userid, $flag);
         }
         $records->close();
     }
