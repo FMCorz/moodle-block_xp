@@ -230,7 +230,7 @@ class report_table extends table_sql {
         $actions[] = $this->renderer->action_icon($url, new pix_icon('t/edit', get_string('edit')));
 
         if (isset($row->xp)) {
-            $url = new moodle_url($this->baseurl, ['delete' => 1, 'userid' => $row->id]);
+            $url = new moodle_url($this->baseurl, ['action' => '', 'delete' => 1, 'userid' => $row->id]);
             $actions[] = $this->renderer->action_icon($url, new pix_icon('t/delete', get_string('delete')));
         }
 
