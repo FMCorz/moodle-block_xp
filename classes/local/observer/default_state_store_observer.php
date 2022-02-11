@@ -71,20 +71,31 @@ class default_state_store_observer implements level_up_state_store_observer, poi
      * @return void
      */
     public function leveled_up(state_store $store, $id, level $beforelevel, level $afterlevel) {
-        $params = [
-            'context' => $this->context,
-            'relateduserid' => $id,
-            'other' => [
-                'level' => $afterlevel->get_level()
-            ]
-        ];
-        $lupevent = \block_xp\event\user_leveledup::create($params);
-        $lupevent->trigger();
+        $lowestlevel = $beforelevel->get_level() + 1;
+        $highestlevel = $afterlevel->get_level();
 
-        if ($this->config->get('enablelevelupnotif')) {
-            $this->notificationservice->notify($id);
+        // Failsafe when the user has leveled down.
+        if ($lowestlevel > $highestlevel) {
+            return;
         }
 
+        // Process for each level.
+        for ($i = $lowestlevel; $i <= $highestlevel; $i++) {
+
+            // Trigger the event.
+            $params = [
+                'context' => $this->context,
+                'relateduserid' => $id,
+                'other' => [
+                    'level' => $i
+                ]
+            ];
+            $lupevent = \block_xp\event\user_leveledup::create($params);
+            $lupevent->trigger();
+
+            // Additional processing.
+            $this->process_leveled_up($store, $id, $i);
+        }
     }
 
     /**
@@ -107,6 +118,19 @@ class default_state_store_observer implements level_up_state_store_observer, poi
             } catch (\Exception $e) {
                 debugging("Error while calling $plugin's xp_points_increased callback: " . $e->getMessage(), DEBUG_DEVELOPER);
             }
+        }
+    }
+
+    /**
+     * Logic to process for levelling up.
+     *
+     * @param state_store $store The store.
+     * @param int $id The subjet ID.
+     * @param int $level The level number.
+     */
+    protected function process_leveled_up(state_store $store, $id, $level) {
+        if ($this->config->get('enablelevelupnotif')) {
+            $this->notificationservice->notify($id);
         }
     }
 
