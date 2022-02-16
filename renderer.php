@@ -258,6 +258,18 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Output a JSON script.
+     *
+     * @param mixed $data The data.
+     * @param string $id The HTML ID to use.
+     * @return string
+     */
+    public function json_script($data, $id) {
+        $jsondata = json_encode($data, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
+        return html_writer::tag('script', $jsondata, ['id' => $id, 'type' => 'application/json']);
+    }
+
+    /**
      * New dot.
      *
      * @return string
@@ -758,8 +770,7 @@ EOT
         $o .= html_writer::end_div();
         $o .= html_writer::end_div();
 
-        $jsonprops = json_encode($props, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
-        $o .= html_writer::tag('script', $jsonprops, ['id' => $propsid, 'type' => 'application/json']);
+        $o .= $this->json_script($props, $propsid);
 
         $this->page->requires->js_amd_inline("
             require(['block_xp/launcher'], function(launcher) {

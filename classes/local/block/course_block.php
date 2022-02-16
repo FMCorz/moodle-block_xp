@@ -221,24 +221,14 @@ class course_block extends block_base {
             $service->mark_as_notified($USER->id);
 
             $level = $state->get_level();
-            $name = $level instanceof level_with_name ? $level->get_name() : null;
-            $args = array(
-                'badge' => $renderer->level_badge($level),
-                'level' => $level->get_level(),
-                'name' => $name,
-            );
+            $propsid = html_writer::random_id();
+            echo $renderer->json_script([
+                'levelnum' => $level->get_level(),
+                'levelname' => $level instanceof level_with_name ? $level->get_name() : null,
+                'levelbadge' => $renderer->level_badge($level),
+            ], $propsid);
 
-            $PAGE->requires->yui_module('moodle-block_xp-notification', 'Y.M.block_xp.Notification.init', array($args));
-            $PAGE->requires->strings_for_js(
-                array(
-                    'coolthanks',
-                    'congratulationsyouleveledup',
-                    'youreachedlevela',
-                    'youreachedlevel',
-                    'levelx'
-                ),
-                'block_xp'
-            );
+            $PAGE->requires->js_call_amd('block_xp/popup-notification', 'initWithJson', ["#{$propsid}"]);
         }
 
         return $this->content;
