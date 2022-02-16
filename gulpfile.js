@@ -22,6 +22,12 @@ const jsUiPaths = [
   './ui/src/**/*.js'
 ];
 
+const cssWatchPaths = [
+  './templates/**/*.mustache',
+  './classes/form/**/*.php',
+  './classes/local/controller/**/*.php',
+].concat(jsUiPaths);
+
 /** CSS. */
 
 var cssBuild = gulp.series(tailwindBuild);
@@ -72,7 +78,7 @@ function watchAmd(cb) {
 }
 
 function watchCss(cb) {
-  return gulp.watch([].concat(cssPaths, jsUiPaths), cssBuild);
+  return gulp.watch([].concat(cssPaths, cssWatchPaths), cssBuild);
 }
 
 const watchJs = gulp.parallel(watchUi, watchAmd);
