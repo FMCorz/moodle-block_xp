@@ -43,6 +43,8 @@ use core\output\notification;
  */
 abstract class page_controller extends course_route_controller {
 
+    /** @var string The nav name. */
+    protected $navname = null;
     /** @var string The route name. */
     protected $routename = null;
     /** @var bool Whether manage permissions ar required. */
@@ -74,6 +76,18 @@ abstract class page_controller extends course_route_controller {
      * @return string
      */
     abstract protected function get_page_heading();
+
+    /**
+     * The route name for the purpose of navigation.
+     *
+     * @return string
+     */
+    protected function get_navigation_route_name() {
+        if ($this->navname === null) {
+            return $this->get_route_name();
+        }
+        return $this->navname;
+    }
 
     /**
      * The route name as defined by the controller.
@@ -130,7 +144,7 @@ abstract class page_controller extends course_route_controller {
      */
     protected function page_navigation() {
         $output = $this->get_renderer();
-        echo $output->course_world_navigation($this->world, $this->get_route_name());
+        echo $output->course_world_navigation($this->world, $this->get_navigation_route_name());
     }
 
     /**
