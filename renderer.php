@@ -749,7 +749,7 @@ EOT
         $iconname = $CFG->branch >= 32 ? 'y/loading' : 'i/loading';
 
         $o = '';
-        $o .= html_writer::start_div('block_xp block_xp-react', ['id' => $id]);
+        $o .= html_writer::start_div('block_xp-react', ['id' => $id]);
         $o .= html_writer::start_div('block_xp-react-loading');
         $o .= html_writer::start_div();
         $o .= $this->render(new pix_icon($iconname, 'loading'));

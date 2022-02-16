@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
 use block_xp\local\routing\url;
+use html_writer;
 
 /**
  * Route controller class.
@@ -233,6 +234,7 @@ abstract class route_controller implements controller {
      */
     final protected function start() {
         echo $this->get_renderer()->header();
+        echo html_writer::start_div('block_xp');
     }
 
     /**
@@ -248,6 +250,7 @@ abstract class route_controller implements controller {
      * @return void
      */
     final protected function end() {
+        echo html_writer::end_div();
         echo $this->get_renderer()->footer();
     }
 
