@@ -113,6 +113,9 @@
 .block_xp .xp-break-all {
     word-break: break-all;
 }
+.block_xp .xp-rounded-xl {
+    border-radius: 0.75rem;
+}
 .block_xp .xp-rounded {
     border-radius: 0.25rem;
 }
