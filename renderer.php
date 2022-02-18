@@ -966,10 +966,10 @@ EOT
             $xp = number_format($xp, 0, '.', $thousandssep);
         }
         $o = '';
-        $o .= html_writer::start_div('block_xp-xp');
-        $o .= html_writer::div($xp, 'pts');
-        $o .= html_writer::div('xp', 'sign sign-sup');
-        $o .= html_writer::end_div();
+        $o .= html_writer::start_tag('span', ['class' => 'block_xp-xp']);
+        $o .= html_writer::tag('span', $xp, ['class' => 'pts']);
+        $o .= html_writer::tag('span', 'xp', ['class' => 'sign sign-sup']);
+        $o .= html_writer::end_tag('span');
         return $o;
     }
 
