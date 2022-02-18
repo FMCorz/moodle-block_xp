@@ -344,6 +344,7 @@ Alternatively, you can use the `level` argument to display the name of a specifi
 
 If the `level` argument is provided and the level does not exist, nothing will be displayed.
 ';
+$string['shortcode:xppoints'] = 'Display a number of points formatted as experience points.';
 $string['shortcode:xpprogressbar'] = 'The current user\'s progress bar towards the next level.';
 $string['someoneelse'] = 'Someone else';
 $string['somethinghappened'] = 'Something happened';

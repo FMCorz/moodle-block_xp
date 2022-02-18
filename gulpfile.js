@@ -23,8 +23,10 @@ const jsUiPaths = [
 ];
 
 const cssWatchPaths = [
+  './renderer.php',
   './templates/**/*.mustache',
   './classes/form/**/*.php',
+  './classes/local/shortcode/handler.php',
   './classes/local/controller/**/*.php',
 ].concat(jsUiPaths);
 

@@ -331,6 +331,32 @@ class handler {
      * @param Closure $next The function to pass the content through to process sub shortcodes.
      * @return string The new content.
      */
+    public static function xppoints($shortcode, $args, $content, $env, $next) {
+        $world = static::get_world_from_env($env);
+        if (!$world) {
+            return;
+        }
+
+        // The number of points is expected to be passed as a standalone argument, which would
+        // make it an attribute with the value of true, so we're interested in its key.
+        $points = 0;
+        if (count($args) === 1) {
+            $points = (int) array_keys($args)[0];
+        }
+
+        return di::get('renderer')->xp_highlight($points);
+    }
+
+    /**
+     * Handle the shortcode.
+     *
+     * @param string $shortcode The shortcode.
+     * @param array $args The arguments of the code.
+     * @param string|null $content The content, if the shortcode wraps content.
+     * @param object $env The filter environment (contains context, noclean and originalformat).
+     * @param Closure $next The function to pass the content through to process sub shortcodes.
+     * @return string The new content.
+     */
     public static function xpprogressbar($shortcode, $args, $content, $env, $next) {
         global $USER;
         $world = static::get_world_from_env($env);

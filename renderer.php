@@ -974,6 +974,21 @@ EOT
     }
 
     /**
+     * A highlight of the points.
+     *
+     * @param int $amount The XP.
+     */
+    public function xp_highlight($amount) {
+        return html_writer::tag(
+            'span',
+            html_writer::tag('span', $this->xp($amount), [
+                'class' => 'xp-inline-block xp-bg-yellow-200 xp-px-2 xp-py-0.5 xp-rounded xp-leading-none'
+            ]),
+            ['class' => 'block_xp block_xp-xp-highlight']
+        );
+    }
+
+    /**
      * Render XP widget navigation.
      *
      * @param array $actions The actions.

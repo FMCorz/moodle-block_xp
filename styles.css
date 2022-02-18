@@ -116,6 +116,11 @@
 .block_xp .xp-rounded {
     border-radius: 0.25rem;
 }
+.block_xp .xp-bg-yellow-200 {
+    --tw-bg-opacity: 1;
+    background-color: #fde68a;
+    background-color: rgba(253, 230, 138, var(--tw-bg-opacity));
+}
 .block_xp .xp-bg-gray-100 {
     --tw-bg-opacity: 1;
     background-color: #f3f4f6;
@@ -127,6 +132,14 @@
 .block_xp .xp-px-2 {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+}
+.block_xp .xp-py-0\.5 {
+    padding-top: 0.125rem;
+    padding-bottom: 0.125rem;
+}
+.block_xp .xp-py-0 {
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 .block_xp .xp-py-1 {
     padding-top: 0.25rem;
@@ -153,6 +166,9 @@
 }
 .block_xp .xp-font-normal {
     font-weight: 400;
+}
+.block_xp .xp-leading-none {
+    line-height: 1;
 }
 
 /** Legacy styles. */
