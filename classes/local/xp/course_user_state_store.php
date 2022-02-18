@@ -232,16 +232,16 @@ class course_user_state_store implements course_state_store,
     protected function observe_increase($id, $beforexp, $afterxp) {
         $xpgained = $afterxp - $beforexp;
 
+        if ($this->pointsobserver && $xpgained > 0) {
+            $this->pointsobserver->points_increased($this, $id, $xpgained);
+        }
+
         if ($this->observer) {
             $beforelevel = $this->levelsinfo->get_level_from_xp($beforexp);
             $afterlevel = $this->levelsinfo->get_level_from_xp($afterxp);
             if ($beforelevel->get_level() < $afterlevel->get_level()) {
                 $this->observer->leveled_up($this, $id, $beforelevel, $afterlevel);
             }
-        }
-
-        if ($this->pointsobserver && $xpgained > 0) {
-            $this->pointsobserver->points_increased($this, $id, $xpgained);
         }
     }
 
