@@ -23,40 +23,47 @@
 
 import Templates from 'core/templates';
 import Modal from 'core/modal';
+import ModalEvents from 'core/modal_events';
 import Notification from 'core/notification';
 
 // Trigger pre-loading.
 Templates.render('block_xp/modal-popup-notification', []);
 
 /**
- * Open the modal.
+ * Show the modal.
  *
+ * @param {Object} context The template context.
  * @param {Object} options The options.
  */
-function init(options) {
-    Templates.render('block_xp/modal-popup-notification', options).then((html) => {
+function show(context, options) {
+    options = options || {};
+    Templates.render('block_xp/modal-popup-notification', context).then((html) => {
         const modal = new Modal(html);
+
+        // Prevent dismissing by clicking outside.
+        if (typeof ModalEvents.outsideClick !== 'undefined') {
+            modal.getRoot().on(ModalEvents.outsideClick, e => {
+                e.preventDefault();
+            });
+        }
+
+        // Broadcast when the modal has been shown.
+        modal.getRoot().on(ModalEvents.shown, () => {
+            if (options.onShown) {
+                options.onShown();
+            }
+        });
+
+        // Broadcast when the modal has been dismissed.
+        modal.getRoot().on(ModalEvents.hidden, () => {
+            if (options.onDismissed) {
+                options.onDismissed();
+            }
+        });
+
         modal.show();
         return;
     }).catch(Notification.exception);
 }
 
-/**
- * Init with JSON node.
- *
- * @param {String} selector The JSON node selector.
- */
-const initWithJson = (selector) => {
-    try {
-        const node = document.querySelector(selector);
-        const data = node ? JSON.parse(node.textContent) : null;
-        if (!data) {
-            throw new Error('That\'s a bit strange.');
-        }
-        init(data);
-    } catch (err) {
-        // Nothing.
-    }
-};
-
-export {init, initWithJson};
+export {show};

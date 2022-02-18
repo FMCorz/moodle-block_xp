@@ -222,13 +222,14 @@ class course_block extends block_base {
 
             $level = $state->get_level();
             $propsid = html_writer::random_id();
-            echo $renderer->json_script([
+            echo $renderer->json_script([[
+                'courseid' => $world->get_courseid(),
                 'levelnum' => $level->get_level(),
                 'levelname' => $level instanceof level_with_name ? $level->get_name() : null,
                 'levelbadge' => $renderer->level_badge($level),
-            ], $propsid);
+            ]], $propsid);
 
-            $PAGE->requires->js_call_amd('block_xp/popup-notification', 'initWithJson', ["#{$propsid}"]);
+            $PAGE->requires->js_call_amd('block_xp/popup-notification-queue', 'queueFromJson', ["#{$propsid}"]);
         }
 
         return $this->content;
