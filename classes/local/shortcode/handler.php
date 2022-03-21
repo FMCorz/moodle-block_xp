@@ -258,10 +258,11 @@ class handler {
         // Output the table.
         $baseurl = $PAGE->url;
         $table = new \block_xp\output\leaderboard_table($leaderboard, di::get('renderer'), [
+            'context' => $world->get_context(),
             'fence' => $limit,
             'rankmode' => $world->get_config()->get('rankmode'),
             'identitymode' => $world->get_config()->get('identitymode'),
-            'discardcolumns' => !empty($args['withprogress']) ? [] : ['progress']
+            'discardcolumns' => !empty($args['withprogress']) ? [] : ['progress'],
         ], $USER->id);
         $table->define_baseurl($baseurl);
         ob_start();

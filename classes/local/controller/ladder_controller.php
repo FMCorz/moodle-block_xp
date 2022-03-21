@@ -89,6 +89,7 @@ class ladder_controller extends page_controller {
             $this->get_leaderboard(),
             $this->get_renderer(),
             [
+                'context' => $this->world->get_context(),
                 'identitymode' => $this->world->get_config()->get('identitymode'),
                 'rankmode' => $this->world->get_config()->get('rankmode'),
             ],

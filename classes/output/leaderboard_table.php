@@ -37,7 +37,6 @@ use flexible_table;
 use html_writer;
 use paging_bar;
 use renderer_base;
-use user_picture;
 
 /**
  * Leaderboard table.
@@ -48,6 +47,11 @@ use user_picture;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class leaderboard_table extends flexible_table {
+
+    /** @var \context The context. */
+    protected $context;
+    /** @var bool Whether the user can view profiles. */
+    protected $canviewprofiles = false;
 
     /** @var leaderboard The leaderboard. */
     protected $leaderboard;
@@ -82,7 +86,7 @@ class leaderboard_table extends flexible_table {
             $userid
         ) {
 
-        global $CFG, $USER;
+        global $CFG, $PAGE, $USER;
         parent::__construct('block_xp_ladder');
 
         // The user ID we're viewing the ladder for.
@@ -93,6 +97,11 @@ class leaderboard_table extends flexible_table {
         $this->xpoutput = $renderer;
 
         // Check options.
+        if (isset($options['context'])) {
+            $this->context = $options['context'];
+        } else {
+            $this->context = $PAGE->context;
+        }
         if (isset($options['rankmode'])) {
             $this->rankmode = $options['rankmode'];
         }
@@ -106,6 +115,8 @@ class leaderboard_table extends flexible_table {
         if (isset($options['discardcolumns'])) {
             $leaderboardcols = array_diff_key($leaderboardcols, array_flip($options['discardcolumns']));
         }
+
+        $this->canviewprofiles = has_capability('moodle/user:viewdetails', $this->context);
 
         // Define columns, and headers.
         $columns = array_keys($leaderboardcols);
@@ -176,7 +187,7 @@ class leaderboard_table extends flexible_table {
         }
 
         $name = empty($name) ? '?' : $name;
-        if ($link) {
+        if ($link && $this->canviewprofiles) {
             $o .= html_writer::link($link->out(false), $name);
         } else {
             $o .= $name;
@@ -243,7 +254,7 @@ class leaderboard_table extends flexible_table {
         $state = $row->state;
         if ($state instanceof state_with_subject) {
             $picture = $state->get_picture();
-            $link = $state->get_link();
+            $link = $this->canviewprofiles ? $state->get_link() : null;
         }
         return $this->xpoutput->user_avatar($picture, $link);
     }
