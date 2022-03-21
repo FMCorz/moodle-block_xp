@@ -18,7 +18,7 @@ Feature: A student earns experience points for participating in a course
     And I am on front page
     And I follow "Course 1"
     And I turn editing mode on
-    And I add the "Level up!" block
+    And I add the "Level Up" block
     And I add a "Forum" to section "1" and I fill the form with:
       | Forum name  | Test forum name |
       | Forum type  | Standard forum for general use |
@@ -34,7 +34,7 @@ Feature: A student earns experience points for participating in a course
       | Subject | Reply with text   |
       | Message | This is the body  |
     And I follow "Course 1"
-    And I click on "Ladder" "link" in the "Level up!" "block"
+    And I click on "Ladder" "link" in the "Level Up" "block"
     Then the following should exist in the "block_xp-table" table:
       | Full name   | Level | Total |
       | Student One | 1     | 117   |

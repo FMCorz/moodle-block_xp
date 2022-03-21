@@ -32,7 +32,7 @@ Feature: A report displays students' progress
     And I am on front page
     And I follow "Course 1"
     And I turn editing mode on
-    And I add the "Level up!" block
+    And I add the "Level Up" block
     And I add a "Forum" to section "1" and I fill the form with:
       | Forum name  | Test forum name |
       | Forum type  | Standard forum for general use |
@@ -62,7 +62,7 @@ Feature: A report displays students' progress
     And I log in as "t1"
     And I am on front page
     And I follow "Course 1"
-    When I click on "Report" "link" in the "Level up!" "block"
+    When I click on "Report" "link" in the "Level Up" "block"
     Then the following should exist in the "block_xp-report-table" table:
       | Full name     | Level | Total |
       | Student One   | 1     | 63    |
@@ -118,8 +118,8 @@ Feature: A report displays students' progress
     And I am on front page
     And I follow "Course 1"
     And I turn editing mode on
-    And I add the "Level up!" block
-    And I click on "Report" "link" in the "Level up!" "block"
+    And I add the "Level Up" block
+    And I click on "Report" "link" in the "Level Up" "block"
     And the following should exist in the "block_xp-report-table" table:
       | Full name     | Level | Total |
       | Student One   | -     | -     |

@@ -82,7 +82,7 @@ class debug_controller extends route_controller {
     protected function content() {
         global $COURSE;
 
-        echo $this->get_renderer()->heading('Level Up! Debug');
+        echo $this->get_renderer()->heading('Level Up Debug');
 
         echo '<pre>';
 

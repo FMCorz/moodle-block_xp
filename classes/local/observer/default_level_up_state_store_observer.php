@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since Level up! 3.12, please use default_state_store_observer instead.
+ * @deprecated Since Level Up 3.12, please use default_state_store_observer instead.
  */
 class default_level_up_state_store_observer extends default_state_store_observer {
 }

@@ -89,7 +89,7 @@ Quality of life
 - Inform users when the cheat guard settings may become ineffective
 - Keep promo page visible when the add-on has been installed
 
-_Level up! Plus_ users may be required to upgrade the add-on for some of these changes to take effect.
+_Level Up Plus_ users may be required to upgrade the add-on for some of these changes to take effect.
 
 v3.9.0
 ------
@@ -127,7 +127,7 @@ Quality of life
 
 Technical changes
 
-- Changes to filters and rules to support grade-based rewards in _Level up! Plus_
+- Changes to filters and rules to support grade-based rewards in _Level Up Plus_
 
 v3.8.0
 ------
@@ -198,12 +198,12 @@ v3.4.0
 ------
 
 - Support GIFs and SVGs for level badges
-- Maintenance for Level up! Plus group leaderboards
+- Maintenance for Level Up Plus group leaderboards
 
 v3.3.1
 ------
 
-- Maintenance for Level up! Plus
+- Maintenance for Level Up Plus
 
 v3.3.0
 ------
@@ -233,7 +233,7 @@ v3.1.1
 v3.1.0
 ------
 
-- Changes to support Moodle Mobile in _Level up! Plus_
+- Changes to support Moodle Mobile in _Level Up Plus_
 - Colours of default badges were revised
 - Event 'course_viewed' added to the list of events
 - Permit capability overrides at category, course and module levels
@@ -252,7 +252,7 @@ v3.0.2
 v3.0.1
 ------
 
-- Improved compatibility with older plugins depending on Level up!
+- Improved compatibility with older plugins depending on Level Up
 
 v3.0.0
 ------
@@ -261,7 +261,7 @@ v3.0.0
 - The block optionally displays their recent rewards to students
 - The default rules are no longer locked and can be changed by administrators and teachers
 - The visual appearance of the block has been improved
-- Made ready for compatibility with the [Level up! Plus add-on](https://github.com/FMCorz/moodle-local_xp)
+- Made ready for compatibility with the [Level Up Plus add-on](https://github.com/FMCorz/moodle-local_xp)
 - Visuals no longer require an image to be uploaded for each level
 - A preview of the badges is displayed in the visuals page
 - The levels are displayed as a graphic in pages accessible to students

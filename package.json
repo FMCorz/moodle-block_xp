@@ -1,7 +1,7 @@
 {
   "name": "block_xp",
   "version": "3.12.0",
-  "description": "Level up! plugin for Moodle",
+  "description": "Level Up plugin for Moodle",
   "repository": "git@github.com:FMCorz/moodle-block_xp.git",
   "author": "Frédéric Massart <fred@branchup.tech>",
   "license": "GPLv3",
