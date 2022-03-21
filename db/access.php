@@ -84,5 +84,16 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         ),
         'clonepermissionsfrom' => 'block/xp:manage'
+    ),
+
+    // Whether or not a user can view the report.
+    'block/xp:viewreport' => array(
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+        'clonepermissionsfrom' => 'block/xp:manage'
     )
 );

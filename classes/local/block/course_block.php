@@ -34,6 +34,7 @@ use lang_string;
 use pix_icon;
 use stdClass;
 use block_xp\local\course_world;
+use block_xp\local\permission\access_report_permissions;
 use block_xp\local\xp\level_with_name;
 use block_xp\output\notice;
 use block_xp\output\dismissable_notice;
@@ -242,7 +243,9 @@ class course_block extends block_base {
      * @return action_link[]
      */
     protected function get_block_navigation(course_world $world) {
-        $canedit = $world->get_access_permissions()->can_manage();
+        $accessperms = $world->get_access_permissions();
+        $canedit = $accessperms->can_manage();
+        $canaccessreport = $accessperms instanceof access_report_permissions && $accessperms->can_access_report();
         $courseid = $world->get_courseid();
         $urlresolver = \block_xp\di::get('url_resolver');
         $config = $world->get_config();
@@ -262,12 +265,14 @@ class course_block extends block_base {
                 new pix_icon('i/ladder', '', 'block_xp')
             );
         }
-        if ($canedit) {
+        if ($canaccessreport) {
             $actions[] = new action_link(
                 $urlresolver->reverse('report', ['courseid' => $courseid]),
                 get_string('navreport', 'block_xp'), null, null,
                 new pix_icon('i/report', '', 'block_xp')
             );
+        }
+        if ($canedit) {
             $actions[] = new action_link(
                 $urlresolver->reverse('config', ['courseid' => $courseid]),
                 get_string('navsettings', 'block_xp'), null, null,

@@ -36,7 +36,7 @@ use context;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class context_permissions implements access_permissions, access_logs_permissions {
+class context_permissions implements access_permissions, access_logs_permissions, access_report_permissions {
 
     /** @var context The context. */
     protected $context;
@@ -71,6 +71,16 @@ class context_permissions implements access_permissions, access_logs_permissions
     }
 
     /**
+     * Whether the user can access the report.
+     *
+     * @param int $userid The user ID.
+     * @return bool
+     */
+    public function can_access_report($userid = null) {
+        return has_capability('block/xp:viewreport', $this->context, $userid);
+    }
+
+    /**
      * Whether the user can manage the content.
      *
      * @param int $userid The user ID.
@@ -100,6 +110,16 @@ class context_permissions implements access_permissions, access_logs_permissions
      */
     public function require_access_logs($userid = null) {
         return require_capability('block/xp:viewlogs', $this->context, $userid);
+    }
+
+    /**
+     * Requires for user to be able to access the report.
+     *
+     * @param int $userid The user ID.
+     * @throws required_capability_exception
+     */
+    public function require_access_report($userid = null) {
+        return require_capability('block/xp:viewreport', $this->context, $userid);
     }
 
     /**

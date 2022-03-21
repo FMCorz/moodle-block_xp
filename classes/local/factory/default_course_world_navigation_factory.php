@@ -92,7 +92,7 @@ class default_course_world_navigation_factory implements course_world_navigation
             ];
         }
 
-        if ($accessperms->can_manage()) {
+        if ($accessperms instanceof \block_xp\local\permission\access_report_permissions && $accessperms->can_access_report()) {
             $links[] = [
                 'id' => 'report',
                 'url' => $urlresolver->reverse('report', ['courseid' => $courseid]),

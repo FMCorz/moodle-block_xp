@@ -62,7 +62,19 @@ class report_controller extends page_controller {
         ];
     }
 
+    protected function permissions_checks() {
+        $accessperms = $this->world->get_access_permissions();
+        if (!($accessperms instanceof \block_xp\local\permission\access_report_permissions)) {
+            throw new \coding_exception('Access permissions object requires report permissions.');
+        }
+        $accessperms->require_access_report();
+    }
+
     protected function pre_content() {
+        if (!$this->world->get_access_permissions()->can_manage()) {
+            return;
+        }
+
         // Reset data.
         if ($this->get_param('resetdata') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
@@ -169,11 +181,12 @@ class report_controller extends page_controller {
     }
 
     protected function page_content() {
+        $canmanage = $this->world->get_access_permissions()->can_manage();
         $output = $this->get_renderer();
         $groupid = $this->get_groupid();
 
         // Confirming reset data.
-        if ($this->get_param('resetdata')) {
+        if ($canmanage && $this->get_param('resetdata')) {
             echo $this->get_renderer()->confirm(
                 empty($groupid) ? get_string('reallyresetdata', 'block_xp') : get_string('reallyresetgroupdata', 'block_xp'),
                 new url($this->pageurl->get_compatible_url(), ['resetdata' => 1, 'confirm' => 1,
@@ -184,7 +197,7 @@ class report_controller extends page_controller {
         }
 
         // Confirming delete data.
-        if ($this->get_param('delete')) {
+        if ($canmanage && $this->get_param('delete')) {
             echo $this->get_renderer()->confirm(
                 markdown_to_html(get_string('reallydeleteuserstate', 'block_xp')),
                 new url($this->pageurl->get_compatible_url(), ['delete' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
@@ -194,7 +207,7 @@ class report_controller extends page_controller {
         }
 
         // Use edit form.
-        if (!empty($this->form)) {
+        if ($canmanage && !empty($this->form)) {
             $user = core_user::get_user($this->get_param('userid'));
             echo $output->heading(fullname($user), 3);
             $this->form->display();
@@ -205,7 +218,7 @@ class report_controller extends page_controller {
         echo $this->get_table()->out(20, true);
 
         // Output the bottom actions.
-        $actions = $this->get_bottom_action_buttons();
+        $actions = !$canmanage ? [] : $this->get_bottom_action_buttons();
         if (!empty($actions)) {
             echo html_writer::tag('p', implode('', array_map(function($button) use ($output) {
                 return $output->render($button);
