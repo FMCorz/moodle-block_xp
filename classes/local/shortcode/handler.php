@@ -101,7 +101,7 @@ class handler {
      * Handle the shortcode.
      *
      * @param string $shortcode The shortcode.
-     * @param object $args The arguments of the code.
+     * @param array $args The arguments of the code.
      * @param string|null $content The content, if the shortcode wraps content.
      * @param object $env The filter environment (contains context, noclean and originalformat).
      * @param Closure $next The function to pass the content through to process sub shortcodes.
@@ -130,7 +130,7 @@ class handler {
      * regardless of the other rules.
      *
      * @param string $shortcode The shortcode.
-     * @param object $args The arguments of the code.
+     * @param array $args The arguments of the code.
      * @param string|null $content The content, if the shortcode wraps content.
      * @param object $env The filter environment (contains context, noclean and originalformat).
      * @param Closure $next The function to pass the content through to process sub shortcodes.
@@ -204,7 +204,7 @@ class handler {
      * Handle the shortcode.
      *
      * @param string $shortcode The shortcode.
-     * @param object $args The arguments of the code.
+     * @param array $args The arguments of the code.
      * @param string|null $content The content, if the shortcode wraps content.
      * @param object $env The filter environment (contains context, noclean and originalformat).
      * @param Closure $next The function to pass the content through to process sub shortcodes.
@@ -292,7 +292,7 @@ class handler {
      * Handle the shortcode.
      *
      * @param string $shortcode The shortcode.
-     * @param object $args The arguments of the code.
+     * @param array $args The arguments of the code.
      * @param string|null $content The content, if the shortcode wraps content.
      * @param object $env The filter environment (contains context, noclean and originalformat).
      * @param Closure $next The function to pass the content through to process sub shortcodes.
@@ -325,7 +325,7 @@ class handler {
      * Handle the shortcode.
      *
      * @param string $shortcode The shortcode.
-     * @param object $args The arguments of the code.
+     * @param array $args The arguments of the code.
      * @param string|null $content The content, if the shortcode wraps content.
      * @param object $env The filter environment (contains context, noclean and originalformat).
      * @param Closure $next The function to pass the content through to process sub shortcodes.
