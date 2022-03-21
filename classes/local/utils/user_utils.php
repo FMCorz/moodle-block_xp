@@ -27,6 +27,7 @@ namespace block_xp\local\utils;
 defined('MOODLE_INTERNAL') || die();
 
 use block_xp\di;
+use context_course;
 use stdClass;
 
 /**
@@ -46,6 +47,40 @@ class user_utils {
      */
     public static function default_picture() {
         return di::get('renderer')->pix_url('u/f1');
+    }
+
+    /**
+     * Get a user's primary group ID.
+     *
+     * This is useful when attempting to determine the primary group of a user
+     * when the group selector does not apply, such as on the course page.
+     *
+     * @param int $courseid The course ID.
+     * @param int $userid The user ID.
+     * @param int The group ID, or 0.
+     */
+    public static function get_primary_group_id($courseid, $userid) {
+        $course = get_fast_modinfo($courseid)->get_course();
+        $groupmode = groups_get_course_groupmode($course);
+        $context = context_course::instance($courseid);
+        $aag = has_capability('moodle/site:accessallgroups', $context);
+
+        if ($groupmode == NOGROUPS && !$aag) {
+            $allowedgroups = [];
+            $usergroups = [];
+        } else if ($groupmode == VISIBLEGROUPS || $aag) {
+            $allowedgroups = groups_get_all_groups($course->id, 0, $course->defaultgroupingid);
+            $usergroups = groups_get_all_groups($course->id, $userid, $course->defaultgroupingid);
+        } else {
+            $allowedgroups = groups_get_all_groups($course->id, $userid, $course->defaultgroupingid);
+            $usergroups = $allowedgroups;
+        }
+
+        // If we don't have at least a group, then we can see everybody.
+        if (empty($usergroups)) {
+            return 0;
+        }
+        return reset($usergroups)->id;
     }
 
     /**

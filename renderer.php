@@ -840,9 +840,27 @@ EOT
         // Level name.
         $o .= $this->level_name($widget->state->get_level());
 
-        // Total XP.
+        // Rank and XP container.
         $xp = $widget->state->get_xp();
+        $o .= html_writer::start_div('xp-flex xp-row-reverse xp-items-center xp-justify-center xp-gap-8 xp-mb-1');
+
+        // Rank.
+        if ($widget->showrank) {
+            $rank = $widget->rank ? $widget->rank->get_rank() : '-';
+            $o .= html_writer::tag('div',
+                $this->render(new pix_icon('i/ladder', '', 'block_xp', ['class' => 'xp-m-0 xp-mr-1', 'role' => 'decoration'])) .
+                $rank, [
+                    'class' => 'xp-rank xp-flex xp-items-center xp-tracking-wider',
+                    'title' => get_string('rank', 'block_xp')
+                ]
+            );
+        }
+
+        // Total XP.
         $o .= html_writer::tag('div', $this->xp($xp), ['class' => 'xp-total']);
+
+        // Rank and XP container end.
+        $o .= html_writer::end_div();
 
         // Progress bar.
         $o .= $this->progress_bar($widget->state);

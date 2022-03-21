@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 use context_course;
 use block_xp\di;
 use block_xp\local\sql\limit;
+use block_xp\local\utils\user_utils;
 use block_xp\local\xp\level_with_name;
 
 /**
@@ -49,27 +50,7 @@ class handler {
      * @return int
      */
     protected static function get_group_id($courseid, $userid) {
-        $course = get_fast_modinfo($courseid)->get_course();
-        $groupmode = groups_get_course_groupmode($course);
-        $context = context_course::instance($courseid);
-        $aag = has_capability('moodle/site:accessallgroups', $context);
-
-        if ($groupmode == NOGROUPS && !$aag) {
-            $allowedgroups = [];
-            $usergroups = [];
-        } else if ($groupmode == VISIBLEGROUPS || $aag) {
-            $allowedgroups = groups_get_all_groups($course->id, 0, $course->defaultgroupingid);
-            $usergroups = groups_get_all_groups($course->id, $userid, $course->defaultgroupingid);
-        } else {
-            $allowedgroups = groups_get_all_groups($course->id, $userid, $course->defaultgroupingid);
-            $usergroups = $allowedgroups;
-        }
-
-        // If we don't have at least a group, then we can see everybody.
-        if (empty($usergroups)) {
-            return 0;
-        }
-        return reset($usergroups)->id;
+        return user_utils::get_primary_group_id($courseid, $userid);
     }
 
     /**

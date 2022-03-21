@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use action_link;
 use block_base;
+use block_xp\local\config\course_world_config;
 use context;
 use context_system;
 use html_writer;
@@ -35,6 +36,7 @@ use pix_icon;
 use stdClass;
 use block_xp\local\course_world;
 use block_xp\local\permission\access_report_permissions;
+use block_xp\local\utils\user_utils;
 use block_xp\local\xp\level_with_name;
 use block_xp\output\notice;
 use block_xp\output\dismissable_notice;
@@ -160,6 +162,7 @@ class course_block extends block_base {
         $indicator = \block_xp\di::get('user_notice_indicator');
         $courseid = $world->get_courseid();
         $config = $world->get_config();
+        $leaderboardfactory = \block_xp\di::get('course_world_leaderboard_factory');
 
         // Recent activity.
         $activity = [];
@@ -205,6 +208,17 @@ class course_block extends block_base {
             $moreurl
         );
         $widget->set_force_recent_activity($forcerecentactivity);
+
+        // Add the rank to the widget.
+        if ($config->get('rankmode') == course_world_config::RANK_ON) {
+            $groupid = 0;
+            if ($adminconfig->get('context') == CONTEXT_COURSE) {
+                $groupid = user_utils::get_primary_group_id($world->get_courseid(), $USER->id);
+            }
+            $leaderboard = $leaderboardfactory->get_course_leaderboard($world, $groupid);
+            $widget->set_rank($leaderboard->get_rank($USER->id));
+            $widget->set_show_rank(true);
+        }
 
         // When XP gain is disabled, let the teacher now.
         if (!$config->get('enabled') && $canedit) {

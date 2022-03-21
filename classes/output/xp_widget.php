@@ -30,6 +30,7 @@ use action_link;
 use lang_string;
 use moodle_url;
 use renderable;
+use block_xp\local\xp\rank;
 use block_xp\local\xp\state;
 use block_xp\local\activity\activity;
 
@@ -43,6 +44,10 @@ use block_xp\local\activity\activity;
  */
 class xp_widget implements renderable {
 
+    /** @var rank The user's leaderboard rank. */
+    public $rank;
+    /** @var bool Whether to show the user's rank.  */
+    public $showrank = false;
     /** @var state The user's state. */
     public $state;
     /** @var activity[] The activity objects. */
@@ -79,6 +84,14 @@ class xp_widget implements renderable {
 
     public function set_force_recent_activity($value) {
         $this->forcerecentactivity = (bool) $value;
+    }
+
+    public function set_rank(rank $rank = null) {
+        $this->rank = $rank;
+    }
+
+    public function set_show_rank($showrank) {
+        $this->showrank = $showrank;
     }
 
 }

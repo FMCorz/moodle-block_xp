@@ -23,6 +23,12 @@
 .block_xp .xp-m-0 {
     margin: 0px;
 }
+.block_xp .xp-mb-1 {
+    margin-bottom: 0.25rem;
+}
+.block_xp .xp-mr-1 {
+    margin-right: 0.25rem;
+}
 .block_xp .xp-mt-6 {
     margin-top: 1.5rem;
 }
@@ -110,6 +116,9 @@
 .block_xp .xp-justify-center {
     justify-content: center;
 }
+.block_xp .xp-gap-8 {
+    gap: 2rem;
+}
 .block_xp .xp-break-all {
     word-break: break-all;
 }
@@ -172,6 +181,9 @@
 }
 .block_xp .xp-leading-none {
     line-height: 1;
+}
+.block_xp .xp-tracking-wider {
+    letter-spacing: 0.05em;
 }
 
 /** Legacy styles. */
@@ -273,10 +285,9 @@
 }
 .block_xp .xp-total {
     text-align: center;
-    margin-bottom: 5px;
 }
 .block_xp .xp-total .pts {
-    letter-spacing: 1px;
+    letter-spacing: 0.05em;
 }
 .block_xp .introduction .alert {
     padding: 8px;
