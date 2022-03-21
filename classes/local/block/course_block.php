@@ -210,7 +210,7 @@ class course_block extends block_base {
         $widget->set_force_recent_activity($forcerecentactivity);
 
         // Add the rank to the widget.
-        if ($config->get('rankmode') == course_world_config::RANK_ON) {
+        if ($config->get('enableladder') && $config->get('rankmode') == course_world_config::RANK_ON) {
             $groupid = 0;
             if ($adminconfig->get('context') == CONTEXT_COURSE) {
                 $groupid = user_utils::get_primary_group_id($world->get_courseid(), $USER->id);
