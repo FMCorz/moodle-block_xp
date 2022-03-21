@@ -42,6 +42,8 @@ abstract class course_route_controller extends route_controller {
     protected $course;
     /** @var int The course ID. */
     protected $courseid;
+    /** @var bool Requires a wide view. */
+    protected $iswideview = false;
     /** @var bool Whether the page supports groups. */
     protected $supportsgroups = false;
     /** @var \block_xp\local\course_world */
@@ -86,13 +88,17 @@ abstract class course_route_controller extends route_controller {
      * @return void
      */
     protected function page_setup() {
-        global $PAGE;
+        global $CFG, $PAGE;
 
         // Note that the context was set by require_login().
         $PAGE->set_url($this->pageurl->get_compatible_url());
         $PAGE->set_pagelayout($this->get_page_layout());
         $PAGE->set_title($this->get_page_html_head_title());
         $PAGE->set_heading($this->get_page_title());
+
+        if (!$this->iswideview) {
+            $PAGE->add_body_class('limitedwidth');
+        }
     }
 
     /**

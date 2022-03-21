@@ -39,6 +39,7 @@ use moodle_exception;
 class log_controller extends page_controller {
 
     protected $routename = 'log';
+    protected $iswideview = true;
     protected $supportsgroups = true;
 
     protected function permissions_checks() {

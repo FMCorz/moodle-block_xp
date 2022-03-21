@@ -41,6 +41,8 @@ use block_xp\local\routing\url;
  */
 class report_controller extends page_controller {
 
+    /** @var bool Requires a wide view. */
+    protected $iswideview = true;
     /** @var bool The page supports groups. */
     protected $supportsgroups = true;
     /** @var string The route name. */

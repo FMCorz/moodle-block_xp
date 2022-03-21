@@ -115,6 +115,7 @@ class promo_controller extends route_controller {
             $PAGE->set_pagelayout('course');
             $PAGE->set_title(get_string('levelupplus', 'block_xp'));
             $PAGE->set_heading(format_string($COURSE->fullname));
+            $PAGE->add_body_class('limitedwidth');
         }
     }
 
