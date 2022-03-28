@@ -156,7 +156,7 @@ class block_xp_filter implements renderable {
     /**
      * Return the ID.
      *
-     * @return int
+     * @return int|null
      */
     public function get_id() {
         return $this->id;
@@ -213,7 +213,17 @@ class block_xp_filter implements renderable {
                 // Prevent negatives.
                 $value = abs(intval($value));
             } else if ($key == 'sortorder') {
+                // Int.
                 $value = intval($value);
+            } else if ($key == 'id' || $key == 'courseid') {
+                // Null or int.
+                $value = !empty($value) ? intval($value) : null;
+            } else if ($key == 'category') {
+                // Must be a valid category.
+                $value = intval($value);
+                if (!in_array($value, [self::CATEGORY_EVENTS, self::CATEGORY_GRADES])) {
+                    continue;
+                }
             }
 
             $filter->$key = $value;
@@ -325,22 +335,24 @@ class block_xp_filter implements renderable {
     public static function validate_data($data) {
         $valid = true;
 
-        if (isset($data['courseid'])) {
+        // Empty values ("", "0", or 0) will be cast to int and will be 0 in self::load_from_data.
+        // If the values are not set, they won't be cast and they property won't be assigned.
+        if (!empty($data['courseid'])) {
             $valid = $valid && clean_param($data['courseid'], PARAM_INT) == $data['courseid'];
         }
-        if (isset($data['points'])) {
+        if (!empty($data['points'])) {
             $valid = $valid && clean_param($data['points'], PARAM_INT) == $data['points'];
         }
-        if (isset($data['sortorder'])) {
+        if (!empty($data['sortorder'])) {
             $valid = $valid && clean_param($data['sortorder'], PARAM_INT) == $data['sortorder'];
         }
-        if (isset($data['id'])) {
+        if (!empty($data['id'])) {
             $valid = $valid && clean_param($data['id'], PARAM_INT) == $data['id'];
         }
-        if (isset($data['category'])) {
-            $valid = $valid && clean_param($data['category'], PARAM_INT) == $data['category'];
-            $value = $valid && in_array($data['category'], [self::CATEGORY_EVENTS, self::CATEGORY_GRADES]);
+        if (!empty($data['category'])) {
+            $valid = $valid && in_array(clean_param($data['category'], PARAM_INT), [self::CATEGORY_EVENTS, self::CATEGORY_GRADES]);
         }
+
         if (isset($data['ruledata'])) {
             $ruledata = json_decode($data['ruledata'], true);
             $valid = $valid && $ruledata !== false;
