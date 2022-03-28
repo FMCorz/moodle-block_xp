@@ -59,7 +59,7 @@ abstract class route_controller implements controller {
      *
      * @return void
      */
-    final private function define_pageurl() {
+    private function define_pageurl() {
         $paramsdef = array_reduce($this->define_optional_params(), function($carry, $item) {
             if (isset($item[3]) && !$item[3]) {
                 // Do not return parameters which must not be in the URL.
@@ -126,7 +126,7 @@ abstract class route_controller implements controller {
      *
      * @return void
      */
-    final private function collect_params() {
+    private function collect_params() {
         $this->collect_optional_params();
         $this->params = $this->request->get_route()->get_params() + $this->optionalparams;
     }
@@ -160,7 +160,7 @@ abstract class route_controller implements controller {
      *
      * @return array
      */
-    final private function collect_optional_params() {
+    private function collect_optional_params() {
         $this->optionalparams = array_reduce($this->define_optional_params(), function($carry, $data) {
             $carry[$data[0]] = optional_param($data[0], $data[1], $data[2]);
             return $carry;
