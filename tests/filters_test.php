@@ -159,4 +159,121 @@ class block_xp_filters_testcase extends block_xp_base_testcase {
 
     }
 
+    public function test_validate_data() {
+        $this->assertTrue(block_xp_filter::validate_data([]));
+
+        // Rule data.
+        $this->assertTrue(block_xp_filter::validate_data([
+            'ruledata' => json_encode(['_class' => 'block_xp_rule_property'])
+        ]));
+        $this->assertFalse(block_xp_filter::validate_data([
+            'ruledata' => json_encode(['_class' => 'core_user'])
+        ]));
+
+        // IDs where loose empty values are OK.
+        $this->assertTrue(block_xp_filter::validate_data(['id' => ""]));
+        $this->assertTrue(block_xp_filter::validate_data(['id' => "0"]));
+        $this->assertTrue(block_xp_filter::validate_data(['id' => 0]));
+        $this->assertTrue(block_xp_filter::validate_data(['id' => "2"]));
+        $this->assertTrue(block_xp_filter::validate_data(['id' => 2]));
+
+        // Course IDs where loose empty values are OK.
+        $this->assertTrue(block_xp_filter::validate_data(['courseid' => ""]));
+        $this->assertTrue(block_xp_filter::validate_data(['courseid' => "0"]));
+        $this->assertTrue(block_xp_filter::validate_data(['courseid' => 0]));
+        $this->assertTrue(block_xp_filter::validate_data(['courseid' => "2"]));
+        $this->assertTrue(block_xp_filter::validate_data(['courseid' => 2]));
+
+        // Points, must be valid integers.
+        $this->assertTrue(block_xp_filter::validate_data(['points' => ""]));
+        $this->assertTrue(block_xp_filter::validate_data(['points' => "0"]));
+        $this->assertTrue(block_xp_filter::validate_data(['points' => 0]));
+        $this->assertTrue(block_xp_filter::validate_data(['points' => "2"]));
+        $this->assertTrue(block_xp_filter::validate_data(['points' => 2]));
+
+        // Category.
+        // $this->assertFalse(block_xp_filter::validate_data(['category' => 20]));
+        $this->assertTrue(block_xp_filter::validate_data(['category' => ""])); // Auto cast to 0.
+        $this->assertTrue(block_xp_filter::validate_data(['category' => "abc"])); // Auto cast to 0.
+        $this->assertTrue(block_xp_filter::validate_data(['category' => block_xp_filter::CATEGORY_EVENTS]));
+        $this->assertTrue(block_xp_filter::validate_data(['category' => block_xp_filter::CATEGORY_GRADES]));
+        $this->assertTrue(block_xp_filter::validate_data(['category' => (string) block_xp_filter::CATEGORY_EVENTS]));
+        $this->assertTrue(block_xp_filter::validate_data(['category' => (string) block_xp_filter::CATEGORY_GRADES]));
+    }
+
+    public function test_load_from_data() {
+        $filter = block_xp_filter::load_from_data((object) [
+            'ruledata' => json_encode(['_class' => 'block_xp_rule_property'])
+        ]);
+        $this->assertInstanceOf('block_xp_rule_property', $filter->get_rule());
+
+        // IDs where loose empty values are OK.
+        $filter = block_xp_filter::load_from_data((object) ['id' => ""]);
+        $this->assertEmpty($filter->get_id());
+        // $this->assertSame(null, $filter->get_id());
+        $filter = block_xp_filter::load_from_data((object) ['id' => "0"]);
+        $this->assertEmpty($filter->get_id());
+        // $this->assertSame(null, $filter->get_id());
+        $filter = block_xp_filter::load_from_data((object) ['id' => 0]);
+        $this->assertEmpty($filter->get_id());
+        // $this->assertSame(null, $filter->get_id());
+        $filter = block_xp_filter::load_from_data((object) ['id' => "2"]);
+        $this->assertEquals(2, $filter->get_id());
+        $filter = block_xp_filter::load_from_data((object) ['id' => 2]);
+        $this->assertSame(2, $filter->get_id());
+
+        // Course IDs where loose empty values are OK.
+        $filter = block_xp_filter::load_from_data((object) ['courseid' => ""]);
+        $this->assertEmpty($filter->export()->courseid);
+        // $this->assertSame(null, $filter->export()->courseid);
+        $filter = block_xp_filter::load_from_data((object) ['courseid' => "0"]);
+        $this->assertEmpty($filter->export()->courseid);
+        // $this->assertSame(null, $filter->export()->courseid);
+        $filter = block_xp_filter::load_from_data((object) ['courseid' => 0]);
+        $this->assertEmpty($filter->export()->courseid);
+        // $this->assertSame(null, $filter->export()->courseid);
+        $filter = block_xp_filter::load_from_data((object) ['courseid' => "2"]);
+        $this->assertEquals(2, $filter->export()->courseid);
+        $filter = block_xp_filter::load_from_data((object) ['courseid' => 2]);
+        $this->assertSame(2, $filter->export()->courseid);
+
+        // Points.
+        $filter = block_xp_filter::load_from_data(['points' => ""]);
+        $this->assertSame(0, $filter->get_points());
+        $filter = block_xp_filter::load_from_data(['points' => "0"]);
+        $this->assertSame(0, $filter->get_points());
+        $filter = block_xp_filter::load_from_data(['points' => 0]);
+        $this->assertSame(0, $filter->get_points());
+        $filter = block_xp_filter::load_from_data(['points' => "2"]);
+        $this->assertSame(2, $filter->get_points());
+        $filter = block_xp_filter::load_from_data(['points' => 2]);
+        $this->assertSame(2, $filter->get_points());
+
+        // Sortorder.
+        $filter = block_xp_filter::load_from_data(['sortorder' => ""]);
+        $this->assertSame(0, $filter->get_sortorder());
+        $filter = block_xp_filter::load_from_data(['sortorder' => "0"]);
+        $this->assertSame(0, $filter->get_sortorder());
+        $filter = block_xp_filter::load_from_data(['sortorder' => 0]);
+        $this->assertSame(0, $filter->get_sortorder());
+        $filter = block_xp_filter::load_from_data(['sortorder' => "2"]);
+        $this->assertSame(2, $filter->get_sortorder());
+        $filter = block_xp_filter::load_from_data(['sortorder' => 2]);
+        $this->assertSame(2, $filter->get_sortorder());
+
+        // Category.
+        // $filter = block_xp_filter::load_from_data(['category' => ""]);
+        // $this->assertEquals(block_xp_filter::CATEGORY_EVENTS, $filter->get_category());
+        // $filter = block_xp_filter::load_from_data(['category' => "abc"]);
+        // $this->assertEquals(block_xp_filter::CATEGORY_EVENTS, $filter->get_category());
+        // $filter = block_xp_filter::load_from_data(['category' => block_xp_filter::CATEGORY_EVENTS]);
+        // $this->assertEquals(block_xp_filter::CATEGORY_EVENTS, $filter->get_category());
+        // $filter = block_xp_filter::load_from_data(['category' => block_xp_filter::CATEGORY_GRADES]);
+        // $this->assertEquals(block_xp_filter::CATEGORY_GRADES, $filter->get_category());
+        // $filter = block_xp_filter::load_from_data(['category' => (string) block_xp_filter::CATEGORY_EVENTS]);
+        // $this->assertEquals(block_xp_filter::CATEGORY_EVENTS, $filter->get_category());
+        // $filter = block_xp_filter::load_from_data(['category' => (string) block_xp_filter::CATEGORY_GRADES]);
+        // $this->assertEquals(block_xp_filter::CATEGORY_GRADES, $filter->get_category());
+    }
+
 }
