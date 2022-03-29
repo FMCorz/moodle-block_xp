@@ -28,6 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 
 use context_course;
 use block_xp\di;
+use block_xp\local\config\config_stack;
+use block_xp\local\config\course_world_config;
+use block_xp\local\config\static_config;
 use block_xp\local\sql\limit;
 use block_xp\local\utils\user_utils;
 use block_xp\local\xp\level_with_name;
@@ -206,8 +209,16 @@ class handler {
             $groupid = static::get_group_id($world->get_courseid(), $USER->id);
         }
 
-        // Fetch the leaderboard.
-        $leaderboard = di::get('course_world_leaderboard_factory')->get_course_leaderboard($world, $groupid);
+        // Prepare the config.
+        $config = $world->get_config();
+        if (!empty($args['top'])) {
+            // Disable the neighbours when argument top is set.
+            $config = new config_stack([new static_config(['neighbours' => 0]), $config]);
+        }
+
+        // Retrieve the leaderboard.
+        $factory = di::get('course_world_leaderboard_factory_with_config');
+        $leaderboard = $factory->get_course_leaderboard_with_config($world, $config, $groupid);
 
         // Check the position of the user.
         $pos = $leaderboard->get_position($USER->id);
@@ -241,8 +252,8 @@ class handler {
         $table = new \block_xp\output\leaderboard_table($leaderboard, di::get('renderer'), [
             'context' => $world->get_context(),
             'fence' => $limit,
-            'rankmode' => $world->get_config()->get('rankmode'),
-            'identitymode' => $world->get_config()->get('identitymode'),
+            'rankmode' => $config->get('rankmode'),
+            'identitymode' => $config->get('identitymode'),
             'discardcolumns' => !empty($args['withprogress']) ? [] : ['progress'],
         ], $USER->id);
         $table->define_baseurl($baseurl);
