@@ -29,7 +29,9 @@ global $CFG;
 require_once(__DIR__ . '/base_testcase.php');
 
 use block_xp\di;
+use block_xp\local\config\config_stack;
 use block_xp\local\config\course_world_config;
+use block_xp\local\config\static_config;
 use block_xp\local\sql\limit;
 
 /**
@@ -162,6 +164,155 @@ class block_xp_leaderboard_factory_testcase extends block_xp_base_testcase {
         $world->get_config()->set('identitymode', course_world_config::IDENTITY_OFF);
         $this->setUser($u4);
         $lb = $factory->get_course_leaderboard($world);
+        $ranking = array_values(iterator_to_array($lb->get_ranking(new limit(0, 0))));
+        $this->assertEquals(30, $ranking[0]->get_rank());
+        $this->assertEquals(20, $ranking[1]->get_rank());
+        $this->assertEquals(10, $ranking[2]->get_rank());
+        $this->assertEquals(0, $ranking[3]->get_rank());
+        $this->assertEquals(-10, $ranking[4]->get_rank());
+        $this->assertEquals(-20, $ranking[5]->get_rank());
+        $this->assertEquals(-40, $ranking[6]->get_rank());
+        $this->assertEquals(get_string('someoneelse', 'block_xp'), $ranking[0]->get_state()->get_name());
+        $this->assertEquals($guestuser->id, $ranking[0]->get_state()->get_id());
+        $this->assertEquals(get_string('someoneelse', 'block_xp'), $ranking[1]->get_state()->get_name());
+        $this->assertEquals($guestuser->id, $ranking[1]->get_state()->get_id());
+        $this->assertEquals(get_string('someoneelse', 'block_xp'), $ranking[2]->get_state()->get_name());
+        $this->assertEquals($guestuser->id, $ranking[2]->get_state()->get_id());
+        $this->assertEquals(fullname($u4), $ranking[3]->get_state()->get_name());
+        $this->assertEquals($u4->id, $ranking[3]->get_state()->get_id());
+        $this->assertEquals(get_string('someoneelse', 'block_xp'), $ranking[4]->get_state()->get_name());
+        $this->assertEquals($guestuser->id, $ranking[4]->get_state()->get_id());
+        $this->assertEquals(get_string('someoneelse', 'block_xp'), $ranking[5]->get_state()->get_name());
+        $this->assertEquals($guestuser->id, $ranking[5]->get_state()->get_id());
+        $this->assertEquals(get_string('someoneelse', 'block_xp'), $ranking[6]->get_state()->get_name());
+        $this->assertEquals($guestuser->id, $ranking[6]->get_state()->get_id());
+    }
+
+    /**
+     * Test the with_config factory.
+     */
+    public function test_factory_with_config_without_groups() {
+        $dg = $this->getDataGenerator();
+        $c1 = $dg->create_course();
+
+        $u1 = $dg->create_user();
+        $u2 = $dg->create_user();
+        $u3 = $dg->create_user();
+        $u4 = $dg->create_user();
+        $u5 = $dg->create_user();
+        $u6 = $dg->create_user();
+        $u7 = $dg->create_user();
+        $u8 = $dg->create_user();
+
+        $world = $this->get_world($c1->id);
+        $store = $world->get_store();
+        $store->set($u1->id, 100);
+        $store->set($u2->id, 120);
+        $store->set($u3->id, 130);
+        $store->set($u4->id, 140);
+        $store->set($u5->id, 150);
+        $store->set($u6->id, 160);
+        $store->set($u7->id, 170);
+        $store->set($u8->id, 180);
+
+        $factory = di::get('course_world_leaderboard_factory_with_config');
+        $config = new config_stack([$world->get_config()]);
+        $lb = $factory->get_course_leaderboard_with_config($world, $config);
+
+        $this->assertEquals(8, $lb->get_count());
+        $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
+            [$u8, 1],
+            [$u7, 2],
+            [$u6, 3],
+            [$u5, 4],
+            [$u4, 5],
+            [$u3, 6],
+            [$u2, 7],
+            [$u1, 8],
+        ]);
+        $this->assertEquals(fullname($u1), $lb->get_rank($u1->id)->get_state()->get_name());
+        $this->assertEquals(fullname($u8), $lb->get_rank($u8->id)->get_state()->get_name());
+
+        // Without a rank.
+        $config = new config_stack([new static_config([
+            'rankmode' => course_world_config::RANK_OFF
+        ]), $world->get_config()]);
+        $lb = $factory->get_course_leaderboard_with_config($world, $config);
+        $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
+            [$u8, 0],
+            [$u7, 0],
+            [$u6, 0],
+            [$u5, 0],
+            [$u4, 0],
+            [$u3, 0],
+            [$u2, 0],
+            [$u1, 0],
+        ]);
+
+        // With a relative rank for u8.
+        $this->setUser($u8);
+        $config = new config_stack([new static_config([
+            'rankmode' => course_world_config::RANK_REL
+        ]), $world->get_config()]);
+        $lb = $factory->get_course_leaderboard_with_config($world, $config);
+        $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
+            [$u8, 0],
+            [$u7, -10],
+            [$u6, -20],
+            [$u5, -30],
+            [$u4, -40],
+            [$u3, -50],
+            [$u2, -60],
+            [$u1, -80],
+        ]);
+
+        // With a relative rank for u2.
+        $this->setUser($u2);
+        $config = new config_stack([new static_config([
+            'rankmode' => course_world_config::RANK_REL
+        ]), $world->get_config()]);
+        $lb = $factory->get_course_leaderboard_with_config($world, $config);
+        $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
+            [$u8, 60],
+            [$u7, 50],
+            [$u6, 40],
+            [$u5, 30],
+            [$u4, 20],
+            [$u3, 10],
+            [$u2, 0],
+            [$u1, -20],
+        ]);
+
+        // With neighbours for u2.
+        $this->setUser($u2);
+        $config = new config_stack([new static_config([
+            'neighbours' => 1,
+            'rankmode' => course_world_config::RANK_REL
+        ]), $world->get_config()]);
+        $lb = $factory->get_course_leaderboard_with_config($world, $config);
+        $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
+            [$u3, 10],
+            [$u2, 0],
+            [$u1, -20],
+        ]);
+
+        // With neighbours for u8.
+        $this->setUser($u8);
+        $lb = $factory->get_course_leaderboard_with_config($world, $config);
+        $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
+            [$u8, 0],
+            [$u7, -10],
+        ]);
+
+        // With anonymity.
+        $guestuser = guest_user();
+        $this->setUser($u4);
+        $config = new config_stack([new static_config([
+            'neighbours' => 3,
+            'rankmode' => course_world_config::RANK_REL,
+            'identitymode' => course_world_config::IDENTITY_OFF,
+        ]), $world->get_config()]);
+        $lb = $factory->get_course_leaderboard_with_config($world, $config);
         $ranking = array_values(iterator_to_array($lb->get_ranking(new limit(0, 0))));
         $this->assertEquals(30, $ranking[0]->get_rank());
         $this->assertEquals(20, $ranking[1]->get_rank());
