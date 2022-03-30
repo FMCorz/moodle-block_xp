@@ -81,9 +81,11 @@ class usage_report_maker {
 
         $xpinfo = $pluginman->get_plugin_info('block_xp');
         $data->xp_version = $xpinfo ? $xpinfo->versiondisk : '?';
+        $data->xp_release = $xpinfo ? $xpinfo->release : '?';
 
         $xpplusinfo = $pluginman->get_plugin_info('local_xp');
         $data->xpplus_version = $xpplusinfo ? $xpplusinfo->versiondisk : '-';
+        $data->xpplus_release = $xpplusinfo ? $xpplusinfo->release : '-';
 
         $data->xp_context = $this->config->get('context');
         $data->xp_courses = $this->db->count_records('block_xp_config', []);
