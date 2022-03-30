@@ -39,6 +39,7 @@ use admin_setting_configtextarea;
 use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
 use block_xp\local\routing\url_resolver;
+use moodle_database;
 
 /**
  * Default settings maker.
@@ -63,6 +64,7 @@ class default_settings_maker implements settings_maker {
      * @param config $defaults The config object to get the defaults from.
      * @param url_resolver $urlresolver The URL resolver.
      * @param config|null $configlocked The repository of locked config.
+     * @param moodle_database|null $db The database.
      */
     public function __construct(config $defaults, url_resolver $urlresolver, config $configlocked = null) {
         $this->defaults = $defaults;
@@ -155,9 +157,6 @@ class default_settings_maker implements settings_maker {
             ]
         ));
 
-        // Logging settings.
-        $settings[] = (new admin_setting_heading('block_xp/hdrlogging', get_string('logging', 'block_xp'), ''));
-
         // Keeps logs for.
         $settings[] = (new admin_setting_configselect('block_xp/keeplogs',
             get_string('keeplogs', 'block_xp'), '',
@@ -169,6 +168,23 @@ class default_settings_maker implements settings_maker {
                 '30' => get_string('nummonth', 'core', 1),
             ]
         ));
+
+        // Usage report.
+        $setting = (new admin_setting_configselect(
+            'block_xp/usagereport',
+            get_string('usagereport', 'block_xp'),
+            get_string('usagereport_desc', 'block_xp'),
+            $this->defaults->get('usagereport'),
+            [
+                0 => get_string('never', 'core'),
+                1 => get_string('occasionally', 'block_xp'),
+            ]
+        ));
+        $setting->set_updatedcallback(function() {
+            $isenabled = (bool) get_config('block_xp', 'usagereport');
+            \block_xp\task\usage_report::set_enabled($isenabled);
+        });
+        $settings[] = $setting;
 
         return $settings;
     }
@@ -294,5 +310,4 @@ class default_settings_maker implements settings_maker {
 
         return $settings;
     }
-
 }

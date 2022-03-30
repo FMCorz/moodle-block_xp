@@ -46,6 +46,15 @@ class default_tasks_definition_maker implements tasks_definition_maker {
                 'day' => '*',
                 'dayofweek' => '*',
                 'month' => '*'
+            ],
+            [
+                'classname' => 'block_xp\task\usage_report',
+                'blocking' => 0,
+                'minute' => 'R',
+                'hour' => 'R',
+                'day' => '*',
+                'dayofweek' => 'R',
+                'month' => '*'
             ]
         ];
     }

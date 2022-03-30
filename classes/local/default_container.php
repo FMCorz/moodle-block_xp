@@ -69,6 +69,7 @@ class default_container implements container {
         'shortcodes_definition_maker' => true,
         'tasks_definition_maker' => true,
         'url_resolver' => true,
+        'usage_reporter' => true,
         'user_generic_indicator' => true,
         'user_notice_indicator' => true,
     ];
@@ -392,6 +393,16 @@ class default_container implements container {
      */
     protected function get_tasks_definition_maker() {
         return new \block_xp\local\task\default_tasks_definition_maker();
+    }
+
+    /**
+     * Get usage reporter.
+     *
+     * @return plugin\usage_reporter
+     */
+    protected function get_usage_reporter() {
+        $config = $this->get('config');
+        return new \block_xp\local\plugin\usage_reporter($config, new plugin\usage_report_maker($this->get('db'), $config));
     }
 
     /**
