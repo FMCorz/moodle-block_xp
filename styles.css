@@ -583,6 +583,7 @@
 .block-xp-filters-wrapper select {
     /* In Edge the line height is inherited when we do not do this. */
     line-height: 18px;
+    max-width: 100%;
 }
 .block-xp-filters-wrapper .filter-rules {
     margin-left: 20px;
