@@ -18,7 +18,7 @@ Feature: A student is shown a notification popup when they level up
     And I am on front page
     And I follow "Course 1"
     And I turn editing mode on
-    And I add the "Level Up" block
+    And I add the "Level Up XP" block
     And I add a "Forum" to section "1" and I fill the form with:
       | Forum name  | Test forum name |
       | Forum type  | Standard forum for general use |
@@ -41,7 +41,7 @@ Feature: A student is shown a notification popup when they level up
     And I follow "Course 1"
     Then I should see "You have reached level 2!"
     And I press "Cool, thanks"
-    And I click on "Ladder" "link" in the "Level Up" "block"
+    And I click on "Ladder" "link" in the "Level Up XP" "block"
     And the following should exist in the "block_xp-table" table:
       | Full name   | Level | Total |
       | Student One | 2     | 120   |

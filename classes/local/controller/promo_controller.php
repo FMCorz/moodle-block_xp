@@ -224,7 +224,7 @@ class promo_controller extends route_controller {
         <td><img src="{$output->pix_url('noun/favorite-mobile', 'block_xp')}" alt=""></td>
         <td>
             <h4>Mobile app support</h4>
-            <p>Access Level Up in the official Moodle Mobile app.</p>
+            <p>Access Level Up XP in the official Moodle Mobile app.</p>
             <ul>
                 <li>See current level and progress</li>
                 <li>Access the leaderboard</li>
@@ -302,7 +302,7 @@ class promo_controller extends route_controller {
 
 <div style="text-align: center; margin-top: 2em">
     <p><a class="btn btn-success btn-large btn-lg" href="{$siteurl}">
-        Get Level Up Plus now!
+        Get Level Up XP+ now!
     </a></p>
 </div>
 EOT;

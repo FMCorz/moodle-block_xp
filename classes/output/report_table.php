@@ -202,7 +202,7 @@ class report_table extends table_sql {
      * Get the columns.
      *
      * @return array
-     * @deprecated Since Level Up 3.12, please use self::get_columns_definition instead.
+     * @deprecated Since Level Up XP 3.12, please use self::get_columns_definition instead.
      */
     protected function get_columns() {
         return array_keys($this->get_columns_definition());
@@ -212,7 +212,7 @@ class report_table extends table_sql {
      * Get the headers.
      *
      * @return void
-     * @deprecated Since Level Up 3.12, please use self::get_columns_definition instead.
+     * @deprecated Since Level Up XP 3.12, please use self::get_columns_definition instead.
      */
     protected function get_headers() {
         return array_map(function($header) {

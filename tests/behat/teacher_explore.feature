@@ -21,12 +21,12 @@ Feature: A teacher can navigate through the pages of the plugin
     And I am on front page
     And I follow "Course 1"
     And I turn editing mode on
-    And I add the "Level Up" block
+    And I add the "Level Up XP" block
     And I log out
     And I log in as "t1"
     And I am on front page
     When I follow "Course 1"
-    And I click on "Info" "link" in the "Level Up" "block"
+    And I click on "Info" "link" in the "Level Up XP" "block"
     And I follow "Ladder"
     And I follow "Report"
     And I click on "Log" "link" in the "#region-main" "css_element"
@@ -35,4 +35,4 @@ Feature: A teacher can navigate through the pages of the plugin
     And I follow "Visuals"
     And I click on "Settings" "link" in the "#region-main" "css_element"
     And I follow "Plus"
-    Then I should see "Discover Level Up Plus"
+    Then I should see "Discover Level Up XP+"

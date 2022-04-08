@@ -75,7 +75,7 @@ $string['deletecondition'] = 'Delete condition';
 $string['deleterule'] = 'Delete rule';
 $string['description'] = 'Description';
 $string['difference'] = 'Diff.';
-$string['discoverlevelupplus'] = 'Discover Level Up Plus';
+$string['discoverlevelupplus'] = 'Discover Level Up XP+';
 $string['dismissnotice'] = 'Dismiss notice';
 $string['displayeveryone'] = 'Display everyone';
 $string['displaynneighbours'] = 'Display {$a} neighbours';
@@ -101,8 +101,8 @@ $string['enablexpgain_help'] = 'When set to \'No\', nobody will earn points in t
 
 Please note that this can also be controlled more granularly using the capability _block/xp:earnxp_.';
 $string['entersearchterm'] = 'Enter a search term';
-$string['errorcontextcoursemismatchforwholesite'] = 'The URL of this <em>Level Up</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up</em> to be used \'For the whole site\', however this page expected it to be used \'Per course\'. Please <a href="{$a->nexturl}">click here</a> to navigate to the right page. Search for the admin setting \'block_xp_context\' if you wish to change your configuration.';
-$string['errorcontextcoursemismatchpercourse'] = 'The URL of this <em>Level Up</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up</em> to be used \'Per course\', but this page expects it to be used \'For the whole site\'. It most likely originates from a <em>block</em> that was added to the dashboard or front page while in a different configuration. You should remove the block from the latter pages, and only use the block from within individual courses.';
+$string['errorcontextcoursemismatchforwholesite'] = 'The URL of this <em>Level Up XP</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up XP</em> to be used \'For the whole site\', however this page expected it to be used \'Per course\'. Please <a href="{$a->nexturl}">click here</a> to navigate to the right page. Search for the admin setting \'block_xp_context\' if you wish to change your configuration.';
+$string['errorcontextcoursemismatchpercourse'] = 'The URL of this <em>Level Up XP</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up XP</em> to be used \'Per course\', but this page expects it to be used \'For the whole site\'. It most likely originates from a <em>block</em> that was added to the dashboard or front page while in a different configuration. You should remove the block from the latter pages, and only use the block from within individual courses.';
 $string['errorformvalues'] = 'There are some issues in the form values, please fix them.';
 $string['errorlevelsincorrect'] = 'The minimum number of levels is 2';
 $string['errornotalllevelsbadgesprovided'] = 'Not all the level badges have been provided. Missing: {$a}';
@@ -152,8 +152,8 @@ $string['leveldesc_help'] = 'A short description of the level, this is displayed
 $string['levelname'] = 'Level name';
 $string['levelname_help'] = 'A short name to display instead of the default _Level #1_, _Level #2_, etc. that is sometimes displayed. If you give names to some levels, we recommend that you give a name to all of them!';
 $string['levels'] = 'Levels';
-$string['levelup'] = 'Level Up';
-$string['levelupplus'] = 'Level Up Plus';
+$string['levelup'] = 'Level Up XP';
+$string['levelupplus'] = 'Level Up XP+';
 $string['levelx'] = 'Level #{$a}';
 $string['likenotice'] = '<strong>Do you like the plugin?</strong> Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourites</a> on Moodle.org and <a href="{$a->github}" target="_blank">star it on GitHub</a>.';
 $string['limitparticipants'] = 'Limit participants';
@@ -170,7 +170,7 @@ $string['navinfos'] = 'Info';
 $string['navladder'] = 'Ladder';
 $string['navlevels'] = 'Levels';
 $string['navlog'] = 'Log';
-$string['navpromo'] = 'Plus';
+$string['navpromo'] = 'XP+';
 $string['navreport'] = 'Report';
 $string['navrules'] = 'Rules';
 $string['navsettings'] = 'Settings';
@@ -184,10 +184,10 @@ $string['participant'] = 'Participant';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level Up';
 $string['perpagecolon'] = 'Per page:';
 $string['pickaconditiontype'] = 'Pick a condition type';
-$string['pluginname'] = 'Level Up';
+$string['pluginname'] = 'Level Up XP';
 $string['pluginsoutofsync'] = '__The plugins are out of sync!__
 
-This means that you have upgraded _Level Up_ but not _Level Up Plus_. While we do our best to try and prevent any issues, some features may no longer function properly, including in _Level Up_ itself. We recommend that you upgrade _Level Up Plus_ to its latest release. [Read more]({$a->url})';
+This means that you have upgraded _Level Up XP_ but not _Level Up XP+_. While we do our best to try and prevent any issues, some features may no longer function properly, including in _Level Up XP_ itself. We recommend that you upgrade _Level Up XP+_ to its latest release. [Read more]({$a->url})';
 $string['pointsintimelinker'] = 'per';
 $string['pointsrequired'] = 'Points required';
 $string['privacy:path:addon'] = 'Add-on';
@@ -214,16 +214,16 @@ $string['property:component'] = 'Event component';
 $string['property:crud'] = 'Event CRUD';
 $string['property:eventname'] = 'Event name';
 $string['property:target'] = 'Event target';
-$string['promocheatguard'] = 'This cheat guard is not designed to cover long time frames. Please consider upgrading to <em>Level Up Plus</em> to unlock greater time frames and other features. <a href="{$a->url}">Read more here</a>.';
-$string['promointro'] = 'The add-on for _Level Up_ with features that can encourage learners to achieve their full potential!';
-$string['promointroinstalled'] = 'The add-on _Level Up Plus_ is installed on your system and all of its features have been enabled.';
-$string['promorulesdidyouknow'] = 'Did you know that with <em>Level Up Plus</em> students can receive points for <em>completing courses</em> and <em>activities</em>, or even receive points according to their <em>grades</em>? <a href="{$a->url}">Discover more here</a>.';
+$string['promocheatguard'] = 'This cheat guard is not designed to cover long time frames. Please consider upgrading to <em>Level Up XP+</em> to unlock greater time frames and other features. <a href="{$a->url}">Read more here</a>.';
+$string['promointro'] = 'The add-on for _Level Up XP_ with features that can encourage learners to achieve their full potential!';
+$string['promointroinstalled'] = 'The add-on _Level Up XP+_ is installed on your system and all of its features have been enabled.';
+$string['promorulesdidyouknow'] = 'Did you know that with <em>Level Up XP+</em> students can receive points for <em>completing courses</em> and <em>activities</em>, or even receive points according to their <em>grades</em>? <a href="{$a->url}">Discover more here</a>.';
 $string['rank'] = 'Rank';
 $string['ranking'] = 'Ranking';
 $string['ranking_help'] = 'The rank is the absolute position of the current user in the ladder. The relative rank is the difference in experience points between a user and their neighbours.';
 $string['reallydeleteuserstate'] = 'Deleting a user is only useful to remove them from the ladder. For any other reasons, we recommend setting their points to 0 instead. Note that deleting them does not affect their ability to earn points in the future.
 
-Importantly, when using _Level Up_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up_ per course, the student may still appear in the report if they are enrolled in the course.
+Importantly, when using _Level Up XP_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
 
 Do you really want to delete the points of this user?';
 $string['reallyresetallcoursestodefaults'] = 'Really reset all courses rules to the default rules? This action is not reversible.';

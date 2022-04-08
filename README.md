@@ -1,4 +1,4 @@
-Level Up (block_xp) ![GitHub tag](https://img.shields.io/github/tag/FMCorz/moodle-block_xp.svg) ![Travis branch](https://img.shields.io/travis/FMCorz/moodle-block_xp/master.svg)
+Level Up XP (block_xp) ![GitHub tag](https://img.shields.io/github/tag/FMCorz/moodle-block_xp.svg) ![Travis branch](https://img.shields.io/travis/FMCorz/moodle-block_xp/master.svg)
 ====================
 
 Engage your students! A Moodle plugin to gamify your students' learning experience by allowing them to _level up_ in their courses.
@@ -20,7 +20,7 @@ Features
 
 ### Additional features
 
-Purchasing the _Level Up Plus_ add-on unlocks additional features. [Click here for more details](https://levelup.plus?ref=readme).
+Purchasing the _Level Up XP+_ add-on unlocks additional features. [Click here for more details](https://levelup.plus?ref=readme).
 
 Requirements
 ------------
@@ -30,7 +30,7 @@ Moodle 3.3 or greater.
 Installation
 ------------
 
-Simply install the plugin and add the block to a course page. More details are available here: [Level Up documentation](https://levelup.plus/docs/topic/installation?ref=readme)
+Simply install the plugin and add the block to a course page. More details are available here: [Level Up XP documentation](https://levelup.plus/docs/topic/installation?ref=readme)
 
 The plugin can also be installed using [composer](https://getcomposer.org/) at [fmcorz/moodle-block_xp](https://packagist.org/packages/fmcorz/moodle-block_xp).
 
@@ -59,7 +59,7 @@ Check the [list of supported shortcodes](https://levelup.plus/docs/article/using
 How to use one block for all courses
 ------------------------------------
 
-In order to gather experience points from all the courses a student is participating in, you have to set the admin setting _Where are experience points used?_ to 'For the whole site'. This setting is located under "Site administration > Plugins > Blocks > Level Up". Once set, any block newly or previously added will display the total experience points of your student.
+In order to gather experience points from all the courses a student is participating in, you have to set the admin setting _Where are experience points used?_ to 'For the whole site'. This setting is located under "Site administration > Plugins > Blocks > Level Up XP". Once set, any block newly or previously added will display the total experience points of your student.
 
 Todo
 ----
