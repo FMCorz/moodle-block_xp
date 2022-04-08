@@ -15,11 +15,10 @@ Feature: A teacher can change the settings for their instance
       | user     | course | role    |
       | t1       | c1     | editingteacher |
     And I log in as "t1"
-    And I am on front page
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I turn editing mode on
     And I add the "Level Up XP" block
-    When I follow "Course 1"
+    When I am on "Course 1" course homepage
     And I click on "Settings" "link" in the "Level Up XP" "block"
     And the field "Enable the ladder" matches value "Yes"
     And the field "Anonymity" matches value "Display participants identity"
@@ -31,5 +30,5 @@ Feature: A teacher can change the settings for their instance
     Then the field "Enable the ladder" matches value "No"
     And the field "Anonymity" matches value "Hide participants identity"
     And the field "Title" matches value "New level up title"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I should see "New level up title"

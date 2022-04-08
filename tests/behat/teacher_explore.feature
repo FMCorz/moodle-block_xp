@@ -18,21 +18,19 @@ Feature: A teacher can navigate through the pages of the plugin
       | s1       | c1     | student |
       | t1       | c1     | editingteacher |
     And I log in as "admin"
-    And I am on front page
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I turn editing mode on
     And I add the "Level Up XP" block
     And I log out
     And I log in as "t1"
-    And I am on front page
-    When I follow "Course 1"
+    When I am on "Course 1" course homepage
     And I click on "Info" "link" in the "Level Up XP" "block"
-    And I follow "Ladder"
-    And I follow "Report"
+    And I click on "Ladder" "link" in the "#region-main" "css_element"
+    And I click on "Report" "link" in the "#region-main" "css_element"
     And I click on "Log" "link" in the "#region-main" "css_element"
-    And I follow "Levels"
-    And I follow "Rules"
-    And I follow "Visuals"
+    And I click on "Levels" "link" in the "#region-main" "css_element"
+    And I click on "Rules" "link" in the "#region-main" "css_element"
+    And I click on "Visuals" "link" in the "#region-main" "css_element"
     And I click on "Settings" "link" in the "#region-main" "css_element"
-    And I follow "Plus"
+    And I click on "XP+" "link" in the "#region-main" "css_element"
     Then I should see "Discover Level Up XP+"
