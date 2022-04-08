@@ -28,6 +28,7 @@ $string['actions'] = 'Actions';
 $string['activityoresourceis'] = 'The activity or resource is {$a}';
 $string['addacondition'] = 'Add a condition';
 $string['addarule'] = 'Add a rule';
+$string['addonnotactivated'] = 'The addon is not activated.';
 $string['admindefaultrulesintro'] = 'The following rules will be used as default for courses in which the block is added.';
 $string['admindefaultsettingsintro'] = 'The settings below will be used as defaults when the block is newly added to a course. Some settings can be locked,  in which case their value is strictly enforced in all instances of the plugin.';
 $string['admindefaultvisualsintro'] = 'The following will be used as defaults when the block is newly added to a course.';

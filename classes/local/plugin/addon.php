@@ -40,22 +40,12 @@ defined('MOODLE_INTERNAL') || die();
 class addon {
 
     /**
-     * Get the plugin info.
-     *
-     * @return \core\plugininfo\base|null
-     */
-    public function get_plugin_info() {
-        $pluginman = \core_plugin_manager::instance();
-        return $pluginman->get_plugin_info('local_xp');
-    }
-
-    /**
      * Whether the plugin's release.
      *
      * @return string
      */
-    public function get_release() {
-        $localxp = $this->get_plugin_info();
+    final public function get_release() {
+        $localxp = static::get_plugin_info();
         return $localxp ? $localxp->release : '-';
     }
 
@@ -65,7 +55,23 @@ class addon {
      * @return bool
      */
     public function is_activated() {
-        return true;
+        // Consider activated if we detect a legacy version.
+        return $this->is_legacy_version_present();
+    }
+
+    /**
+     * Whether a legacy version is installed.
+     *
+     * The legacy version do not know about the concept of this class, which
+     * can lead to issues. In order to avoid breaking existing installations
+     * using currently outdated local_xp, we flag the addon as activated
+     * when using a legacy version.
+     *
+     * @return bool
+     */
+    final public function is_legacy_version_present() {
+        $localxp = static::get_plugin_info();
+        return !empty($localxp) && $localxp->versiondb < 2022021115;
     }
 
     /**
@@ -74,7 +80,8 @@ class addon {
      * @return bool
      */
     public function is_installed_and_upgraded() {
-        return false;
+        return $this->is_legacy_version_present()
+            && static::get_plugin_info()->is_installed_and_upgraded();
     }
 
     /**
@@ -83,7 +90,8 @@ class addon {
      * @return bool
      */
     public function is_out_of_sync() {
-        return false;
+        // If we use a legacy version, we're certain to be out of sync.
+        return $this->is_legacy_version_present();
     }
 
     /**
@@ -91,9 +99,28 @@ class addon {
      *
      * @return bool
      */
-    public function is_present() {
-        $localxp = $this->get_plugin_info();
+    final public function is_present() {
+        $localxp = static::get_plugin_info();
         return !empty($localxp);
+    }
+
+    /**
+     * Require the plugin to be activated.
+     */
+    public function require_activated() {
+        if (!$this->is_activated()) {
+            throw new \moodle_exception('addonnotactivated', 'block_xp');
+        }
+    }
+
+    /**
+     * Get the plugin info.
+     *
+     * @return \core\plugininfo\base|null
+     */
+    public static function get_plugin_info() {
+        $pluginman = \core_plugin_manager::instance();
+        return $pluginman->get_plugin_info('local_xp');
     }
 
     /**
