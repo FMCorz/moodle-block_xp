@@ -41,6 +41,7 @@ class default_container implements container {
 
     /** @var array The objects supported by this container. */
     protected static $supports = [
+        'addon' => true,
         'ajax_base_url' => true,
         'ajax_router' => true,
         'ajax_url_resolver' => true,
@@ -92,6 +93,15 @@ class default_container implements container {
             $this->instances[$id] = $this->{$method}();
         }
         return $this->instances[$id];
+    }
+
+    /**
+     * Get the addon.
+     *
+     * @return plugin\addon
+     */
+    protected function get_addon() {
+        return new plugin\addon();
     }
 
     /**

@@ -60,7 +60,7 @@ class di {
      * @return container
      */
     protected static function make_container() {
-        if (class_exists('local_xp\local\container')) {
+        if (local\plugin\addon::should_activate()) {
             $container = new \local_xp\local\container();
         } else {
             $container = new \block_xp\local\default_container();
