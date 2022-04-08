@@ -73,7 +73,7 @@ class usage_report extends \core\task\scheduled_task {
 
         if ($host === 'localhost') {
             return true;
-        } else if ($ip && !ip_is_public($host)) {
+        } else if ($ip && !ip_is_public($ip)) {
             return true;
         } else if (preg_match('/\.local$/', $host)) {
             return true;
