@@ -678,7 +678,7 @@ EOT
             'class' => 'btn btn-primary']);
         echo ' ';
         echo html_writer::empty_tag('input', ['value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel',
-            'class' => 'btn btn-default']);
+            'class' => 'btn btn-default btn-secondary']);
         echo html_writer::end_tag('p');
         echo html_writer::end_tag('form');
 
