@@ -43,6 +43,9 @@ use block_xp\local\routing\url;
  */
 class rules_controller extends page_controller {
 
+    /** @inheritDoc */
+    protected $navname = 'rules';
+
     /** @var string The route name. */
     protected $routename = 'rules';
 

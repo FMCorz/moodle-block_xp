@@ -45,6 +45,10 @@ interface course_world_navigation_factory {
      * - id
      * - text
      * - url
+     * - children (optional):
+     *   - id
+     *   - text
+     *   - url
      *
      * @param course_world $world The world.
      * @return array

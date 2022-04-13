@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/adminlib.php');
 
+use block_xp\di;
 use html_writer;
 use block_xp\local\routing\url;
 
@@ -81,6 +82,20 @@ class promo_controller extends route_controller {
             $courseid = intval($this->get_param('courseid'));
             require_login($courseid);
         }
+    }
+
+    /**
+     * The course page navigation.
+     *
+     * @return void
+     */
+    protected function page_course_navigation() {
+        $output = $this->get_renderer();
+        $items = di::get('course_world_navigation_factory')->get_course_navigation($this->world);
+        if (count($items) > 1) {
+            return $output->tab_navigation($items, $this->routename);
+        }
+        return '';
     }
 
     protected function post_login() {
@@ -142,7 +157,7 @@ class promo_controller extends route_controller {
 
         if (!$this->is_admin_page()) {
             echo $output->heading(get_string('levelupplus', 'block_xp'));
-            echo $output->course_world_navigation($this->world, $this->routename);
+            echo $this->page_course_navigation();
             echo $output->notices($this->world);
         }
 
@@ -321,7 +336,7 @@ EOT;
 
         if (!$this->is_admin_page()) {
             echo $output->heading(get_string('levelupplus', 'block_xp'));
-            echo $output->course_world_navigation($this->world, $this->routename);
+            echo $this->page_course_navigation();
         }
 
         if (!$addon->is_installed_and_upgraded()) {

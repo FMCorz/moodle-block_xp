@@ -58,7 +58,7 @@ const LevelTile: React.FC<{
     const getStr = useStrings(['noname', 'nodescription', 'pointsrequired', 'description', 'name']);
     const levelx = useString('levelx', 'block_xp', level.level);
     return (
-        <div className="xp-flex-none md:xp-w-1/3 lg:xp-w-1/4 xp-w-1/2 xp-pl-4 xp-mb-4">
+        <div className="xp-flex-none md:xp-w-1/3 xp-w-1/2 xp-pl-4 xp-mb-4">
             <div className="xp-bg-gray-100 xp-p-4 xp-pt-2 xp-rounded">
                 <div className="xp-flex xp-flex-col xp-items-center">
                     <div>

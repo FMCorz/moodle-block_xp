@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 use coding_exception;
 use block_xp\di;
 use core\output\notification;
+use html_writer;
 
 /**
  * Page controller class.
@@ -102,6 +103,40 @@ abstract class page_controller extends course_route_controller {
     }
 
     /**
+     * Return the navigation items.
+     *
+     * @return array
+     */
+    protected function get_navigation_items() {
+        return $this->navfactory->get_course_navigation($this->world);
+    }
+
+    /**
+     * Return the sub navigation items.
+     *
+     * @return array
+     */
+    protected function get_sub_navigation_items() {
+        $routename = $this->get_navigation_route_name();
+        $links = $this->navfactory->get_course_navigation($this->world);
+        foreach ($links as $link) {
+            if ($link['id'] === $routename) {
+                return !empty($link['children']) ? $link['children'] : [];
+            }
+        }
+        return [];
+    }
+
+    /**
+     * Whether the page has a sub navigation.
+     *
+     * @return bool
+     */
+    protected function has_sub_navigation() {
+        return count($this->get_sub_navigation_items()) > 1;
+    }
+
+    /**
      * The content of the page.
      *
      * You probably want to look at {@link self::page_content} instead.
@@ -133,8 +168,17 @@ abstract class page_controller extends course_route_controller {
         echo $output->heading($this->get_page_heading());
 
         $this->page_navigation();
+
+        echo html_writer::start_div('xp-w-full xp-flex xp-flex-col lg:xp-flex-row xp-gap-6');
+        if ($this->has_sub_navigation()) {
+            $this->page_sub_navigation();
+        }
+        echo html_writer::start_div('xp-flex-1 xp-w-full');
         $this->page_notices();
         $this->page_content();
+        echo html_writer::end_div();
+        echo html_writer::end_div();
+
     }
 
     /**
@@ -144,7 +188,22 @@ abstract class page_controller extends course_route_controller {
      */
     protected function page_navigation() {
         $output = $this->get_renderer();
-        echo $output->course_world_navigation($this->world, $this->get_navigation_route_name());
+        $items = $this->get_navigation_items();
+        if (count($items) > 1) {
+            echo $output->tab_navigation($items, $this->get_navigation_route_name());
+        }
+    }
+
+    /**
+     * The page sub navigation.
+     *
+     * @return void
+     */
+    protected function page_sub_navigation() {
+        $output = $this->get_renderer();
+        echo html_writer::start_div('xp-w-full lg:xp-w-36 xp-max-w-full');
+        echo $output->sub_navigation($this->get_sub_navigation_items(), $this->get_route_name());
+        echo html_writer::end_div();
     }
 
     /**

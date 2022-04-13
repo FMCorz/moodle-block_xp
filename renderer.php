@@ -240,21 +240,17 @@ class block_xp_renderer extends plugin_renderer_base {
      * @param course_world $world The world.
      * @param string $page The page we are on.
      * @return string The navigation.
+     * @deprecated Since Level Up XP 3.12, use tab_navigation instead.
      */
     public function course_world_navigation(course_world $world, $page) {
+        debugging('The method course_world_navigation is deprecated, please use tab_navigation instead.', DEBUG_DEVELOPER);
         $factory = \block_xp\di::get('course_world_navigation_factory');
         $links = $factory->get_course_navigation($world);
-
         // If there is only one page, then that is the page we are on.
         if (count($links) <= 1) {
             return '';
         }
-
-        $tabs = array_map(function($link) {
-            return new tabobject($link['id'], $link['url'], $link['text'], clean_param($link['text'], PARAM_NOTAGS));
-        }, $links);
-
-        return html_writer::div($this->tabtree($tabs, $page), 'block_xp-page-nav');
+        return $this->tab_navigation($links, $page);
     }
 
     /**
@@ -899,6 +895,40 @@ EOT
      */
     public function rules_page_loading_check_success() {
         return $this->render_from_template('block_xp/rules-page-loading-success', []);
+    }
+
+    /**
+     * Sub navigation.
+     *
+     * @return string
+     */
+    public function sub_navigation($items, $activenode) {
+        return $this->render_from_template('block_xp/sub-navigation', [
+            'items' => array_map(function($item) use ($activenode) {
+                $url = $item['url'];
+                if ($url instanceof moodle_url) {
+                    $url = $url->out(false);
+                }
+                return array_merge($item, [
+                    'url' => $url,
+                    'current' => $item['id'] == $activenode
+                ]);
+            }, $items)
+        ]);
+    }
+
+    /**
+     * Outputs the navigation.
+     *
+     * @param array $items The items.
+     * @param string $activenode The active node.
+     * @return string The navigation.
+     */
+    public function tab_navigation($items, $activenode) {
+        $tabs = array_map(function($link) {
+            return new tabobject($link['id'], $link['url'], $link['text'], clean_param($link['text'], PARAM_NOTAGS));
+        }, $items);
+        return html_writer::div($this->tabtree($tabs, $activenode), 'block_xp-page-nav');
     }
 
     /**

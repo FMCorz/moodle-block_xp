@@ -44,6 +44,8 @@ use block_xp\local\config\course_world_config;
  */
 class visuals_controller extends page_controller {
 
+    /** @inheritDoc */
+    protected $navname = 'levels';
     /** @var string The route name. */
     protected $routename = 'visuals';
 

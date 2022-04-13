@@ -48,6 +48,8 @@ abstract class course_route_controller extends route_controller {
     protected $supportsgroups = false;
     /** @var \block_xp\local\course_world */
     protected $world;
+    /** @var \block_xp\local\factory\course_world_navigation_factory The navigation factory. */
+    protected $navfactory;
 
     /** @var int The group ID. */
     private $groupid;
@@ -80,6 +82,7 @@ abstract class course_route_controller extends route_controller {
         parent::post_login();
         $this->world = \block_xp\di::get('course_world_factory')->get_world($this->courseid);
         $this->courseid = $this->world->get_courseid();
+        $this->navfactory = \block_xp\di::get('course_world_navigation_factory');
     }
 
     /**

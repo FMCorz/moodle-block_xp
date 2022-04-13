@@ -29,6 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 use block_xp\di;
 use block_xp\local\course_world;
 use block_xp\local\config\config;
+use block_xp\local\permission\access_logs_permissions;
+use block_xp\local\permission\access_report_permissions;
 use block_xp\local\routing\url_resolver;
 
 /**
@@ -45,6 +47,8 @@ class default_course_world_navigation_factory implements course_world_navigation
     protected $adminconfig;
     /** @var url_resolver The URL resolver. */
     protected $resolver;
+    /** @var array The navigation cache. */
+    protected $navcache = [];
 
     /**
      * Constructor.
@@ -70,8 +74,19 @@ class default_course_world_navigation_factory implements course_world_navigation
      * @return array
      */
     public function get_course_navigation(course_world $world) {
-        global $USER;
+        if (!isset($this->navcache[$world->get_courseid()])) {
+            $this->navcache[$world->get_courseid()] = $this->make_course_navigation($world);
+        }
+        return $this->navcache[$world->get_courseid()];
+    }
 
+    /**
+     * Make the course navigation.
+     *
+     * @param course_world $world
+     * @return array
+     */
+    protected function make_course_navigation(course_world $world) {
         $links = [];
         $courseid = $world->get_courseid();
         $urlresolver = $this->resolver;
@@ -93,36 +108,70 @@ class default_course_world_navigation_factory implements course_world_navigation
             ];
         }
 
-        if ($accessperms instanceof \block_xp\local\permission\access_report_permissions && $accessperms->can_access_report()) {
-            $links[] = [
+        $canviewlogs = $accessperms instanceof access_logs_permissions && $accessperms->can_access_logs();
+        $canviewreport = $accessperms instanceof access_report_permissions && $accessperms->can_access_report();
+        if ($canviewreport || $canviewlogs) {
+
+            // The link is always called report, but leads to the logs if we can't view the report.
+            $mainurl = $urlresolver->reverse('report', ['courseid' => $courseid]);
+            if (!$canviewreport) {
+                $mainurl = $urlresolver->reverse('log', ['courseid' => $courseid]);
+            }
+
+            $reportnav = [
                 'id' => 'report',
                 'url' => $urlresolver->reverse('report', ['courseid' => $courseid]),
-                'text' => get_string('navreport', 'block_xp')
+                'text' => get_string('navreport', 'block_xp'),
             ];
-        }
-        if ($accessperms instanceof \block_xp\local\permission\access_logs_permissions && $accessperms->can_access_logs()) {
-            $links[] = [
+            $lognav = [
                 'id' => 'log',
                 'url' => $urlresolver->reverse('log', ['courseid' => $courseid]),
-                'text' => get_string('navlog', 'block_xp')
+                'text' => get_string('navlog', 'block_xp'),
+            ];
+
+            $links[] = [
+                'id' => 'report',
+                'url' => $mainurl,
+                'text' => get_string('navreport', 'block_xp'),
+                'children' => array_filter([
+                    $canviewreport ? $reportnav : null,
+                    $canviewlogs ? $lognav : null,
+                ])
             ];
         }
+
         if ($accessperms->can_manage()) {
             $links[] = [
                 'id' => 'levels',
                 'url' => $urlresolver->reverse('levels', ['courseid' => $courseid]),
-                'text' => get_string('navlevels', 'block_xp')
+                'text' => get_string('navlevels', 'block_xp'),
+                'children' => [
+                    [
+                        'id' => 'levels',
+                        'url' => $urlresolver->reverse('levels', ['courseid' => $courseid]),
+                        'text' => get_string('navlevelssetup', 'block_xp'),
+                    ],
+                    [
+                        'id' => 'visuals',
+                        'url' => $urlresolver->reverse('visuals', ['courseid' => $courseid]),
+                        'text' => get_string('navvisuals', 'block_xp')
+                    ],
+
+                ]
             ];
             $links[] = [
                 'id' => 'rules',
                 'url' => $urlresolver->reverse('rules', ['courseid' => $courseid]),
-                'text' => get_string('navrules', 'block_xp')
+                'text' => get_string('navpoints', 'block_xp'),
+                'children' => [
+                    [
+                        'id' => 'rules',
+                        'url' => $urlresolver->reverse('rules', ['courseid' => $courseid]),
+                        'text' => get_string('navrules', 'block_xp'),
+                    ]
+                ]
             ];
-            $links[] = [
-                'id' => 'visuals',
-                'url' => $urlresolver->reverse('visuals', ['courseid' => $courseid]),
-                'text' => get_string('navvisuals', 'block_xp')
-            ];
+
             $links[] = [
                 'id' => 'config',
                 'url' => $urlresolver->reverse('config', ['courseid' => $courseid]),
