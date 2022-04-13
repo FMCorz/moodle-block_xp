@@ -51,6 +51,8 @@ class table_row_config implements config {
     protected $conditions;
     /** @var config The config holding the defaults. */
     protected $defaults;
+    /** @var bool Use defaults when null, if possible. */
+    protected $defaulstifnull;
     /** @var stdClass The table row. */
     protected $record;
     /** @var array Reserved keys. */
@@ -64,11 +66,12 @@ class table_row_config implements config {
      * @param config $defaults The defaults.
      * @param array $conditions The conditions to find the record.
      */
-    public function __construct(moodle_database $db, $table, config $defaults, array $conditions = []) {
+    public function __construct(moodle_database $db, $table, config $defaults, array $conditions = [], $defaulstifnull = false) {
         $this->db = $db;
         $this->table = $table;
         $this->conditions = $conditions;
         $this->defaults = $defaults;
+        $this->defaulstifnull = $defaulstifnull;
         $this->reservedkeys = array_flip(array_merge(['id'], array_keys($conditions)));
 
         // Quick validation.
@@ -89,11 +92,15 @@ class table_row_config implements config {
         if (array_key_exists($name, $this->reservedkeys)) {
             throw new coding_exception('Invalid config name: ' . $name);
         }
-
         if (!$this->has($name)) {
             throw new coding_exception('Unknown config: ' . $name);
         }
-        return $this->record->{$name};
+
+        $value = $this->record->{$name};
+        if ($value === null && $this->defaulstifnull && $this->defaults->has($name)) {
+            return $this->defaults->get($name);
+        }
+        return $value;
     }
 
     /**
@@ -105,7 +112,17 @@ class table_row_config implements config {
         $this->load();
         $data = (array) $this->record;
         unset($data['id']);
-        return array_diff_key($data, $this->reservedkeys);
+        $data = array_diff_key($data, $this->reservedkeys);
+
+        if ($this->defaulstifnull) {
+            foreach ($data as $key => $value) {
+                if ($value === null && $this->defaults->has($key)) {
+                    $data[$key] = $this->defaults->get($key);
+                }
+            }
+        }
+
+        return $data;
     }
 
     /**
