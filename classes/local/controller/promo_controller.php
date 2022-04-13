@@ -156,7 +156,13 @@ class promo_controller extends route_controller {
         $siteurl = "https://levelup.plus?ref=plugin_promopage";
 
         if (!$this->is_admin_page()) {
-            echo $output->heading(get_string('levelupplus', 'block_xp'));
+            $config = $this->world->get_config();
+            $context = $this->world->get_context();
+            $blocktitle = $config->get('blocktitle');
+            if (empty($blocktitle)) {
+                $blocktitle = get_string('levelup', 'block_xp');
+            }
+            echo $output->heading(format_string($blocktitle, true, ['context' => $context]));
             echo $this->page_course_navigation();
             echo $output->notices($this->world);
         }
@@ -335,7 +341,13 @@ EOT;
         $outofsyncurl = new url('https://levelup.plus/docs/article/plugins-out-of-sync?ref=localxp_promopage');
 
         if (!$this->is_admin_page()) {
-            echo $output->heading(get_string('levelupplus', 'block_xp'));
+            $config = $this->world->get_config();
+            $context = $this->world->get_context();
+            $blocktitle = $config->get('blocktitle');
+            if (empty($blocktitle)) {
+                $blocktitle = get_string('levelup', 'block_xp');
+            }
+            echo $output->heading(format_string($blocktitle, true, ['context' => $context]));
             echo $this->page_course_navigation();
         }
 

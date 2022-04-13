@@ -165,7 +165,14 @@ abstract class page_controller extends course_route_controller {
             }
         }
 
-        echo $output->heading($this->get_page_heading());
+
+        $config = $this->world->get_config();
+        $context = $this->world->get_context();
+        $blocktitle = $config->get('blocktitle');
+        if (empty($blocktitle)) {
+            $blocktitle = get_string('levelup', 'block_xp');
+        }
+        echo $output->heading(format_string($blocktitle, true, ['context' => $context]));
 
         $this->page_navigation();
 
