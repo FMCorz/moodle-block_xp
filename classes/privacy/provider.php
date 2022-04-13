@@ -35,7 +35,7 @@ use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
-use block_xp\local\provider\addon_userlist_provider;
+use block_xp\local\privacy\addon_userlist_provider;
 
 /**
  * Data provider class.
