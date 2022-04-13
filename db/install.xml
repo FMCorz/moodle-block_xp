@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/xp/db" VERSION="20191203" COMMENT="XMLDB file for Moodle blocks/xp"
+<XMLDB PATH="blocks/xp/db" VERSION="20220413" COMMENT="XMLDB file for Moodle blocks/xp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -59,6 +59,9 @@
         <FIELD NAME="laddercols" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="xp,progress" SEQUENCE="false" COMMENT="The additional columns to display in the ladder. Comma-separated list."/>
         <FIELD NAME="instructions" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="instructions_format" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="blocktitle" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="blockdescription" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="blockrecentactivity" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

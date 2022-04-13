@@ -84,7 +84,7 @@ class course_world_config extends proxy_config {
         ]);
 
         $config = new \block_xp\local\config\table_row_config($db, 'block_xp_config',
-            $defaults, ['courseid' => $courseid]);
+            $defaults, ['courseid' => $courseid], true);
         parent::__construct($config);
     }
 
