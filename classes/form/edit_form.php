@@ -26,6 +26,7 @@ namespace block_xp\form;
 defined('MOODLE_INTERNAL') || die();
 
 use block_edit_form;
+use block_xp\di;
 
 // Workaround code that would have been written in a way that does not load the form.
 require_once($CFG->dirroot . '/blocks/edit_form.php');
@@ -46,27 +47,9 @@ class edit_form extends block_edit_form {
      * @return void
      */
     protected function specific_definition($mform) {
-        // Not nice to use DI here, but we do not control when this instance is created.
-        $config = \block_xp\di::get('config');
-
-        $mform->addElement('header', 'confighdr', get_string('configheader', 'block_xp'));
-        $mform->addElement('text', 'config_title', get_string('configtitle', 'block_xp'));
-        $mform->setDefault('config_title', $config->get('blocktitle'));
-        $mform->addHelpButton('config_title', 'configtitle', 'block_xp');
-        $mform->setType('config_title', PARAM_TEXT);
-
-        $mform->addElement('textarea', 'config_description', get_string('configdescription', 'block_xp'));
-        $mform->setDefault('config_description', $config->get('blockdescription'));
-        $mform->addHelpButton('config_description', 'configdescription', 'block_xp');
-        $mform->setType('config_description', PARAM_TEXT);
-
-        $mform->addElement('select', 'config_recentactivity', get_string('configrecentactivity', 'block_xp'), [
-            0 => get_string('no'),
-            3 => get_string('yes'),
-        ]);
-        $mform->setDefault('config_recentactivity', $config->get('blockrecentactivity'));
-        $mform->addHelpButton('config_recentactivity', 'configrecentactivity', 'block_xp');
-        $mform->setType('config_recentactivity', PARAM_INT);
+        $output = di::get('renderer');
+        $mform->addElement('html', $output->notification_without_close(
+            get_string('blockappearancemovedtopluginsettings', 'block_xp'), 'info'));
     }
 
 }

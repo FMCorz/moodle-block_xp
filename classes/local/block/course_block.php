@@ -168,8 +168,7 @@ class course_block extends block_base {
         $activity = [];
         $forcerecentactivity = false;
         $moreurl = null; // TODO Add URL for students to see, and option to control it.
-        $recentactivity = isset($this->config->recentactivity) ? $this->config->recentactivity : // @codingStandardsIgnoreLine.
-            $adminconfig->get('blockrecentactivity');
+        $recentactivity = $config->get('blockrecentactivity');
         if ($recentactivity) {
             $repo = $world->get_user_recent_activity_repository();
             $activity = $repo->get_user_recent_activity($USER->id, $recentactivity);
@@ -182,9 +181,7 @@ class course_block extends block_base {
         $actions = $this->get_block_navigation($world);
 
         // Introduction.
-        $introduction = isset($this->config->description) ?
-            format_string($this->config->description, true, ['context' => $context]) : // @codingStandardsIgnoreLine.
-            format_string($adminconfig->get('blockdescription'), true, ['context' => $context]);
+        $introduction = format_string($config->get('blockdescription'), true, ['context' => $context]);
         $introname = 'block_intro_' . $courseid;
         if (empty($introduction)) {
             // The intro is empty, no need for further checks then...
@@ -318,11 +315,8 @@ class course_block extends block_base {
         parent::specialization();
         $world = $this->get_world($this->page->course->id);
         $context = $world->get_context();
-        if (!empty($this->config->title)) {
-            $this->title = format_string($this->config->title, true, ['context' => $context]);
-        } else {
-            $this->title = format_string(\block_xp\di::get('config')->get('blocktitle'), true, ['context' => $context]);
-        }
+        $config = $world->get_config();
+        $this->title = format_string($config->get('blocktitle'), true, ['context' => $context]);
     }
 
 }

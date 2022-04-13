@@ -40,6 +40,7 @@ $string['anonymity_help'] = 'This setting controls whether participants can see 
 $string['awardaxpwhen'] = '<strong>{$a}</strong> points are earned when:';
 $string['basexp'] = 'Algorithm base';
 $string['blockappearance'] = 'Block appearance';
+$string['blockappearancemovedtopluginsettings'] = 'The block appearance settings were moved to the plugin\'s settings page.';
 $string['cachedef_filters'] = 'Level filters';
 $string['cachedef_ruleevent_eventslist'] = 'List of some events';
 $string['cannotshowblockconfig'] = 'I would usually display the appearance settings here, but I could not find your block. To change the block\'s appearance, head back [here]({$a}) (or where you added the block), turn editing mode on, and follow the "Configure" option in the block\'s dropdown. If you cannot find the block, add it to your course again.';
@@ -152,7 +153,7 @@ $string['leveldesc_help'] = 'A short description of the level, this is displayed
 $string['levelname'] = 'Level name';
 $string['levelname_help'] = 'A short name to display instead of the default _Level #1_, _Level #2_, etc. that is sometimes displayed. If you give names to some levels, we recommend that you give a name to all of them!';
 $string['levels'] = 'Levels';
-$string['levelup'] = 'Level Up XP';
+$string['levelup'] = 'Level up!'; // The action, not the brand!
 $string['levelupplus'] = 'Level Up XP+';
 $string['levelx'] = 'Level #{$a}';
 $string['likenotice'] = '<strong>Do you like the plugin?</strong> Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourites</a> on Moodle.org and <a href="{$a->github}" target="_blank">star it on GitHub</a>.';

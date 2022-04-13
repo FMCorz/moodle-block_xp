@@ -49,10 +49,10 @@ class config_controller extends page_controller {
     /**
      * Define the form.
      *
-     * @param bool $withblockconfig With block config?
+     * @param bool $unused No longer used.
      * @return moodleform
      */
-    protected function define_form($withblockconfig = false) {
+    protected function define_form($unused = false) {
         return new \block_xp\form\config($this->pageurl->out(false), $this->define_form_customdata());
     }
 
@@ -63,7 +63,6 @@ class config_controller extends page_controller {
      */
     protected function define_form_customdata() {
         return [
-            'showblockconfig' => !empty($this->blockconfig),
             'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $this->courseid]),
             'world' => $this->world,
         ];
@@ -78,47 +77,20 @@ class config_controller extends page_controller {
      */
     private function get_form() {
         if (!$this->form) {
-            $this->form = $this->define_form(!empty($this->blockconfig));
+            $this->form = $this->define_form();
         }
         return $this->form;
     }
 
     protected function pre_content() {
-        // Try to find an instance of our block, and thus block configuration.
-        $bifinder = \block_xp\di::get('course_world_block_instance_finder');
-        $bi = $bifinder->get_instance_in_context('xp', $this->world->get_context());
-        if (!empty($bi)) {
-            $this->blockconfig = new block_config($bi);
-        }
-
-        // Load raw config data.
         $config = $this->world->get_config();
-        $rawconfig = $config->get_all();
-        if ($this->blockconfig) {
-            foreach ($this->blockconfig->get_all() as $key => $value) {
-                $rawconfig['block_' . $key] = $value;
-            }
-        }
-
         $form = $this->get_form();
-        $form->set_data($rawconfig);
+        $form->set_data($config->get_all());
         if ($data = $form->get_data()) {
             $data = (array) $data;
 
-            // Extract the config meant for the block.
-            $blockdata = [];
-            foreach ($data as $key => $value) {
-                if (preg_match('/^block_/', $key)) {
-                    $blockdata[substr($key, 6)] = $value;
-                    unset($data[$key]);
-                }
-            }
-
             // Save the config.
             $config->set_many($data);
-            if ($this->blockconfig) {
-                $this->blockconfig->set_many($blockdata);
-            }
 
             // TODO Display a message.
             $this->redirect();

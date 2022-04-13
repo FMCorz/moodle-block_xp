@@ -51,7 +51,6 @@ class config extends moodleform {
         global $PAGE;
         // Conditional check (on world) for compatibility with older versions of local_xp.
         $world = !empty($this->_customdata['world']) ? $this->_customdata['world'] : null;
-        $showblockconfig = !empty($this->_customdata['showblockconfig']);
         $config = \block_xp\di::get('config');
         $renderer = \block_xp\di::get('renderer');
 
@@ -150,48 +149,20 @@ class config extends moodleform {
 
         $mform->addElement('header', 'hdrblockconfig', get_string('blockappearance', 'block_xp'));
 
-        if ($showblockconfig) {
-            // This is a direct duplicate from the form to edit the block, however we
-            // renamed the arguments to start with 'block_', so remember to update both
-            // this and the block form when adding new "block appearance" settings.
-            $config = \block_xp\di::get('config');
+        $mform->addElement('text', 'blocktitle', get_string('configtitle', 'block_xp'));
+        $mform->addHelpButton('blocktitle', 'configtitle', 'block_xp');
+        $mform->setType('blocktitle', PARAM_TEXT);
 
-            $mform->addElement('text', 'block_title', get_string('configtitle', 'block_xp'));
-            $mform->setDefault('block_title', $config->get('blocktitle'));
-            $mform->addHelpButton('block_title', 'configtitle', 'block_xp');
-            $mform->setType('block_title', PARAM_TEXT);
+        $mform->addElement('textarea', 'blockdescription', get_string('configdescription', 'block_xp'));
+        $mform->addHelpButton('blockdescription', 'configdescription', 'block_xp');
+        $mform->setType('blockdescription', PARAM_TEXT);
 
-            $mform->addElement('textarea', 'block_description', get_string('configdescription', 'block_xp'));
-            $mform->setDefault('block_description', $config->get('blockdescription'));
-            $mform->addHelpButton('block_description', 'configdescription', 'block_xp');
-            $mform->setType('block_description', PARAM_TEXT);
-
-            $mform->addElement('select', 'block_recentactivity', get_string('configrecentactivity', 'block_xp'), [
-                0 => get_string('no'),
-                3 => get_string('yes'),
-            ]);
-            $mform->setDefault('block_recentactivity', $config->get('blockrecentactivity'));
-            $mform->addHelpButton('block_recentactivity', 'configrecentactivity', 'block_xp');
-            $mform->setType('block_recentactivity', PARAM_INT);
-
-        } else {
-            // Advise that we could not find the block.
-            if ($PAGE->course->id == SITEID) {
-                $fp = new \moodle_url('/', ['redirect' => 0]);
-                $mysys = new \moodle_url('/my/indexsys.php');
-                $params = [
-                    'fp' => $fp->out(false),
-                    'mysys' => $mysys->out(false)
-                ];
-                $str = 'cannotshowblockconfigsys';
-            } else {
-                $url = new \moodle_url('/course/view.php', ['id' => $PAGE->course->id]);
-                $str = 'cannotshowblockconfig';
-                $params = $url->out(false);
-            }
-            $mform->addElement('static', 'missingblock', get_string('whoops', 'block_xp'),
-                markdown_to_html(get_string($str, 'block_xp', $params)));
-        }
+        $mform->addElement('select', 'blockrecentactivity', get_string('configrecentactivity', 'block_xp'), [
+            0 => get_string('no'),
+            3 => get_string('yes'),
+        ]);
+        $mform->addHelpButton('blockrecentactivity', 'configrecentactivity', 'block_xp');
+        $mform->setType('blockrecentactivity', PARAM_INT);
 
         $mform->addElement('hidden', '__blockappearanceend');
         $mform->setType('__blockappearanceend', PARAM_BOOL);
