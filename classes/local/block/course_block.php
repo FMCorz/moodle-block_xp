@@ -155,6 +155,9 @@ class course_block extends block_base {
             return $this->content;
         }
 
+        // Migrate the old config if needed.
+        $this->migrate_config_data_if_needed($world);
+
         $renderer = \block_xp\di::get('renderer');
         $urlresolver = \block_xp\di::get('url_resolver');
         $state = $world->get_store()->get_state($USER->id);
@@ -302,6 +305,46 @@ class course_block extends block_base {
      */
     protected function get_world($courseid) {
         return \block_xp\di::get('course_world_factory')->get_world($courseid);
+    }
+
+    /**
+     * Migrate config data if needed.
+     *
+     * This is used for the transition from configdata in the block
+     * to using the configuration object of the world.
+     *
+     * @param \block_xp\local\course_world $world The world.
+     */
+    protected function migrate_config_data_if_needed($world) {
+        $migrateflag = 'block_configdata_migrated_' . $world->get_courseid();
+        if (!get_config('block_xp', $migrateflag)) {
+            $config = $world->get_config();
+
+            // An empty title previously defaulted to admin title, so do not change.
+            if (!empty($this->config->title)) {
+                $config->set('blocktitle', $this->config->title);
+            }
+            if (isset($this->config->description)) {
+                $config->set('blockdescription', $this->config->description);
+            }
+            if (isset($this->config->recentactivity)) {
+                $config->set('blockrecentactivity', (int) $this->config->recentactivity);
+            }
+
+            // Remove config and flag in an admin config. This is polluting the admin
+            // config a bit, but we can remove these values later when we remove this
+            // code, we cannot remove the flags before this code is as well. Note
+            // that we need the flag because there may be multiple instances of the
+            // block in different places and thus we could override the data. This
+            // method here may not convert the right block instances, but it will
+            // convert the first one displayed to a user. It is probably safe enough
+            // and does not require a complex upgrade path to identify block instances.
+            // Instances like the default dashboard are tricky ones to deal with.
+            set_config($migrateflag, time(), 'block_xp');
+
+            // Reset the title as the specialisation has already happened.
+            $this->title = format_string($config->get('blocktitle'), true, ['context' => $world->get_context()]);
+        }
     }
 
     /**
