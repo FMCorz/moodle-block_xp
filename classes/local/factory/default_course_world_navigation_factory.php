@@ -26,6 +26,7 @@
 namespace block_xp\local\factory;
 defined('MOODLE_INTERNAL') || die();
 
+use block_xp\di;
 use block_xp\local\course_world;
 use block_xp\local\config\config;
 use block_xp\local\routing\url_resolver;
@@ -136,8 +137,7 @@ class default_course_world_navigation_factory implements course_world_navigation
             //   $CFG->forced_plugin_settings = ['block_xp' => ['enablepromoincourses' => 0]];
             //
             // @codingStandardsIgnoreEnd
-            $pluginman = \core_plugin_manager::instance();
-            $localxp = $pluginman->get_plugin_info('local_xp');
+            $localxp = di::get('addon')->is_present();
             if ($this->adminconfig->get('enablepromoincourses') || $localxp) {
                 $star = $renderer->pix_icon('star', '', 'block_xp', ['class' => 'icon']);
                 if ($localxp) {
