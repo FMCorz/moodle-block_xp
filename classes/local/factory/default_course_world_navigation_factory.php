@@ -186,7 +186,7 @@ class default_course_world_navigation_factory implements course_world_navigation
             //   $CFG->forced_plugin_settings = ['block_xp' => ['enablepromoincourses' => 0]];
             //
             // @codingStandardsIgnoreEnd
-            $localxp = di::get('addon')->is_present();
+            $localxp = di::get('addon')->is_activated();
             if ($this->adminconfig->get('enablepromoincourses') || $localxp) {
                 $star = $renderer->pix_icon('star', '', 'block_xp', ['class' => 'icon']);
                 if ($localxp) {
