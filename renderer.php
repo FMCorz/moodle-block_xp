@@ -46,6 +46,40 @@ class block_xp_renderer extends plugin_renderer_base {
     protected $noticesflag = 'block_xp_notices';
 
     /**
+     * Advanced heading.
+     *
+     * @param string $heading The heading.
+     * @param array $options The options.
+     */
+    public function advanced_heading($heading, $options = []) {
+        $options = array_merge(['level' => 3, 'actions' => [], 'intro' => null, 'help' => null], $options);
+        $level = (int) $options['level'];
+        $actions = (array) $options['actions'];
+        $intro = !empty($options['intro']) ? $options['intro'] : null;
+        /** @var \help_icon|null */
+        $help = $options['help'] instanceof \help_icon ? $options['help'] : null;
+
+        $o = '';
+        $o .= html_writer::start_div('xp-flex xp-mb-6 xp-gap-4');
+        $o .= html_writer::start_div('xp-flex-grow');
+        $o .= html_writer::start_div('');
+        $o .= $this->heading($heading, $level, 'xp-m-0');
+        if (!empty($intro)) {
+            $o .= html_writer::start_div('xp-text-sm xp-text-gray-500 xp-mt-2');
+            $o .= $intro . ' ' . (!empty($help) ? $this->render($help) : '');
+            $o .= html_writer::end_div();
+        }
+        $o .= html_writer::end_div();
+        $o .= html_writer::end_div();
+        $o .= html_writer::start_div('xp-flex xp-flex-wrap xp-gap-4 xp-items-start xp-whitespace-nowrap');
+        $o .= implode('', array_map([$this, 'render'], $actions));
+        $o .= html_writer::end_div();
+        $o .= html_writer::end_div();
+
+        return $o;
+    }
+
+    /**
      * Get a user's picture.
      *
      * @param object $user The user.

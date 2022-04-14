@@ -10,6 +10,7 @@ module.exports = {
         './classes/form/**/*.php',
         './classes/local/controller/**/*.php',
         './classes/local/shortcode/handler.php',
+        './css/safelist.txt',
         './ui/src/**/*.{js,ts,tsx}',
     ],
     darkMode: false,
