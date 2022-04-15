@@ -22,7 +22,6 @@ Bug fixes
 - Shortcode `[xpladder]` with `top` did not display top for neighboured leaderboards
 - Leaderboard only links to profile when course profiles are enabled
 - Event `user_leveledup` could be skipped when leveling up multiple levels at once
-- Level up notification popup could be skipped when levelup multiple levels at once
 - Other minor bug fixes and improvements
 
 Technical changes
