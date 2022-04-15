@@ -1,6 +1,44 @@
 Changelog
 =========
 
+v3.12.0
+-------
+
+New features
+
+- Display student's rank on the block
+- New shortcode `[xppoints]` to display number of points
+- Additional capability to control access to the report was added
+- Optional usage sharing functionality
+
+Quality of life
+
+- Block title can be left empty
+- Block appearance settings always set from the plugin's settings
+- Navigation improvements by introducing sub-navigation in some pages
+
+Bug fixes
+
+- Shortcode `[xpladder]` with `top` did not display top for neighboured leaderboards
+- Leaderboard only links to profile when course profiles are enabled
+- Event `user_leveledup` could be skipped when leveling up multiple levels at once
+- Level up notification popup could be skipped when levelup multiple levels at once
+- Other minor bug fixes and improvements
+
+Technical changes
+
+- Raised minimum required version to Moodle 3.3
+- Compatibility with Moodle 4.0
+- Compatibility with PHP 8
+- Support for optional activation of Level Up XP+ for shared hosting (beta)
+
+Additional notes
+
+- The migration of the block appearance settings will happen automatically in most cases. Those settings include the block title, the description shown to students, and whether or not to displays rewards. If those did not migrate accurately, their values can be set from the "Block appearance" section at the bottom of the plugin's settings page.
+- The "Log" page is now found under "Report", and the "Visuals" page under "Levels".
+- Level Up is renamed Level Up XP, and Level Up Plus becomes Level Up XP+.
+
+
 v3.11.4
 -------
 
