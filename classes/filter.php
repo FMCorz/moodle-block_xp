@@ -215,9 +215,12 @@ class block_xp_filter implements renderable {
             } else if ($key == 'sortorder') {
                 // Int.
                 $value = intval($value);
-            } else if ($key == 'id' || $key == 'courseid') {
+            } else if ($key == 'id') {
                 // Null or int.
                 $value = !empty($value) ? intval($value) : null;
+            } else if ($key == 'courseid') {
+                // Always int.
+                $value = max(0, intval($value));
             } else if ($key == 'category') {
                 // Must be a valid category.
                 $value = intval($value);
