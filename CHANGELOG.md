@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v3.12.1
+-------
+
+Bug fixes
+
+- Default rules could not be saved in the admin settings
+- Usage sharing incorrectly counted number of rules
+
 v3.12.0
 -------
 
