@@ -101,7 +101,7 @@ class usage_report_maker {
             }
         }
 
-        $data->xp_rules = $this->db->count_records_select('block_xp', 'courseid > 0');
+        $data->xp_rules = $this->db->count_records_select('block_xp_filters', 'courseid > 0');
         $data->xp_rules_usage = $this->get_rules_usage($data->xp_rules > 5000 ? 5000 : 0);
 
         return $data;
