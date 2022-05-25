@@ -225,13 +225,13 @@ class block_xp_filters_testcase extends block_xp_base_testcase {
         // Course IDs where loose empty values are OK.
         $filter = block_xp_filter::load_from_data((object) ['courseid' => ""]);
         $this->assertEmpty($filter->export()->courseid);
-        $this->assertSame(null, $filter->export()->courseid);
+        $this->assertSame(0, $filter->export()->courseid);
         $filter = block_xp_filter::load_from_data((object) ['courseid' => "0"]);
         $this->assertEmpty($filter->export()->courseid);
-        $this->assertSame(null, $filter->export()->courseid);
+        $this->assertSame(0, $filter->export()->courseid);
         $filter = block_xp_filter::load_from_data((object) ['courseid' => 0]);
         $this->assertEmpty($filter->export()->courseid);
-        $this->assertSame(null, $filter->export()->courseid);
+        $this->assertSame(0, $filter->export()->courseid);
         $filter = block_xp_filter::load_from_data((object) ['courseid' => "2"]);
         $this->assertSame(2, $filter->export()->courseid);
         $filter = block_xp_filter::load_from_data((object) ['courseid' => 2]);
