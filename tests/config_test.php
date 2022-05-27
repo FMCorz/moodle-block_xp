@@ -217,8 +217,8 @@ class block_xp_config_testcase extends block_xp_base_testcase {
             'char2' => 'default_char2',
             'text1' => 'default_text1',
             'text2' => 'default_text2',
-            'int1' => 111,
-            'int2' => 222,
+            'intval1' => 111,
+            'intval2' => 222,
         ]);
 
         // Fallback on default when record does not exist.
@@ -228,48 +228,48 @@ class block_xp_config_testcase extends block_xp_base_testcase {
         $this->assertEquals('default_char2', $config->get('char2'));
         $this->assertEquals('default_text1', $config->get('text1'));
         $this->assertEquals('default_text2', $config->get('text2'));
-        $this->assertEquals(111, $config->get('int1'));
-        $this->assertEquals(222, $config->get('int2'));
+        $this->assertEquals(111, $config->get('intval1'));
+        $this->assertEquals(222, $config->get('intval2'));
         $this->assertEquals([
             'char1' => 'default_char1',
             'char2' => 'default_char2',
             'text1' => 'default_text1',
             'text2' => 'default_text2',
-            'int1' => 111,
-            'int2' => 222,
+            'intval1' => 111,
+            'intval2' => 222,
         ], $config->get_all());
         $this->assertFalse($DB->record_exists('phpunit_block_xp_config', ['courseid' => 1]));
 
         // Setting a value will write to the database.
-        $config->set('int1', 333);
+        $config->set('intval1', 333);
         $this->assertEquals('default_char1', $config->get('char1'));
         $this->assertEquals('default_char2', $config->get('char2'));
         $this->assertEquals('default_text1', $config->get('text1'));
         $this->assertEquals('default_text2', $config->get('text2'));
-        $this->assertEquals(333, $config->get('int1'));
-        $this->assertEquals(222, $config->get('int2'));
+        $this->assertEquals(333, $config->get('intval1'));
+        $this->assertEquals(222, $config->get('intval2'));
         $this->assertEquals([
             'char1' => 'default_char1',
             'char2' => 'default_char2',
             'text1' => 'default_text1',
             'text2' => 'default_text2',
-            'int1' => 333,
-            'int2' => 222,
+            'intval1' => 333,
+            'intval2' => 222,
         ], $config->get_all());
         $this->assertTrue($DB->record_exists('phpunit_block_xp_config', ['courseid' => 1]));
-        $this->assertEquals(333, $DB->get_field('phpunit_block_xp_config', 'int1', ['courseid' => 1]));
+        $this->assertEquals(333, $DB->get_field('phpunit_block_xp_config', 'intval1', ['courseid' => 1]));
 
         // Validate that the value set is loaded with a new object.
         $config = new table_row_config($DB, 'phpunit_block_xp_config', $defaults, ['courseid' => 1]);
-        $this->assertEquals(333, $config->get('int1'));
+        $this->assertEquals(333, $config->get('intval1'));
 
         // Validate that overriding a value works when DB record exists.
-        $config->set('int2', 444);
-        $this->assertEquals(333, $config->get('int1'));
-        $this->assertEquals(444, $config->get('int2'));
-        $this->assertEquals(444, $DB->get_field('phpunit_block_xp_config', 'int2', ['courseid' => 1]));
+        $config->set('intval2', 444);
+        $this->assertEquals(333, $config->get('intval1'));
+        $this->assertEquals(444, $config->get('intval2'));
+        $this->assertEquals(444, $DB->get_field('phpunit_block_xp_config', 'intval2', ['courseid' => 1]));
         $config = new table_row_config($DB, 'phpunit_block_xp_config', $defaults, ['courseid' => 1]);
-        $this->assertEquals(444, $config->get('int2'));
+        $this->assertEquals(444, $config->get('intval2'));
 
         // Validate that the conditions work.
         $config = new table_row_config($DB, 'phpunit_block_xp_config', $defaults, ['courseid' => 1]);
@@ -287,14 +287,14 @@ class block_xp_config_testcase extends block_xp_base_testcase {
             'char2' => 'default_char2',
             'text1' => 'default_text1',
             'text2' => 'default_text2',
-            'int1' => 111,
-            'int2' => 222,
+            'intval1' => 111,
+            'intval2' => 222,
         ]);
 
         // Test the creation of a partial record (with null values).
-        $DB->insert_record('phpunit_block_xp_config', ['courseid' => 1, 'int1' => 11, 'char1' => 'hh', 'text1' => 'ww']);
+        $DB->insert_record('phpunit_block_xp_config', ['courseid' => 1, 'intval1' => 11, 'char1' => 'hh', 'text1' => 'ww']);
         $config = new table_row_config($DB, 'phpunit_block_xp_config', $defaults, ['courseid' => 1]);
-        $this->assertNull($config->get('int2'));
+        $this->assertNull($config->get('intval2'));
         $this->assertNull($config->get('char2'));
         $this->assertNull($config->get('text2'));
         $this->assertEquals([
@@ -302,13 +302,13 @@ class block_xp_config_testcase extends block_xp_base_testcase {
             'char2' => null,
             'text1' => 'ww',
             'text2' => null,
-            'int1' => 11,
-            'int2' => null,
+            'intval1' => 11,
+            'intval2' => null,
         ], $config->get_all());
 
         // Test fallback on null.
         $config = new table_row_config($DB, 'phpunit_block_xp_config', $defaults, ['courseid' => 1], true);
-        $this->assertEquals($defaults->get('int2'), $config->get('int2'));
+        $this->assertEquals($defaults->get('intval2'), $config->get('intval2'));
         $this->assertEquals($defaults->get('char2'), $config->get('char2'));
         $this->assertEquals($defaults->get('text2'), $config->get('text2'));
         $this->assertEquals([
@@ -316,8 +316,8 @@ class block_xp_config_testcase extends block_xp_base_testcase {
             'char2' => 'default_char2',
             'text1' => 'ww',
             'text2' => 'default_text2',
-            'int1' => 11,
-            'int2' => 222,
+            'intval1' => 11,
+            'intval2' => 222,
         ], $config->get_all());
 
         // Test fallback on null only works when default has key.
@@ -326,10 +326,10 @@ class block_xp_config_testcase extends block_xp_base_testcase {
             'char2' => 'default_char2',
             'text1' => 'default_text1',
             'text2' => 'default_text2',
-            'int1' => 111,
+            'intval1' => 111,
         ]);
         $config = new table_row_config($DB, 'phpunit_block_xp_config', $partialdefaults, ['courseid' => 1], true);
-        $this->assertEquals(null, $config->get('int2'));
+        $this->assertEquals(null, $config->get('intval2'));
         $this->assertEquals($partialdefaults->get('char2'), $config->get('char2'));
         $this->assertEquals($partialdefaults->get('text2'), $config->get('text2'));
         $this->assertEquals([
@@ -337,8 +337,8 @@ class block_xp_config_testcase extends block_xp_base_testcase {
             'char2' => 'default_char2',
             'text1' => 'ww',
             'text2' => 'default_text2',
-            'int1' => 11,
-            'int2' => null,
+            'intval1' => 11,
+            'intval2' => null,
         ], $config->get_all());
     }
 
@@ -356,8 +356,8 @@ class block_xp_config_testcase extends block_xp_base_testcase {
         $table->add_field('char2', XMLDB_TYPE_CHAR, '100', null, null, null, null);
         $table->add_field('text1', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
         $table->add_field('text2', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('int1', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $table->add_field('int2', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('intval1', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('intval2', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
 
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
