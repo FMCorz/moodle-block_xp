@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v3.12.2
+-------
+
+Technical changes
+
+- Addressed false negatives in unit tests
+
 v3.12.1
 -------
 
