@@ -152,7 +152,8 @@ class report_table extends table_sql {
 
         // Define SQL.
         $this->sql = new stdClass();
-        $this->sql->fields = user_utils::picture_fields('u') . ', COALESCE(x.lvl, 1) AS lvl, x.xp, ' .
+        $this->sql->fields = user_utils::picture_fields('u') . ', u.idnumber, u.email, u.username, ' .
+            'COALESCE(x.lvl, 1) AS lvl, x.xp, ' .
             context_helper::get_preload_record_columns_sql('ctx');
         $this->sql->from = "{user} u
                        JOIN {context} ctx
