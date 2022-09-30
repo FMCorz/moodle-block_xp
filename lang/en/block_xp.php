@@ -396,6 +396,7 @@ $string['usecustomlevelbadges'] = 'Use custom level badges';
 $string['usecustomlevelbadges_help'] = 'When set to yes, you must provide an image for each level.';
 $string['unknowneventa'] = 'Unknown event ({$a})';
 $string['viewas'] = 'View as';
+$string['viewlogs'] = 'View logs';
 $string['when'] = 'When';
 $string['whoops'] = 'Whoops!';
 $string['wewillreplyat'] = 'We will reply at: _{$a}_.';

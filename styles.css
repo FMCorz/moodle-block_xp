@@ -917,6 +917,10 @@
     border-right: 1px dotted #ccc;
     right: 0;
 }
+.block_xp .after\:xp-hidden::after {
+    content: var(--tw-content);
+    display: none;
+}
 .block_xp .odd\:xp-bg-gray-100:nth-child(odd) {
     --tw-bg-opacity: 1;
     background-color: rgb(243 244 246 / var(--tw-bg-opacity));

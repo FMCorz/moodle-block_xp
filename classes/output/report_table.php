@@ -38,6 +38,7 @@ use stdClass;
 use table_sql;
 use block_xp\di;
 use block_xp\local\course_world;
+use block_xp\local\permission\access_logs_permissions;
 use block_xp\local\routing\url_resolver;
 use block_xp\local\utils\user_utils;
 use block_xp\local\xp\course_user_state_store;
@@ -58,8 +59,12 @@ class report_table extends table_sql {
     protected $world = null;
     /** @var \block_xp\local\xp\course_user_state_store The store. */
     protected $store = null;
+    /** @var access_logs_permissions|null The log access permissions. */
+    protected $logaccessperms = null;
     /** @var renderer_base The renderer. */
     protected $renderer = null;
+    /** @var url_resolver The URL resolver. */
+    protected $urlresolver;
     /** @var int The groupd ID. */
     protected $groupid = null;
     /** @var array The columns definition where keys are IDs, values are lang strings. */
@@ -89,6 +94,12 @@ class report_table extends table_sql {
         $this->world = $world;
         $this->renderer = $renderer;
         $this->store = $store;
+        $this->urlresolver = di::get('url_resolver');
+
+        $accessperms = $this->world->get_access_permissions();
+        if ($accessperms instanceof access_logs_permissions) {
+            $this->logaccessperms = $accessperms;
+        }
 
         // Init the stuff.
         $this->init();
@@ -254,6 +265,13 @@ class report_table extends table_sql {
 
         $url = new moodle_url($this->baseurl, ['action' => 'edit', 'userid' => $row->id]);
         $actions[] = new action_menu_link($url, new pix_icon('t/edit', get_string('edit', 'core')), get_string('edit', 'core'));
+
+        if ($this->logaccessperms && $this->logaccessperms->can_access_logs()) {
+            $url = $this->urlresolver->reverse('log', ['courseid' => $this->world->get_courseid()]);
+            $url->param('userid', $row->id);
+            $actions[] = new action_menu_link($url, new pix_icon('t/log', get_string('logs', 'core')),
+                get_string('viewlogs', 'block_xp'));
+        }
 
         if (isset($row->xp)) {
             $url = new moodle_url($this->baseurl, ['action' => '', 'delete' => 1, 'userid' => $row->id]);
