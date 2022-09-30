@@ -16,7 +16,14 @@ module.exports = {
         extend: {},
     },
     corePlugins: {
+        // Older versions of Moodle do not understand rgb(... / opacity).
+        backgroundOpacity: false,
+        borderOpacity: false,
+        ringOpacity: false,
+        textOpacity: false,
+        // Removes the @base.
         preflight: false,
+        // Space breaks compatibility with older Moodles.
         space: false,
     },
     plugins: [
