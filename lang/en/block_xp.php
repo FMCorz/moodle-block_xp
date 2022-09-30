@@ -165,6 +165,7 @@ $string['logging'] = 'Logging';
 $string['manually'] = 'Manually';
 $string['maxactionspertime'] = 'Max. actions in time frame';
 $string['maxactionspertime_help'] = 'The maximum number of actions that will count for points during the time frame given. Any subsequent action will be ignored. When this value is empty, or equals to zero, it does not apply.';
+$string['menu'] = 'Menu';
 $string['movecondition'] = 'Move condition';
 $string['moverule'] = 'Move rule';
 $string['name'] = 'Name';

@@ -27,6 +27,7 @@ namespace block_xp\output;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
 
+use action_menu_link;
 use context_course;
 use context_helper;
 use moodle_database;
@@ -37,8 +38,9 @@ use stdClass;
 use table_sql;
 use block_xp\di;
 use block_xp\local\course_world;
-use block_xp\local\xp\course_user_state_store;
+use block_xp\local\routing\url_resolver;
 use block_xp\local\utils\user_utils;
+use block_xp\local\xp\course_user_state_store;
 use block_xp\local\xp\state_with_subject;
 
 /**
@@ -242,23 +244,38 @@ class report_table extends table_sql {
     }
 
     /**
+     * Get the actions for row.
+     *
+     * @param stdClass $row Table row.
+     * @return action_menu_link[] List of actions.
+     */
+    protected function get_row_actions($row) {
+        $actions = [];
+
+        $url = new moodle_url($this->baseurl, ['action' => 'edit', 'userid' => $row->id]);
+        $actions[] = new action_menu_link($url, new pix_icon('t/edit', get_string('edit', 'core')), get_string('edit', 'core'));
+
+        if (isset($row->xp)) {
+            $url = new moodle_url($this->baseurl, ['action' => '', 'delete' => 1, 'userid' => $row->id]);
+            $actions[] = new action_menu_link($url, new pix_icon('t/delete', get_string('delete', 'core')),
+                get_string('delete', 'core'));
+        }
+
+        return $actions;
+    }
+
+    /**
      * Formats the column actions.
      *
      * @param stdClass $row Table row.
      * @return string Output produced.
      */
     protected function col_actions($row) {
-        $actions = [];
-
-        $url = new moodle_url($this->baseurl, ['action' => 'edit', 'userid' => $row->id]);
-        $actions[] = $this->renderer->action_icon($url, new pix_icon('t/edit', get_string('edit')));
-
-        if (isset($row->xp)) {
-            $url = new moodle_url($this->baseurl, ['action' => '', 'delete' => 1, 'userid' => $row->id]);
-            $actions[] = $this->renderer->action_icon($url, new pix_icon('t/delete', get_string('delete')));
+        $actions = $this->get_row_actions($row);
+        if (empty($actions)) {
+            return '';
         }
-
-        return implode(' ', $actions);
+        return $this->renderer->control_menu($this->get_row_actions($row));
     }
 
     /**

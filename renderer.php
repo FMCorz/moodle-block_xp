@@ -80,6 +80,29 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Render a control menu.
+     *
+     * @param action_menu_link $actions
+     */
+    public function control_menu($actions) {
+        $menu = new action_menu();
+
+        // Without this, the control menu can wrap on the next line when placed next to another item.
+        $menu->attributes['class'] .= ' xp-inline-block';
+
+        // Styles copied from core_courseformat\output\local\content\cm::get_action_menu() in 4.1dev.
+        $icon = $this->pix_icon('i/menu', get_string('menu', 'block_xp'));
+        $menu->set_menu_trigger($icon, 'btn btn-icon d-flex align-items-center justify-content-center after:xp-hidden');
+
+        foreach ($actions as $action) {
+            $action->primary = false;
+            $menu->add_secondary_action($action);
+        }
+
+        return $this->render($menu);
+    }
+
+    /**
      * Get a user's picture.
      *
      * @param object $user The user.
