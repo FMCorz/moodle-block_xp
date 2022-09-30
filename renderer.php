@@ -688,11 +688,18 @@ EOT
      * @return string
      */
     public function render_filters_widget_group(renderable $group) {
+        global $CFG;
+
         $formid = html_writer::random_id();
 
-        $this->page->requires->string_for_js('changesmadereallygoaway', 'moodle');
-        $this->page->requires->yui_module('moodle-core-formchangechecker', 'M.core_formchangechecker.init',
-            [['formid' => $formid]]);
+        // The form change checker YUI module is deprecated since Moodle 4.0.
+        if ($CFG->branch >= 400) {
+            $this->page->requires->js_call_amd('core_form/changechecker', 'watchFormById', [$formid]);
+        } else {
+            $this->page->requires->string_for_js('changesmadereallygoaway', 'moodle');
+            $this->page->requires->yui_module('moodle-core-formchangechecker', 'M.core_formchangechecker.init',
+                [['formid' => $formid]]);
+        }
 
         echo html_writer::start_div('block-xp-filters-group');
         echo html_writer::start_tag('form', ['method' => 'POST', 'class' => 'block-xp-filters', 'id' => $formid]);
