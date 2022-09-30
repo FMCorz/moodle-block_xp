@@ -217,7 +217,9 @@ class report_controller extends page_controller {
 
         // Displaying the report.
         $this->print_group_menu();
+        echo html_writer::start_div('xp-cancel-overflow'); // Else dropdown menu is cropped on some versions.
         echo $this->get_table()->out(20, true);
+        echo html_writer::end_div();
 
         // Output the bottom actions.
         $actions = !$canmanage ? [] : $this->get_bottom_action_buttons();

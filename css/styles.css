@@ -10,6 +10,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/** Cancel overflow of .no-overflow */
+.block_xp .xp-cancel-overflow .no-overflow {
+    overflow: visible;
+}
+
 /** Legacy styles. */
 .block_xp-level {
     background: url([[pix:block_xp|10]]) no-repeat;
