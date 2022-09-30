@@ -61,7 +61,7 @@ class block_xp_renderer extends plugin_renderer_base {
 
         $o = '';
         $o .= html_writer::start_div('xp-flex xp-mb-6 xp-gap-4');
-        $o .= html_writer::start_div('xp-flex-grow');
+        $o .= html_writer::start_div('xp-grow');
         $o .= html_writer::start_div('');
         $o .= $this->heading($heading, $level, 'xp-m-0');
         if (!empty($intro)) {

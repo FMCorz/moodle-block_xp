@@ -119,7 +119,7 @@
 .block_xp .xp-flex-none {
     flex: none;
 }
-.block_xp .xp-flex-grow {
+.block_xp .xp-grow {
     flex-grow: 1;
 }
 .block_xp .xp-flex-row {
@@ -186,18 +186,15 @@
 }
 .block_xp .xp-border-gray-100 {
     --tw-border-opacity: 1;
-    border-color: #f3f4f6;
-    border-color: rgba(243, 244, 246, var(--tw-border-opacity));
+    border-color: rgb(243 244 246 / var(--tw-border-opacity));
 }
 .block_xp .xp-bg-yellow-200 {
     --tw-bg-opacity: 1;
-    background-color: #fde68a;
-    background-color: rgba(253, 230, 138, var(--tw-bg-opacity));
+    background-color: rgb(254 240 138 / var(--tw-bg-opacity));
 }
 .block_xp .xp-bg-gray-100 {
     --tw-bg-opacity: 1;
-    background-color: #f3f4f6;
-    background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
+    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 .block_xp .xp-p-0 {
     padding: 0px;
@@ -283,21 +280,18 @@
 }
 .block_xp .xp-text-gray-500 {
     --tw-text-opacity: 1;
-    color: #6b7280;
-    color: rgba(107, 114, 128, var(--tw-text-opacity));
+    color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 .block_xp .xp-text-gray-900 {
     --tw-text-opacity: 1;
-    color: #111827;
-    color: rgba(17, 24, 39, var(--tw-text-opacity));
+    color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 .block_xp .xp-text-gray-600 {
     --tw-text-opacity: 1;
-    color: #4b5563;
-    color: rgba(75, 85, 99, var(--tw-text-opacity));
+    color: rgb(75 85 99 / var(--tw-text-opacity));
 }
 .block_xp .xp-no-underline {
-    text-decoration: none;
+    text-decoration-line: none;
 }
 
 /** Legacy styles. */
@@ -316,7 +310,6 @@
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 
@@ -365,7 +358,6 @@
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 .block_xp-level.level-badge {
@@ -927,18 +919,15 @@
 }
 .block_xp .odd\:xp-bg-gray-100:nth-child(odd) {
     --tw-bg-opacity: 1;
-    background-color: #f3f4f6;
-    background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
+    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 .block_xp .hover\:xp-bg-gray-50:hover {
     --tw-bg-opacity: 1;
-    background-color: #f9fafb;
-    background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
+    background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 .block_xp .hover\:xp-text-gray-900:hover {
     --tw-text-opacity: 1;
-    color: #111827;
-    color: rgba(17, 24, 39, var(--tw-text-opacity));
+    color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 @media (min-width: 768px) {
 

@@ -1,10 +1,9 @@
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
-    mode: 'jit',
     prefix: 'xp-',
     important: '.block_xp',
-    purge: [
+    content: [
         './renderer.php',
         './templates/**/*.mustache',
         './classes/form/**/*.php',
@@ -13,14 +12,11 @@ module.exports = {
         './css/safelist.txt',
         './ui/src/**/*.{js,ts,tsx}',
     ],
-    darkMode: false,
     theme: {
         extend: {},
     },
-    variants: {
-        extend: {},
-    },
     corePlugins: {
+        preflight: false,
         space: false,
     },
     plugins: [
