@@ -85,7 +85,6 @@ class block_xp_course_world_testcase extends block_xp_base_testcase {
         $this->assertEquals(1, $DB->count_records('block_xp_log', array('courseid' => $c2->id)));
     }
 
-
     public function test_reset_data_with_groups() {
         global $DB;
 
@@ -135,5 +134,60 @@ class block_xp_course_world_testcase extends block_xp_base_testcase {
         $this->assertEquals(2, $DB->count_records('block_xp_log', array('courseid' => $c1->id, 'userid' => $u2->id)));
         $this->assertEquals(1, $DB->count_records('block_xp', array('courseid' => $c2->id)));
         $this->assertEquals(1, $DB->count_records('block_xp_log', array('courseid' => $c2->id)));
+    }
+
+    public function test_delete_user_state() {
+        global $DB;
+
+        $c1 = $this->getDataGenerator()->create_course();
+        $c2 = $this->getDataGenerator()->create_course();
+        $u1 = $this->getDataGenerator()->create_user();
+        $u2 = $this->getDataGenerator()->create_user();
+        $g1 = $this->getDataGenerator()->create_group(['courseid' => $c1->id]);
+
+        $this->getDataGenerator()->enrol_user($u1->id, $c1->id);
+        $this->getDataGenerator()->enrol_user($u2->id, $c1->id);
+        $this->getDataGenerator()->enrol_user($u1->id, $c2->id);
+
+        $world = $this->get_world($c1->id);
+        $world->get_config()->set_many(['enabled' => true, 'timebetweensameactions' => 0]);
+        $strategy = $world->get_collection_strategy();
+
+        $e = \block_xp\event\something_happened::mock(['crud' => 'c', 'userid' => $u1->id, 'courseid' => $c1->id]);
+        $strategy->collect_event($e);
+        $strategy->collect_event($e);
+
+        $e = \block_xp\event\something_happened::mock(['crud' => 'c', 'userid' => $u2->id, 'courseid' => $c1->id]);
+        $strategy->collect_event($e);
+        $strategy->collect_event($e);
+
+        $world = $this->get_world($c2->id);
+        $world->get_config()->set_many(['enabled' => true, 'timebetweensameactions' => 0]);
+        $strategy = $world->get_collection_strategy();
+
+        $e = \block_xp\event\something_happened::mock(['crud' => 'c', 'userid' => $u1->id, 'courseid' => $c2->id]);
+        $strategy->collect_event($e);
+
+        $world = $this->get_world($c1->id);
+
+        $this->assertGreaterThan(0, $world->get_store()->get_state($u1->id)->get_xp());
+        $this->assertGreaterThan(0, $world->get_store()->get_state($u2->id)->get_xp());
+        $this->assertEquals(1, $DB->count_records('block_xp', ['courseid' => $c1->id, 'userid' => $u1->id]));
+        $this->assertEquals(1, $DB->count_records('block_xp', ['courseid' => $c1->id, 'userid' => $u2->id]));
+        $this->assertEquals(2, $DB->count_records('block_xp_log', ['courseid' => $c1->id, 'userid' => $u1->id]));
+        $this->assertEquals(2, $DB->count_records('block_xp_log', ['courseid' => $c1->id, 'userid' => $u2->id]));
+        $this->assertEquals(1, $DB->count_records('block_xp', ['courseid' => $c2->id]));
+        $this->assertEquals(1, $DB->count_records('block_xp_log', ['courseid' => $c2->id]));
+
+        $world->get_store()->delete($u1->id);
+
+        $this->assertEquals(0, $world->get_store()->get_state($u1->id)->get_xp());
+        $this->assertGreaterThan(0, $world->get_store()->get_state($u2->id)->get_xp());
+        $this->assertEquals(0, $DB->count_records('block_xp', ['courseid' => $c1->id, 'userid' => $u1->id]));
+        $this->assertEquals(1, $DB->count_records('block_xp', ['courseid' => $c1->id, 'userid' => $u2->id]));
+        $this->assertEquals(0, $DB->count_records('block_xp_log', ['courseid' => $c1->id, 'userid' => $u1->id]));
+        $this->assertEquals(2, $DB->count_records('block_xp_log', ['courseid' => $c1->id, 'userid' => $u2->id]));
+        $this->assertEquals(1, $DB->count_records('block_xp', ['courseid' => $c2->id]));
+        $this->assertEquals(1, $DB->count_records('block_xp_log', ['courseid' => $c2->id]));
     }
 }
