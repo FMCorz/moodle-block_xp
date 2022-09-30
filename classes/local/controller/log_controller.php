@@ -24,6 +24,11 @@
  */
 
 namespace block_xp\local\controller;
+
+use block_xp\local\routing\url;
+use core_user;
+use html_writer;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -41,6 +46,9 @@ class log_controller extends page_controller {
     protected $iswideview = true;
     protected $supportsgroups = true;
 
+    /** @var int|null The user ID to filter the logs for. Use {@link self::get_user_id} to obtain. */
+    protected $userid = null;
+
     protected function permissions_checks() {
         $accessperms = $this->world->get_access_permissions();
         if (!($accessperms instanceof \block_xp\local\permission\access_logs_permissions)) {
@@ -49,10 +57,17 @@ class log_controller extends page_controller {
         $accessperms->require_access_logs();
     }
 
+    protected function define_optional_params() {
+        return [
+            ['userid', null, PARAM_INT]
+        ];
+    }
+
     protected function get_table() {
         $table = new \block_xp\output\log_table(
             $this->world,
-            $this->get_groupid()
+            $this->get_groupid(),
+            $this->get_user_id()
         );
         $table->define_baseurl($this->pageurl);
         return $table;
@@ -66,9 +81,37 @@ class log_controller extends page_controller {
         return get_string('courselog', 'block_xp');
     }
 
+    /**
+     * Get the user ID to display the logs for.
+     *
+     * @return int When falsy, no users or the user is invalid.
+     */
+    protected function get_user_id() {
+        if ($this->userid === null) {
+            $userid = $this->get_param('userid');
+            if (!$userid || $userid <= 0 || isguestuser($userid)) {
+                $userid = 0;
+            }
+            $this->userid = $userid;
+        }
+        return $this->userid;
+    }
+
     protected function page_content() {
-        $this->print_group_menu();
-        echo $this->get_table()->out(50, true);
+        $userid = $this->get_user_id();
+        $singleuser = (bool) $userid;
+
+        if (!$singleuser) {
+            $this->print_group_menu();
+        } else {
+            $user = core_user::get_user($userid, '*', MUST_EXIST);
+            $allusers = new url($this->pageurl);
+            $allusers->remove_params('userid');
+            echo html_writer::tag('p', get_string('resultsfilteredforn', 'block_xp', fullname($user))
+                . ' ' . html_writer::link($allusers, get_string('removefilter', 'block_xp')));
+        }
+
+        echo $this->get_table()->out(50, !$singleuser);
     }
 
 }

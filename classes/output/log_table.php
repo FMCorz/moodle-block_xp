@@ -31,6 +31,9 @@ use stdClass;
 use table_sql;
 use block_xp\local\course_world;
 use block_xp\local\utils\user_utils;
+use html_writer;
+use moodle_url;
+use pix_icon;
 
 /**
  * Block XP log table class.
@@ -47,17 +50,24 @@ class log_table extends table_sql {
     protected $world;
     /** @var renderer_base The renderer. */
     protected $renderer;
+    /** @var int Filter by user ID, falsy means not filtering. */
+    protected $filterbyuserid;
 
     /**
      * Constructor.
      *
      * @param course_world $world The world.
      * @param int $groupid The group ID.
+     * @param int|null $userid The user ID.
      */
-    public function __construct(course_world $world, $groupid) {
-        parent::__construct('block_xp_log');
+    public function __construct(course_world $world, $groupid, $userid = null) {
+        $userid = max(0, (int) $userid);
+        parent::__construct('block_xp_log_' . $userid);
+
         $this->world = $world;
         $this->renderer = \block_xp\di::get('renderer');
+        $this->filterbyuserid = $userid;
+
         $courseid = $world->get_courseid();
 
         // Define columns.
@@ -95,10 +105,31 @@ class log_table extends table_sql {
         $this->sql->from = $sqlfrom;
         $this->sql->where = 'courseid = :courseid';
         $this->sql->params = array_merge(array('courseid' => $courseid), $sqlparams);
+        if ($this->filterbyuserid) {
+            $this->sql->where .= ' AND userid = :userid';
+            $this->sql->params = array_merge($this->sql->params, ['userid' => $this->filterbyuserid]);
+        }
 
         // Define various table settings.
         $this->sortable(true, 'time', SORT_DESC);
         $this->collapsible(false);
+    }
+
+    /**
+     * Formats the column time.
+     *
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
+    public function col_fullname($row) {
+        $fullname = parent::col_fullname($row);
+        if (!$this->filterbyuserid) {
+            $fullname .= ' ' . $this->renderer->action_icon(
+                new moodle_url($this->baseurl, ['userid' => $row->userid]),
+                new pix_icon('i/search', get_string('filterbyuser', 'block_xp')),
+            );
+        }
+        return $fullname;
     }
 
     /**
