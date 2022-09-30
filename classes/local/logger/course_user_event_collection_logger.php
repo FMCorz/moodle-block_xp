@@ -40,7 +40,10 @@ use block_xp\local\reason\reason;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_user_event_collection_logger implements reason_collection_logger, collection_logger_with_group_reset {
+class course_user_event_collection_logger implements
+        reason_collection_logger,
+        collection_logger_with_group_reset,
+        collection_logger_with_id_reset {
 
     /** The table name. */
     const TABLE = 'block_xp_log';
@@ -153,6 +156,22 @@ class course_user_event_collection_logger implements reason_collection_logger, c
         ];
 
         $this->db->execute($sql, $params);
+    }
+
+    /**
+     * Purge logs for an ID.
+     *
+     * @param int $id The ID.
+     * @return void
+     */
+    public function reset_by_id($id) {
+        $this->db->delete_records(
+            static::TABLE,
+            [
+                'courseid' => $this->courseid,
+                'userid' => $id
+            ]
+        );
     }
 
 }

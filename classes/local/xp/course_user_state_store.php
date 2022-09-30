@@ -30,6 +30,7 @@ use context_helper;
 use moodle_database;
 use stdClass;
 use block_xp\local\logger\collection_logger_with_group_reset;
+use block_xp\local\logger\collection_logger_with_id_reset;
 use block_xp\local\logger\reason_collection_logger;
 use block_xp\local\observer\level_up_state_store_observer;
 use block_xp\local\observer\points_increased_state_store_observer;
@@ -61,7 +62,7 @@ class course_user_state_store implements course_state_store,
     protected $table = 'block_xp';
     /** @var reason_collection_logger The logger. */
     protected $logger;
-    /** @var level_up_state_store_observer he observer. */
+    /** @var level_up_state_store_observer The observer. */
     protected $observer;
     /** @var points_increased_state_store_observer The observer. */
     protected $pointsobserver;
@@ -127,6 +128,10 @@ class course_user_state_store implements course_state_store,
         $params['userid'] = $id;
         $params['courseid'] = $this->courseid;
         $this->db->delete_records($this->table, $params);
+
+        if ($this->logger instanceof collection_logger_with_id_reset) {
+            $this->logger->reset_by_id($id);
+        }
     }
 
     /**

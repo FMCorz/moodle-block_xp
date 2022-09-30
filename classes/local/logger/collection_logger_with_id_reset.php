@@ -15,17 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Collection logger with ID reset.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2022 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp\local\logger;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2022090101;
-$plugin->requires   = 2017051500;   // Moodle 3.3.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_ALPHA;
-$plugin->release    = 'dev';
+/**
+ * Collection logger with ID reset.
+ *
+ * @package    block_xp
+ * @copyright  2022 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface collection_logger_with_id_reset {
+
+    /**
+     * Purge logs by ID.
+     *
+     * @param int $id The ID.
+     * @return void
+     */
+    public function reset_by_id($id);
+
+}
