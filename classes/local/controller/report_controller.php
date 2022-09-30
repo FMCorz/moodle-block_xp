@@ -201,7 +201,7 @@ class report_controller extends page_controller {
         // Confirming delete data.
         if ($canmanage && $this->get_param('delete')) {
             echo $this->get_renderer()->confirm(
-                markdown_to_html(get_string('reallydeleteuserstate', 'block_xp')),
+                markdown_to_html(get_string('reallydeleteuserstateandlogs', 'block_xp')),
                 new url($this->pageurl->get_compatible_url(), ['delete' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
                 new url($this->pageurl->get_compatible_url(), ['userid' => null])
             );

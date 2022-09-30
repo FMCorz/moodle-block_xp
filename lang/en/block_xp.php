@@ -229,6 +229,13 @@ $string['reallydeleteuserstate'] = 'Deleting a user is only useful to remove the
 Importantly, when using _Level Up XP_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
 
 Do you really want to delete the points of this user?';
+$string['reallydeleteuserstateandlogs'] = 'Deleting a user removes them from the leaderboard and removes all of their associated logs.
+
+Removing logs may enable a user to re-earn points for previous actions. If your intention is only to reset their points, we recommend setting their points to 0 instead. Note that deleting a user does not affect their ability to earn points in the future.
+
+Importantly, when using _Level Up XP_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
+
+Do you really want to delete the points and logs of this user?';
 $string['reallyresetallcoursestodefaults'] = 'Really reset all courses rules to the default rules? This action is not reversible.';
 $string['reallyresetcourserulestodefaults'] = 'Really reset the course rules to the default rules? This action is not reversible.';
 $string['reallyresetdata'] = 'Really reset the levels and points of everyone in this course?';
