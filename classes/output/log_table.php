@@ -126,7 +126,7 @@ class log_table extends table_sql {
         if (!$this->filterbyuserid) {
             $fullname .= ' ' . $this->renderer->action_icon(
                 new moodle_url($this->baseurl, ['userid' => $row->userid]),
-                new pix_icon('i/search', get_string('filterbyuser', 'block_xp')),
+                new pix_icon('i/search', get_string('filterbyuser', 'block_xp'))
             );
         }
         return $fullname;
