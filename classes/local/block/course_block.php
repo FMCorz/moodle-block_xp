@@ -146,93 +146,21 @@ class course_block extends block_base {
         $this->content->footer = '';
 
         $world = $this->get_world($this->page->course->id);
-        $context = $world->get_context();
         $canview = $world->get_access_permissions()->can_access();
-        $canedit = $world->get_access_permissions()->can_manage();
 
         // Hide the block to non-logged in users, guests and those who cannot view the block.
         if (!$USER->id || isguestuser() || !$canview) {
             return $this->content;
         }
 
+        $renderer = \block_xp\di::get('renderer');
+        $state = $world->get_store()->get_state($USER->id);
+
         // Migrate the old config if needed.
         $this->migrate_config_data_if_needed($world);
 
-        $renderer = \block_xp\di::get('renderer');
-        $urlresolver = \block_xp\di::get('url_resolver');
-        $state = $world->get_store()->get_state($USER->id);
-        $adminconfig = \block_xp\di::get('config');
-        $indicator = \block_xp\di::get('user_notice_indicator');
-        $courseid = $world->get_courseid();
-        $config = $world->get_config();
-        $leaderboardfactory = \block_xp\di::get('course_world_leaderboard_factory');
-
-        // Recent activity.
-        $activity = [];
-        $forcerecentactivity = false;
-        $moreurl = null; // TODO Add URL for students to see, and option to control it.
-        $recentactivity = $config->get('blockrecentactivity');
-        if ($recentactivity) {
-            $repo = $world->get_user_recent_activity_repository();
-            $activity = $repo->get_user_recent_activity($USER->id, $recentactivity);
-
-            // Users who can manage should see this when it's enabled, even without activity to show.
-            $forcerecentactivity = $canedit;
-        }
-
-        // Navigation.
-        $actions = $this->get_block_navigation($world);
-
-        // Introduction.
-        $introduction = format_string($config->get('blockdescription'), true, ['context' => $context]);
-        $introname = 'block_intro_' . $courseid;
-        if (empty($introduction)) {
-            // The intro is empty, no need for further checks then...
-            $introduction = null;
-        } else if ($canedit) {
-            // Always show the notification to teachers.
-            $introduction = $introduction ? new notice($introduction, notice::INFO) : null;
-        } else if (!$indicator->user_has_flag($USER->id, $introname)) {
-            // Allow students to dismiss the message.
-            $introduction = $introduction ? new dismissable_notice($introduction, $introname, notice::INFO) : null;
-        } else {
-            $introduction = null;
-        }
-
-        // Widget.
-        $widget = new \block_xp\output\xp_widget(
-            $state,
-            $activity,
-            $introduction,
-            $actions,
-            $moreurl
-        );
-        $widget->set_force_recent_activity($forcerecentactivity);
-
-        // Add the rank to the widget.
-        if ($config->get('enableladder') && $config->get('rankmode') == course_world_config::RANK_ON) {
-            $groupid = 0;
-            if ($adminconfig->get('context') == CONTEXT_COURSE) {
-                $groupid = user_utils::get_primary_group_id($world->get_courseid(), $USER->id);
-            }
-            $leaderboard = $leaderboardfactory->get_course_leaderboard($world, $groupid);
-            $widget->set_rank($leaderboard->get_rank($USER->id));
-            $widget->set_show_rank(true);
-        }
-
-        // Add information about the next level.
-        $widget->set_show_next_level((bool) $config->get('enableinfos'));
-        if ($widget->shownextlevel) {
-            if ($world->get_levels_info()->get_count() > $state->get_level()->get_level()) {
-                $widget->set_next_level($world->get_levels_info()->get_level($state->get_level()->get_level() + 1));
-            }
-        }
-
-        // When XP gain is disabled, let the teacher now.
-        if (!$config->get('enabled') && $canedit) {
-            $widget->add_manager_notice(new lang_string('xpgaindisabled', 'block_xp'));
-        }
-
+        // Render the content.
+        $widget = $this->get_widget($world, $state);
         $this->content->text = $renderer->render($widget);
 
         // We should be congratulating the user because they leveled up!
@@ -303,6 +231,89 @@ class course_block extends block_base {
         }
 
         return $actions;
+    }
+
+    /**
+     * Get the widget.
+     *
+     * @param \block_xp\local\course_world $world The world.
+     * @param \block_xp\local\xp\state $state The user's state.
+     * @return \block_xp\local\output\xp_widget The widget.
+     */
+    protected function get_widget($world, $state) {
+        global $USER;
+
+        $context = $world->get_context();
+        $canedit = $world->get_access_permissions()->can_manage();
+        $adminconfig = \block_xp\di::get('config');
+        $indicator = \block_xp\di::get('user_notice_indicator');
+        $courseid = $world->get_courseid();
+        $config = $world->get_config();
+        $leaderboardfactory = \block_xp\di::get('course_world_leaderboard_factory');
+
+        // Recent activity.
+        $activity = [];
+        $forcerecentactivity = false;
+        $recentactivity = $config->get('blockrecentactivity');
+        if ($recentactivity) {
+            $repo = $world->get_user_recent_activity_repository();
+            $activity = $repo->get_user_recent_activity($USER->id, $recentactivity);
+
+            // Users who can manage should see this when it's enabled, even without activity to show.
+            $forcerecentactivity = $canedit;
+        }
+
+        // Navigation.
+        $actions = $this->get_block_navigation($world);
+
+        // Introduction.
+        $introduction = format_string($config->get('blockdescription'), true, ['context' => $context]);
+        $introname = 'block_intro_' . $courseid;
+        if (empty($introduction)) {
+            // The intro is empty, no need for further checks then...
+            $introduction = null;
+        } else if ($canedit) {
+            // Always show the notification to teachers.
+            $introduction = $introduction ? new notice($introduction, notice::INFO) : null;
+        } else if (!$indicator->user_has_flag($USER->id, $introname)) {
+            // Allow students to dismiss the message.
+            $introduction = $introduction ? new dismissable_notice($introduction, $introname, notice::INFO) : null;
+        } else {
+            $introduction = null;
+        }
+
+        // Widget.
+        $widget = new \block_xp\output\xp_widget(
+            $state,
+            $activity,
+            $introduction,
+            $actions
+        );
+        $widget->set_force_recent_activity($forcerecentactivity);
+
+        // Add the rank to the widget.
+        if ($config->get('enableladder') && $config->get('rankmode') == course_world_config::RANK_ON) {
+            $groupid = 0;
+            if ($adminconfig->get('context') == CONTEXT_COURSE) {
+                $groupid = user_utils::get_primary_group_id($world->get_courseid(), $USER->id);
+            }
+            $leaderboard = $leaderboardfactory->get_course_leaderboard($world, $groupid);
+            $widget->set_rank($leaderboard->get_rank($USER->id));
+            $widget->set_show_rank(true);
+        }
+
+        // Add information about the next level.
+        $widget->set_show_next_level((bool) $config->get('enableinfos'));
+        if ($world->get_levels_info()->get_count() > $state->get_level()->get_level()) {
+            $widget->set_next_level($world->get_levels_info()->get_level($state->get_level()->get_level() + 1));
+        }
+
+        // When XP gain is disabled, let the teacher now.
+        if (!$config->get('enabled') && $canedit) {
+            $widget->add_manager_notice(new lang_string('xpgaindisabled', 'block_xp'));
+        }
+
+        return $widget;
     }
 
     /**
