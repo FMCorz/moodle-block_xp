@@ -1,0 +1,36 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_xp/progress-bar
+
+    Progress bar.
+
+    Example context (json):
+    {
+    }
+}}
+<div class="block_xp-level-progress xp-flex xp-flex-col">
+    <div>
+        <div class="xp-bg-gray-200 xp-rounded xp-h-3 xp-relative" role="progressbar" aria-valuenow="{{percentagehuman}}" aria-valuemin="0" aria-valuemax="100">
+            <div style="width: {{percentage}}%;" class="xp-rounded xp-h-3 xp-bg-green-400 {{#nonzero}}xp-min-w-[0.375rem]{{/nonzero}} {{#nonfull}}xp-max-w-[98%]{{/nonfull}}"></div>
+        </div>
+    </div>
+    <div class="xp-flex xp-justify-end xp-self-end xp-text-right xp-text-sm xp-leading-none xp-mt-1">
+        <div class="xp-text-gray-500 xp-text-xs">{{#str}}nextlevelin, block_xp{{/str}}</div>
+        <div class="xp-ml-1">{{{nextinvaluehtml}}}</div>
+    </div>
+</div>

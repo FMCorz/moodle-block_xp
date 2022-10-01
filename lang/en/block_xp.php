@@ -51,7 +51,7 @@ $string['coefxp'] = 'Algorithm coefficient';
 $string['colon'] = '{$a->a}: {$a->b}';
 $string['cmselector'] = 'Course module selector';
 $string['configdescription'] = 'Introduction';
-$string['configdescription_help'] = 'A short introduction displayed in the block, below the student\'s level. Students have the ability to dismiss the message, in which case they won\'t see it again.';
+$string['configdescription_help'] = 'A short introduction message displayed in the block. Students have the ability to dismiss the message, in which case they won\'t see it again.';
 $string['configheader'] = 'Settings';
 $string['configtitle'] = 'Title';
 $string['configtitle_help'] = 'The title of the block.';
@@ -180,6 +180,7 @@ $string['navreport'] = 'Report';
 $string['navrules'] = 'Rules';
 $string['navsettings'] = 'Settings';
 $string['navvisuals'] = 'Visuals';
+$string['nextlevelin'] = 'next level in';
 $string['nodescription'] = 'No description';
 $string['nologsrecordedyet'] = 'Logs have not been recorded yet.';
 $string['noname'] = 'No name';
@@ -407,7 +408,6 @@ $string['xp:myaddinstance'] = 'Add the block to my dashboard';
 $string['xp:view'] = 'View the block and its related pages';
 $string['xp:viewlogs'] = 'View the logs';
 $string['xp:viewreport'] = 'View the report';
-$string['xptogo'] = '[[{$a}]] to go';
 $string['xpgaindisabled'] = 'Points gain disabled';
 $string['youreachedlevel'] = 'You have reached the level:';
 $string['youreachedlevela'] = 'You have reached level {$a}!';
@@ -444,8 +444,11 @@ $string['rulesformhelp'] = '<p>This plugin is making use of the events to attrib
 </ul>
 </p>';
 
-// Deprecated since 3.10.1
+// Deprecated since 3.10.1.
 $string['for1day'] = 'For 1 day';
 $string['for1month'] = 'For a month';
 $string['for1week'] = 'For a week';
 $string['for3days'] = 'For 3 days';
+
+// Deprecated since 3.13.0.
+$string['xptogo'] = '[[{$a}]] to go';

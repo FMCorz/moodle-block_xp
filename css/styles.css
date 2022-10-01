@@ -28,12 +28,7 @@
     width: 100px;
 
     cursor: default;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    @apply xp-select-none;
 }
 
 .block_xp-level.level-1 {
@@ -77,13 +72,7 @@
     background: none;
     height: auto;
     width: auto;
-
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    @apply xp-select-none;
 }
 .block_xp-level.level-badge {
     line-height: 100px;
@@ -97,6 +86,8 @@
 .block_xp-level.level-badge.small img {
     width: auto;
     max-width: 100px;
+}
+.block_xp-level.level-badge.small img {
     height: 35px;
 }
 
@@ -105,26 +96,12 @@
 }
 
 /** Block content. */
-.block_xp .block_xp-level {
+.block.block_xp .block_xp-level {
     margin-left: auto;
     margin-right: auto;
 }
-.block_xp .level-name {
-    text-align: center;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-.block_xp .xp-total {
-    text-align: center;
-}
-.block_xp .xp-total .pts {
-    @apply xp-tracking-wider;
-}
-.block_xp .introduction .alert {
-    padding: 8px;
-}
-.block_xp .footer {
-    font-size: 0.9em;
+.block.block_xp .alert.alert-block {
+    @apply xp-p-2 xp-py-1.5;
 }
 
 .block_xp nav {
@@ -162,39 +139,6 @@
     background: #eee;
 }
 
-/** Recent rewards styles. */
-.block_xp-recent-activity {
-    clear: both;
-    padding: 0 2px;
-    margin-bottom: 10px;
-}
-.block_xp-recent-activity h5 {
-    text-transform: uppercase;
-    color: #999;
-    font-size: 11px;
-    letter-spacing: 0;
-    margin-bottom: 5px;
-}
-.block_xp-recent-activity h5 a {
-    float: right;
-    text-transform: none;
-    font-weight: normal;
-}
-.block_xp-recent-activity .activity-entry {
-    font-size: 90%;
-    clear: both;
-}
-.block_xp-recent-activity .activity-entry .date {
-    float: right;
-    color: #999;
-    font-size: 90%;
-}
-.block_xp-recent-activity .activity-entry .xp {
-    float: left;
-    margin-right: 5px;
-    min-width: 25px;
-}
-
 /** Use over defined class name to re-use it through the block pages. */
 .block_xp-xp {
     display: inline-block;
@@ -207,55 +151,8 @@
 }
 .block_xp-xp .sign-sup {
     vertical-align: super;
-    font-size: 9px;
-    line-height: 9px;
-}
-
-.block_xp-level-progress .xp-bar-wrapper {
-    background-color: #ccc;
-    border-radius: 5px;
-    height: 10px;
-    margin: 0 auto;
-    position: relative;
-}
-.block_xp-level-progress .xp-bar {
-    background-color: #4bb1cf;
-    background-image: -moz-linear-gradient(top, #5bc0de, #339bb9);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#5bc0de), to(#339bb9));
-    background-image: -webkit-linear-gradient(top, #5bc0de, #339bb9);
-    background-image: -o-linear-gradient(top, #5bc0de, #339bb9);
-    background-image: linear-gradient(to bottom, #5bc0de, #339bb9);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de', endColorstr='#ff339bb9', GradientType=0);
-    border-radius: 5px;
-    height: 100%;
-}
-.block_xp-level-progress.progress-non-zero .xp-bar {
-    min-width: 5px;
-}
-.block_xp-level-progress .xp-bar-txt {
-    color: #fff;
-    font-size: 12px;
-    left: 0;
-    line-height: 25px;
-    position: absolute;
-    text-align: center;
-    top: 0;
-    width: 100%;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-}
-.block_xp-level-progress .xp-togo {
-    font-size: 90%;
-    text-align: right;
-    padding: 0 3px;
-}
-.block_xp-level-progress .xp-togo-txt {
-    font-size: 90%;
-    color: #999;
-}
-.block_xp .block_xp-level-progress {
-    /** Add margin in the block. */
-    margin-bottom: 10px;
+    font-size: 0.6428571428571429em; /* 9px. */
+    line-height: 0.6428571428571429em;
 }
 
 /** Levels preview. */
@@ -272,7 +169,7 @@
 /** Use our own highlight because of discrepencies between various themes. Sorry themers,
     it's a nightmare to maintain a plugin for multiple themes... */
 .block_xp-table tr.highlight-row > td {
-    background-color: #d9edf7 !important;
+    @apply !xp-bg-yellow-100;
 }
 
 /**
@@ -341,6 +238,7 @@
 }
 .block_xp-dismissable-notice .dismiss-action .icon {
     padding: 0;
+    margin: 0;
     width: 12px;
     height: 12px;
 }

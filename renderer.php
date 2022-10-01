@@ -765,45 +765,28 @@ EOT
     public function progress_bar(state $state, $percentagetogo = false) {
         global $CFG;
 
-        $classes = ['block_xp-level-progress'];
         $pc = $state->get_ratio_in_level() * 100;
-        if ($pc != 0) {
-            $classes[] = 'progress-non-zero';
-        }
-
-        $html = '';
-
-        $html .= html_writer::start_tag('div', ['class' => implode(' ', $classes)]);
-
-        $html .= html_writer::start_tag('div', ['class' => 'xp-bar-wrapper', 'role' => 'progressbar',
-            'aria-valuenow' => round($pc, 1), 'aria-valuemin' => 0, 'aria-valuemax' => 100]);
-        $html .= html_writer::tag('div', '', ['style' => "width: {$pc}%;", 'class' => 'xp-bar']);
-        $html .= html_writer::end_tag('div');
-
-        $thingtogo = $this->xp($state->get_total_xp_in_level() - $state->get_xp_in_level());
+        $nextinvalue = $this->xp($state->get_total_xp_in_level() - $state->get_xp_in_level());
         if ($percentagetogo) {
             $value = format_float(max(0, 100 - $pc), 1);
             // Quick hack to support localisation of percentages without having to define a new language
             // string for older versions. When the string is not available, we provide a sensible fallback.
             if ($CFG->branch >= 36) {
-                $thingtogo = get_string('percents', 'core', $value);
+                $nextinvalue = get_string('percents', 'core', $value);
             } else {
-                $thingtogo = $value . '%';
+                $nextinvalue = $value . '%';
             }
         }
-        $togo = get_string('xptogo', 'block_xp', $thingtogo);
 
-        $span = html_writer::start_tag('span', ['class' => 'xp-togo-txt']);
-        if (strpos($togo, '[[') !== false && strpos($togo, ']]')) {
-            $togo = $span . $togo . '</span>';
-            $togo = str_replace('[[', '</span>', $togo);
-            $togo = str_replace(']]', $span, $togo);
-        }
+        $context = [
+            'nonfull' => $pc < 100,
+            'nonzero' => $pc != 0,
+            'percentage' => $pc,
+            'percentagehuman' => $pc > 0 ? floor($pc) : ceil($pc),
+            'nextinvaluehtml' => $nextinvalue,
+        ];
 
-        $html .= html_writer::tag('div', $togo, ['class' => 'xp-togo']);
-
-        $html .= html_writer::end_tag('div');
-        return $html;
+        return $this->render_from_template('block_xp/progress-bar', $context);
     }
 
     /**
@@ -845,40 +828,22 @@ EOT
      * Recent activity.
      *
      * @param activity[] $activity The activity entries.
-     * @param moodle_url $moreurl The URL to view more.
+     * @param moodle_url $moreurl The URL to view more (deprecated).
      * @return string
      */
     public function recent_activity(array $activity, moodle_url $moreurl = null) {
-        $o = '';
-
-        $o .= html_writer::start_tag('div', ['class' => 'block_xp-recent-activity']);
-
-        $title = get_string('recentrewards', 'block_xp');
-        if ($moreurl) {
-            $title .= ' ' . html_writer::link($moreurl, get_string('viewmore'));
-        }
-        $o .= html_writer::tag('h5', $title, ['class' => "clearfix"]);
-
-        $o .= implode('', array_map(function(activity $entry) {
-            $tinyago = $this->tiny_time_ago($entry->get_date());
-            $date = userdate($entry->get_date()->getTimestamp());
-            $xp = $entry instanceof \block_xp\local\activity\activity_with_xp ? $entry->get_xp() : '';
-            $o = '';
-            $o .= html_writer::start_div('activity-entry');
-            $o .= html_writer::div($tinyago, 'date', ['title' => $date]);
-            $o .= html_writer::div($this->xp($xp), 'xp');
-            $o .= html_writer::div(s($entry->get_description()), 'desc');
-            $o .= html_writer::end_div();
-            return $o;
-        }, $activity));
-
-        if (!$activity) {
-            $o .= html_writer::tag('p', '-');
-        }
-
-        $o .= html_writer::end_tag('div');
-
-        return $o;
+        return $this->render_from_template('block_xp/recent-activity', [
+            'hasrecentactivities' => !empty($activity),
+            'recentactivities' => array_values(array_map(function($entry) {
+                $xp = $entry instanceof \block_xp\local\activity\activity_with_xp ? $entry->get_xp() : null;
+                return [
+                    'date' => userdate($entry->get_date()->getTimestamp()),
+                    'dateagotiny' => $this->tiny_time_ago($entry->get_date()),
+                    'description' => $entry->get_description(),
+                    'xphtml' => $xp !== null ? $this->xp($xp) : ''
+                ];
+            }, $activity)),
+        ]);
     }
 
     /**
@@ -888,59 +853,35 @@ EOT
      * @return string
      */
     public function render_xp_widget(xp_widget $widget) {
-        $o = '';
+        $level = $widget->state->get_level();
+        $badgehtml = $this->level_badge($level);
+        $showrecentactivity = !empty($widget->recentactivity) || $widget->forcerecentactivity;
 
-        foreach ($widget->managernotices as $notice) {
-            $o .= $this->notification_without_close($notice, 'warning');
-        }
+        return $this->render_from_template('block_xp/xp-widget', [
+            'introhtml' => $widget->intro ? $this->render($widget->intro) : '',
 
-        // Badge.
-        $o .= $this->level_badge($widget->state->get_level());
+            // Level and XP.
+            'badgehtml' => $badgehtml,
+            'levelnamehtml' => $this->level_name($level),
+            'xphtml' => $this->xp($widget->state->get_xp()),
 
-        // Level name.
-        $o .= $this->level_name($widget->state->get_level());
+            // Progress bar.
+            'progressbarhtml' => $this->progress_bar($widget->state),
 
-        // Rank and XP container.
-        $xp = $widget->state->get_xp();
-        $o .= html_writer::start_div('xp-flex xp-row-reverse xp-items-center xp-justify-center xp-gap-8 xp-mb-1');
+            // Recent activity.
+            'showrecentactivity' => $showrecentactivity,
+            'recentactivityhtml' => $showrecentactivity ? $this->recent_activity($widget->recentactivity) : '',
 
-        // Rank.
-        if ($widget->showrank) {
-            $rank = $widget->rank ? $widget->rank->get_rank() : '-';
-            $o .= html_writer::tag('div',
-                $this->render(new pix_icon('i/ladder', '', 'block_xp', ['class' => 'xp-m-0 xp-mr-1', 'role' => 'decoration'])) .
-                $rank, [
-                    'class' => 'xp-rank xp-flex xp-items-center xp-tracking-wider',
-                    'title' => get_string('rank', 'block_xp')
-                ]
-            );
-        }
+            // Actions.
+            'showactions' => !empty($widget->actions),
+            'actionshtml' => !empty($widget->actions) ? $this->xp_widget_navigation($widget->actions) : '',
 
-        // Total XP.
-        $o .= html_writer::tag('div', $this->xp($xp), ['class' => 'xp-total']);
-
-        // Rank and XP container end.
-        $o .= html_writer::end_div();
-
-        // Progress bar.
-        $o .= $this->progress_bar($widget->state);
-
-        // Intro.
-        if (!empty($widget->intro)) {
-            $o .= html_writer::div($this->render($widget->intro), 'introduction');
-        }
-
-        // Recent rewards.
-        if (!empty($widget->recentactivity) || $widget->forcerecentactivity) {
-            $o .= $this->recent_activity($widget->recentactivity, $widget->recentactivityurl);
-        }
-
-        // Navigation.
-        if (!empty($widget->actions)) {
-            $o .= $this->xp_widget_navigation($widget->actions);
-        }
-
-        return $o;
+            // Manager notices.
+            'hasmanagernotices' => !empty($widget->managernotices),
+            'managernotices' => array_values(array_map(function($notice) {
+                return $this->notification_without_close($notice, 'warning');
+            }, $widget->managernotices)),
+        ]);
     }
 
     /**

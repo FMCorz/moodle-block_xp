@@ -13,7 +13,11 @@ module.exports = {
         './ui/src/**/*.{js,ts,tsx}',
     ],
     theme: {
-        extend: {},
+        extend: {
+            fontSize: {
+                xxs: '0.6875rem' // 11px.
+            }
+        },
     },
     corePlugins: {
         // Older versions of Moodle do not understand rgb(... / opacity).

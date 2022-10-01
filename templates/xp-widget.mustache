@@ -1,0 +1,76 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_xp/xp-widget
+
+    XP Widget.
+
+    Example context (json):
+    {
+    }
+}}
+<div>
+
+    {{#hasmanagernotices}}
+        {{#managernotices}}
+            {{{.}}}
+        {{/managernotices}}
+    {{/hasmanagernotices}}
+
+    {{#introhtml}}
+        <div class="introduction">{{{.}}}</div>
+    {{/introhtml}}
+
+    <div class="xp-text-xl xp-text-center xp-font-bold">{{{levelnamehtml}}}</div>
+
+    <div>{{{badgehtml}}}</div>
+
+    <div class="xp-mt-6">
+
+        <div class="xp-flex xp-gap-3">
+            <div class="xp-flex-1">
+
+                <div class="xp-border-solid xp-border-gray-100 xp-border xp-rounded xp-inline-block xp-relative xp-min-w-[5rem] xp-max-w-full">
+                    <div class="xp-left-1 -xp-top-3 xp-relative xp-uppercase xp-text-xs xp-text-gray-600 xp-bg-gray-100 xp-rounded xp-px-1 xp-inline-block xp-mr-2">{{#str}}total, block_xp{{/str}}</div>
+                    <div class="xp-flex xp-justify-center xp-px-2 -xp-mt-2.5 xp-pb-1">
+                        <div class="xp-text-xl">{{{xphtml}}}</div>
+                    </div>
+                </div>
+
+                <div class="xp-mt-2">
+                    {{{progressbarhtml}}}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{#showrecentactivity}}
+        <div class="mt-4">
+            {{{recentactivityhtml}}}
+        </div>
+    {{/showrecentactivity}}
+
+    {{#showactions}}
+        <div class="mt-4">
+            {{{actionshtml}}}
+        </div>
+    {{/showactions}}
+
+</div>
