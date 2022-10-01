@@ -119,6 +119,12 @@
 .block.block_xp .alert.alert-block {
     @apply xp-p-2 xp-py-1.5;
 }
+.block.block_xp .block_xp-level-progress [role=progressbar] {
+    @apply xp-h-4;
+}
+.block.block_xp .block_xp-heading {
+    @apply xp-uppercase xp-text-gray-600 xp-text-xs xp-tracking-normal xp-mb-4 xp-border-0 xp-border-b xp-border-solid xp-border-gray-200;
+}
 
 .block_xp nav {
     text-align: center;
@@ -134,6 +140,7 @@
     -webkit-align-items: stretch;
     -ms-flex-align: stretch;
     align-items: stretch;
+    @apply xp-border-0 xp-border-solid xp-border-t xp-border-gray-200;
 }
 .block_xp nav .nav-button {
     -webkit-flex: 1;

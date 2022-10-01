@@ -31,6 +31,7 @@ use block_xp\local\xp\level;
 use block_xp\local\xp\level_with_badge;
 use block_xp\local\xp\level_with_name;
 use block_xp\local\xp\state;
+use block_xp\local\xp\state_with_subject;
 use block_xp\output\xp_widget;
 
 /**
@@ -857,10 +858,19 @@ EOT
      * @return string
      */
     public function render_xp_widget(xp_widget $widget) {
+        global $USER;
+
         $level = $widget->state->get_level();
         $badgehtml = $this->level_badge($level);
         $showrecentactivity = !empty($widget->recentactivity) || $widget->forcerecentactivity;
         $shownextlevel = $widget->shownextlevel && !empty($widget->nextlevel);
+        $fallbackpic = user_utils::default_picture();
+
+        $rankingsnapshot = [];
+        foreach ($widget->rankingsnapshot as $rank) {
+            $rankingsnapshot[] = $rank;
+        }
+        $rankingsnapshot = array_slice(array_merge($rankingsnapshot, [null, null, null]), 0, 3);
 
         return $this->render_from_template('block_xp/xp-widget', [
             'introhtml' => $widget->intro ? $this->render($widget->intro) : '',
@@ -868,6 +878,7 @@ EOT
             // Level and XP.
             'badgehtml' => $badgehtml,
             'levelnamehtml' => $this->level_name($level),
+            'xp' => $widget->state->get_xp(),
             'xphtml' => $this->xp($widget->state->get_xp()),
 
             // Next level.
@@ -876,6 +887,35 @@ EOT
 
             // Progress bar.
             'progressbarhtml' => $this->progress_bar($widget->state),
+
+            // Ranking snapshot.
+            'showrankingsnapshot' => $widget->showrankingsnapshot,
+            'hasrankingsnapshot' => !empty($rankingsnapshot),
+            'rankingsnapshot' => array_values(array_map(function($rank, $idx) use ($fallbackpic, $USER) {
+                if (!$rank) {
+                    return [
+                        'idx' => $idx,
+                        'isplaceholder' => true,
+                        'name' => '',
+                        'picurl' => $fallbackpic,
+                    ];
+                }
+
+                $state = $rank->get_state();
+                $pic = $state->get_picture();
+                $name = '';
+                if ($state instanceof state_with_subject) {
+                    $name = $state->get_name();
+                }
+                return [
+                    'idx' => $idx,
+                    'isplaceholder' => false,
+                    'rankhtml' => $rank->get_rank(),
+                    'name' => $name,
+                    'picurl' => $pic ?? $fallbackpic,
+                    'highlight' => $rank->get_state()->get_id() == $USER->id,
+                ];
+            }, $rankingsnapshot, array_keys($rankingsnapshot))),
 
             // Recent activity.
             'showrecentactivity' => $showrecentactivity,

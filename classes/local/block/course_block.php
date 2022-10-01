@@ -36,6 +36,7 @@ use pix_icon;
 use stdClass;
 use block_xp\local\course_world;
 use block_xp\local\permission\access_report_permissions;
+use block_xp\local\sql\limit;
 use block_xp\local\utils\user_utils;
 use block_xp\local\xp\level_with_name;
 use block_xp\output\notice;
@@ -297,9 +298,23 @@ class course_block extends block_base {
             if ($adminconfig->get('context') == CONTEXT_COURSE) {
                 $groupid = user_utils::get_primary_group_id($world->get_courseid(), $USER->id);
             }
+
             $leaderboard = $leaderboardfactory->get_course_leaderboard($world, $groupid);
+
+            // Gather the rank.
             $widget->set_rank($leaderboard->get_rank($USER->id));
             $widget->set_show_rank(true);
+
+            // Gather the ranking snapshot.
+            $position = $leaderboard->get_position($USER->id);
+            $widget->set_show_ranking_snapshot($position !== null || $canedit);
+            if ($position !== null) {
+                $ranking = $leaderboard->get_ranking(new limit(3, max(0, $position - 1)));
+                $widget->set_ranking_snapshot($ranking);
+                // We may have a position, but an empty ranking, for instance with the neighboured
+                // leaderboard, therefore we must check again whether we should show the ranking.
+                $widget->set_show_ranking_snapshot(!empty($ranking) || $canedit);
+            }
         }
 
         // Add information about the next level.

@@ -67,6 +67,10 @@ class xp_widget implements renderable {
     public $nextlevel;
     /** @var bool Whether to show the next level. */
     public $shownextlevel = false;
+    /** @var rank[] A ranking snapshot. */
+    public $rankingsnapshot = [];
+    /** @var bool Whether to show the ranking snapshot. */
+    public $showrankingsnapshot = false;
 
     public function __construct(state $state, array $recentactivity, renderable $intro = null, array $actions,
             moodle_url $recentactivityurl = null) {
@@ -105,6 +109,14 @@ class xp_widget implements renderable {
 
     public function set_show_rank($showrank) {
         $this->showrank = $showrank;
+    }
+
+    public function set_ranking_snapshot($rankingsnapshot) {
+        $this->rankingsnapshot = $rankingsnapshot;
+    }
+
+    public function set_show_ranking_snapshot($showrankingsnapshot) {
+        $this->showrankingsnapshot = $showrankingsnapshot;
     }
 
 }

@@ -42,12 +42,12 @@
     <div class="xp-mt-6">
 
         <div class="xp-flex xp-gap-3">
-            <div class="xp-flex-1">
+            <div class="xp-flex-1 xp-overflow-hidden">
 
-                <div class="xp-border-solid xp-border-gray-100 xp-border xp-rounded xp-inline-block xp-relative xp-min-w-[5rem] xp-max-w-full">
-                    <div class="xp-left-1 -xp-top-3 xp-relative xp-uppercase xp-text-xs xp-text-gray-600 xp-bg-gray-100 xp-rounded xp-px-1 xp-inline-block xp-mr-2">{{#str}}total, block_xp{{/str}}</div>
-                    <div class="xp-flex xp-justify-center xp-px-2 -xp-mt-2.5 xp-pb-1">
-                        <div class="xp-text-xl">{{{xphtml}}}</div>
+                <div class="xp-flex xp-items-end xp-gap-1 xp-max-w-full">
+                    <div class="xp-text-xs xp-uppercase xp-text-gray-600">{{#str}}total, block_xp{{/str}}</div>
+                    <div class="xp-bg-gray-200 xp-rounded-full xp-px-3 xp-py-1 xp-overflow-hidden">
+                        <div class="xp-max-w-full xp-text-xl xp-leading-none xp-truncate" title="{{xp}}">{{{xphtml}}}</div>
                     </div>
                 </div>
 
@@ -66,6 +66,36 @@
         </div>
 
     </div>
+
+    {{#showrankingsnapshot}}
+        <div class="mt-4">
+            <h5 class="block_xp-heading">{{#str}}ranking, block_xp{{/str}}</h5>
+            {{#hasrankingsnapshot}}
+            <div class="xp-flex xp-gap-2 xp-items-center">
+                {{#rankingsnapshot}}
+                    <div class="xp-flex xp-flex-col xp-items-center {{^highlight}}xp-flex-1{{/highlight}}{{#highlight}}xp-flex-2{{/highlight}} xp-overflow-hidden">
+                        <div class="{{^highlight}}xp-mt-4{{/highlight}}{{#highlight}}xp-text-xl xp-bg-gray-200 xp-rounded-full xp-px-2 xp-py-1 xp-min-w-[3rem] {{/highlight}} xp-max-w-full xp-truncate xp-text-center xp-leading-none xp-mb-1">
+                            {{#isplaceholder}}-{{/isplaceholder}}
+                            {{^isplaceholder}}{{{rankhtml}}}{{/isplaceholder}}
+                            <span class="xp-sr-only"> {{name}}</span>
+                        </div>
+                    </div>
+                {{/rankingsnapshot}}
+            </div>
+            <div class="xp-flex xp-gap-2 xp-items-center">
+                {{#rankingsnapshot}}
+                    <div class="xp-flex xp-flex-col xp-items-center {{^highlight}}xp-mt-1 xp-flex-1{{/highlight}}{{#highlight}}xp-flex-2{{/highlight}}">
+                        <img src="{{picurl}}" alt="{{name}}" class="xp-block xp-w-full xp-rounded-full {{^highlight}} xp-max-w-[4rem] xp-border-gray-200 {{/highlight}}{{#highlight}} xp-max-w-[6rem] xp-border-sky-400 {{/highlight}} xp-border-solid xp-border-2 xp-p-0.5">
+
+                            <!--<div class="{{#highlight}}hidden{{/highlight}} xp-text-xxs xp-text-gray-500 xp-mt-1">{{^isplaceholder}}+1,203{{/isplaceholder}}&nbsp;</div>-->
+
+                    </div>
+                {{/rankingsnapshot}}
+            </div>
+            {{/hasrankingsnapshot}}
+
+        </div>
+    {{/showrankingsnapshot}}
 
     {{#showrecentactivity}}
         <div class="mt-4">

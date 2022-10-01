@@ -25,8 +25,8 @@
 }}
 <div class="block_xp-level-progress xp-flex xp-flex-col">
     <div>
-        <div class="xp-bg-gray-200 xp-rounded xp-h-3 xp-relative" role="progressbar" aria-valuenow="{{percentagehuman}}" aria-valuemin="0" aria-valuemax="100">
-            <div style="width: {{percentage}}%;" class="xp-rounded xp-h-3 xp-bg-green-400 {{#nonzero}}xp-min-w-[0.375rem]{{/nonzero}} {{#nonfull}}xp-max-w-[98%]{{/nonfull}}"></div>
+        <div class="xp-bg-gray-200 xp-rounded-full xp-h-3 xp-relative xp-overflow-hidden" role="progressbar" aria-valuenow="{{percentagehuman}}" aria-valuemin="0" aria-valuemax="100">
+            <div style="width: {{percentage}}%;" class="xp-h-full xp-bg-green-400 {{#nonzero}}xp-min-w-[0.25rem]{{/nonzero}} {{#nonfull}} xp-max-w-[99%] {{/nonfull}}"></div>
         </div>
     </div>
     <div class="xp-flex xp-justify-end xp-self-end xp-text-right xp-text-sm xp-leading-none xp-mt-1">

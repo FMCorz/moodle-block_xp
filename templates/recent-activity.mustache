@@ -24,19 +24,32 @@
     }
 }}
 <div class="block_xp-recent-activity">
-    <h5 class="xp-uppercase xp-text-gray-400 xp-text-xxs xp-tracking-normal xp-mb-2">{{#str}}recentrewards, block_xp{{/str}}</h5>
+    <h5 class="block_xp-heading">{{#str}}recentrewards, block_xp{{/str}}</h5>
     {{^hasrecentactivities}}
         <p>-</p>
     {{/hasrecentactivities}}
     {{#hasrecentactivities}}
+    {{#x}}
         <div class="xp-space-y-0.5">
         {{#recentactivities}}
-            <div class="activity-entry xp-text-xs xp-flex">
-                <div class="xp-flex-none xp-text-gray-500 xp-order-1 xp-text-xxs" title="{{date}}">{{dateagotiny}}</div>
-                <div class="xp-flex-none xp-min-w-[1.5rem]">{{{xphtml}}}</div>
+            <div class="activity-entry xp-text-sm xp-flex">
+                <div class="xp-flex-none xp-text-gray-500 xp-order-1" title="{{date}}">{{dateagotiny}}</div>
+                <div class="xp-flex-none xp-min-w-[2.25rem]">{{{xphtml}}}</div>
                 <div class="xp-flex-1 xp-mx-2">{{description}}</div>
             </div>
         {{/recentactivities}}
         </div>
+        {{/x}}
+
+        <table class="xp-w-full xp-border-0">
+        {{#recentactivities}}
+            <tr>
+                <td class="xp-align-top xp-p-0 xp-pr-2">{{{xphtml}}}</td>
+                <td class="xp-align-top xp-p-0 xp-mx-2">{{description}}</td>
+                <td class="xp-align-top xp-p-0 xp-pl-2 xp-text-gray-500 xp-text-right" title="{{date}}">{{dateagotiny}}</td>
+            </tr>
+        {{/recentactivities}}
+        </table>
+
     {{/hasrecentactivities}}
 </div>

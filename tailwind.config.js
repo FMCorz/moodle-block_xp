@@ -14,6 +14,9 @@ module.exports = {
     ],
     theme: {
         extend: {
+            flex: {
+                '2': '2 2 0%',
+            },
             fontSize: {
                 xxs: '0.6875rem' // 11px.
             }
