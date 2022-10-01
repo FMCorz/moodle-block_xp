@@ -781,6 +781,8 @@ EOT
         }
 
         $context = [
+            // 100% completion of a level is 0% of the next one, unless it's the final one.
+            'atmaxlevel' => $pc >= 100,
             'nonfull' => $pc < 100,
             'nonzero' => $pc != 0,
             'percentage' => $pc,
