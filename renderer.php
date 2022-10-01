@@ -145,7 +145,9 @@ class block_xp_renderer extends plugin_renderer_base {
         $classes = 'block_xp-level level-' . $levelnum;
         $label = get_string('levelx', 'block_xp', $levelnum);
 
-        if (!empty($options['small'])) {
+        if (!empty($options['medium'])) {
+            $classes .= ' medium';
+        } else if (!empty($options['small'])) {
             $classes .= ' small';
         }
 
@@ -856,6 +858,7 @@ EOT
         $level = $widget->state->get_level();
         $badgehtml = $this->level_badge($level);
         $showrecentactivity = !empty($widget->recentactivity) || $widget->forcerecentactivity;
+        $shownextlevel = $widget->shownextlevel && !empty($widget->nextlevel);
 
         return $this->render_from_template('block_xp/xp-widget', [
             'introhtml' => $widget->intro ? $this->render($widget->intro) : '',
@@ -864,6 +867,10 @@ EOT
             'badgehtml' => $badgehtml,
             'levelnamehtml' => $this->level_name($level),
             'xphtml' => $this->xp($widget->state->get_xp()),
+
+            // Next level.
+            'shownextlevel' => $shownextlevel,
+            'nextbadgehtml' => $shownextlevel ? $this->level_badge_with_options($widget->nextlevel, ['medium' => true]) : '',
 
             // Progress bar.
             'progressbarhtml' => $this->progress_bar($widget->state),

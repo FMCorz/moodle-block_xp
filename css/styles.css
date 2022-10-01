@@ -66,9 +66,18 @@
     margin: 0 auto;
     background-size: cover;
 }
+.block_xp-level.medium {
+    height: 50px;
+    width: 50px;
+    font-size: 24px;
+    line-height: 54px;
+    margin: 0 auto;
+    background-size: cover;
+}
 
 .block_xp-level.level-badge,
-.block_xp-level.level-badge.small {
+.block_xp-level.level-badge.small,
+.block_xp-level.level-badge.medium {
     background: none;
     height: auto;
     width: auto;
@@ -80,15 +89,22 @@
 .block_xp-level.level-badge.small {
     line-height: 35px;
 }
+.block_xp-level.level-badge.medium {
+    line-height: 50px;
+}
 .block_xp-level.level-badge img {
     width: 100px;
 }
-.block_xp-level.level-badge.small img {
+.block_xp-level.level-badge.small img,
+.block_xp-level.level-badge.medium img {
     width: auto;
     max-width: 100px;
 }
 .block_xp-level.level-badge.small img {
     height: 35px;
+}
+.block_xp-level.level-badge.medium img {
+    height: 50px;
 }
 
 .block_xp-instructions {

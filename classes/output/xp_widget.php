@@ -33,6 +33,7 @@ use renderable;
 use block_xp\local\xp\rank;
 use block_xp\local\xp\state;
 use block_xp\local\activity\activity;
+use block_xp\local\xp\level;
 
 /**
  * Main widget.
@@ -62,6 +63,10 @@ class xp_widget implements renderable {
     public $actions;
     /** @var lang_string[] Manager notices. */
     public $managernotices = [];
+    /** @var level|null The next level, null if none or not shown. */
+    public $nextlevel;
+    /** @var bool Whether to show the next level. */
+    public $shownextlevel = false;
 
     public function __construct(state $state, array $recentactivity, renderable $intro = null, array $actions,
             moodle_url $recentactivityurl = null) {
@@ -84,6 +89,14 @@ class xp_widget implements renderable {
 
     public function set_force_recent_activity($value) {
         $this->forcerecentactivity = (bool) $value;
+    }
+
+    public function set_next_level(level $nextlevel = null) {
+        $this->nextlevel = $nextlevel;
+    }
+
+    public function set_show_next_level($shownextlevel) {
+        $this->shownextlevel = $shownextlevel;
     }
 
     public function set_rank(rank $rank = null) {

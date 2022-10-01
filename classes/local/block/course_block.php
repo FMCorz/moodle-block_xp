@@ -220,6 +220,14 @@ class course_block extends block_base {
             $widget->set_show_rank(true);
         }
 
+        // Add information about the next level.
+        $widget->set_show_next_level((bool) $config->get('enableinfos'));
+        if ($widget->shownextlevel) {
+            if ($world->get_levels_info()->get_count() > $state->get_level()->get_level()) {
+                $widget->set_next_level($world->get_levels_info()->get_level($state->get_level()->get_level() + 1));
+            }
+        }
+
         // When XP gain is disabled, let the teacher now.
         if (!$config->get('enabled') && $canedit) {
             $widget->add_manager_notice(new lang_string('xpgaindisabled', 'block_xp'));
