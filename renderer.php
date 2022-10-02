@@ -136,6 +136,16 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Medium level badge.
+     *
+     * @param level $level The level.
+     * @return string.
+     */
+    public function medium_level_badge(level $level) {
+        return $this->level_badge_with_options($level, ['medium' => true]);
+    }
+
+    /**
      * Print a level's badge.
      *
      * @param level $level The level.
@@ -1062,11 +1072,7 @@ EOT
      * @return string
      */
     public function xp($amount) {
-        $xp = (int) $amount;
-        if ($xp > 999) {
-            $thousandssep = get_string('thousandssep', 'langconfig');
-            $xp = number_format($xp, 0, '.', $thousandssep);
-        }
+        $xp = $this->xp_human($amount);
         $o = '';
         $o .= html_writer::start_tag('span', ['class' => 'block_xp-xp']);
         $o .= html_writer::tag('span', $xp, ['class' => 'pts']);
@@ -1088,6 +1094,20 @@ EOT
             ]),
             ['class' => 'block_xp block_xp-xp-highlight']
         );
+    }
+
+    /**
+     * Formats points for human.
+     *
+     * @param int $points
+     */
+    public function xp_human($points) {
+        $xp = (int) $points;
+        if (abs($xp) > 999) {
+            $thousandssep = get_string('thousandssep', 'langconfig');
+            $xp = number_format($xp, 0, '.', $thousandssep);
+        }
+        return $xp;
     }
 
     /**
