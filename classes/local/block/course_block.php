@@ -293,17 +293,24 @@ class course_block extends block_base {
         $widget->set_force_recent_activity($forcerecentactivity);
 
         // Add the rank to the widget.
-        if ($config->get('enableladder') && $config->get('rankmode') == course_world_config::RANK_ON) {
+        $rankon = $config->get('rankmode') == course_world_config::RANK_ON;
+        $rankrel = $config->get('rankmode') == course_world_config::RANK_REL;
+        if ($config->get('enableladder') && ($rankon || $rankrel)) {
+
             $groupid = 0;
             if ($adminconfig->get('context') == CONTEXT_COURSE) {
                 $groupid = user_utils::get_primary_group_id($world->get_courseid(), $USER->id);
             }
 
             $leaderboard = $leaderboardfactory->get_course_leaderboard($world, $groupid);
+            $widget->set_rank_is_rel($rankrel);
+            $widget->set_show_diffs_in_ranking_snapshot($rankrel || array_key_exists('xp', $leaderboard->get_columns()));
 
             // Gather the rank.
-            $widget->set_rank($leaderboard->get_rank($USER->id));
-            $widget->set_show_rank(true);
+            if ($rankon) {
+                $widget->set_rank($leaderboard->get_rank($USER->id));
+                $widget->set_show_rank(true);
+            }
 
             // Gather the ranking snapshot.
             $position = $leaderboard->get_position($USER->id);
@@ -315,6 +322,7 @@ class course_block extends block_base {
                 // leaderboard, therefore we must check again whether we should show the ranking.
                 $widget->set_show_ranking_snapshot(!empty($ranking) || $canedit);
             }
+
         }
 
         // Add information about the next level.

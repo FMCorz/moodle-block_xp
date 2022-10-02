@@ -33,7 +33,11 @@ use renderable;
 use block_xp\local\xp\rank;
 use block_xp\local\xp\state;
 use block_xp\local\activity\activity;
+use block_xp\local\utils\user_utils;
 use block_xp\local\xp\level;
+use block_xp\local\xp\state_with_subject;
+use renderer_base;
+use templatable;
 
 /**
  * Main widget.
@@ -43,12 +47,14 @@ use block_xp\local\xp\level;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class xp_widget implements renderable {
+class xp_widget implements renderable, templatable {
 
     /** @var rank The user's leaderboard rank. */
     public $rank;
     /** @var bool Whether to show the user's rank.  */
     public $showrank = false;
+    /** @var bool Whether the ranks is relative. */
+    public $rankisrel = false;
     /** @var state The user's state. */
     public $state;
     /** @var activity[] The activity objects. */
@@ -69,8 +75,10 @@ class xp_widget implements renderable {
     public $shownextlevel = false;
     /** @var rank[] A ranking snapshot. */
     public $rankingsnapshot = [];
-    /** @var bool Whether to show the ranking snapshot. */
+    /** @var bool Whether to show the ranks in the ranking snapshot. */
     public $showrankingsnapshot = false;
+    /** @var bool Whether to show the diffs in the ranking snapshot.  */
+    public $showdiffsinrankingsnapshot = true;
 
     public function __construct(state $state, array $recentactivity, renderable $intro = null, array $actions,
             moodle_url $recentactivityurl = null) {
@@ -107,6 +115,14 @@ class xp_widget implements renderable {
         $this->rank = $rank;
     }
 
+    public function set_rank_is_rel($rankisrel) {
+        $this->rankisrel = $rankisrel;
+    }
+
+    public function set_show_diffs_in_ranking_snapshot($showdiffs) {
+        $this->showdiffsinrankingsnapshot = $showdiffs;
+    }
+
     public function set_show_rank($showrank) {
         $this->showrank = $showrank;
     }
@@ -119,4 +135,96 @@ class xp_widget implements renderable {
         $this->showrankingsnapshot = $showrankingsnapshot;
     }
 
+    public function export_for_template(renderer_base $renderer) {
+        $level = $this->state->get_level();
+        $badgehtml = $renderer->level_badge($level);
+        $showrecentactivity = !empty($this->recentactivity) || $this->forcerecentactivity;
+        $shownextlevel = $this->shownextlevel && !empty($this->nextlevel);
+        $fallbackpic = user_utils::default_picture();
+
+        $rankingsnapshot = [];
+        foreach ($this->rankingsnapshot as $rank) {
+            $rankingsnapshot[] = $rank;
+        }
+        $rankingsnapshot = array_slice(array_merge($rankingsnapshot, [null, null, null]), 0, 3);
+
+        return [
+            'introhtml' => $this->intro ? $renderer->render($this->intro) : '',
+
+            // Level and XP.
+            'badgehtml' => $badgehtml,
+            'levelnamehtml' => $renderer->level_name($level),
+            'xp' => $renderer->xp_human($this->state->get_xp()),
+            'xphtml' => $renderer->xp($this->state->get_xp()),
+
+            // Next level.
+            'shownextlevel' => $shownextlevel,
+            'nextbadgehtml' => $shownextlevel ? $renderer->medium_level_badge($this->nextlevel) : '',
+
+            // Progress bar.
+            'progressbarhtml' => $renderer->progress_bar($this->state),
+
+            // Ranking snapshot.
+            'showrankingsnapshot' => $this->showrankingsnapshot,
+            'hasrankingsnapshot' => !empty($rankingsnapshot),
+            'showranksinrankingsnapshot' => !$this->rankisrel,
+            'showdiffsinrankingsnapshot' => $this->showdiffsinrankingsnapshot,
+
+            'rankingsnapshot' => array_values(array_map(function($rank, $idx) use ($fallbackpic, $renderer) {
+                if (!$rank) {
+                    return [
+                        'idx' => $idx,
+                        'isplaceholder' => true,
+                        'name' => '',
+                        'picurl' => $fallbackpic,
+                    ];
+                }
+
+                $state = $rank->get_state();
+                $ishighlight = $state->get_id() == $this->state->get_id();
+                $pic = $state->get_picture();
+                $name = '';
+                if ($state instanceof state_with_subject) {
+                    $name = $state->get_name();
+                }
+
+                $diff = 0;
+                if ($this->rankisrel) {
+                    $diff = $rank->get_rank();
+                } else {
+                    $diff = $state->get_xp() - $this->state->get_xp();
+                }
+                $diffprefix = $diff > 0 ? '+' : '';
+
+                return [
+                    'idx' => $idx,
+                    'isplaceholder' => false,
+
+                    'diff' => $diffprefix . $renderer->xp_human($diff),
+                    'diffhtml' => $diffprefix . $renderer->xp($diff),
+                    'hasdiff' => $diff != 0 && !$ishighlight,
+
+                    'rankhtml' => $rank->get_rank(),
+
+                    'name' => $name,
+                    'picurl' => $pic ?? $fallbackpic,
+                    'highlight' => $ishighlight,
+                ];
+            }, $rankingsnapshot, array_keys($rankingsnapshot))),
+
+            // Recent activity.
+            'showrecentactivity' => $showrecentactivity,
+            'recentactivityhtml' => $showrecentactivity ? $renderer->recent_activity($this->recentactivity) : '',
+
+            // Actions.
+            'showactions' => !empty($this->actions),
+            'actionshtml' => !empty($this->actions) ? $renderer->xp_widget_navigation($this->actions) : '',
+
+            // Manager notices.
+            'hasmanagernotices' => !empty($this->managernotices),
+            'managernotices' => array_values(array_map(function($notice) {
+                return $renderer->notification_without_close($notice, 'warning');
+            }, $this->managernotices)),
+        ];
+    }
 }

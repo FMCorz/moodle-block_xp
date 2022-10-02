@@ -71,24 +71,29 @@
         <div class="mt-4">
             <h5 class="block_xp-heading">{{#str}}ranking, block_xp{{/str}}</h5>
             {{#hasrankingsnapshot}}
+            {{#showranksinrankingsnapshot}}
             <div class="xp-flex xp-gap-2 xp-items-center">
                 {{#rankingsnapshot}}
                     <div class="xp-flex xp-flex-col xp-items-center {{^highlight}}xp-flex-1{{/highlight}}{{#highlight}}xp-flex-2{{/highlight}} xp-overflow-hidden">
-                        <div class="{{^highlight}}xp-mt-4{{/highlight}}{{#highlight}}xp-text-xl xp-bg-gray-200 xp-rounded-full xp-px-2 xp-py-1 xp-min-w-[3rem] {{/highlight}} xp-max-w-full xp-truncate xp-text-center xp-leading-none xp-mb-1">
+                        <div class="{{^highlight}}xp-mt-4{{/highlight}}{{#highlight}}xp-text-xl xp-bg-gray-200 xp-rounded-full xp-px-2 xp-py-1 xp-min-w-[3rem] {{/highlight}} xp-max-w-full xp-truncate xp-text-center xp-leading-none xp-mb-1" aria-labelledby="block_xp-ranking-snapshot-rank-{{uniqid}}-{{idx}}">
                             {{#isplaceholder}}-{{/isplaceholder}}
                             {{^isplaceholder}}{{{rankhtml}}}{{/isplaceholder}}
-                            <span class="xp-sr-only"> {{name}}</span>
                         </div>
                     </div>
                 {{/rankingsnapshot}}
             </div>
+            {{/showranksinrankingsnapshot}}
             <div class="xp-flex xp-gap-2 xp-items-center">
                 {{#rankingsnapshot}}
-                    <div class="xp-flex xp-flex-col xp-items-center {{^highlight}}xp-mt-1 xp-flex-1{{/highlight}}{{#highlight}}xp-flex-2{{/highlight}}">
+                    <div class="xp-flex xp-flex-col xp-items-center {{^highlight}}xp-mt-1 xp-flex-1{{/highlight}}{{#highlight}}xp-flex-2{{/highlight}} xp-overflow-hidden" id="block_xp-ranking-snapshot-rank-{{uniqid}}-{{idx}}">
                         <img src="{{picurl}}" alt="{{name}}" class="xp-block xp-w-full xp-rounded-full {{^highlight}} xp-max-w-[4rem] xp-border-gray-200 {{/highlight}}{{#highlight}} xp-max-w-[6rem] xp-border-sky-400 {{/highlight}} xp-border-solid xp-border-2 xp-p-0.5">
-
-                            <!--<div class="{{#highlight}}hidden{{/highlight}} xp-text-xxs xp-text-gray-500 xp-mt-1">{{^isplaceholder}}+1,203{{/isplaceholder}}&nbsp;</div>-->
-
+                        {{#showdiffsinrankingsnapshot}}
+                        {{^highlight}}
+                        <div class="xp-text-xxs xp-text-gray-500 xp-mt-1" title="{{diff}}">
+                            {{#hasdiff}}{{{diff}}}{{/hasdiff}}{{^hasdiff}}&nbsp;{{/hasdiff}}
+                        </div>
+                        {{/highlight}}
+                        {{/showdiffsinrankingsnapshot}}
                     </div>
                 {{/rankingsnapshot}}
             </div>
