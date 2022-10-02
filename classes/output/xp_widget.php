@@ -222,7 +222,7 @@ class xp_widget implements renderable, templatable {
 
             // Manager notices.
             'hasmanagernotices' => !empty($this->managernotices),
-            'managernotices' => array_values(array_map(function($notice) {
+            'managernotices' => array_values(array_map(function($notice) use ($renderer) {
                 return $renderer->notification_without_close($notice, 'warning');
             }, $this->managernotices)),
         ];
