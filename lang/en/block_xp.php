@@ -188,6 +188,7 @@ $string['noname'] = 'No name';
 $string['notesomesettingslocked'] = 'Note that some settings may not be editable when they have been locked by an administrator.';
 $string['occasionally'] = 'Occasionally';
 $string['participant'] = 'Participant';
+$string['participants'] = 'Participants';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';
 $string['perpagecolon'] = 'Per page:';
 $string['pickaconditiontype'] = 'Pick a condition type';

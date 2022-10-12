@@ -100,13 +100,21 @@ class default_course_world_navigation_factory implements course_world_navigation
                 'text' => get_string('navinfos', 'block_xp')
             ];
         }
+
+        $laddernav = null;
         if ($world->get_config()->get('enableladder')) {
-            $links[] = [
+            $laddernav = [
                 'id' => 'ladder',
                 'url' => $urlresolver->reverse('ladder', ['courseid' => $courseid]),
-                'text' => get_string('navladder', 'block_xp')
+                'text' => get_string('participants', 'block_xp'),
             ];
         }
+        $links[] = [
+            'id' => 'ladder',
+            'url' => null,
+            'text' => get_string('navladder', 'block_xp'),
+            'children' => array_filter([$laddernav])
+        ];
 
         $canviewlogs = $accessperms instanceof access_logs_permissions && $accessperms->can_access_logs();
         $canviewreport = $accessperms instanceof access_report_permissions && $accessperms->can_access_report();
