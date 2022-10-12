@@ -93,8 +93,8 @@ $string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive 
 ';
 $string['enableinfos'] = 'Enable info page';
 $string['enableinfos_help'] = 'When set to \'No\', students will not be able to view the information page.';
-$string['enableladder'] = 'Enable the ladder';
-$string['enableladder_help'] = 'When set to \'No\', students will not be able to view the ladder.';
+$string['enableladder'] = 'Enable the leaderboard';
+$string['enableladder_help'] = 'When set to \'No\', students will not be able to view the leaderboard.';
 $string['enablelevelupnotif'] = 'Enable level up notification';
 $string['enablelevelupnotif_help'] = 'When set to \'Yes\', students will be displayed a popup congratulating them for the new level reached.';
 $string['enablexpgain'] = 'Enable points gain';
@@ -131,7 +131,7 @@ $string['filtermodules'] = 'Filter modules';
 $string['forever'] = 'Forever';
 $string['forthewholesite'] = 'For the whole site';
 $string['give'] = 'give';
-$string['gotofullladder'] = 'Go to full ladder';
+$string['gotofullladder'] = 'Go to full leaderboard';
 $string['grid'] = 'Grid';
 $string['hideparticipantsidentity'] = 'Hide participants identity';
 $string['hiderank'] = 'Hide rank';
@@ -141,10 +141,10 @@ $string['infos'] = 'Information';
 $string['instructions'] = 'More information';
 $string['invalidxp'] = 'Invalid points value';
 $string['keeplogs'] = 'Keep logs';
-$string['ladder'] = 'Ladder';
+$string['ladder'] = 'Leaderboard';
 $string['ladderadditionalcols'] = 'Additional columns';
-$string['ladderadditionalcols_help'] = 'This setting determines which additional columns are displayed on the ladder. Press the CTRL or CMD key while clicking to select more than one column, or to unselect a selected column.';
-$string['ladderempty'] = 'The ladder is currently empty, make sure to come back later!';
+$string['ladderadditionalcols_help'] = 'This setting determines which additional columns are displayed on the leaderboard. Press the CTRL or CMD key while clicking to select more than one column, or to unselect a selected column.';
+$string['ladderempty'] = 'The leaderboard is currently empty, make sure to come back later!';
 $string['level'] = 'Level';
 $string['levelbadges'] = 'Level badges';
 $string['levelbadgesformhelp'] = 'Name the files [level].[file extension], for instance: 1.png, 2.jpg, etc... The recommended image size is 100x100.';
@@ -171,7 +171,7 @@ $string['movecondition'] = 'Move condition';
 $string['moverule'] = 'Move rule';
 $string['name'] = 'Name';
 $string['navinfos'] = 'Info';
-$string['navladder'] = 'Ladder';
+$string['navladder'] = 'Leaderboard';
 $string['navlevels'] = 'Levels';
 $string['navlevelssetup'] = 'Setup';
 $string['navlog'] = 'Log';
@@ -209,7 +209,7 @@ $string['privacy:metadata:prefintro'] = 'Records whether the user dismissed the 
 $string['privacy:metadata:preflevelup'] = 'Records whether the user should see the level up notification';
 $string['privacy:metadata:prefnotices'] = 'Records whether the user closed the support notice';
 $string['privacy:metadata:prefseenpromo'] = 'Records when the user viewed the promo page';
-$string['privacy:metadata:prefladderpagesize'] = 'The user\'s preferred page size when viewing the ladder';
+$string['privacy:metadata:prefladderpagesize'] = 'The user\'s preferred page size when viewing the leaderboard';
 $string['privacy:metadata:xp'] = 'Stores the points and level of users';
 $string['privacy:metadata:xp:xp'] = 'The user\'s points';
 $string['privacy:metadata:xp:lvl'] = 'The user\'s level';
@@ -227,8 +227,8 @@ $string['promointroinstalled'] = 'The add-on _Level Up XP+_ is installed on your
 $string['promorulesdidyouknow'] = 'Did you know that with <em>Level Up XP+</em> students can receive points for <em>completing courses</em> and <em>activities</em>, or even receive points according to their <em>grades</em>? <a href="{$a->url}">Discover more here</a>.';
 $string['rank'] = 'Rank';
 $string['ranking'] = 'Ranking';
-$string['ranking_help'] = 'The rank is the absolute position of the current user in the ladder. The relative rank is the difference in experience points between a user and their neighbours.';
-$string['reallydeleteuserstate'] = 'Deleting a user is only useful to remove them from the ladder. For any other reasons, we recommend setting their points to 0 instead. Note that deleting them does not affect their ability to earn points in the future.
+$string['ranking_help'] = 'The rank is the absolute position of the current user in the leaderboard. The relative rank is the difference in experience points between a user and their neighbours.';
+$string['reallydeleteuserstate'] = 'Deleting a user is only useful to remove them from the leaderboard. For any other reasons, we recommend setting their points to 0 instead. Note that deleting them does not affect their ability to earn points in the future.
 
 Importantly, when using _Level Up XP_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
 
@@ -290,9 +290,9 @@ $string['searchandselectmodule'] = 'Search and select an activity or resource';
 $string['send'] = 'Send';
 $string['setpoints'] = 'Set points';
 $string['shortcode:xpbadge'] = 'The badge matching the current user\'s level.';
-$string['shortcode:xpladder'] = 'Display a portion of the ladder.';
+$string['shortcode:xpladder'] = 'Display a portion of the leaderboard.';
 $string['shortcode:xpladder_help'] = '
-By default, a portion of the ladder surrounding the current user will be displayed.
+By default, a portion of the leaderboard surrounding the current user will be displayed.
 
 ```
 [xpladder]
@@ -305,19 +305,19 @@ To display the top 10 students instead of the neighbours of the current user, se
 [xpladder top=15]
 ```
 
-A link to the full ladder will automatically be displayed below the table, if you do not want to display such link, add the argument `hidelink`.
+A link to the full leaderboard will automatically be displayed below the table, if you do not want to display such link, add the argument `hidelink`.
 
 ```
 [xpladder hidelink]
 ```
 
-By default, the table does not include the progress column which displays the progress bar. If such column has been selected in the additional colums in the ladder\'s settings, you can use the argument `withprogress` to display it.
+By default, the table does not include the progress column which displays the progress bar. If such column has been selected in the additional colums in the leaderboard\'s settings, you can use the argument `withprogress` to display it.
 
 ```
 [xpladder withprogress]
 ```
 
-Note that when a course is using groups, the ladder will best guess which group to display the ladder of.
+Note that when a course is using groups, the leaderboard will best guess which group to display the leaderboard of.
 ';
 $string['shortcode:xpiflevel'] = 'Display the content when the current user\'s level matches.';
 $string['shortcode:xpiflevel_help'] = '
