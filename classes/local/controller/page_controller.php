@@ -108,16 +108,7 @@ abstract class page_controller extends course_route_controller {
      * @return array
      */
     protected function get_navigation_items() {
-        return array_map(function($link) {
-            if (empty($link['url']) && !empty($link['children'])) {
-                $firstchild = reset($link['children']);
-                $url = $firstchild['url'];
-                $link = array_merge($link, ['url' => $url]);
-            }
-            return $link;
-        }, array_filter($this->navfactory->get_course_navigation($this->world), function($link) {
-            return !isset($link['children']) || !empty($link['children']);
-        }));
+        return $this->navfactory->get_course_navigation($this->world);
     }
 
     /**

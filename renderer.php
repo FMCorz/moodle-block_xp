@@ -917,8 +917,17 @@ EOT
      */
     public function tab_navigation($items, $activenode) {
         $tabs = array_map(function($link) {
+            // If we don't have a URL, but we have children take the first child's.
+            if (empty($link['url']) && !empty($link['children'])) {
+                $firstchild = reset($link['children']);
+                $url = $firstchild['url'];
+                $link = array_merge($link, ['url' => $url]);
+            }
             return new tabobject($link['id'], $link['url'], $link['text'], clean_param($link['text'], PARAM_NOTAGS));
-        }, $items);
+        }, array_filter($items, function($item) {
+            // Remove the items that define children but do not have any.
+            return !isset($item['children']) || !empty($item['children']);
+        }));
         return html_writer::div($this->tabtree($tabs, $activenode), 'block_xp-page-nav');
     }
 
