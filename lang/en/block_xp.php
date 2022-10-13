@@ -255,6 +255,7 @@ $string['reallyreverttopluginsdefaults'] = 'Really reset the default rules to th
 $string['recentrewards'] = 'Recent rewards';
 $string['recommendedplugins'] = 'Recommended plugins';
 $string['releasenotes'] = 'Release notes';
+$string['remaining'] = 'remaining';
 $string['removefilter'] = 'Remove filter';
 $string['reportisempty'] = 'The report is empty, student have yet to earn points.';
 $string['reportisemptyenrolstudents'] = 'The report is empty, have students been enrolled in this course?';

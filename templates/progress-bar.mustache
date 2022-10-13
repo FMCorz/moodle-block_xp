@@ -31,11 +31,16 @@
     </div>
     <div class="xp-flex xp-justify-end xp-self-end xp-text-right xp-text-sm xp-leading-none xp-mt-1">
         {{^atmaxlevel}}
-        <div class="xp-text-gray-500 xp-text-xs">{{#str}}nextlevelin, block_xp{{/str}}</div>
+        <div class="xp-text-gray-500 xp-text-xs">
+            {{^islevelless}}{{#str}}nextlevelin, block_xp{{/str}}{{/islevelless}}
+            {{#islevelless}}{{#str}}remaining, block_xp{{/str}}{{/islevelless}}
+        </div>
         <div class="xp-ml-1">{{{nextinvaluehtml}}}</div>
         {{/atmaxlevel}}
         {{#atmaxlevel}}
-        <div class="xp-text-gray-500 xp-text-xs">{{#str}}maxlevelexcl, block_xp{{/str}}</div>
+        <div class="xp-text-gray-500 xp-text-xs">
+            {{#str}}maxlevelexcl, block_xp{{/str}}
+        </div>
         {{/atmaxlevel}}
     </div>
 </div>

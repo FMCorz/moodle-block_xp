@@ -768,13 +768,13 @@ EOT
     }
 
     /**
-     * Returns the progress bar rendered.
+     * Get the progress bar mustache context.
      *
      * @param state $state The renderable object.
      * @param bool $showpercentagetogo Show the percentage to go.
-     * @return string HTML produced.
+     * @return array
      */
-    public function progress_bar(state $state, $percentagetogo = false) {
+    protected function get_progress_bar_context(state $state, $percentagetogo = false) {
         global $CFG;
 
         $pc = $state->get_ratio_in_level() * 100;
@@ -790,17 +790,26 @@ EOT
             }
         }
 
-        $context = [
+        return [
             // 100% completion of a level is 0% of the next one, unless it's the final one.
             'atmaxlevel' => $pc >= 100,
             'nonfull' => $pc < 100,
             'nonzero' => $pc != 0,
             'percentage' => $pc,
             'percentagehuman' => $pc > 0 ? floor($pc) : ceil($pc),
-            'nextinvaluehtml' => $nextinvalue,
+            'nextinvaluehtml' => $nextinvalue
         ];
+    }
 
-        return $this->render_from_template('block_xp/progress-bar', $context);
+    /**
+     * Returns the progress bar rendered.
+     *
+     * @param state $state The renderable object.
+     * @param bool $showpercentagetogo Show the percentage to go.
+     * @return string HTML produced.
+     */
+    public function progress_bar(state $state, $percentagetogo = false) {
+        return $this->render_from_template('block_xp/progress-bar', $this->get_progress_bar_context($state, $percentagetogo));
     }
 
     /**
