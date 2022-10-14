@@ -101,6 +101,15 @@ class usage_report_maker {
         $data->xp_rules = $this->db->count_records_select('block_xp_filters', 'courseid > 0');
         $data->xp_rules_usage = $this->get_rules_usage($data->xp_rules > 5000 ? 5000 : 0);
 
+        $components = ['availability_xp', 'block_stash', 'enrol_xp', 'filter_shortcodes'];
+        $data->plugins = array_reduce($components, function($carry, $component) use ($pluginman) {
+            $plugininfo = $pluginman->get_plugin_info($component);
+            if (!$plugininfo) {
+                return $carry;
+            }
+            return array_merge($carry, [$component => ['r' => $plugininfo->release, 'v' => (string) $plugininfo->versiondisk]]);
+        }, []);
+
         return $data;
     }
 
