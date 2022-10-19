@@ -146,7 +146,6 @@ class default_settings_maker implements settings_maker {
      */
     protected function get_general_settings() {
         $settings = [];
-        $renderer = di::get('renderer');
 
         // Display a list of recommended plugins.
         $settings[] = new recommended_plugins_setting();
