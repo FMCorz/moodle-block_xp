@@ -10,10 +10,12 @@ xp-mb-2
 xp-mb-4
 xp-mb-6
 xp-ml-2
+xp-mt-1
 xp-p-0
 xp-px-2
 xp-px-4
 xp-py-2
+xp-space-x-1
 xp-text-center
 xp-text-xs
 xp-w-5

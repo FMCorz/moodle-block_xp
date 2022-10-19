@@ -48,14 +48,14 @@
 .block_xp .xp-ml-2 {
     margin-left: 0.5rem;
 }
+.block_xp .xp-mt-1 {
+    margin-top: 0.25rem;
+}
 .block_xp .xp-mb-1 {
     margin-bottom: 0.25rem;
 }
 .block_xp .xp-mt-6 {
     margin-top: 1.5rem;
-}
-.block_xp .xp-mt-1 {
-    margin-top: 0.25rem;
 }
 .block_xp .xp-ml-1 {
     margin-left: 0.25rem;
@@ -381,6 +381,10 @@
 }
 .block_xp .xp-no-underline {
     text-decoration-line: none;
+}
+.block_xp .xp-space-x-1 > :not([hidden]) ~ :not([hidden]) {
+    margin-right: 0;
+    margin-left: 0.25rem;
 }
 .block_xp .xp-space-y-4 > :not([hidden]) ~ :not([hidden]) {
     margin-top: 1rem;
