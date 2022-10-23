@@ -89,7 +89,7 @@ $string['editinstructions'] = 'Edit information';
 $string['enablecheatguard'] = 'Enable cheat guard';
 $string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive mechanism for preventing students to abuse the system using obvious techniques, such as refreshing the same page endlessly, or repeating the same action over and over again.
 
-[More info](https://levelup.plus/docs/article/level-up-cheat-guard?ref=blockxp_help)
+[More info](https://docs.levelup.plus/xp/docs/getting-started/cheat-guard?ref=blockxp_help)
 ';
 $string['enableinfos'] = 'Enable info page';
 $string['enableinfos_help'] = 'When set to \'No\', students will not be able to view the information page.';
@@ -118,8 +118,8 @@ It is advised to check the plugin\'s _Log_ page to identify which events are tri
 
 Additional resources:
 
-- [How are experience points calculated?](https://levelup.plus/docs/article/how-are-experience-points-calculated?ref=blockxp_help)
-- [Troubleshooting rules](https://levelup.plus/docs/article/event-rule-not-working?ref=blockxp_help)
+- [How are experience points calculated?](https://docs.levelup.plus/xp/docs/getting-started/points-calculation?ref=blockxp_help)
+- [Troubleshooting rules](https://docs.levelup.plus/xp/docs/troubleshooting/event-rule-not-working?ref=blockxp_help)
 ';
 $string['event_user_leveledup'] = 'User leveled up';
 $string['eventis'] = 'The event is {$a}';

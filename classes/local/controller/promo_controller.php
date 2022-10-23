@@ -333,11 +333,11 @@ EOT;
         $output = \block_xp\di::get('renderer');
         $addon = \block_xp\di::get('addon');
         $siteurl = new url('https://levelup.plus?ref=localxp_promopage');
-        $docsurl = new url('https://levelup.plus/docs?ref=localxp_promopage');
+        $docsurl = new url('https://docs.levelup.plus/xp/docs?ref=localxp_promopage');
         $recoverurl = new url('https://levelup.plus/recover?ref=localxp_promopage');
-        $releasenotesurl = new url('https://levelup.plus/docs/topic/release-notes?ref=localxp_promopage');
-        $upgradeurl = new url('https://levelup.plus/docs/article/upgrading-level-up?ref=localxp_promopage');
-        $outofsyncurl = new url('https://levelup.plus/docs/article/plugins-out-of-sync?ref=localxp_promopage');
+        $releasenotesurl = new url('https://docs.levelup.plus/xp/release-notes?ref=localxp_promopage');
+        $upgradeurl = new url('https://docs.levelup.plus/xp/docs/upgrade?ref=localxp_promopage');
+        $outofsyncurl = new url('https://docs.levelup.plus/xp/docs/troubleshooting/plugins-out-of-sync?ref=localxp_promopage');
 
         if (!$this->is_admin_page()) {
             $config = $this->world->get_config();

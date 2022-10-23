@@ -30,14 +30,14 @@ Moodle 3.3 or greater.
 Installation
 ------------
 
-Simply install the plugin and add the block to a course page. More details are available here: [Level Up XP documentation](https://levelup.plus/docs/topic/installation?ref=readme)
+Simply install the plugin and add the block to a course page. More details are available here: [Level Up XP documentation](https://docs.levelup.plus/xp/docs/install?ref=readme)
 
 The plugin can also be installed using [composer](https://getcomposer.org/) at [fmcorz/moodle-block_xp](https://packagist.org/packages/fmcorz/moodle-block_xp).
 
 How are experience points calculated?
 -------------------------------------
 
-Have a look at this [documentation page](https://levelup.plus/docs/article/how-are-experience-points-calculated?ref=readme).
+Have a look at this [documentation page](https://docs.levelup.plus/xp/docs/getting-started/points-calculation?ref=readme).
 
 Restricting access based on students' levels
 --------------------------------------------
@@ -54,7 +54,7 @@ Shortcodes
 
 _What are those? Shortcodes can be used in editors throughout Moodle to include or modify the content. The plugin [Shortcodes](https://github.com/branchup/moodle-filter_shortcodes) must be installed to enable them._
 
-Check the [list of supported shortcodes](https://levelup.plus/docs/article/using-shortcodes?ref=readme).
+Check the [list of supported shortcodes](https://docs.levelup.plus/xp/docs/how-to/use-shortcodes?ref=readme).
 
 How to use one block for all courses
 ------------------------------------
