@@ -78,6 +78,7 @@ class default_admin_config extends immutable_config {
             'blocktitle' => get_string('levelup', 'block_xp'),
             'blockdescription' => get_string('participatetolevelup', 'block_xp'),
             'blockrecentactivity' => 3,
+            'blockrankingsnapshot' => 1,
 
             'apiroot' => 'https://backend.levelup.plus/api',
             'usagereport' => 1,

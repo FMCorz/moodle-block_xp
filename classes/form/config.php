@@ -157,6 +157,14 @@ class config extends moodleform {
         $mform->addHelpButton('blockdescription', 'configdescription', 'block_xp');
         $mform->setType('blockdescription', PARAM_TEXT);
 
+        $mform->addElement('select', 'blockrankingsnapshot', get_string('configblockrankingsnapshot', 'block_xp'), [
+            0 => get_string('no'),
+            1 => get_string('yes'),
+        ]);
+        $mform->addHelpButton('blockrankingsnapshot', 'configblockrankingsnapshot', 'block_xp');
+        $mform->setType('blockrankingsnapshot', PARAM_INT);
+        $mform->disabledIf('blockrankingsnapshot', 'enableladder', 'eq', '0');
+
         $mform->addElement('select', 'blockrecentactivity', get_string('configrecentactivity', 'block_xp'), [
             0 => get_string('no'),
             3 => get_string('yes'),

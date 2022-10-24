@@ -43,8 +43,6 @@ class config_controller extends page_controller {
     protected $routename = 'config';
     /** @var moodleform The form. */
     private $form;
-    /** @var config The block config. */
-    private $blockconfig;
 
     /**
      * Define the form.

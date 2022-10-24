@@ -313,14 +313,16 @@ class course_block extends block_base {
             }
 
             // Gather the ranking snapshot.
-            $position = $leaderboard->get_position($USER->id);
-            $widget->set_show_ranking_snapshot($position !== null || $canedit);
-            if ($position !== null) {
-                $ranking = $leaderboard->get_ranking(new limit(3, max(0, $position - 1)));
-                $widget->set_ranking_snapshot($ranking);
-                // We may have a position, but an empty ranking, for instance with the neighboured
-                // leaderboard, therefore we must check again whether we should show the ranking.
-                $widget->set_show_ranking_snapshot(!empty($ranking) || $canedit);
+            if ($config->get('blockrankingsnapshot')) {
+                $position = $leaderboard->get_position($USER->id);
+                $widget->set_show_ranking_snapshot($position !== null || $canedit);
+                if ($position !== null) {
+                    $ranking = $leaderboard->get_ranking(new limit(3, max(0, $position - 1)));
+                    $widget->set_ranking_snapshot($ranking);
+                    // We may have a position, but an empty ranking, for instance with the neighboured
+                    // leaderboard, therefore we must check again whether we should show the ranking.
+                    $widget->set_show_ranking_snapshot(!empty($ranking) || $canedit);
+                }
             }
 
         }

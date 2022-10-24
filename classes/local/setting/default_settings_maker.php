@@ -305,6 +305,14 @@ class default_settings_maker implements settings_maker {
             get_string('configdescription', 'block_xp'), get_string('configdescription_help', 'block_xp'),
             $defaults['blockdescription'], PARAM_TEXT));
 
+        // Block ranking snapshot.
+        $settings[] = (new admin_setting_configselect('block_xp/blockrankingsnapshot',
+            get_string('configblockrankingsnapshot', 'block_xp'), get_string('configblockrankingsnapshot_help', 'block_xp'),
+            $defaults['blockrankingsnapshot'], [
+                0 => get_string('no'),
+                1 => get_string('yes')
+            ]));
+
         // Block recent activity.
         $settings[] = (new admin_setting_configselect('block_xp/blockrecentactivity',
             get_string('configrecentactivity', 'block_xp'), get_string('configrecentactivity_help', 'block_xp'),
