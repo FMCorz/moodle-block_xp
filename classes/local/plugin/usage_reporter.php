@@ -87,7 +87,7 @@ class usage_reporter {
 
         $this->config->set('lastusagereport', time());
         $respdata = json_decode($resp);
-        if ($respdata && $respdata->local_site_id && $respdata->local_site_id !== $localsiteid) {
+        if ($respdata && !empty($respdata->local_site_id) && $respdata->local_site_id !== $localsiteid) {
             $this->config->set('usagereportid', $respdata->local_site_id);
         }
         return true;
