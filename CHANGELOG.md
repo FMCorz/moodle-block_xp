@@ -1,6 +1,32 @@
 Changelog
 =========
 
+v3.13.0
+-------
+
+New features
+
+- Display a snapshot of the leaderboard on the block
+- Showcase the next level a user is progressing towards on the block
+- Logs can be filtered for an individual user
+
+Quality of life
+
+- The block appearance has been updated to look more modern
+- Navigate to a user's logs directly from the report
+- Actions against users in report moved to a dropdown menu
+- Renamed "Ladder" to "Leaderboard"
+
+Bug fixes
+
+- Deleting a user removes its associated logs allowing them to re-earn points
+- Block appearance settings were not included in backups
+
+Technical changes
+
+- Compatibility with Moodle 4.1
+- Remove usage of deprecated YUI module formchangechecker
+
 v3.12.2
 -------
 
