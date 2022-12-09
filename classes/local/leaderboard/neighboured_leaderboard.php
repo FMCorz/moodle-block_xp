@@ -126,8 +126,11 @@ class neighboured_leaderboard implements leaderboard {
      * @return int Indexed from 0, null when not ranked.
      */
     public function get_position($id) {
-        // Only report that our position is in the middle, whether true or not.
-        return $id == $this->objectid ? $this->neighbours : null;
+        if ($id != $this->objectid) {
+            return null;
+        }
+        $pos = $this->leaderboard->get_position($id);
+        return $pos !== null ? $this->neighbours : null;
     }
 
     /**
