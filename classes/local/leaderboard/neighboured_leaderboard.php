@@ -88,31 +88,35 @@ class neighboured_leaderboard implements leaderboard {
      *
      * @return array
      */
-    protected function get_limit_and_count() {
+    private function get_limit_and_count() {
         $neighbours = $this->neighbours;
         $pos = $this->leaderboard->get_position($this->objectid);
         if ($pos === null) {
-            return $this->fallbackontop ? [new limit($this->neighbours, 0), $this->neighbours] : [new limit(0, 0), 0];
+            return $this->fallbackontop ? [new limit($this->neighbours, 0), $this->neighbours, 0] : [new limit(0, 0), 0, 0];
         }
         $total = $this->leaderboard->get_count();
 
         $count = $neighbours * 2 + 1;
+        $missingleft = 0;
+        $missingright = 0;
 
         // The are less people in front of us than the number of neighbours.
         if ($pos < $neighbours) {
-            $count = $count - ($neighbours - $pos);
+            $missingleft = $neighbours - $pos;
+            $count = $count - $missingleft;
         }
 
         // There are less people after us than the number of neighbours.
         if ($pos > $total - $neighbours) {
-            $count = $count - ($pos - ($total - $neighbours));
+            $missingright = ($pos - ($total - $neighbours));
+            $count = $count - $missingright;
         }
 
         $offset = max(0, $pos - $neighbours);
         $limit = new limit($count, $offset);
         $total = $count;
 
-        return [$limit, $total];
+        return [$limit, $total, $missingleft];
     }
 
     /**
@@ -140,15 +144,61 @@ class neighboured_leaderboard implements leaderboard {
     /**
      * Get the ranking.
      *
-     * @param limit $limit The limit.
+     * The custom limit is relative to the neighboured position, so in leaderboard configured
+     * for 2 neighbours (2 left, 1 center, 2 right), the offset 0 is the far left of the ranking.
+     * The offset 2 will be the center, and the offset 4 would be the far right entry.
+     *
+     * Any value of 0 in the custom limit is ignored.
+     *
+     * While this method has been made compatible with the absolute positioning reported by
+     * the {@link self::get_position} method, it is not compatible with {@see self::get_count}
+     * which always reports that there are as many entries as there could be.
+     *
+     * @param limit $customlimit The limit.
      * @return Traversable
      */
-    public function get_ranking(limit $limit) {
-        // Ignore the limit and set ours.
-        list($limit, $count) = $this->get_limit_and_count();
+    public function get_ranking(limit $customlimit) {
+        list($limit, $total, $missingleft) = $this->get_limit_and_count();
+
+        $count = $limit->get_count();
+        $offset = $limit->get_offset();
+        $maxcount = $this->neighbours * 2 + 1;
+
+        // This should not happen.
+        if ($count <= 0) {
+            return [];
+        }
+
+        // If we have a custom limit, we need to apply it respectively to the position.
+        if ($customlimit) {
+            $hascustomcount = $customlimit->get_count() > 0;
+            $hascustomoffset = $customlimit->get_offset() > 0;
+            $customcount = max(0, min($maxcount, $customlimit->get_count()));
+            $customoffset = max(0, min($maxcount, $customlimit->get_offset()));
+
+            if ($hascustomoffset && $hascustomcount) {
+                $offsetdiff = $customoffset - $missingleft;
+                $offset = max($offset, $offset + $offsetdiff);
+                $count = min($count, $offsetdiff < 0 ? $customcount + $offsetdiff : $customcount);
+
+            } else if ($hascustomcount) {
+                $count = min($count, $customcount);
+
+            } else if ($hascustomoffset) {
+                $offsetdiff = $customoffset - $missingleft;
+                $offset = max($offset, $offset + $offsetdiff);
+                $count = $count - abs($offsetdiff);
+            }
+
+            $limit = new limit($count, $offset);
+        }
+
+        // With a custom limit, we can end up in a situation where the count is 0,
+        // in which case the leaderboard should be empty.
         if ($limit->get_count() <= 0) {
             return [];
         }
+
         return $this->leaderboard->get_ranking($limit);
     }
 

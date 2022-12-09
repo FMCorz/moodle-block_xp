@@ -338,6 +338,323 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
         $this->assert_ranking($ranking, $expected);
     }
 
+    /**
+     * Neighboured leaderboard with custom limit.
+     */
+    public function test_neighboured_leaderboard_with_limit() {
+        $dg = $this->getDataGenerator();
+        $c1 = $dg->create_course();
+
+        $u1 = $dg->create_user();
+        $u2 = $dg->create_user();
+        $u3 = $dg->create_user();
+        $u4 = $dg->create_user();
+        $u5 = $dg->create_user();
+        $u6 = $dg->create_user();
+        $u7 = $dg->create_user();
+        $u8 = $dg->create_user();
+
+        $world1 = $this->get_world($c1->id);
+        $store1 = $world1->get_store();
+        $store1->set($u5->id, 20);
+        $store1->set($u6->id, 30);
+        $store1->set($u7->id, 40);
+        $store1->set($u1->id, 100);
+        $store1->set($u4->id, 110);
+        $store1->set($u2->id, 120);
+        $store1->set($u3->id, 130);
+
+        $lb = $this->get_leaderboard($world1, 0);
+
+        // With 0/0 limit.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 2);
+        $ranking = $nlb->get_ranking(new limit(0, 0));
+        $expected = [
+            [$u2, 2],
+            [$u4, 3],
+            [$u1, 4],
+            [$u7, 5],
+            [$u6, 6],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit of 2.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 2);
+        $ranking = $nlb->get_ranking(new limit(2, 0));
+        $expected = [
+            [$u2, 2],
+            [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With offset of 2.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 2);
+        $ranking = $nlb->get_ranking(new limit(0, 2));
+        $expected = [
+            // [$u2, 2],
+            // [$u4, 3],
+            [$u1, 4],
+            [$u7, 5],
+            [$u6, 6],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 2);
+        $ranking = $nlb->get_ranking(new limit(2, 1));
+        $expected = [
+            // [$u2, 2],
+            [$u4, 3],
+            [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset for first person.
+        $nlb = new neighboured_leaderboard($lb, $u3->id, 2);
+        $ranking = $nlb->get_ranking(new limit(2, 1));
+        $expected = [
+            [$u3, 1],
+            // [$u2, 2],
+            // [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+        ];
+
+        // With limit and offset for first person, again.
+        $nlb = new neighboured_leaderboard($lb, $u3->id, 5);
+        $ranking = $nlb->get_ranking(new limit(2, 1));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            // [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+        ];
+
+        // With limit and offset for first person, again.
+        $nlb = new neighboured_leaderboard($lb, $u3->id, 5);
+        $ranking = $nlb->get_ranking(new limit(0, 1));
+        $expected = [
+            [$u3, 1],
+            // [$u2, 2],
+            // [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+        ];
+
+        // With limit and offset for first person, again.
+        $nlb = new neighboured_leaderboard($lb, $u3->id, 5);
+        $ranking = $nlb->get_ranking(new limit(1, 7));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+        ];
+
+        // With limit and offset for last person.
+        $nlb = new neighboured_leaderboard($lb, $u5->id, 2);
+        $ranking = $nlb->get_ranking(new limit(2, 1));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            // [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            [$u6, 6],
+            [$u5, 7],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset for last person, again.
+        $nlb = new neighboured_leaderboard($lb, $u5->id, 5);
+        $ranking = $nlb->get_ranking(new limit(2, 1));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            [$u4, 3],
+            [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+            // [$u5, 7],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset to get last record.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 2);
+        $ranking = $nlb->get_ranking(new limit(0, 4));
+        $expected = [
+            // [$u2, 2],
+            // [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            [$u6, 6],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset to get last record for first person.
+        $nlb = new neighboured_leaderboard($lb, $u3->id, 2);
+        $ranking = $nlb->get_ranking(new limit(0, 4));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+        ];
+
+        // With limit and offset to get last record for last person.
+        $nlb = new neighboured_leaderboard($lb, $u5->id, 2);
+        $ranking = $nlb->get_ranking(new limit(0, 4));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            // [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+            // [$u5, 7],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset from position of middle person.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 2);
+        $ranking = $nlb->get_ranking(new limit(3, $nlb->get_position($u1->id) - 1));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            [$u4, 3],
+            [$u1, 4],
+            [$u7, 5],
+            // [$u6, 6],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset from position of first person.
+        $nlb = new neighboured_leaderboard($lb, $u3->id, 2);
+        $ranking = $nlb->get_ranking(new limit(3, $nlb->get_position($u3->id) - 1));
+        $expected = [
+            [$u3, 1],
+            [$u2, 2],
+            // [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset from position of last person.
+        $nlb = new neighboured_leaderboard($lb, $u5->id, 2);
+        $ranking = $nlb->get_ranking(new limit(3, $nlb->get_position($u5->id) - 1));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            // [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            [$u6, 6],
+            [$u5, 7],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset from position of middle person on narrower leaderboard.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 1);
+        $ranking = $nlb->get_ranking(new limit(5, $nlb->get_position($u1->id) - 2));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            [$u4, 3],
+            [$u1, 4],
+            [$u7, 5],
+            // [$u6, 6],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset from position of first person on narrower leaderboard.
+        $nlb = new neighboured_leaderboard($lb, $u3->id, 1);
+        $ranking = $nlb->get_ranking(new limit(5, $nlb->get_position($u3->id) - 2));
+        $expected = [
+            [$u3, 1],
+            [$u2, 2],
+            // [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            // [$u6, 6],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With limit and offset from position of last person on narrower leaderboard.
+        $nlb = new neighboured_leaderboard($lb, $u5->id, 1);
+        $ranking = $nlb->get_ranking(new limit(5, $nlb->get_position($u5->id) - 2));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            // [$u4, 3],
+            // [$u1, 4],
+            // [$u7, 5],
+            [$u6, 6],
+            [$u5, 7],
+        ];
+        $this->assert_ranking($ranking, $expected);
+
+        // With offset exceeding max items.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 1);
+        $ranking = $nlb->get_ranking(new limit(0, 8));
+        $expected = [];
+        $this->assert_ranking($ranking, $expected);
+
+        // With offset less than 0, it would be ignored.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 1);
+        $ranking = $nlb->get_ranking(new limit(0, -1));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            [$u4, 3],
+            [$u1, 4],
+            [$u7, 5],
+            // [$u6, 6],
+            // [$u5, 7],
+        ];
+
+        // With count exceeding max items.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 1);
+        $ranking = $nlb->get_ranking(new limit(10, 0));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            [$u4, 3],
+            [$u1, 4],
+            [$u7, 5],
+            // [$u6, 6],
+            // [$u5, 7],
+        ];
+
+        // With negative count, would be ignored.
+        $nlb = new neighboured_leaderboard($lb, $u1->id, 1);
+        $ranking = $nlb->get_ranking(new limit(-10, 0));
+        $expected = [
+            // [$u3, 1],
+            // [$u2, 2],
+            [$u4, 3],
+            [$u1, 4],
+            [$u7, 5],
+            // [$u6, 6],
+            // [$u5, 7],
+        ];
+        $this->assert_ranking($ranking, $expected);
+    }
+
     public function test_relative_ranker() {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
@@ -396,7 +713,7 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
             $this->assertEquals($expected[$i][1], $rank->get_rank(), $i);
             $i++;
         }
-        $this->assertEquals($i, count($expected));
+        $this->assertEquals(count($expected), $i);
     }
 
 }
