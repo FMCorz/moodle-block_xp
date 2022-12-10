@@ -51,13 +51,22 @@ class static_setting extends \admin_setting {
      * @param string $description The setting's description.
      * @param string $content The setting's content.
      */
-    public function __construct($name, $label, $description, $content) {
+    public function __construct($name, $label, $description, $content = '') {
         parent::__construct($name, $label, $description, '');
         $this->content = $content;
     }
 
     /**
-     * Retrieves the setting,
+     * Retrieves the content.
+     *
+     * @return string
+     */
+    protected function get_html_content() {
+        return $this->content;
+    }
+
+    /**
+     * Retrieves the setting.
      *
      * @return string
      */
@@ -82,7 +91,8 @@ class static_setting extends \admin_setting {
      * @return string
      */
     public function output_html($data, $query = '') {
-        return format_admin_setting($this, $this->visiblename, $this->content, $this->description, true, '', null, $query);
+        return format_admin_setting($this, $this->visiblename, $this->get_html_content(), $this->description,
+            true, '', null, $query);
     }
 
 }

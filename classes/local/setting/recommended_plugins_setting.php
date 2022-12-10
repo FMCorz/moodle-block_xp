@@ -44,6 +44,15 @@ class recommended_plugins_setting extends static_setting {
      * Constructor.
      */
     public function __construct() {
+        parent::__construct('block_xp/recommendedplugins', get_string('recommendedplugins', 'block_xp'), '');
+    }
+
+    /**
+     * Get HTML content.
+     *
+     * @return string
+     */
+    protected function get_html_content() {
         $pluginman = core_plugin_manager::instance();
 
         $plugins = array_map(function($plugin) use ($pluginman) {
@@ -74,8 +83,7 @@ class recommended_plugins_setting extends static_setting {
             ]
         ]);
 
-        parent::__construct('block_xp/recommendedplugins', get_string('recommendedplugins', 'block_xp'), '',
-            di::get('renderer')->render_from_template('block_xp/admin-recommended-plugins', ['plugins' => $plugins]));
+        return di::get('renderer')->render_from_template('block_xp/admin-recommended-plugins', ['plugins' => $plugins]);
     }
 
 }
