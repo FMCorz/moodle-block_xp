@@ -79,8 +79,25 @@ class neighboured_leaderboard implements leaderboard {
      * @return int
      */
     public function get_count() {
-        // Always assumes there are as many neighbours as possible.
-        return $this->neighbours * 2 + 1;
+        $pos = $this->leaderboard->get_position($this->objectid);
+        if ($pos === null) {
+            return $this->fallbackontop ? min($this->neighbours + 1, $this->leaderboard->get_count()) : 0;
+        }
+
+        $total = $this->leaderboard->get_count();
+        $count = $this->neighbours * 2 + 1;
+
+        $missingbefore = max(0, $this->neighbours - $pos);
+        if ($missingbefore > 0) {
+            $count -= $missingbefore;
+        }
+
+        $missingafter = max(0, $this->neighbours - ($total - $pos - 1));
+        if ($missingafter > 0) {
+            $count -= $missingafter;
+        }
+
+        return $count;
     }
 
     /**
@@ -92,7 +109,7 @@ class neighboured_leaderboard implements leaderboard {
         $neighbours = $this->neighbours;
         $pos = $this->leaderboard->get_position($this->objectid);
         if ($pos === null) {
-            return $this->fallbackontop ? [new limit($this->neighbours, 0), $this->neighbours, 0] : [new limit(0, 0), 0, 0];
+            return $this->fallbackontop ? [new limit($this->neighbours, 0), $this->neighbours] : [new limit(0, 0), 0];
         }
         $total = $this->leaderboard->get_count();
 
@@ -116,11 +133,16 @@ class neighboured_leaderboard implements leaderboard {
         $limit = new limit($count, $offset);
         $total = $count;
 
-        return [$limit, $total, $missingleft];
+        return [$limit, $total];
     }
 
     /**
      * Return the position of the object.
+     *
+     * The position will most generally be the number of neighbours, except
+     * when there aren't enough neighbours on the left of the object.
+     *
+     * Only the position of the object ID the leaderboard is relative to is known.
      *
      * @param int $id The object ID.
      * @return int Indexed from 0, null when not ranked.
@@ -130,7 +152,10 @@ class neighboured_leaderboard implements leaderboard {
             return null;
         }
         $pos = $this->leaderboard->get_position($id);
-        return $pos !== null ? $this->neighbours : null;
+        if ($pos === null && $this->fallbackontop) {
+            return $this->get_count() > 0 ? 0 : null;
+        }
+        return $pos !== null ? min($pos, $this->neighbours) : null;
     }
 
     /**
@@ -147,25 +172,16 @@ class neighboured_leaderboard implements leaderboard {
     /**
      * Get the ranking.
      *
-     * The custom limit is relative to the neighboured position, so in leaderboard configured
-     * for 2 neighbours (2 left, 1 center, 2 right), the offset 0 is the far left of the ranking.
-     * The offset 2 will be the center, and the offset 4 would be the far right entry.
-     *
      * Any value of 0 in the custom limit is ignored.
-     *
-     * While this method has been made compatible with the absolute positioning reported by
-     * the {@link self::get_position} method, it is not compatible with {@see self::get_count}
-     * which always reports that there are as many entries as there could be.
      *
      * @param limit $customlimit The limit.
      * @return Traversable
      */
     public function get_ranking(limit $customlimit) {
-        list($limit, $total, $missingleft) = $this->get_limit_and_count();
+        list($limit, $total) = $this->get_limit_and_count();
 
         $count = $limit->get_count();
         $offset = $limit->get_offset();
-        $maxcount = $this->neighbours * 2 + 1;
 
         // This should not happen.
         if ($count <= 0) {
@@ -175,23 +191,11 @@ class neighboured_leaderboard implements leaderboard {
         // If we have a custom limit, we need to apply it respectively to the position.
         if ($customlimit) {
             $hascustomcount = $customlimit->get_count() > 0;
-            $hascustomoffset = $customlimit->get_offset() > 0;
-            $customcount = max(0, min($maxcount, $customlimit->get_count()));
-            $customoffset = max(0, min($maxcount, $customlimit->get_offset()));
+            $customcount = max(0, min($count, $customlimit->get_count()));
+            $customoffset = max(0, min($count, $customlimit->get_offset()));
 
-            if ($hascustomoffset && $hascustomcount) {
-                $offsetdiff = $customoffset - $missingleft;
-                $offset = max($offset, $offset + $offsetdiff);
-                $count = min($count, $offsetdiff < 0 ? $customcount + $offsetdiff : $customcount);
-
-            } else if ($hascustomcount) {
-                $count = min($count, $customcount);
-
-            } else if ($hascustomoffset) {
-                $offsetdiff = $customoffset - $missingleft;
-                $offset = max($offset, $offset + $offsetdiff);
-                $count = $count - abs($offsetdiff);
-            }
+            $offset = $offset + $customoffset;
+            $count = max(0, $hascustomcount ? min($customcount, $count - $customoffset) : $count - $customoffset);
 
             $limit = new limit($count, $offset);
         }
