@@ -339,7 +339,7 @@ class default_container implements container {
      */
     protected function get_renderer() {
         global $PAGE;
-        if (!$PAGE->has_set_url() && !defined('PHPUNIT_TEST')) {
+        if (!$PAGE->has_set_url() && !defined('PHPUNIT_TEST') && !WS_SERVER && !CLI_SCRIPT) {
             debugging('The renderer was requested too early in the request.', DEBUG_DEVELOPER);
         }
         return $PAGE->get_renderer('block_xp');
