@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v3.13.2
+-------
+
+Bug fixes
+
+- Some JS files were not loaded in development mode
+
 v3.13.1
 -------
 
