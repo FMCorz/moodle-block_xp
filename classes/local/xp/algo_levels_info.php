@@ -153,6 +153,8 @@ class algo_levels_info implements levels_info {
         return $this->usealgo;
     }
 
+    // @codingStandardsIgnoreLine.
+    #[\ReturnTypeWillChange]
     /**
      * Serialize that thing.
      *
