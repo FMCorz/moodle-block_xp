@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v3.13.3
+-------
+
+Bug fixes
+
+- Suppress notice about undefined return type with PHP 8.1
+- Fixed failing report task due to incorrect reference to XP+
+
 v3.13.2
 -------
 
