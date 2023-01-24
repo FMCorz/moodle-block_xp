@@ -26,12 +26,7 @@
 namespace block_xp\local\plugin;
 
 use block_xp\local\config\config;
-use block_xp_filter;
-use core_component;
-use core_plugin_manager;
 use curl;
-use Exception;
-use moodle_database;
 
 defined('MOODLE_INTERNAL') || die();
 

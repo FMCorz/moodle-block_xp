@@ -30,8 +30,6 @@ use block_xp\local\config\config;
 use block_xp_filter;
 use core_component;
 use core_plugin_manager;
-use Exception;
-use local_xp\local\plugin\addon;
 use moodle_database;
 
 defined('MOODLE_INTERNAL') || die();
