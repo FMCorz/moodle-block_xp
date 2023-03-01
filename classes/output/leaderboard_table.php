@@ -82,7 +82,7 @@ class leaderboard_table extends flexible_table {
     public function __construct(
             leaderboard $leaderboard,
             renderer_base $renderer,
-            array $options = [],
+            array $options,
             $userid
         ) {
 
