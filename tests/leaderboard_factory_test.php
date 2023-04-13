@@ -44,10 +44,6 @@ use block_xp\local\sql\limit;
  */
 class block_xp_leaderboard_factory_testcase extends block_xp_base_testcase {
 
-    protected function get_world($courseid) {
-        return \block_xp\di::get('course_world_factory')->get_world($courseid);
-    }
-
     /**
      * Test the plain factory.
      */

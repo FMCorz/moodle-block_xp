@@ -37,10 +37,6 @@ require_once(__DIR__ . '/fixtures/events.php');
  */
 class block_xp_course_world_testcase extends block_xp_base_testcase {
 
-    protected function get_world($courseid) {
-        return \block_xp\di::get('course_world_factory')->get_world($courseid);
-    }
-
     public function test_reset_data() {
         global $DB;
 

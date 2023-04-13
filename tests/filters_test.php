@@ -40,7 +40,7 @@ use block_xp\local\config\course_world_config;
 class block_xp_filters_testcase extends block_xp_base_testcase {
 
     protected function get_filter_manager($courseid) {
-        $world = \block_xp\di::get('course_world_factory')->get_world($courseid);
+        $world = $this->get_world($courseid);
         $world->get_config()->set('defaultfilters', course_world_config::DEFAULT_FILTERS_STATIC);
         return $world->get_filter_manager();
     }

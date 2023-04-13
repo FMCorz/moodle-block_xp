@@ -41,10 +41,6 @@ use block_xp\di;
  */
 class block_xp_course_world_config_testcase extends block_xp_base_testcase {
 
-    protected function get_world($courseid) {
-        return di::get('course_world_factory')->get_world($courseid);
-    }
-
     public function test_default_config() {
         global $DB;
 

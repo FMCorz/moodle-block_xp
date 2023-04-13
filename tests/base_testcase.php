@@ -40,6 +40,10 @@ abstract class block_xp_base_testcase extends advanced_testcase {
         $this->reset_container();
     }
 
+    protected function get_world($courseid) {
+        return \block_xp\di::get('course_world_factory')->get_world($courseid);
+    }
+
     protected function reset_container() {
         \block_xp\di::set_container(new \block_xp\local\default_container());
     }

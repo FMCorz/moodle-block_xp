@@ -58,10 +58,6 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
         );
     }
 
-    protected function get_world($courseid) {
-        return \block_xp\di::get('course_world_factory')->get_world($courseid);
-    }
-
     /**
      * Basic test of the leaderboard.
      */
