@@ -178,19 +178,26 @@ class event_lister {
         // We need to disable debugging as some events can be deprecated.
         $debuglevel = $CFG->debug;
         $debugdisplay = $CFG->debugdisplay;
+        $debugusers = $CFG->debugusers;
+        $CFG->debugusers = '';
         set_debugging(0, false);
 
         // Check that the event exists, and is not an abstract event.
-        if (method_exists($class, 'get_static_info')) {
-            $ref = new \ReflectionClass($class);
-            if (!$ref->isAbstract()) {
-                $infos = $class::get_static_info();
-                $infos['name'] = method_exists($class, 'get_name_with_info') ? $class::get_name_with_info() : $class::get_name();
-                $infos['isdeprecated'] = method_exists($class, 'is_deprecated') ? $class::is_deprecated() : false;
+        try {
+            if (method_exists($class, 'get_static_info')) {
+                $ref = new \ReflectionClass($class);
+                if (!$ref->isAbstract()) {
+                    $infos = $class::get_static_info();
+                    $infos['name'] = method_exists($class, 'get_name_with_info') ? $class::get_name_with_info() : $class::get_name();
+                    $infos['isdeprecated'] = method_exists($class, 'is_deprecated') ? $class::is_deprecated() : false;
+                }
             }
+        } catch (\Exception $e) {
+            // Capture all exceptions to ensure we're not breaking the page, and resetting the debugging parameters.
         }
 
         // Restore debugging.
+        $CFG->debugusers = $debugusers;
         set_debugging($debuglevel, $debugdisplay);
 
         return $infos;
