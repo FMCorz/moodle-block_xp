@@ -75,7 +75,32 @@ class restore_xp_block_structure_step extends restore_structure_step {
      * Process block.
      */
     protected function process_block($data) {
-        // Nothing to do here... \o/!
+        global $DB;
+
+        $target = $this->get_task()->get_target();
+        $courseid = $this->get_courseid();
+
+        // The backup target expects that all content is first being removed. Since deleting the block
+        // instance does not delete the data itself, we must manually delete everything.
+        if ($target == backup::TARGET_CURRENT_DELETING || $target == backup::TARGET_EXISTING_DELETING) {
+            $this->log('block_xp: deleting all data in target course', backup::LOG_DEBUG);
+
+            // Removing associated data.
+            $conditions = ['courseid' => $courseid];
+            $DB->delete_records('block_xp', $conditions);
+            $DB->delete_records('block_xp_config', $conditions);
+            $DB->delete_records('block_xp_filters', $conditions);
+            $DB->delete_records('block_xp_log', $conditions);
+
+            // Removing old preferences.
+            $sql = $DB->sql_like('name', ':name');
+            $DB->delete_records_select('user_preferences', $sql, [
+                'name' => 'block_xp-notice-block_intro_' . $courseid
+            ]);
+            $DB->delete_records_select('user_preferences', $sql, [
+                'name' => 'block_xp_notify_level_up_' . $courseid
+            ]);
+        }
     }
 
     /**
