@@ -128,6 +128,43 @@ class restore_xp_block_structure_step extends restore_structure_step {
     protected function process_filter($data) {
         global $DB;
         $data['courseid'] = $this->get_courseid();
+
+        // We must never have more than one category grades rule, and it should be a ruleset.
+        if (!empty($data['category']) && $data['category'] == block_xp_filter::CATEGORY_GRADES) {
+
+            // If there is only rule, and its empty, then we restore on top of it.
+            $records = $DB->get_records('block_xp_filters', ['courseid' => $data['courseid'], 'category' => $data['category']]);
+            if (count($records) === 1) {
+
+                $record = reset($records);
+                $filter = block_xp_filter::load_from_data($record);
+                $rule = $filter->get_rule();
+
+                if ($rule instanceof block_xp_ruleset) {
+                    $rules = $rule->get_rules();
+                    if (!empty($rules)) {
+                        // The ruleset is not empty, there are existing rules, pass.
+                        $this->log("block_xp: grades rules not restored, existing grade rules found", backup::LOG_DEBUG);
+                        return;
+                    }
+
+                    // Update the record.
+                    $DB->update_record('block_xp_filters', ['id' => $record->id] + $data);
+                    return;
+
+                } else {
+                    // It really should be a ruleset, odd, let's just pass.
+                    $this->log("block_xp: grades rules not restored, existing grade rules found", backup::LOG_DEBUG);
+                    return;
+                }
+
+            } else if (count($records) > 1) {
+                // It's safer to ignore this.
+                $this->log("block_xp: grades rules not restored, multiple existing grade rules found", backup::LOG_DEBUG);
+                return;
+            }
+        }
+
         $DB->insert_record('block_xp_filters', $data);
     }
 

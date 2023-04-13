@@ -245,6 +245,177 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
         $this->assertTrue($DB->record_exists('block_xp_filters', ['courseid' => $c1->id, 'points' => 666]));
     }
 
+    public function test_restore_grade_filter_with_none_existing() {
+        global $DB;
+
+        $data = $this->setup_courses();
+        $c1 = $data['c1'];
+        $c2 = $data['c2'];
+        $w1 = $data['w1'];
+
+        $fm = $w1->get_filter_manager();
+        $fm->purge();
+
+        $rule = new block_xp_ruleset([new block_xp_rule_property(block_xp_rule_base::CT, 'something', 'eventname')]);
+        block_xp_filter::load_from_data(['rule' => $rule, 'points' => 1, 'courseid' => $c1->id, 'sortorder' => 0,
+            'category' => block_xp_filter::CATEGORY_GRADES])->save();
+
+        $this->assertEquals(1, $DB->count_records('block_xp_filters', ['courseid' => $c1->id,
+            'category' => block_xp_filter::CATEGORY_GRADES]));
+
+        $this->setAdminUser();
+        $backupid = $this->backup($c1);
+
+        $newid = restore_dbops::create_new_course('xptest', 'xptest', $c1->category);
+        $this->restore($backupid, $newid, backup::TARGET_NEW_COURSE);
+
+        // The filter has been restored.
+        $this->assertEquals(1, $DB->count_records('block_xp_filters', ['courseid' => $newid,
+            'category' => block_xp_filter::CATEGORY_GRADES]));
+    }
+
+    public function test_restore_grade_filter_with_one_existing() {
+        global $DB;
+
+        $data = $this->setup_courses();
+        $c1 = $data['c1'];
+        $c2 = $data['c2'];
+        $w1 = $data['w1'];
+
+        $fm = $w1->get_filter_manager();
+        $fm->purge();
+
+        $rule = new block_xp_ruleset([new block_xp_rule_property(block_xp_rule_base::CT, 'something', 'eventname')]);
+        $filter = block_xp_filter::load_from_data(['rule' => $rule, 'points' => 1, 'courseid' => $c1->id, 'sortorder' => 0,
+            'category' => block_xp_filter::CATEGORY_GRADES]);
+        $filter->save();
+
+        $this->assertEquals(1, $DB->count_records('block_xp_filters', ['courseid' => $c1->id,
+            'category' => block_xp_filter::CATEGORY_GRADES]));
+
+        $this->setAdminUser();
+        $backupid = $this->backup($c1);
+
+        $this->restore($backupid, $c1->id, backup::TARGET_CURRENT_ADDING);
+
+        // Another filter has not been created.
+        $this->assertTrue($DB->record_exists('block_xp_filters', ['id' => $filter->get_id()]));
+        $this->assertEquals(1, $DB->count_records('block_xp_filters', ['courseid' => $c1->id,
+            'category' => block_xp_filter::CATEGORY_GRADES]));
+    }
+
+    public function test_restore_grade_filter_with_one_non_ruleset_existing() {
+        global $DB;
+
+        $data = $this->setup_courses();
+        $c1 = $data['c1'];
+        $c2 = $data['c2'];
+        $w1 = $data['w1'];
+
+        $fm = $w1->get_filter_manager();
+        $fm->purge();
+
+        $rule = new block_xp_rule_property(block_xp_rule_base::CT, 'something', 'eventname');
+        $filter = block_xp_filter::load_from_data(['rule' => $rule, 'points' => 1, 'courseid' => $c1->id, 'sortorder' => 0,
+            'category' => block_xp_filter::CATEGORY_GRADES]);
+        $filter->save();
+
+        $this->assertEquals(1, $DB->count_records('block_xp_filters', ['courseid' => $c1->id,
+            'category' => block_xp_filter::CATEGORY_GRADES]));
+
+        $this->setAdminUser();
+        $backupid = $this->backup($c1);
+
+        $this->restore($backupid, $c1->id, backup::TARGET_CURRENT_ADDING);
+
+        // Another filter has not been created.
+        $this->assertTrue($DB->record_exists('block_xp_filters', ['id' => $filter->get_id()]));
+        $this->assertEquals(1, $DB->count_records('block_xp_filters', ['courseid' => $c1->id,
+            'category' => block_xp_filter::CATEGORY_GRADES]));
+    }
+
+    public function test_restore_grade_filter_with_many_existing() {
+        global $DB;
+
+        $data = $this->setup_courses();
+        $c1 = $data['c1'];
+        $c2 = $data['c2'];
+        $w1 = $data['w1'];
+
+        $fm = $w1->get_filter_manager();
+        $fm->purge();
+
+        $rule = new block_xp_ruleset([new block_xp_rule_property(block_xp_rule_base::CT, 'something', 'eventname')]);
+        $filter1 = block_xp_filter::load_from_data(['rule' => $rule, 'points' => 1, 'courseid' => $c1->id, 'sortorder' => 0,
+            'category' => block_xp_filter::CATEGORY_GRADES]);
+        $filter1->save();
+        $rule = new block_xp_ruleset([new block_xp_rule_property(block_xp_rule_base::CT, 'somethingelse', 'eventname')]);
+        $filter2 = block_xp_filter::load_from_data(['rule' => $rule, 'points' => 2, 'courseid' => $c1->id, 'sortorder' => 0,
+            'category' => block_xp_filter::CATEGORY_GRADES]);
+        $filter2->save();
+
+        $this->assertEquals(2, $DB->count_records('block_xp_filters', ['courseid' => $c1->id,
+            'category' => block_xp_filter::CATEGORY_GRADES]));
+
+        $this->setAdminUser();
+        $backupid = $this->backup($c1);
+
+        $this->restore($backupid, $c1->id, backup::TARGET_CURRENT_ADDING);
+
+        // Another filter has not been created.
+        $this->assertTrue($DB->record_exists('block_xp_filters', ['id' => $filter1->get_id()]));
+        $this->assertTrue($DB->record_exists('block_xp_filters', ['id' => $filter2->get_id()]));
+        $this->assertEquals(2, $DB->count_records('block_xp_filters', ['courseid' => $c1->id,
+            'category' => block_xp_filter::CATEGORY_GRADES]));
+    }
+
+    public function test_restore_grade_filter_with_one_empty_existing() {
+        global $DB;
+
+        $data = $this->setup_courses();
+        $c1 = $data['c1'];
+        $c2 = $data['c2'];
+        $w1 = $data['w1'];
+
+        $fm = $w1->get_filter_manager();
+        $fm->purge();
+
+        $rule = new block_xp_ruleset([new block_xp_rule_property(block_xp_rule_base::CT, 'something', 'eventname')]);
+        $filter = block_xp_filter::load_from_data(['rule' => $rule, 'points' => 1, 'courseid' => $c1->id, 'sortorder' => 0,
+            'category' => block_xp_filter::CATEGORY_GRADES]);
+        $filter->save();
+        $origfilterid = $filter->get_id();
+        $this->assertNotEmpty($filter->get_rule()->get_rules());
+
+        // Creating backup with a non-empty rule.
+        $this->setAdminUser();
+        $backupid = $this->backup($c1);
+
+        // Changing existing rule to empty rule.
+        $rule = new block_xp_ruleset([]);
+        $filter->set_rule($rule);
+        $filter->save();
+
+        $record = $DB->get_record('block_xp_filters', ['courseid' => $c1->id,
+            'category' => block_xp_filter::CATEGORY_GRADES]);
+        $dbfilter = block_xp_filter::load_from_data($record);
+        $this->assertEquals($filter->get_id(), $dbfilter->get_id());
+        $this->assertEmpty($filter->get_rule()->get_rules());
+        $this->assertEmpty($dbfilter->get_rule()->get_rules());
+
+        // Restoring the backup.
+        $this->restore($backupid, $c1->id, backup::TARGET_CURRENT_ADDING);
+
+        // The filter has been replaced.
+        $this->assertEquals(1, $DB->count_records('block_xp_filters', ['courseid' => $c1->id,
+            'category' => block_xp_filter::CATEGORY_GRADES]));
+        $record = $DB->get_record('block_xp_filters', ['courseid' => $c1->id,
+            'category' => block_xp_filter::CATEGORY_GRADES]);
+        $filter = block_xp_filter::load_from_data($record);
+        $this->assertEquals($origfilterid, $filter->get_id());
+        $this->assertNotEmpty($filter->get_rule()->get_rules());
+    }
+
     /**
      * Backs a course up to temp directory.
      *
