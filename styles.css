@@ -39,6 +39,9 @@
 .block_xp .xp-mt-2 {
     margin-top: 0.5rem;
 }
+.block_xp .\!xp-mr-1 {
+    margin-right: 0.25rem !important;
+}
 .block_xp .xp-mb-2 {
     margin-bottom: 0.5rem;
 }
@@ -96,6 +99,9 @@
 .block_xp .xp-hidden {
     display: none;
 }
+.block_xp .xp-h-10 {
+    height: 2.5rem;
+}
 .block_xp .xp-h-5 {
     height: 1.25rem;
 }
@@ -108,11 +114,17 @@
 .block_xp .xp-h-auto {
     height: auto;
 }
-.block_xp .xp-w-5 {
-    width: 1.25rem;
+.block_xp .xp-min-h-10 {
+    min-height: 2.5rem;
+}
+.block_xp .xp-min-h-full {
+    min-height: 100%;
 }
 .block_xp .xp-w-full {
     width: 100%;
+}
+.block_xp .xp-w-5 {
+    width: 1.25rem;
 }
 .block_xp .xp-w-8 {
     width: 2rem;
@@ -138,17 +150,23 @@
 .block_xp .xp-min-w-\[3rem\] {
     min-width: 3rem;
 }
-.block_xp .xp-max-w-\[99\%\] {
-    max-width: 99%;
+.block_xp .xp-min-w-px {
+    min-width: 1px;
 }
 .block_xp .xp-max-w-full {
     max-width: 100%;
+}
+.block_xp .xp-max-w-\[99\%\] {
+    max-width: 99%;
 }
 .block_xp .xp-max-w-\[4rem\] {
     max-width: 4rem;
 }
 .block_xp .xp-max-w-\[6rem\] {
     max-width: 6rem;
+}
+.block_xp .xp-max-w-\[80\%\] {
+    max-width: 80%;
 }
 .block_xp .xp-max-w-xs {
     max-width: 20rem;
@@ -367,6 +385,9 @@
 .block_xp .xp-uppercase {
     text-transform: uppercase;
 }
+.block_xp .xp-leading-tight {
+    line-height: 1.25;
+}
 .block_xp .xp-leading-none {
     line-height: 1;
 }
@@ -381,6 +402,11 @@
 }
 .block_xp .xp-no-underline {
     text-decoration-line: none;
+}
+.block_xp .xp-transition-opacity {
+    transition-property: opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
 }
 .block_xp .xp-space-x-1 > :not([hidden]) ~ :not([hidden]) {
     margin-right: 0;
@@ -781,7 +807,6 @@
     margin-left: 20px;
 }
 .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition {
-    line-height: 40px;
     padding-left: 5px;
 }
 .block-xp-filters-wrapper .rule-type-ruleset,
@@ -794,7 +819,6 @@
 }
 .block-xp-filters-wrapper .rule-rules .rule {
     border-left: 1px dotted #ccc;
-    line-height: 40px;
     min-height: 40px;
     padding-left: 15px;
     position: relative;
@@ -840,7 +864,7 @@
 }
 .block-xp-filters-wrapper .filter-delete,
 .block-xp-filters-wrapper .rule-delete {
-    margin: 0 0.5rem;
+    margin-left: 0.5rem;
 }
 .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition .rule-delete,
 .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition .rule-move {
@@ -993,6 +1017,28 @@
 }
 .block_xp .hover\:xp-text-gray-900:hover {
     color: #111827;
+}
+.block_xp .focus\:xp-pointer-events-auto:focus {
+    pointer-events: auto;
+}
+.block_xp .focus\:xp-opacity-100:focus {
+    opacity: 1;
+}
+.block_xp .xp-group:hover .group-hover\:xp-pointer-events-auto {
+    pointer-events: auto;
+}
+.block_xp .xp-group:hover .group-hover\:xp-opacity-100 {
+    opacity: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+
+    .block_xp .supports-hover\:xp-pointer-events-none {
+        pointer-events: none;
+    }
+
+    .block_xp .supports-hover\:xp-opacity-0 {
+        opacity: 0;
+    }
 }
 @media (min-width: 768px) {
 

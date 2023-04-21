@@ -21,6 +21,7 @@ const cssWatchPaths = [
   './classes/form/**/*.php',
   './classes/local/shortcode/handler.php',
   './classes/local/controller/**/*.php',
+  './classes/rule_*.php',
   './css/safelist.txt',
 ].concat(jsUiPaths);
 

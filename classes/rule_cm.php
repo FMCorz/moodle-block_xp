@@ -189,8 +189,14 @@ class block_xp_rule_cm extends block_xp_rule_property {
 
         $o = block_xp_rule::get_form($basename);
         $modules = html_writer::select($options, $basename . '[value]', $this->value, '', array('id' => '', 'class' => ''));
-        $o .= get_string('activityoresourceis', 'block_xp', $modules);
-        $o .= $output->help_icon('rulecm', 'block_xp');
+        $helpicon = $output->help_icon('rulecm', 'block_xp');
+
+        $o .= html_writer::start_div('xp-flex xp-gap-1 xp-min-full');
+        $o .= html_writer::start_div('xp-flex xp-items-center');
+        $o .= get_string('activityoresourceis', 'block_xp', '');
+        $o .= html_writer::end_div();
+        $o .= html_writer::div($modules . $helpicon, 'xp-flex xp-items-center xp-min-w-px xp-whitespace-nowrap');
+        $o .= html_writer::end_div();
 
         return $o;
     }

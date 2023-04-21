@@ -499,21 +499,32 @@ class block_xp_renderer extends plugin_renderer_base {
         $o .= html_writer::start_tag('li', array('class' => 'filter', 'data-basename' => $basename));
 
         if ($filter->is_editable()) {
+            $content = '';
+            $content .= html_writer::start_div('xp-flex xp-min-h-10 xp-group');
 
-            $content = $this->render(new pix_icon('i/dragdrop', get_string('moverule', 'block_xp'), '',
+            $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
+            $content .= $this->render(new pix_icon('i/dragdrop', get_string('moverule', 'block_xp'), '',
                 array('class' => 'iconsmall filter-move')));
+            $content .= html_writer::end_div();
+
+            $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex xp-items-center xp-leading-tight');
             $content .= get_string('awardaxpwhen', 'block_xp',
                 html_writer::empty_tag('input', array(
                     'type' => 'text',
                     'value' => $filter->get_points(),
                     'size' => 3,
                     'name' => $basename . '[points]',
-                    'class' => 'form-control block_xp-form-control-inline'))
+                    'class' => 'form-control block_xp-form-control-inline !xp-mr-1'))
             );
-            $content .= $this->action_link('#', '', null, array('class' => 'filter-delete'),
-                new pix_icon('t/delete', get_string('deleterule', 'block_xp'), '', array('class' => 'iconsmall')));
+            $content .= html_writer::end_div();
 
-            $o .= html_writer::tag('p', $content);
+            $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
+            $content .= $this->render_block_xp_rule_delete_action_link('deleterule', 'filter-delete');
+            $content .= html_writer::end_div();
+
+            $content .= html_writer::end_div();
+
+            $o .= html_writer::div($content, 'xp-group');
             $o .= html_writer::empty_tag('input', array(
                     'type' => 'hidden',
                     'value' => $filter->get_id(),
@@ -546,17 +557,30 @@ class block_xp_renderer extends plugin_renderer_base {
         $iseditable = !empty($options['iseditable']);
         $basename = isset($options['basename']) ? $options['basename'] : '';
         if ($iseditable) {
-            $content = $this->render(new pix_icon('i/dragdrop', get_string('movecondition', 'block_xp'), '',
-                array('class' => 'iconsmall rule-move')));
-            $content .= $rule->get_form($basename);
-            $content .= $this->action_link('#', '', null, array('class' => 'rule-delete'),
-                new pix_icon('t/delete', get_string('deletecondition', 'block_xp'), '', array('class' => 'iconsmall')));
+            $content = '';
+            $content .= html_writer::start_div('xp-flex xp-min-h-10');
+
+            $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
+            $content .= $this->render(new pix_icon('i/dragdrop', get_string('movecondition', 'block_xp'), '',
+                ['class' => 'iconsmall rule-move']));
+            $content .= html_writer::end_div();
+
+            $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex xp-items-center'
+                . ' xp-leading-tight');
+            $content .= html_writer::div($rule->get_form($basename), 'xp-w-full xp-max-w-full');
+            $content .= html_writer::end_div();
+
+            $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
+            $content .= $this->render_block_xp_rule_delete_action_link('deletecondition', 'rule-delete');
+            $content .= html_writer::end_div();
+
+            $content .= html_writer::end_div();
         } else {
             $content = s($rule->get_description());
         }
         $o = '';
-        $o .= html_writer::start_tag('li', array('class' => 'rule rule-type-rule'));
-        $o .= html_writer::tag('p', $content, array('class' => 'rule-definition', 'data-basename' => $basename));
+        $o .= html_writer::start_tag('li', array('class' => 'rule rule-type-rule xp-group'));
+        $o .= html_writer::tag('div', $content, array('class' => 'rule-definition', 'data-basename' => $basename));
         $o .= html_writer::end_tag('li');
         return $o;
     }
@@ -575,15 +599,27 @@ class block_xp_renderer extends plugin_renderer_base {
         $o = '';
         $o .= html_writer::start_tag('li', array('class' => 'rule rule-type-ruleset'));
         if ($iseditable) {
-            $content = $this->render(new pix_icon('i/dragdrop', get_string('movecondition', 'block_xp'), '',
+            $content = '';
+            $content .= html_writer::start_div('xp-flex xp-min-h-10');
+
+            $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
+            $content .= $this->render(new pix_icon('i/dragdrop', get_string('movecondition', 'block_xp'), '',
                 array('class' => 'iconsmall rule-move')));
-            $content .= $ruleset->get_form($basename);
-            $content .= $this->action_link('#', '', null, array('class' => 'rule-delete'),
-                new pix_icon('t/delete', get_string('deletecondition', 'block_xp'), '', array('class' => 'iconsmall')));
+            $content .= html_writer::end_div();
+
+            $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex xp-items-center xp-leading-tight');
+            $content .= html_writer::div($ruleset->get_form($basename));
+            $content .= html_writer::end_div();
+
+            $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
+            $content .= $this->render_block_xp_rule_delete_action_link('deletecondition', 'rule-delete');
+            $content .= html_writer::end_div();
+
+            $content .= html_writer::end_div();
         } else {
             $content = s($ruleset->get_description());
         }
-        $o .= html_writer::tag('p', $content, array('class' => 'rule-definition', 'data-basename' => $basename));
+        $o .= html_writer::tag('div', $content, array('class' => 'rule-definition xp-h-10 xp-group', 'data-basename' => $basename));
         $o .= html_writer::start_tag('ul', array('class' => 'rule-rules', 'data-basename' => $basename . '[rules]'));
         foreach ($ruleset->get_rules() as $rule) {
             if ($iseditable) {
@@ -600,6 +636,22 @@ class block_xp_renderer extends plugin_renderer_base {
         $o .= html_writer::end_tag('ul');
         $o .= html_writer::end_tag('li');
         return $o;
+    }
+
+    /**
+     * Render the delete action icon in rules.
+     *
+     * @param string $str The string identifier for the title.
+     * @param string $classname Classes to add to the action link.
+     * @return string
+     */
+    public function render_block_xp_rule_delete_action_link($str, $classname = '') {
+        $icon = new pix_icon('t/delete', get_string($str, 'block_xp'), '', ['class' => 'iconsmall']);
+        return $this->action_link('#', '', null, [
+            'class' => $classname . ' supports-hover:xp-opacity-0 supports-hover:xp-pointer-events-none'
+                . ' focus:xp-opacity-100 focus:xp-pointer-events-auto'
+                . ' group-hover:xp-opacity-100 group-hover:xp-pointer-events-auto xp-transition-opacity'
+        ], $icon);
     }
 
     /**

@@ -9,6 +9,7 @@ module.exports = {
         './classes/form/**/*.php',
         './classes/local/controller/**/*.php',
         './classes/local/shortcode/handler.php',
+        './classes/rule_*.php',
         './css/safelist.txt',
         './ui/src/**/*.{js,ts,tsx}',
     ],
@@ -20,6 +21,10 @@ module.exports = {
             fontSize: {
                 xxs: '0.6875rem' // 11px.
             },
+            maxWidth: {
+                '4/5': '80%'
+            },
+            minHeight: theme => theme('spacing'),
             minWidth: theme => theme('spacing'),
         },
     },
@@ -66,5 +71,8 @@ module.exports = {
                 }
             );
         }),
+        plugin(function({addVariant}) {
+            addVariant('supports-hover', '@media (hover: hover) and (pointer: fine)');
+        })
     ],
 };

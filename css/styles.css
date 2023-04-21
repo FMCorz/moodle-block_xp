@@ -379,7 +379,6 @@
     margin-left: 20px;
 }
 .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition {
-    line-height: 40px;
     padding-left: 5px;
 }
 .block-xp-filters-wrapper .rule-type-ruleset,
@@ -392,7 +391,6 @@
 }
 .block-xp-filters-wrapper .rule-rules .rule {
     border-left: 1px dotted #ccc;
-    line-height: 40px;
     min-height: 40px;
     padding-left: 15px;
     position: relative;
@@ -438,7 +436,7 @@
 }
 .block-xp-filters-wrapper .filter-delete,
 .block-xp-filters-wrapper .rule-delete {
-    margin: 0 0.5rem;
+    margin-left: 0.5rem;
 }
 .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition .rule-delete,
 .block-xp-filters-wrapper .filter-rules > .rule > .rule-definition .rule-move {

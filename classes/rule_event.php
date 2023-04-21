@@ -119,7 +119,15 @@ class block_xp_rule_event extends block_xp_rule_property {
 
         $modules = html_writer::select($eventslist, $basename . '[value]', $this->value, '',
             array('id' => '', 'class' => ''));
-        $o .= get_string('eventis', 'block_xp', $modules);
+
+        $o .= html_writer::start_div('xp-flex xp-gap-1');
+        $o .= html_writer::start_div('xp-flex xp-items-center');
+        $o .= get_string('eventis', 'block_xp', '');
+        $o .= html_writer::end_div();
+
+        $o .= html_writer::div($modules, 'xp-min-w-px xp-max-w-[80%]');
+        $o .= html_writer::end_div();
+
         return $o;
     }
 

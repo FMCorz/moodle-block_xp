@@ -79,6 +79,9 @@ class block_xp_rule_property extends block_xp_rule_base {
      */
     public function get_form($basename) {
         $o = parent::get_form($basename);
+        $o .= html_writer::start_div('xp-flex xp-gap-1');
+
+        $o .= html_writer::start_div('xp-min-w-px');
         $o .= html_writer::select(array(
                 'eventname' => get_string('property:eventname', 'block_xp'),
                 'component' => get_string('property:component', 'block_xp'),
@@ -86,11 +89,18 @@ class block_xp_rule_property extends block_xp_rule_base {
                 'target' => get_string('property:target', 'block_xp'),
                 'crud' => get_string('property:crud', 'block_xp'),
             ), $basename . '[property]', $this->property, '', array('id' => '', 'class' => ''));
-        $o .= '&nbsp;';
+        $o .= html_writer::end_div();
+
+        $o .= html_writer::start_div('xp-min-w-px');
         $o .= self::get_compare_select($basename);
-        $o .= '&nbsp;';
+        $o .= html_writer::end_div();
+
+        $o .= html_writer::start_div('xp-min-w-px');
         $o .= html_writer::empty_tag('input', array('type' => 'text', 'name' => $basename . '[value]',
             'value' => s($this->value), 'class' => 'form-control block_xp-form-control-inline'));
+        $o .= html_writer::end_div();
+
+        $o .= html_writer::end_div();
         return $o;
     }
 
