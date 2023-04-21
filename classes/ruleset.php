@@ -136,7 +136,7 @@ class block_xp_ruleset extends block_xp_rule {
     /**
      * Import the properties.
      *
-     * @param array $properties Array of properties acquired from {@link self::export()}.
+     * @param array $properties Array of properties acquired from {@see self::export()}.
      * @return exportable
      */
     protected function import(array $properties) {
@@ -214,8 +214,11 @@ class block_xp_ruleset extends block_xp_rule {
     }
 
     /**
-     * Update the rule after a restore.
+     * Update after a restore.
      *
+     * @param string $restoreid The restore ID.
+     * @param int $courseid The course ID.
+     * @param base_logger $logger The logger.
      * @return void
      */
     public function update_after_restore($restoreid, $courseid, base_logger $logger) {

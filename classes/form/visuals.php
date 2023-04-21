@@ -38,6 +38,9 @@ use moodleform;
  */
 class visuals extends moodleform {
 
+    /**
+     * The definition.
+     */
     public function definition() {
         $mform = $this->_form;
         $mform->addElement('filemanager', 'badges', get_string('levelbadges', 'block_xp'), null, $this->_customdata['fmoptions']);

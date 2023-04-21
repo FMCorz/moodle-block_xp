@@ -242,6 +242,8 @@ class config extends moodleform {
 
     /**
      * Set the data.
+     *
+     * @param mixed $name The data.
      */
     public function set_data($data) {
         $data = (array) $data;

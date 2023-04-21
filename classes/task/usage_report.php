@@ -38,10 +38,18 @@ use block_xp\di;
  */
 class usage_report extends \core\task\scheduled_task {
 
+    /**
+     * Get name.
+     *
+     * @return string
+     */
     public function get_name() {
         return get_string('taskusagereport', 'block_xp');
     }
 
+    /**
+     * Execute.
+     */
     public function execute() {
         $config = di::get('config');
 
@@ -64,6 +72,9 @@ class usage_report extends \core\task\scheduled_task {
         di::get('usage_reporter')->report();
     }
 
+    /**
+     * Whether is a local site.
+     */
     protected function is_local_site() {
         global $CFG;
 

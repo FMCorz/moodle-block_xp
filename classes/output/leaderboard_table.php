@@ -137,6 +137,8 @@ class leaderboard_table extends flexible_table {
 
     /**
      * Output the table.
+     *
+     * @param int $pagesize The page size.
      */
     public function out($pagesize) {
         $this->setup();
@@ -349,7 +351,7 @@ class leaderboard_table extends flexible_table {
      * Convert a rank to keyed table data.
      *
      * @param rank $rank The rank object.
-     * @return array Will be passed to {@link self::add_data_keyed}.
+     * @return array Will be passed to {@see self::add_data_keyed}.
      */
     protected function rank_to_keyed_data($rank) {
         $row = (object) [

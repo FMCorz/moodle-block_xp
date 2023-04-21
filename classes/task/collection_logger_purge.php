@@ -38,10 +38,18 @@ use DateTime;
  */
 class collection_logger_purge extends \core\task\scheduled_task {
 
+    /**
+     * Get name.
+     *
+     * @return string
+     */
     public function get_name() {
         return get_string('taskcollectionloggerpurge', 'block_xp');
     }
 
+    /**
+     * Execute.
+     */
     public function execute() {
         $db = \block_xp\di::get('db');
         $config = \block_xp\di::get('config');

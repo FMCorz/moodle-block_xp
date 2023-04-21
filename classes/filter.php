@@ -313,6 +313,9 @@ class block_xp_filter implements renderable {
     /**
      * Update after a restore.
      *
+     * @param string $restoreid The restore ID.
+     * @param int $courseid The course ID.
+     * @param base_logger $logger The logger.
      * @return void
      */
     public function update_after_restore($restoreid, $courseid, base_logger $logger) {

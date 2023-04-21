@@ -40,15 +40,28 @@ use renderable;
  */
 class notice implements renderable {
 
+    /** @const Success. */
     const SUCCESS = 'success';
+    /** @const warning. */
     const WARNING = 'warning';
+    /** @const info. */
     const INFO = 'info';
+    /** @const error. */
     const ERROR = 'error';
 
+    /** @var string The message. */
     public $message;
+    /** @var string The name. */
     public $name;
+    /** @var string The type. */
     public $type;
 
+    /**
+     * Constructor.
+     *
+     * @param string $message The message.
+     * @param string $type The type.
+     */
     public function __construct($message, $type = self::INFO) {
         $this->message = $message;
         $this->type = $type;

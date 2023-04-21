@@ -53,6 +53,8 @@ class filters_widget_element implements renderable {
      *
      * @param renderable $widget The widget, or any renderable really.
      * @param string $title The element's title.
+     * @param string $description The description.
+     * @param help_icon $helpicon The help.
      */
     public function __construct(renderable $widget, $title = null, $description = null, help_icon $helpicon = null) {
         $this->widget = $widget;

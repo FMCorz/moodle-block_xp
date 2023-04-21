@@ -84,7 +84,7 @@ abstract class block_xp_rule_base extends block_xp_rule {
     /**
      * Export the properties and their values.
      *
-     * This must return all the values required by the {@link self::create()} method.
+     * This must return all the values required by the {@see self::create()} method.
      *
      * @return array Keys are properties, values are the values.
      */

@@ -204,6 +204,9 @@ class block_xp_rule_cm extends block_xp_rule_property {
     /**
      * Update the rule after a restore.
      *
+     * @param string $restoreid The restore ID.
+     * @param int $courseid The course ID.
+     * @param base_logger $logger The logger.
      * @return void
      */
     public function update_after_restore($restoreid, $courseid, base_logger $logger) {

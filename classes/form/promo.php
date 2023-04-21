@@ -40,6 +40,9 @@ use moodleform;
  */
 class promo extends moodleform {
 
+    /**
+     * Definition.
+     */
     public function definition() {
         global $USER;
         $mform = $this->_form;

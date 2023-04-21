@@ -80,6 +80,15 @@ class xp_widget implements renderable, templatable {
     /** @var bool Whether to show the diffs in the ranking snapshot.  */
     public $showdiffsinrankingsnapshot = true;
 
+    /**
+     * Constructor.
+     *
+     * @param state $state The state.
+     * @param array $recentactivity The recent activity.
+     * @param renderable|null $intro The introduction text.
+     * @param array $actions The actions.
+     * @param moodle_url|null $recentactivityurl The URL to see more.
+     */
     public function __construct(state $state, array $recentactivity, renderable $intro = null, array $actions,
             moodle_url $recentactivityurl = null) {
 
@@ -95,46 +104,112 @@ class xp_widget implements renderable, templatable {
         });
     }
 
+    /**
+     * Add a manager notice.
+     *
+     * @param lang_string $managernotice The notice.
+     * @return void
+     */
     public function add_manager_notice(lang_string $managernotice) {
         $this->managernotices[] = $managernotice;
     }
 
+    /**
+     * Set param.
+     *
+     * @param mixed $value The value.
+     */
     public function set_force_recent_activity($value) {
         $this->forcerecentactivity = (bool) $value;
     }
 
+    /**
+     * Set intro.
+     *
+     * @param renderable $intro The intro.
+     */
+    public function set_intro(renderable $intro) {
+        $this->intro = $intro;
+    }
+
+    /**
+     * Set next level.
+     *
+     * @param level $nextlevel The next level.
+     */
     public function set_next_level(level $nextlevel = null) {
         $this->nextlevel = $nextlevel;
     }
 
+    /**
+     * Set show next level.
+     *
+     * @param bool $shownextlevel The value.
+     */
     public function set_show_next_level($shownextlevel) {
         $this->shownextlevel = $shownextlevel;
     }
 
+    /**
+     * Set rank.
+     *
+     * @param rank $rank The rank.
+     */
     public function set_rank(rank $rank = null) {
         $this->rank = $rank;
     }
 
+    /**
+     * Set rank is relative.
+     *
+     * @param bool $rankisrel The value.
+     */
     public function set_rank_is_rel($rankisrel) {
         $this->rankisrel = $rankisrel;
     }
 
+    /**
+     * Set show diff.
+     *
+     * @param bool $showdiffs The value.
+     */
     public function set_show_diffs_in_ranking_snapshot($showdiffs) {
         $this->showdiffsinrankingsnapshot = $showdiffs;
     }
 
+    /**
+     * Set show rank.
+     *
+     * @param bool $showrank The value.
+     */
     public function set_show_rank($showrank) {
         $this->showrank = $showrank;
     }
 
+    /**
+     * Set ranking snapshot.
+     *
+     * @param rank[] $rankingsnapshot The ranking snapshot.
+     */
     public function set_ranking_snapshot($rankingsnapshot) {
         $this->rankingsnapshot = $rankingsnapshot;
     }
 
+    /**
+     * Set show ranking snapshot.
+     *
+     * @param bool $showrankingsnapshot The value.
+     */
     public function set_show_ranking_snapshot($showrankingsnapshot) {
         $this->showrankingsnapshot = $showrankingsnapshot;
     }
 
+    /**
+     * Export for template.
+     *
+     * @param renderer_base $renderer The renderer.
+     * @return array
+     */
     public function export_for_template(renderer_base $renderer) {
         $level = $this->state->get_level();
         $badgehtml = $renderer->level_badge($level);

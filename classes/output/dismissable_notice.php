@@ -38,8 +38,16 @@ use renderable;
  */
 class dismissable_notice extends notice {
 
+    /** @var string The name. */
     public $name;
 
+    /**
+     * Constructor.
+     *
+     * @param string $message The message.
+     * @param string $name The name.
+     * @param string $type The type.
+     */
     public function __construct($message, $name, $type = self::INFO) {
         if (!preg_match('/^[a-z0-9_-]+$/', $name)) {
             throw new \coding_exception('Invalid name for a notice.');

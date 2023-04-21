@@ -39,9 +39,9 @@ abstract class block_xp_rule implements renderable {
      * This method helps restoring a tree of rules without having to check
      * what the first rule is. Simply call block_xp_rule::create($properties).
      *
-     * This then calls the method {@link self::import()}.
+     * This then calls the method {@see self::import()}.
      *
-     * @param array $properties Array of properties acquired from {@link self::export()}.
+     * @param array $properties Array of properties acquired from {@see self::export()}.
      * @return block_xp_rule|false The rule object.
      */
     public static function create(array $properties) {
@@ -130,6 +130,9 @@ abstract class block_xp_rule implements renderable {
     /**
      * Update the rule after a restore.
      *
+     * @param string $restoreid The restore ID.
+     * @param int $courseid The course ID.
+     * @param base_logger $logger The logger.
      * @return void
      */
     public function update_after_restore($restoreid, $courseid, base_logger $logger) {
