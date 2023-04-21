@@ -57,6 +57,8 @@ class map_iterator extends IteratorIterator {
         $this->callback = $callback;
     }
 
+    // @codingStandardsIgnoreLine.
+    #[\ReturnTypeWillChange]
     /**
      * Returns the current element.
      *
