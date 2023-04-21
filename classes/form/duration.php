@@ -54,31 +54,31 @@ class block_xp_form_duration extends \MoodleQuickForm_duration {
     /**
      * Real constructor.
      *
-     * @param string $elementName Name.
-     * @param string $elementLabel Label.
+     * @param string $elementname Name.
+     * @param string $elementlabel Label.
      * @param array $options Options.
      * @param array $attributes Attributes.
      */
-    public function __construct($elementName = null, $elementLabel = null, $options = [], $attributes = null) {
+    public function __construct($elementname = null, $elementlabel = null, $options = [], $attributes = null) {
         if (isset($options['maxunit'])) {
             $this->_options['maxunit'] = $options['maxunit'];
         }
-        \MoodleQuickForm_duration::__construct($elementName, $elementLabel, $options, $attributes);
+        \MoodleQuickForm_duration::__construct($elementname, $elementlabel, $options, $attributes);
     }
 
     /**
      * Ugly constructor override...
      *
-     * @param string $elementName Name.
-     * @param string $elementLabel Label.
+     * @param string $elementname Name.
+     * @param string $elementlabel Label.
      * @param array $options Options.
      * @param array $attributes Attributes.
      */
-    function block_xp_form_duration($elementName = null, $elementLabel = null, $options = [], $attributes = null) {
+    public function block_xp_form_duration($elementname = null, $elementlabel = null, $options = [], $attributes = null) {
         if (isset($options['maxunit'])) {
             $this->_options['maxunit'] = $options['maxunit'];
         }
-        $this->MoodleQuickForm_duration($elementName, $elementLabel, $options, $attributes);
+        $this->MoodleQuickForm_duration($elementname, $elementlabel, $options, $attributes);
     }
 
     /**

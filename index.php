@@ -33,6 +33,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// @codingStandardsIgnoreLine
 require(__DIR__ . '/../../config.php');
 
 \block_xp\di::get('router')->dispatch();

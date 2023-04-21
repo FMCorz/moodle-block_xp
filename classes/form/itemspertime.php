@@ -60,29 +60,29 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
     /**
      * Real constructor.
      *
-     * @param string $elementName Name.
-     * @param string $elementLabel Label.
+     * @param string $elementname Name.
+     * @param string $elementlabel Label.
      * @param array $options Options.
      * @param array $attributes Attributes.
      */
-    public function __construct($elementName = null, $elementLabel = null, $options = [], $attributes = null) {
+    public function __construct($elementname = null, $elementlabel = null, $options = [], $attributes = null) {
         $options = (array) $options;
         $this->_options = array_merge($this->_options, $options);
-        \MoodleQuickForm_group::__construct($elementName, $elementLabel, $attributes);
+        \MoodleQuickForm_group::__construct($elementname, $elementlabel, $attributes);
     }
 
     /**
      * Ugly constructor override...
      *
-     * @param string $elementName Name.
-     * @param string $elementLabel Label.
+     * @param string $elementname Name.
+     * @param string $elementlabel Label.
      * @param array $options Options.
      * @param array $attributes Attributes.
      */
-    function block_xp_form_itemspertime($elementName = null, $elementLabel = null, $options = [], $attributes = null) {
+    public function block_xp_form_itemspertime($elementname = null, $elementlabel = null, $options = [], $attributes = null) {
         $options = (array) $options;
         $this->_options = array_merge($this->_options, $options);
-        $this->MoodleQuickForm_group($elementName, $elementLabel, $attributes);
+        $this->MoodleQuickForm_group($elementname, $elementlabel, $attributes);
     }
 
     /**
@@ -134,7 +134,7 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
      *
      * @return void
      */
-    function _createElements() {
+    function _createElements() { // @codingStandardsIgnoreLine
         $this->_elements = [];
 
         $item = $this->my_create_element('text', 'points', $this->_options['itemlabel'], [
@@ -193,7 +193,7 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
      * @param object $caller calling object
      * @return bool
      */
-    function onQuickFormEvent($event, $arg, &$caller) {
+    function onQuickFormEvent($event, $arg, &$caller) { // @codingStandardsIgnoreLine
         if (method_exists($this, 'setMoodleForm')) {
             $this->setMoodleForm($caller);
         }
@@ -263,15 +263,15 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
      * Output a timestamp. Give it the name of the group.
      * Override of standard quickforms method.
      *
-     * @param  array $submitValues
+     * @param  array $submitvalues
      * @param  bool  $notused Not used.
      * @return array field name => value. The value is the time interval in seconds.
      */
-    function exportValue(&$submitValues, $notused = false) {
+    function exportValue(&$submitvalues, $notused = false) { // @codingStandardsIgnoreLine
         // Get the values from all the child elements.
         $values = [];
         foreach ($this->_elements as $element) {
-            $thisexport = $element->exportValue($submitValues[$this->getName()], true);
+            $thisexport = $element->exportValue($submitvalues[$this->getName()], true);
             if ($thisexport !== null) {
                 $values += $thisexport;
             }

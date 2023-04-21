@@ -223,7 +223,7 @@ class block_xp_rule_cm extends block_xp_rule_property {
      * @return void
      */
     protected static function init_page_requirements() {
-        global $PAGE, $COURSE;
+        global $PAGE, $COURSE; // @codingStandardsIgnoreLine
 
         static $alreadydone = false;
         if ($alreadydone) {
@@ -238,8 +238,10 @@ class block_xp_rule_cm extends block_xp_rule_property {
             $args = array_intersect_key((array) $COURSE, array_flip(['id', 'fullname', 'displayname', 'shortname', 'categoryid']));
         }
 
+        // @codingStandardsIgnoreStart
         $PAGE->requires->js_call_amd('block_xp/cm-rule', 'init', $args);
         $PAGE->requires->strings_for_js(['cmselector', 'rulecmdescwithcourse'], 'block_xp');
+        // @codingStandardsIgnoreEnd
     }
 
 }

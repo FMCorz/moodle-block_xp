@@ -29,6 +29,7 @@
 
 define('AJAX_SCRIPT', true);
 
+// @codingStandardsIgnoreLine
 require(__DIR__ . '/../../config.php');
 
 \block_xp\di::get('ajax_router')->dispatch();

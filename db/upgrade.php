@@ -156,7 +156,7 @@ function xmldb_block_xp_upgrade($oldversion) {
 
         // Define field enablecustomlevelbadges to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
-        $field = new xmldb_field('enablecustomlevelbadges', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'enablelevelupnotif');
+        $field = new xmldb_field('enablecustomlevelbadges', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'enablelevelupnotif'); // @codingStandardsIgnoreLine
 
         // Conditionally launch add field enablecustomlevelbadges.
         if (!$dbman->field_exists($table, $field)) {
@@ -171,7 +171,7 @@ function xmldb_block_xp_upgrade($oldversion) {
 
         // Define field maxactionspertime to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
-        $field = new xmldb_field('maxactionspertime', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '10', 'enablecustomlevelbadges');
+        $field = new xmldb_field('maxactionspertime', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '10', 'enablecustomlevelbadges'); // @codingStandardsIgnoreLine
 
         // Conditionally launch add field maxactionspertime.
         if (!$dbman->field_exists($table, $field)) {
@@ -186,7 +186,7 @@ function xmldb_block_xp_upgrade($oldversion) {
 
         // Define field timeformaxactions to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
-        $field = new xmldb_field('timeformaxactions', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '60', 'maxactionspertime');
+        $field = new xmldb_field('timeformaxactions', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '60', 'maxactionspertime'); // @codingStandardsIgnoreLine
 
         // Conditionally launch add field timeformaxactions.
         if (!$dbman->field_exists($table, $field)) {
@@ -201,7 +201,7 @@ function xmldb_block_xp_upgrade($oldversion) {
 
         // Define field timebetweensameactions to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
-        $field = new xmldb_field('timebetweensameactions', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '180', 'timeformaxactions');
+        $field = new xmldb_field('timebetweensameactions', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '180', 'timeformaxactions'); // @codingStandardsIgnoreLine
 
         // Conditionally launch add field timebetweensameactions.
         if (!$dbman->field_exists($table, $field)) {
@@ -543,7 +543,7 @@ function xmldb_block_xp_upgrade($oldversion) {
 
         // Define field blockrankingsnapshot to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
-        $field = new xmldb_field('blockrankingsnapshot', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'blockrecentactivity');
+        $field = new xmldb_field('blockrankingsnapshot', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'blockrecentactivity'); // @codingStandardsIgnoreLine
 
         // Conditionally launch add field blockrankingsnapshot.
         if (!$dbman->field_exists($table, $field)) {

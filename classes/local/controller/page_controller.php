@@ -165,7 +165,6 @@ abstract class page_controller extends course_route_controller {
             }
         }
 
-
         $config = $this->world->get_config();
         $context = $this->world->get_context();
         $blocktitle = $config->get('blocktitle');

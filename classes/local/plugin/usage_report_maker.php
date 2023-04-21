@@ -139,9 +139,11 @@ class usage_report_maker {
             return null;
         }
 
+        // @codingStandardsIgnoreStart
         $TOTARA = new \stdClass();
         include($CFG->dirroot . '/version.php');
         return isset($TOTARA->version) ? $TOTARA->version : null;
+        // @codingStandardsIgnoreEnd
     }
 
     /**

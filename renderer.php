@@ -56,7 +56,6 @@ class block_xp_renderer extends plugin_renderer_base {
         $level = (int) $options['level'];
         $actions = (array) $options['actions'];
         $intro = !empty($options['intro']) ? $options['intro'] : null;
-        /** @var \help_icon|null */
         $help = $options['help'] instanceof \help_icon ? $options['help'] : null;
 
         $o = '';
@@ -507,7 +506,8 @@ class block_xp_renderer extends plugin_renderer_base {
                 array('class' => 'iconsmall filter-move')));
             $content .= html_writer::end_div();
 
-            $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex xp-items-center xp-leading-tight');
+            $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex'
+                . ' xp-items-center xp-leading-tight');
             $content .= get_string('awardaxpwhen', 'block_xp',
                 html_writer::empty_tag('input', array(
                     'type' => 'text',
@@ -607,7 +607,8 @@ class block_xp_renderer extends plugin_renderer_base {
                 array('class' => 'iconsmall rule-move')));
             $content .= html_writer::end_div();
 
-            $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex xp-items-center xp-leading-tight');
+            $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex'
+                . ' xp-items-center xp-leading-tight');
             $content .= html_writer::div($ruleset->get_form($basename));
             $content .= html_writer::end_div();
 
