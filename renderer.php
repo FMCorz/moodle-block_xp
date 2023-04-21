@@ -42,6 +42,9 @@ use block_xp\output\xp_widget;
  */
 class block_xp_renderer extends plugin_renderer_base {
 
+    /** @const Notice flag. */
+    const NOTICE_FLAG_QUEST = 'block_xp_notice_quest';
+
     /** @var string Notices flag. */
     protected $noticesflag = 'block_xp_notices';
 
@@ -273,26 +276,64 @@ class block_xp_renderer extends plugin_renderer_base {
             return $o;
         }
 
-        if (!get_user_preferences($this->noticesflag, false)) {
+        $notice = null;
+        $candidates = [
+            [
+                static::NOTICE_FLAG_QUEST,
+                function() {
+                    $questblogurl = new moodle_url('https://www.levelup.plus/blog/quest-moodle-gamification-plugin?ref=xp_notice');
+                    $questurl = new moodle_url('https://www.levelup.plus/quest?ref=xp_notice');
+                    return strip_tags(markdown_to_html(get_string('questreleasenotice', 'block_xp', (object) array(
+                        'questblogurl' => $questblogurl->out(false),
+                        'questurl' => $questurl->out(false)
+                    ))), '<a><em><strong>');
+                }
+            ], [
+                $this->noticesflag,
+                function() {
+                    $moodleorgurl = new moodle_url('https://moodle.org/plugins/view.php?plugin=block_xp');
+                    $githuburl = new moodle_url('https://github.com/FMCorz/moodle-block_xp');
+                    return get_string('likenotice', 'block_xp', (object) array(
+                        'moodleorg' => $moodleorgurl->out(),
+                        'github' => $githuburl->out()
+                    ));
+                }
+            ]
+        ];
+        foreach ($candidates as $candidate) {
+            if (!get_user_preferences($candidate[0], false)) {
+                $notice = $candidate;
+                break;
+            }
+        }
+
+        if ($notice) {
+            [$flag, $textfn] = $notice;
+
             require_once($CFG->libdir . '/ajax/ajaxlib.php');
-            user_preference_allow_ajax_update($this->noticesflag, PARAM_BOOL);
+            user_preference_allow_ajax_update($flag, PARAM_BOOL);
 
-            $moodleorgurl = new moodle_url('https://moodle.org/plugins/view.php?plugin=block_xp');
-            $githuburl = new moodle_url('https://github.com/FMCorz/moodle-block_xp');
-            $text = get_string('likenotice', 'block_xp', (object) array(
-                'moodleorg' => $moodleorgurl->out(),
-                'github' => $githuburl->out()
-            ));
-
-            $this->page->requires->js_init_call("Y.one('.block-xp-rocks').on('click', function(e) {
-                e.preventDefault();
-                M.util.set_user_preference('" . $this->noticesflag . "', 1);
-                Y.one('.block-xp-notices').hide();
+            $this->page->requires->js_amd_inline("require([], function() {
+                const flag = '$flag';
+                const n = document.querySelector('.block-xp-rocks');
+                if (!n) return;
+                n.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    M.util.set_user_preference($flag, 1);
+                    const notice = document.querySelector('.block-xp-notices');
+                    if (!notice) return;
+                    notice.style.display = 'none';
+                });
             });");
 
             $icon = new pix_icon('t/close', get_string('dismissnotice', 'block_xp'), 'block_xp');
             $actionicon = $this->action_icon(new moodle_url($this->page->url), $icon, null, array('class' => 'block-xp-rocks'));
-            $text .= html_writer::div($actionicon, 'dismiss-action');
+
+            $text = html_writer::start_div('xp-flex xp-gap-1');
+            $text .= html_writer::div($textfn(), 'xp-flex-1 [&_a]:xp-font-normal [&_a]:xp-underline');
+            $text .= html_writer::div($actionicon, 'xp-grow-0 dismiss-action');
+            $text .= html_writer::end_div();
+
             $o .= html_writer::div($this->notification_without_close($text, 'success'),
                 'block_xp-dismissable-notice block-xp-notices');
         }

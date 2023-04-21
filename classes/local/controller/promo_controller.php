@@ -153,7 +153,7 @@ class promo_controller extends route_controller {
      */
     protected function content_not_installed() {
         $output = \block_xp\di::get('renderer');
-        $siteurl = "https://levelup.plus?ref=plugin_promopage";
+        $siteurl = "https://www.levelup.plus/xp/?ref=plugin_promopage";
 
         if (!$this->is_admin_page()) {
             $config = $this->world->get_config();
@@ -205,10 +205,10 @@ class promo_controller extends route_controller {
     <tr>
         <td><img src="{$output->pix_url('noun/checklist', 'block_xp')}" alt=""></td>
         <td>
-            <h4>Additional reward methods $new</h4>
+            <h4>Additional reward methods</h4>
             <p>More control and methods to award points!</p>
             <ul>
-            <li><strong>Drops</strong>: award points by placing code snippets anywhere $new</li>
+            <li><strong>Drops</strong>: award points by placing code snippets anywhere</li>
             <li>Convert <strong>grades</strong> into points</li>
             <li>Reward <strong>activity</strong> and <strong>course completion</strong></li>
             </ul>
@@ -256,10 +256,10 @@ class promo_controller extends route_controller {
     <tr>
         <td><img src="{$output->pix_url('noun/export', 'block_xp')}" alt=""></td>
         <td>
-            <h4>Import, export &amp; report $new</h4>
+            <h4>Import, export &amp; report</h4>
             <p>Better control and information about your learners' actions.</p>
             <ul>
-                <li><strong>Export everything</strong>: leaderboards, logs and reports $new</li>
+                <li><strong>Export everything</strong>: leaderboards, logs and reports</li>
                 <li>Allocate <strong>points in bulk</strong> from an imported CSV file</li>
                 <li>Logs contain <strong>human-friendly</strong> descriptions and originating locations</li>
             </ul>
@@ -271,19 +271,8 @@ class promo_controller extends route_controller {
             <h4>Change the meaning of points</h4>
             <p>Replace the "XP" symbol to give another meaning to the points awarded.</p>
             <ul>
-                <li>Use carrots, gems, thumbs up, reputation points...</li>
-                <li>It's your call, <strong>use any symbol</strong> you want!</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('noun/favorite-mobile', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Mobile app support</h4>
-            <p>Access Level Up XP in the official <strong>Mobile app</strong>.</p>
-            <ul>
-                <li>See current level and progress</li>
-                <li>Access the leaderboard</li>
+                <li>Choose one of the built-in symbols: 🧱, 💧, 🍃, 💡, 🧩, ⭐</li>
+                <li>Or make your own symbol by uploading an image.</li>
             </ul>
         </td>
     </tr>
@@ -293,7 +282,8 @@ class promo_controller extends route_controller {
             <h4>Additional level badges</h4>
             <p>Celebrate learners achievements with more badges.</p>
             <ul>
-                <li><strong>Three new sets</strong> of level badges</li>
+                <li><strong>Five new sets</strong> of level badges</li>
+                <li>From cute characters, to progressive levels such as a seed growing into a tree</li>
             </ul>
         </td>
     </tr>
@@ -332,12 +322,10 @@ EOT;
     protected function content_installed() {
         $output = \block_xp\di::get('renderer');
         $addon = \block_xp\di::get('addon');
-        $siteurl = new url('https://levelup.plus?ref=localxp_promopage');
-        $docsurl = new url('https://docs.levelup.plus/xp/docs?ref=localxp_promopage');
-        $recoverurl = new url('https://levelup.plus/recover?ref=localxp_promopage');
-        $releasenotesurl = new url('https://docs.levelup.plus/xp/release-notes?ref=localxp_promopage');
-        $upgradeurl = new url('https://docs.levelup.plus/xp/docs/upgrade?ref=localxp_promopage');
-        $outofsyncurl = new url('https://docs.levelup.plus/xp/docs/troubleshooting/plugins-out-of-sync?ref=localxp_promopage');
+        $docsurl = new url('https://docs.levelup.plus/xp/docs?ref=plugin_promopage');
+        $releasenotesurl = new url('https://docs.levelup.plus/xp/release-notes?ref=plugin_promopage');
+        $upgradeurl = new url('https://docs.levelup.plus/xp/docs/upgrade?ref=plugin_promopage');
+        $outofsyncurl = new url('https://docs.levelup.plus/xp/docs/troubleshooting/plugins-out-of-sync?ref=plugin_promopage');
 
         if (!$this->is_admin_page()) {
             $config = $this->world->get_config();

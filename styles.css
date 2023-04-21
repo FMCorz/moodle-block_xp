@@ -171,17 +171,20 @@
 .block_xp .xp-max-w-xs {
     max-width: 20rem;
 }
-.block_xp .xp-flex-none {
-    flex: none;
-}
 .block_xp .xp-flex-1 {
     flex: 1 1 0%;
+}
+.block_xp .xp-flex-none {
+    flex: none;
 }
 .block_xp .xp-flex-2 {
     flex: 2 2 0%;
 }
 .block_xp .xp-grow {
     flex-grow: 1;
+}
+.block_xp .xp-grow-0 {
+    flex-grow: 0;
 }
 .block_xp .xp-flex-row {
     flex-direction: row;
@@ -210,14 +213,14 @@
 .block_xp .xp-gap-4 {
     gap: 1rem;
 }
+.block_xp .xp-gap-1 {
+    gap: 0.25rem;
+}
 .block_xp .xp-gap-2 {
     gap: 0.5rem;
 }
 .block_xp .xp-gap-3 {
     gap: 0.75rem;
-}
-.block_xp .xp-gap-1 {
-    gap: 0.25rem;
 }
 .block_xp .xp-gap-6 {
     gap: 1.5rem;
@@ -1104,6 +1107,12 @@
         margin-top: 0.25rem;
         margin-bottom: 0;
     }
+}
+.block_xp .\[\&_a\]\:xp-font-normal a {
+    font-weight: 400;
+}
+.block_xp .\[\&_a\]\:xp-underline a {
+    text-decoration-line: underline;
 }
 .block_xp .\[\&\>\*\]\:xp-mx-auto>* {
     margin-left: auto;

@@ -132,7 +132,7 @@ class config extends moodleform {
             $worldconfig = $world->get_config();
             $timeframe = max(0, $worldconfig->get('timebetweensameactions'), $worldconfig->get('timeformaxactions'));
 
-            $promourl = new moodle_url('https://levelup.plus');
+            $promourl = new moodle_url('https://www.levelup.plus');
             if (!empty($this->_customdata['promourl'])) {
                 $promourl = $this->_customdata['promourl'];
             }
