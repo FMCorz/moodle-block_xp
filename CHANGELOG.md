@@ -1,6 +1,30 @@
 Changelog
 =========
 
+v3.14.0
+-------
+
+Quality of life
+
+- Adjusted styles and rules for better flow and readability
+
+Bug fixes
+
+- Prevent narrow page layout from extending out of bounds
+- Restoring backup into existing course honours delete contents option
+- Remove notices about deprecated events for debug users
+- Other minor fixes and improvements
+
+Technical changes
+
+- Raised minimum required version to Moodle 3.4
+- Compatibility with Moodle 4.2
+- Compatibility with PHP 8.1
+
+Notes
+
+- We are proud to have released [Quest](https://www.levelup.plus/quest?ref=release-notes), another gamification plugin. Read our [launch post here](https://www.levelup.plus/blog/quest-moodle-gamification-plugin?ref=release-notes).
+
 v3.13.3
 -------
 
