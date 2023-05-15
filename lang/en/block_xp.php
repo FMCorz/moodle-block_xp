@@ -234,7 +234,7 @@ $string['promocheatguard'] = 'This cheat guard is not designed to cover long tim
 $string['promointro'] = 'Become the game master, and unleash Level Up XP to its full potential. Unlock additional features with Level Up XP+!';
 $string['promointroinstalled'] = 'The add-on _Level Up XP+_ is installed on your system and all of its features have been enabled.';
 $string['promorulesdidyouknow'] = 'Did you know that with <em>Level Up XP+</em> students can receive points for <em>completing courses</em> and <em>activities</em>, or even receive points according to their <em>grades</em>? <a href="{$a->url}">Discover more here</a>.';
-$string['questreleasenotice'] = ' We are excited to announce our **new gamification plugin** called **Level Up Quest** . Turn your courses into **exciting adventures**, filled with **re-engagement strategies** and **celebrations** ! Check out [Quest\'s website]({$a->questurl}) and our [launch post here]({$a->questblogurl}). ';
+$string['questreleasenotice'] = 'We are excited to announce our **new gamification plugin** called **Level Up Quest** . Turn your courses into **exciting adventures**, filled with **re-engagement strategies** and **celebrations** ! Check out [Quest\'s website]({$a->questurl}) and our [launch post here]({$a->questblogurl}). ';
 $string['rank'] = 'Rank';
 $string['ranking'] = 'Ranking';
 $string['ranking_help'] = 'The rank is the absolute position of the current user in the leaderboard. The relative rank is the difference in experience points between a user and their neighbours.';
