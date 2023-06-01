@@ -1,11 +1,16 @@
 language: php
 
+dist: focal
+
 addons:
-  postgresql: "9.6"
+  postgresql: '13'
+  apt:
+    packages:
+      - postgresql-13
+      - postgresql-client-13
 
 services:
   - mysql
-  - postgresql
   - docker
 
 cache:
@@ -14,29 +19,31 @@ cache:
     - $HOME/.npm
 
 php:
+  - 8.1
+  - 8.0
   - 7.4
-  - 7.3
-  - 7.2
-  - 7.1
-  - 7.0
+  # - 7.3
+  # - 7.2
+  # - 7.1
+  # - 7.0
 
 env:
   global:
+    - PGVER=13
     # Copy/paste from XMLDBEditor should not be linted.
     # Custom form elements are formatted according for formslib, which doesn't match Moodle's style.
     - IGNORE_PATHS=db/upgrade.php,classes/form/duration.php,classes/form/itemspertime.php
 
   matrix:
-    - MOODLE_BRANCH=MOODLE_32_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_33_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_35_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_36_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_37_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_38_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_39_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_310_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_310_STABLE DB=mysqli
+    - MOODLE_BRANCH=MOODLE_311_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_312_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_400_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_401_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_402_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_402_STABLE DB=mysqli
     - MOODLE_BRANCH=master DB=pgsql
 
 matrix:
@@ -51,7 +58,17 @@ matrix:
     - php: 7.0
       env: MOODLE_BRANCH=MOODLE_310_STABLE DB=pgsql
     - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_310_STABLE DB=mysqli
+      env: MOODLE_BRANCH=MOODLE_311_STABLE DB=pgsql
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_312_STABLE DB=pgsql
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_400_STABLE DB=pgsql
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_401_STABLE DB=pgsql
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=pgsql
+    - php: 7.0
+      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=mysqli
     - php: 7.0
       env: MOODLE_BRANCH=master DB=pgsql
 
@@ -61,44 +78,62 @@ matrix:
     - php: 7.1
       env: MOODLE_BRANCH=MOODLE_310_STABLE DB=pgsql
     - php: 7.1
-      env: MOODLE_BRANCH=MOODLE_310_STABLE DB=mysqli
+      env: MOODLE_BRANCH=MOODLE_311_STABLE DB=pgsql
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_312_STABLE DB=pgsql
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_400_STABLE DB=pgsql
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_401_STABLE DB=pgsql
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=pgsql
+    - php: 7.1
+      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=mysqli
     - php: 7.1
       env: MOODLE_BRANCH=master DB=pgsql
 
-    # Exclude builds not compatible with 7.2.
-    - php: 7.2
-      env: MOODLE_BRANCH=MOODLE_32_STABLE DB=pgsql
-    - php: 7.2
-      env: MOODLE_BRANCH=MOODLE_33_STABLE DB=pgsql
-
     # Exclude builds not compatible with 7.3.
-    - php: 7.3
-      env: MOODLE_BRANCH=MOODLE_32_STABLE DB=pgsql
-    - php: 7.3
-      env: MOODLE_BRANCH=MOODLE_33_STABLE DB=pgsql
     - php: 7.3
       env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
     - php: 7.3
-      env: MOODLE_BRANCH=MOODLE_35_STABLE DB=pgsql
+      env: MOODLE_BRANCH=MOODLE_401_STABLE DB=pgsql
+    - php: 7.3
+      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=pgsql
+    - php: 7.3
+      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=mysqli
+    - php: 7.3
+      env: MOODLE_BRANCH=master DB=pgsql
 
     # Exclude builds not compatible with 7.4.
     - php: 7.4
-      env: MOODLE_BRANCH=MOODLE_32_STABLE DB=pgsql
-    - php: 7.4
-      env: MOODLE_BRANCH=MOODLE_33_STABLE DB=pgsql
-    - php: 7.4
       env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
-    - php: 7.4
-      env: MOODLE_BRANCH=MOODLE_35_STABLE DB=pgsql
-    - php: 7.4
-      env: MOODLE_BRANCH=MOODLE_36_STABLE DB=pgsql
-    - php: 7.4
-      env: MOODLE_BRANCH=MOODLE_37_STABLE DB=pgsql
+
+    # Exclude builds not compatible with 8.0.
+    - php: 8.0
+      env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
+    - php: 8.0
+      env: MOODLE_BRANCH=MOODLE_39_STABLE DB=pgsql
+    - php: 8.0
+      env: MOODLE_BRANCH=MOODLE_310_STABLE DB=pgsql
+
+    # Exclude builds not compatible with 8.1.
+    - php: 8.1
+      env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
+    - php: 8.1
+      env: MOODLE_BRANCH=MOODLE_39_STABLE DB=pgsql
+    - php: 8.1
+      env: MOODLE_BRANCH=MOODLE_310_STABLE DB=pgsql
+    - php: 8.1
+      env: MOODLE_BRANCH=MOODLE_311_STABLE DB=pgsql
+    - php: 8.1
+      env: MOODLE_BRANCH=MOODLE_400_STABLE DB=pgsql
 
 before_install:
+  - if [[ ${TRAVIS_PHP_VERSION:0:1} -gt 7 ]]; then pecl install xmlrpc-beta; fi
+  - echo 'max_input_vars=5000' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv config-rm xdebug.ini
   - cd ../..
-  - composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
+  - composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:
