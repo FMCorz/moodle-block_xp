@@ -34,34 +34,20 @@ jobs:
       fail-fast: false
       matrix:
         php: ['7.4', '8.0', '8.1']
-        moodle-branch:
-          [
-            'MOODLE_39_STABLE',
-            'MOODLE_310_STABLE',
-            'MOODLE_311_STABLE',
-            'MOODLE_400_STABLE',
-            'MOODLE_401_STABLE',
-            'MOODLE_402_STABLE',
-            'master',
-          ]
+        moodle-branch: ['MOODLE_39_STABLE', 'MOODLE_311_STABLE', 'MOODLE_400_STABLE', 'MOODLE_401_STABLE', 'MOODLE_402_STABLE']
         database: [pgsql]
         include:
           - moodle-branch: MOODLE_402_STABLE
             database: mariadb
+            php: 8.1
         exclude:
           - moodle-branch: MOODLE_39_STABLE
             php: 7.4
-          - moodle-branch: MOODLE_420_STABLE
-            php: 7.4
-          - moodle-branch: master
+          - moodle-branch: MOODLE_402_STABLE
             php: 7.4
           - moodle-branch: MOODLE_39_STABLE
             php: 8.0
-          - moodle-branch: MOODLE_310_STABLE
-            php: 8.0
           - moodle-branch: MOODLE_39_STABLE
-            php: 8.1
-          - moodle-branch: MOODLE_310_STABLE
             php: 8.1
           - moodle-branch: MOODLE_311_STABLE
             php: 8.1
