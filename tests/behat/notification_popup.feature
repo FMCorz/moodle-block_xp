@@ -38,7 +38,7 @@ Feature: A student is shown a notification popup when they level up
     And I am on "Course 1" course homepage
     Then I should see "You have reached level 2!"
     And I press "Cool, thanks"
-    And I click on "Ladder" "link" in the "Level Up XP" "block"
+    And I click on "Leaderboard" "link" in the "Level up!" "block"
     And the following should exist in the "block_xp-table" table:
       | Full name   | Level | Total |
       | Student One | 2     | 120   |

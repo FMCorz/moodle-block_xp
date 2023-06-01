@@ -34,7 +34,7 @@ Feature: A student earns experience points for participating in a course
       | Subject | Reply with text   |
       | Message | This is the body  |
     And I am on "Course 1" course homepage
-    And I click on "Ladder" "link" in the "Level Up XP" "block"
+    And I click on "Leaderboard" "link" in the "Level up!" "block"
     Then the following should exist in the "block_xp-table" table:
       | Full name   | Level | Total |
       | Student One | 1     | 117   |

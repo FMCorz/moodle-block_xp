@@ -65,7 +65,7 @@ Feature: A report displays students' progress
     And I log in as "t1"
     And I am on front page
     And I am on "Course 1" course homepage
-    When I click on "Report" "link" in the "Level Up XP" "block"
+    When I click on "Report" "link" in the "Level up!" "block"
     Then the following should exist in the "block_xp-report-table" table:
       | Full name     | Level | Total |
       | Student One   | 1     | 63    |
@@ -122,7 +122,7 @@ Feature: A report displays students' progress
     And I am on "Course 1" course homepage
     And I turn editing mode on
     And I add the "Level Up XP" block
-    And I click on "Report" "link" in the "Level Up XP" "block"
+    And I click on "Report" "link" in the "Level up!" "block"
     And the following should exist in the "block_xp-report-table" table:
       | Full name     | Level | Total |
       | Student One   | -     | -     |

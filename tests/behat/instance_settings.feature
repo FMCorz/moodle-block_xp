@@ -19,15 +19,15 @@ Feature: A teacher can change the settings for their instance
     And I turn editing mode on
     And I add the "Level Up XP" block
     When I am on "Course 1" course homepage
-    And I click on "Settings" "link" in the "Level Up XP" "block"
-    And the field "Enable the ladder" matches value "Yes"
+    And I click on "Settings" "link" in the "Level up!" "block"
+    And the field "Enable the leaderboard" matches value "Yes"
     And the field "Anonymity" matches value "Display participants identity"
-    And the field "Title" matches value "Level Up XP"
-    And I set the field "Enable the ladder" to "No"
+    And the field "Title" matches value "Level up!"
+    And I set the field "Enable the leaderboard" to "No"
     And I set the field "Anonymity" to "Hide participants identity"
     And I set the field "Title" to "New level up title"
     And I press "Save changes"
-    Then the field "Enable the ladder" matches value "No"
+    Then the field "Enable the leaderboard" matches value "No"
     And the field "Anonymity" matches value "Hide participants identity"
     And the field "Title" matches value "New level up title"
     And I am on "Course 1" course homepage
