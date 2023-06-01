@@ -21,73 +21,80 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/**
- * Delegate click to a zone.
- *
- * @param {String} rootSelector The root selector.
- * @param {String} nodeSelector The node on which the event must happen.
- * @param {Function} onClick The callback, receiving the node.
- */
-export function delegateClick(rootSelector, nodeSelector, onClick) {
-    const nodes = document.querySelectorAll(rootSelector);
+define([], function() {
+    /**
+   * Delegate click to a zone.
+   *
+   * @param {String} rootSelector The root selector.
+   * @param {String} nodeSelector The node on which the event must happen.
+   * @param {Function} onClick The callback, receiving the node.
+   */
+    function delegateClick(rootSelector, nodeSelector, onClick) {
+        const nodes = document.querySelectorAll(rootSelector);
 
-    const handleHit = (e) => {
-        const node = e.target.closest('[role=button]');
-        if (node && node.matches(nodeSelector)) {
-            if (e.defaultPrevented) {
-                return;
+        const handleHit = (e) => {
+            const node = e.target.closest('[role=button]');
+            if (node && node.matches(nodeSelector)) {
+                if (e.defaultPrevented) {
+                    return;
+                }
+                e.preventDefault();
+                onClick(node);
             }
-            e.preventDefault();
-            onClick(node);
-        }
-    };
+        };
 
-    nodes.forEach((node) => {
-        node.addEventListener('click', handleHit);
+        nodes.forEach((node) => {
+            node.addEventListener('click', handleHit);
 
-        node.addEventListener('mousedown', (e) => {
-            if (e.key !== ' ' && e.key !== 'Enter') {
-                return;
-            }
-            handleHit(e);
+            node.addEventListener('mousedown', (e) => {
+                if (e.key !== ' ' && e.key !== 'Enter') {
+                    return;
+                }
+                handleHit(e);
+            });
+
+            node.querySelectorAll(nodeSelector).forEach((node) => {
+                if (!node.getAttribute('role')) {
+                    node.setAttribute('role', 'button');
+                }
+            });
         });
+    }
 
-        node.querySelectorAll(nodeSelector).forEach((node) => {
+    /**
+   * Register a click.
+   *
+   * @param {String} selector The selector.
+   * @param {Function} onClick The callback, receiving the node.
+   */
+    function registerClick(selector, onClick) {
+        const nodes = document.querySelectorAll(selector);
+
+        nodes.forEach((node) => {
+            const handleHit = (e) => {
+                if (e.defaultPrevented) {
+                    return;
+                }
+                e.preventDefault();
+                onClick(node);
+            };
+
+            node.addEventListener('click', handleHit);
+            node.addEventListener('mousedown', (e) => {
+                if (e.key !== ' ' && e.key !== 'Enter') {
+                    return;
+                }
+                handleHit(e);
+            });
+
             if (!node.getAttribute('role')) {
                 node.setAttribute('role', 'button');
             }
         });
-    });
-}
+    }
 
-/**
- * Register a click.
- *
- * @param {String} selector The selector.
- * @param {Function} onClick The callback, receiving the node.
- */
-export function registerClick(selector, onClick) {
-    const nodes = document.querySelectorAll(selector);
-
-    nodes.forEach((node) => {
-        const handleHit = (e) => {
-            if (e.defaultPrevented) {
-                return;
-            }
-            e.preventDefault();
-            onClick(node);
-        };
-
-        node.addEventListener('click', handleHit);
-        node.addEventListener('mousedown', (e) => {
-            if (e.key !== ' ' && e.key !== 'Enter') {
-                return;
-            }
-            handleHit(e);
-        });
-
-        if (!node.getAttribute('role')) {
-            node.setAttribute('role', 'button');
-        }
-    });
-}
+    return {
+        delegateClick,
+        registerClick,
+    };
+});

@@ -21,72 +21,74 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// import Ajax from 'core/ajax';
-import * as PopupNotification from 'block_xp/popup-notification';
+define(['block_xp/popup-notification'], function(PopupNotification) {
+    let instances = [];
+    let isShowing = false;
 
-let instances = [];
-let isShowing = false;
-
-/**
- * Notify received new instance.
- */
-function notifyNewInstance() {
-    if (!isShowing) {
-        showNextInstance();
-    }
-}
-
-/**
- * Show next instance.
- */
-function showNextInstance() {
-    if (!instances.length) {
-        return;
-    }
-    const instance = instances.splice(0, 1)[0];
-    PopupNotification.show(instance, {
-        onShown: () => {
-            // Ajax.call([{
-            //     methodname: 'block_xp_mark_popup_notification_seen',
-            //     args: {
-            //         courseid: instance.courseid,
-            //         level: instance.levelnum
-            //     }
-            // }])[0].fail();
-        },
-        onDismissed: () => {
-            isShowing = false;
-            setTimeout(() => showNextInstance(), 500);
+    /**
+   * Notify received new instance.
+   */
+    function notifyNewInstance() {
+        if (!isShowing) {
+            showNextInstance();
         }
-    });
-}
-
-/**
- * Queue instances.
- *
- * @param {Object[]} additionalInstances The instances.
- */
-function queue(additionalInstances) {
-    instances = instances.concat(additionalInstances);
-    notifyNewInstance();
-}
-
-/**
- * Queue from JSON node.
- *
- * @param {String} selector The JSON node selector.
- */
-const queueFromJson = (selector) => {
-    try {
-        const node = document.querySelector(selector);
-        const data = node ? JSON.parse(node.textContent) : null;
-        if (!Array.isArray(data)) {
-            throw new Error('That\'s a bit strange.');
-        }
-        queue(data);
-    } catch (err) {
-        // Nothing.
     }
-};
 
-export {queue, queueFromJson};
+    /**
+   * Show next instance.
+   */
+    function showNextInstance() {
+        if (!instances.length) {
+            return;
+        }
+        const instance = instances.splice(0, 1)[0];
+        PopupNotification.show(instance, {
+            onShown: () => {
+                // Ajax.call([{
+                //     methodname: 'block_xp_mark_popup_notification_seen',
+                //     args: {
+                //         courseid: instance.courseid,
+                //         level: instance.levelnum
+                //     }
+                // }])[0].fail();
+            },
+            onDismissed: () => {
+                isShowing = false;
+                setTimeout(() => showNextInstance(), 500);
+            },
+        });
+    }
+
+    /**
+   * Queue instances.
+   *
+   * @param {Object[]} additionalInstances The instances.
+   */
+    function queue(additionalInstances) {
+        instances = instances.concat(additionalInstances);
+        notifyNewInstance();
+    }
+
+    /**
+   * Queue from JSON node.
+   *
+   * @param {String} selector The JSON node selector.
+   */
+    const queueFromJson = (selector) => {
+        try {
+            const node = document.querySelector(selector);
+            const data = node ? JSON.parse(node.textContent) : null;
+            if (!Array.isArray(data)) {
+                throw new Error("That's a bit strange.");
+            }
+            queue(data);
+        } catch (err) {
+            // Nothing.
+        }
+    };
+
+    return {
+        queue,
+        queueFromJson,
+    };
+});

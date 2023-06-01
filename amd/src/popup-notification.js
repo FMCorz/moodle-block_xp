@@ -21,49 +21,55 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import Templates from 'core/templates';
-import Modal from 'core/modal';
-import ModalEvents from 'core/modal_events';
-import Notification from 'core/notification';
+define(['core/templates', 'core/modal', 'core/modal_events', 'core/notification'], function(
+    Templates,
+    Modal,
+    ModalEvents,
+    Notification
+) {
+    // Trigger pre-loading.
+    Templates.render('block_xp/modal-popup-notification', []);
 
-// Trigger pre-loading.
-Templates.render('block_xp/modal-popup-notification', []);
+    /**
+   * Show the modal.
+   *
+   * @param {Object} context The template context.
+   * @param {Object} options The options.
+   */
+    function show(context, options) {
+        options = options || {};
+        Templates.render('block_xp/modal-popup-notification', context)
+            .then((html) => {
+                const modal = new Modal(html);
 
-/**
- * Show the modal.
- *
- * @param {Object} context The template context.
- * @param {Object} options The options.
- */
-function show(context, options) {
-    options = options || {};
-    Templates.render('block_xp/modal-popup-notification', context).then((html) => {
-        const modal = new Modal(html);
+                // Prevent dismissing by clicking outside.
+                if (typeof ModalEvents.outsideClick !== 'undefined') {
+                    modal.getRoot().on(ModalEvents.outsideClick, (e) => {
+                        e.preventDefault();
+                    });
+                }
 
-        // Prevent dismissing by clicking outside.
-        if (typeof ModalEvents.outsideClick !== 'undefined') {
-            modal.getRoot().on(ModalEvents.outsideClick, e => {
-                e.preventDefault();
-            });
-        }
+                // Broadcast when the modal has been shown.
+                modal.getRoot().on(ModalEvents.shown, () => {
+                    if (options.onShown) {
+                        options.onShown();
+                    }
+                });
 
-        // Broadcast when the modal has been shown.
-        modal.getRoot().on(ModalEvents.shown, () => {
-            if (options.onShown) {
-                options.onShown();
-            }
-        });
+                // Broadcast when the modal has been dismissed.
+                modal.getRoot().on(ModalEvents.hidden, () => {
+                    if (options.onDismissed) {
+                        options.onDismissed();
+                    }
+                });
 
-        // Broadcast when the modal has been dismissed.
-        modal.getRoot().on(ModalEvents.hidden, () => {
-            if (options.onDismissed) {
-                options.onDismissed();
-            }
-        });
+                modal.show();
+                return;
+            })
+            .catch(Notification.exception);
+    }
 
-        modal.show();
-        return;
-    }).catch(Notification.exception);
-}
-
-export {show};
+    return {
+        show,
+    };
+});
