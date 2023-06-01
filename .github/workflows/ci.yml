@@ -42,7 +42,6 @@ jobs:
             'MOODLE_400_STABLE',
             'MOODLE_401_STABLE',
             'MOODLE_402_STABLE',
-            'MOODLE_402_STABLE',
             'master',
           ]
         database: [pgsql]
@@ -51,6 +50,10 @@ jobs:
             database: mariadb
         exclude:
           - moodle-branch: MOODLE_39_STABLE
+            php: 7.4
+          - moodle-branch: MOODLE_420_STABLE
+            php: 7.4
+          - moodle-branch: master
             php: 7.4
           - moodle-branch: MOODLE_39_STABLE
             php: 8.0
@@ -62,7 +65,7 @@ jobs:
             php: 8.1
           - moodle-branch: MOODLE_311_STABLE
             php: 8.1
-          - moodle-branch: MOODLE_312_STABLE
+          - moodle-branch: MOODLE_400_STABLE
             php: 8.1
 
     steps:

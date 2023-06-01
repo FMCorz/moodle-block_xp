@@ -23,7 +23,6 @@
  */
 
 namespace block_xp\event;
-defined('MOODLE_INTERNAL') || die();
 
 class something_happened extends \core\event\base {
     public function init() {
