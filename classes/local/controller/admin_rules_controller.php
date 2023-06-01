@@ -24,11 +24,9 @@
  */
 
 namespace block_xp\local\controller;
-defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
 use html_writer;
-use pix_icon;
 use block_xp\local\routing\url;
 
 /**

@@ -23,16 +23,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-global $CFG;
-require_once(__DIR__ . '/base_testcase.php');
+namespace block_xp;
 
 use block_xp\di;
 use block_xp\local\config\config_stack;
 use block_xp\local\config\course_world_config;
 use block_xp\local\config\static_config;
 use block_xp\local\sql\limit;
+use block_xp\tests\base_testcase;
 
 /**
  * Leaderboard factory testcase.
@@ -41,8 +39,9 @@ use block_xp\local\sql\limit;
  * @copyright  2022 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers     \block_xp\local\factory\default_course_world_leaderboard_factory
  */
-class block_xp_leaderboard_factory_testcase extends block_xp_base_testcase {
+class leaderboard_factory_test extends base_testcase {
 
     /**
      * Test the plain factory.

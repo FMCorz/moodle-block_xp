@@ -26,7 +26,6 @@
  */
 
 namespace block_xp\local\rule;
-defined('MOODLE_INTERNAL') || die();
 
 use DirectoryIterator;
 use cache;

@@ -22,13 +22,18 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once(__DIR__ . '/base_testcase.php');
 require_once(__DIR__ . '/fixtures/events.php');
 
 use block_xp\local\config\course_world_config;
+use block_xp\tests\base_testcase;
+use block_xp_filter;
+use block_xp_rule_base;
+use block_xp_rule_property;
+use block_xp_ruleset;
 
 /**
  * Filters testcase.
@@ -36,8 +41,9 @@ use block_xp\local\config\course_world_config;
  * @package    block_xp
  * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers     \block_xp\local\xp\course_filter_manager
  */
-class block_xp_filters_testcase extends block_xp_base_testcase {
+class filters_test extends base_testcase {
 
     protected function get_filter_manager($courseid) {
         $world = $this->get_world($courseid);
@@ -192,7 +198,7 @@ class block_xp_filters_testcase extends block_xp_base_testcase {
         $this->assertTrue(block_xp_filter::validate_data(['points' => 2]));
 
         // Category.
-        // $this->assertFalse(block_xp_filter::validate_data(['category' => 20]));
+        $this->assertFalse(block_xp_filter::validate_data(['category' => 20]));
         $this->assertTrue(block_xp_filter::validate_data(['category' => ""])); // Auto cast to 0.
         $this->assertTrue(block_xp_filter::validate_data(['category' => "abc"])); // Auto cast to 0.
         $this->assertTrue(block_xp_filter::validate_data(['category' => block_xp_filter::CATEGORY_EVENTS]));

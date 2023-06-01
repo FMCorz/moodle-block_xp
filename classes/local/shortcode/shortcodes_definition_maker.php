@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\shortcode;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Shortcodes definition maker interface.

@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\permission;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Access logs permissions interface.

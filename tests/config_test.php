@@ -23,10 +23,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once(__DIR__ . '/base_testcase.php');
 require_once(__DIR__ . '/fixtures/events.php');
 
 use block_xp\local\config\config_stack;
@@ -34,6 +34,8 @@ use block_xp\local\config\filtered_config;
 use block_xp\local\config\mdl_locked_config;
 use block_xp\local\config\static_config;
 use block_xp\local\config\table_row_config;
+use block_xp\tests\base_testcase;
+use xmldb_table;
 
 /**
  * Config test case.
@@ -43,8 +45,13 @@ use block_xp\local\config\table_row_config;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_config_testcase extends block_xp_base_testcase {
+class config_test extends base_testcase {
 
+    /**
+     * Test MDL locked config.
+     *
+     * @covers \block_xp\local\config\mdl_locked_config
+     */
     public function test_mdl_locked_config() {
         global $DB;
 
@@ -92,6 +99,11 @@ class block_xp_config_testcase extends block_xp_base_testcase {
         $this->assertTrue((bool) get_config('block_xp', 'testb_locked'));
     }
 
+    /**
+     * Test config stack with locked.
+     *
+     * @covers \block_xp\local\config\config_stack
+     */
     public function test_config_stack_with_locked() {
         $master = new static_config([
             'testa' => 'abc',
@@ -151,6 +163,11 @@ class block_xp_config_testcase extends block_xp_base_testcase {
 
     }
 
+    /**
+     * Test filtered config.
+     *
+     * @covers \block_xp\local\config\filtered_config
+     */
     public function test_filtered_config() {
         $data = [
             'testa' => 'abc',
@@ -177,9 +194,6 @@ class block_xp_config_testcase extends block_xp_base_testcase {
         $this->assertEquals(['testb' => 'def', 'testc' => 'ghk'], $config->get_all());
         $this->assertEquals('def', $config->get('testb'));
         $this->assertEquals('ghk', $config->get('testc'));
-        try {
-            $this->assertEquals('abc', $config->get('testa'));
-        } catch (coding_exception $e) {}
 
         // Test filtering excluded.
         $config = new filtered_config($master, null, ['testa']);
@@ -189,9 +203,6 @@ class block_xp_config_testcase extends block_xp_base_testcase {
         $this->assertEquals(['testb' => 'def', 'testc' => 'ghk'], $config->get_all());
         $this->assertEquals('def', $config->get('testb'));
         $this->assertEquals('ghk', $config->get('testc'));
-        try {
-            $this->assertEquals('abc', $config->get('testa'));
-        } catch (coding_exception $e) {}
 
         // Test filtering allowed and excluded.
         $config = new filtered_config($master, ['testa', 'testb'], ['testa']);
@@ -200,14 +211,13 @@ class block_xp_config_testcase extends block_xp_base_testcase {
         $this->assertFalse($config->has('testc'));
         $this->assertEquals(['testb' => 'def'], $config->get_all());
         $this->assertEquals('def', $config->get('testb'));
-        try {
-            $this->assertEquals('abc', $config->get('testa'));
-        } catch (coding_exception $e) {}
-        try {
-            $this->assertEquals('ghk', $config->get('testc'));
-        } catch (coding_exception $e) {}
     }
 
+    /**
+     * Test table row config.
+     *
+     * @covers \block_xp\local\config\table_row_config
+     */
     public function test_table_row_config() {
         global $DB;
         $this->make_config_table();
@@ -278,6 +288,11 @@ class block_xp_config_testcase extends block_xp_base_testcase {
         $this->assertEquals($defaults->get_all(), $config->get_all());
     }
 
+    /**
+     * Test table row config with null.
+     *
+     * @covers \block_xp\local\config\table_row_config
+     */
     public function test_table_row_config_with_null() {
         global $DB;
         $this->make_config_table();

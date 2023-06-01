@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\output;
-defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
 use block_xp_filter;

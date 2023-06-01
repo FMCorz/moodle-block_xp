@@ -24,9 +24,6 @@
  */
 
 namespace block_xp\local\logger;
-defined('MOODLE_INTERNAL') || die();
-
-use DateTime;
 
 /**
  * Collection logger with group reset.

@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\reason;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Event name reason.

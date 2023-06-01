@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\notification;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Course level up notification service.

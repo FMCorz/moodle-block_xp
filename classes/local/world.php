@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local;
-defined('MOODLE_INTERNAL') || die();
 
 use block_xp\local\xp\levels_info;
 use block_xp\local\xp\state_store;

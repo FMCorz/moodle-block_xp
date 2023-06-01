@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\activity;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Recent user activity repository interface.

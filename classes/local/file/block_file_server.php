@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\file;
-defined('MOODLE_INTERNAL') || die();
 
 use context;
 

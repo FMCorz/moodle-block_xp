@@ -25,8 +25,6 @@
 
 namespace block_xp\local\plugin;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Addon class.
  *

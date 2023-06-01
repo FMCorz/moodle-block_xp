@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\factory;
-defined('MOODLE_INTERNAL') || die();
 
 use lang_string;
 use moodle_database;

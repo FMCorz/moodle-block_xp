@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\leaderboard;
-defined('MOODLE_INTERNAL') || die();
 
 use context_helper;
 use course_modinfo;

@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\observer;
-defined('MOODLE_INTERNAL') || die();
 
 use context;
 use block_xp\local\config\config;

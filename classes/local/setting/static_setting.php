@@ -25,7 +25,6 @@
  */
 
 namespace block_xp\local\setting;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Static admin setting.

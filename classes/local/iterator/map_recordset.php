@@ -27,8 +27,6 @@
 
 namespace block_xp\local\iterator;
 
-defined('MOODLE_INTERNAL') || die();
-
 use moodle_recordset;
 use NoRewindIterator;
 

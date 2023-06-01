@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\setting;
-defined('MOODLE_INTERNAL') || die();
 
 use admin_category;
 use admin_settingpage;
@@ -37,7 +36,6 @@ use admin_setting_configmultiselect;
 use admin_setting_configselect;
 use admin_setting_configtext;
 use admin_setting_configtextarea;
-use block_xp\di;
 use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
 use block_xp\local\routing\url_resolver;

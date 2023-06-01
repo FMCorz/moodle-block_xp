@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\task;
-defined('MOODLE_INTERNAL') || die();
 
 use block_xp\di;
 

@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\routing;
-defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
 

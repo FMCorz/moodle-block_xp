@@ -32,8 +32,6 @@ use core_component;
 use core_plugin_manager;
 use moodle_database;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Usage report maker class.
  *

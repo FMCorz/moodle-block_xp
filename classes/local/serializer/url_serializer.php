@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\serializer;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Serializer.

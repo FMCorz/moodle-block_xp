@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\controller;
-defined('MOODLE_INTERNAL') || die();
 
 use moodle_exception;
 

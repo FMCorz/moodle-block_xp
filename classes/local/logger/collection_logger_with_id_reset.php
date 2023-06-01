@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\logger;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Collection logger with ID reset.

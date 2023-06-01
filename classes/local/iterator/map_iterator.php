@@ -25,8 +25,6 @@
 
 namespace block_xp\local\iterator;
 
-defined('MOODLE_INTERNAL') || die();
-
 use ArrayIterator;
 use IteratorIterator;
 use Traversable;

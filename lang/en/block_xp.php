@@ -20,9 +20,8 @@
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @codingStandardsIgnoreFile
  */
-
-defined('MOODLE_INTERNAL') || die();
 
 $string['actions'] = 'Actions';
 $string['activityoresourceis'] = 'The activity or resource is {$a}';

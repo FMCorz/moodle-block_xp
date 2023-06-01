@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\serializer;
-defined('MOODLE_INTERNAL') || die();
 
 use external_single_structure;
 use external_value;

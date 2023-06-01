@@ -24,10 +24,8 @@
  */
 
 namespace block_xp\local\controller;
-defined('MOODLE_INTERNAL') || die();
 
 use html_writer;
-use block_xp\local\config\block_config;
 
 /**
  * Config controller class.

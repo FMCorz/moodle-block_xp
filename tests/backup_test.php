@@ -23,15 +23,29 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
 require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
-require_once(__DIR__ . '/base_testcase.php');
 require_once(__DIR__ . '/fixtures/events.php');
 
+use backup_controller;
+use backup;
+use base_setting;
+use block_manager;
+use block_xp_filter;
+use block_xp_rule_base;
+use block_xp_rule_property;
+use block_xp_ruleset;
 use block_xp\local\reason\event_name_reason;
+use block_xp\tests\base_testcase;
+use context_course;
+use moodle_page;
+use moodle_url;
+use restore_controller;
+use restore_dbops;
 
 /**
  * Test backup and retore.
@@ -40,9 +54,18 @@ use block_xp\local\reason\event_name_reason;
  * @copyright  2023 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers     \backup_xp_block_task
+ * @covers     \backup_xp_block_structure_step
+ * @covers     \restore_xp_block_task
+ * @covers     \restore_xp_block_structure_step
  */
-class block_xp_backup_testcase extends block_xp_base_testcase {
+class backup_test extends base_testcase {
 
+    /**
+     * Test restore in new course.
+     *
+     * @covers \backup_xp_block_structure_step
+     */
     public function test_restore_in_new_course() {
         global $DB;
 
@@ -69,6 +92,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
         $this->assertTrue($DB->record_exists('block_xp_filters', ['courseid' => $newid, 'points' => 666]));
     }
 
+    /**
+     * Test restore in new course without users.
+     */
     public function test_restore_in_new_course_without_users() {
         global $DB;
 
@@ -89,6 +115,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
         $this->assertTrue($DB->record_exists('block_xp_filters', ['courseid' => $newid, 'points' => 666]));
     }
 
+    /**
+     * Test restore merge in other.
+     */
     public function test_restore_merge_in_other() {
         global $DB;
 
@@ -117,6 +146,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
         $this->assertTrue($DB->record_exists('block_xp_filters', ['courseid' => $c2->id, 'points' => 666]));
     }
 
+    /**
+     * Test restore delete and merge in other.
+     */
     public function test_restore_delete_and_merge_in_other() {
         global $DB;
 
@@ -152,6 +184,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
         $this->assertTrue($DB->record_exists('block_xp_filters', ['courseid' => $c1->id, 'points' => 666]));
     }
 
+    /**
+     * Test restore merge in same without change.
+     */
     public function test_restore_merge_in_same_without_change() {
         global $DB;
 
@@ -179,6 +214,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
         $this->assertEquals(2, $DB->count_records('block_xp_filters', ['courseid' => $c1->id, 'points' => 666]));
     }
 
+    /**
+     * Test restore merge in same with changes.
+     */
     public function test_restore_merge_in_same_with_changes() {
         global $DB;
 
@@ -215,6 +253,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
         $this->assertEquals(2, $DB->count_records('block_xp_filters', ['courseid' => $c1->id, 'points' => 666]));
     }
 
+    /**
+     * Test restore delete and merge in same.
+     */
     public function test_restore_delete_and_merge_in_same() {
         global $DB;
 
@@ -247,6 +288,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
         $this->assertTrue($DB->record_exists('block_xp_filters', ['courseid' => $c1->id, 'points' => 666]));
     }
 
+    /**
+     * Test restore grade filters with non existing.
+     */
     public function test_restore_grade_filter_with_none_existing() {
         global $DB;
 
@@ -276,6 +320,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
             'category' => block_xp_filter::CATEGORY_GRADES]));
     }
 
+    /**
+     * Test restore grade filters with one existing.
+     */
     public function test_restore_grade_filter_with_one_existing() {
         global $DB;
 
@@ -306,6 +353,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
             'category' => block_xp_filter::CATEGORY_GRADES]));
     }
 
+    /**
+     * Test restore grade filters with one non ruleset existing.
+     */
     public function test_restore_grade_filter_with_one_non_ruleset_existing() {
         global $DB;
 
@@ -336,6 +386,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
             'category' => block_xp_filter::CATEGORY_GRADES]));
     }
 
+    /**
+     * Test restore grade filters with many existing.
+     */
     public function test_restore_grade_filter_with_many_existing() {
         global $DB;
 
@@ -371,6 +424,9 @@ class block_xp_backup_testcase extends block_xp_base_testcase {
             'category' => block_xp_filter::CATEGORY_GRADES]));
     }
 
+    /**
+     * Test restore grade filters with one empty existing.
+     */
     public function test_restore_grade_filter_with_one_empty_existing() {
         global $DB;
 

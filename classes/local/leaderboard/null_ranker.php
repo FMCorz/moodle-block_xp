@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\leaderboard;
-defined('MOODLE_INTERNAL') || die();
 
 use block_xp\local\iterator\map_iterator;
 use block_xp\local\xp\state;

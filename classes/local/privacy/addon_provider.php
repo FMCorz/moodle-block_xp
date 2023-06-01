@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\privacy;
-defined('MOODLE_INTERNAL') || die();
 
 use context;
 use core_privacy\local\request\approved_contextlist;

@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\setting;
-defined('MOODLE_INTERNAL') || die();
 
 use admin_settingpage;
 use block_base;

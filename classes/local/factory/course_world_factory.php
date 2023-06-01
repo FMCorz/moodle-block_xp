@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\factory;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Course world factory interface.

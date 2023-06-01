@@ -31,8 +31,6 @@ use block_xp\local\serializer\level_serializer;
 use block_xp\local\serializer\levels_info_serializer;
 use block_xp\local\serializer\url_serializer;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Admin levels controller class.
  *

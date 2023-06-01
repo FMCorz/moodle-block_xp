@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\activity;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Activity interface.

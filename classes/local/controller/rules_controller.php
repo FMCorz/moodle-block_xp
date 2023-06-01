@@ -24,13 +24,9 @@
  */
 
 namespace block_xp\local\controller;
-defined('MOODLE_INTERNAL') || die();
 
 use html_writer;
 use moodle_exception;
-use moodle_url;
-use pix_icon;
-use stdClass;
 use block_xp\local\routing\url;
 
 /**

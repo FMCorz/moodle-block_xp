@@ -27,7 +27,6 @@ namespace block_xp\local\controller;
 defined('MOODLE_INTERNAL') || die();
 
 use coding_exception;
-use block_xp\local\routing\url;
 
 require_once($CFG->libdir . '/adminlib.php');
 

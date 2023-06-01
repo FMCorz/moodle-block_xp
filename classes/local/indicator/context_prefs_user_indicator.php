@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\indicator;
-defined('MOODLE_INTERNAL') || die();
 
 use context;
 use moodle_database;

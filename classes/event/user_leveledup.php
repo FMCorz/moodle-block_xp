@@ -23,7 +23,6 @@
  */
 
 namespace block_xp\event;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * User leveled up event class.

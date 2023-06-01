@@ -22,11 +22,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once(__DIR__ . '/base_testcase.php');
 require_once(__DIR__ . '/fixtures/events.php');
+
+use block_xp\tests\base_testcase;
 
 /**
  * Course world testcase.
@@ -34,8 +36,9 @@ require_once(__DIR__ . '/fixtures/events.php');
  * @package    block_xp
  * @copyright  2015 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers     \block_xp\local\local\course_world
  */
-class block_xp_course_world_testcase extends block_xp_base_testcase {
+class course_world_test extends base_testcase {
 
     public function test_reset_data() {
         global $DB;

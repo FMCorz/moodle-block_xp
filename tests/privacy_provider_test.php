@@ -23,10 +23,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once(__DIR__ . '/base_testcase.php');
 require_once(__DIR__ . '/fixtures/events.php');
 
 use core_privacy\local\metadata\collection;
@@ -39,6 +40,9 @@ use block_xp\local\config\course_world_config;
 use block_xp\local\controller\promo_controller;
 use block_xp\local\controller\ladder_controller;
 use block_xp\privacy\provider;
+use block_xp\tests\base_testcase;
+use context_course;
+use context_system;
 
 /**
  * Privacy provider testcase.
@@ -47,11 +51,11 @@ use block_xp\privacy\provider;
  * @copyright  2018 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers     \block_xp\privacy\provider
  */
-class block_xp_privacy_provider_testcase extends block_xp_base_testcase {
+class privacy_provider_test extends base_testcase {
 
     public function setUp(): void {
-        global $CFG;
         if (!class_exists('core_privacy\manager')) {
             $this->markTestSkipped('Moodle versions does not support privacy subsystem.');
         }

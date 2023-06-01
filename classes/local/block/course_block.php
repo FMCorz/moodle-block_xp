@@ -23,7 +23,6 @@
  */
 
 namespace block_xp\local\block;
-defined('MOODLE_INTERNAL') || die();
 
 use action_link;
 use block_base;

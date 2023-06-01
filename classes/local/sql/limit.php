@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\sql;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * SQL limit class.

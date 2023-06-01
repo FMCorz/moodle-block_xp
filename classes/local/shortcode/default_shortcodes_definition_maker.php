@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\shortcode;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Default shortcodes definition maker.

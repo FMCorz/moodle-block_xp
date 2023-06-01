@@ -24,12 +24,9 @@
  */
 
 namespace block_xp\local\shortcode;
-defined('MOODLE_INTERNAL') || die();
 
-use context_course;
 use block_xp\di;
 use block_xp\local\config\config_stack;
-use block_xp\local\config\course_world_config;
 use block_xp\local\config\static_config;
 use block_xp\local\sql\limit;
 use block_xp\local\utils\user_utils;

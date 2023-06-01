@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\strategy;
-defined('MOODLE_INTERNAL') || die();
 
 use moodle_exception;
 use block_xp\local\factory\course_world_factory;

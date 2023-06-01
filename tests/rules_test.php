@@ -22,9 +22,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_xp;
 
-global $CFG;
+use block_xp_rule;
+use block_xp_rule_base;
+use block_xp_rule_property;
+use block_xp_ruleset;
 
 /**
  * Rules testcase.
@@ -33,8 +36,13 @@ global $CFG;
  * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_rules_testcase extends advanced_testcase {
+class rules_test extends \advanced_testcase {
 
+    /**
+     * Test rule property.
+     *
+     * @covers \block_xp_rule_property
+     */
     public function test_rule_property() {
         $subject = (object) array(
             'int' => 10,
@@ -92,6 +100,11 @@ class block_xp_rules_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test ruleset.
+     *
+     * @covers \block_xp_ruleset
+     */
     public function test_ruleset() {
         $subject = (object) array(
             'int' => 10,
@@ -128,6 +141,11 @@ class block_xp_rules_testcase extends advanced_testcase {
         $this->assertTrue($rs->match($subject));
     }
 
+    /**
+     * Test nested ruleset.
+     *
+     * @covers \block_xp_ruleset
+     */
     public function test_nested_ruleset() {
         $subject = (object) array(
             'int' => 10,
@@ -145,6 +163,11 @@ class block_xp_rules_testcase extends advanced_testcase {
 
     }
 
+    /**
+     * Test export create.
+     *
+     * @covers \block_xp_rule::create
+     */
     public function test_export_create() {
         $rule = new block_xp_rule_property(block_xp_rule_base::CT, 'I', 'str');
         $newrule = block_xp_rule::create($rule->export());

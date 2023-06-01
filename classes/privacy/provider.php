@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\privacy;
-defined('MOODLE_INTERNAL') || die();
 
 use context;
 use context_course;

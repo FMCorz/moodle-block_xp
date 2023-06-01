@@ -29,8 +29,6 @@ use block_xp\local\routing\url;
 use core_user;
 use html_writer;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Log controller class.
  *

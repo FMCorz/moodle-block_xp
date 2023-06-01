@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\observer;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Observer rules maker class.

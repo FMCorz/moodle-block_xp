@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\factory;
-defined('MOODLE_INTERNAL') || die();
 
 use block_xp\local\course_world;
 use block_xp\local\config\course_world_config;

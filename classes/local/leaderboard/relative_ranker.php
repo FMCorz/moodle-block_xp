@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\leaderboard;
-defined('MOODLE_INTERNAL') || die();
 
 use Traversable;
 use block_xp\local\iterator\map_iterator;

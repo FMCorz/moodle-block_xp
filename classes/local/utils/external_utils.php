@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\utils;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * External utils.

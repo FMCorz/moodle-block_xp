@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\block;
-defined('MOODLE_INTERNAL') || die();
 
 use context;
 use moodle_database;

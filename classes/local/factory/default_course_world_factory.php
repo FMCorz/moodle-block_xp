@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\factory;
-defined('MOODLE_INTERNAL') || die();
 
 use moodle_database;
 use block_xp\local\config\config;

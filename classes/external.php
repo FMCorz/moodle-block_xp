@@ -232,7 +232,7 @@ class external extends external_api {
     public static function set_default_levels_info($levels, $algo) {
         global $USER;
         $params = self::validate_parameters(self::set_default_levels_info_parameters(), compact('levels', 'algo'));
-        extract($params);
+        extract($params); // @codingStandardsIgnoreLine
 
         // Permission checks.
         $context = context_system::instance();
@@ -297,7 +297,7 @@ class external extends external_api {
     public static function set_levels_info($courseid, $levels, $algo) {
         global $USER;
         $params = self::validate_parameters(self::set_levels_info_parameters(), compact('courseid', 'levels', 'algo'));
-        extract($params);
+        extract($params); // @codingStandardsIgnoreLine
 
         // Pre-checks.
         $worldfactory = di::get('course_world_factory');

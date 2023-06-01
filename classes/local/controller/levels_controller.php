@@ -31,8 +31,6 @@ use block_xp\local\serializer\url_serializer;
 use block_xp\local\xp\algo_levels_info;
 use coding_exception;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Levels controller class.
  *

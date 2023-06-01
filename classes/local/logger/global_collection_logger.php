@@ -24,13 +24,9 @@
  */
 
 namespace block_xp\local\logger;
-defined('MOODLE_INTERNAL') || die();
 
 use DateTime;
-use dml_exception;
 use moodle_database;
-use stdClass;
-use block_xp\local\reason\reason;
 
 /**
  * Global collection logger.

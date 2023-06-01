@@ -23,13 +23,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_xp;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once(__DIR__ . '/base_testcase.php');
 require_once(__DIR__ . '/fixtures/events.php');
 
 use block_xp\di;
+use block_xp\tests\base_testcase;
 
 /**
  * Course world config testcase.
@@ -38,14 +39,16 @@ use block_xp\di;
  * @copyright  2020 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers     \block_xp\local\config\default_course_world_config
+ * @covers     \block_xp\local\config\default_admin_config
  */
-class block_xp_course_world_config_testcase extends block_xp_base_testcase {
+class course_world_config_test extends base_testcase {
 
     public function test_default_config() {
         global $DB;
 
-        $defaultcourse = new block_xp\local\config\default_course_world_config();
-        $defaultadmin = new block_xp\local\config\default_admin_config();
+        $defaultcourse = new local\config\default_course_world_config();
+        $defaultadmin = new local\config\default_admin_config();
         $inheritable = array_keys(array_intersect_key($defaultcourse->get_all(), $defaultadmin->get_all()));
 
         $config = di::get('config');

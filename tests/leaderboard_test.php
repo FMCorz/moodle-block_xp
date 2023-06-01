@@ -23,10 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-global $CFG;
-require_once(__DIR__ . '/base_testcase.php');
+namespace block_xp;
 
 use block_xp\local\leaderboard\anonymisable_leaderboard;
 use block_xp\local\leaderboard\course_user_leaderboard;
@@ -35,6 +32,8 @@ use block_xp\local\leaderboard\relative_ranker;
 use block_xp\local\leaderboard\null_ranker;
 use block_xp\local\sql\limit;
 use block_xp\local\xp\full_anonymiser;
+use block_xp\tests\base_testcase;
+use core_text;
 
 /**
  * Leaderboard testcase.
@@ -44,7 +43,7 @@ use block_xp\local\xp\full_anonymiser;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_xp_leaderboard_testcase extends block_xp_base_testcase {
+class leaderboard_test extends base_testcase {
 
     protected function get_leaderboard($world, $groupid = 0, $ranker = null) {
         global $DB, $USER;
@@ -60,6 +59,8 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
 
     /**
      * Basic test of the leaderboard.
+     *
+     * @covers \block_xp\local\leaderboard\course_user_leaderboard
      */
     public function test_basic_leaderboard() {
         $dg = $this->getDataGenerator();
@@ -141,6 +142,8 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
 
     /**
      * Basic test of the leaderboard.
+     *
+     * @covers \block_xp\local\leaderboard\course_user_leaderboard
      */
     public function test_group_leaderboard() {
         $dg = $this->getDataGenerator();
@@ -217,6 +220,8 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
 
     /**
      * Anonymised leaderboard.
+     *
+     * @covers \block_xp\local\leaderboard\anonymisable_leaderboard
      */
     public function test_anonymisable_leaderboard() {
         $dg = $this->getDataGenerator();
@@ -247,6 +252,8 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
 
     /**
      * Neighboured leaderboard.
+     *
+     * @covers \block_xp\local\leaderboard\neighboured_leaderboard
      */
     public function test_neighboured_leaderboard() {
         $dg = $this->getDataGenerator();
@@ -336,6 +343,8 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
 
     /**
      * Neighboured leaderboard count and position.
+     *
+     * @covers \block_xp\local\leaderboard\neighboured_leaderboard
      */
     public function test_neighboured_leaderboard_count_and_position() {
         $dg = $this->getDataGenerator();
@@ -419,6 +428,8 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
 
     /**
      * Neighboured leaderboard top fallback.
+     *
+     * @covers \block_xp\local\leaderboard\neighboured_leaderboard
      */
     public function test_neighboured_leaderboard_top_fallback() {
         $dg = $this->getDataGenerator();
@@ -514,6 +525,8 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
 
     /**
      * Neighboured leaderboard with custom limit.
+     *
+     * @covers \block_xp\local\leaderboard\neighboured_leaderboard
      */
     public function test_neighboured_leaderboard_with_limit() {
         $dg = $this->getDataGenerator();
@@ -743,6 +756,11 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
         $this->assert_ranking($ranking, $expected);
     }
 
+    /**
+     * Test relative ranker.
+     *
+     * @covers \block_xp\local\leaderboard\relative_ranker
+     */
     public function test_relative_ranker() {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
@@ -772,6 +790,11 @@ class block_xp_leaderboard_testcase extends block_xp_base_testcase {
         $this->assert_ranking($lb->get_ranking(new limit(0, 0)), $expected);
     }
 
+    /**
+     * Test null ranker.
+     *
+     * @covers \block_xp\local\leaderboard\relative_ranker
+     */
     public function test_null_ranker() {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();

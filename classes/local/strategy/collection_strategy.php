@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\local\strategy;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Collection strategy.

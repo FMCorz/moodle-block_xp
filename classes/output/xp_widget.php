@@ -24,7 +24,6 @@
  */
 
 namespace block_xp\output;
-defined('MOODLE_INTERNAL') || die();
 
 use action_link;
 use lang_string;
