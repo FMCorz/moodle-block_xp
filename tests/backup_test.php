@@ -26,6 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
+
+require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
 require_once(__DIR__ . '/base_testcase.php');
 require_once(__DIR__ . '/fixtures/events.php');
 
