@@ -308,7 +308,7 @@ class block_xp_renderer extends plugin_renderer_base {
         }
 
         if ($notice) {
-            [$flag, $textfn] = $notice;
+            list($flag, $textfn) = $notice;
 
             require_once($CFG->libdir . '/ajax/ajaxlib.php');
             user_preference_allow_ajax_update($flag, PARAM_BOOL);
