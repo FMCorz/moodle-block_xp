@@ -1,6 +1,19 @@
 Changelog
 =========
 
+v3.14.1
+-------
+
+Bug fixes
+
+- Fix bug occurring with PHP 7.0
+- Address compatibility issues with Moodle 3.4
+- Prevent notice when `debugusers` setting is undefined
+
+Technical changes
+
+- Address false positives in automated tests
+
 v3.14.0
 -------
 
