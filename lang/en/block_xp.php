@@ -86,6 +86,7 @@ $string['displayparticipantsidentity'] = 'Display participants identity';
 $string['displayrank'] = 'Display rank';
 $string['displayrelativerank'] = 'Display a relative rank';
 $string['documentation'] = 'Documentation';
+$string['editingdefaultsettingsinwholesitemodenotice'] = '**Attention!** You are not modifying the current active site-wide settings, instead you are editing the default settings values. As Level Up XP is used site-wide, your intention is most likely to change the site-wide settings. [Navigate here]({$a->url}) to change those settings, or follow the "Settings" link from the XP block itself.';
 $string['editinstructions'] = 'Edit information';
 $string['enablecheatguard'] = 'Enable cheat guard';
 $string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive mechanism for preventing students to abuse the system using obvious techniques, such as refreshing the same page endlessly, or repeating the same action over and over again.

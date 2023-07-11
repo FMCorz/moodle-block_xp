@@ -36,6 +36,7 @@ use admin_setting_configmultiselect;
 use admin_setting_configselect;
 use admin_setting_configtext;
 use admin_setting_configtextarea;
+use block_xp\di;
 use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
 use block_xp\local\routing\url_resolver;
@@ -200,6 +201,21 @@ class default_settings_maker implements settings_maker {
     protected function get_default_settings() {
         $defaults = $this->defaults->get_all();
         $settings = [];
+
+        // Default settings warning.
+        $settings[] = (new freeform_setting('block_xp/hdreditingdefaultsnotice', function() {
+            // Use DI directly as an exception.
+            if (di::get('config')->get('context') != CONTEXT_SYSTEM) {
+                return;
+            }
+            $url = $this->urlresolver->reverse('config', ['courseid' => SITEID]);
+            return di::get('renderer')->notification_without_close(strip_tags(
+                markdown_to_html(get_string('editingdefaultsettingsinwholesitemodenotice', 'block_xp', [
+                    'url' => $url->out(false)
+                ])),
+                '<a><em><strong>'
+            ), \core\output\notification::NOTIFY_WARNING);
+        }));
 
         // Intro.
         $settings[] = (new admin_setting_heading('block_xp/hdrintro', '', get_string('admindefaultsettingsintro', 'block_xp')));
