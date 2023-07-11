@@ -33,7 +33,9 @@ namespace block_xp\tests;
  */
 abstract class base_testcase extends \advanced_testcase {
 
-    public function setUp(): void {
+    use setup_trait;
+
+    public function setup_test() {
         $this->resetAfterTest();
         $this->reset_container();
     }
