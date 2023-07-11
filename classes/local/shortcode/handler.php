@@ -322,19 +322,41 @@ class handler {
      * @return string The new content.
      */
     public static function xppoints($shortcode, $args, $content, $env, $next) {
+        global $USER;
+
         $world = static::get_world_from_env($env);
         if (!$world) {
             return;
         }
 
-        // The number of points is expected to be passed as a standalone argument, which would
-        // make it an attribute with the value of true, so we're interested in its key.
-        $points = 0;
-        if (count($args) === 1) {
-            $points = (int) array_keys($args)[0];
+        $kwargs = [];
+        if (array_key_exists('plain', $args)) {
+            $kwargs['plain'] = $args['plain'];
+            unset($args['plain']);
         }
 
-        return di::get('renderer')->xp_highlight($points);
+        $highlight = true;
+        if (array_key_exists('points', $args)) {
+            $kwargs['points'] = (int) $args['points'];
+            unset($args['points']);
+        } else if (count($args) === 1) {
+            // The number of points can be passed as a standalone argument, which would
+            // make it an attribute with the value of true, so we're interested in its key.
+            $kwargs['points'] = (int) array_keys($args)[0];
+        } else {
+            // If points are not specified, we use the user's.
+            $state = $world->get_store()->get_state($USER->id);
+            $kwargs['points'] = $state->get_xp();
+            $highlight = false; // Default is not to highlight when getting user points.
+        }
+
+        $points = 0;
+        if (array_key_exists('points', $kwargs)) {
+            $points = $kwargs['points'];
+        }
+
+        $output = di::get('renderer');
+        return !empty($kwargs['plain']) ? $output->xp($points) : $output->xp_highlight($points, $highlight);
     }
 
     /**

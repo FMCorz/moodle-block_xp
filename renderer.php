@@ -1122,12 +1122,14 @@ EOT
      * A highlight of the points.
      *
      * @param int $amount The XP.
+     * @param bool $bright Whether the highlight should be "bright".
      */
-    public function xp_highlight($amount) {
+    public function xp_highlight($amount, $bright = true) {
+        $colourclass = $bright ? 'xp-bg-yellow-200' : 'xp-bg-gray-200';
         return html_writer::tag(
             'span',
             html_writer::tag('span', $this->xp($amount), [
-                'class' => 'xp-inline-block xp-bg-yellow-200 xp-px-2 xp-py-0.5 xp-rounded-xl xp-leading-none'
+                'class' => "xp-inline-block $colourclass xp-px-2 xp-py-0.5 xp-rounded-xl xp-leading-none"
             ]),
             ['class' => 'block_xp block_xp-xp-highlight']
         );

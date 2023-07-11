@@ -375,6 +375,17 @@ Alternatively, you can use the `level` argument to display the name of a specifi
 If the `level` argument is provided and the level does not exist, nothing will be displayed.
 ';
 $string['shortcode:xppoints'] = 'Display a number of points formatted as experience points.';
+$string['shortcode:xppoints_help'] = '
+By default, this shows the number of points of the current user. Alternatively, you can specify a number to override this value.
+
+The styling of the points will depend on whether an arbitrary value is displayed or the current user\'s points. The argument `plain` can be used to remove any styling.
+
+```
+[xppoints]
+[xppoints 500]
+[xppoints 123 plain]
+```
+';
 $string['shortcode:xpprogressbar'] = 'The current user\'s progress bar towards the next level.';
 $string['somefeaturesrequireotherplugins'] = 'Some features require additional plugins to be installed.';
 $string['someoneelse'] = 'Someone else';
