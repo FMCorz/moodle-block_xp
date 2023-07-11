@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2023042403;
+$plugin->version    = 2023071100;
 $plugin->requires   = 2017111300;   // Moodle 3.4.0.
 $plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.14.1';
+$plugin->maturity   = MATURITY_ALPHA;
+$plugin->release    = 'dev';
