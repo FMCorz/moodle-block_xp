@@ -40,6 +40,44 @@ use stdClass;
 class user_utils {
 
     /**
+     * Whether a user can earn points.
+     *
+     * @param \context $context The context.
+     * @param int $userid The user ID.
+     * @return bool
+     */
+    public static function can_earn_points($context, $userid) {
+
+        // This is a fail safe, as there are known instances where, events for instance,
+        // do not return a valid context. So might as well handle this edge case.
+        if (!$context) {
+            return false;
+        }
+
+        if (!$userid) {
+            return false;
+        } else if (!\core_user::is_real_user($userid)) {
+            return false;
+        } else if (isguestuser($userid)) {
+            return false;
+        }
+
+        // Site admins always have all permissions, so we defer to the admin setting.
+        if (is_siteadmin($userid)) {
+            $config = di::get('config');
+            return (bool) $config->get('adminscanearnxp');
+        }
+
+        // It has been reported that this can throw an exception when the context got missing
+        // but is still cached within the event object. Or something like that...
+        try {
+            return has_capability('block/xp:earnxp', $context, $userid);
+        } catch (\moodle_exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * Get the default picture URL.
      *
      * @return \moodle_url The URL.

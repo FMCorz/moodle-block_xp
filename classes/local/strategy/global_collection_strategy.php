@@ -25,8 +25,8 @@
 
 namespace block_xp\local\strategy;
 
-use moodle_exception;
 use block_xp\local\factory\course_world_factory;
+use block_xp\local\utils\user_utils;
 
 /**
  * The global collection strategy.
@@ -70,9 +70,6 @@ class global_collection_strategy implements event_collection_strategy {
         if ($event->component === 'block_xp') {
             // Skip own events.
             return;
-        } else if (!$userid || isguestuser($userid) || is_siteadmin($userid)) {
-            // Skip non-logged in users and guests.
-            return;
         } else if ($event->anonymous) {
             // Skip all the events marked as anonymous.
             return;
@@ -87,16 +84,8 @@ class global_collection_strategy implements event_collection_strategy {
             return;
         }
 
-        try {
-            // It has been reported that this can throw an exception when the context got missing
-            // but is still cached within the event object. Or something like that...
-            $canearn = has_capability('block/xp:earnxp', $event->get_context(), $userid);
-        } catch (moodle_exception $e) {
-            return;
-        }
-
-        // Skip the events if the user does not have the capability to earn XP.
-        if (!$canearn) {
+        // Skip the events if the user does not have the right to earn XP.
+        if (!user_utils::can_earn_points($event->get_context(), $userid)) {
             return;
         }
 

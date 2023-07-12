@@ -161,6 +161,16 @@ class default_settings_maker implements settings_maker {
             ]
         ));
 
+        // Whether admins can earn points.
+        $settings[] = (new admin_setting_configselect('block_xp/adminscanearnxp',
+            get_string('adminscanearnxp', 'block_xp'),
+            get_string('adminscanearnxp_desc', 'block_xp'),
+            $this->defaults->get('adminscanearnxp'), [
+                '0' => get_string('no', 'core'),
+                '1' => get_string('yes', 'core'),
+            ]
+        ));
+
         // Keeps logs for.
         $settings[] = (new admin_setting_configselect('block_xp/keeplogs',
             get_string('keeplogs', 'block_xp'), '',
