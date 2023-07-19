@@ -255,6 +255,7 @@ Do you really want to delete the points and logs of this user?';
 $string['reallyresetallcoursestodefaults'] = 'Really reset all courses rules to the default rules? This action is not reversible.';
 $string['reallyresetcourserulestodefaults'] = 'Really reset the course rules to the default rules? This action is not reversible.';
 $string['reallyresetcourselevelstodefaults'] = 'Really reset the course levels to the default levels? This action is not reversible.';
+$string['reallyresetcoursevisualstodefaults'] = 'Really reset the course visuals to the default visuals? This action is not reversible.';
 $string['reallyresetdata'] = 'Really reset the levels and points of everyone in this course?';
 $string['reallyresetgroupdata'] = 'Really reset the levels and points of everyone in this group?';
 $string['reallyreverttopluginsdefaults'] = 'Really reset the default rules to the defaults suggested by the plugin? This action is not reversible.';
@@ -271,6 +272,7 @@ $string['resetallcoursestodefaultsintro'] = 'Click the button below to reset all
 $string['resetcourserulestodefaults'] = 'Reset course rules to defaults';
 $string['resetgroupdata'] = 'Reset group data';
 $string['resetlevelstodefaults'] = 'Reset levels to defaults';
+$string['resetvisualstodefaults'] = 'Reset visuals to defaults';
 $string['resultsfilteredforn'] = 'Results filtered for {$a}.';
 $string['reward'] = 'Reward';
 $string['requires'] = 'Requires';

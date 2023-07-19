@@ -33,6 +33,7 @@ use context_system;
 use html_writer;
 use stdClass;
 use block_xp\local\config\course_world_config;
+use block_xp\local\routing\url;
 
 /**
  * Visuals controller class.
@@ -51,6 +52,13 @@ class visuals_controller extends page_controller {
 
     /** @var moodleform The form. */
     private $form;
+
+    protected function define_optional_params() {
+        return [
+            ['reset', false, PARAM_BOOL, false],
+            ['confirm', false, PARAM_BOOL, false]
+        ];
+    }
 
     /**
      * Get manager context.
@@ -94,6 +102,15 @@ class visuals_controller extends page_controller {
     }
 
     protected function pre_content() {
+
+        // Reset to defaults.
+        if ($this->get_param('reset') && confirm_sesskey()) {
+            if ($this->get_param('confirm')) {
+                $this->reset_visuals_to_defaults();
+                $this->redirect(new url($this->pageurl));
+            }
+        }
+
         $form = $this->get_form();
         $form->set_data((object) $this->get_initial_form_data());
         if ($data = $form->get_data()) {
@@ -127,6 +144,17 @@ class visuals_controller extends page_controller {
         return [
             'badges' => $draftitemid
         ];
+    }
+
+    /**
+     * Reset visuals to defaults.
+     */
+    protected function reset_visuals_to_defaults() {
+        $config = $this->world->get_config();
+        $config->set('enablecustomlevelbadges', course_world_config::CUSTOM_BADGES_MISSING);
+
+        $fs = get_file_storage();
+        $fs->delete_area_files($this->get_filemanager_context()->id, 'block_xp', 'badges', 0);
     }
 
     /**
@@ -166,13 +194,26 @@ class visuals_controller extends page_controller {
     }
 
     protected function page_content() {
+        $output = $this->get_renderer();
+
+        if ($this->get_param('reset')) {
+            echo $output->confirm(
+                get_string('reallyresetcoursevisualstodefaults', 'block_xp'),
+                new url($this->pageurl->get_compatible_url(), ['reset' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
+                new url($this->pageurl->get_compatible_url())
+            );
+            return;
+        }
+
         $this->intro();
 
         $this->get_form()->display();
 
-        echo $this->get_renderer()->heading(get_string('preview'), 3);
+        echo $output->heading_with_divider(get_string('preview', 'core'));
 
         $this->preview();
+
+        $this->page_danger_zone_content();
     }
 
     /**
@@ -183,6 +224,21 @@ class visuals_controller extends page_controller {
     protected function preview() {
         $levelsinfo = $this->world->get_levels_info();
         echo $this->get_renderer()->levels_preview($levelsinfo->get_levels());
+    }
+
+    protected function page_danger_zone_content() {
+        $output = $this->get_renderer();
+
+        echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
+
+        $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
+        echo html_writer::tag('div',
+            $output->single_button(
+                $url->get_compatible_url(),
+                get_string('resetvisualstodefaults', 'block_xp'),
+                'get'
+            )
+        );
     }
 
 }
