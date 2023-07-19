@@ -248,8 +248,7 @@ class admin_rules_controller extends admin_route_controller {
 
         $hasdangerzone = $this->filtermanager->is_customised() || !$forwholesite;
         if ($hasdangerzone) {
-            echo html_writer::tag('div', $output->heading(get_string('dangerzone', 'block_xp'), 3),
-                ['style' => 'margin-top: 2em']);
+            echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
         }
 
         // Revert button.

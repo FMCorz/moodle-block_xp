@@ -249,8 +249,7 @@ class rules_controller extends page_controller {
         $forwholesite = \block_xp\di::get('config')->get('context') == CONTEXT_SYSTEM;
         $output = $this->get_renderer();
 
-        echo html_writer::tag('div', $output->heading(get_string('dangerzone', 'block_xp'), 3),
-            ['style' => 'margin-top: 2em']);
+        echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
 
         $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
         echo html_writer::tag('p',

@@ -115,14 +115,13 @@ class levels_controller extends page_controller {
     protected function page_danger_zone_content() {
         $output = $this->get_renderer();
 
-        echo html_writer::tag('div', $output->heading(get_string('dangerzone', 'block_xp'), 3),
-            ['class' => 'xp-mt-8 xp-border-0 xp-border-solid xp-border-t xp-border-gray-100 xp-pt-8']);
+        echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
 
         $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
         echo html_writer::tag('div',
             $output->single_button(
                 $url->get_compatible_url(),
-                get_string('resetlevelsodefaults', 'block_xp'),
+                get_string('resetlevelstodefaults', 'block_xp'),
                 'get'
             )
         );

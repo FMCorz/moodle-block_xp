@@ -103,6 +103,19 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Heading with divider.
+     *
+     * @param string $text The heading text.
+     * @param array $options The options.
+     * @return string
+     */
+    public function heading_with_divider($text, $options = []) {
+        $options = array_merge(['level' => 3], $options);
+        return html_writer::tag('div', $this->heading($text, $options['level'], 'xp-m-0'),
+            ['class' => 'xp-mb-6 xp-mt-8 xp-border-0 xp-border-solid xp-border-t xp-border-gray-100 xp-pt-8']);
+    }
+
+    /**
      * Get a user's picture.
      *
      * @param object $user The user.

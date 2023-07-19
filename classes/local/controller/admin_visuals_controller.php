@@ -140,7 +140,7 @@ class admin_visuals_controller extends admin_route_controller {
         $form->display();
 
         // Preview.
-        echo $output->heading(get_string('preview'), 3);
+        echo $output->heading_with_divider(get_string('preview', 'core'));
         $this->preview();
     }
 
