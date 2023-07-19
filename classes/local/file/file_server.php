@@ -69,15 +69,11 @@ class file_server implements block_file_server {
      * @return void
      */
     public function serve_block_file($course, $bi, context $context, $filearea, $args, $forcedownload, array $options = []) {
-        // Check context consistency.
-        if ($filearea == 'badges') {
-            if ($this->forwholesite && $context->contextlevel !== CONTEXT_SYSTEM) {
-                return false;
-            } else if (!$this->forwholesite && $context->contextlevel !== CONTEXT_COURSE) {
-                return false;
-            }
-
-        } else if ($filearea == 'defaultbadges') {
+        // Check context. We used to check the 'badges' context matched the admin context setting, but this was
+        // an overkill and could hide badges when viewing a system context while the plugin is set per course,
+        // and vice-versa. The latter should rarely happen but its behaviour was unexpected, and the context
+        // check itself did not provide any security or value on its own.
+        if ($filearea == 'defaultbadges') {
             if ($context->contextlevel !== CONTEXT_SYSTEM) {
                 return false;
             }
