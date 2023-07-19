@@ -15,7 +15,7 @@ const LevelsList: React.FC<{
     onPointsChange: (level: LevelType, n: number | null) => void;
 }> = ({ algoEnabled, levels, onDescChange, onNameChange, onPointsChange }) => {
     return (
-        <div className="xp-table xp-w-full">
+        <div className="xp-table xp-w-full xp-mb-4">
             <div className="xp-table-row odd:xp-bg-gray-100 xp-font-bold">
                 <div className="xp-w-10 xp-px-2 xp-py-1 xp-table-cell xp-align-middle">
                     <Str id="level" />

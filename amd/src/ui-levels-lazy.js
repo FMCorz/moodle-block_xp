@@ -5877,7 +5877,7 @@ var NumberInput_1 = __importDefault(__webpack_require__(4959));
 var Str_1 = __importDefault(__webpack_require__(430));
 var LevelsList = function (_a) {
     var algoEnabled = _a.algoEnabled, levels = _a.levels, onDescChange = _a.onDescChange, onNameChange = _a.onNameChange, onPointsChange = _a.onPointsChange;
-    return (react_1.default.createElement("div", { className: "xp-table xp-w-full" },
+    return (react_1.default.createElement("div", { className: "xp-table xp-w-full xp-mb-4" },
         react_1.default.createElement("div", { className: "xp-table-row odd:xp-bg-gray-100 xp-font-bold" },
             react_1.default.createElement("div", { className: "xp-w-10 xp-px-2 xp-py-1 xp-table-cell xp-align-middle" },
                 react_1.default.createElement(Str_1.default, { id: "level" })),
@@ -6229,24 +6229,27 @@ var App = function (_a) {
         onPointsChange: function (level, nb) { return dispatch(['levelPointsChange', { level: level, points: nb }]); },
     };
     var Renderer = state.view === 'grid' ? LevelsGrid_1.default : LevelsList_1.default;
+    var canSave = state.pendingSave;
     return (react_1.default.createElement("div", null,
         react_1.default.createElement("div", { className: "xp-flex xp-flex-col xp-flex-wrap" },
             react_1.default.createElement("div", { className: "xp-mb-4" },
-                react_1.default.createElement(Menu, { algo: state.algo, nbLevels: state.nblevels, canSave: state.pendingSave, view: state.view, mutation: mutation, onAlgoEnabledChange: function (p) { return dispatch(['algoEnabledChange', p]); }, onAlgoBaseChange: function (p) { return dispatch(['algoBaseChange', p]); }, onAlgoCoefChange: function (p) { return dispatch(['algoCoefChange', p]); }, onNbLevelsChange: function (nb) { return dispatch(['nbLevelsChange', nb]); }, onSave: handleSave, onViewChange: function (v) { return dispatch(['setView', v]); } })),
+                react_1.default.createElement(Menu, { algo: state.algo, nbLevels: state.nblevels, canSave: canSave, view: state.view, mutation: mutation, onAlgoEnabledChange: function (p) { return dispatch(['algoEnabledChange', p]); }, onAlgoBaseChange: function (p) { return dispatch(['algoBaseChange', p]); }, onAlgoCoefChange: function (p) { return dispatch(['algoCoefChange', p]); }, onNbLevelsChange: function (nb) { return dispatch(['nbLevelsChange', nb]); }, onSave: handleSave, onViewChange: function (v) { return dispatch(['setView', v]); } })),
             react_1.default.createElement("div", { className: "xp-flex-1" },
-                react_1.default.createElement(Renderer, __assign({}, rendererProps))))));
+                react_1.default.createElement(Renderer, __assign({}, rendererProps))),
+            react_1.default.createElement("div", { className: "xp-mt-4" },
+                react_1.default.createElement(Button_1.SaveButton, { statePosition: "after", onClick: handleSave, mutation: mutation, disabled: !canSave })))));
 };
 var MenuItem = function (_a) {
     var label = _a.label, _b = _a.className, className = _b === void 0 ? '' : _b, children = _a.children;
-    return (react_1.default.createElement("div", { className: "xp-mb-2 xp-mr-2 " + className },
+    return (react_1.default.createElement("div", { className: "" + className },
         label ? react_1.default.createElement("div", null, label) : null,
         react_1.default.createElement("div", null, children)));
 };
 var Menu = function (_a) {
     var algo = _a.algo, canSave = _a.canSave, view = _a.view, mutation = _a.mutation, nbLevels = _a.nbLevels, onAlgoEnabledChange = _a.onAlgoEnabledChange, onAlgoBaseChange = _a.onAlgoBaseChange, onAlgoCoefChange = _a.onAlgoCoefChange, onNbLevelsChange = _a.onNbLevelsChange, onViewChange = _a.onViewChange, onSave = _a.onSave;
     var getStr = (0, hooks_1.useStrings)(['grid', 'list', 'usingalgo', 'manually']);
-    return (react_1.default.createElement("div", { className: "xp-flex xp-flex-col md:xp-flex-row" },
-        react_1.default.createElement("div", { className: "xp-flex xp-flex-col xp-flex-wrap xp-order-2 md:xp-order-none md:xp-flex-row" },
+    return (react_1.default.createElement("div", { className: "xp-flex xp-flex-col md:xp-flex-row xp-gap-2 md:xp-gap-0" },
+        react_1.default.createElement("div", { className: "xp-flex xp-flex-col xp-flex-wrap xp-order-2 md:xp-order-none md:xp-flex-row xp-gap-2" },
             react_1.default.createElement(MenuItem, { label: react_1.default.createElement("label", { htmlFor: "bxpViewAs", className: "xp-m-0" },
                     react_1.default.createElement(Str_1.default, { id: "viewas" })) },
                 react_1.default.createElement("select", { id: "bxpViewAs", value: view, onChange: function (e) { return onViewChange(e.target.value); }, className: "form-control xp-m-0 xp-max-w-xs" },

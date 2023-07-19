@@ -232,6 +232,7 @@ const App = ({ courseId, levelsInfo }: { courseId: number; levelsInfo: LevelsInf
     onPointsChange: (level: LevelType, nb: number | null) => dispatch(['levelPointsChange', { level: level, points: nb }]),
   };
   const Renderer = state.view === 'grid' ? LevelsGrid : LevelsList;
+  const canSave = state.pendingSave;
 
   return (
     <div>
@@ -240,7 +241,7 @@ const App = ({ courseId, levelsInfo }: { courseId: number; levelsInfo: LevelsInf
           <Menu
             algo={state.algo}
             nbLevels={state.nblevels}
-            canSave={state.pendingSave}
+            canSave={canSave}
             view={state.view}
             mutation={mutation}
             onAlgoEnabledChange={(p: boolean) => dispatch(['algoEnabledChange', p])}
@@ -254,6 +255,9 @@ const App = ({ courseId, levelsInfo }: { courseId: number; levelsInfo: LevelsInf
         <div className="xp-flex-1">
           <Renderer {...rendererProps} />
         </div>
+        <div className="xp-mt-4">
+          <SaveButton statePosition="after" onClick={handleSave} mutation={mutation} disabled={!canSave} />
+        </div>
       </div>
     </div>
   );
@@ -261,7 +265,7 @@ const App = ({ courseId, levelsInfo }: { courseId: number; levelsInfo: LevelsInf
 
 const MenuItem: React.FC<{ label?: React.ReactNode; className?: string }> = ({ label, className = '', children }) => {
   return (
-    <div className={`xp-mb-2 xp-mr-2 ${className}`}>
+    <div className={`${className}`}>
       {label ? <div>{label}</div> : null}
       <div>{children}</div>
     </div>
@@ -295,8 +299,8 @@ const Menu: React.FC<{
 }) => {
   const getStr = useStrings(['grid', 'list', 'usingalgo', 'manually']);
   return (
-    <div className="xp-flex xp-flex-col md:xp-flex-row">
-      <div className="xp-flex xp-flex-col xp-flex-wrap xp-order-2 md:xp-order-none md:xp-flex-row">
+    <div className="xp-flex xp-flex-col md:xp-flex-row xp-gap-2 md:xp-gap-0">
+      <div className="xp-flex xp-flex-col xp-flex-wrap xp-order-2 md:xp-order-none md:xp-flex-row xp-gap-2">
         <MenuItem
           label={
             <label htmlFor="bxpViewAs" className="xp-m-0">
