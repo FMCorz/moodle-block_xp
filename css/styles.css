@@ -22,8 +22,7 @@
     color: #fff;
     font-size: 4em;
     height: 100px;
-    line-height: 110px;
-    margin: 10px 0;
+    line-height: 100px;
     text-align: center;
     width: 100px;
 
@@ -119,7 +118,7 @@
 .block.block_xp .alert.alert-block {
     @apply xp-p-2 xp-py-1.5;
 }
-.block.block_xp .block_xp-level-progress [role=progressbar] {
+.block.block_xp .block_xp-level-progress [role='progressbar'] {
     @apply xp-h-4;
 }
 .block.block_xp .block_xp-heading {
@@ -176,17 +175,6 @@
     vertical-align: super;
     font-size: 0.6428571428571429em; /* 9px. */
     line-height: 0.6428571428571429em;
-}
-
-/** Levels preview. */
-.block_xp-level-preview .previewed-level {
-    display: inline-block;
-    padding: 5px;
-    margin-bottom: 10px;
-}
-.block_xp-level-preview .level-name {
-    white-space: nowrap;
-    text-align: center;
 }
 
 /** Use our own highlight because of discrepencies between various themes. Sorry themers,
@@ -303,7 +291,7 @@
 }
 .block_xp-rulepicker-content .rule {
     cursor: pointer;
-    padding: .5rem;
+    padding: 0.5rem;
     border-bottom: 1px solid #efefef;
 }
 .block_xp-rulepicker-content .rule:last-child {
@@ -319,8 +307,8 @@
     margin: 0 !important;
 }
 .block_xp-rulepicker-content .rule .info {
-    margin-top: .5rem;
-    font-size: .875rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
 }
 
 /**
@@ -328,7 +316,7 @@
  *
  * Note: We find the very first rule using .filter-rules > .rule
  */
-.block-xp-filters-group .block-xp-filters-submit-actions  {
+.block-xp-filters-group .block-xp-filters-submit-actions {
     margin-top: 2em;
 }
 .block-xp-filters-group h4:not(:first-of-type) {

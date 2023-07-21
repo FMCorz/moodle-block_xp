@@ -30,24 +30,27 @@
     {{/title}}
     {{$body}}
         <div class="block_xp">
-            <div class="xp-text-center">
-                {{#levelname}}
-                    {{#str}}youreachedlevel, block_xp{{/str}}
-                {{/levelname}}
-                {{^levelname}}
-                    {{#str}}youreachedlevela, block_xp, {{levelnum}}{{/str}}
-                {{/levelname}}
+            <div class="xp-text-center xp-text-xl xp-font-bold">
+                <h3 class="xp-text-center xp-mb-2 xp-text-3xl xp-animate-fade-in xp-animation-delay-[500ms]">
+                    {{#str}}youleveledupexcl, block_xp{{/str}}
+                </h3>
             </div>
-            <div class="[&>*]:xp-mx-auto">
-                {{{levelbadge}}}
+            <div class="xp-my-4 xp-grid xp-grid-cols-[1fr] [&>div]:xp-row-start-1 [&>div]:xp-col-start-1 xp-justify-center xp-items-center">
+                <div class="xp-animate-badge-leaving xp-pointer-events-none xp-animation-delay-[1.5s,2.5s,3.5s]">
+                    {{{prevlevelbadge}}}
+                </div>
+                <div class="xp-animate-badge-ping xp-animation-delay-[7s] xp-opacity-0">
+                    {{{levelbadge}}}
+                </div>
+                <div class="xp-animate-badge-incoming xp-animation-delay-[3.8s]">{{{levelbadge}}}</div>
             </div>
             {{#levelname}}
-                <div class="xp-text-center xp-font-bold">
+                <div class="xp-text-center xp-font-bold xp-animate-fade-in xp-animation-delay-[5s]">
                     {{levelname}}
                 </div>
             {{/levelname}}
             {{#message}}
-            <div class="xp-mt-6 xp-text-lg xp-flex xp-justify-center">
+            <div class="xp-mt-6 xp-text-lg xp-flex xp-justify-center xp-animate-fade-in  xp-animation-delay-[6s] xp-bg-gray-100 xp-rounded xp-px-4 xp-py-2">
                 {{{message}}}
             </div>
             {{/message}}

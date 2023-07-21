@@ -261,10 +261,10 @@ class block_xp_renderer extends plugin_renderer_base {
     public function levels_preview(array $levels) {
         $o = '';
 
-        $o .= html_writer::start_div('block_xp-level-preview');
+        $o .= html_writer::start_div('xp-flex xp-gap-2 xp-gap-y-4 xp-flex-wrap');
         foreach ($levels as $level) {
-            $o .= html_writer::start_div('previewed-level');
-            $o .= html_writer::div('#' . $level->get_level(), 'level-name');
+            $o .= html_writer::start_div('');
+            $o .= html_writer::div('#' . $level->get_level(), 'xp-whitespace-nowrap xp-text-center xp-mb-1');
             $o .= $this->small_level_badge($level);
             $o .= html_writer::end_div();
         }

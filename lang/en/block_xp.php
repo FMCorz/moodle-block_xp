@@ -440,6 +440,7 @@ $string['xp:view'] = 'View the block and its related pages';
 $string['xp:viewlogs'] = 'View the logs';
 $string['xp:viewreport'] = 'View the report';
 $string['xpgaindisabled'] = 'Points gain disabled';
+$string['youleveledupexcl'] = 'You leveled up!';
 $string['youreachedlevel'] = 'You have reached the level:';
 $string['youreachedlevela'] = 'You have reached level {$a}!';
 $string['yourmessage'] = 'Your message';

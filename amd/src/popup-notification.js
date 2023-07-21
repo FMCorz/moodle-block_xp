@@ -31,11 +31,11 @@ define(['core/templates', 'core/modal', 'core/modal_events', 'core/notification'
     Templates.render('block_xp/modal-popup-notification', []);
 
     /**
-   * Show the modal.
-   *
-   * @param {Object} context The template context.
-   * @param {Object} options The options.
-   */
+     * Show the modal.
+     *
+     * @param {Object} context The template context.
+     * @param {Object} options The options.
+     */
     function show(context, options) {
         options = options || {};
         Templates.render('block_xp/modal-popup-notification', context)

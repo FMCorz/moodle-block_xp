@@ -178,6 +178,7 @@ class course_block extends block_base {
                 'levelnum' => $level->get_level(),
                 'levelname' => $level instanceof level_with_name ? $level->get_name() : null,
                 'levelbadge' => $renderer->level_badge($level),
+                'prevlevelbadge' => $renderer->level_badge($world->get_levels_info()->get_level(max(1, $level->get_level() - 1))),
             ]], $propsid);
 
             $PAGE->requires->js_call_amd('block_xp/popup-notification-queue', 'queueFromJson', ["#{$propsid}"]);
