@@ -27,29 +27,29 @@ defined('MOODLE_INTERNAL') || die();
 
 $functions = [
     'block_xp_search_courses' => [
-        'classname' => 'block_xp\external',
-        'methodname' => 'search_courses',
+        'classname' => 'block_xp\external\search_courses',
+        'methodname' => 'execute',
         'description' => 'Search for courses',
         'type' => 'read',
         'ajax' => true
     ],
     'block_xp_search_modules' => [
-        'classname' => 'block_xp\external',
-        'methodname' => 'search_modules',
+        'classname' => 'block_xp\external\search_modules',
+        'methodname' => 'execute',
         'description' => 'Search modules within a course',
         'type' => 'read',
         'ajax' => true
     ],
     'block_xp_set_default_levels_info' => [
-        'classname' => 'block_xp\external',
-        'methodname' => 'set_default_levels_info',
+        'classname' => 'block_xp\external\set_default_levels_info',
+        'methodname' => 'execute',
         'description' => 'Set the default levels info',
         'type' => 'write',
         'ajax' => true,
     ],
     'block_xp_set_levels_info' => [
-        'classname' => 'block_xp\external',
-        'methodname' => 'set_levels_info',
+        'classname' => 'block_xp\external\set_levels_info',
+        'methodname' => 'execute',
         'description' => 'Set the levels info',
         'type' => 'write',
         'ajax' => true,
