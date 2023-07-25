@@ -20,6 +20,9 @@
 .block_xp .xp-pointer-events-none {
     pointer-events: none;
 }
+.block_xp .xp-invisible {
+    visibility: hidden;
+}
 .block_xp .xp-relative {
     position: relative;
 }
@@ -289,9 +292,6 @@
 .block_xp .xp-animate-badge-incoming {
     animation: xp-pulse-in 500ms ease-in-out 2000ms both;
 }
-.block_xp .xp-grid-cols-\[1fr\] {
-    grid-template-columns: 1fr;
-}
 .block_xp .xp-flex-row {
     flex-direction: row;
 }
@@ -532,6 +532,9 @@
     transition-property: opacity;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
+}
+.block_xp .xp-duration-1000 {
+    transition-duration: 1000ms;
 }
 .block_xp .xp-space-x-1 > :not([hidden]) ~ :not([hidden]) {
     margin-right: 0;

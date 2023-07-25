@@ -129,7 +129,7 @@ class default_state_store_observer implements level_up_state_store_observer, poi
      */
     protected function process_leveled_up(state_store $store, $id, $level) {
         if ($this->config->get('enablelevelupnotif')) {
-            $this->notificationservice->notify($id);
+            $this->notificationservice->notify($id, $level);
         }
     }
 

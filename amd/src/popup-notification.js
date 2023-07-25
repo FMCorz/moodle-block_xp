@@ -41,6 +41,8 @@ define(['core/templates', 'core/modal', 'core/modal_events', 'core/notification'
         Templates.render('block_xp/modal-popup-notification', context)
             .then((html) => {
                 const modal = new Modal(html);
+                const footer = modal.getFooter()[0];
+                const hideBtn = footer.querySelector(modal.getActionSelector('hide'));
 
                 // Prevent dismissing by clicking outside.
                 if (typeof ModalEvents.outsideClick !== 'undefined') {
@@ -54,6 +56,13 @@ define(['core/templates', 'core/modal', 'core/modal_events', 'core/notification'
                     if (options.onShown) {
                         options.onShown();
                     }
+
+                    // Show the button after a few seconds.
+                    setTimeout(() => {
+                        hideBtn.classList.remove('xp-pointer-events-none');
+                        hideBtn.classList.remove('xp-invisible');
+                        hideBtn.classList.remove('xp-opacity-0');
+                    }, 4000);
                 });
 
                 // Broadcast when the modal has been dismissed.

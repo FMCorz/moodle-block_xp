@@ -26,6 +26,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
+    'block_xp_mark_popup_notification_seen' => [
+        'classname' => 'block_xp\external\mark_popup_notification_seen',
+        'methodname' => 'execute',
+        'description' => 'Mark popup notification as seen',
+        'type' => 'write',
+        'ajax' => true
+    ],
     'block_xp_search_courses' => [
         'classname' => 'block_xp\external\search_courses',
         'methodname' => 'execute',

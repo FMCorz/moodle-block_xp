@@ -35,7 +35,7 @@
                     {{#str}}youleveledupexcl, block_xp{{/str}}
                 </h3>
             </div>
-            <div class="xp-my-4 xp-grid xp-grid-cols-[1fr] [&>div]:xp-row-start-1 [&>div]:xp-col-start-1 xp-justify-center xp-items-center">
+            <div class="xp-my-4 xp-grid [&>div]:xp-row-start-1 [&>div]:xp-col-start-1 xp-justify-center xp-items-center">
                 <div class="xp-animate-badge-leaving xp-pointer-events-none xp-animation-delay-[1.5s,2.5s,3.5s]">
                     {{{prevlevelbadge}}}
                 </div>
@@ -50,14 +50,16 @@
                 </div>
             {{/levelname}}
             {{#message}}
-            <div class="xp-mt-6 xp-text-lg xp-flex xp-justify-center xp-animate-fade-in  xp-animation-delay-[6s] xp-bg-gray-100 xp-rounded xp-px-4 xp-py-2">
+            <div class="xp-mt-6 xp-text-lg xp-flex xp-justify-center xp-animate-fade-in xp-animation-delay-[6s] xp-bg-gray-100 xp-rounded xp-px-4 xp-py-2">
                 {{{message}}}
             </div>
             {{/message}}
         </div>
     {{/body}}
     {{$footer}}
-        <button type="button" class="btn btn-primary" data-action="hide">{{#str}} coolthanks, block_xp {{/str}}</button>
+        <div class="block_xp">
+            <button type="button" class="btn btn-default btn-secondary xp-transition-opacity xp-opacity-0 xp-invisible xp-duration-1000 xp-pointer-events-none" data-action="hide">{{#str}} coolthanks, block_xp {{/str}}</button>
+        </div>
     {{/footer}}
 {{/ core/modal }}
 
