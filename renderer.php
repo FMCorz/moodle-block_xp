@@ -330,7 +330,7 @@ class block_xp_renderer extends plugin_renderer_base {
                 if (!n) return;
                 n.addEventListener('click', function(e) {
                     e.preventDefault();
-                    M.util.set_user_preference($flag, 1);
+                    M.util.set_user_preference(flag, 1);
                     const notice = document.querySelector('.block-xp-notices');
                     if (!notice) return;
                     notice.style.display = 'none';
