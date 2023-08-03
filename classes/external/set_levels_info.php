@@ -54,8 +54,9 @@ class set_levels_info extends external_api {
                 'description' => new external_value(PARAM_NOTAGS, '', VALUE_DEFAULT, ''),
             ])),
             'algo' => new external_single_structure([
-                'enabled' => new external_value(PARAM_BOOL),
+                'method' => new external_value(PARAM_ALPHANUMEXT),
                 'base' => new external_value(PARAM_INT),
+                'incr' => new external_value(PARAM_INT),
                 'coef' => new external_value(PARAM_FLOAT),
             ])
         ]);
@@ -92,52 +93,8 @@ class set_levels_info extends external_api {
         $perms = $world->get_access_permissions();
         $perms->require_manage();
 
-        // Sort levels.
-        usort($levels, function($l1, $l2) {
-            return $l1['level'] - $l2['level'];
-        });
-
-        // Pseudo validation, we basically ignore errors.
-        if (count($levels) < 2 || count($levels) > 99) {
-            $levelsinfo = algo_levels_info::make_from_defaults();
-
-        } else {
-            $lastpts = null;
-            $levelsdata = array_reduce(array_keys($levels), function($carry, $key) use ($levels, &$lastpts) {
-                $level = $levels[$key];
-                $levelnb = $level['level'];
-
-                if ($lastpts === null) {
-                    $xp = 0;
-                } else {
-                    $xp = min(max($lastpts + 1, $level['xprequired']), PHP_INT_MAX);
-                }
-
-                $carry['xp'][$levelnb] = $xp;
-                if (!empty($level['name'])) {
-                    $carry['name'][$levelnb] = core_text::substr($level['name'], 0, 40);
-                }
-                if (!empty($level['description'])) {
-                    $carry['desc'][$levelnb] = core_text::substr($level['description'], 0, 255);
-                }
-
-                $lastpts = $xp;
-                return $carry;
-            }, ['xp' => [], 'name' => [], 'desc' => []]);
-
-            // Normalise data if it's incorrect.
-            $algo['base'] = min(max(1, $algo['base']), PHP_INT_MAX);
-            $algo['coef'] = min(max(1, $algo['coef']), PHP_INT_MAX);
-
-            $levelsinfo = new algo_levels_info([
-                'xp' => $levelsdata['xp'],
-                'desc' => $levelsdata['desc'],
-                'name' => $levelsdata['name'],
-                'base' => $algo['base'],
-                'coef' => $algo['coef'],
-                'usealgo' => $algo['enabled'],
-            ]);
-        }
+        // Validate the data.
+        $levelsinfo = static::clean_levels_info_data($levels, $algo);
 
         // Serialise and encode within the config object?
         // Or better if the levels info can save itself?
@@ -207,6 +164,8 @@ class set_levels_info extends external_api {
             // Normalise data if it's incorrect.
             $algo['base'] = min(max(1, $algo['base']), PHP_INT_MAX);
             $algo['coef'] = min(max(1, $algo['coef']), PHP_INT_MAX);
+            $algo['incr'] = min(max(0, $algo['incr']), PHP_INT_MAX);
+            $algo['method'] = !in_array($algo['method'], ['flat', 'linear', 'relative']) ? 'relative' : $algo['method'];
 
             $levelsinfo = new algo_levels_info([
                 'xp' => $levelsdata['xp'],
@@ -214,7 +173,8 @@ class set_levels_info extends external_api {
                 'name' => $levelsdata['name'],
                 'base' => $algo['base'],
                 'coef' => $algo['coef'],
-                'usealgo' => $algo['enabled'],
+                'incr' => $algo['incr'],
+                'method' => $algo['method'],
             ]);
         }
 

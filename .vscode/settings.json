@@ -1,11 +1,19 @@
 {
     "prettier.tabWidth": 4,
     "eslint.format.enable": true,
+    "eslint.validate": [
+        "javascript",
+    ],
+    "files.associations": {
+        "*.js": "javascript",
+    },
     "[javascript]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-        "editor.formatOnSave": false,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
 }

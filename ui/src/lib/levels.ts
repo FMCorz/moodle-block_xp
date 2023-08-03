@@ -1,4 +1,4 @@
-import { Level } from './types';
+import { PointCalculationMethod, Level } from "./types";
 
 export function computeRequiredPoints(level: number, base: number, coef: number) {
   if (level <= 1) {
@@ -12,6 +12,29 @@ export function computeRequiredPoints(level: number, base: number, coef: number)
   }
 
   return Math.round(base * ((1 - Math.pow(coef, level - 1)) / (1 - coef)));
+}
+
+export function computeRequiredPointsWithMethod(level: number, method: PointCalculationMethod) {
+  if (level <= 1) {
+    return 0;
+  } else if (level === 2) {
+    return method.base;
+  }
+
+  if (method.method === "relative") {
+    // Refer to the original method that was algorithmic.
+    return computeRequiredPoints(level, method.base, method.coef);
+  } else if (method.method === "linear") {
+    // Each level is worth the base + increment (starting at level 3);
+    // Level 1: 0; level 2: 100; Level 3: 210 (100 + (100 + 10)); Level 4: 330 (100 + (100 + 10) + (100 + 10 + 10));
+    return (
+      method.base * (level - 1) +
+      Array.from({ length: level }).reduce<number>((carry, _, idx) => carry + Math.max(0, idx - 1) * method.incr, 0)
+    );
+  }
+
+  // Flat method.
+  return (level - 1) * method.base;
 }
 
 export const getLevel = (levels: Level[], level: number): Level | undefined => {

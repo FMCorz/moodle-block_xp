@@ -46,6 +46,7 @@ class default_container implements container {
         'ajax_url_resolver' => true,
         'base_url' => true,
         'badge_url_resolver' => true,
+        'badge_url_resolver_course_world_factory' => true,
         'block_class' => true,
         'block_edit_form_class' => true,
         'collection_logger' => true,
@@ -147,10 +148,21 @@ class default_container implements container {
     /**
      * Get the default badge URL resolver.
      *
-     * @return moodle_url
+     * @return xp\badge_url_resolver
      */
     protected function get_badge_url_resolver() {
         return new \block_xp\local\xp\file_storage_badge_url_resolver(\context_system::instance(), 'block_xp', 'defaultbadges', 0);
+    }
+
+    /**
+     * Get the badge URL resolver factory.
+     *
+     * @return factory\badge_url_resolver_course_world_factory
+     */
+    protected function get_badge_url_resolver_course_world_factory() {
+        return new \block_xp\local\factory\default_badge_url_resolver_course_world_factory(
+            $this->get('badge_url_resolver')
+        );
     }
 
     /**
@@ -261,9 +273,7 @@ class default_container implements container {
         return new \block_xp\local\factory\default_course_world_factory(
             $this->get('config'),
             $this->get('db'),
-            new \block_xp\local\factory\default_badge_url_resolver_course_world_factory(
-                $this->get('badge_url_resolver')
-            ),
+            $this->get('badge_url_resolver_course_world_factory'),
             $this->get('config_locked')
         );
     }

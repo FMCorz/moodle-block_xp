@@ -38,6 +38,10 @@ function tailwindBuild(cb) {
 
 function moodleGruntAmd(cb) {
   exec('grunt amd', function (err, stdout, stderr) {
+    if (err) {
+      console.log(stdout);
+      console.log(stderr);
+    }
     cb(err);
   });
 }

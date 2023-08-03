@@ -44,6 +44,10 @@ class algo_levels_info implements levels_info {
     const DEFAULT_BASE = 120;
     /** Default coef for XP algo. */
     const DEFAULT_COEF = 1.3;
+    /** Default incr for XP algo. */
+    const DEFAULT_INCR = 40;
+    /** Default method for XP algo. */
+    const DEFAULT_METHOD = 'relative';
 
     /** @var array The initial data. */
     protected $data;
@@ -51,14 +55,24 @@ class algo_levels_info implements levels_info {
     protected $count;
     /** @var level[] The levels. */
     protected $levels;
+
     /** @var int Base XP */
     protected $base;
     /** @var float Coef */
     protected $coef;
-    /** @var bool Used algo? */
-    protected $usealgo;
+    /** @var int Incr */
+    protected $incr = self::DEFAULT_INCR;
+    /** @var string Method */
+    protected $method = self::DEFAULT_METHOD;
+
     /** @var badge_url_resolver The resolver. */
     protected $resolver;
+
+    /**
+     * @var bool Used algo?
+     * @deprecated Since Level Up XP 3.15 without replacement.
+     */
+    protected $usealgo = false;
 
     /**
      * Constructor.
@@ -70,7 +84,15 @@ class algo_levels_info implements levels_info {
         $this->data = $data;
         $this->base = $data['base'];
         $this->coef = $data['coef'];
-        $this->usealgo = (bool) $data['usealgo'];
+        $this->incr = isset($data['incr']) ? max(0, (int) $data['incr']) : static::DEFAULT_INCR;
+
+        // For legacy reasons, if we do not know the method we fall onto what was the equivalent
+        // to the previous algorithm, which is the relative method.
+        $this->method = isset($data['method']) ? $data['method'] : null;
+        if (!in_array($this->method, ['flat', 'linear', 'relative'])) {
+            $this->method = self::DEFAULT_METHOD;
+        }
+
         $this->resolver = $resolver;
     }
 
@@ -90,6 +112,24 @@ class algo_levels_info implements levels_info {
      */
     public function get_coef() {
         return $this->coef;
+    }
+
+    /**
+     * XP incr.
+     *
+     * @return int
+     */
+    public function get_incr() {
+        return $this->incr;
+    }
+
+    /**
+     * XP method.
+     *
+     * @return string
+     */
+    public function get_method() {
+        return $this->method;
     }
 
     /**
@@ -147,6 +187,7 @@ class algo_levels_info implements levels_info {
      * Whether the algo was used.
      *
      * @return bool
+     * @deprecated Since Level Up XP 3.15 without replacement.
      */
     public function get_use_algo() {
         return $this->usealgo;
@@ -172,7 +213,8 @@ class algo_levels_info implements levels_info {
             }, $this->get_levels())),
             'base' => $this->base,
             'coef' => $this->coef,
-            'usealgo' => $this->usealgo,
+            'incr' => $this->incr,
+            'method' => $this->method
         ];
     }
 
@@ -207,10 +249,12 @@ class algo_levels_info implements levels_info {
      */
     public static function make_from_defaults(badge_url_resolver $resolver = null) {
         return new self([
-            'usealgo' => true,
+            'method' => self::DEFAULT_METHOD,
             'base' => self::DEFAULT_BASE,
             'coef' => self::DEFAULT_COEF,
-            'xp' => self::get_xp_with_algo(self::DEFAULT_COUNT, self::DEFAULT_BASE, self::DEFAULT_COEF),
+            'incr' => self::DEFAULT_INCR,
+            'xp' => self::get_xp_with_algo(self::DEFAULT_COUNT, self::DEFAULT_BASE, self::DEFAULT_COEF,
+                self::DEFAULT_METHOD, self::DEFAULT_INCR),
             'name' => [],
             'desc' => [],
         ], $resolver);
@@ -222,9 +266,36 @@ class algo_levels_info implements levels_info {
      * @param int $levelcount The number of levels.
      * @param int $base The base XP required.
      * @param float $coef The coefficient between levels.
+     * @param string $method The method.
+     * @param int $incr The incr value.
      * @return array level => xp required.
      */
-    public static function get_xp_with_algo($levelcount, $base, $coef) {
+    public static function get_xp_with_algo($levelcount, $base, $coef, $method = self::DEFAULT_METHOD,
+            $incr = self::DEFAULT_INCR) {
+
+        if ($method === 'flat') {
+            $list = [];
+            for ($i = 1; $i <= $levelcount; $i++) {
+                $list[$i] = $base * ($i - 1);
+            }
+            return $list;
+        }
+
+        if ($method === 'linear') {
+            $list = [];
+            for ($i = 1; $i <= $levelcount; $i++) {
+                if ($i == 1) {
+                    $list[$i] = 0;
+                } else if ($i == 2) {
+                    $list[$i] = $base;
+                } else {
+                    $list[$i] = $list[$i - 1] + $base + ($i - 2) * $incr;
+                }
+            }
+            return $list;
+        }
+
+        // Relative method.
         $list = [];
         for ($i = 1; $i <= $levelcount; $i++) {
             if ($i == 1) {

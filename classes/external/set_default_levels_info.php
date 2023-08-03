@@ -51,8 +51,9 @@ class set_default_levels_info extends external_api {
                 'description' => new external_value(PARAM_NOTAGS, '', VALUE_DEFAULT, ''),
             ])),
             'algo' => new external_single_structure([
-                'enabled' => new external_value(PARAM_BOOL),
+                'method' => new external_value(PARAM_ALPHANUMEXT),
                 'base' => new external_value(PARAM_INT),
+                'incr' => new external_value(PARAM_INT),
                 'coef' => new external_value(PARAM_FLOAT),
             ])
         ]);

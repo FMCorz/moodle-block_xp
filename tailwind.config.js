@@ -26,10 +26,12 @@ module.exports = {
                 'fade-in': 'fade-in 300ms both'
             },
             flex: {
+                "0": '0 0 auto',
                 "2": '2 2 0%',
             },
             fontSize: {
-                xxs: '0.6875rem', // 11px.
+                '2xs': ['0.6875rem', '1'],
+                '3xs': ['0.6875rem', '1']
             },
             keyframes: {
                 'fade-in': {
@@ -74,11 +76,15 @@ module.exports = {
                     '50%': {transform: 'rotate(3deg)'}
                 },
             },
-            maxWidth: {
-                '4/5': '80%',
-            },
+            maxWidth: (theme) => theme('spacing'),
             minHeight: (theme) => theme('spacing'),
             minWidth: (theme) => theme('spacing'),
+            spacing: {
+                full: '100%',
+            },
+            transitionProperty: {
+                'height': 'height'
+            }
         },
     },
     corePlugins: {
@@ -89,7 +95,8 @@ module.exports = {
         textOpacity: false,
         // Removes the @base.
         preflight: false,
-        // Space breaks compatibility with older Moodles.
+        // Divide, space breaks compatibility with older Moodle.
+        divideWidth: false,
         space: false,
     },
     plugins: [
@@ -121,6 +128,38 @@ module.exports = {
                     values: theme('space'),
                     variants: variants('space'),
                     type: 'any',
+                }
+            );
+        }),
+        // Redefine the 'divide' plugin because Moodle 3.11 (and older most likely) do not
+        // properly parse its generated CSS. This disables the utility `divide-[x/y]-reverse`.
+        plugin(function({matchUtilities, theme}) {
+            matchUtilities(
+                {
+                    'divide-x': (value) => {
+                        value = value === '0' ? '0px' : value;
+                        return {
+                            '& > :not([hidden]) ~ :not([hidden])': {
+                                'border-style': 'solid',
+                                'border-width': '0',
+                                'border-right-width': `${value}`,
+                            },
+                        };
+                    },
+                    'divide-y': (value) => {
+                        value = value === '0' ? '0px' : value;
+                        return {
+                            '& > :not([hidden]) ~ :not([hidden])': {
+                                'border-style': 'solid',
+                                'border-width': '0',
+                                'border-top-width': `${value}`,
+                            },
+                        };
+                    },
+                },
+                {
+                    values: theme('divideWidth'),
+                    type: ['line-width', 'length', 'any']
                 }
             );
         }),

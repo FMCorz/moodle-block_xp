@@ -934,9 +934,10 @@ EOT
         $o = '';
         $o .= html_writer::start_div('block_xp-react', ['id' => $id]);
         $o .= html_writer::start_div('block_xp-react-loading');
-        $o .= html_writer::start_div();
-        $o .= $this->render(new pix_icon($iconname, 'loading'));
-        $o .= ' ' . get_string('loadinghelp');
+        $o .= html_writer::start_div('xp-grid xp-grid-cols-2 xp-gap-4 xp-animate-pulse');
+        $o .= html_writeR::div('', 'xp-col-span-2 xp-bg-gray-100 xp-rounded xp-h-4');
+        $o .= html_writeR::div('', 'xp-bg-gray-100 xp-rounded xp-h-4');
+        $o .= html_writeR::div('', 'xp-bg-gray-100 xp-rounded xp-h-4');
         $o .= html_writer::end_div();
         $o .= html_writer::end_div();
         $o .= html_writer::end_div();

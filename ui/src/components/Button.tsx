@@ -1,25 +1,42 @@
-import React from 'react';
-import { useStrings } from '../lib/hooks';
-import Pix from './Pix';
-import Spinner from './Spinner';
-import Str from './Str';
+import React, { ButtonHTMLAttributes } from "react";
+import { useAnchorButtonProps, useStrings } from "../lib/hooks";
+import Pix from "./Pix";
+import Spinner from "./Spinner";
+import Str from "./Str";
+import { classNames } from "../lib/utils";
+
+export const Button: React.FC<{
+  disabled?: boolean;
+  onClick?: () => void;
+  label?: string;
+  primary?: boolean;
+  className?: React.ButtonHTMLAttributes<HTMLButtonElement>["className"];
+  type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
+}> = ({ onClick, disabled, children, primary, className, type = "button" }) => {
+  const classes = classNames("btn", primary ? "btn-primary" : "btn-default btn-secondary", className);
+  return (
+    <button className={classes} onClick={onClick} disabled={disabled} type={type}>
+      {children}
+    </button>
+  );
+};
 
 export const SaveButton: React.FC<{
   mutation?: any;
   disabled?: boolean;
   onClick?: () => void;
   label?: string;
-  statePosition?: 'before' | 'after';
-}> = ({ onClick, disabled, label, mutation = {}, statePosition = 'after' }) => {
-  const getStr = useStrings(['changessaved', 'error'], 'core');
+  statePosition?: "before" | "after";
+}> = ({ onClick, disabled, label, mutation = {}, statePosition = "after" }) => {
+  const getStr = useStrings(["changessaved", "error"], "core");
   const { isLoading, isSuccess, isError } = mutation;
-  const isStateBefore = statePosition === 'before';
+  const isStateBefore = statePosition === "before";
 
   const state = (
-    <div className={`xp-w-8 xp-flex ${isStateBefore ? 'xp-mr-4 xp-justify-end' : 'xp-ml-4'}`} aria-live="assertive">
+    <div className={`xp-w-8 xp-flex ${isStateBefore ? "xp-mr-4 xp-justify-end" : "xp-ml-4"}`} aria-live="assertive">
       {isLoading ? <Spinner /> : null}
-      {isSuccess ? <Pix id="i/valid" component="core" alt={getStr('changessaved')} /> : null}
-      {isError ? <Pix id="i/invalid" component="core" alt={getStr('error')} /> : null}
+      {isSuccess ? <Pix id="i/valid" component="core" alt={getStr("changessaved")} /> : null}
+      {isError ? <Pix id="i/invalid" component="core" alt={getStr("error")} /> : null}
     </div>
   );
 
@@ -27,11 +44,25 @@ export const SaveButton: React.FC<{
     <div className="xp-flex xp-items-center">
       {isStateBefore ? state : null}
       <div className="">
-        <button className="btn btn-primary" onClick={onClick} disabled={disabled || isLoading} type="button">
+        <Button primary onClick={onClick} disabled={disabled || isLoading}>
           {label || <Str id="savechanges" component="core" />}
-        </button>
+        </Button>
       </div>
       {!isStateBefore ? state : null}
     </div>
+  );
+};
+
+export const AnchorButton: React.FC<{ onClick: () => void } & React.AnchorHTMLAttributes<HTMLAnchorElement>> = ({
+  children,
+  onClick,
+  className,
+  ...props
+}) => {
+  const anchorButtonProps = useAnchorButtonProps(onClick);
+  return (
+    <a className={classNames("xp-text-inherit xp-no-underline", className)} {...props} {...anchorButtonProps}>
+      {children}
+    </a>
   );
 };

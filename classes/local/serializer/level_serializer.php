@@ -25,8 +25,8 @@
 
 namespace block_xp\local\serializer;
 
-use external_single_structure;
-use external_value;
+use block_xp\external\external_single_structure;
+use block_xp\external\external_value;
 use block_xp\local\xp\level_with_badge;
 use block_xp\local\xp\level_with_description;
 use block_xp\local\xp\level_with_name;

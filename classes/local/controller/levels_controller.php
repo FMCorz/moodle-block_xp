@@ -32,7 +32,6 @@ use block_xp\local\serializer\levels_info_serializer;
 use block_xp\local\serializer\url_serializer;
 use block_xp\local\xp\algo_levels_info;
 use coding_exception;
-use html_writer;
 
 /**
  * Levels controller class.
@@ -84,14 +83,33 @@ class levels_controller extends page_controller {
             throw new coding_exception("Expecting algo_levels_info class");
         }
 
-        $serializer = new levels_info_serializer(new level_serializer(new url_serializer()));
+        $urlserializer = new url_serializer();
+        $badgeurlresolver = di::get('badge_url_resolver_course_world_factory')->get_url_resolver($world);
+        $defaultbadges = array_reduce(range(1, 20), function($carry, $level) use ($badgeurlresolver, $urlserializer) {
+            $url = $badgeurlresolver->get_url_for_level($level);
+            $carry[$level] = $urlserializer->serialize($url);
+            return $carry;
+        }, []);
+
+        $serializer = new levels_info_serializer(new level_serializer($urlserializer));
         return [
             'block_xp/ui-levels-lazy',
             [
                 'courseId' => $courseid,
-                'levelsInfo' => $serializer->serialize($levelsinfo)
+                'levelsInfo' => $serializer->serialize($levelsinfo),
+                'resetToDefaultsUrl' => $this->get_reset_url()->out(false),
+                'defaultBadgeUrls' => $defaultbadges,
+                'addon' => [
+                    'activated' => di::get('addon')->is_activated(),
+                    'enablepromo' => (bool) di::get('config')->get('enablepromoincourses'),
+                    'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $world->get_courseid()])->out(false)
+                ]
             ]
         ];
+    }
+
+    protected function get_reset_url() {
+        return new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
     }
 
     protected function page_content() {
@@ -113,17 +131,6 @@ class levels_controller extends page_controller {
     }
 
     protected function page_danger_zone_content() {
-        $output = $this->get_renderer();
-
-        echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
-
-        $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
-        echo html_writer::tag('div',
-            $output->single_button(
-                $url->get_compatible_url(),
-                get_string('resetlevelstodefaults', 'block_xp'),
-                'get'
-            )
-        );
     }
+
 }

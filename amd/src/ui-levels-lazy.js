@@ -101,117 +101,6 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 /***/ }),
 
-/***/ 2703:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var ReactPropTypesSecret = __webpack_require__(414);
-
-function emptyFunction() {}
-function emptyFunctionWithReset() {}
-emptyFunctionWithReset.resetWarningCache = emptyFunction;
-
-module.exports = function() {
-  function shim(props, propName, componentName, location, propFullName, secret) {
-    if (secret === ReactPropTypesSecret) {
-      // It is still safe when called from React.
-      return;
-    }
-    var err = new Error(
-      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
-      'Use PropTypes.checkPropTypes() to call them. ' +
-      'Read more at http://fb.me/use-check-prop-types'
-    );
-    err.name = 'Invariant Violation';
-    throw err;
-  };
-  shim.isRequired = shim;
-  function getShim() {
-    return shim;
-  };
-  // Important!
-  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
-  var ReactPropTypes = {
-    array: shim,
-    bool: shim,
-    func: shim,
-    number: shim,
-    object: shim,
-    string: shim,
-    symbol: shim,
-
-    any: shim,
-    arrayOf: getShim,
-    element: shim,
-    elementType: shim,
-    instanceOf: getShim,
-    node: shim,
-    objectOf: getShim,
-    oneOf: getShim,
-    oneOfType: getShim,
-    shape: getShim,
-    exact: getShim,
-
-    checkPropTypes: emptyFunctionWithReset,
-    resetWarningCache: emptyFunction
-  };
-
-  ReactPropTypes.PropTypes = ReactPropTypes;
-
-  return ReactPropTypes;
-};
-
-
-/***/ }),
-
-/***/ 5697:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-if (false) { var throwOnDirectAccess, ReactIs; } else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(2703)();
-}
-
-
-/***/ }),
-
-/***/ 414:
-/***/ (function(module) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-module.exports = ReactPropTypesSecret;
-
-
-/***/ }),
-
 /***/ 4448:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -549,1003 +438,6 @@ if (true) {
   module.exports = __webpack_require__(4448);
 } else {}
 
-
-/***/ }),
-
-/***/ 4109:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-module.exports =
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-
-/******/ 	// The require function
-/******/ 	function __nested_webpack_require_179__(moduleId) {
-
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
-/******/ 			return installedModules[moduleId].exports;
-
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
-/******/ 		};
-
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __nested_webpack_require_179__);
-
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-
-
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__nested_webpack_require_179__.m = modules;
-
-/******/ 	// expose the module cache
-/******/ 	__nested_webpack_require_179__.c = installedModules;
-
-/******/ 	// __webpack_public_path__
-/******/ 	__nested_webpack_require_179__.p = "";
-
-/******/ 	// Load entry module and return exports
-/******/ 	return __nested_webpack_require_179__(0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __nested_webpack_require_1380__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __nested_webpack_require_1380__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _propTypes = __nested_webpack_require_1380__(2);
-
-	var _propTypes2 = _interopRequireDefault(_propTypes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var KEYCODE_UP = 38;
-	var KEYCODE_DOWN = 40;
-	var IS_BROWSER = typeof document != 'undefined';
-	var RE_NUMBER = /^[+-]?((\.\d+)|(\d+(\.\d+)?))$/;
-	var RE_INCOMPLETE_NUMBER = /^([+-]|\.0*|[+-]\.0*|[+-]?\d+\.)?$/;
-
-	function addClass(element, className) {
-	    if (element.classList) {
-	        return element.classList.add(className);
-	    }
-	    if (!element.className.search(new RegExp("\\b" + className + "\\b"))) {
-	        element.className = " " + className;
-	    }
-	}
-
-	function removeClass(element, className) {
-	    if (element.className) {
-	        if (element.classList) {
-	            return element.classList.remove(className);
-	        }
-
-	        element.className = element.className.replace(new RegExp("\\b" + className + "\\b", "g"), "");
-	    }
-	}
-
-	function access(object, prop, defaultValue) {
-	    var result = object[prop];
-	    if (typeof result == "function") {
-	        for (var _len = arguments.length, args = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
-	            args[_key - 3] = arguments[_key];
-	        }
-
-	        result = result.apply(undefined, args);
-	    }
-	    return result === undefined ? defaultValue : result;
-	}
-
-	var NumericInput = function (_Component) {
-	    _inherits(NumericInput, _Component);
-
-	    function NumericInput() {
-	        var _ref;
-
-	        _classCallCheck(this, NumericInput);
-
-	        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-	            args[_key2] = arguments[_key2];
-	        }
-
-	        var _this = _possibleConstructorReturn(this, (_ref = NumericInput.__proto__ || Object.getPrototypeOf(NumericInput)).call.apply(_ref, [this].concat(args)));
-
-	        _this._isStrict = !!_this.props.strict;
-
-	        _this.state = _extends({
-	            btnDownHover: false,
-	            btnDownActive: false,
-	            btnUpHover: false,
-	            btnUpActive: false,
-	            stringValue: ""
-	        }, _this._propsToState(_this.props));
-	        _this.stop = _this.stop.bind(_this);
-	        _this.onTouchEnd = _this.onTouchEnd.bind(_this);
-	        _this.refsInput = {};
-	        _this.refsWrapper = {};
-	        return _this;
-	    }
-
-	    _createClass(NumericInput, [{
-	        key: '_propsToState',
-	        value: function _propsToState(props) {
-	            var out = {};
-
-	            if (props.hasOwnProperty("value")) {
-	                out.stringValue = String(props.value || props.value === 0 ? props.value : '').trim();
-
-	                out.value = out.stringValue !== '' ? this._parse(props.value) : null;
-	            } else if (!this._isMounted && props.hasOwnProperty("defaultValue")) {
-	                out.stringValue = String(props.defaultValue || props.defaultValue === 0 ? props.defaultValue : '').trim();
-
-	                out.value = props.defaultValue !== '' ? this._parse(props.defaultValue) : null;
-	            }
-
-	            return out;
-	        }
-	    }, {
-	        key: 'componentWillReceiveProps',
-	        value: function componentWillReceiveProps(props) {
-	            var _this2 = this;
-
-	            this._isStrict = !!props.strict;
-	            var nextState = this._propsToState(props);
-	            if (Object.keys(nextState).length) {
-	                this._ignoreValueChange = true;
-	                this.setState(nextState, function () {
-	                    _this2._ignoreValueChange = false;
-	                });
-	            }
-	        }
-	    }, {
-	        key: 'componentWillUpdate',
-	        value: function componentWillUpdate() {
-	            this.saveSelection();
-	        }
-	    }, {
-	        key: 'componentDidUpdate',
-	        value: function componentDidUpdate(prevProps, prevState) {
-	            if (!this._ignoreValueChange && prevState.value !== this.state.value && (!isNaN(this.state.value) || this.state.value === null)) {
-	                    this._invokeEventCallback("onChange", this.state.value, this.refsInput.value, this.refsInput);
-	                }
-
-	            if (this._inputFocus) {
-	                this.refsInput.focus();
-
-	                if (this.state.selectionStart || this.state.selectionStart === 0) {
-	                    this.refsInput.selectionStart = this.state.selectionStart;
-	                }
-
-	                if (this.state.selectionEnd || this.state.selectionEnd === 0) {
-	                    this.refsInput.selectionEnd = this.state.selectionEnd;
-	                }
-	            }
-
-	            this.checkValidity();
-	        }
-	    }, {
-	        key: 'componentWillUnmount',
-	        value: function componentWillUnmount() {
-	            this._isMounted = false;
-	            this.stop();
-	        }
-	    }, {
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var _this3 = this;
-
-	            this._isMounted = true;
-	            this.refsInput.getValueAsNumber = function () {
-	                return _this3.state.value || 0;
-	            };
-
-	            this.refsInput.setValue = function (value) {
-	                _this3.setState({
-	                    value: _this3._parse(value),
-	                    stringValue: value
-	                });
-	            };
-
-	            if (!this._inputFocus && IS_BROWSER && document.activeElement === this.refsInput) {
-	                this._inputFocus = true;
-	                this.refsInput.focus();
-	                this._invokeEventCallback("onFocus", {
-	                    target: this.refsInput,
-	                    type: "focus"
-	                });
-	            }
-
-	            this.checkValidity();
-	        }
-	    }, {
-	        key: 'saveSelection',
-	        value: function saveSelection() {
-	            this.state.selectionStart = this.refsInput.selectionStart;
-	            this.state.selectionEnd = this.refsInput.selectionEnd;
-	        }
-	    }, {
-	        key: 'checkValidity',
-	        value: function checkValidity() {
-	            var valid = void 0,
-	                validationError = "";
-
-	            var supportsValidation = !!this.refsInput.checkValidity;
-
-	            var noValidate = !!(this.props.noValidate && this.props.noValidate != "false");
-
-	            this.refsInput.noValidate = noValidate;
-
-	            valid = noValidate || !supportsValidation;
-
-	            if (valid) {
-	                validationError = "";
-	            } else {
-	                if (this.refsInput.pattern === "") {
-	                    this.refsInput.pattern = this.props.required ? ".+" : ".*";
-	                }
-
-	                if (supportsValidation) {
-	                    this.refsInput.checkValidity();
-	                    valid = this.refsInput.validity.valid;
-
-	                    if (!valid) {
-	                        validationError = this.refsInput.validationMessage;
-	                    }
-	                }
-
-	                if (valid && supportsValidation && this.props.maxLength) {
-	                    if (this.refsInput.value.length > this.props.maxLength) {
-	                        validationError = "This value is too long";
-	                    }
-	                }
-	            }
-
-	            validationError = validationError || (valid ? "" : this.refsInput.validationMessage || "Unknown Error");
-
-	            var validStateChanged = this._valid !== validationError;
-	            this._valid = validationError;
-	            if (validationError) {
-	                addClass(this.refsWrapper, "has-error");
-	                if (validStateChanged) {
-	                    this._invokeEventCallback("onInvalid", validationError, this.state.value, this.refsInput.value);
-	                }
-	            } else {
-	                removeClass(this.refsWrapper, "has-error");
-	                if (validStateChanged) {
-	                    this._invokeEventCallback("onValid", this.state.value, this.refsInput.value);
-	                }
-	            }
-	        }
-	    }, {
-	        key: '_toNumber',
-	        value: function _toNumber(x) {
-	            var n = parseFloat(x);
-	            if (isNaN(n) || !isFinite(n)) {
-	                n = 0;
-	            }
-
-	            if (this._isStrict) {
-	                var precision = access(this.props, "precision", null, this);
-	                var q = Math.pow(10, precision === null ? 10 : precision);
-	                var _min = +access(this.props, "min", NumericInput.defaultProps.min, this);
-	                var _max = +access(this.props, "max", NumericInput.defaultProps.max, this);
-	                n = Math.min(Math.max(n, _min), _max);
-	                n = Math.round(n * q) / q;
-	            }
-
-	            return n;
-	        }
-	    }, {
-	        key: '_parse',
-	        value: function _parse(x) {
-	            x = String(x);
-	            if (typeof this.props.parse == 'function') {
-	                return parseFloat(this.props.parse(x));
-	            }
-	            return parseFloat(x);
-	        }
-	    }, {
-	        key: '_format',
-	        value: function _format(n) {
-	            var _n = this._toNumber(n);
-	            var precision = access(this.props, "precision", null, this);
-	            if (precision !== null) {
-	                _n = n.toFixed(precision);
-	            }
-
-	            _n += "";
-
-	            if (this.props.format) {
-	                return this.props.format(_n);
-	            }
-
-	            return _n;
-	        }
-	    }, {
-	        key: '_step',
-	        value: function _step(n, callback) {
-	            var _isStrict = this._isStrict;
-	            this._isStrict = true;
-
-	            var _step = +access(this.props, "step", NumericInput.defaultProps.step, this, n > 0 ? NumericInput.DIRECTION_UP : NumericInput.DIRECTION_DOWN);
-
-	            var _n = this._toNumber((this.state.value || 0) + _step * n);
-
-	            if (this.props.snap) {
-	                _n = Math.round(_n / _step) * _step;
-	            }
-
-	            this._isStrict = _isStrict;
-
-	            if (_n !== this.state.value) {
-	                this.setState({ value: _n, stringValue: _n + "" }, callback);
-	                return true;
-	            }
-
-	            return false;
-	        }
-	    }, {
-	        key: '_onKeyDown',
-	        value: function _onKeyDown() {
-	            for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-	                args[_key3] = arguments[_key3];
-	            }
-
-	            args[0].persist();
-	            this._invokeEventCallback.apply(this, ["onKeyDown"].concat(args));
-	            var e = args[0];
-	            if (!e.isDefaultPrevented()) {
-	                if (e.keyCode === KEYCODE_UP) {
-	                    e.preventDefault();
-	                    this._step(e.ctrlKey || e.metaKey ? 0.1 : e.shiftKey ? 10 : 1);
-	                } else if (e.keyCode === KEYCODE_DOWN) {
-	                    e.preventDefault();
-	                    this._step(e.ctrlKey || e.metaKey ? -0.1 : e.shiftKey ? -10 : -1);
-	                } else {
-	                    var _value = this.refsInput.value,
-	                        length = _value.length;
-	                    if (e.keyCode === 8) {
-	                        if (this.refsInput.selectionStart == this.refsInput.selectionEnd && this.refsInput.selectionEnd > 0 && _value.length && _value.charAt(this.refsInput.selectionEnd - 1) === ".") {
-	                            e.preventDefault();
-	                            this.refsInput.selectionStart = this.refsInput.selectionEnd = this.refsInput.selectionEnd - 1;
-	                        }
-	                    } else if (e.keyCode === 46) {
-	                        if (this.refsInput.selectionStart == this.refsInput.selectionEnd && this.refsInput.selectionEnd < length + 1 && _value.length && _value.charAt(this.refsInput.selectionEnd) === ".") {
-	                            e.preventDefault();
-	                            this.refsInput.selectionStart = this.refsInput.selectionEnd = this.refsInput.selectionEnd + 1;
-	                        }
-	                    }
-	                }
-	            }
-	        }
-	    }, {
-	        key: 'stop',
-	        value: function stop() {
-	            if (this._timer) {
-	                clearTimeout(this._timer);
-	            }
-	        }
-	    }, {
-	        key: 'increase',
-	        value: function increase() {
-	            var _this4 = this;
-
-	            var _recursive = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-	            var callback = arguments[1];
-
-	            this.stop();
-	            this._step(1, callback);
-	            var _max = +access(this.props, "max", NumericInput.defaultProps.max, this);
-	            if (isNaN(this.state.value) || +this.state.value < _max) {
-	                this._timer = setTimeout(function () {
-	                    _this4.increase(true);
-	                }, _recursive ? NumericInput.SPEED : NumericInput.DELAY);
-	            }
-	        }
-	    }, {
-	        key: 'decrease',
-	        value: function decrease() {
-	            var _this5 = this;
-
-	            var _recursive = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-	            var callback = arguments[1];
-
-	            this.stop();
-	            this._step(-1, callback);
-	            var _min = +access(this.props, "min", NumericInput.defaultProps.min, this);
-	            if (isNaN(this.state.value) || +this.state.value > _min) {
-	                this._timer = setTimeout(function () {
-	                    _this5.decrease(true);
-	                }, _recursive ? NumericInput.SPEED : NumericInput.DELAY);
-	            }
-	        }
-	    }, {
-	        key: 'onMouseDown',
-	        value: function onMouseDown(dir, callback) {
-	            if (dir == 'down') {
-	                this.decrease(false, callback);
-	            } else if (dir == 'up') {
-	                this.increase(false, callback);
-	            }
-	        }
-	    }, {
-	        key: 'onTouchStart',
-	        value: function onTouchStart(dir, e) {
-	            e.preventDefault();
-	            if (dir == 'down') {
-	                this.decrease();
-	            } else if (dir == 'up') {
-	                this.increase();
-	            }
-	        }
-	    }, {
-	        key: 'onTouchEnd',
-	        value: function onTouchEnd(e) {
-	            e.preventDefault();
-	            this.stop();
-	        }
-	    }, {
-	        key: '_invokeEventCallback',
-	        value: function _invokeEventCallback(callbackName) {
-	            if (typeof this.props[callbackName] == "function") {
-	                var _props$callbackName;
-
-	                for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-	                    args[_key4 - 1] = arguments[_key4];
-	                }
-
-	                (_props$callbackName = this.props[callbackName]).call.apply(_props$callbackName, [null].concat(args));
-	            }
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var _this6 = this;
-
-	            var props = this.props;
-	            var state = this.state;
-	            var css = {};
-
-	            var _props = this.props,
-	                step = _props.step,
-	                min = _props.min,
-	                max = _props.max,
-	                precision = _props.precision,
-	                parse = _props.parse,
-	                format = _props.format,
-	                mobile = _props.mobile,
-	                snap = _props.snap,
-	                componentClass = _props.componentClass,
-	                value = _props.value,
-	                type = _props.type,
-	                style = _props.style,
-	                defaultValue = _props.defaultValue,
-	                onInvalid = _props.onInvalid,
-	                onValid = _props.onValid,
-	                strict = _props.strict,
-	                noStyle = _props.noStyle,
-	                rest = _objectWithoutProperties(_props, ['step', 'min', 'max', 'precision', 'parse', 'format', 'mobile', 'snap', 'componentClass', 'value', 'type', 'style', 'defaultValue', 'onInvalid', 'onValid', 'strict', 'noStyle']);
-
-	            noStyle = noStyle || style === false;
-
-	            for (var x in NumericInput.style) {
-	                css[x] = _extends({}, NumericInput.style[x], style ? style[x] || {} : {});
-	            }
-
-	            var hasFormControl = props.className && /\bform-control\b/.test(props.className);
-
-	            if (mobile == 'auto') {
-	                mobile = IS_BROWSER && 'ontouchstart' in document;
-	            }
-
-	            if (typeof mobile == "function") {
-	                mobile = mobile.call(this);
-	            }
-	            mobile = !!mobile;
-
-	            var attrs = {
-	                wrap: {
-	                    style: noStyle ? null : css.wrap,
-	                    className: 'react-numeric-input',
-	                    ref: function ref(e) {
-	                        if (e != null && e != undefined) {
-	                            _this6.refsWrapper = e;
-	                        }
-	                    },
-	                    onMouseUp: undefined,
-	                    onMouseLeave: undefined
-	                },
-	                input: _extends({
-	                    ref: function ref(e) {
-	                        if (e != null && e != undefined) {
-	                            _this6.refsInput = e;
-	                        }
-	                    },
-	                    type: 'text',
-	                    style: noStyle ? null : _extends({}, css.input, !hasFormControl ? css['input:not(.form-control)'] : {}, this._inputFocus ? css['input:focus'] : {})
-	                }, rest),
-	                btnUp: {
-	                    onMouseEnter: undefined,
-	                    onMouseDown: undefined,
-	                    onMouseUp: undefined,
-	                    onMouseLeave: undefined,
-	                    onTouchStart: undefined,
-	                    onTouchEnd: undefined,
-	                    style: noStyle ? null : _extends({}, css.btn, css.btnUp, props.disabled || props.readOnly ? css['btn:disabled'] : state.btnUpActive ? css['btn:active'] : state.btnUpHover ? css['btn:hover'] : {})
-	                },
-	                btnDown: {
-	                    onMouseEnter: undefined,
-	                    onMouseDown: undefined,
-	                    onMouseUp: undefined,
-	                    onMouseLeave: undefined,
-	                    onTouchStart: undefined,
-	                    onTouchEnd: undefined,
-	                    style: noStyle ? null : _extends({}, css.btn, css.btnDown, props.disabled || props.readOnly ? css['btn:disabled'] : state.btnDownActive ? css['btn:active'] : state.btnDownHover ? css['btn:hover'] : {})
-	                }
-	            };
-
-	            var stringValue = String(state.stringValue || (state.value || state.value === 0 ? state.value : "") || "");
-
-	            var loose = !this._isStrict && (this._inputFocus || !this._isMounted);
-
-	            if (loose && RE_INCOMPLETE_NUMBER.test(stringValue)) {
-	                attrs.input.value = stringValue;
-	            } else if (loose && stringValue && !RE_NUMBER.test(stringValue)) {
-	                    attrs.input.value = stringValue;
-	                } else if (state.value || state.value === 0) {
-	                        attrs.input.value = this._format(state.value);
-	                    } else {
-	                            attrs.input.value = "";
-	                        }
-
-	            if (hasFormControl && !noStyle) {
-	                _extends(attrs.wrap.style, css['wrap.hasFormControl']);
-	            }
-
-	            if (mobile && !noStyle) {
-	                _extends(attrs.input.style, css['input.mobile']);
-	                _extends(attrs.btnUp.style, css['btnUp.mobile']);
-	                _extends(attrs.btnDown.style, css['btnDown.mobile']);
-	            }
-
-	            if (!props.disabled && !props.readOnly) {
-	                _extends(attrs.wrap, {
-	                    onMouseUp: this.stop,
-	                    onMouseLeave: this.stop
-	                });
-
-	                _extends(attrs.btnUp, {
-	                    onTouchStart: this.onTouchStart.bind(this, 'up'),
-	                    onTouchEnd: this.onTouchEnd,
-	                    onMouseEnter: function onMouseEnter() {
-	                        _this6.setState({
-	                            btnUpHover: true
-	                        });
-	                    },
-	                    onMouseLeave: function onMouseLeave() {
-	                        _this6.stop();
-	                        _this6.setState({
-	                            btnUpHover: false,
-	                            btnUpActive: false
-	                        });
-	                    },
-	                    onMouseUp: function onMouseUp() {
-	                        _this6.setState({
-	                            btnUpHover: true,
-	                            btnUpActive: false
-	                        });
-	                    },
-	                    onMouseDown: function onMouseDown() {
-	                        for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-	                            args[_key5] = arguments[_key5];
-	                        }
-
-	                        args[0].preventDefault();
-	                        args[0].persist();
-	                        _this6._inputFocus = true;
-	                        _this6.setState({
-	                            btnUpHover: true,
-	                            btnUpActive: true
-	                        }, function () {
-	                            _this6._invokeEventCallback.apply(_this6, ["onFocus"].concat(args));
-	                            _this6.onMouseDown('up');
-	                        });
-	                    }
-	                });
-
-	                _extends(attrs.btnDown, {
-	                    onTouchStart: this.onTouchStart.bind(this, 'down'),
-	                    onTouchEnd: this.onTouchEnd,
-	                    onMouseEnter: function onMouseEnter() {
-	                        _this6.setState({
-	                            btnDownHover: true
-	                        });
-	                    },
-	                    onMouseLeave: function onMouseLeave() {
-	                        _this6.stop();
-	                        _this6.setState({
-	                            btnDownHover: false,
-	                            btnDownActive: false
-	                        });
-	                    },
-	                    onMouseUp: function onMouseUp() {
-	                        _this6.setState({
-	                            btnDownHover: true,
-	                            btnDownActive: false
-	                        });
-	                    },
-	                    onMouseDown: function onMouseDown() {
-	                        for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-	                            args[_key6] = arguments[_key6];
-	                        }
-
-	                        args[0].preventDefault();
-	                        args[0].persist();
-	                        _this6._inputFocus = true;
-	                        _this6.setState({
-	                            btnDownHover: true,
-	                            btnDownActive: true
-	                        }, function () {
-	                            _this6._invokeEventCallback.apply(_this6, ["onFocus"].concat(args));
-	                            _this6.onMouseDown('down');
-	                        });
-	                    }
-	                });
-
-	                _extends(attrs.input, {
-	                    onChange: function onChange(e) {
-	                        var original = e.target.value;
-	                        var val = _this6._parse(original);
-	                        if (isNaN(val)) {
-	                            val = null;
-	                        }
-	                        _this6.setState({
-	                            value: _this6._isStrict ? _this6._toNumber(val) : val,
-	                            stringValue: original
-	                        });
-	                    },
-	                    onKeyDown: this._onKeyDown.bind(this),
-	                    onInput: function onInput() {
-	                        for (var _len7 = arguments.length, args = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-	                            args[_key7] = arguments[_key7];
-	                        }
-
-	                        _this6.saveSelection();
-	                        _this6._invokeEventCallback.apply(_this6, ["onInput"].concat(args));
-	                    },
-	                    onSelect: function onSelect() {
-	                        for (var _len8 = arguments.length, args = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-	                            args[_key8] = arguments[_key8];
-	                        }
-
-	                        _this6.saveSelection();
-	                        _this6._invokeEventCallback.apply(_this6, ["onSelect"].concat(args));
-	                    },
-	                    onFocus: function onFocus() {
-	                        for (var _len9 = arguments.length, args = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-	                            args[_key9] = arguments[_key9];
-	                        }
-
-	                        args[0].persist();
-	                        _this6._inputFocus = true;
-	                        var val = _this6._parse(args[0].target.value);
-	                        _this6.setState({
-	                            value: val,
-	                            stringValue: val || val === 0 ? val + "" : ""
-	                        }, function () {
-	                            _this6._invokeEventCallback.apply(_this6, ["onFocus"].concat(args));
-	                        });
-	                    },
-	                    onBlur: function onBlur() {
-	                        for (var _len10 = arguments.length, args = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-	                            args[_key10] = arguments[_key10];
-	                        }
-
-	                        var _isStrict = _this6._isStrict;
-	                        _this6._isStrict = true;
-	                        args[0].persist();
-	                        _this6._inputFocus = false;
-	                        var val = _this6._parse(args[0].target.value);
-	                        _this6.setState({
-	                            value: val
-	                        }, function () {
-	                            _this6._invokeEventCallback.apply(_this6, ["onBlur"].concat(args));
-	                            _this6._isStrict = _isStrict;
-	                        });
-	                    }
-	                });
-	            } else {
-	                if (!noStyle && props.disabled) {
-	                    _extends(attrs.input.style, css['input:disabled']);
-	                }
-	            }
-
-	            var InputTag = componentClass || 'input';
-
-	            if (mobile) {
-	                return _react2.default.createElement(
-	                    'span',
-	                    attrs.wrap,
-	                    _react2.default.createElement(InputTag, attrs.input),
-	                    _react2.default.createElement(
-	                        'b',
-	                        attrs.btnUp,
-	                        _react2.default.createElement('i', { style: noStyle ? null : css.minus }),
-	                        _react2.default.createElement('i', { style: noStyle ? null : css.plus })
-	                    ),
-	                    _react2.default.createElement(
-	                        'b',
-	                        attrs.btnDown,
-	                        _react2.default.createElement('i', { style: noStyle ? null : css.minus })
-	                    )
-	                );
-	            }
-
-	            return _react2.default.createElement(
-	                'span',
-	                attrs.wrap,
-	                _react2.default.createElement(InputTag, attrs.input),
-	                _react2.default.createElement(
-	                    'b',
-	                    attrs.btnUp,
-	                    _react2.default.createElement('i', { style: noStyle ? null : css.arrowUp })
-	                ),
-	                _react2.default.createElement(
-	                    'b',
-	                    attrs.btnDown,
-	                    _react2.default.createElement('i', { style: noStyle ? null : css.arrowDown })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return NumericInput;
-	}(_react.Component);
-
-	NumericInput.propTypes = {
-	    step: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.func]),
-	    min: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.func]),
-	    max: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.func]),
-	    precision: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.func]),
-	    maxLength: _propTypes2.default.number,
-	    parse: _propTypes2.default.func,
-	    format: _propTypes2.default.func,
-	    className: _propTypes2.default.string,
-	    disabled: _propTypes2.default.bool,
-	    readOnly: _propTypes2.default.bool,
-	    required: _propTypes2.default.bool,
-	    snap: _propTypes2.default.bool,
-	    noValidate: _propTypes2.default.oneOfType([_propTypes2.default.bool, _propTypes2.default.string]),
-	    style: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.bool]),
-	    noStyle: _propTypes2.default.bool,
-	    type: _propTypes2.default.string,
-	    pattern: _propTypes2.default.string,
-	    onFocus: _propTypes2.default.func,
-	    onBlur: _propTypes2.default.func,
-	    onKeyDown: _propTypes2.default.func,
-	    onChange: _propTypes2.default.func,
-	    onInvalid: _propTypes2.default.func,
-	    onValid: _propTypes2.default.func,
-	    onInput: _propTypes2.default.func,
-	    onSelect: _propTypes2.default.func,
-	    size: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.string]),
-	    value: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.string]),
-	    defaultValue: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.string]),
-	    strict: _propTypes2.default.bool,
-	    componentClass: _propTypes2.default.string,
-	    mobile: function mobile(props, propName) {
-	        var prop = props[propName];
-	        if (prop !== true && prop !== false && prop !== 'auto' && typeof prop != 'function') {
-	            return new Error('The "mobile" prop must be true, false, "auto" or a function');
-	        }
-	    }
-	};
-	NumericInput.defaultProps = {
-	    step: 1,
-	    min: Number.MIN_SAFE_INTEGER || -9007199254740991,
-	    max: Number.MAX_SAFE_INTEGER || 9007199254740991,
-	    precision: null,
-	    parse: null,
-	    format: null,
-	    mobile: 'auto',
-	    strict: false,
-	    componentClass: "input",
-	    style: {}
-	};
-	NumericInput.style = {
-	    wrap: {
-	        position: 'relative',
-	        display: 'inline-block'
-	    },
-
-	    'wrap.hasFormControl': {
-	        display: 'block'
-	    },
-
-	    arrowUp: {
-	        position: 'absolute',
-	        top: '50%',
-	        left: '50%',
-	        width: 0,
-	        height: 0,
-	        borderWidth: '0 0.6ex 0.6ex 0.6ex',
-	        borderColor: 'transparent transparent rgba(0, 0, 0, 0.7)',
-	        borderStyle: 'solid',
-	        margin: '-0.3ex 0 0 -0.56ex'
-	    },
-
-	    arrowDown: {
-	        position: 'absolute',
-	        top: '50%',
-	        left: '50%',
-	        width: 0,
-	        height: 0,
-	        borderWidth: '0.6ex 0.6ex 0 0.6ex',
-	        borderColor: 'rgba(0, 0, 0, 0.7) transparent transparent',
-	        borderStyle: 'solid',
-	        margin: '-0.3ex 0 0 -0.56ex'
-	    },
-
-	    plus: {
-	        position: 'absolute',
-	        top: '50%',
-	        left: '50%',
-	        width: 2,
-	        height: 10,
-	        background: 'rgba(0,0,0,.7)',
-	        margin: '-5px 0 0 -1px'
-	    },
-
-	    minus: {
-	        position: 'absolute',
-	        top: '50%',
-	        left: '50%',
-	        width: 10,
-	        height: 2,
-	        background: 'rgba(0,0,0,.7)',
-	        margin: '-1px 0 0 -5px'
-	    },
-
-	    btn: {
-	        position: 'absolute',
-	        right: 2,
-	        width: '2.26ex',
-	        borderColor: 'rgba(0,0,0,.1)',
-	        borderStyle: 'solid',
-	        textAlign: 'center',
-	        cursor: 'default',
-	        transition: 'all 0.1s',
-	        background: 'rgba(0,0,0,.1)',
-	        boxShadow: '-1px -1px 3px rgba(0,0,0,.1) inset,' + '1px 1px 3px rgba(255,255,255,.7) inset'
-	    },
-
-	    btnUp: {
-	        top: 2,
-	        bottom: '50%',
-	        borderRadius: '2px 2px 0 0',
-	        borderWidth: '1px 1px 0 1px'
-	    },
-
-	    'btnUp.mobile': {
-	        width: '3.3ex',
-	        bottom: 2,
-	        boxShadow: 'none',
-	        borderRadius: 2,
-	        borderWidth: 1
-	    },
-
-	    btnDown: {
-	        top: '50%',
-	        bottom: 2,
-	        borderRadius: '0 0 2px 2px',
-	        borderWidth: '0 1px 1px 1px'
-	    },
-
-	    'btnDown.mobile': {
-	        width: '3.3ex',
-	        bottom: 2,
-	        left: 2,
-	        top: 2,
-	        right: 'auto',
-	        boxShadow: 'none',
-	        borderRadius: 2,
-	        borderWidth: 1
-	    },
-
-	    'btn:hover': {
-	        background: 'rgba(0,0,0,.2)'
-	    },
-
-	    'btn:active': {
-	        background: 'rgba(0,0,0,.3)',
-	        boxShadow: '0 1px 3px rgba(0,0,0,.2) inset,' + '-1px -1px 4px rgba(255,255,255,.5) inset'
-	    },
-
-	    'btn:disabled': {
-	        opacity: 0.5,
-	        boxShadow: 'none',
-	        cursor: 'not-allowed'
-	    },
-
-	    input: {
-	        paddingRight: '3ex',
-	        boxSizing: 'border-box',
-	        fontSize: 'inherit'
-	    },
-
-	    'input:not(.form-control)': {
-	        border: '1px solid #ccc',
-	        borderRadius: 2,
-	        paddingLeft: 4,
-	        display: 'block',
-	        WebkitAppearance: 'none',
-	        lineHeight: 'normal'
-	    },
-
-	    'input.mobile': {
-	        paddingLeft: ' 3.4ex',
-	        paddingRight: '3.4ex',
-	        textAlign: 'center'
-	    },
-
-	    'input:focus': {},
-
-	    'input:disabled': {
-	        color: 'rgba(0, 0, 0, 0.3)',
-	        textShadow: '0 1px 0 rgba(255, 255, 255, 0.8)'
-	    }
-	};
-	NumericInput.SPEED = 50;
-	NumericInput.DELAY = 500;
-	NumericInput.DIRECTION_UP = "up";
-	NumericInput.DIRECTION_DOWN = "down";
-
-
-	module.exports = NumericInput;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-	module.exports = __webpack_require__(7294);
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-	module.exports = __webpack_require__(5697);
-
-/***/ })
-/******/ ]);
 
 /***/ }),
 
@@ -5700,7 +4592,296 @@ if (true) {
 
 /***/ }),
 
+/***/ 4634:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AddonRequired = exports.IfAddonActivatedOrPromoEnabled = void 0;
+var react_1 = __importStar(__webpack_require__(7294));
+var contexts_1 = __webpack_require__(2471);
+var hooks_1 = __webpack_require__(7909);
+var IfAddonActivatedOrPromoEnabled = function (_a) {
+    var children = _a.children;
+    var _b = (0, react_1.useContext)(contexts_1.AddonContext), activated = _b.activated, enablepromo = _b.enablepromo;
+    if (!activated && !enablepromo) {
+        return null;
+    }
+    return react_1.default.createElement(react_1.default.Fragment, null, children);
+};
+exports.IfAddonActivatedOrPromoEnabled = IfAddonActivatedOrPromoEnabled;
+var AddonRequired = function () {
+    var promourl = (0, react_1.useContext)(contexts_1.AddonContext).promourl;
+    var getStr = (0, hooks_1.useStrings)(["xpplusrequired", "unlockfeaturewithxpplus"]);
+    return (react_1.default.createElement("a", { href: "#", role: "button", "data-toggle": "popover", "data-placement": "top", "data-container": "body", "data-content": getStr("unlockfeaturewithxpplus", promourl), "data-html": "true", className: "xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline" }, getStr("xpplusrequired")));
+};
+exports.AddonRequired = AddonRequired;
+
+
+/***/ }),
+
+/***/ 2224:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BulkEditPointsModal = exports.getDefaultBulkEditPointsState = void 0;
+var react_1 = __importStar(__webpack_require__(7294));
+var Modal_1 = __webpack_require__(1274);
+var hooks_1 = __webpack_require__(7909);
+var Str_1 = __importDefault(__webpack_require__(430));
+var NumberInput_1 = __webpack_require__(4959);
+var RadioGroup_1 = __webpack_require__(3828);
+var constants_1 = __webpack_require__(9482);
+function calculationMethodReducer(state, action) {
+    switch (action.type) {
+        case "setMethod":
+            return __assign(__assign({}, state), { method: action.payload });
+        case "setBase":
+            return __assign(__assign({}, state), { base: Math.max(1, action.payload) });
+        case "setIncrement":
+            return __assign(__assign({}, state), { incr: Math.max(0, action.payload) });
+        case "setCoef":
+            return __assign(__assign({}, state), { coef: Math.min(5, Math.max(1, action.payload)) });
+    }
+    return state;
+}
+function getDefaultBulkEditPointsState(props) {
+    return {
+        method: props.method || "relative",
+        base: Math.max(1, props.base || 120),
+        incr: Math.max(0, props.incr || 40),
+        coef: Math.min(5, Math.max(props.coef || 1.3)),
+    };
+}
+exports.getDefaultBulkEditPointsState = getDefaultBulkEditPointsState;
+var BulkEditPoints = function (_a) {
+    var method = _a.method, base = _a.base, incr = _a.incr, coef = _a.coef, onBaseChange = _a.onBaseChange, onCoefChange = _a.onCoefChange, onIncrementChange = _a.onIncrementChange, onMethodChange = _a.onMethodChange;
+    var getStr = (0, hooks_1.useStrings)([
+        "basepoints",
+        "basepointslineardesc",
+        "basepointsrelativedesc",
+        "difficulty",
+        "difficultyflat",
+        "difficultyflatdesc",
+        "difficultylinear",
+        "difficultylineardesc",
+        "difficultylinearincrdesc",
+        "difficultypointincrease",
+        "difficultyrelative",
+        "difficultyrelativedesc",
+        "difficultyrelativeincrdesc",
+        "documentation",
+        "pointincrement",
+        "pointincrementdesc",
+        "pointsperlevel",
+        "recommended",
+    ], "block_xp");
+    return (react_1.default.createElement("div", { className: "xp-space-y-4" },
+        react_1.default.createElement("div", null,
+            react_1.default.createElement("div", { className: "xp-mb-2 xp-flex xp-items-start xp-flex-wrap" },
+                react_1.default.createElement("div", { className: "xp-grow xp-font-bold" }, getStr("difficulty")),
+                react_1.default.createElement("div", { className: "xp-shrink-0" },
+                    react_1.default.createElement("a", { href: constants_1.HELP_URL_LEVELS, target: "_blank", rel: "noopener" }, getStr("documentation")))),
+            react_1.default.createElement(RadioGroup_1.RadioGroup, { onChange: onMethodChange, value: method, items: [
+                    { value: "flat", label: getStr("difficultyflat"), desc: getStr("difficultyflatdesc") },
+                    {
+                        value: "linear",
+                        label: getStr("difficultylinear"),
+                        desc: getStr("difficultylineardesc"),
+                    },
+                    {
+                        value: "relative",
+                        label: (react_1.default.createElement(react_1.default.Fragment, null,
+                            getStr("difficultyrelative"),
+                            react_1.default.createElement("div", { className: "badge badge-info xp-ml-2" }, getStr("recommended")))),
+                        desc: getStr("difficultyrelativedesc"),
+                    },
+                ] })),
+        react_1.default.createElement("div", null,
+            react_1.default.createElement("p", { className: "xp-font-bold xp-mb-2" },
+                react_1.default.createElement(Str_1.default, { id: "settings", component: "core" })),
+            method === "flat" ? (react_1.default.createElement(react_1.default.Fragment, null,
+                react_1.default.createElement("div", { className: "" },
+                    react_1.default.createElement("label", { htmlFor: "xp-calc-bp", className: "xp-m-0" },
+                        react_1.default.createElement(Str_1.default, { id: "pointsperlevel" })),
+                    react_1.default.createElement("div", null,
+                        react_1.default.createElement(NumberInput_1.NumberInputWithButtons, { value: base, onChange: onBaseChange, min: 1, step: 10, inputProps: { id: "xp-calc-bp", className: "xp-w-24" } }))))) : null,
+            method === "linear" ? (react_1.default.createElement(react_1.default.Fragment, null,
+                react_1.default.createElement("div", { className: "xp-space-y-2" },
+                    react_1.default.createElement("div", { className: "" },
+                        react_1.default.createElement("label", { htmlFor: "xp-calc-bp", className: "xp-m-0" },
+                            react_1.default.createElement(Str_1.default, { id: "basepoints" })),
+                        react_1.default.createElement("div", null,
+                            react_1.default.createElement(NumberInput_1.NumberInputWithButtons, { value: base, onChange: onBaseChange, min: 1, step: 10, inputProps: { id: "xp-calc-bp", className: "xp-w-24" } })),
+                        react_1.default.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, getStr("basepointslineardesc"))),
+                    react_1.default.createElement("div", { className: "" },
+                        react_1.default.createElement("label", { htmlFor: "xp-calc-pi", className: "xp-m-0" }, getStr("difficultypointincrease")),
+                        react_1.default.createElement("div", null,
+                            react_1.default.createElement(NumberInput_1.NumberInputWithButtons, { value: incr, onChange: onIncrementChange, min: 0, inputProps: { id: "xp-calc-pi", className: "xp-w-24" } })),
+                        react_1.default.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, getStr("difficultylinearincrdesc")))))) : null,
+            method === "relative" ? (react_1.default.createElement(react_1.default.Fragment, null,
+                react_1.default.createElement("div", { className: "xp-space-y-2" },
+                    react_1.default.createElement("div", { className: "" },
+                        react_1.default.createElement("label", { htmlFor: "xp-calc-bp", className: "xp-m-0" },
+                            react_1.default.createElement(Str_1.default, { id: "basepoints" })),
+                        react_1.default.createElement("div", null,
+                            react_1.default.createElement(NumberInput_1.NumberInputWithButtons, { value: base, onChange: onBaseChange, min: 1, step: 10, inputProps: { id: "xp-calc-bp", className: "xp-w-24" } })),
+                        react_1.default.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, getStr("basepointsrelativedesc"))),
+                    react_1.default.createElement("div", { className: "" },
+                        react_1.default.createElement("label", { htmlFor: "xp-calc-pi", className: "xp-m-0" }, getStr("difficultypointincrease")),
+                        react_1.default.createElement("div", null,
+                            react_1.default.createElement(NumberInput_1.NumberInputWithButtons, { value: Math.floor(coef * 100 - 100), onChange: function (p) { return onCoefChange(1 + p / 100); }, min: 0, max: 400, inputProps: { id: "xp-calc-pi", className: "xp-w-24", maxLength: 3 }, suffix: "%" })),
+                        react_1.default.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, getStr("difficultyrelativeincrdesc")))))) : null)));
+};
+var BulkEditPointsModal = function (props) {
+    var _a = (0, react_1.useReducer)(calculationMethodReducer, props, getDefaultBulkEditPointsState), state = _a[0], dispatch = _a[1];
+    var getStr = (0, hooks_1.useStrings)(["quickeditpoints"], "block_xp");
+    var applyStr = (0, hooks_1.useString)("apply", "core");
+    var setMethod = function (p) { return dispatch({ type: "setMethod", payload: p }); };
+    var setIncrement = function (p) { return dispatch({ type: "setIncrement", payload: p }); };
+    var setBase = function (p) { return dispatch({ type: "setBase", payload: p }); };
+    var setCoef = function (p) { return dispatch({ type: "setCoef", payload: p }); };
+    var handleClose = function () {
+        dispatch({ type: "reset", payload: getDefaultBulkEditPointsState(props) });
+        props.onClose && props.onClose();
+    };
+    var handleSave = function () {
+        props.onSave && props.onSave(state);
+    };
+    return (react_1.default.createElement(Modal_1.SaveCancelModal, { show: props.show, onClose: handleClose, onSave: handleSave, title: getStr("quickeditpoints"), saveButtonText: applyStr },
+        react_1.default.createElement(BulkEditPoints, { coef: state.coef, base: state.base, incr: state.incr, method: state.method, onBaseChange: setBase, onCoefChange: setCoef, onIncrementChange: setIncrement, onMethodChange: setMethod })));
+};
+exports.BulkEditPointsModal = BulkEditPointsModal;
+
+
+/***/ }),
+
 /***/ 6549:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AnchorButton = exports.SaveButton = exports.Button = void 0;
+var react_1 = __importDefault(__webpack_require__(7294));
+var hooks_1 = __webpack_require__(7909);
+var Pix_1 = __importDefault(__webpack_require__(9803));
+var Spinner_1 = __importDefault(__webpack_require__(5811));
+var Str_1 = __importDefault(__webpack_require__(430));
+var utils_1 = __webpack_require__(6926);
+var Button = function (_a) {
+    var onClick = _a.onClick, disabled = _a.disabled, children = _a.children, primary = _a.primary, className = _a.className, _b = _a.type, type = _b === void 0 ? "button" : _b;
+    var classes = (0, utils_1.classNames)("btn", primary ? "btn-primary" : "btn-default btn-secondary", className);
+    return (react_1.default.createElement("button", { className: classes, onClick: onClick, disabled: disabled, type: type }, children));
+};
+exports.Button = Button;
+var SaveButton = function (_a) {
+    var onClick = _a.onClick, disabled = _a.disabled, label = _a.label, _b = _a.mutation, mutation = _b === void 0 ? {} : _b, _c = _a.statePosition, statePosition = _c === void 0 ? "after" : _c;
+    var getStr = (0, hooks_1.useStrings)(["changessaved", "error"], "core");
+    var isLoading = mutation.isLoading, isSuccess = mutation.isSuccess, isError = mutation.isError;
+    var isStateBefore = statePosition === "before";
+    var state = (react_1.default.createElement("div", { className: "xp-w-8 xp-flex " + (isStateBefore ? "xp-mr-4 xp-justify-end" : "xp-ml-4"), "aria-live": "assertive" },
+        isLoading ? react_1.default.createElement(Spinner_1.default, null) : null,
+        isSuccess ? react_1.default.createElement(Pix_1.default, { id: "i/valid", component: "core", alt: getStr("changessaved") }) : null,
+        isError ? react_1.default.createElement(Pix_1.default, { id: "i/invalid", component: "core", alt: getStr("error") }) : null));
+    return (react_1.default.createElement("div", { className: "xp-flex xp-items-center" },
+        isStateBefore ? state : null,
+        react_1.default.createElement("div", { className: "" },
+            react_1.default.createElement(exports.Button, { primary: true, onClick: onClick, disabled: disabled || isLoading }, label || react_1.default.createElement(Str_1.default, { id: "savechanges", component: "core" }))),
+        !isStateBefore ? state : null));
+};
+exports.SaveButton = SaveButton;
+var AnchorButton = function (_a) {
+    var children = _a.children, onClick = _a.onClick, className = _a.className, props = __rest(_a, ["children", "onClick", "className"]);
+    var anchorButtonProps = (0, hooks_1.useAnchorButtonProps)(onClick);
+    return (react_1.default.createElement("a", __assign({ className: (0, utils_1.classNames)("xp-text-inherit xp-no-underline", className) }, props, anchorButtonProps), children));
+};
+exports.AnchorButton = AnchorButton;
+
+
+/***/ }),
+
+/***/ 1707:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -5709,28 +4890,63 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SaveButton = void 0;
 var react_1 = __importDefault(__webpack_require__(7294));
-var hooks_1 = __webpack_require__(7909);
-var Pix_1 = __importDefault(__webpack_require__(9803));
-var Spinner_1 = __importDefault(__webpack_require__(5811));
-var Str_1 = __importDefault(__webpack_require__(430));
-var SaveButton = function (_a) {
-    var onClick = _a.onClick, disabled = _a.disabled, label = _a.label, _b = _a.mutation, mutation = _b === void 0 ? {} : _b, _c = _a.statePosition, statePosition = _c === void 0 ? 'after' : _c;
-    var getStr = (0, hooks_1.useStrings)(['changessaved', 'error'], 'core');
-    var isLoading = mutation.isLoading, isSuccess = mutation.isSuccess, isError = mutation.isError;
-    var isStateBefore = statePosition === 'before';
-    var state = (react_1.default.createElement("div", { className: "xp-w-8 xp-flex " + (isStateBefore ? 'xp-mr-4 xp-justify-end' : 'xp-ml-4'), "aria-live": "assertive" },
-        isLoading ? react_1.default.createElement(Spinner_1.default, null) : null,
-        isSuccess ? react_1.default.createElement(Pix_1.default, { id: "i/valid", component: "core", alt: getStr('changessaved') }) : null,
-        isError ? react_1.default.createElement(Pix_1.default, { id: "i/invalid", component: "core", alt: getStr('error') }) : null));
-    return (react_1.default.createElement("div", { className: "xp-flex xp-items-center" },
-        isStateBefore ? state : null,
-        react_1.default.createElement("div", { className: "" },
-            react_1.default.createElement("button", { className: "btn btn-primary", onClick: onClick, disabled: disabled || isLoading, type: "button" }, label || react_1.default.createElement(Str_1.default, { id: "savechanges", component: "core" }))),
-        !isStateBefore ? state : null));
+var react_animate_height_1 = __importDefault(__webpack_require__(5085));
+function Expandable(_a) {
+    var expanded = _a.expanded, children = _a.children, id = _a.id;
+    return (react_1.default.createElement(react_animate_height_1.default, { id: id, height: expanded ? "auto" : 0, applyInlineTransitions: false, animationStateClasses: {
+            animating: "xp-transition-height xp-duration-500",
+            static: "xp-transition-height xp-duration-500",
+            animatingUp: "",
+            animatingDown: "",
+            animatingToHeightZero: "",
+            animatingToHeightAuto: "",
+            animatingToHeightSpecific: "",
+            staticHeightZero: "",
+            staticHeightAuto: "",
+            staticHeightSpecific: "",
+        } }, children));
+}
+exports.default = Expandable;
+
+
+/***/ }),
+
+/***/ 3521:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.SaveButton = SaveButton;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PaperAirplaneIconSolid = exports.LanguageIcon = exports.CheckBadgeIconSolid = exports.Bars3BottomLeftIcon = void 0;
+var react_1 = __importDefault(__webpack_require__(7294));
+var Bars3BottomLeftIcon = function (_a) {
+    var className = _a.className;
+    return (react_1.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", className: className },
+        react_1.default.createElement("path", { fillRule: "evenodd", d: "M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75H12a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z", clipRule: "evenodd" })));
+};
+exports.Bars3BottomLeftIcon = Bars3BottomLeftIcon;
+var CheckBadgeIconSolid = function (_a) {
+    var className = _a.className;
+    return (react_1.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", className: className },
+        react_1.default.createElement("path", { fillRule: "evenodd", d: "M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z", clipRule: "evenodd" })));
+};
+exports.CheckBadgeIconSolid = CheckBadgeIconSolid;
+var LanguageIcon = function (_a) {
+    var className = _a.className;
+    return (react_1.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", className: className },
+        react_1.default.createElement("path", { fillRule: "evenodd", d: "M9 2.25a.75.75 0 01.75.75v1.506a49.38 49.38 0 015.343.371.75.75 0 11-.186 1.489c-.66-.083-1.323-.151-1.99-.206a18.67 18.67 0 01-2.969 6.323c.317.384.65.753.998 1.107a.75.75 0 11-1.07 1.052A18.902 18.902 0 019 13.687a18.823 18.823 0 01-5.656 4.482.75.75 0 11-.688-1.333 17.323 17.323 0 005.396-4.353A18.72 18.72 0 015.89 8.598a.75.75 0 011.388-.568A17.21 17.21 0 009 11.224a17.17 17.17 0 002.391-5.165 48.038 48.038 0 00-8.298.307.75.75 0 01-.186-1.489 49.159 49.159 0 015.343-.371V3A.75.75 0 019 2.25zM15.75 9a.75.75 0 01.68.433l5.25 11.25a.75.75 0 01-1.36.634l-1.198-2.567h-6.744l-1.198 2.567a.75.75 0 01-1.36-.634l5.25-11.25A.75.75 0 0115.75 9zm-2.672 8.25h5.344l-2.672-5.726-2.672 5.726z", clipRule: "evenodd" })));
+};
+exports.LanguageIcon = LanguageIcon;
+var PaperAirplaneIconSolid = function (_a) {
+    var className = _a.className;
+    return (react_1.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", className: className },
+        react_1.default.createElement("path", { d: "M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" })));
+};
+exports.PaperAirplaneIconSolid = PaperAirplaneIconSolid;
 
 
 /***/ }),
@@ -5766,12 +4982,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Textarea = exports.Select = void 0;
 var react_1 = __importDefault(__webpack_require__(7294));
 var Input = function (_a) {
     var _b = _a.className, className = _b === void 0 ? '' : _b, props = __rest(_a, ["className"]);
     /** Apply those classes for normalised styling across themes and versions. */
-    return react_1.default.createElement("input", __assign({}, props, { className: "xp-m-0 xp-h-auto form-control " + className }));
+    return react_1.default.createElement("input", __assign({}, props, { className: "xp-m-0 form-control " + className }));
 };
+var Select = function (_a) {
+    var _b = _a.className, className = _b === void 0 ? '' : _b, props = __rest(_a, ["className"]);
+    /** Apply those classes for normalised styling across themes and versions. */
+    return react_1.default.createElement("select", __assign({}, props, { className: "xp-m-0 xp-max-w-auto form-control " + className }));
+};
+exports.Select = Select;
+var Textarea = function (_a) {
+    var _b = _a.className, className = _b === void 0 ? '' : _b, props = __rest(_a, ["className"]);
+    /** Apply those classes for normalised styling across themes and versions. */
+    return react_1.default.createElement("textarea", __assign({}, props, { className: "xp-m-0 form-control " + className }));
+};
+exports.Textarea = Textarea;
 exports.default = Input;
 
 
@@ -5782,142 +5011,158 @@ exports.default = Input;
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-var react_1 = __importDefault(__webpack_require__(7294));
+var react_1 = __importStar(__webpack_require__(7294));
 var hooks_1 = __webpack_require__(7909);
-var Level = function (_a) {
-    var level = _a.level, small = _a.small;
-    var label = (0, hooks_1.useString)('levelx', 'block_xp', level.level);
-    var classes = 'block_xp-level level-' + level.level + (small ? ' small' : '');
+var Level = (0, react_1.forwardRef)(function (_a, ref) {
+    var level = _a.level, small = _a.small, medium = _a.medium;
+    var label = (0, hooks_1.useString)("levelx", "block_xp", level.level);
+    var classes = "block_xp-level level-" + level.level + (small ? " small" : medium ? " medium" : "");
     if (level.badgeurl) {
-        return (react_1.default.createElement("div", { className: classes + ' level-badge', "aria-label": label },
+        return (react_1.default.createElement("div", { className: classes + " level-badge", "aria-label": label, ref: ref },
             react_1.default.createElement("img", { src: level.badgeurl, alt: label })));
     }
-    return (react_1.default.createElement("div", { className: classes, "aria-label": label }, level.level));
-};
+    return (react_1.default.createElement("div", { className: classes, "aria-label": label, ref: ref }, level.level));
+});
 exports.default = Level;
 
 
 /***/ }),
 
-/***/ 1625:
+/***/ 1274:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-var react_1 = __importDefault(__webpack_require__(7294));
-var hooks_1 = __webpack_require__(7909);
-var levels_1 = __webpack_require__(8839);
-var Input_1 = __importDefault(__webpack_require__(6935));
-var Level_1 = __importDefault(__webpack_require__(633));
-var NumberInput_1 = __importDefault(__webpack_require__(4959));
-var Str_1 = __importDefault(__webpack_require__(430));
-var LevelsGrid = function (_a) {
-    var algoEnabled = _a.algoEnabled, levels = _a.levels, onDescChange = _a.onDescChange, onNameChange = _a.onNameChange, onPointsChange = _a.onPointsChange;
-    return (react_1.default.createElement("div", { className: "xp-flex xp-flex-wrap xp--ml-4" }, levels.map(function (level) {
-        return (react_1.default.createElement(LevelTile, { key: level.level, level: level, minPoints: (0, levels_1.getMinimumPointsForLevel)(levels, level), pointsEditable: level.level > 1 && !algoEnabled, onDescChange: function (nb) { return onDescChange(level, nb); }, onNameChange: function (nb) { return onNameChange(level, nb); }, onPointsChange: function (nb) { return onPointsChange(level, nb); } }));
-    })));
+exports.SaveCancelModal = void 0;
+var react_1 = __webpack_require__(7294);
+var ReactDOM = __importStar(__webpack_require__(3935));
+var moodle_1 = __webpack_require__(3422);
+var SaveCancelModal = function (_a) {
+    var children = _a.children, onClose = _a.onClose, onSave = _a.onSave, show = _a.show, title = _a.title, saveButtonText = _a.saveButtonText;
+    var modalPromise = (0, react_1.useRef)();
+    var modalRef = (0, react_1.useRef)();
+    var _b = (0, react_1.useState)(false), ready = _b[0], setReady = _b[1];
+    var setSaveButtonText = function (text) {
+        if (!modalRef.current || !text)
+            return;
+        var saveBtn = modalRef.current.getFooter()[0].querySelector(modalRef.current.getActionSelector("save"));
+        if (!saveBtn)
+            return;
+        saveBtn.textContent = saveButtonText;
+    };
+    // Create the modal object.
+    (0, react_1.useEffect)(function () {
+        var cancelled = false;
+        if (modalRef.current)
+            return;
+        if (!modalPromise.current) {
+            var ModalFactory = (0, moodle_1.getModule)("core/modal_factory");
+            modalPromise.current = ModalFactory.create({
+                type: ModalFactory.types.SAVE_CANCEL,
+                title: title,
+                body: "<div class='block_xp'></div>",
+            });
+        }
+        modalPromise.current.then(function (modal) {
+            if (cancelled)
+                return;
+            modalRef.current = modal;
+            if (saveButtonText) {
+                setSaveButtonText(saveButtonText);
+            }
+            setReady(true); // State update to force re-render.
+            if (show) {
+                modal.show();
+            }
+        });
+        return function () {
+            cancelled = true;
+        };
+    });
+    // Attach event listeners.
+    (0, react_1.useEffect)(function () {
+        var modal = modalRef.current;
+        if (!modal)
+            return;
+        var ModalEvents = (0, moodle_1.getModule)("core/modal_events");
+        var root = modal.getRoot();
+        var handleSave = function () {
+            onSave && onSave();
+        };
+        var handleClose = function () {
+            onClose && onClose();
+        };
+        root.on(ModalEvents.save, handleSave);
+        root.on(ModalEvents.hidden, handleClose);
+        return function () {
+            root.off(ModalEvents.save, handleSave);
+            root.off(ModalEvents.hidden, handleClose);
+        };
+    });
+    // Update visibility.
+    (0, react_1.useEffect)(function () {
+        if (!modalRef.current)
+            return;
+        if (show) {
+            modalRef.current.show();
+        }
+        else {
+            modalRef.current.hide();
+        }
+    }, [show, modalRef.current]);
+    // Update title.
+    (0, react_1.useEffect)(function () {
+        if (!modalRef.current || !title)
+            return;
+        modalRef.current.setTitle(title);
+    }, [title, modalRef.current]);
+    // Update save button text.
+    (0, react_1.useEffect)(function () {
+        setSaveButtonText(saveButtonText);
+    }, [saveButtonText, modalRef.current]);
+    return modalRef.current ? ReactDOM.createPortal(children, modalRef.current.getBody()[0].querySelector(".block_xp")) : null;
 };
-var Field = function (_a) {
-    var level = _a.level, label = _a.label, children = _a.children;
-    return (react_1.default.createElement("label", { className: "xp-m-0 xp-font-normal" },
-        react_1.default.createElement("div", { className: "" },
-            react_1.default.createElement("div", { className: "xp-sr-only" },
-                react_1.default.createElement(Str_1.default, { id: "levelx", a: level.level })),
-            label),
-        children));
-};
-var LevelTile = function (_a) {
-    var minPoints = _a.minPoints, level = _a.level, pointsEditable = _a.pointsEditable, onPointsChange = _a.onPointsChange, onNameChange = _a.onNameChange, onDescChange = _a.onDescChange;
-    var getStr = (0, hooks_1.useStrings)(['noname', 'nodescription', 'pointsrequired', 'description', 'name']);
-    var levelx = (0, hooks_1.useString)('levelx', 'block_xp', level.level);
-    return (react_1.default.createElement("div", { className: "xp-flex-none md:xp-w-1/3 xp-w-1/2 xp-pl-4 xp-mb-4" },
-        react_1.default.createElement("div", { className: "xp-bg-gray-100 xp-p-4 xp-pt-2 xp-rounded" },
-            react_1.default.createElement("div", { className: "xp-flex xp-flex-col xp-items-center" },
-                react_1.default.createElement("div", { className: "xp-my-2" },
-                    react_1.default.createElement("div", { className: "xp-sr-only" }, levelx),
-                    react_1.default.createElement(Level_1.default, { level: level })),
-                react_1.default.createElement("div", { className: "xp-w-full xp-mb-2" },
-                    react_1.default.createElement(Field, { level: level, label: getStr('name') },
-                        react_1.default.createElement(Input_1.default, { className: "xp-w-full", placeholder: getStr('noname'), onChange: function (e) { return onNameChange(e.target.value || null); }, defaultValue: level.name || '', maxLength: 40, type: "text" }))),
-                react_1.default.createElement("div", { className: "xp-w-full xp-mb-2 xp-break-all" },
-                    react_1.default.createElement(Field, { level: level, label: getStr('pointsrequired') },
-                        react_1.default.createElement(NumberInput_1.default, { min: minPoints, onChange: onPointsChange, value: level.xprequired, size: 5, disabled: !pointsEditable, className: "xp-px-2 xp-py-1 xp-w-28" }))),
-                react_1.default.createElement("div", { className: "xp-w-full" },
-                    react_1.default.createElement(Field, { level: level, label: getStr('description') },
-                        react_1.default.createElement(Input_1.default, { className: "xp-w-full", placeholder: getStr('nodescription'), onChange: function (e) { return onDescChange(e.target.value || null); }, defaultValue: level.description || '', maxLength: 255, type: "text" })))))));
-};
-exports.default = LevelsGrid;
-
-
-/***/ }),
-
-/***/ 5807:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-var react_1 = __importDefault(__webpack_require__(7294));
-var hooks_1 = __webpack_require__(7909);
-var levels_1 = __webpack_require__(8839);
-var Input_1 = __importDefault(__webpack_require__(6935));
-var Level_1 = __importDefault(__webpack_require__(633));
-var NumberInput_1 = __importDefault(__webpack_require__(4959));
-var Str_1 = __importDefault(__webpack_require__(430));
-var LevelsList = function (_a) {
-    var algoEnabled = _a.algoEnabled, levels = _a.levels, onDescChange = _a.onDescChange, onNameChange = _a.onNameChange, onPointsChange = _a.onPointsChange;
-    return (react_1.default.createElement("div", { className: "xp-table xp-w-full xp-mb-4" },
-        react_1.default.createElement("div", { className: "xp-table-row odd:xp-bg-gray-100 xp-font-bold" },
-            react_1.default.createElement("div", { className: "xp-w-10 xp-px-2 xp-py-1 xp-table-cell xp-align-middle" },
-                react_1.default.createElement(Str_1.default, { id: "level" })),
-            react_1.default.createElement("div", { className: "xp-px-2 xp-py-1 xp-table-cell xp-align-middle" },
-                react_1.default.createElement(Str_1.default, { id: "pointsrequired" })),
-            react_1.default.createElement("div", { className: "xp-px-2 xp-py-1 xp-table-cell xp-align-middle" },
-                react_1.default.createElement(Str_1.default, { id: "levelname" })),
-            react_1.default.createElement("div", { className: "xp-px-2 xp-py-1 xp-table-cell xp-align-middle" },
-                react_1.default.createElement(Str_1.default, { id: "leveldesc" }))),
-        levels.map(function (level) {
-            return (react_1.default.createElement(LevelRow, { level: level, minPoints: (0, levels_1.getMinimumPointsForLevel)(levels, level), pointsEditable: level.level > 1 && !algoEnabled, onDescChange: function (nb) { return onDescChange(level, nb); }, onNameChange: function (nb) { return onNameChange(level, nb); }, onPointsChange: function (nb) { return onPointsChange(level, nb); } }));
-        })));
-};
-var Field = function (_a) {
-    var level = _a.level, label = _a.label, children = _a.children;
-    return (react_1.default.createElement("label", { className: "xp-m-0 xp-font-normal xp-w-full" },
-        react_1.default.createElement("div", { className: "xp-sr-only" },
-            react_1.default.createElement(Str_1.default, { id: "levelx", a: level.level }),
-            " ",
-            label),
-        children));
-};
-var LevelRow = function (_a) {
-    var minPoints = _a.minPoints, level = _a.level, pointsEditable = _a.pointsEditable, onPointsChange = _a.onPointsChange, onNameChange = _a.onNameChange, onDescChange = _a.onDescChange;
-    var getStr = (0, hooks_1.useStrings)(['noname', 'nodescription', 'pointsrequired', 'description', 'name']);
-    return (react_1.default.createElement("div", { className: "xp-table-row odd:xp-bg-gray-100" },
-        react_1.default.createElement("div", { className: "xp-px-2 xp-py-1 xp-table-cell xp-align-middle" },
-            react_1.default.createElement(Level_1.default, { level: level, small: true })),
-        react_1.default.createElement("div", { className: "xp-px-2 xp-py-1 xp-table-cell xp-align-middle xp-break-all" },
-            react_1.default.createElement(Field, { level: level, label: getStr('pointsrequired') },
-                react_1.default.createElement("div", { className: "xp-inline-block" },
-                    react_1.default.createElement(NumberInput_1.default, { min: minPoints, onChange: onPointsChange, value: level.xprequired, size: 5, disabled: !pointsEditable, className: "xp-px-2 xp-py-1 xp-w-28" })))),
-        react_1.default.createElement("div", { className: "xp-px-2 xp-py-1 xp-table-cell xp-align-middle" },
-            react_1.default.createElement(Field, { level: level, label: getStr('name') },
-                react_1.default.createElement(Input_1.default, { className: "xp-w-full", placeholder: getStr('noname'), onChange: function (e) { return onNameChange(e.target.value || null); }, defaultValue: level.name || '', maxLength: 40, type: "text" }))),
-        react_1.default.createElement("div", { className: "xp-px-2 xp-py-1 xp-table-cell xp-align-middle" },
-            react_1.default.createElement(Field, { level: level, label: getStr('description') },
-                react_1.default.createElement(Input_1.default, { className: "xp-w-full", placeholder: getStr('nodescription'), onChange: function (e) { return onDescChange(e.target.value || null); }, defaultValue: level.description || '', maxLength: 255, type: "text" })))));
-};
-exports.default = LevelsList;
+exports.SaveCancelModal = SaveCancelModal;
 
 
 /***/ }),
@@ -5953,18 +5198,64 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.NumberInputWithButtons = exports.PlainNumberInput = exports.NumInput = void 0;
 var react_1 = __importDefault(__webpack_require__(7294));
-var react_numeric_input_1 = __importDefault(__webpack_require__(4109));
-var sizes = {
-    4: 'xp-w-20',
+var hooks_1 = __webpack_require__(7909);
+var utils_1 = __webpack_require__(6926);
+var Input_1 = __importDefault(__webpack_require__(6935));
+var NumInput = function (_a) {
+    var className = _a.className, value = _a.value, onChange = _a.onChange, props = __rest(_a, ["className", "value", "onChange"]);
+    var inputProps = (0, hooks_1.useNumericInputProps)(value, onChange);
+    return react_1.default.createElement(Input_1.default, __assign({ type: "text" }, inputProps, { className: className }, props));
 };
-var NumberInput = function (_a) {
-    var _b = _a.className, className = _b === void 0 ? '' : _b, props = __rest(_a, ["className"]);
-    var width = props.size ? sizes[props.size] || '' : '';
-    return (react_1.default.createElement("div", { className: "xp-inline-block " + width },
-        react_1.default.createElement(react_numeric_input_1.default, __assign({}, props, { className: "form-control xp-m-0 xp-h-full " + className }))));
+exports.NumInput = NumInput;
+var PlainNumberInput = function (_a) {
+    var value = _a.value, onChange = _a.onChange, props = __rest(_a, ["value", "onChange"]);
+    var inputProps = (0, hooks_1.useNumericInputProps)(value, onChange);
+    return react_1.default.createElement("input", __assign({ type: "text" }, inputProps, props));
 };
-exports.default = NumberInput;
+exports.PlainNumberInput = PlainNumberInput;
+var NumberInputWithButtons = function (_a) {
+    var onChange = _a.onChange, value = _a.value, min = _a.min, max = _a.max, suffix = _a.suffix, _b = _a.step, step = _b === void 0 ? 1 : _b, inputProps = _a.inputProps;
+    var hasMin = typeof min !== "undefined";
+    var hasMax = typeof max !== "undefined";
+    var minDisabled = hasMin && min >= value;
+    var maxDisabled = hasMax && max <= value;
+    var minusProps = (0, hooks_1.useAnchorButtonProps)(function () {
+        if (minDisabled)
+            return;
+        handleChange(value - step);
+    });
+    var plusProps = (0, hooks_1.useAnchorButtonProps)(function () {
+        if (maxDisabled)
+            return;
+        handleChange(value + step);
+    });
+    var handleChange = function (n) {
+        var final = n;
+        if (hasMin) {
+            final = Math.max(min, final);
+        }
+        if (hasMax) {
+            final = Math.min(max, final);
+        }
+        onChange(final);
+    };
+    var _c = inputProps !== null && inputProps !== void 0 ? inputProps : {}, inputClassName = _c.className, remainingInputProps = __rest(_c, ["className"]);
+    var allInputProps = __assign({ className: (0, utils_1.classNames)("xp-h-auto xp-border-0 xp-text-center xp-rounded-none focus:xp-z-10", suffix ? "xp-pr-6" : null, inputClassName || "xp-w-16") }, remainingInputProps);
+    return (react_1.default.createElement("div", { className: "xp-inline-flex xp-rounded xp-border xp-border-solid xp-border-gray-300" },
+        react_1.default.createElement("a", __assign({}, minusProps, { className: (0, utils_1.classNames)("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1 xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", minDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") }),
+            react_1.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5" },
+                react_1.default.createElement("path", { fillRule: "evenodd", d: "M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z", clipRule: "evenodd" }))),
+        react_1.default.createElement("div", { className: "xp-flex-1 xp-relative" },
+            react_1.default.createElement(exports.NumInput, __assign({ onChange: handleChange, value: value }, allInputProps)),
+            suffix ? (react_1.default.createElement("div", { className: "xp-pointer-events-none xp-absolute xp-inset-y-0 xp-right-0 xp-flex xp-items-center xp-pr-2" },
+                react_1.default.createElement("span", { className: "xp-text-gray-500" }, suffix))) : null),
+        react_1.default.createElement("a", __assign({}, plusProps, { className: (0, utils_1.classNames)("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1 xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", maxDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") }),
+            react_1.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5" },
+                react_1.default.createElement("path", { d: "M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" })))));
+};
+exports.NumberInputWithButtons = NumberInputWithButtons;
 
 
 /***/ }),
@@ -5985,6 +5276,48 @@ var Pix = function (_a) {
     return react_1.default.createElement("img", { src: (0, moodle_1.imageUrl)(id, component), alt: alt, className: className });
 };
 exports.default = Pix;
+
+
+/***/ }),
+
+/***/ 3828:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RadioGroup = void 0;
+var react_1 = __importStar(__webpack_require__(7294));
+var RadioGroup = function (_a) {
+    var items = _a.items, value = _a.value, onChange = _a.onChange;
+    var uniqid = (0, react_1.useState)(function () { return Math.random().toString(12).slice(2); })[0];
+    return (react_1.default.createElement("div", { className: "xp-space-y-2" }, items.map(function (item, idx) { return (react_1.default.createElement("label", { className: "xp-relative xp-flex xp-items-start xp-cursor-pointer xp-m-0 xp-font-normal", key: item.value },
+        react_1.default.createElement("div", { className: "xp-h-6 xp-flex xp-items-center" },
+            react_1.default.createElement("input", { type: "radio", "aria-describedby": "xp-radiogroup-" + uniqid + "-" + idx, checked: value === item.value, onChange: function () { return onChange(item.value); } })),
+        react_1.default.createElement("div", { className: "xp-ml-3" },
+            react_1.default.createElement("div", { className: "xp-font-medium" }, item.label),
+            item.desc ? (react_1.default.createElement("p", { id: "xp-radiogroup-" + uniqid + "-" + idx, className: "xp-text-gray-500 xp-m-0" }, item.desc)) : null))); })));
+};
+exports.RadioGroup = RadioGroup;
 
 
 /***/ }),
@@ -6023,11 +5356,62 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 var react_1 = __importDefault(__webpack_require__(7294));
 var hooks_1 = __webpack_require__(7909);
 var Str = function (_a) {
-    var id = _a.id, _b = _a.component, component = _b === void 0 ? 'block_xp' : _b, a = _a.a;
+    var id = _a.id, _b = _a.component, component = _b === void 0 ? "block_xp" : _b, a = _a.a;
     var str = (0, hooks_1.useString)(id, component, a);
-    return react_1.default.createElement(react_1.default.Fragment, null, str || ' ');
+    return react_1.default.createElement(react_1.default.Fragment, null, str || "​");
 };
 exports.default = Str;
+
+
+/***/ }),
+
+/***/ 7992:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Tooltip = void 0;
+var react_1 = __importStar(__webpack_require__(7294));
+var moodle_1 = __webpack_require__(3422);
+var Tooltip = function (_a) {
+    var children = _a.children, content = _a.content;
+    var ref = react_1.default.useRef(null);
+    (0, react_1.useEffect)(function () {
+        var $ = (0, moodle_1.getModule)("jquery");
+        if (!$ || !ref.current || !$(ref.current).tooltip) {
+            return;
+        }
+        ref.current.setAttribute("data-toggle", "popover");
+        ref.current.setAttribute("data-container", "body");
+        ref.current.setAttribute("title", content);
+        $(ref.current).tooltip("enable");
+        return function () {
+            $(ref.current).tooltip("dispose");
+        };
+    }, [content]);
+    return (0, react_1.cloneElement)(children, { ref: ref });
+};
+exports.Tooltip = Tooltip;
 
 
 /***/ }),
@@ -6067,68 +5451,111 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.startApp = exports.dependencies = void 0;
-var react_1 = __importStar(__webpack_require__(7294));
+exports.startApp = exports.dependencies = exports.App = void 0;
+var react_1 = __webpack_require__(5594);
+var react_2 = __importStar(__webpack_require__(7294));
 var react_dom_1 = __importDefault(__webpack_require__(3935));
 var react_query_1 = __webpack_require__(8767);
+var Addon_1 = __webpack_require__(4634);
+var BulkEditPoints_1 = __webpack_require__(2224);
 var Button_1 = __webpack_require__(6549);
-var LevelsGrid_1 = __importDefault(__webpack_require__(1625));
-var LevelsList_1 = __importDefault(__webpack_require__(5807));
-var NumberInput_1 = __importDefault(__webpack_require__(4959));
+var Expandable_1 = __importDefault(__webpack_require__(1707));
+var Icons_1 = __webpack_require__(3521);
+var Input_1 = __importStar(__webpack_require__(6935));
+var Level_1 = __importDefault(__webpack_require__(633));
+var NumberInput_1 = __webpack_require__(4959);
 var Str_1 = __importDefault(__webpack_require__(430));
+var Tooltip_1 = __webpack_require__(7992);
+var constants_1 = __webpack_require__(9482);
+var contexts_1 = __webpack_require__(2471);
 var hooks_1 = __webpack_require__(7909);
 var levels_1 = __webpack_require__(8839);
 var moodle_1 = __webpack_require__(3422);
 var utils_1 = __webpack_require__(6926);
+var optionsStates = [
+    {
+        id: "name",
+        Icon: Icons_1.LanguageIcon,
+        yes: "hasname",
+        no: "hasnoname",
+        checker: function (level) { return level.name && level.name.trim().length > 0; },
+    },
+    {
+        id: "description",
+        Icon: Icons_1.Bars3BottomLeftIcon,
+        yes: "hasdescription",
+        no: "hasnodescription",
+        checker: function (level) { return level.description && level.description.trim().length > 0; },
+    },
+    {
+        id: "popupmessage",
+        Icon: Icons_1.PaperAirplaneIconSolid,
+        yes: "haspopupmessage",
+        no: "hasnopopupmessage",
+        checker: function (level) { return false; },
+    },
+    {
+        id: "badgeaward",
+        Icon: Icons_1.CheckBadgeIconSolid,
+        yes: "hasbadgeaward",
+        no: "hasnobadgeaward",
+        checker: function (level) { return false; },
+    },
+];
+var optionsStatesStringIds = optionsStates.map(function (o) { return o.yes; }).concat(optionsStates.map(function (o) { return o.no; }));
+var getInitialState = function (_a) {
+    var levelsInfo = _a.levelsInfo;
+    return {
+        algo: __assign(__assign({}, levelsInfo.algo), { method: levelsInfo.algo.method || "relative", incr: levelsInfo.algo.incr || 30 }),
+        levels: levelsInfo.levels.map(function (level) { return (__assign({}, level)); }),
+        nblevels: levelsInfo.levels.length,
+        pendingSave: false,
+    };
+};
 var markPendingSave = function (state) {
     return __assign(__assign({}, state), { pendingSave: true });
 };
 var updateLevelPoints = function (state) {
-    if (!state.algo.enabled) {
-        return __assign(__assign({}, state), { levels: state.levels.reduce(function (carry, level, i) {
-                return carry.concat([
-                    __assign(__assign({}, level), { xprequired: Math.max(level.xprequired, (0, levels_1.getMinimumPointsForLevel)(carry.concat([level]), level)) }),
-                ]);
-            }, []) });
-    }
-    return __assign(__assign({}, state), { levels: state.levels.map(function (level) {
-            return __assign(__assign({}, level), { xprequired: (0, levels_1.computeRequiredPoints)(level.level, state.algo.base, state.algo.coef) });
-        }) });
+    return __assign(__assign({}, state), { levels: state.levels.reduce(function (carry, level, i) {
+            return carry.concat([
+                __assign(__assign({}, level), { xprequired: Math.max(level.xprequired, (0, levels_1.getMinimumPointsForLevel)(carry.concat([level]), level)) }),
+            ]);
+        }, []) });
 };
 var reducer = function (state, _a) {
     var action = _a[0], payload = _a[1];
     var nextLevel;
     switch (action) {
-        case 'algoBaseChange':
-            if (!payload || payload < 1 || isNaN(payload))
-                return state;
-            var base = Math.min(999999, Math.max(payload, 1));
-            return markPendingSave(updateLevelPoints(__assign(__assign({}, state), { algo: __assign(__assign({}, state.algo), { base: base }) })));
-        case 'algoCoefChange':
-            if (!payload || payload < 1 || isNaN(payload))
-                return state;
-            return markPendingSave(updateLevelPoints(__assign(__assign({}, state), { algo: __assign(__assign({}, state.algo), { coef: Math.min(5, Math.max(1, payload)) }) })));
-        case 'algoEnabledChange':
-            return markPendingSave(updateLevelPoints(__assign(__assign({}, state), { algo: __assign(__assign({}, state.algo), { enabled: Boolean(payload) }) })));
-        case 'levelDescChange':
+        case "bulkEdit":
+            return markPendingSave(__assign(__assign({}, state), { algo: payload, levels: state.levels.map(function (level) { return (__assign(__assign({}, level), { xprequired: (0, levels_1.computeRequiredPointsWithMethod)(level.level, payload) })); }) }));
+        case "levelDescChange":
             return markPendingSave(__assign(__assign({}, state), { levels: state.levels.map(function (level) {
                     if (level !== payload.level) {
                         return level;
                     }
                     return __assign(__assign({}, level), { description: payload.desc || null });
                 }) }));
-        case 'levelNameChange':
+        case "levelNameChange":
             return markPendingSave(__assign(__assign({}, state), { levels: state.levels.map(function (level) {
                     if (level !== payload.level) {
                         return level;
                     }
                     return __assign(__assign({}, level), { name: payload.name || null });
                 }) }));
-        case 'levelPointsChange':
+        case "levelPointsChange":
             nextLevel = (0, levels_1.getNextLevel)(state.levels, payload.level, state.nblevels);
             if (isNaN(payload.points) || payload.points <= 2 || payload.points >= Infinity) {
                 return state;
@@ -6142,51 +5569,49 @@ var reducer = function (state, _a) {
                     }
                     return __assign(__assign({}, level), { xprequired: payload.points });
                 }) })));
-        case 'nbLevelsChange':
-            if (isNaN(payload) || payload < 2 || payload > 99) {
+        case "nbLevelsChange":
+            if (typeof (payload === null || payload === void 0 ? void 0 : payload.n) === "undefined" || isNaN(payload.n) || payload.n < 2 || payload.n > 99) {
                 return state;
             }
-            return markPendingSave(__assign(__assign({}, state), { nblevels: payload, levels: state.levels.concat(Array.from({ length: Math.max(0, payload - state.levels.length) }).map(function (_, i) {
+            return markPendingSave(__assign(__assign({}, state), { nblevels: payload.n, levels: state.levels.concat(Array.from({ length: Math.max(0, payload.n - state.levels.length) }).map(function (_, i) {
                     var l = state.levels.length + i + 1;
                     return {
                         level: l,
                         name: null,
                         description: null,
-                        badgeurl: null,
-                        xprequired: state.algo.enabled
-                            ? (0, levels_1.computeRequiredPoints)(l, state.algo.base, state.algo.coef)
-                            : (0, levels_1.getMinimumPointsAtLevel)(state.levels, l),
-                        hasFile: false,
+                        badgeurl: ((payload === null || payload === void 0 ? void 0 : payload.defaultBadgeUrls) || {})[l] || null,
+                        xprequired: (0, levels_1.computeRequiredPointsWithMethod)(l, state.algo),
                     };
                 })) }));
-        case 'markSaved':
+        case "markSaved":
             return __assign(__assign({}, state), { pendingSave: false });
-        case 'setView':
-            return __assign(__assign({}, state), { view: payload });
     }
     return state;
 };
-var initState = function (_a) {
-    var levelsInfo = _a.levelsInfo;
-    return {
-        algo: __assign({}, levelsInfo.algo),
-        levels: levelsInfo.levels.map(function (level) {
-            return __assign(__assign({}, level), { hasFile: false });
-        }),
-        nblevels: levelsInfo.count,
-        view: 'grid',
-        pendingSave: false,
-    };
+var OptionField = function (_a) {
+    var label = _a.label, children = _a.children, note = _a.note, xpPlusRequired = _a.xpPlusRequired;
+    return (react_2.default.createElement("div", null,
+        react_2.default.createElement("label", { className: "xp-m-0 xp-block xp-font-normal" },
+            react_2.default.createElement("div", { className: "xp-flex" },
+                react_2.default.createElement("div", { className: "xp-grow xp-uppercase xp-text-xs" }, label),
+                react_2.default.createElement("div", null, xpPlusRequired ? react_2.default.createElement(Addon_1.AddonRequired, null) : null)),
+            react_2.default.createElement("div", { className: "xp-mt-1" }, children)),
+        note ? react_2.default.createElement("div", { className: "xp-text-gray-500 xp-mt-1" }, note) : null));
 };
 var App = function (_a) {
-    var courseId = _a.courseId, levelsInfo = _a.levelsInfo;
-    var _b = (0, react_1.useReducer)(reducer, { levelsInfo: levelsInfo }, initState), state = _b[0], dispatch = _b[1];
+    var courseId = _a.courseId, levelsInfo = _a.levelsInfo, resetToDefaultsUrl = _a.resetToDefaultsUrl, defaultBadgeUrls = _a.defaultBadgeUrls;
+    var hasXpPlus = (0, hooks_1.useAddonActivated)();
+    var _b = (0, react_2.useReducer)(reducer, { levelsInfo: levelsInfo }, getInitialState), state = _b[0], dispatch = _b[1];
     var levels = state.levels.slice(0, state.nblevels);
+    var _c = react_2.default.useState([]), expanded = _c[0], setExpanded = _c[1];
+    var _d = react_2.default.useState(false), bulkEdit = _d[0], setBulkEdit = _d[1];
+    var getStr = (0, hooks_1.useStrings)(optionsStatesStringIds.concat(["levelssaved", "unknownbadgea", "levelx"]));
     (0, hooks_1.useUnloadCheck)(state.pendingSave);
+    // Prepare the save mutation.
     var mutation = (0, react_query_1.useMutation)(function () {
         // An falsy course ID means admin config.
-        var method = courseId ? 'block_xp_set_levels_info' : 'block_xp_set_default_levels_info';
-        return (0, moodle_1.getModule)('core/ajax').call([
+        var method = courseId ? "block_xp_set_levels_info" : "block_xp_set_default_levels_info";
+        return (0, moodle_1.getModule)("core/ajax").call([
             {
                 methodname: method,
                 args: {
@@ -6195,21 +5620,17 @@ var App = function (_a) {
                         return {
                             level: level.level,
                             xprequired: level.xprequired,
-                            name: (0, utils_1.stripTags)(level.name || ''),
-                            description: (0, utils_1.stripTags)(level.description || ''),
+                            name: (0, utils_1.stripTags)(level.name || ""),
+                            description: (0, utils_1.stripTags)(level.description || ""),
                         };
                     }),
                     algo: state.algo,
                 },
             },
         ])[0];
-    }, {
-        onSuccess: function () {
-            dispatch(['markSaved', true]);
-        },
     });
     // Reset mutation after success.
-    (0, react_1.useEffect)(function () {
+    (0, react_2.useEffect)(function () {
         if (!mutation.isSuccess) {
             return;
         }
@@ -6218,78 +5639,227 @@ var App = function (_a) {
         }, 2500);
         return function () { return clearTimeout(t); };
     });
+    var allExpanded = expanded.length === levels.length;
+    var handleCollapseExpandAll = function () {
+        setExpanded(allExpanded ? [] : levels.map(function (l) { return l.level; }));
+    };
     var handleSave = function () {
-        mutation.mutate();
+        mutation.mutate(undefined, {
+            onSuccess: function () {
+                var Toast = (0, moodle_1.getModule)("core/toast");
+                Toast && Toast.add(getStr("levelssaved"));
+                dispatch(["markSaved", true]);
+            },
+        });
     };
-    var rendererProps = {
-        levels: levels,
-        algoEnabled: state.algo.enabled,
-        onDescChange: function (level, desc) { return dispatch(['levelDescChange', { level: level, desc: desc }]); },
-        onNameChange: function (level, name) { return dispatch(['levelNameChange', { level: level, name: name }]); },
-        onPointsChange: function (level, nb) { return dispatch(['levelPointsChange', { level: level, points: nb }]); },
+    var handleBulkEdit = function (state) {
+        dispatch(["bulkEdit", state]);
     };
-    var Renderer = state.view === 'grid' ? LevelsGrid_1.default : LevelsList_1.default;
-    var canSave = state.pendingSave;
-    return (react_1.default.createElement("div", null,
-        react_1.default.createElement("div", { className: "xp-flex xp-flex-col xp-flex-wrap" },
-            react_1.default.createElement("div", { className: "xp-mb-4" },
-                react_1.default.createElement(Menu, { algo: state.algo, nbLevels: state.nblevels, canSave: canSave, view: state.view, mutation: mutation, onAlgoEnabledChange: function (p) { return dispatch(['algoEnabledChange', p]); }, onAlgoBaseChange: function (p) { return dispatch(['algoBaseChange', p]); }, onAlgoCoefChange: function (p) { return dispatch(['algoCoefChange', p]); }, onNbLevelsChange: function (nb) { return dispatch(['nbLevelsChange', nb]); }, onSave: handleSave, onViewChange: function (v) { return dispatch(['setView', v]); } })),
-            react_1.default.createElement("div", { className: "xp-flex-1" },
-                react_1.default.createElement(Renderer, __assign({}, rendererProps))),
-            react_1.default.createElement("div", { className: "xp-mt-4" },
-                react_1.default.createElement(Button_1.SaveButton, { statePosition: "after", onClick: handleSave, mutation: mutation, disabled: !canSave })))));
+    var handleNumLevelsChange = function (n) {
+        dispatch(["nbLevelsChange", { n: n, defaultBadgeUrls: defaultBadgeUrls }]);
+    };
+    var handleLevelDescChange = function (level, desc) {
+        if (level.description === desc)
+            return;
+        dispatch(["levelDescChange", { level: level, desc: desc }]);
+    };
+    var handleLevelNameChange = function (level, name) {
+        if (level.name === name)
+            return;
+        dispatch(["levelNameChange", { level: level, name: name }]);
+    };
+    var handleXpChange = function (level, xp) {
+        if (level.xprequired === xp)
+            return;
+        dispatch(["levelPointsChange", { level: level, points: xp }]);
+    };
+    return (react_2.default.createElement("div", { className: "xp-flex xp-flex-col" },
+        react_2.default.createElement("div", { className: "xp-mb-4 xp-flex xp-items-end xp-justify-end xp-flex-wrap xp-gap-4" },
+            react_2.default.createElement("div", { className: "xp-flex xp-flex-1 xp-gap-4 xp-items-end xp-flex-wrap" },
+                react_2.default.createElement("div", { className: "" },
+                    react_2.default.createElement("label", { htmlFor: "label-x", className: "xp-block xp-m-0" },
+                        react_2.default.createElement(Str_1.default, { id: "numberoflevels" })),
+                    react_2.default.createElement(NumberInput_1.NumberInputWithButtons, { value: state.nblevels, onChange: handleNumLevelsChange, min: 2, max: 99, inputProps: { id: "label-x", maxLength: 2 } })),
+                react_2.default.createElement("div", { className: "" },
+                    react_2.default.createElement(Button_1.Button, { onClick: function () { return setBulkEdit(true); } },
+                        react_2.default.createElement(Str_1.default, { id: "quickeditpoints" })),
+                    react_2.default.createElement(BulkEditPoints_1.BulkEditPointsModal, { show: bulkEdit, onClose: function () { return setBulkEdit(false); }, onSave: handleBulkEdit, method: state.algo.method, coef: state.algo.coef, base: state.algo.base, incr: state.algo.incr }))),
+            react_2.default.createElement("div", { className: "xp-flex xp-gap-1" },
+                react_2.default.createElement(Button_1.SaveButton, { statePosition: "before", onClick: handleSave, mutation: mutation, disabled: !state.pendingSave || mutation.isLoading }),
+                react_2.default.createElement(react_1.Menu, { as: "div", className: "xp-relative xp-inline-block xp-text-left" },
+                    react_2.default.createElement("div", null,
+                        react_2.default.createElement(react_1.Menu.Button, { className: "xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full hover:xp-bg-gray-100" },
+                            react_2.default.createElement("span", { className: "sr-only" },
+                                react_2.default.createElement(Str_1.default, { id: "options", component: "core" })),
+                            react_2.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5", "aria-hidden": "true" },
+                                react_2.default.createElement("path", { d: "M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" })))),
+                    react_2.default.createElement(react_1.Menu.Items, { className: "xp-absolute xp-right-0 xp-z-10 xp-mt-2 xp-w-56 xp-origin-top-right xp-rounded-md xp-bg-white xp-border xp-border-solid xp-border-gray-300 xp-shadow-sm xp-divide-y xp-divide-gray-100" },
+                        react_2.default.createElement("div", { className: "xp-py-1" },
+                            react_2.default.createElement(react_1.Menu.Item, null, function (_a) {
+                                var active = _a.active, close = _a.close;
+                                return (react_2.default.createElement("a", { href: "#", role: "button", onClick: function (e) {
+                                        e.preventDefault();
+                                        handleCollapseExpandAll();
+                                        close();
+                                    }, className: (0, utils_1.classNames)(active ? "xp-bg-gray-100" : null, "xp-text-inherit xp-block xp-px-6 xp-py-1 xp-no-underline") }, allExpanded ? react_2.default.createElement(Str_1.default, { id: "collapseall", component: "core" }) : react_2.default.createElement(Str_1.default, { id: "expandall", component: "core" })));
+                            }),
+                            react_2.default.createElement(react_1.Menu.Item, null, function (_a) {
+                                var active = _a.active, close = _a.close;
+                                return (react_2.default.createElement("a", { href: constants_1.HELP_URL_LEVELS, target: "_blank", rel: "noopener", className: (0, utils_1.classNames)(active ? "xp-bg-gray-100" : null, "xp-text-inherit xp-block xp-px-6 xp-py-1 xp-no-underline") },
+                                    react_2.default.createElement(Str_1.default, { id: "documentation" })));
+                            })),
+                        resetToDefaultsUrl ? (react_2.default.createElement("div", { className: "xp-py-1" },
+                            react_2.default.createElement(react_1.Menu.Item, null, function (_a) {
+                                var active = _a.active, close = _a.close;
+                                return (react_2.default.createElement("a", { href: resetToDefaultsUrl, className: (0, utils_1.classNames)(active ? "xp-bg-gray-100" : null, "xp-text-red-600 xp-block xp-px-6 xp-py-1 xp-no-underline") },
+                                    react_2.default.createElement(Str_1.default, { id: "resetlevelstodefaults" })));
+                            }))) : null)))),
+        react_2.default.createElement("div", { className: "xp-flex xp-flex-col xp-flex-1 xp-gap-4" }, Array.from({ length: state.nblevels }).map(function (_, idx) {
+            var _a;
+            var level = levels[idx] || { level: idx + 1, xprequired: 0 };
+            var prevLevel = levels[idx - 1];
+            var nextLevel = levels[idx + 1];
+            var pointsInLevel = nextLevel ? nextLevel.xprequired - level.xprequired : 0;
+            var isExpanded = expanded.includes(level.level);
+            var optionStates = level.level <= 1
+                ? optionsStates.filter(function (o) { return ["name", "description", courseId ? null : "badgeawardid"].includes(o.id); })
+                : optionsStates;
+            optionStates = optionStates.concat(Array.from({ length: Math.max(0, optionsStates.length - optionStates.length) }).map(function (_) { return null; }));
+            var badgeOptions = [];
+            var isBadgeValueMissing = level.badgeawardid && !badgeOptions.find(function (b) { return b.id === level.badgeawardid; });
+            return (react_2.default.createElement(react_2.default.Fragment, { key: "l" + level.level },
+                react_2.default.createElement("div", { className: "xp-relative xp-min-h-28 xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 xp-p-3 xp-overflow-hidden" },
+                    react_2.default.createElement("div", { className: "xp-absolute xp--top-4 xp--left-8 xp-text-[10rem] xp-text-gray-50 xp-leading-none xp-pointer-events-none" }, level.level),
+                    react_2.default.createElement("div", { className: "xp-flex xp-items-center xp-flex-grow xp-gap-4 sm:xp-gap-8 xp-flex-col sm:xp-flex-row xp-relative" },
+                        react_2.default.createElement("div", { className: "xp-flex-0" },
+                            react_2.default.createElement(Tooltip_1.Tooltip, { content: getStr("levelx", level.level) },
+                                react_2.default.createElement(Level_1.default, { level: level }))),
+                        react_2.default.createElement("div", { className: "xp-shrink-0 xp-basis-auto sm:xp-basis-52 sm:xp--mt-3.5" },
+                            react_2.default.createElement("div", { className: "xp-grid xp-grid-cols-2" },
+                                react_2.default.createElement("label", { className: "xp-m-0 xp-flex xp-items-end xp-text-xs xp-font-normal xp-uppercase", htmlFor: "xp-level-" + level.level + "-start" },
+                                    react_2.default.createElement(Str_1.default, { id: "levelpointsstart" })),
+                                react_2.default.createElement("label", { className: "xp-m-0 xp-flex xp-items-end xp-text-xs xp-font-normal xp-uppercase", htmlFor: "xp-level-" + level.level + "-length" },
+                                    react_2.default.createElement(Str_1.default, { id: "levelpointslength" }))),
+                            react_2.default.createElement("div", { className: "xp-grid xp-grid-cols-2 xp-border xp-border-solid xp-border-gray-300 xp-rounded" },
+                                react_2.default.createElement("div", null,
+                                    react_2.default.createElement(NumberInput_1.NumInput, { value: level.xprequired, onChange: function (xp) { return handleXpChange(level, xp); }, disabled: level.level <= 1, className: "xp-min-w-[4ch] xp-w-full xp-rounded-none xp-rounded-l xp-border-0 xp-relative focus:xp-z-10", id: "xp-level-" + level.level + "-start" })),
+                                react_2.default.createElement("div", { className: "" },
+                                    react_2.default.createElement("div", { className: "xp-flex-1 xp-relative" },
+                                        react_2.default.createElement("div", { className: "xp-pointer-events-none xp-absolute xp-inset-y-0 xp-left-0 xp-flex xp-items-center xp-pl-2 xp-z-20" },
+                                            react_2.default.createElement("span", { className: "xp-text-gray-500" }, "+")),
+                                        react_2.default.createElement(NumberInput_1.NumInput, { value: pointsInLevel, onChange: function (xp) { return handleXpChange(nextLevel, level.xprequired + xp); }, disabled: pointsInLevel <= 0, className: "xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 xp-rounded-r xp-pl-6 xp-relative focus:xp-z-10", id: "xp-level-" + level.level + "-length" }))))),
+                        react_2.default.createElement("div", { className: "xp-flex xp-grow xp-items-center xp-justify-center  xp-gap-4" }, optionStates.map(function (o, idx) {
+                            if (!o) {
+                                return react_2.default.createElement("div", { key: idx, className: "xp-w-6 xp-h-6 xp-hidden sm:xp-block" });
+                            }
+                            var state = o.checker(level);
+                            var label = getStr(state ? o.yes : o.no);
+                            return (react_2.default.createElement(Tooltip_1.Tooltip, { content: label, key: idx },
+                                react_2.default.createElement("div", { className: (0, utils_1.classNames)("xp-w-6 xp-h-6", !state ? "xp-text-gray-300" : null) },
+                                    react_2.default.createElement("span", { className: "xp-sr-only" }, label),
+                                    react_2.default.createElement(o.Icon, { className: "xp-w-full xp-h-full" }))));
+                        })),
+                        react_2.default.createElement("div", { className: "xp-flex-0 sm:xp--mr-3" },
+                            react_2.default.createElement(Button_1.AnchorButton, { "aria-expanded": isExpanded, "aria-controls": "xp-level-" + level.level + "-options", onClick: function () {
+                                    setExpanded(isExpanded ? expanded.filter(function (e) { return e != level.level; }) : __spreadArray([level.level], expanded, true));
+                                }, className: "xp-p-2 xp-inline-block sm:xp-mr-1" },
+                                react_2.default.createElement("span", { className: "xp-sr-only" }, isExpanded ? react_2.default.createElement(Str_1.default, { id: "collapse", component: "core" }) : react_2.default.createElement(Str_1.default, { id: "expand", component: "core" })),
+                                react_2.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: (0, utils_1.classNames)("xp-w-6 xp-h-6 xp-transition-transform xp-duration-300", isExpanded ? "xp-rotate-90" : null) },
+                                    react_2.default.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8.25 4.5l7.5 7.5-7.5 7.5" }))))),
+                    react_2.default.createElement(Expandable_1.default, { expanded: isExpanded, id: "xp-level-" + level.level + "-options" },
+                        react_2.default.createElement("div", { className: (0, utils_1.classNames)("sm:xp-ml-[100px] sm:xp-pl-8 xp-space-y-4") },
+                            react_2.default.createElement(OptionField, { label: react_2.default.createElement(Str_1.default, { id: "name" }) },
+                                react_2.default.createElement(Input_1.default, { className: "xp-min-w-48 x-w-full sm:xp-w-1/2 xp-max-w-full", onBlur: function (e) { return handleLevelNameChange(level, e.target.value); }, defaultValue: level.name || "", maxLength: 40, type: "text" })),
+                            react_2.default.createElement(OptionField, { label: react_2.default.createElement(Str_1.default, { id: "description" }), note: react_2.default.createElement(Str_1.default, { id: "leveldescriptiondesc" }) },
+                                react_2.default.createElement(Input_1.Textarea, { className: "xp-w-full", onBlur: function (e) { return handleLevelDescChange(level, e.target.value); }, defaultValue: level.description || "", maxLength: 280, rows: 2 })),
+                            react_2.default.createElement(Addon_1.IfAddonActivatedOrPromoEnabled, null, level.level > 1 ? (react_2.default.createElement(react_2.default.Fragment, null,
+                                react_2.default.createElement(OptionField, { label: react_2.default.createElement(Str_1.default, { id: "popupnotificationmessage" }), note: react_2.default.createElement(Str_1.default, { id: "popupnotificationmessagedesc" }), xpPlusRequired: !hasXpPlus },
+                                    react_2.default.createElement(Input_1.Textarea, { className: "xp-w-full", onChange: function (e) { }, defaultValue: level.popupmessage || "", maxLength: 280, rows: 2, disabled: !hasXpPlus })),
+                                react_2.default.createElement(OptionField, { label: react_2.default.createElement(Str_1.default, { id: "badgeaward" }), note: react_2.default.createElement(Str_1.default, { id: "badgeawarddesc" }), xpPlusRequired: !hasXpPlus }, courseId ? (react_2.default.createElement(Input_1.Select, { disabled: !hasXpPlus, className: "xp-max-w-full xp-w-auto", value: (_a = level.badgeawardid) !== null && _a !== void 0 ? _a : "" },
+                                    react_2.default.createElement("option", null, "--"),
+                                    badgeOptions.map(function (b) { return (react_2.default.createElement("option", { value: b.id, key: b.id }, b.name)); }),
+                                    isBadgeValueMissing ? (react_2.default.createElement("option", { value: level.badgeawardid || "" }, getStr("unknownbadgea", level.badgeawardid))) : null)) : (react_2.default.createElement("div", { className: "alert alert-info xp-m-0" },
+                                    react_2.default.createElement(Str_1.default, { id: "cannotbesetindefaults" })))))) : (react_2.default.createElement("div", null,
+                                react_2.default.createElement("div", { className: "xp-text-sm xp-text-gray-500 xp-italic" },
+                                    react_2.default.createElement(Str_1.default, { id: "levelupoptionsunavailableforlevelone" }))))))))));
+        })),
+        react_2.default.createElement("div", { className: "xp-flex xp-flex-1 xp-gap-4 xp-items-start xp-flex-wrap xp-mt-4" },
+            react_2.default.createElement("div", { className: "xp-grow" },
+                react_2.default.createElement(Button_1.Button, { onClick: function () { return handleNumLevelsChange(state.nblevels + 1); } },
+                    react_2.default.createElement(Str_1.default, { id: "addlevel" }))),
+            react_2.default.createElement("div", { className: "" },
+                react_2.default.createElement(Button_1.SaveButton, { statePosition: "before", onClick: handleSave, mutation: mutation, disabled: !state.pendingSave || mutation.isLoading })))));
 };
-var MenuItem = function (_a) {
-    var label = _a.label, _b = _a.className, className = _b === void 0 ? '' : _b, children = _a.children;
-    return (react_1.default.createElement("div", { className: "" + className },
-        label ? react_1.default.createElement("div", null, label) : null,
-        react_1.default.createElement("div", null, children)));
-};
-var Menu = function (_a) {
-    var algo = _a.algo, canSave = _a.canSave, view = _a.view, mutation = _a.mutation, nbLevels = _a.nbLevels, onAlgoEnabledChange = _a.onAlgoEnabledChange, onAlgoBaseChange = _a.onAlgoBaseChange, onAlgoCoefChange = _a.onAlgoCoefChange, onNbLevelsChange = _a.onNbLevelsChange, onViewChange = _a.onViewChange, onSave = _a.onSave;
-    var getStr = (0, hooks_1.useStrings)(['grid', 'list', 'usingalgo', 'manually']);
-    return (react_1.default.createElement("div", { className: "xp-flex xp-flex-col md:xp-flex-row xp-gap-2 md:xp-gap-0" },
-        react_1.default.createElement("div", { className: "xp-flex xp-flex-col xp-flex-wrap xp-order-2 md:xp-order-none md:xp-flex-row xp-gap-2" },
-            react_1.default.createElement(MenuItem, { label: react_1.default.createElement("label", { htmlFor: "bxpViewAs", className: "xp-m-0" },
-                    react_1.default.createElement(Str_1.default, { id: "viewas" })) },
-                react_1.default.createElement("select", { id: "bxpViewAs", value: view, onChange: function (e) { return onViewChange(e.target.value); }, className: "form-control xp-m-0 xp-max-w-xs" },
-                    react_1.default.createElement("option", { value: "grid" }, getStr('grid')),
-                    react_1.default.createElement("option", { value: "list" }, getStr('list')))),
-            react_1.default.createElement(MenuItem, { label: react_1.default.createElement("label", { htmlFor: "bxpNbLevels", className: "xp-m-0" },
-                    react_1.default.createElement(Str_1.default, { id: "levelcount" })) },
-                react_1.default.createElement(NumberInput_1.default, { id: "bxpNbLevels", min: 2, max: 99, size: 4, onChange: onNbLevelsChange, value: nbLevels, className: "form-control" })),
-            react_1.default.createElement(MenuItem, { label: react_1.default.createElement("label", { htmlFor: "bxpAlgoEnabled", className: "xp-m-0" },
-                    react_1.default.createElement(Str_1.default, { id: "setpoints" })) },
-                react_1.default.createElement("select", { id: "bxpAlgoEnabled", value: algo.enabled ? 'usealgo' : '', onChange: function (e) { return onAlgoEnabledChange(Boolean(e.target.value)); }, className: "form-control xp-m-0 xp-max-w-xs" },
-                    react_1.default.createElement("option", { value: "usealgo" }, getStr('usingalgo')),
-                    react_1.default.createElement("option", { value: "" }, getStr('manually')))),
-            algo.enabled ? (react_1.default.createElement(react_1.default.Fragment, null,
-                react_1.default.createElement(MenuItem, { label: react_1.default.createElement("label", { htmlFor: "bxpAlgoPts", className: "xp-m-0" },
-                        react_1.default.createElement(Str_1.default, { id: "basexp" })) },
-                    react_1.default.createElement(NumberInput_1.default, { id: "bxpAlgoPts", min: 1, size: 4, disabled: !algo.enabled, value: algo.base, onChange: onAlgoBaseChange })),
-                react_1.default.createElement(MenuItem, { label: react_1.default.createElement("label", { htmlFor: "bxpAlgoCoef", className: "xp-m-0" },
-                        react_1.default.createElement(Str_1.default, { id: "coefxp" })) },
-                    react_1.default.createElement(NumberInput_1.default, { id: "bxpAlgoCoef", min: 1, max: 5, size: 4, step: 0.1, disabled: !algo.enabled, value: algo.coef, onChange: onAlgoCoefChange })))) : null),
-        react_1.default.createElement("div", { className: "xp-flex-1 xp-flex md:xp-justify-end" },
-            react_1.default.createElement(MenuItem, { className: "md:xp-hidden" },
-                react_1.default.createElement(Button_1.SaveButton, { statePosition: "after", onClick: onSave, mutation: mutation, disabled: !canSave })),
-            react_1.default.createElement(MenuItem, { className: "xp-hidden md:xp-block" },
-                react_1.default.createElement(Button_1.SaveButton, { statePosition: "before", onClick: onSave, mutation: mutation, disabled: !canSave })))));
-};
+exports.App = App;
 var queryClient = new react_query_1.QueryClient({
     defaultOptions: {
         mutations: {
-            onError: function (err) { return (0, moodle_1.getModule)('core/notification').exception(err); },
+            onError: function (err) { return (0, moodle_1.getModule)("core/notification").exception(err); },
         },
     },
 });
 function startApp(node, props) {
-    react_dom_1.default.render(react_1.default.createElement(react_query_1.QueryClientProvider, { client: queryClient },
-        react_1.default.createElement(App, __assign({}, props))), node);
+    react_dom_1.default.render(react_2.default.createElement(contexts_1.AddonContext.Provider, { value: (0, contexts_1.makeAddonContextValueFromAppProps)(props) },
+        react_2.default.createElement(react_query_1.QueryClientProvider, { client: queryClient },
+            react_2.default.createElement(exports.App, __assign({}, props)))), node);
 }
 exports.startApp = startApp;
-var dependencies = (0, moodle_1.makeDependenciesDefinition)(['core/str', 'core/ajax', 'core/notification']);
+var dependencies = (0, moodle_1.makeDependenciesDefinition)([
+    "core/str",
+    "core/ajax",
+    "core/modal",
+    "core/modal_events",
+    "core/modal_factory",
+    "core/notification",
+    "core/toast",
+    "jquery",
+]);
 exports.dependencies = dependencies;
+
+
+/***/ }),
+
+/***/ 9482:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.HELP_URL_LEVELS = void 0;
+exports.HELP_URL_LEVELS = "https://docs.levelup.plus/xp/docs/levels";
+
+
+/***/ }),
+
+/***/ 2471:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AddonContext = exports.makeAddonContextValueFromAppProps = void 0;
+var react_1 = __webpack_require__(7294);
+var makeAddonContextValueFromAppProps = function (props) {
+    var _a;
+    return __assign({ activated: false, enablepromo: true, promourl: "https://levelup.plus/xp/" }, ((_a = props === null || props === void 0 ? void 0 : props.addon) !== null && _a !== void 0 ? _a : {}));
+};
+exports.makeAddonContextValueFromAppProps = makeAddonContextValueFromAppProps;
+exports.AddonContext = (0, react_1.createContext)({
+    activated: false,
+    enablepromo: true,
+    promourl: "https://levelup.plus/xp/", // Local promo page where possible.
+});
 
 
 /***/ }),
@@ -6299,6 +5869,17 @@ exports.dependencies = dependencies;
 
 "use strict";
 
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -6336,11 +5917,64 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.useStrings = exports.useString = exports.useUnloadCheck = void 0;
+exports.useStrings = exports.useString = exports.useUnloadCheck = exports.useRoleButtonListeners = exports.useNumericInputProps = exports.useAnchorButtonProps = exports.useAddonActivated = void 0;
 var react_1 = __webpack_require__(7294);
 var moodle_1 = __webpack_require__(3422);
+var contexts_1 = __webpack_require__(2471);
+var useAddonActivated = function () {
+    return (0, react_1.useContext)(contexts_1.AddonContext).activated;
+};
+exports.useAddonActivated = useAddonActivated;
+var useAnchorButtonProps = function (onClick) {
+    var listeners = (0, exports.useRoleButtonListeners)(onClick);
+    return __assign({ href: "#", role: "button" }, listeners);
+};
+exports.useAnchorButtonProps = useAnchorButtonProps;
+var useNumericInputProps = function (value, onChange) {
+    var valueAsString = value.toString();
+    var _a = (0, react_1.useState)(valueAsString), externalValue = _a[0], setExternalValue = _a[1];
+    var _b = (0, react_1.useState)(externalValue), internalValue = _b[0], setInternalValue = _b[1];
+    (0, react_1.useEffect)(function () {
+        if (valueAsString !== externalValue) {
+            setExternalValue(valueAsString);
+            setInternalValue(valueAsString);
+        }
+    });
+    var handleBlur = function (e) {
+        var v = parseInt(internalValue, 10) || 0;
+        setExternalValue(v.toString());
+        onChange(v);
+    };
+    var handleChange = function (e) {
+        setInternalValue(e.target.value.replace(/[^0-9]/, ""));
+    };
+    return {
+        value: internalValue,
+        onChange: handleChange,
+        onBlur: handleBlur,
+    };
+};
+exports.useNumericInputProps = useNumericInputProps;
+var useRoleButtonListeners = function (onClick) {
+    var handleClick = function (e) {
+        e.preventDefault();
+        onClick();
+    };
+    var handleKeyDown = function (e) {
+        if (e.key !== " " && e.key !== "Enter") {
+            return;
+        }
+        e.preventDefault();
+        onClick();
+    };
+    return {
+        onClick: handleClick,
+        onKeyDown: handleKeyDown,
+    };
+};
+exports.useRoleButtonListeners = useRoleButtonListeners;
 var useUnloadCheck = function (isDirty) {
-    var str = (0, exports.useString)('changesmadereallygoaway', 'core');
+    var str = (0, exports.useString)("changesmadereallygoaway", "core");
     (0, react_1.useEffect)(function () {
         var fn = function (e) {
             if (!isDirty || (0, moodle_1.isBehatRunning)()) {
@@ -6350,15 +5984,15 @@ var useUnloadCheck = function (isDirty) {
             e.returnValue = str;
             return str;
         };
-        window.addEventListener('beforeunload', fn);
+        window.addEventListener("beforeunload", fn);
         return function () {
-            window.removeEventListener('beforeunload', fn);
+            window.removeEventListener("beforeunload", fn);
         };
     });
 };
 exports.useUnloadCheck = useUnloadCheck;
 var useString = function (id, component, a) {
-    if (component === void 0) { component = 'block_xp'; }
+    if (component === void 0) { component = "block_xp"; }
     var wasKnownAtMount = (0, react_1.useMemo)(function () { return (0, moodle_1.hasString)(id, component); }, [id, component]);
     var _a = (0, react_1.useState)(false), isLoaded = _a[0], setLoaded = _a[1];
     // When the string changes, remove the promise.
@@ -6395,12 +6029,12 @@ var useString = function (id, component, a) {
             cancelled = true;
         };
     });
-    return (0, moodle_1.hasString)(id, component) ? (0, moodle_1.getString)(id, component, a) : '';
+    return (0, moodle_1.hasString)(id, component) ? (0, moodle_1.getString)(id, component, a) : "​";
 };
 exports.useString = useString;
 var useStrings = function (ids, component) {
-    if (component === void 0) { component = 'block_xp'; }
-    var idsForKey = ids.join(',');
+    if (component === void 0) { component = "block_xp"; }
+    var idsForKey = ids.join(",");
     var allKnownAtMount = (0, react_1.useMemo)(function () { return ids.every(function (id) { return (0, moodle_1.hasString)(id, component); }); }, [idsForKey, component]);
     var _a = (0, react_1.useState)(false), isLoaded = _a[0], setLoaded = _a[1];
     // When the string changes, remove the promise.
@@ -6437,7 +6071,7 @@ var useStrings = function (ids, component) {
             cancelled = true;
         };
     });
-    return function (id, a) { return ((0, moodle_1.hasString)(id, component) ? (0, moodle_1.getString)(id, component, a) : ''); };
+    return function (id, a) { return ((0, moodle_1.hasString)(id, component) ? (0, moodle_1.getString)(id, component, a) : "​"); };
 };
 exports.useStrings = useStrings;
 
@@ -6450,7 +6084,7 @@ exports.useStrings = useStrings;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getPreviousLevel = exports.getNextLevel = exports.getMinimumPointsAtLevel = exports.getMinimumPointsForLevel = exports.getLevel = exports.computeRequiredPoints = void 0;
+exports.getPreviousLevel = exports.getNextLevel = exports.getMinimumPointsAtLevel = exports.getMinimumPointsForLevel = exports.getLevel = exports.computeRequiredPointsWithMethod = exports.computeRequiredPoints = void 0;
 function computeRequiredPoints(level, base, coef) {
     if (level <= 1) {
         return 0;
@@ -6464,6 +6098,27 @@ function computeRequiredPoints(level, base, coef) {
     return Math.round(base * ((1 - Math.pow(coef, level - 1)) / (1 - coef)));
 }
 exports.computeRequiredPoints = computeRequiredPoints;
+function computeRequiredPointsWithMethod(level, method) {
+    if (level <= 1) {
+        return 0;
+    }
+    else if (level === 2) {
+        return method.base;
+    }
+    if (method.method === "relative") {
+        // Refer to the original method that was algorithmic.
+        return computeRequiredPoints(level, method.base, method.coef);
+    }
+    else if (method.method === "linear") {
+        // Each level is worth the base + increment (starting at level 3);
+        // Level 1: 0; level 2: 100; Level 3: 210 (100 + (100 + 10)); Level 4: 330 (100 + (100 + 10) + (100 + 10 + 10));
+        return (method.base * (level - 1) +
+            Array.from({ length: level }).reduce(function (carry, _, idx) { return carry + Math.max(0, idx - 1) * method.incr; }, 0));
+    }
+    // Flat method.
+    return (level - 1) * method.base;
+}
+exports.computeRequiredPointsWithMethod = computeRequiredPointsWithMethod;
 var getLevel = function (levels, level) {
     return levels[Math.max(0, level - 1)];
 };
@@ -6631,7 +6286,15 @@ exports.setModule = setModule;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.stripTags = exports.fifoCache = void 0;
+exports.stripTags = exports.fifoCache = exports.classNames = void 0;
+var classNames = function () {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return args.filter(Boolean).join(' ');
+};
+exports.classNames = classNames;
 var fifoCache = function (maxItems) {
     if (maxItems === void 0) { maxItems = 128; }
     var items = {};
@@ -6663,6 +6326,327 @@ var stripTags = function (html) {
     return tmp.textContent || tmp.innerText || '';
 };
 exports.stripTags = stripTags;
+
+
+/***/ }),
+
+/***/ 5006:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+var zo=Object.create;var ct=Object.defineProperty;var Zo=Object.getOwnPropertyDescriptor;var er=Object.getOwnPropertyNames;var tr=Object.getPrototypeOf,nr=Object.prototype.hasOwnProperty;var or=(e,t,n)=>t in e?ct(e,t,{enumerable:!0,configurable:!0,writable:!0,value:n}):e[t]=n;var rr=(e,t)=>{for(var n in t)ct(e,n,{get:t[n],enumerable:!0})},Un=(e,t,n,o)=>{if(t&&typeof t=="object"||typeof t=="function")for(let l of er(t))!nr.call(e,l)&&l!==n&&ct(e,l,{get:()=>t[l],enumerable:!(o=Zo(t,l))||o.enumerable});return e};var oe=(e,t,n)=>(n=e!=null?zo(tr(e)):{},Un(t||!e||!e.__esModule?ct(n,"default",{value:e,enumerable:!0}):n,e)),ar=e=>Un(ct({},"__esModule",{value:!0}),e);var Ct=(e,t,n)=>(or(e,typeof t!="symbol"?t+"":t,n),n);var Xi={};rr(Xi,{Combobox:()=>_r,Dialog:()=>Ma,Disclosure:()=>Ka,FocusTrap:()=>Xe,Listbox:()=>pl,Menu:()=>Cl,Popover:()=>$l,Portal:()=>it,RadioGroup:()=>ai,Switch:()=>ci,Tab:()=>Ii,Transition:()=>Ki});module.exports=ar(Xi);var B=oe(__webpack_require__(7294),1);var Vn=__webpack_require__(7294);var At=__webpack_require__(7294);var Qt=class{constructor(){Ct(this,"current",this.detect());Ct(this,"handoffState","pending");Ct(this,"currentId",0)}set(t){this.current!==t&&(this.handoffState="pending",this.currentId=0,this.current=t)}reset(){this.set(this.detect())}nextId(){return++this.currentId}get isServer(){return this.current==="server"}get isClient(){return this.current==="client"}detect(){return typeof window=="undefined"||typeof document=="undefined"?"server":"client"}handoff(){this.handoffState==="pending"&&(this.handoffState="complete")}get isHandoffComplete(){return this.handoffState==="complete"}},Pe=new Qt;var w=(e,t)=>{Pe.isServer?(0,At.useEffect)(e,t):(0,At.useLayoutEffect)(e,t)};var Bn=__webpack_require__(7294);function z(e){let t=(0,Bn.useRef)(e);return w(()=>{t.current=e},[e]),t}function Be(e,t){let[n,o]=(0,Vn.useState)(e),l=z(e);return w(()=>o(l.current),[l,o,...t]),n}var Lt=__webpack_require__(7294);function we(e){typeof queueMicrotask=="function"?queueMicrotask(e):Promise.resolve().then(e).catch(t=>setTimeout(()=>{throw t}))}function ie(){let e=[],t={addEventListener(n,o,l,r){return n.addEventListener(o,l,r),t.add(()=>n.removeEventListener(o,l,r))},requestAnimationFrame(...n){let o=requestAnimationFrame(...n);return t.add(()=>cancelAnimationFrame(o))},nextFrame(...n){return t.requestAnimationFrame(()=>t.requestAnimationFrame(...n))},setTimeout(...n){let o=setTimeout(...n);return t.add(()=>clearTimeout(o))},microTask(...n){let o={current:!0};return we(()=>{o.current&&n[0]()}),t.add(()=>{o.current=!1})},style(n,o,l){let r=n.style.getPropertyValue(o);return Object.assign(n.style,{[o]:l}),this.add(()=>{Object.assign(n.style,{[o]:r})})},group(n){let o=ie();return n(o),this.add(()=>o.dispose())},add(n){return e.push(n),()=>{let o=e.indexOf(n);if(o>=0)for(let l of e.splice(o,1))l()}},dispose(){for(let n of e.splice(0))n()}};return t}function se(){let[e]=(0,Lt.useState)(ie);return(0,Lt.useEffect)(()=>()=>e.dispose(),[e]),e}var jn=oe(__webpack_require__(7294),1);var T=function(t){let n=z(t);return jn.default.useCallback((...o)=>n.current(...o),[n])};var zt=oe(__webpack_require__(7294),1);var ft=__webpack_require__(7294);function Ce(){let[e,t]=(0,ft.useState)(Pe.isHandoffComplete);return e&&Pe.isHandoffComplete===!1&&t(!1),(0,ft.useEffect)(()=>{e!==!0&&t(!0)},[e]),(0,ft.useEffect)(()=>Pe.handoff(),[]),e}var Wn,j=(Wn=zt.default.useId)!=null?Wn:function(){let t=Ce(),[n,o]=zt.default.useState(t?()=>Pe.nextId():null);return w(()=>{n===null&&o(Pe.nextId())},[n]),n!=null?""+n:void 0};var mt=__webpack_require__(7294);function M(e,t,...n){if(e in t){let l=t[e];return typeof l=="function"?l(...n):l}let o=new Error(`Tried to handle "${e}" but there is no handler defined. Only defined handlers are: ${Object.keys(t).map(l=>`"${l}"`).join(", ")}.`);throw Error.captureStackTrace&&Error.captureStackTrace(o,M),o}function me(e){return Pe.isServer?null:e instanceof Node?e.ownerDocument:e!=null&&e.hasOwnProperty("current")&&e.current instanceof Node?e.current.ownerDocument:document}var Zt=["[contentEditable=true]","[tabindex]","a[href]","area[href]","button:not([disabled])","iframe","input:not([disabled])","select:not([disabled])","textarea:not([disabled])"].map(e=>`${e}:not([tabindex='-1'])`).join(",");function Ye(e=document.body){return e==null?[]:Array.from(e.querySelectorAll(Zt)).sort((t,n)=>Math.sign((t.tabIndex||Number.MAX_SAFE_INTEGER)-(n.tabIndex||Number.MAX_SAFE_INTEGER)))}function _e(e,t=0){var n;return e===((n=me(e))==null?void 0:n.body)?!1:M(t,{[0](){return e.matches(Zt)},[1](){let o=e;for(;o!==null;){if(o.matches(Zt))return!0;o=o.parentElement}return!1}})}function en(e){let t=me(e);ie().nextFrame(()=>{t&&!_e(t.activeElement,0)&&He(e)})}typeof window!="undefined"&&typeof document!="undefined"&&(document.addEventListener("keydown",e=>{e.metaKey||e.altKey||e.ctrlKey||(document.documentElement.dataset.headlessuiFocusVisible="")},!0),document.addEventListener("click",e=>{e.detail===1?delete document.documentElement.dataset.headlessuiFocusVisible:e.detail===0&&(document.documentElement.dataset.headlessuiFocusVisible="")},!0));function He(e){e==null||e.focus({preventScroll:!0})}var lr=["textarea","input"].join(",");function ir(e){var t,n;return(n=(t=e==null?void 0:e.matches)==null?void 0:t.call(e,lr))!=null?n:!1}function ye(e,t=n=>n){return e.slice().sort((n,o)=>{let l=t(n),r=t(o);if(l===null||r===null)return 0;let a=l.compareDocumentPosition(r);return a&Node.DOCUMENT_POSITION_FOLLOWING?-1:a&Node.DOCUMENT_POSITION_PRECEDING?1:0})}function Kn(e,t){return le(Ye(),t,{relativeTo:e})}function le(e,t,{sorted:n=!0,relativeTo:o=null,skipElements:l=[]}={}){let r=Array.isArray(e)?e.length>0?e[0].ownerDocument:document:e.ownerDocument,a=Array.isArray(e)?n?ye(e):e:Ye(e);l.length>0&&a.length>1&&(a=a.filter(g=>!l.includes(g))),o=o!=null?o:r.activeElement;let i=(()=>{if(t&5)return 1;if(t&10)return-1;throw new Error("Missing Focus.First, Focus.Previous, Focus.Next or Focus.Last")})(),s=(()=>{if(t&1)return 0;if(t&2)return Math.max(0,a.indexOf(o))-1;if(t&4)return Math.max(0,a.indexOf(o))+1;if(t&8)return a.length-1;throw new Error("Missing Focus.First, Focus.Previous, Focus.Next or Focus.Last")})(),u=t&32?{preventScroll:!0}:{},m=0,p=a.length,y;do{if(m>=p||m+p<=0)return 0;let g=s+m;if(t&16)g=(g+p)%p;else{if(g<0)return 3;if(g>=p)return 1}y=a[g],y==null||y.focus(u),m+=i}while(y!==r.activeElement);return t&6&&ir(y)&&y.select(),2}var Xn=__webpack_require__(7294);function Tt(e,t,n){let o=z(t);(0,Xn.useEffect)(()=>{function l(r){o.current(r)}return document.addEventListener(e,l,n),()=>document.removeEventListener(e,l,n)},[e,n])}var $n=__webpack_require__(7294);function ht(e,t,n){let o=z(t);(0,$n.useEffect)(()=>{function l(r){o.current(r)}return window.addEventListener(e,l,n),()=>window.removeEventListener(e,l,n)},[e,n])}function De(e,t,n=!0){let o=(0,mt.useRef)(!1);(0,mt.useEffect)(()=>{requestAnimationFrame(()=>{o.current=n})},[n]);function l(a,i){if(!o.current||a.defaultPrevented)return;let s=i(a);if(s===null||!s.getRootNode().contains(s)||!s.isConnected)return;let u=function m(p){return typeof p=="function"?m(p()):Array.isArray(p)||p instanceof Set?p:[p]}(e);for(let m of u){if(m===null)continue;let p=m instanceof HTMLElement?m:m.current;if(p!=null&&p.contains(s)||a.composed&&a.composedPath().includes(p))return}return!_e(s,1)&&s.tabIndex!==-1&&a.preventDefault(),t(a,s)}let r=(0,mt.useRef)(null);Tt("pointerdown",a=>{var i,s;o.current&&(r.current=((s=(i=a.composedPath)==null?void 0:i.call(a))==null?void 0:s[0])||a.target)},!0),Tt("mousedown",a=>{var i,s;o.current&&(r.current=((s=(i=a.composedPath)==null?void 0:i.call(a))==null?void 0:s[0])||a.target)},!0),Tt("click",a=>{r.current&&(l(a,()=>r.current),r.current=null)},!0),Tt("touchend",a=>l(a,()=>a.target instanceof HTMLElement?a.target:null),!0),ht("blur",a=>l(a,()=>window.document.activeElement instanceof HTMLIFrameElement?window.document.activeElement:null),!0)}var qn=__webpack_require__(7294);function Jn(e){var n;if(e.type)return e.type;let t=(n=e.as)!=null?n:"button";if(typeof t=="string"&&t.toLowerCase()==="button")return"button"}function xe(e,t){let[n,o]=(0,qn.useState)(()=>Jn(e));return w(()=>{o(Jn(e))},[e.type,e.as]),w(()=>{n||t.current&&t.current instanceof HTMLButtonElement&&!t.current.hasAttribute("type")&&o("button")},[n,t]),n}var Dt=__webpack_require__(7294);var Yn=Symbol();function Qe(e,t=!0){return Object.assign(e,{[Yn]:t})}function I(...e){let t=(0,Dt.useRef)(e);(0,Dt.useEffect)(()=>{t.current=e},[e]);let n=T(o=>{for(let l of t.current)l!=null&&(typeof l=="function"?l(o):l.current=o)});return e.every(o=>o==null||(o==null?void 0:o[Yn]))?void 0:n}var bt=__webpack_require__(7294);function ze({container:e,accept:t,walk:n,enabled:o=!0}){let l=(0,bt.useRef)(t),r=(0,bt.useRef)(n);(0,bt.useEffect)(()=>{l.current=t,r.current=n},[t,n]),w(()=>{if(!e||!o)return;let a=me(e);if(!a)return;let i=l.current,s=r.current,u=Object.assign(p=>i(p),{acceptNode:i}),m=a.createTreeWalker(e,NodeFilter.SHOW_ELEMENT,u,!1);for(;m.nextNode();)s(m.currentNode)},[e,o,l,r])}function sr(e){throw new Error("Unexpected object: "+e)}function Ze(e,t){let n=t.resolveItems();if(n.length<=0)return null;let o=t.resolveActiveIndex(),l=o!=null?o:-1,r=(()=>{switch(e.focus){case 0:return n.findIndex(a=>!t.resolveDisabled(a));case 1:{let a=n.slice().reverse().findIndex((i,s,u)=>l!==-1&&u.length-s-1>=l?!1:!t.resolveDisabled(i));return a===-1?a:n.length-1-a}case 2:return n.findIndex((a,i)=>i<=l?!1:!t.resolveDisabled(a));case 3:{let a=n.slice().reverse().findIndex(i=>!t.resolveDisabled(i));return a===-1?a:n.length-1-a}case 4:return n.findIndex(a=>t.resolveId(a)===e.id);case 5:return null;default:sr(e)}})();return r===-1?o:r}var Re=__webpack_require__(7294);function yt(...e){return e.filter(Boolean).join(" ")}function L({ourProps:e,theirProps:t,slot:n,defaultTag:o,features:l,visible:r=!0,name:a}){let i=Qn(t,e);if(r)return Mt(i,n,o,a);let s=l!=null?l:0;if(s&2){let{static:u=!1,...m}=i;if(u)return Mt(m,n,o,a)}if(s&1){let{unmount:u=!0,...m}=i;return M(u?0:1,{[0](){return null},[1](){return Mt({...m,hidden:!0,style:{display:"none"}},n,o,a)}})}return Mt(i,n,o,a)}function Mt(e,t={},n,o){let{as:l=n,children:r,refName:a="ref",...i}=nn(e,["unmount","static"]),s=e.ref!==void 0?{[a]:e.ref}:{},u=typeof r=="function"?r(t):r;"className"in i&&i.className&&typeof i.className=="function"&&(i.className=i.className(t));let m={};if(t){let p=!1,y=[];for(let[g,d]of Object.entries(t))typeof d=="boolean"&&(p=!0),d===!0&&y.push(g);p&&(m["data-headlessui-state"]=y.join(" "))}if(l===Re.Fragment&&Object.keys(Me(i)).length>0){if(!(0,Re.isValidElement)(u)||Array.isArray(u)&&u.length>1)throw new Error(['Passing props on "Fragment"!',"",`The current component <${o} /> is rendering a "Fragment".`,"However we need to passthrough the following props:",Object.keys(i).map(d=>`  - ${d}`).join(`
+`),"","You can apply a few solutions:",['Add an `as="..."` prop, to ensure that we render an actual element instead of a "Fragment".',"Render a single element as the child so that we can forward the props onto that element."].map(d=>`  - ${d}`).join(`
+`)].join(`
+`));let p=u.props,y=typeof(p==null?void 0:p.className)=="function"?(...d)=>yt(p==null?void 0:p.className(...d),i.className):yt(p==null?void 0:p.className,i.className),g=y?{className:y}:{};return(0,Re.cloneElement)(u,Object.assign({},Qn(u.props,Me(nn(i,["ref"]))),m,s,ur(u.ref,s.ref),g))}return(0,Re.createElement)(l,Object.assign({},nn(i,["ref"]),l!==Re.Fragment&&s,l!==Re.Fragment&&m),u)}function ur(...e){return{ref:e.every(t=>t==null)?void 0:t=>{for(let n of e)n!=null&&(typeof n=="function"?n(t):n.current=t)}}}function Qn(...e){var o;if(e.length===0)return{};if(e.length===1)return e[0];let t={},n={};for(let l of e)for(let r in l)r.startsWith("on")&&typeof l[r]=="function"?((o=n[r])!=null||(n[r]=[]),n[r].push(l[r])):t[r]=l[r];if(t.disabled||t["aria-disabled"])return Object.assign(t,Object.fromEntries(Object.keys(n).map(l=>[l,void 0])));for(let l in n)Object.assign(t,{[l](r,...a){let i=n[l];for(let s of i){if((r instanceof Event||(r==null?void 0:r.nativeEvent)instanceof Event)&&r.defaultPrevented)return;s(r,...a)}}});return t}function h(e){var t;return Object.assign((0,Re.forwardRef)(e),{displayName:(t=e.displayName)!=null?t:e.name})}function Me(e){let t=Object.assign({},e);for(let n in t)t[n]===void 0&&delete t[n];return t}function nn(e,t=[]){let n=Object.assign({},e);for(let o of t)o in n&&delete n[o];return n}function de(e){let t=e.parentElement,n=null;for(;t&&!(t instanceof HTMLFieldSetElement);)t instanceof HTMLLegendElement&&(n=t),t=t.parentElement;let o=(t==null?void 0:t.getAttribute("disabled"))==="";return o&&pr(n)?!1:o}function pr(e){if(!e)return!1;let t=e.previousElementSibling;for(;t!==null;){if(t instanceof HTMLLegendElement)return!1;t=t.previousElementSibling}return!0}function Ve(e={},t=null,n=[]){for(let[o,l]of Object.entries(e))Zn(n,zn(t,o),l);return n}function zn(e,t){return e?e+"["+t+"]":t}function Zn(e,t,n){if(Array.isArray(n))for(let[o,l]of n.entries())Zn(e,zn(t,o.toString()),l);else n instanceof Date?e.push([t,n.toISOString()]):typeof n=="boolean"?e.push([t,n?"1":"0"]):typeof n=="string"?e.push([t,n]):typeof n=="number"?e.push([t,`${n}`]):n==null?e.push([t,""]):Ve(n,t,e)}function Ft(e){var n;let t=(n=e==null?void 0:e.form)!=null?n:e.closest("form");if(t){for(let o of t.elements)if(o.tagName==="INPUT"&&o.type==="submit"||o.tagName==="BUTTON"&&o.type==="submit"||o.nodeName==="INPUT"&&o.type==="image"){o.click();return}t.requestSubmit()}}var dr="div";function cr(e,t){let{features:n=1,...o}=e,l={ref:t,"aria-hidden":(n&2)===2?!0:void 0,style:{position:"fixed",top:1,left:1,width:1,height:0,padding:0,margin:-1,overflow:"hidden",clip:"rect(0, 0, 0, 0)",whiteSpace:"nowrap",borderWidth:"0",...(n&4)===4&&(n&2)!==2&&{display:"none"}}};return L({ourProps:l,theirProps:o,slot:{},defaultTag:dr,name:"Hidden"})}var pe=h(cr);var et=oe(__webpack_require__(7294),1),on=(0,et.createContext)(null);on.displayName="OpenClosedContext";function be(){return(0,et.useContext)(on)}function Se({value:e,children:t}){return et.default.createElement(on.Provider,{value:e},t)}var tt=__webpack_require__(7294);function ke(e,t,n){let[o,l]=(0,tt.useState)(n),r=e!==void 0,a=(0,tt.useRef)(r),i=(0,tt.useRef)(!1),s=(0,tt.useRef)(!1);return r&&!a.current&&!i.current?(i.current=!0,a.current=r,console.error("A component is changing from uncontrolled to controlled. This may be caused by the value changing from undefined to a defined value, which should not happen.")):!r&&a.current&&!s.current&&(s.current=!0,a.current=r,console.error("A component is changing from controlled to uncontrolled. This may be caused by the value changing from a defined value to undefined, which should not happen.")),[r?e:o,T(u=>(r||l(u),t==null?void 0:t(u)))]}var It=__webpack_require__(7294);function je(e,t){let n=(0,It.useRef)([]),o=T(e);(0,It.useEffect)(()=>{let l=[...n.current];for(let[r,a]of t.entries())if(n.current[r]!==a){let i=o(t,l);return n.current=t,i}},[o,...t])}var to=__webpack_require__(7294);function eo(e){return[e.screenX,e.screenY]}function nt(){let e=(0,to.useRef)([-1,-1]);return{wasMoved(t){let n=eo(t);return e.current[0]===n[0]&&e.current[1]===n[1]?!1:(e.current=n,!0)},update(t){e.current=eo(t)}}}function rn(){return/iPhone/gi.test(window.navigator.platform)||/Mac/gi.test(window.navigator.platform)&&window.navigator.maxTouchPoints>0}function fr(){return/Android/gi.test(window.navigator.userAgent)}function no(){return rn()||fr()}function an(e,t=n=>n){let n=e.activeOptionIndex!==null?e.options[e.activeOptionIndex]:null,o=ye(t(e.options.slice()),r=>r.dataRef.current.domRef.current),l=n?o.indexOf(n):null;return l===-1&&(l=null),{options:o,activeOptionIndex:l}}var Tr={[1](e){var t;return(t=e.dataRef.current)!=null&&t.disabled||e.comboboxState===1?e:{...e,activeOptionIndex:null,comboboxState:1}},[0](e){var n;if((n=e.dataRef.current)!=null&&n.disabled||e.comboboxState===0)return e;let t=e.activeOptionIndex;if(e.dataRef.current){let{isSelected:o}=e.dataRef.current,l=e.options.findIndex(r=>o(r.dataRef.current.value));l!==-1&&(t=l)}return{...e,comboboxState:0,activeOptionIndex:t}},[2](e,t){var l,r,a,i;if((l=e.dataRef.current)!=null&&l.disabled||(r=e.dataRef.current)!=null&&r.optionsRef.current&&!((a=e.dataRef.current)!=null&&a.optionsPropsRef.current.static)&&e.comboboxState===1)return e;let n=an(e);if(n.activeOptionIndex===null){let s=n.options.findIndex(u=>!u.dataRef.current.disabled);s!==-1&&(n.activeOptionIndex=s)}let o=Ze(t,{resolveItems:()=>n.options,resolveActiveIndex:()=>n.activeOptionIndex,resolveId:s=>s.id,resolveDisabled:s=>s.dataRef.current.disabled});return{...e,...n,activeOptionIndex:o,activationTrigger:(i=t.trigger)!=null?i:1}},[3]:(e,t)=>{var r,a;let n={id:t.id,dataRef:t.dataRef},o=an(e,i=>[...i,n]);e.activeOptionIndex===null&&(r=e.dataRef.current)!=null&&r.isSelected(t.dataRef.current.value)&&(o.activeOptionIndex=o.options.indexOf(n));let l={...e,...o,activationTrigger:1};return(a=e.dataRef.current)!=null&&a.__demoMode&&e.dataRef.current.value===void 0&&(l.activeOptionIndex=0),l},[4]:(e,t)=>{let n=an(e,o=>{let l=o.findIndex(r=>r.id===t.id);return l!==-1&&o.splice(l,1),o});return{...e,...n,activationTrigger:1}},[5]:(e,t)=>({...e,labelId:t.id})},ln=(0,B.createContext)(null);ln.displayName="ComboboxActionsContext";function gt(e){let t=(0,B.useContext)(ln);if(t===null){let n=new Error(`<${e} /> is missing a parent <Combobox /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,gt),n}return t}var sn=(0,B.createContext)(null);sn.displayName="ComboboxDataContext";function rt(e){let t=(0,B.useContext)(sn);if(t===null){let n=new Error(`<${e} /> is missing a parent <Combobox /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,rt),n}return t}function mr(e,t){return M(t.type,Tr,e,t)}var br=B.Fragment;function yr(e,t){let{value:n,defaultValue:o,onChange:l,form:r,name:a,by:i=(S,F)=>S===F,disabled:s=!1,__demoMode:u=!1,nullable:m=!1,multiple:p=!1,...y}=e,[g=p?[]:void 0,d]=ke(n,l,o),[f,b]=(0,B.useReducer)(mr,{dataRef:(0,B.createRef)(),comboboxState:u?0:1,options:[],activeOptionIndex:null,activationTrigger:1,labelId:null}),c=(0,B.useRef)(!1),E=(0,B.useRef)({static:!1,hold:!1}),D=(0,B.useRef)(null),A=(0,B.useRef)(null),U=(0,B.useRef)(null),_=(0,B.useRef)(null),x=T(typeof i=="string"?(S,F)=>{let q=i;return(S==null?void 0:S[q])===(F==null?void 0:F[q])}:i),P=(0,B.useCallback)(S=>M(O.mode,{[1]:()=>g.some(F=>x(F,S)),[0]:()=>x(g,S)}),[g]),O=(0,B.useMemo)(()=>({...f,optionsPropsRef:E,labelRef:D,inputRef:A,buttonRef:U,optionsRef:_,value:g,defaultValue:o,disabled:s,mode:p?1:0,get activeOptionIndex(){if(c.current&&f.activeOptionIndex===null&&f.options.length>0){let S=f.options.findIndex(F=>!F.dataRef.current.disabled);if(S!==-1)return S}return f.activeOptionIndex},compare:x,isSelected:P,nullable:m,__demoMode:u}),[g,o,s,p,m,u,f]),v=(0,B.useRef)(O.activeOptionIndex!==null?O.options[O.activeOptionIndex]:null);(0,B.useEffect)(()=>{let S=O.activeOptionIndex!==null?O.options[O.activeOptionIndex]:null;v.current!==S&&(v.current=S)}),w(()=>{f.dataRef.current=O},[O]),De([O.buttonRef,O.inputRef,O.optionsRef],()=>Q.closeCombobox(),O.comboboxState===0);let R=(0,B.useMemo)(()=>({open:O.comboboxState===0,disabled:s,activeIndex:O.activeOptionIndex,activeOption:O.activeOptionIndex===null?null:O.options[O.activeOptionIndex].dataRef.current.value,value:g}),[O,s,g]),C=T(S=>{let F=O.options.find(q=>q.id===S);F&&H(F.dataRef.current.value)}),N=T(()=>{if(O.activeOptionIndex!==null){let{dataRef:S,id:F}=O.options[O.activeOptionIndex];H(S.current.value),Q.goToOption(4,F)}}),ee=T(()=>{b({type:0}),c.current=!0}),K=T(()=>{b({type:1}),c.current=!1}),G=T((S,F,q)=>(c.current=!1,S===4?b({type:2,focus:4,id:F,trigger:q}):b({type:2,focus:S,trigger:q}))),X=T((S,F)=>(b({type:3,id:S,dataRef:F}),()=>{var q;((q=v.current)==null?void 0:q.id)===S&&(c.current=!0),b({type:4,id:S})})),ce=T(S=>(b({type:5,id:S}),()=>b({type:5,id:null}))),H=T(S=>M(O.mode,{[0](){return d==null?void 0:d(S)},[1](){let F=O.value.slice(),q=F.findIndex(Ee=>x(Ee,S));return q===-1?F.push(S):F.splice(q,1),d==null?void 0:d(F)}})),Q=(0,B.useMemo)(()=>({onChange:H,registerOption:X,registerLabel:ce,goToOption:G,closeCombobox:K,openCombobox:ee,selectActiveOption:N,selectOption:C}),[]),J=t===null?{}:{ref:t},te=(0,B.useRef)(null),fe=se();return(0,B.useEffect)(()=>{te.current&&o!==void 0&&fe.addEventListener(te.current,"reset",()=>{H(o)})},[te,H]),B.default.createElement(ln.Provider,{value:Q},B.default.createElement(sn.Provider,{value:O},B.default.createElement(Se,{value:M(O.comboboxState,{[0]:1,[1]:2})},a!=null&&g!=null&&Ve({[a]:g}).map(([S,F],q)=>B.default.createElement(pe,{features:4,ref:q===0?Ee=>{var Ue;te.current=(Ue=Ee==null?void 0:Ee.closest("form"))!=null?Ue:null}:void 0,...Me({key:S,as:"input",type:"hidden",hidden:!0,readOnly:!0,form:r,name:S,value:F})})),L({ourProps:J,theirProps:y,slot:R,defaultTag:br,name:"Combobox"}))))}var gr="input";function Er(e,t){var x,P,O,v;let n=j(),{id:o=`headlessui-combobox-input-${n}`,onChange:l,displayValue:r,type:a="text",...i}=e,s=rt("Combobox.Input"),u=gt("Combobox.Input"),m=I(s.inputRef,t),p=(0,B.useRef)(!1),y=se(),g=function(){var R;return typeof r=="function"&&s.value!==void 0?(R=r(s.value))!=null?R:"":typeof s.value=="string"?s.value:""}();je(([R,C],[N,ee])=>{if(p.current)return;let K=s.inputRef.current;K&&((ee===0&&C===1||R!==N)&&(K.value=R),requestAnimationFrame(()=>{if(p.current||!K)return;let{selectionStart:G,selectionEnd:X}=K;Math.abs((X!=null?X:0)-(G!=null?G:0))===0&&G===0&&K.setSelectionRange(K.value.length,K.value.length)}))},[g,s.comboboxState]),je(([R],[C])=>{if(R===0&&C===1){if(p.current)return;let N=s.inputRef.current;if(!N)return;let ee=N.value,{selectionStart:K,selectionEnd:G,selectionDirection:X}=N;N.value="",N.value=ee,X!==null?N.setSelectionRange(K,G,X):N.setSelectionRange(K,G)}},[s.comboboxState]);let d=(0,B.useRef)(!1),f=T(()=>{d.current=!0}),b=T(()=>{y.nextFrame(()=>{d.current=!1})}),c=T(R=>{switch(p.current=!0,R.key){case"Backspace":case"Delete":if(s.mode!==0||!s.nullable)return;let C=R.currentTarget;y.requestAnimationFrame(()=>{C.value===""&&(u.onChange(null),s.optionsRef.current&&(s.optionsRef.current.scrollTop=0),u.goToOption(5))});break;case"Enter":if(p.current=!1,s.comboboxState!==0||d.current)return;if(R.preventDefault(),R.stopPropagation(),s.activeOptionIndex===null){u.closeCombobox();return}u.selectActiveOption(),s.mode===0&&u.closeCombobox();break;case"ArrowDown":return p.current=!1,R.preventDefault(),R.stopPropagation(),M(s.comboboxState,{[0]:()=>{u.goToOption(2)},[1]:()=>{u.openCombobox()}});case"ArrowUp":return p.current=!1,R.preventDefault(),R.stopPropagation(),M(s.comboboxState,{[0]:()=>{u.goToOption(1)},[1]:()=>{u.openCombobox(),y.nextFrame(()=>{s.value||u.goToOption(3)})}});case"Home":if(R.shiftKey)break;return p.current=!1,R.preventDefault(),R.stopPropagation(),u.goToOption(0);case"PageUp":return p.current=!1,R.preventDefault(),R.stopPropagation(),u.goToOption(0);case"End":if(R.shiftKey)break;return p.current=!1,R.preventDefault(),R.stopPropagation(),u.goToOption(3);case"PageDown":return p.current=!1,R.preventDefault(),R.stopPropagation(),u.goToOption(3);case"Escape":return p.current=!1,s.comboboxState!==0?void 0:(R.preventDefault(),s.optionsRef.current&&!s.optionsPropsRef.current.static&&R.stopPropagation(),u.closeCombobox());case"Tab":if(p.current=!1,s.comboboxState!==0)return;s.mode===0&&u.selectActiveOption(),u.closeCombobox();break}}),E=T(R=>{l==null||l(R),u.openCombobox()}),D=T(()=>{p.current=!1}),A=Be(()=>{if(s.labelId)return[s.labelId].join(" ")},[s.labelId]),U=(0,B.useMemo)(()=>({open:s.comboboxState===0,disabled:s.disabled}),[s]),_={ref:m,id:o,role:"combobox",type:a,"aria-controls":(x=s.optionsRef.current)==null?void 0:x.id,"aria-expanded":s.comboboxState===0,"aria-activedescendant":s.activeOptionIndex===null||(P=s.options[s.activeOptionIndex])==null?void 0:P.id,"aria-labelledby":A,"aria-autocomplete":"list",defaultValue:(v=(O=e.defaultValue)!=null?O:s.defaultValue!==void 0?r==null?void 0:r(s.defaultValue):null)!=null?v:s.defaultValue,disabled:s.disabled,onCompositionStart:f,onCompositionEnd:b,onKeyDown:c,onChange:E,onBlur:D};return L({ourProps:_,theirProps:i,slot:U,defaultTag:gr,name:"Combobox.Input"})}var Pr="button";function xr(e,t){var d;let n=rt("Combobox.Button"),o=gt("Combobox.Button"),l=I(n.buttonRef,t),r=j(),{id:a=`headlessui-combobox-button-${r}`,...i}=e,s=se(),u=T(f=>{switch(f.key){case"ArrowDown":return f.preventDefault(),f.stopPropagation(),n.comboboxState===1&&o.openCombobox(),s.nextFrame(()=>{var b;return(b=n.inputRef.current)==null?void 0:b.focus({preventScroll:!0})});case"ArrowUp":return f.preventDefault(),f.stopPropagation(),n.comboboxState===1&&(o.openCombobox(),s.nextFrame(()=>{n.value||o.goToOption(3)})),s.nextFrame(()=>{var b;return(b=n.inputRef.current)==null?void 0:b.focus({preventScroll:!0})});case"Escape":return n.comboboxState!==0?void 0:(f.preventDefault(),n.optionsRef.current&&!n.optionsPropsRef.current.static&&f.stopPropagation(),o.closeCombobox(),s.nextFrame(()=>{var b;return(b=n.inputRef.current)==null?void 0:b.focus({preventScroll:!0})}));default:return}}),m=T(f=>{if(de(f.currentTarget))return f.preventDefault();n.comboboxState===0?o.closeCombobox():(f.preventDefault(),o.openCombobox()),s.nextFrame(()=>{var b;return(b=n.inputRef.current)==null?void 0:b.focus({preventScroll:!0})})}),p=Be(()=>{if(n.labelId)return[n.labelId,a].join(" ")},[n.labelId,a]),y=(0,B.useMemo)(()=>({open:n.comboboxState===0,disabled:n.disabled,value:n.value}),[n]),g={ref:l,id:a,type:xe(e,n.buttonRef),tabIndex:-1,"aria-haspopup":"listbox","aria-controls":(d=n.optionsRef.current)==null?void 0:d.id,"aria-expanded":n.comboboxState===0,"aria-labelledby":p,disabled:n.disabled,onClick:m,onKeyDown:u};return L({ourProps:g,theirProps:i,slot:y,defaultTag:Pr,name:"Combobox.Button"})}var vr="label";function Rr(e,t){let n=j(),{id:o=`headlessui-combobox-label-${n}`,...l}=e,r=rt("Combobox.Label"),a=gt("Combobox.Label"),i=I(r.labelRef,t);w(()=>a.registerLabel(o),[o]);let s=T(()=>{var p;return(p=r.inputRef.current)==null?void 0:p.focus({preventScroll:!0})}),u=(0,B.useMemo)(()=>({open:r.comboboxState===0,disabled:r.disabled}),[r]);return L({ourProps:{ref:i,id:o,onClick:s},theirProps:l,slot:u,defaultTag:vr,name:"Combobox.Label"})}var Sr="ul",Or=3;function Cr(e,t){let n=j(),{id:o=`headlessui-combobox-options-${n}`,hold:l=!1,...r}=e,a=rt("Combobox.Options"),i=I(a.optionsRef,t),s=be(),u=(()=>s!==null?(s&1)===1:a.comboboxState===0)();w(()=>{var g;a.optionsPropsRef.current.static=(g=e.static)!=null?g:!1},[a.optionsPropsRef,e.static]),w(()=>{a.optionsPropsRef.current.hold=l},[a.optionsPropsRef,l]),ze({container:a.optionsRef.current,enabled:a.comboboxState===0,accept(g){return g.getAttribute("role")==="option"?NodeFilter.FILTER_REJECT:g.hasAttribute("role")?NodeFilter.FILTER_SKIP:NodeFilter.FILTER_ACCEPT},walk(g){g.setAttribute("role","none")}});let m=Be(()=>{var g,d;return(d=a.labelId)!=null?d:(g=a.buttonRef.current)==null?void 0:g.id},[a.labelId,a.buttonRef.current]),p=(0,B.useMemo)(()=>({open:a.comboboxState===0}),[a]),y={"aria-labelledby":m,role:"listbox","aria-multiselectable":a.mode===1?!0:void 0,id:o,ref:i};return L({ourProps:y,theirProps:r,slot:p,defaultTag:Sr,features:Or,visible:u,name:"Combobox.Options"})}var Ar="li";function Lr(e,t){var P,O;let n=j(),{id:o=`headlessui-combobox-option-${n}`,disabled:l=!1,value:r,...a}=e,i=rt("Combobox.Option"),s=gt("Combobox.Option"),u=i.activeOptionIndex!==null?i.options[i.activeOptionIndex].id===o:!1,m=i.isSelected(r),p=(0,B.useRef)(null),y=z({disabled:l,value:r,domRef:p,textValue:(O=(P=p.current)==null?void 0:P.textContent)==null?void 0:O.toLowerCase()}),g=I(t,p),d=T(()=>s.selectOption(o));w(()=>s.registerOption(o,y),[y,o]);let f=(0,B.useRef)(!i.__demoMode);w(()=>{if(!i.__demoMode)return;let v=ie();return v.requestAnimationFrame(()=>{f.current=!0}),v.dispose},[]),w(()=>{if(i.comboboxState!==0||!u||!f.current||i.activationTrigger===0)return;let v=ie();return v.requestAnimationFrame(()=>{var R,C;(C=(R=p.current)==null?void 0:R.scrollIntoView)==null||C.call(R,{block:"nearest"})}),v.dispose},[p,u,i.comboboxState,i.activationTrigger,i.activeOptionIndex]);let b=T(v=>{if(l)return v.preventDefault();d(),i.mode===0&&s.closeCombobox(),no()||requestAnimationFrame(()=>{var R;return(R=i.inputRef.current)==null?void 0:R.focus()})}),c=T(()=>{if(l)return s.goToOption(5);s.goToOption(4,o)}),E=nt(),D=T(v=>E.update(v)),A=T(v=>{E.wasMoved(v)&&(l||u||s.goToOption(4,o,0))}),U=T(v=>{E.wasMoved(v)&&(l||u&&(i.optionsPropsRef.current.hold||s.goToOption(5)))}),_=(0,B.useMemo)(()=>({active:u,selected:m,disabled:l}),[u,m,l]);return L({ourProps:{id:o,ref:g,role:"option",tabIndex:l===!0?void 0:-1,"aria-disabled":l===!0?!0:void 0,"aria-selected":m,disabled:void 0,onClick:b,onFocus:c,onPointerEnter:D,onMouseEnter:D,onPointerMove:A,onMouseMove:A,onPointerLeave:U,onMouseLeave:U},theirProps:a,slot:_,defaultTag:Ar,name:"Combobox.Option"})}var hr=h(yr),Dr=h(xr),Mr=h(Er),Fr=h(Rr),Ir=h(Cr),wr=h(Lr),_r=Object.assign(hr,{Input:Mr,Button:Dr,Label:Fr,Options:Ir,Option:wr});var W=oe(__webpack_require__(7294),1);var Fe=oe(__webpack_require__(7294),1);var ro=__webpack_require__(7294);function Et(){let e=(0,ro.useRef)(0);return ht("keydown",t=>{t.key==="Tab"&&(e.current=t.shiftKey?1:0)},!0),e}var ao=__webpack_require__(7294);function Ae(){let e=(0,ao.useRef)(!1);return w(()=>(e.current=!0,()=>{e.current=!1}),[]),e}var lo=__webpack_require__(7294);function ge(...e){return(0,lo.useMemo)(()=>me(...e),[...e])}var io=__webpack_require__(7294);function at(e,t,n,o){let l=z(n);(0,io.useEffect)(()=>{e=e!=null?e:window;function r(a){l.current(a)}return e.addEventListener(t,r,o),()=>e.removeEventListener(t,r,o)},[e,t,o])}function so(e){function t(){document.readyState!=="loading"&&(e(),document.removeEventListener("DOMContentLoaded",t))}typeof window!="undefined"&&typeof document!="undefined"&&(document.addEventListener("DOMContentLoaded",t),t())}var wt=__webpack_require__(7294);function _t(e){let t=T(e),n=(0,wt.useRef)(!1);(0,wt.useEffect)(()=>(n.current=!1,()=>{n.current=!0,we(()=>{n.current&&t()})}),[t])}function uo(e){if(!e)return new Set;if(typeof e=="function")return new Set(e());let t=new Set;for(let n of e.current)n.current instanceof HTMLElement&&t.add(n.current);return t}var kr="div",po=(a=>(a[a.None=1]="None",a[a.InitialFocus=2]="InitialFocus",a[a.TabLock=4]="TabLock",a[a.FocusLock=8]="FocusLock",a[a.RestoreFocus=16]="RestoreFocus",a[a.All=30]="All",a))(po||{});function Nr(e,t){let n=(0,Fe.useRef)(null),o=I(n,t),{initialFocus:l,containers:r,features:a=30,...i}=e;Ce()||(a=1);let s=ge(n);Br({ownerDocument:s},Boolean(a&16));let u=Vr({ownerDocument:s,container:n,initialFocus:l},Boolean(a&2));jr({ownerDocument:s,container:n,containers:r,previousActiveElement:u},Boolean(a&8));let m=Et(),p=T(f=>{let b=n.current;if(!b)return;(E=>E())(()=>{M(m.current,{[0]:()=>{le(b,1,{skipElements:[f.relatedTarget]})},[1]:()=>{le(b,8,{skipElements:[f.relatedTarget]})}})})}),y=se(),g=(0,Fe.useRef)(!1),d={ref:o,onKeyDown(f){f.key=="Tab"&&(g.current=!0,y.requestAnimationFrame(()=>{g.current=!1}))},onBlur(f){let b=uo(r);n.current instanceof HTMLElement&&b.add(n.current);let c=f.relatedTarget;c instanceof HTMLElement&&c.dataset.headlessuiFocusGuard!=="true"&&(co(b,c)||(g.current?le(n.current,M(m.current,{[0]:()=>4,[1]:()=>2})|16,{relativeTo:f.target}):f.target instanceof HTMLElement&&He(f.target)))}};return Fe.default.createElement(Fe.default.Fragment,null,Boolean(a&4)&&Fe.default.createElement(pe,{as:"button",type:"button","data-headlessui-focus-guard":!0,onFocus:p,features:2}),L({ourProps:d,theirProps:i,defaultTag:kr,name:"FocusTrap"}),Boolean(a&4)&&Fe.default.createElement(pe,{as:"button",type:"button","data-headlessui-focus-guard":!0,onFocus:p,features:2}))}var Gr=h(Nr),Xe=Object.assign(Gr,{features:po}),Ne=[];so(()=>{function e(t){t.target instanceof HTMLElement&&t.target!==document.body&&Ne[0]!==t.target&&(Ne.unshift(t.target),Ne=Ne.filter(n=>n!=null&&n.isConnected),Ne.splice(10))}window.addEventListener("click",e,{capture:!0}),window.addEventListener("mousedown",e,{capture:!0}),window.addEventListener("focus",e,{capture:!0}),document.body.addEventListener("click",e,{capture:!0}),document.body.addEventListener("mousedown",e,{capture:!0}),document.body.addEventListener("focus",e,{capture:!0})});function Ur(e=!0){let t=(0,Fe.useRef)(Ne.slice());return je(([n],[o])=>{o===!0&&n===!1&&we(()=>{t.current.splice(0)}),o===!1&&n===!0&&(t.current=Ne.slice())},[e,Ne,t]),T(()=>{var n;return(n=t.current.find(o=>o!=null&&o.isConnected))!=null?n:null})}function Br({ownerDocument:e},t){let n=Ur(t);je(()=>{t||(e==null?void 0:e.activeElement)===(e==null?void 0:e.body)&&He(n())},[t]),_t(()=>{t&&He(n())})}function Vr({ownerDocument:e,container:t,initialFocus:n},o){let l=(0,Fe.useRef)(null),r=Ae();return je(()=>{if(!o)return;let a=t.current;a&&we(()=>{if(!r.current)return;let i=e==null?void 0:e.activeElement;if(n!=null&&n.current){if((n==null?void 0:n.current)===i){l.current=i;return}}else if(a.contains(i)){l.current=i;return}n!=null&&n.current?He(n.current):le(a,1)===0&&console.warn("There are no focusable elements inside the <FocusTrap />"),l.current=e==null?void 0:e.activeElement})},[o]),l}function jr({ownerDocument:e,container:t,containers:n,previousActiveElement:o},l){let r=Ae();at(e==null?void 0:e.defaultView,"focus",a=>{if(!l||!r.current)return;let i=uo(n);t.current instanceof HTMLElement&&i.add(t.current);let s=o.current;if(!s)return;let u=a.target;u&&u instanceof HTMLElement?co(i,u)?(o.current=u,He(u)):(a.preventDefault(),a.stopPropagation(),He(s)):He(o.current)},!0)}function co(e,t){for(let n of e)if(n.contains(t))return!0;return!1}var re=oe(__webpack_require__(7294),1),mo=__webpack_require__(3935);var lt=oe(__webpack_require__(7294),1),fo=(0,lt.createContext)(!1);function To(){return(0,lt.useContext)(fo)}function kt(e){return lt.default.createElement(fo.Provider,{value:e.force},e.children)}function Wr(e){let t=To(),n=(0,re.useContext)(bo),o=ge(e),[l,r]=(0,re.useState)(()=>{if(!t&&n!==null||Pe.isServer)return null;let a=o==null?void 0:o.getElementById("headlessui-portal-root");if(a)return a;if(o===null)return null;let i=o.createElement("div");return i.setAttribute("id","headlessui-portal-root"),o.body.appendChild(i)});return(0,re.useEffect)(()=>{l!==null&&(o!=null&&o.body.contains(l)||o==null||o.body.appendChild(l))},[l,o]),(0,re.useEffect)(()=>{t||n!==null&&r(n.current)},[n,r,t]),l}var Kr=re.Fragment;function Xr(e,t){let n=e,o=(0,re.useRef)(null),l=I(Qe(p=>{o.current=p}),t),r=ge(o),a=Wr(o),[i]=(0,re.useState)(()=>{var p;return Pe.isServer?null:(p=r==null?void 0:r.createElement("div"))!=null?p:null}),s=(0,re.useContext)(pn),u=Ce();return w(()=>{!a||!i||a.contains(i)||(i.setAttribute("data-headlessui-portal",""),a.appendChild(i))},[a,i]),w(()=>{if(i&&s)return s.register(i)},[s,i]),_t(()=>{var p;!a||!i||(i instanceof Node&&a.contains(i)&&a.removeChild(i),a.childNodes.length<=0&&((p=a.parentElement)==null||p.removeChild(a)))}),u?!a||!i?null:(0,mo.createPortal)(L({ourProps:{ref:l},theirProps:n,defaultTag:Kr,name:"Portal"}),i):null}var $r=re.Fragment,bo=(0,re.createContext)(null);function Jr(e,t){let{target:n,...o}=e,r={ref:I(t)};return re.default.createElement(bo.Provider,{value:n},L({ourProps:r,theirProps:o,defaultTag:$r,name:"Popover.Group"}))}var pn=(0,re.createContext)(null);function Nt(){let e=(0,re.useContext)(pn),t=(0,re.useRef)([]),n=T(r=>(t.current.push(r),e&&e.register(r),()=>o(r))),o=T(r=>{let a=t.current.indexOf(r);a!==-1&&t.current.splice(a,1),e&&e.unregister(r)}),l=(0,re.useMemo)(()=>({register:n,unregister:o,portals:t}),[n,o,t]);return[t,(0,re.useMemo)(()=>function({children:a}){return re.default.createElement(pn.Provider,{value:l},a)},[l])]}var qr=h(Xr),Yr=h(Jr),it=Object.assign(qr,{Group:Yr});var Le=oe(__webpack_require__(7294),1);var yo=(0,Le.createContext)(null);function go(){let e=(0,Le.useContext)(yo);if(e===null){let t=new Error("You used a <Description /> component, but it is not inside a relevant parent.");throw Error.captureStackTrace&&Error.captureStackTrace(t,go),t}return e}function $e(){let[e,t]=(0,Le.useState)([]);return[e.length>0?e.join(" "):void 0,(0,Le.useMemo)(()=>function(o){let l=T(a=>(t(i=>[...i,a]),()=>t(i=>{let s=i.slice(),u=s.indexOf(a);return u!==-1&&s.splice(u,1),s}))),r=(0,Le.useMemo)(()=>({register:l,slot:o.slot,name:o.name,props:o.props}),[l,o.slot,o.name,o.props]);return Le.default.createElement(yo.Provider,{value:r},o.children)},[t])]}var Qr="p";function zr(e,t){let n=j(),{id:o=`headlessui-description-${n}`,...l}=e,r=go(),a=I(t);w(()=>r.register(o),[o,r.register]);let i={ref:a,...r.props,id:o};return L({ourProps:i,theirProps:l,slot:r.slot||{},defaultTag:Qr,name:r.name||"Description"})}var Zr=h(zr),st=Object.assign(Zr,{});var ut=oe(__webpack_require__(7294),1);var dn=(0,ut.createContext)(()=>{});dn.displayName="StackContext";function ea(){return(0,ut.useContext)(dn)}function Eo({children:e,onUpdate:t,type:n,element:o,enabled:l}){let r=ea(),a=T((...i)=>{t==null||t(...i),r(...i)});return w(()=>{let i=l===void 0||l===!0;return i&&a(0,n,o),()=>{i&&a(1,n,o)}},[a,n,o,l]),ut.default.createElement(dn.Provider,{value:a},e)}var vo=oe(__webpack_require__(7294),1);var ta=oe(__webpack_require__(7294),1);function na(e,t){return e===t&&(e!==0||1/e===1/t)||e!==e&&t!==t}var oa=typeof Object.is=="function"?Object.is:na,{useState:ra,useEffect:aa,useLayoutEffect:la,useDebugValue:ia}=ta;function Po(e,t,n){let o=t(),[{inst:l},r]=ra({inst:{value:o,getSnapshot:t}});return la(()=>{l.value=o,l.getSnapshot=t,cn(l)&&r({inst:l})},[e,o,t]),aa(()=>(cn(l)&&r({inst:l}),e(()=>{cn(l)&&r({inst:l})})),[e]),ia(o),o}function cn(e){let t=e.getSnapshot,n=e.value;try{let o=t();return!oa(n,o)}catch{return!0}}function xo(e,t,n){return t()}var sa=typeof window!="undefined"&&typeof window.document!="undefined"&&typeof window.document.createElement!="undefined",ua=!sa,pa=ua?xo:Po,Ro="useSyncExternalStore"in vo?(e=>e.useSyncExternalStore)(vo):pa;function So(e){return Ro(e.subscribe,e.getSnapshot,e.getSnapshot)}function Oo(e,t){let n=e(),o=new Set;return{getSnapshot(){return n},subscribe(l){return o.add(l),()=>o.delete(l)},dispatch(l,...r){let a=t[l].call(n,...r);a&&(n=a,o.forEach(i=>i()))}}}function Co(){let e;return{before({doc:t}){var l;let n=t.documentElement;e=((l=t.defaultView)!=null?l:window).innerWidth-n.clientWidth},after({doc:t,d:n}){let o=t.documentElement,l=o.clientWidth-o.offsetWidth,r=e-l;n.style(o,"paddingRight",`${r}px`)}}}function Ao(){if(!rn())return{};let e;return{before(){e=window.pageYOffset},after({doc:t,d:n,meta:o}){function l(a){return o.containers.flatMap(i=>i()).some(i=>i.contains(a))}n.style(t.body,"marginTop",`-${e}px`),window.scrollTo(0,0);let r=null;n.addEventListener(t,"click",a=>{if(a.target instanceof HTMLElement)try{let i=a.target.closest("a");if(!i)return;let{hash:s}=new URL(i.href),u=t.querySelector(s);u&&!l(u)&&(r=u)}catch{}},!0),n.addEventListener(t,"touchmove",a=>{a.target instanceof HTMLElement&&!l(a.target)&&a.preventDefault()},{passive:!1}),n.add(()=>{window.scrollTo(0,window.pageYOffset+e),r&&r.isConnected&&(r.scrollIntoView({block:"nearest"}),r=null)})}}}function Lo(){return{before({doc:e,d:t}){t.style(e.documentElement,"overflow","hidden")}}}function da(e){let t={};for(let n of e)Object.assign(t,n(t));return t}var Ge=Oo(()=>new Map,{PUSH(e,t){var o;let n=(o=this.get(e))!=null?o:{doc:e,count:0,d:ie(),meta:new Set};return n.count++,n.meta.add(t),this.set(e,n),this},POP(e,t){let n=this.get(e);return n&&(n.count--,n.meta.delete(t)),this},SCROLL_PREVENT({doc:e,d:t,meta:n}){let o={doc:e,d:t,meta:da(n)},l=[Ao(),Co(),Lo()];l.forEach(({before:r})=>r==null?void 0:r(o)),l.forEach(({after:r})=>r==null?void 0:r(o))},SCROLL_ALLOW({d:e}){e.dispose()},TEARDOWN({doc:e}){this.delete(e)}});Ge.subscribe(()=>{let e=Ge.getSnapshot(),t=new Map;for(let[n]of e)t.set(n,n.documentElement.style.overflow);for(let n of e.values()){let o=t.get(n.doc)==="hidden",l=n.count!==0;(l&&!o||!l&&o)&&Ge.dispatch(n.count>0?"SCROLL_PREVENT":"SCROLL_ALLOW",n),n.count===0&&Ge.dispatch("TEARDOWN",n)}});function ho(e,t,n){let o=So(Ge),l=e?o.get(e):void 0,r=l?l.count>0:!1;return w(()=>{if(!(!e||!t))return Ge.dispatch("PUSH",e,n),()=>Ge.dispatch("POP",e,n)},[t,e]),r}var fn=new Map,Pt=new Map;function Tn(e,t=!0){w(()=>{var r;if(!t)return;let n=typeof e=="function"?e():e.current;if(!n)return;function o(){var s;if(!n)return;let a=(s=Pt.get(n))!=null?s:1;if(a===1?Pt.delete(n):Pt.set(n,a-1),a!==1)return;let i=fn.get(n);i&&(i["aria-hidden"]===null?n.removeAttribute("aria-hidden"):n.setAttribute("aria-hidden",i["aria-hidden"]),n.inert=i.inert,fn.delete(n))}let l=(r=Pt.get(n))!=null?r:0;return Pt.set(n,l+1),l!==0||(fn.set(n,{"aria-hidden":n.getAttribute("aria-hidden"),inert:n.inert}),n.setAttribute("aria-hidden","true"),n.inert=!0),o},[e,t])}var pt=oe(__webpack_require__(7294),1);function Gt({defaultContainers:e=[],portals:t}={}){let n=(0,pt.useRef)(null),o=ge(n),l=T(()=>{var a;let r=[];for(let i of e)i!==null&&(i instanceof HTMLElement?r.push(i):"current"in i&&i.current instanceof HTMLElement&&r.push(i.current));if(t!=null&&t.current)for(let i of t.current)r.push(i);for(let i of(a=o==null?void 0:o.querySelectorAll("html > *, body > *"))!=null?a:[])i!==document.body&&i!==document.head&&i instanceof HTMLElement&&i.id!=="headlessui-portal-root"&&(i.contains(n.current)||r.some(s=>i.contains(s))||r.push(i));return r});return{resolveContainers:l,contains:T(r=>l().some(a=>a.contains(r))),mainTreeNodeRef:n,MainTreeNode:(0,pt.useMemo)(()=>function(){return pt.default.createElement(pe,{features:4,ref:n})},[n])}}var ca={[0](e,t){return e.titleId===t.id?e:{...e,titleId:t.id}}},Ut=(0,W.createContext)(null);Ut.displayName="DialogContext";function xt(e){let t=(0,W.useContext)(Ut);if(t===null){let n=new Error(`<${e} /> is missing a parent <Dialog /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,xt),n}return t}function fa(e,t,n=()=>[document.body]){ho(e,t,o=>{var l;return{containers:[...(l=o.containers)!=null?l:[],n]}})}function Ta(e,t){return M(t.type,ca,e,t)}var ma="div",ba=3;function ya(e,t){var Gn;let n=j(),{id:o=`headlessui-dialog-${n}`,open:l,onClose:r,initialFocus:a,__demoMode:i=!1,...s}=e,[u,m]=(0,W.useState)(0),p=be();l===void 0&&p!==null&&(l=(p&1)===1);let y=(0,W.useRef)(null),g=I(y,t),d=ge(y),f=e.hasOwnProperty("open")||p!==null,b=e.hasOwnProperty("onClose");if(!f&&!b)throw new Error("You have to provide an `open` and an `onClose` prop to the `Dialog` component.");if(!f)throw new Error("You provided an `onClose` prop to the `Dialog`, but forgot an `open` prop.");if(!b)throw new Error("You provided an `open` prop to the `Dialog`, but forgot an `onClose` prop.");if(typeof l!="boolean")throw new Error(`You provided an \`open\` prop to the \`Dialog\`, but the value is not a boolean. Received: ${l}`);if(typeof r!="function")throw new Error(`You provided an \`onClose\` prop to the \`Dialog\`, but the value is not a function. Received: ${r}`);let c=l?0:1,[E,D]=(0,W.useReducer)(Ta,{titleId:null,descriptionId:null,panelRef:(0,W.createRef)()}),A=T(()=>r(!1)),U=T(Te=>D({type:0,id:Te})),x=Ce()?i?!1:c===0:!1,P=u>1,O=(0,W.useContext)(Ut)!==null,[v,R]=Nt(),{resolveContainers:C,mainTreeNodeRef:N,MainTreeNode:ee}=Gt({portals:v,defaultContainers:[(Gn=E.panelRef.current)!=null?Gn:y.current]}),K=P?"parent":"leaf",G=p!==null?(p&4)===4:!1,X=(()=>O||G?!1:x)(),ce=(0,W.useCallback)(()=>{var Te,Ie;return(Ie=Array.from((Te=d==null?void 0:d.querySelectorAll("body > *"))!=null?Te:[]).find(ve=>ve.id==="headlessui-portal-root"?!1:ve.contains(N.current)&&ve instanceof HTMLElement))!=null?Ie:null},[N]);Tn(ce,X);let H=(()=>P?!0:x)(),Q=(0,W.useCallback)(()=>{var Te,Ie;return(Ie=Array.from((Te=d==null?void 0:d.querySelectorAll("[data-headlessui-portal]"))!=null?Te:[]).find(ve=>ve.contains(N.current)&&ve instanceof HTMLElement))!=null?Ie:null},[N]);Tn(Q,H);let J=(()=>!(!x||P))();De(C,A,J);let te=(()=>!(P||c!==0))();at(d==null?void 0:d.defaultView,"keydown",Te=>{te&&(Te.defaultPrevented||Te.key==="Escape"&&(Te.preventDefault(),Te.stopPropagation(),A()))});let fe=(()=>!(G||c!==0||O))();fa(d,fe,C),(0,W.useEffect)(()=>{if(c!==0||!y.current)return;let Te=new ResizeObserver(Ie=>{for(let ve of Ie){let Ot=ve.target.getBoundingClientRect();Ot.x===0&&Ot.y===0&&Ot.width===0&&Ot.height===0&&A()}});return Te.observe(y.current),()=>Te.disconnect()},[c,y,A]);let[S,F]=$e(),q=(0,W.useMemo)(()=>[{dialogState:c,close:A,setTitleId:U},E],[c,E,A,U]),Ee=(0,W.useMemo)(()=>({open:c===0}),[c]),Ue={ref:g,id:o,role:"dialog","aria-modal":c===0?!0:void 0,"aria-labelledby":E.titleId,"aria-describedby":S};return W.default.createElement(Eo,{type:"Dialog",enabled:c===0,element:y,onUpdate:T((Te,Ie)=>{Ie==="Dialog"&&M(Te,{[0]:()=>m(ve=>ve+1),[1]:()=>m(ve=>ve-1)})})},W.default.createElement(kt,{force:!0},W.default.createElement(it,null,W.default.createElement(Ut.Provider,{value:q},W.default.createElement(it.Group,{target:y},W.default.createElement(kt,{force:!1},W.default.createElement(F,{slot:Ee,name:"Dialog.Description"},W.default.createElement(Xe,{initialFocus:a,containers:C,features:x?M(K,{parent:Xe.features.RestoreFocus,leaf:Xe.features.All&~Xe.features.FocusLock}):Xe.features.None},W.default.createElement(R,null,L({ourProps:Ue,theirProps:s,slot:Ee,defaultTag:ma,features:ba,visible:c===0,name:"Dialog"}))))))))),W.default.createElement(ee,null))}var ga="div";function Ea(e,t){let n=j(),{id:o=`headlessui-dialog-overlay-${n}`,...l}=e,[{dialogState:r,close:a}]=xt("Dialog.Overlay"),i=I(t),s=T(p=>{if(p.target===p.currentTarget){if(de(p.currentTarget))return p.preventDefault();p.preventDefault(),p.stopPropagation(),a()}}),u=(0,W.useMemo)(()=>({open:r===0}),[r]);return L({ourProps:{ref:i,id:o,"aria-hidden":!0,onClick:s},theirProps:l,slot:u,defaultTag:ga,name:"Dialog.Overlay"})}var Pa="div";function xa(e,t){let n=j(),{id:o=`headlessui-dialog-backdrop-${n}`,...l}=e,[{dialogState:r},a]=xt("Dialog.Backdrop"),i=I(t);(0,W.useEffect)(()=>{if(a.panelRef.current===null)throw new Error("A <Dialog.Backdrop /> component is being used, but a <Dialog.Panel /> component is missing.")},[a.panelRef]);let s=(0,W.useMemo)(()=>({open:r===0}),[r]);return W.default.createElement(kt,{force:!0},W.default.createElement(it,null,L({ourProps:{ref:i,id:o,"aria-hidden":!0},theirProps:l,slot:s,defaultTag:Pa,name:"Dialog.Backdrop"})))}var va="div";function Ra(e,t){let n=j(),{id:o=`headlessui-dialog-panel-${n}`,...l}=e,[{dialogState:r},a]=xt("Dialog.Panel"),i=I(t,a.panelRef),s=(0,W.useMemo)(()=>({open:r===0}),[r]),u=T(p=>{p.stopPropagation()});return L({ourProps:{ref:i,id:o,onClick:u},theirProps:l,slot:s,defaultTag:va,name:"Dialog.Panel"})}var Sa="h2";function Oa(e,t){let n=j(),{id:o=`headlessui-dialog-title-${n}`,...l}=e,[{dialogState:r,setTitleId:a}]=xt("Dialog.Title"),i=I(t);(0,W.useEffect)(()=>(a(o),()=>a(null)),[o,a]);let s=(0,W.useMemo)(()=>({open:r===0}),[r]);return L({ourProps:{ref:i,id:o},theirProps:l,slot:s,defaultTag:Sa,name:"Dialog.Title"})}var Ca=h(ya),Aa=h(xa),La=h(Ra),ha=h(Ea),Da=h(Oa),Ma=Object.assign(Ca,{Backdrop:Aa,Panel:La,Overlay:ha,Title:Da,Description:st});var Y=oe(__webpack_require__(7294),1);var Mo=oe(__webpack_require__(7294),1),Do,Fo=(Do=Mo.default.startTransition)!=null?Do:function(t){t()};var Fa={[0]:e=>({...e,disclosureState:M(e.disclosureState,{[0]:1,[1]:0})}),[1]:e=>e.disclosureState===1?e:{...e,disclosureState:1},[4](e){return e.linkedPanel===!0?e:{...e,linkedPanel:!0}},[5](e){return e.linkedPanel===!1?e:{...e,linkedPanel:!1}},[2](e,t){return e.buttonId===t.buttonId?e:{...e,buttonId:t.buttonId}},[3](e,t){return e.panelId===t.panelId?e:{...e,panelId:t.panelId}}},mn=(0,Y.createContext)(null);mn.displayName="DisclosureContext";function bn(e){let t=(0,Y.useContext)(mn);if(t===null){let n=new Error(`<${e} /> is missing a parent <Disclosure /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,bn),n}return t}var yn=(0,Y.createContext)(null);yn.displayName="DisclosureAPIContext";function Io(e){let t=(0,Y.useContext)(yn);if(t===null){let n=new Error(`<${e} /> is missing a parent <Disclosure /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,Io),n}return t}var gn=(0,Y.createContext)(null);gn.displayName="DisclosurePanelContext";function Ia(){return(0,Y.useContext)(gn)}function wa(e,t){return M(t.type,Fa,e,t)}var _a=Y.Fragment;function Ha(e,t){let{defaultOpen:n=!1,...o}=e,l=(0,Y.useRef)(null),r=I(t,Qe(b=>{l.current=b},e.as===void 0||e.as===Y.Fragment)),a=(0,Y.useRef)(null),i=(0,Y.useRef)(null),s=(0,Y.useReducer)(wa,{disclosureState:n?0:1,linkedPanel:!1,buttonRef:i,panelRef:a,buttonId:null,panelId:null}),[{disclosureState:u,buttonId:m},p]=s,y=T(b=>{p({type:1});let c=me(l);if(!c||!m)return;let E=(()=>b?b instanceof HTMLElement?b:b.current instanceof HTMLElement?b.current:c.getElementById(m):c.getElementById(m))();E==null||E.focus()}),g=(0,Y.useMemo)(()=>({close:y}),[y]),d=(0,Y.useMemo)(()=>({open:u===0,close:y}),[u,y]),f={ref:r};return Y.default.createElement(mn.Provider,{value:s},Y.default.createElement(yn.Provider,{value:g},Y.default.createElement(Se,{value:M(u,{[0]:1,[1]:2})},L({ourProps:f,theirProps:o,slot:d,defaultTag:_a,name:"Disclosure"}))))}var ka="button";function Na(e,t){let n=j(),{id:o=`headlessui-disclosure-button-${n}`,...l}=e,[r,a]=bn("Disclosure.Button"),i=Ia(),s=i===null?!1:i===r.panelId,u=(0,Y.useRef)(null),m=I(u,t,s?null:r.buttonRef);(0,Y.useEffect)(()=>{if(!s)return a({type:2,buttonId:o}),()=>{a({type:2,buttonId:null})}},[o,a,s]);let p=T(c=>{var E;if(s){if(r.disclosureState===1)return;switch(c.key){case" ":case"Enter":c.preventDefault(),c.stopPropagation(),a({type:0}),(E=r.buttonRef.current)==null||E.focus();break}}else switch(c.key){case" ":case"Enter":c.preventDefault(),c.stopPropagation(),a({type:0});break}}),y=T(c=>{switch(c.key){case" ":c.preventDefault();break}}),g=T(c=>{var E;de(c.currentTarget)||e.disabled||(s?(a({type:0}),(E=r.buttonRef.current)==null||E.focus()):a({type:0}))}),d=(0,Y.useMemo)(()=>({open:r.disclosureState===0}),[r]),f=xe(e,u),b=s?{ref:m,type:f,onKeyDown:p,onClick:g}:{ref:m,id:o,type:f,"aria-expanded":r.disclosureState===0,"aria-controls":r.linkedPanel?r.panelId:void 0,onKeyDown:p,onKeyUp:y,onClick:g};return L({ourProps:b,theirProps:l,slot:d,defaultTag:ka,name:"Disclosure.Button"})}var Ga="div",Ua=3;function Ba(e,t){let n=j(),{id:o=`headlessui-disclosure-panel-${n}`,...l}=e,[r,a]=bn("Disclosure.Panel"),{close:i}=Io("Disclosure.Panel"),s=I(t,r.panelRef,g=>{Fo(()=>a({type:g?4:5}))});(0,Y.useEffect)(()=>(a({type:3,panelId:o}),()=>{a({type:3,panelId:null})}),[o,a]);let u=be(),m=(()=>u!==null?(u&1)===1:r.disclosureState===0)(),p=(0,Y.useMemo)(()=>({open:r.disclosureState===0,close:i}),[r,i]),y={ref:s,id:o};return Y.default.createElement(gn.Provider,{value:r.panelId},L({ourProps:y,theirProps:l,slot:p,defaultTag:Ga,features:Ua,visible:m,name:"Disclosure.Panel"}))}var Va=h(Ha),ja=h(Na),Wa=h(Ba),Ka=Object.assign(Va,{Button:ja,Panel:Wa});var $=oe(__webpack_require__(7294),1);var En=__webpack_require__(7294);var wo=/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g;function _o(e){var r,a;let t=(r=e.innerText)!=null?r:"",n=e.cloneNode(!0);if(!(n instanceof HTMLElement))return t;let o=!1;for(let i of n.querySelectorAll('[hidden],[aria-hidden],[role="img"]'))i.remove(),o=!0;let l=o?(a=n.innerText)!=null?a:"":t;return wo.test(l)&&(l=l.replace(wo,"")),l}function Ho(e){let t=e.getAttribute("aria-label");if(typeof t=="string")return t.trim();let n=e.getAttribute("aria-labelledby");if(n){let o=n.split(" ").map(l=>{let r=document.getElementById(l);if(r){let a=r.getAttribute("aria-label");return typeof a=="string"?a.trim():_o(r).trim()}return null}).filter(Boolean);if(o.length>0)return o.join(", ")}return _o(e).trim()}function Bt(e){let t=(0,En.useRef)(""),n=(0,En.useRef)("");return T(()=>{let o=e.current;if(!o)return"";let l=o.innerText;if(t.current===l)return n.current;let r=Ho(o).trim().toLowerCase();return t.current=l,n.current=r,r})}function Pn(e,t=n=>n){let n=e.activeOptionIndex!==null?e.options[e.activeOptionIndex]:null,o=ye(t(e.options.slice()),r=>r.dataRef.current.domRef.current),l=n?o.indexOf(n):null;return l===-1&&(l=null),{options:o,activeOptionIndex:l}}var Xa={[1](e){return e.dataRef.current.disabled||e.listboxState===1?e:{...e,activeOptionIndex:null,listboxState:1}},[0](e){if(e.dataRef.current.disabled||e.listboxState===0)return e;let t=e.activeOptionIndex,{isSelected:n}=e.dataRef.current,o=e.options.findIndex(l=>n(l.dataRef.current.value));return o!==-1&&(t=o),{...e,listboxState:0,activeOptionIndex:t}},[2](e,t){var l;if(e.dataRef.current.disabled||e.listboxState===1)return e;let n=Pn(e),o=Ze(t,{resolveItems:()=>n.options,resolveActiveIndex:()=>n.activeOptionIndex,resolveId:r=>r.id,resolveDisabled:r=>r.dataRef.current.disabled});return{...e,...n,searchQuery:"",activeOptionIndex:o,activationTrigger:(l=t.trigger)!=null?l:1}},[3]:(e,t)=>{if(e.dataRef.current.disabled||e.listboxState===1)return e;let o=e.searchQuery!==""?0:1,l=e.searchQuery+t.value.toLowerCase(),a=(e.activeOptionIndex!==null?e.options.slice(e.activeOptionIndex+o).concat(e.options.slice(0,e.activeOptionIndex+o)):e.options).find(s=>{var u;return!s.dataRef.current.disabled&&((u=s.dataRef.current.textValue)==null?void 0:u.startsWith(l))}),i=a?e.options.indexOf(a):-1;return i===-1||i===e.activeOptionIndex?{...e,searchQuery:l}:{...e,searchQuery:l,activeOptionIndex:i,activationTrigger:1}},[4](e){return e.dataRef.current.disabled||e.listboxState===1||e.searchQuery===""?e:{...e,searchQuery:""}},[5]:(e,t)=>{let n={id:t.id,dataRef:t.dataRef},o=Pn(e,l=>[...l,n]);return e.activeOptionIndex===null&&e.dataRef.current.isSelected(t.dataRef.current.value)&&(o.activeOptionIndex=o.options.indexOf(n)),{...e,...o}},[6]:(e,t)=>{let n=Pn(e,o=>{let l=o.findIndex(r=>r.id===t.id);return l!==-1&&o.splice(l,1),o});return{...e,...n,activationTrigger:1}},[7]:(e,t)=>({...e,labelId:t.id})},xn=(0,$.createContext)(null);xn.displayName="ListboxActionsContext";function vt(e){let t=(0,$.useContext)(xn);if(t===null){let n=new Error(`<${e} /> is missing a parent <Listbox /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,vt),n}return t}var vn=(0,$.createContext)(null);vn.displayName="ListboxDataContext";function Rt(e){let t=(0,$.useContext)(vn);if(t===null){let n=new Error(`<${e} /> is missing a parent <Listbox /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,Rt),n}return t}function $a(e,t){return M(t.type,Xa,e,t)}var Ja=$.Fragment;function qa(e,t){let{value:n,defaultValue:o,form:l,name:r,onChange:a,by:i=(S,F)=>S===F,disabled:s=!1,horizontal:u=!1,multiple:m=!1,...p}=e,y=u?"horizontal":"vertical",g=I(t),[d=m?[]:void 0,f]=ke(n,a,o),[b,c]=(0,$.useReducer)($a,{dataRef:(0,$.createRef)(),listboxState:1,options:[],searchQuery:"",labelId:null,activeOptionIndex:null,activationTrigger:1}),E=(0,$.useRef)({static:!1,hold:!1}),D=(0,$.useRef)(null),A=(0,$.useRef)(null),U=(0,$.useRef)(null),_=T(typeof i=="string"?(S,F)=>{let q=i;return(S==null?void 0:S[q])===(F==null?void 0:F[q])}:i),x=(0,$.useCallback)(S=>M(P.mode,{[1]:()=>d.some(F=>_(F,S)),[0]:()=>_(d,S)}),[d]),P=(0,$.useMemo)(()=>({...b,value:d,disabled:s,mode:m?1:0,orientation:y,compare:_,isSelected:x,optionsPropsRef:E,labelRef:D,buttonRef:A,optionsRef:U}),[d,s,m,b]);w(()=>{b.dataRef.current=P},[P]),De([P.buttonRef,P.optionsRef],(S,F)=>{var q;c({type:1}),_e(F,1)||(S.preventDefault(),(q=P.buttonRef.current)==null||q.focus())},P.listboxState===0);let O=(0,$.useMemo)(()=>({open:P.listboxState===0,disabled:s,value:d}),[P,s,d]),v=T(S=>{let F=P.options.find(q=>q.id===S);F&&X(F.dataRef.current.value)}),R=T(()=>{if(P.activeOptionIndex!==null){let{dataRef:S,id:F}=P.options[P.activeOptionIndex];X(S.current.value),c({type:2,focus:4,id:F})}}),C=T(()=>c({type:0})),N=T(()=>c({type:1})),ee=T((S,F,q)=>S===4?c({type:2,focus:4,id:F,trigger:q}):c({type:2,focus:S,trigger:q})),K=T((S,F)=>(c({type:5,id:S,dataRef:F}),()=>c({type:6,id:S}))),G=T(S=>(c({type:7,id:S}),()=>c({type:7,id:null}))),X=T(S=>M(P.mode,{[0](){return f==null?void 0:f(S)},[1](){let F=P.value.slice(),q=F.findIndex(Ee=>_(Ee,S));return q===-1?F.push(S):F.splice(q,1),f==null?void 0:f(F)}})),ce=T(S=>c({type:3,value:S})),H=T(()=>c({type:4})),Q=(0,$.useMemo)(()=>({onChange:X,registerOption:K,registerLabel:G,goToOption:ee,closeListbox:N,openListbox:C,selectActiveOption:R,selectOption:v,search:ce,clearSearch:H}),[]),J={ref:g},te=(0,$.useRef)(null),fe=se();return(0,$.useEffect)(()=>{te.current&&o!==void 0&&fe.addEventListener(te.current,"reset",()=>{X(o)})},[te,X]),$.default.createElement(xn.Provider,{value:Q},$.default.createElement(vn.Provider,{value:P},$.default.createElement(Se,{value:M(P.listboxState,{[0]:1,[1]:2})},r!=null&&d!=null&&Ve({[r]:d}).map(([S,F],q)=>$.default.createElement(pe,{features:4,ref:q===0?Ee=>{var Ue;te.current=(Ue=Ee==null?void 0:Ee.closest("form"))!=null?Ue:null}:void 0,...Me({key:S,as:"input",type:"hidden",hidden:!0,readOnly:!0,form:l,name:S,value:F})})),L({ourProps:J,theirProps:p,slot:O,defaultTag:Ja,name:"Listbox"}))))}var Ya="button";function Qa(e,t){var f;let n=j(),{id:o=`headlessui-listbox-button-${n}`,...l}=e,r=Rt("Listbox.Button"),a=vt("Listbox.Button"),i=I(r.buttonRef,t),s=se(),u=T(b=>{switch(b.key){case" ":case"Enter":case"ArrowDown":b.preventDefault(),a.openListbox(),s.nextFrame(()=>{r.value||a.goToOption(0)});break;case"ArrowUp":b.preventDefault(),a.openListbox(),s.nextFrame(()=>{r.value||a.goToOption(3)});break}}),m=T(b=>{switch(b.key){case" ":b.preventDefault();break}}),p=T(b=>{if(de(b.currentTarget))return b.preventDefault();r.listboxState===0?(a.closeListbox(),s.nextFrame(()=>{var c;return(c=r.buttonRef.current)==null?void 0:c.focus({preventScroll:!0})})):(b.preventDefault(),a.openListbox())}),y=Be(()=>{if(r.labelId)return[r.labelId,o].join(" ")},[r.labelId,o]),g=(0,$.useMemo)(()=>({open:r.listboxState===0,disabled:r.disabled,value:r.value}),[r]),d={ref:i,id:o,type:xe(e,r.buttonRef),"aria-haspopup":"listbox","aria-controls":(f=r.optionsRef.current)==null?void 0:f.id,"aria-expanded":r.listboxState===0,"aria-labelledby":y,disabled:r.disabled,onKeyDown:u,onKeyUp:m,onClick:p};return L({ourProps:d,theirProps:l,slot:g,defaultTag:Ya,name:"Listbox.Button"})}var za="label";function Za(e,t){let n=j(),{id:o=`headlessui-listbox-label-${n}`,...l}=e,r=Rt("Listbox.Label"),a=vt("Listbox.Label"),i=I(r.labelRef,t);w(()=>a.registerLabel(o),[o]);let s=T(()=>{var p;return(p=r.buttonRef.current)==null?void 0:p.focus({preventScroll:!0})}),u=(0,$.useMemo)(()=>({open:r.listboxState===0,disabled:r.disabled}),[r]);return L({ourProps:{ref:i,id:o,onClick:s},theirProps:l,slot:u,defaultTag:za,name:"Listbox.Label"})}var el="ul",tl=3;function nl(e,t){var b;let n=j(),{id:o=`headlessui-listbox-options-${n}`,...l}=e,r=Rt("Listbox.Options"),a=vt("Listbox.Options"),i=I(r.optionsRef,t),s=se(),u=se(),m=be(),p=(()=>m!==null?(m&1)===1:r.listboxState===0)();(0,$.useEffect)(()=>{var E;let c=r.optionsRef.current;c&&r.listboxState===0&&c!==((E=me(c))==null?void 0:E.activeElement)&&c.focus({preventScroll:!0})},[r.listboxState,r.optionsRef]);let y=T(c=>{switch(u.dispose(),c.key){case" ":if(r.searchQuery!=="")return c.preventDefault(),c.stopPropagation(),a.search(c.key);case"Enter":if(c.preventDefault(),c.stopPropagation(),r.activeOptionIndex!==null){let{dataRef:E}=r.options[r.activeOptionIndex];a.onChange(E.current.value)}r.mode===0&&(a.closeListbox(),ie().nextFrame(()=>{var E;return(E=r.buttonRef.current)==null?void 0:E.focus({preventScroll:!0})}));break;case M(r.orientation,{vertical:"ArrowDown",horizontal:"ArrowRight"}):return c.preventDefault(),c.stopPropagation(),a.goToOption(2);case M(r.orientation,{vertical:"ArrowUp",horizontal:"ArrowLeft"}):return c.preventDefault(),c.stopPropagation(),a.goToOption(1);case"Home":case"PageUp":return c.preventDefault(),c.stopPropagation(),a.goToOption(0);case"End":case"PageDown":return c.preventDefault(),c.stopPropagation(),a.goToOption(3);case"Escape":return c.preventDefault(),c.stopPropagation(),a.closeListbox(),s.nextFrame(()=>{var E;return(E=r.buttonRef.current)==null?void 0:E.focus({preventScroll:!0})});case"Tab":c.preventDefault(),c.stopPropagation();break;default:c.key.length===1&&(a.search(c.key),u.setTimeout(()=>a.clearSearch(),350));break}}),g=Be(()=>{var c,E,D;return(D=(c=r.labelRef.current)==null?void 0:c.id)!=null?D:(E=r.buttonRef.current)==null?void 0:E.id},[r.labelRef.current,r.buttonRef.current]),d=(0,$.useMemo)(()=>({open:r.listboxState===0}),[r]),f={"aria-activedescendant":r.activeOptionIndex===null||(b=r.options[r.activeOptionIndex])==null?void 0:b.id,"aria-multiselectable":r.mode===1?!0:void 0,"aria-labelledby":g,"aria-orientation":r.orientation,id:o,onKeyDown:y,role:"listbox",tabIndex:0,ref:i};return L({ourProps:f,theirProps:l,slot:d,defaultTag:el,features:tl,visible:p,name:"Listbox.Options"})}var ol="li";function rl(e,t){let n=j(),{id:o=`headlessui-listbox-option-${n}`,disabled:l=!1,value:r,...a}=e,i=Rt("Listbox.Option"),s=vt("Listbox.Option"),u=i.activeOptionIndex!==null?i.options[i.activeOptionIndex].id===o:!1,m=i.isSelected(r),p=(0,$.useRef)(null),y=Bt(p),g=z({disabled:l,value:r,domRef:p,get textValue(){return y()}}),d=I(t,p);w(()=>{if(i.listboxState!==0||!u||i.activationTrigger===0)return;let x=ie();return x.requestAnimationFrame(()=>{var P,O;(O=(P=p.current)==null?void 0:P.scrollIntoView)==null||O.call(P,{block:"nearest"})}),x.dispose},[p,u,i.listboxState,i.activationTrigger,i.activeOptionIndex]),w(()=>s.registerOption(o,g),[g,o]);let f=T(x=>{if(l)return x.preventDefault();s.onChange(r),i.mode===0&&(s.closeListbox(),ie().nextFrame(()=>{var P;return(P=i.buttonRef.current)==null?void 0:P.focus({preventScroll:!0})}))}),b=T(()=>{if(l)return s.goToOption(5);s.goToOption(4,o)}),c=nt(),E=T(x=>c.update(x)),D=T(x=>{c.wasMoved(x)&&(l||u||s.goToOption(4,o,0))}),A=T(x=>{c.wasMoved(x)&&(l||u&&s.goToOption(5))}),U=(0,$.useMemo)(()=>({active:u,selected:m,disabled:l}),[u,m,l]);return L({ourProps:{id:o,ref:d,role:"option",tabIndex:l===!0?void 0:-1,"aria-disabled":l===!0?!0:void 0,"aria-selected":m,disabled:void 0,onClick:f,onFocus:b,onPointerEnter:E,onMouseEnter:E,onPointerMove:D,onMouseMove:D,onPointerLeave:A,onMouseLeave:A},theirProps:a,slot:U,defaultTag:ol,name:"Listbox.Option"})}var al=h(qa),ll=h(Qa),il=h(Za),sl=h(nl),ul=h(rl),pl=Object.assign(al,{Button:ll,Label:il,Options:sl,Option:ul});var ae=oe(__webpack_require__(7294),1);function Rn(e,t=n=>n){let n=e.activeItemIndex!==null?e.items[e.activeItemIndex]:null,o=ye(t(e.items.slice()),r=>r.dataRef.current.domRef.current),l=n?o.indexOf(n):null;return l===-1&&(l=null),{items:o,activeItemIndex:l}}var dl={[1](e){return e.menuState===1?e:{...e,activeItemIndex:null,menuState:1}},[0](e){return e.menuState===0?e:{...e,__demoMode:!1,menuState:0}},[2]:(e,t)=>{var l;let n=Rn(e),o=Ze(t,{resolveItems:()=>n.items,resolveActiveIndex:()=>n.activeItemIndex,resolveId:r=>r.id,resolveDisabled:r=>r.dataRef.current.disabled});return{...e,...n,searchQuery:"",activeItemIndex:o,activationTrigger:(l=t.trigger)!=null?l:1}},[3]:(e,t)=>{let o=e.searchQuery!==""?0:1,l=e.searchQuery+t.value.toLowerCase(),a=(e.activeItemIndex!==null?e.items.slice(e.activeItemIndex+o).concat(e.items.slice(0,e.activeItemIndex+o)):e.items).find(s=>{var u;return((u=s.dataRef.current.textValue)==null?void 0:u.startsWith(l))&&!s.dataRef.current.disabled}),i=a?e.items.indexOf(a):-1;return i===-1||i===e.activeItemIndex?{...e,searchQuery:l}:{...e,searchQuery:l,activeItemIndex:i,activationTrigger:1}},[4](e){return e.searchQuery===""?e:{...e,searchQuery:"",searchActiveItemIndex:null}},[5]:(e,t)=>{let n=Rn(e,o=>[...o,{id:t.id,dataRef:t.dataRef}]);return{...e,...n}},[6]:(e,t)=>{let n=Rn(e,o=>{let l=o.findIndex(r=>r.id===t.id);return l!==-1&&o.splice(l,1),o});return{...e,...n,activationTrigger:1}}},Sn=(0,ae.createContext)(null);Sn.displayName="MenuContext";function Vt(e){let t=(0,ae.useContext)(Sn);if(t===null){let n=new Error(`<${e} /> is missing a parent <Menu /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,Vt),n}return t}function cl(e,t){return M(t.type,dl,e,t)}var fl=ae.Fragment;function Tl(e,t){let{__demoMode:n=!1,...o}=e,l=(0,ae.useReducer)(cl,{__demoMode:n,menuState:n?0:1,buttonRef:(0,ae.createRef)(),itemsRef:(0,ae.createRef)(),items:[],searchQuery:"",activeItemIndex:null,activationTrigger:1}),[{menuState:r,itemsRef:a,buttonRef:i},s]=l,u=I(t);De([i,a],(g,d)=>{var f;s({type:1}),_e(d,1)||(g.preventDefault(),(f=i.current)==null||f.focus())},r===0);let m=T(()=>{s({type:1})}),p=(0,ae.useMemo)(()=>({open:r===0,close:m}),[r,m]),y={ref:u};return ae.default.createElement(Sn.Provider,{value:l},ae.default.createElement(Se,{value:M(r,{[0]:1,[1]:2})},L({ourProps:y,theirProps:o,slot:p,defaultTag:fl,name:"Menu"})))}var ml="button";function bl(e,t){var d;let n=j(),{id:o=`headlessui-menu-button-${n}`,...l}=e,[r,a]=Vt("Menu.Button"),i=I(r.buttonRef,t),s=se(),u=T(f=>{switch(f.key){case" ":case"Enter":case"ArrowDown":f.preventDefault(),f.stopPropagation(),a({type:0}),s.nextFrame(()=>a({type:2,focus:0}));break;case"ArrowUp":f.preventDefault(),f.stopPropagation(),a({type:0}),s.nextFrame(()=>a({type:2,focus:3}));break}}),m=T(f=>{switch(f.key){case" ":f.preventDefault();break}}),p=T(f=>{if(de(f.currentTarget))return f.preventDefault();e.disabled||(r.menuState===0?(a({type:1}),s.nextFrame(()=>{var b;return(b=r.buttonRef.current)==null?void 0:b.focus({preventScroll:!0})})):(f.preventDefault(),a({type:0})))}),y=(0,ae.useMemo)(()=>({open:r.menuState===0}),[r]),g={ref:i,id:o,type:xe(e,r.buttonRef),"aria-haspopup":"menu","aria-controls":(d=r.itemsRef.current)==null?void 0:d.id,"aria-expanded":r.menuState===0,onKeyDown:u,onKeyUp:m,onClick:p};return L({ourProps:g,theirProps:l,slot:y,defaultTag:ml,name:"Menu.Button"})}var yl="div",gl=3;function El(e,t){var b,c;let n=j(),{id:o=`headlessui-menu-items-${n}`,...l}=e,[r,a]=Vt("Menu.Items"),i=I(r.itemsRef,t),s=ge(r.itemsRef),u=se(),m=be(),p=(()=>m!==null?(m&1)===1:r.menuState===0)();(0,ae.useEffect)(()=>{let E=r.itemsRef.current;E&&r.menuState===0&&E!==(s==null?void 0:s.activeElement)&&E.focus({preventScroll:!0})},[r.menuState,r.itemsRef,s]),ze({container:r.itemsRef.current,enabled:r.menuState===0,accept(E){return E.getAttribute("role")==="menuitem"?NodeFilter.FILTER_REJECT:E.hasAttribute("role")?NodeFilter.FILTER_SKIP:NodeFilter.FILTER_ACCEPT},walk(E){E.setAttribute("role","none")}});let y=T(E=>{var D,A;switch(u.dispose(),E.key){case" ":if(r.searchQuery!=="")return E.preventDefault(),E.stopPropagation(),a({type:3,value:E.key});case"Enter":if(E.preventDefault(),E.stopPropagation(),a({type:1}),r.activeItemIndex!==null){let{dataRef:U}=r.items[r.activeItemIndex];(A=(D=U.current)==null?void 0:D.domRef.current)==null||A.click()}en(r.buttonRef.current);break;case"ArrowDown":return E.preventDefault(),E.stopPropagation(),a({type:2,focus:2});case"ArrowUp":return E.preventDefault(),E.stopPropagation(),a({type:2,focus:1});case"Home":case"PageUp":return E.preventDefault(),E.stopPropagation(),a({type:2,focus:0});case"End":case"PageDown":return E.preventDefault(),E.stopPropagation(),a({type:2,focus:3});case"Escape":E.preventDefault(),E.stopPropagation(),a({type:1}),ie().nextFrame(()=>{var U;return(U=r.buttonRef.current)==null?void 0:U.focus({preventScroll:!0})});break;case"Tab":E.preventDefault(),E.stopPropagation(),a({type:1}),ie().nextFrame(()=>{Kn(r.buttonRef.current,E.shiftKey?2:4)});break;default:E.key.length===1&&(a({type:3,value:E.key}),u.setTimeout(()=>a({type:4}),350));break}}),g=T(E=>{switch(E.key){case" ":E.preventDefault();break}}),d=(0,ae.useMemo)(()=>({open:r.menuState===0}),[r]),f={"aria-activedescendant":r.activeItemIndex===null||(b=r.items[r.activeItemIndex])==null?void 0:b.id,"aria-labelledby":(c=r.buttonRef.current)==null?void 0:c.id,id:o,onKeyDown:y,onKeyUp:g,role:"menu",tabIndex:0,ref:i};return L({ourProps:f,theirProps:l,slot:d,defaultTag:yl,features:gl,visible:p,name:"Menu.Items"})}var Pl=ae.Fragment;function xl(e,t){let n=j(),{id:o=`headlessui-menu-item-${n}`,disabled:l=!1,...r}=e,[a,i]=Vt("Menu.Item"),s=a.activeItemIndex!==null?a.items[a.activeItemIndex].id===o:!1,u=(0,ae.useRef)(null),m=I(t,u);w(()=>{if(a.__demoMode||a.menuState!==0||!s||a.activationTrigger===0)return;let _=ie();return _.requestAnimationFrame(()=>{var x,P;(P=(x=u.current)==null?void 0:x.scrollIntoView)==null||P.call(x,{block:"nearest"})}),_.dispose},[a.__demoMode,u,s,a.menuState,a.activationTrigger,a.activeItemIndex]);let p=Bt(u),y=(0,ae.useRef)({disabled:l,domRef:u,get textValue(){return p()}});w(()=>{y.current.disabled=l},[y,l]),w(()=>(i({type:5,id:o,dataRef:y}),()=>i({type:6,id:o})),[y,o]);let g=T(()=>{i({type:1})}),d=T(_=>{if(l)return _.preventDefault();i({type:1}),en(a.buttonRef.current)}),f=T(()=>{if(l)return i({type:2,focus:5});i({type:2,focus:4,id:o})}),b=nt(),c=T(_=>b.update(_)),E=T(_=>{b.wasMoved(_)&&(l||s||i({type:2,focus:4,id:o,trigger:0}))}),D=T(_=>{b.wasMoved(_)&&(l||s&&i({type:2,focus:5}))}),A=(0,ae.useMemo)(()=>({active:s,disabled:l,close:g}),[s,l,g]);return L({ourProps:{id:o,ref:m,role:"menuitem",tabIndex:l===!0?void 0:-1,"aria-disabled":l===!0?!0:void 0,disabled:void 0,onClick:d,onFocus:f,onPointerEnter:c,onMouseEnter:c,onPointerMove:E,onMouseMove:E,onPointerLeave:D,onMouseLeave:D},theirProps:r,slot:A,defaultTag:Pl,name:"Menu.Item"})}var vl=h(Tl),Rl=h(bl),Sl=h(El),Ol=h(xl),Cl=Object.assign(vl,{Button:Rl,Items:Sl,Item:Ol});var k=oe(__webpack_require__(7294),1);var Al={[0]:e=>{let t={...e,popoverState:M(e.popoverState,{[0]:1,[1]:0})};return t.popoverState===0&&(t.__demoMode=!1),t},[1](e){return e.popoverState===1?e:{...e,popoverState:1}},[2](e,t){return e.button===t.button?e:{...e,button:t.button}},[3](e,t){return e.buttonId===t.buttonId?e:{...e,buttonId:t.buttonId}},[4](e,t){return e.panel===t.panel?e:{...e,panel:t.panel}},[5](e,t){return e.panelId===t.panelId?e:{...e,panelId:t.panelId}}},On=(0,k.createContext)(null);On.displayName="PopoverContext";function jt(e){let t=(0,k.useContext)(On);if(t===null){let n=new Error(`<${e} /> is missing a parent <Popover /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,jt),n}return t}var Cn=(0,k.createContext)(null);Cn.displayName="PopoverAPIContext";function An(e){let t=(0,k.useContext)(Cn);if(t===null){let n=new Error(`<${e} /> is missing a parent <Popover /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,An),n}return t}var Ln=(0,k.createContext)(null);Ln.displayName="PopoverGroupContext";function ko(){return(0,k.useContext)(Ln)}var Wt=(0,k.createContext)(null);Wt.displayName="PopoverPanelContext";function Ll(){return(0,k.useContext)(Wt)}function hl(e,t){return M(t.type,Al,e,t)}var Dl="div";function Ml(e,t){var K;let{__demoMode:n=!1,...o}=e,l=(0,k.useRef)(null),r=I(t,Qe(G=>{l.current=G})),a=(0,k.useRef)([]),i=(0,k.useReducer)(hl,{__demoMode:n,popoverState:n?0:1,buttons:a,button:null,buttonId:null,panel:null,panelId:null,beforePanelSentinel:(0,k.createRef)(),afterPanelSentinel:(0,k.createRef)()}),[{popoverState:s,button:u,buttonId:m,panel:p,panelId:y,beforePanelSentinel:g,afterPanelSentinel:d},f]=i,b=ge((K=l.current)!=null?K:u),c=(0,k.useMemo)(()=>{if(!u||!p)return!1;for(let te of document.querySelectorAll("body > *"))if(Number(te==null?void 0:te.contains(u))^Number(te==null?void 0:te.contains(p)))return!0;let G=Ye(),X=G.indexOf(u),ce=(X+G.length-1)%G.length,H=(X+1)%G.length,Q=G[ce],J=G[H];return!p.contains(Q)&&!p.contains(J)},[u,p]),E=z(m),D=z(y),A=(0,k.useMemo)(()=>({buttonId:E,panelId:D,close:()=>f({type:1})}),[E,D,f]),U=ko(),_=U==null?void 0:U.registerPopover,x=T(()=>{var G;return(G=U==null?void 0:U.isFocusWithinPopoverGroup())!=null?G:(b==null?void 0:b.activeElement)&&((u==null?void 0:u.contains(b.activeElement))||(p==null?void 0:p.contains(b.activeElement)))});(0,k.useEffect)(()=>_==null?void 0:_(A),[_,A]);let[P,O]=Nt(),v=Gt({portals:P,defaultContainers:[u,p]});at(b==null?void 0:b.defaultView,"focus",G=>{var X,ce,H,Q;G.target!==window&&G.target instanceof HTMLElement&&s===0&&(x()||u&&p&&(v.contains(G.target)||(ce=(X=g.current)==null?void 0:X.contains)!=null&&ce.call(X,G.target)||(Q=(H=d.current)==null?void 0:H.contains)!=null&&Q.call(H,G.target)||f({type:1})))},!0),De(v.resolveContainers,(G,X)=>{f({type:1}),_e(X,1)||(G.preventDefault(),u==null||u.focus())},s===0);let R=T(G=>{f({type:1});let X=(()=>G?G instanceof HTMLElement?G:"current"in G&&G.current instanceof HTMLElement?G.current:u:u)();X==null||X.focus()}),C=(0,k.useMemo)(()=>({close:R,isPortalled:c}),[R,c]),N=(0,k.useMemo)(()=>({open:s===0,close:R}),[s,R]),ee={ref:r};return k.default.createElement(Wt.Provider,{value:null},k.default.createElement(On.Provider,{value:i},k.default.createElement(Cn.Provider,{value:C},k.default.createElement(Se,{value:M(s,{[0]:1,[1]:2})},k.default.createElement(O,null,L({ourProps:ee,theirProps:o,slot:N,defaultTag:Dl,name:"Popover"}),k.default.createElement(v.MainTreeNode,null))))))}var Fl="button";function Il(e,t){let n=j(),{id:o=`headlessui-popover-button-${n}`,...l}=e,[r,a]=jt("Popover.Button"),{isPortalled:i}=An("Popover.Button"),s=(0,k.useRef)(null),u=`headlessui-focus-sentinel-${j()}`,m=ko(),p=m==null?void 0:m.closeOthers,g=Ll()!==null;(0,k.useEffect)(()=>{if(!g)return a({type:3,buttonId:o}),()=>{a({type:3,buttonId:null})}},[g,o,a]);let[d]=(0,k.useState)(()=>Symbol()),f=I(s,t,g?null:C=>{if(C)r.buttons.current.push(d);else{let N=r.buttons.current.indexOf(d);N!==-1&&r.buttons.current.splice(N,1)}r.buttons.current.length>1&&console.warn("You are already using a <Popover.Button /> but only 1 <Popover.Button /> is supported."),C&&a({type:2,button:C})}),b=I(s,t),c=ge(s),E=T(C=>{var N,ee,K;if(g){if(r.popoverState===1)return;switch(C.key){case" ":case"Enter":C.preventDefault(),(ee=(N=C.target).click)==null||ee.call(N),a({type:1}),(K=r.button)==null||K.focus();break}}else switch(C.key){case" ":case"Enter":C.preventDefault(),C.stopPropagation(),r.popoverState===1&&(p==null||p(r.buttonId)),a({type:0});break;case"Escape":if(r.popoverState!==0)return p==null?void 0:p(r.buttonId);if(!s.current||c!=null&&c.activeElement&&!s.current.contains(c.activeElement))return;C.preventDefault(),C.stopPropagation(),a({type:1});break}}),D=T(C=>{g||C.key===" "&&C.preventDefault()}),A=T(C=>{var N,ee;de(C.currentTarget)||e.disabled||(g?(a({type:1}),(N=r.button)==null||N.focus()):(C.preventDefault(),C.stopPropagation(),r.popoverState===1&&(p==null||p(r.buttonId)),a({type:0}),(ee=r.button)==null||ee.focus()))}),U=T(C=>{C.preventDefault(),C.stopPropagation()}),_=r.popoverState===0,x=(0,k.useMemo)(()=>({open:_}),[_]),P=xe(e,s),O=g?{ref:b,type:P,onKeyDown:E,onClick:A}:{ref:f,id:r.buttonId,type:P,"aria-expanded":r.popoverState===0,"aria-controls":r.panel?r.panelId:void 0,onKeyDown:E,onKeyUp:D,onClick:A,onMouseDown:U},v=Et(),R=T(()=>{let C=r.panel;if(!C)return;function N(){M(v.current,{[0]:()=>le(C,1),[1]:()=>le(C,8)})===0&&le(Ye().filter(K=>K.dataset.headlessuiFocusGuard!=="true"),M(v.current,{[0]:4,[1]:2}),{relativeTo:r.button})}N()});return k.default.createElement(k.default.Fragment,null,L({ourProps:O,theirProps:l,slot:x,defaultTag:Fl,name:"Popover.Button"}),_&&!g&&i&&k.default.createElement(pe,{id:u,features:2,"data-headlessui-focus-guard":!0,as:"button",type:"button",onFocus:R}))}var wl="div",_l=3;function Hl(e,t){let n=j(),{id:o=`headlessui-popover-overlay-${n}`,...l}=e,[{popoverState:r},a]=jt("Popover.Overlay"),i=I(t),s=be(),u=(()=>s!==null?(s&1)===1:r===0)(),m=T(g=>{if(de(g.currentTarget))return g.preventDefault();a({type:1})}),p=(0,k.useMemo)(()=>({open:r===0}),[r]);return L({ourProps:{ref:i,id:o,"aria-hidden":!0,onClick:m},theirProps:l,slot:p,defaultTag:wl,features:_l,visible:u,name:"Popover.Overlay"})}var kl="div",Nl=3;function Gl(e,t){let n=j(),{id:o=`headlessui-popover-panel-${n}`,focus:l=!1,...r}=e,[a,i]=jt("Popover.Panel"),{close:s,isPortalled:u}=An("Popover.Panel"),m=`headlessui-focus-sentinel-before-${j()}`,p=`headlessui-focus-sentinel-after-${j()}`,y=(0,k.useRef)(null),g=I(y,t,x=>{i({type:4,panel:x})}),d=ge(y);w(()=>(i({type:5,panelId:o}),()=>{i({type:5,panelId:null})}),[o,i]);let f=be(),b=(()=>f!==null?(f&1)===1:a.popoverState===0)(),c=T(x=>{var P;switch(x.key){case"Escape":if(a.popoverState!==0||!y.current||d!=null&&d.activeElement&&!y.current.contains(d.activeElement))return;x.preventDefault(),x.stopPropagation(),i({type:1}),(P=a.button)==null||P.focus();break}});(0,k.useEffect)(()=>{var x;e.static||a.popoverState===1&&((x=e.unmount)==null||x)&&i({type:4,panel:null})},[a.popoverState,e.unmount,e.static,i]),(0,k.useEffect)(()=>{if(a.__demoMode||!l||a.popoverState!==0||!y.current)return;let x=d==null?void 0:d.activeElement;y.current.contains(x)||le(y.current,1)},[a.__demoMode,l,y,a.popoverState]);let E=(0,k.useMemo)(()=>({open:a.popoverState===0,close:s}),[a,s]),D={ref:g,id:o,onKeyDown:c,onBlur:l&&a.popoverState===0?x=>{var O,v,R,C,N;let P=x.relatedTarget;P&&y.current&&((O=y.current)!=null&&O.contains(P)||(i({type:1}),((R=(v=a.beforePanelSentinel.current)==null?void 0:v.contains)!=null&&R.call(v,P)||(N=(C=a.afterPanelSentinel.current)==null?void 0:C.contains)!=null&&N.call(C,P))&&P.focus({preventScroll:!0})))}:void 0,tabIndex:-1},A=Et(),U=T(()=>{let x=y.current;if(!x)return;function P(){M(A.current,{[0]:()=>{var v;le(x,1)===0&&((v=a.afterPanelSentinel.current)==null||v.focus())},[1]:()=>{var O;(O=a.button)==null||O.focus({preventScroll:!0})}})}P()}),_=T(()=>{let x=y.current;if(!x)return;function P(){M(A.current,{[0]:()=>{var ee;if(!a.button)return;let O=Ye(),v=O.indexOf(a.button),R=O.slice(0,v+1),N=[...O.slice(v+1),...R];for(let K of N.slice())if(K.dataset.headlessuiFocusGuard==="true"||(ee=a.panel)!=null&&ee.contains(K)){let G=N.indexOf(K);G!==-1&&N.splice(G,1)}le(N,1,{sorted:!1})},[1]:()=>{var v;le(x,2)===0&&((v=a.button)==null||v.focus())}})}P()});return k.default.createElement(Wt.Provider,{value:o},b&&u&&k.default.createElement(pe,{id:m,ref:a.beforePanelSentinel,features:2,"data-headlessui-focus-guard":!0,as:"button",type:"button",onFocus:U}),L({ourProps:D,theirProps:r,slot:E,defaultTag:kl,features:Nl,visible:b,name:"Popover.Panel"}),b&&u&&k.default.createElement(pe,{id:p,ref:a.afterPanelSentinel,features:2,"data-headlessui-focus-guard":!0,as:"button",type:"button",onFocus:_}))}var Ul="div";function Bl(e,t){let n=(0,k.useRef)(null),o=I(n,t),[l,r]=(0,k.useState)([]),a=T(d=>{r(f=>{let b=f.indexOf(d);if(b!==-1){let c=f.slice();return c.splice(b,1),c}return f})}),i=T(d=>(r(f=>[...f,d]),()=>a(d))),s=T(()=>{var b;let d=me(n);if(!d)return!1;let f=d.activeElement;return(b=n.current)!=null&&b.contains(f)?!0:l.some(c=>{var E,D;return((E=d.getElementById(c.buttonId.current))==null?void 0:E.contains(f))||((D=d.getElementById(c.panelId.current))==null?void 0:D.contains(f))})}),u=T(d=>{for(let f of l)f.buttonId.current!==d&&f.close()}),m=(0,k.useMemo)(()=>({registerPopover:i,unregisterPopover:a,isFocusWithinPopoverGroup:s,closeOthers:u}),[i,a,s,u]),p=(0,k.useMemo)(()=>({}),[]),y=e,g={ref:o};return k.default.createElement(Ln.Provider,{value:m},L({ourProps:g,theirProps:y,slot:p,defaultTag:Ul,name:"Popover.Group"}))}var Vl=h(Ml),jl=h(Il),Wl=h(Hl),Kl=h(Gl),Xl=h(Bl),$l=Object.assign(Vl,{Button:jl,Overlay:Wl,Panel:Kl,Group:Xl});var Z=oe(__webpack_require__(7294),1);var Je=__webpack_require__(7294);function Kt(e=0){let[t,n]=(0,Je.useState)(e),o=Ae(),l=(0,Je.useCallback)(s=>{o.current&&n(u=>u|s)},[t,o]),r=(0,Je.useCallback)(s=>Boolean(t&s),[t]),a=(0,Je.useCallback)(s=>{o.current&&n(u=>u&~s)},[n,o]),i=(0,Je.useCallback)(s=>{o.current&&n(u=>u^s)},[n]);return{flags:t,addFlag:l,hasFlag:r,removeFlag:a,toggleFlag:i}}var he=oe(__webpack_require__(7294),1);var No=(0,he.createContext)(null);function Go(){let e=(0,he.useContext)(No);if(e===null){let t=new Error("You used a <Label /> component, but it is not inside a relevant parent.");throw Error.captureStackTrace&&Error.captureStackTrace(t,Go),t}return e}function St(){let[e,t]=(0,he.useState)([]);return[e.length>0?e.join(" "):void 0,(0,he.useMemo)(()=>function(o){let l=T(a=>(t(i=>[...i,a]),()=>t(i=>{let s=i.slice(),u=s.indexOf(a);return u!==-1&&s.splice(u,1),s}))),r=(0,he.useMemo)(()=>({register:l,slot:o.slot,name:o.name,props:o.props}),[l,o.slot,o.name,o.props]);return he.default.createElement(No.Provider,{value:r},o.children)},[t])]}var Jl="label";function ql(e,t){let n=j(),{id:o=`headlessui-label-${n}`,passive:l=!1,...r}=e,a=Go(),i=I(t);w(()=>a.register(o),[o,a.register]);let s={ref:i,...a.props,id:o};return l&&("onClick"in s&&(delete s.htmlFor,delete s.onClick),"onClick"in r&&delete r.onClick),L({ourProps:s,theirProps:r,slot:a.slot||{},defaultTag:Jl,name:a.name||"Label"})}var Yl=h(ql),Xt=Object.assign(Yl,{});var Ql={[0](e,t){let n=[...e.options,{id:t.id,element:t.element,propsRef:t.propsRef}];return{...e,options:ye(n,o=>o.element.current)}},[1](e,t){let n=e.options.slice(),o=e.options.findIndex(l=>l.id===t.id);return o===-1?e:(n.splice(o,1),{...e,options:n})}},hn=(0,Z.createContext)(null);hn.displayName="RadioGroupDataContext";function Uo(e){let t=(0,Z.useContext)(hn);if(t===null){let n=new Error(`<${e} /> is missing a parent <RadioGroup /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,Uo),n}return t}var Dn=(0,Z.createContext)(null);Dn.displayName="RadioGroupActionsContext";function Bo(e){let t=(0,Z.useContext)(Dn);if(t===null){let n=new Error(`<${e} /> is missing a parent <RadioGroup /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,Bo),n}return t}function zl(e,t){return M(t.type,Ql,e,t)}var Zl="div";function ei(e,t){let n=j(),{id:o=`headlessui-radiogroup-${n}`,value:l,defaultValue:r,form:a,name:i,onChange:s,by:u=(H,Q)=>H===Q,disabled:m=!1,...p}=e,y=T(typeof u=="string"?(H,Q)=>{let J=u;return(H==null?void 0:H[J])===(Q==null?void 0:Q[J])}:u),[g,d]=(0,Z.useReducer)(zl,{options:[]}),f=g.options,[b,c]=St(),[E,D]=$e(),A=(0,Z.useRef)(null),U=I(A,t),[_,x]=ke(l,s,r),P=(0,Z.useMemo)(()=>f.find(H=>!H.propsRef.current.disabled),[f]),O=(0,Z.useMemo)(()=>f.some(H=>y(H.propsRef.current.value,_)),[f,_]),v=T(H=>{var J;if(m||y(H,_))return!1;let Q=(J=f.find(te=>y(te.propsRef.current.value,H)))==null?void 0:J.propsRef.current;return Q!=null&&Q.disabled?!1:(x==null||x(H),!0)});ze({container:A.current,accept(H){return H.getAttribute("role")==="radio"?NodeFilter.FILTER_REJECT:H.hasAttribute("role")?NodeFilter.FILTER_SKIP:NodeFilter.FILTER_ACCEPT},walk(H){H.setAttribute("role","none")}});let R=T(H=>{let Q=A.current;if(!Q)return;let J=me(Q),te=f.filter(fe=>fe.propsRef.current.disabled===!1).map(fe=>fe.element.current);switch(H.key){case"Enter":Ft(H.currentTarget);break;case"ArrowLeft":case"ArrowUp":if(H.preventDefault(),H.stopPropagation(),le(te,18)===2){let S=f.find(F=>F.element.current===(J==null?void 0:J.activeElement));S&&v(S.propsRef.current.value)}break;case"ArrowRight":case"ArrowDown":if(H.preventDefault(),H.stopPropagation(),le(te,20)===2){let S=f.find(F=>F.element.current===(J==null?void 0:J.activeElement));S&&v(S.propsRef.current.value)}break;case" ":{H.preventDefault(),H.stopPropagation();let fe=f.find(S=>S.element.current===(J==null?void 0:J.activeElement));fe&&v(fe.propsRef.current.value)}break}}),C=T(H=>(d({type:0,...H}),()=>d({type:1,id:H.id}))),N=(0,Z.useMemo)(()=>({value:_,firstOption:P,containsCheckedOption:O,disabled:m,compare:y,...g}),[_,P,O,m,y,g]),ee=(0,Z.useMemo)(()=>({registerOption:C,change:v}),[C,v]),K={ref:U,id:o,role:"radiogroup","aria-labelledby":b,"aria-describedby":E,onKeyDown:R},G=(0,Z.useMemo)(()=>({value:_}),[_]),X=(0,Z.useRef)(null),ce=se();return(0,Z.useEffect)(()=>{X.current&&r!==void 0&&ce.addEventListener(X.current,"reset",()=>{v(r)})},[X,v]),Z.default.createElement(D,{name:"RadioGroup.Description"},Z.default.createElement(c,{name:"RadioGroup.Label"},Z.default.createElement(Dn.Provider,{value:ee},Z.default.createElement(hn.Provider,{value:N},i!=null&&_!=null&&Ve({[i]:_}).map(([H,Q],J)=>Z.default.createElement(pe,{features:4,ref:J===0?te=>{var fe;X.current=(fe=te==null?void 0:te.closest("form"))!=null?fe:null}:void 0,...Me({key:H,as:"input",type:"radio",checked:Q!=null,hidden:!0,readOnly:!0,form:a,name:H,value:Q})})),L({ourProps:K,theirProps:p,slot:G,defaultTag:Zl,name:"RadioGroup"})))))}var ti="div";function ni(e,t){var R;let n=j(),{id:o=`headlessui-radiogroup-option-${n}`,value:l,disabled:r=!1,...a}=e,i=(0,Z.useRef)(null),s=I(i,t),[u,m]=St(),[p,y]=$e(),{addFlag:g,removeFlag:d,hasFlag:f}=Kt(1),b=z({value:l,disabled:r}),c=Uo("RadioGroup.Option"),E=Bo("RadioGroup.Option");w(()=>E.registerOption({id:o,element:i,propsRef:b}),[o,E,i,e]);let D=T(C=>{var N;if(de(C.currentTarget))return C.preventDefault();E.change(l)&&(g(2),(N=i.current)==null||N.focus())}),A=T(C=>{if(de(C.currentTarget))return C.preventDefault();g(2)}),U=T(()=>d(2)),_=((R=c.firstOption)==null?void 0:R.id)===o,x=c.disabled||r,P=c.compare(c.value,l),O={ref:s,id:o,role:"radio","aria-checked":P?"true":"false","aria-labelledby":u,"aria-describedby":p,"aria-disabled":x?!0:void 0,tabIndex:(()=>x?-1:P||!c.containsCheckedOption&&_?0:-1)(),onClick:x?void 0:D,onFocus:x?void 0:A,onBlur:x?void 0:U},v=(0,Z.useMemo)(()=>({checked:P,disabled:x,active:f(2)}),[P,x,f]);return Z.default.createElement(y,{name:"RadioGroup.Description"},Z.default.createElement(m,{name:"RadioGroup.Label"},L({ourProps:O,theirProps:a,slot:v,defaultTag:ti,name:"RadioGroup.Option"})))}var oi=h(ei),ri=h(ni),ai=Object.assign(oi,{Option:ri,Label:Xt,Description:st});var ue=oe(__webpack_require__(7294),1);var Mn=(0,ue.createContext)(null);Mn.displayName="GroupContext";var li=ue.Fragment;function ii(e){var m;let[t,n]=(0,ue.useState)(null),[o,l]=St(),[r,a]=$e(),i=(0,ue.useMemo)(()=>({switch:t,setSwitch:n,labelledby:o,describedby:r}),[t,n,o,r]),s={},u=e;return ue.default.createElement(a,{name:"Switch.Description"},ue.default.createElement(l,{name:"Switch.Label",props:{htmlFor:(m=i.switch)==null?void 0:m.id,onClick(p){t&&(p.currentTarget.tagName==="LABEL"&&p.preventDefault(),t.click(),t.focus({preventScroll:!0}))}}},ue.default.createElement(Mn.Provider,{value:i},L({ourProps:s,theirProps:u,defaultTag:li,name:"Switch.Group"}))))}var si="button";function ui(e,t){let n=j(),{id:o=`headlessui-switch-${n}`,checked:l,defaultChecked:r=!1,onChange:a,name:i,value:s,form:u,...m}=e,p=(0,ue.useContext)(Mn),y=(0,ue.useRef)(null),g=I(y,t,p===null?null:p.setSwitch),[d,f]=ke(l,a,r),b=T(()=>f==null?void 0:f(!d)),c=T(x=>{if(de(x.currentTarget))return x.preventDefault();x.preventDefault(),b()}),E=T(x=>{x.key===" "?(x.preventDefault(),b()):x.key==="Enter"&&Ft(x.currentTarget)}),D=T(x=>x.preventDefault()),A=(0,ue.useMemo)(()=>({checked:d}),[d]),U={id:o,ref:g,role:"switch",type:xe(e,y),tabIndex:0,"aria-checked":d,"aria-labelledby":p==null?void 0:p.labelledby,"aria-describedby":p==null?void 0:p.describedby,onClick:c,onKeyUp:E,onKeyPress:D},_=se();return(0,ue.useEffect)(()=>{var P;let x=(P=y.current)==null?void 0:P.closest("form");x&&r!==void 0&&_.addEventListener(x,"reset",()=>{f(r)})},[y,f]),ue.default.createElement(ue.default.Fragment,null,i!=null&&d&&ue.default.createElement(pe,{features:4,...Me({as:"input",type:"checkbox",hidden:!0,readOnly:!0,form:u,checked:d,name:i,value:s})}),L({ourProps:U,theirProps:m,slot:A,defaultTag:si,name:"Switch"}))}var pi=h(ui),di=ii,ci=Object.assign(pi,{Group:di,Label:Xt,Description:st});var ne=oe(__webpack_require__(7294),1);var $t=oe(__webpack_require__(7294),1);function Vo({onFocus:e}){let[t,n]=(0,$t.useState)(!0),o=Ae();return t?$t.default.createElement(pe,{as:"button",type:"button",features:2,onFocus:l=>{l.preventDefault();let r,a=50;function i(){if(a--<=0){r&&cancelAnimationFrame(r);return}if(e()){if(cancelAnimationFrame(r),!o.current)return;n(!1);return}r=requestAnimationFrame(i)}r=requestAnimationFrame(i)}}):null}var Oe=oe(__webpack_require__(7294),1),jo=Oe.createContext(null);function fi(){return{groups:new Map,get(e,t){var a;let n=this.groups.get(e);n||(n=new Map,this.groups.set(e,n));let o=(a=n.get(t))!=null?a:0;n.set(t,o+1);let l=Array.from(n.keys()).indexOf(t);function r(){let i=n.get(t);i>1?n.set(t,i-1):n.delete(t)}return[l,r]}}}function Wo({children:e}){let t=Oe.useRef(fi());return Oe.createElement(jo.Provider,{value:t},e)}function Fn(e){let t=Oe.useContext(jo);if(!t)throw new Error("You must wrap your component in a <StableCollection>");let n=Ti(),[o,l]=t.current.get(e,n);return Oe.useEffect(()=>l,[]),o}function Ti(){var o,l,r;let e=(r=(l=(o=Oe.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED)==null?void 0:o.ReactCurrentOwner)==null?void 0:l.current)!=null?r:null;if(!e)return Symbol();let t=[],n=e;for(;n;)t.push(n.index),n=n.return;return"$."+t.join(".")}var mi={[0](e,t){var m;let n=ye(e.tabs,p=>p.current),o=ye(e.panels,p=>p.current),l=n.filter(p=>{var y;return!((y=p.current)!=null&&y.hasAttribute("disabled"))}),r={...e,tabs:n,panels:o};if(t.index<0||t.index>n.length-1){let p=M(Math.sign(t.index-e.selectedIndex),{[-1]:()=>1,[0]:()=>M(Math.sign(t.index),{[-1]:()=>0,[0]:()=>0,[1]:()=>1}),[1]:()=>0});return l.length===0?r:{...r,selectedIndex:M(p,{[0]:()=>n.indexOf(l[0]),[1]:()=>n.indexOf(l[l.length-1])})}}let a=n.slice(0,t.index),s=[...n.slice(t.index),...a].find(p=>l.includes(p));if(!s)return r;let u=(m=n.indexOf(s))!=null?m:e.selectedIndex;return u===-1&&(u=e.selectedIndex),{...r,selectedIndex:u}},[1](e,t){var r;if(e.tabs.includes(t.tab))return e;let n=e.tabs[e.selectedIndex],o=ye([...e.tabs,t.tab],a=>a.current),l=(r=o.indexOf(n))!=null?r:e.selectedIndex;return l===-1&&(l=e.selectedIndex),{...e,tabs:o,selectedIndex:l}},[2](e,t){return{...e,tabs:e.tabs.filter(n=>n!==t.tab)}},[3](e,t){return e.panels.includes(t.panel)?e:{...e,panels:ye([...e.panels,t.panel],n=>n.current)}},[4](e,t){return{...e,panels:e.panels.filter(n=>n!==t.panel)}}},In=(0,ne.createContext)(null);In.displayName="TabsDataContext";function dt(e){let t=(0,ne.useContext)(In);if(t===null){let n=new Error(`<${e} /> is missing a parent <Tab.Group /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,dt),n}return t}var wn=(0,ne.createContext)(null);wn.displayName="TabsActionsContext";function _n(e){let t=(0,ne.useContext)(wn);if(t===null){let n=new Error(`<${e} /> is missing a parent <Tab.Group /> component.`);throw Error.captureStackTrace&&Error.captureStackTrace(n,_n),n}return t}function bi(e,t){return M(t.type,mi,e,t)}var yi=ne.Fragment;function gi(e,t){let{defaultIndex:n=0,vertical:o=!1,manual:l=!1,onChange:r,selectedIndex:a=null,...i}=e,s=o?"vertical":"horizontal",u=l?"manual":"auto",m=a!==null,p=I(t),[y,g]=(0,ne.useReducer)(bi,{selectedIndex:a!=null?a:n,tabs:[],panels:[]}),d=(0,ne.useMemo)(()=>({selectedIndex:y.selectedIndex}),[y.selectedIndex]),f=z(r||(()=>{})),b=z(y.tabs),c=(0,ne.useMemo)(()=>({orientation:s,activation:u,...y}),[s,u,y]),E=T(P=>(g({type:1,tab:P}),()=>g({type:2,tab:P}))),D=T(P=>(g({type:3,panel:P}),()=>g({type:4,panel:P}))),A=T(P=>{U.current!==P&&f.current(P),m||g({type:0,index:P})}),U=z(m?e.selectedIndex:y.selectedIndex),_=(0,ne.useMemo)(()=>({registerTab:E,registerPanel:D,change:A}),[]);w(()=>{g({type:0,index:a!=null?a:n})},[a]),w(()=>{if(U.current===void 0||y.tabs.length<=0)return;let P=ye(y.tabs,v=>v.current);P.some((v,R)=>y.tabs[R]!==v)&&A(P.indexOf(y.tabs[U.current]))});let x={ref:p};return ne.default.createElement(Wo,null,ne.default.createElement(wn.Provider,{value:_},ne.default.createElement(In.Provider,{value:c},c.tabs.length<=0&&ne.default.createElement(Vo,{onFocus:()=>{var P,O;for(let v of b.current)if(((P=v.current)==null?void 0:P.tabIndex)===0)return(O=v.current)==null||O.focus(),!0;return!1}}),L({ourProps:x,theirProps:i,slot:d,defaultTag:yi,name:"Tabs"}))))}var Ei="div";function Pi(e,t){let{orientation:n,selectedIndex:o}=dt("Tab.List"),l=I(t);return L({ourProps:{ref:l,role:"tablist","aria-orientation":n},theirProps:e,slot:{selectedIndex:o},defaultTag:Ei,name:"Tabs.List"})}var xi="button";function vi(e,t){var P,O;let n=j(),{id:o=`headlessui-tabs-tab-${n}`,...l}=e,{orientation:r,activation:a,selectedIndex:i,tabs:s,panels:u}=dt("Tab"),m=_n("Tab"),p=dt("Tab"),y=(0,ne.useRef)(null),g=I(y,t);w(()=>m.registerTab(y),[m,y]);let d=Fn("tabs"),f=s.indexOf(y);f===-1&&(f=d);let b=f===i,c=T(v=>{var C;let R=v();if(R===2&&a==="auto"){let N=(C=me(y))==null?void 0:C.activeElement,ee=p.tabs.findIndex(K=>K.current===N);ee!==-1&&m.change(ee)}return R}),E=T(v=>{let R=s.map(N=>N.current).filter(Boolean);if(v.key===" "||v.key==="Enter"){v.preventDefault(),v.stopPropagation(),m.change(f);return}switch(v.key){case"Home":case"PageUp":return v.preventDefault(),v.stopPropagation(),c(()=>le(R,1));case"End":case"PageDown":return v.preventDefault(),v.stopPropagation(),c(()=>le(R,8))}if(c(()=>M(r,{vertical(){return v.key==="ArrowUp"?le(R,18):v.key==="ArrowDown"?le(R,20):0},horizontal(){return v.key==="ArrowLeft"?le(R,18):v.key==="ArrowRight"?le(R,20):0}}))===2)return v.preventDefault()}),D=(0,ne.useRef)(!1),A=T(()=>{var v;D.current||(D.current=!0,(v=y.current)==null||v.focus(),m.change(f),we(()=>{D.current=!1}))}),U=T(v=>{v.preventDefault()}),_=(0,ne.useMemo)(()=>({selected:b}),[b]),x={ref:g,onKeyDown:E,onMouseDown:U,onClick:A,id:o,role:"tab",type:xe(e,y),"aria-controls":(O=(P=u[f])==null?void 0:P.current)==null?void 0:O.id,"aria-selected":b,tabIndex:b?0:-1};return L({ourProps:x,theirProps:l,slot:_,defaultTag:xi,name:"Tabs.Tab"})}var Ri="div";function Si(e,t){let{selectedIndex:n}=dt("Tab.Panels"),o=I(t),l=(0,ne.useMemo)(()=>({selectedIndex:n}),[n]);return L({ourProps:{ref:o},theirProps:e,slot:l,defaultTag:Ri,name:"Tabs.Panels"})}var Oi="div",Ci=3;function Ai(e,t){var c,E,D,A;let n=j(),{id:o=`headlessui-tabs-panel-${n}`,tabIndex:l=0,...r}=e,{selectedIndex:a,tabs:i,panels:s}=dt("Tab.Panel"),u=_n("Tab.Panel"),m=(0,ne.useRef)(null),p=I(m,t);w(()=>u.registerPanel(m),[u,m]);let y=Fn("panels"),g=s.indexOf(m);g===-1&&(g=y);let d=g===a,f=(0,ne.useMemo)(()=>({selected:d}),[d]),b={ref:p,id:o,role:"tabpanel","aria-labelledby":(E=(c=i[g])==null?void 0:c.current)==null?void 0:E.id,tabIndex:d?l:-1};return!d&&((D=r.unmount)==null||D)&&!((A=r.static)!=null&&A)?ne.default.createElement(pe,{as:"span",...b}):L({ourProps:b,theirProps:r,slot:f,defaultTag:Oi,features:Ci,visible:d,name:"Tabs.Panel"})}var Li=h(vi),hi=h(gi),Di=h(Pi),Mi=h(Si),Fi=h(Ai),Ii=Object.assign(Li,{Group:hi,List:Di,Panels:Mi,Panel:Fi});var V=oe(__webpack_require__(7294),1);function Ko(e){let t={called:!1};return(...n)=>{if(!t.called)return t.called=!0,e(...n)}}function Hn(e,...t){e&&t.length>0&&e.classList.add(...t)}function kn(e,...t){e&&t.length>0&&e.classList.remove(...t)}function wi(e,t){let n=ie();if(!e)return n.dispose;let{transitionDuration:o,transitionDelay:l}=getComputedStyle(e),[r,a]=[o,l].map(s=>{let[u=0]=s.split(",").filter(Boolean).map(m=>m.includes("ms")?parseFloat(m):parseFloat(m)*1e3).sort((m,p)=>p-m);return u}),i=r+a;if(i!==0){n.group(u=>{u.setTimeout(()=>{t(),u.dispose()},i),u.addEventListener(e,"transitionrun",m=>{m.target===m.currentTarget&&u.dispose()})});let s=n.addEventListener(e,"transitionend",u=>{u.target===u.currentTarget&&(t(),s())})}else t();return n.add(()=>t()),n.dispose}function Xo(e,t,n,o){let l=n?"enter":"leave",r=ie(),a=o!==void 0?Ko(o):()=>{};l==="enter"&&(e.removeAttribute("hidden"),e.style.display="");let i=M(l,{enter:()=>t.enter,leave:()=>t.leave}),s=M(l,{enter:()=>t.enterTo,leave:()=>t.leaveTo}),u=M(l,{enter:()=>t.enterFrom,leave:()=>t.leaveFrom});return kn(e,...t.enter,...t.enterTo,...t.enterFrom,...t.leave,...t.leaveFrom,...t.leaveTo,...t.entered),Hn(e,...i,...u),r.nextFrame(()=>{kn(e,...u),Hn(e,...s),wi(e,()=>(kn(e,...i),Hn(e,...t.entered),a()))}),r.dispose}function $o({container:e,direction:t,classes:n,onStart:o,onStop:l}){let r=Ae(),a=se(),i=z(t);w(()=>{let s=ie();a.add(s.dispose);let u=e.current;if(u&&i.current!=="idle"&&r.current)return s.dispose(),o.current(i.current),s.add(Xo(u,n.current,i.current==="enter",()=>{s.dispose(),l.current(i.current)})),s.dispose},[t])}function qe(e=""){return e.split(" ").filter(t=>t.trim().length>1)}var Jt=(0,V.createContext)(null);Jt.displayName="TransitionContext";function _i(){let e=(0,V.useContext)(Jt);if(e===null)throw new Error("A <Transition.Child /> is used but it is missing a parent <Transition /> or <Transition.Root />.");return e}function Hi(){let e=(0,V.useContext)(qt);if(e===null)throw new Error("A <Transition.Child /> is used but it is missing a parent <Transition /> or <Transition.Root />.");return e}var qt=(0,V.createContext)(null);qt.displayName="NestingContext";function Yt(e){return"children"in e?Yt(e.children):e.current.filter(({el:t})=>t.current!==null).filter(({state:t})=>t==="visible").length>0}function qo(e,t){let n=z(e),o=(0,V.useRef)([]),l=Ae(),r=se(),a=T((g,d=1)=>{let f=o.current.findIndex(({el:b})=>b===g);f!==-1&&(M(d,{[0](){o.current.splice(f,1)},[1](){o.current[f].state="hidden"}}),r.microTask(()=>{var b;!Yt(o)&&l.current&&((b=n.current)==null||b.call(n))}))}),i=T(g=>{let d=o.current.find(({el:f})=>f===g);return d?d.state!=="visible"&&(d.state="visible"):o.current.push({el:g,state:"visible"}),()=>a(g,0)}),s=(0,V.useRef)([]),u=(0,V.useRef)(Promise.resolve()),m=(0,V.useRef)({enter:[],leave:[],idle:[]}),p=T((g,d,f)=>{s.current.splice(0),t&&(t.chains.current[d]=t.chains.current[d].filter(([b])=>b!==g)),t==null||t.chains.current[d].push([g,new Promise(b=>{s.current.push(b)})]),t==null||t.chains.current[d].push([g,new Promise(b=>{Promise.all(m.current[d].map(([c,E])=>E)).then(()=>b())})]),d==="enter"?u.current=u.current.then(()=>t==null?void 0:t.wait.current).then(()=>f(d)):f(d)}),y=T((g,d,f)=>{Promise.all(m.current[d].splice(0).map(([b,c])=>c)).then(()=>{var b;(b=s.current.shift())==null||b()}).then(()=>f(d))});return(0,V.useMemo)(()=>({children:o,register:i,unregister:a,onStart:p,onStop:y,wait:u,chains:m}),[i,a,o,p,y,m,u])}function ki(){}var Ni=["beforeEnter","afterEnter","beforeLeave","afterLeave"];function Jo(e){var n;let t={};for(let o of Ni)t[o]=(n=e[o])!=null?n:ki;return t}function Gi(e){let t=(0,V.useRef)(Jo(e));return(0,V.useEffect)(()=>{t.current=Jo(e)},[e]),t}var Ui="div",Yo=1;function Bi(e,t){let{beforeEnter:n,afterEnter:o,beforeLeave:l,afterLeave:r,enter:a,enterFrom:i,enterTo:s,entered:u,leave:m,leaveFrom:p,leaveTo:y,...g}=e,d=(0,V.useRef)(null),f=I(d,t),b=g.unmount?0:1,{show:c,appear:E,initial:D}=_i(),[A,U]=(0,V.useState)(c?"visible":"hidden"),_=Hi(),{register:x,unregister:P}=_,O=(0,V.useRef)(null);(0,V.useEffect)(()=>x(d),[x,d]),(0,V.useEffect)(()=>{if(b===1&&d.current){if(c&&A!=="visible"){U("visible");return}return M(A,{["hidden"]:()=>P(d),["visible"]:()=>x(d)})}},[A,d,x,P,c,b]);let v=z({enter:qe(a),enterFrom:qe(i),enterTo:qe(s),entered:qe(u),leave:qe(m),leaveFrom:qe(p),leaveTo:qe(y)}),R=Gi({beforeEnter:n,afterEnter:o,beforeLeave:l,afterLeave:r}),C=Ce();(0,V.useEffect)(()=>{if(C&&A==="visible"&&d.current===null)throw new Error("Did you forget to passthrough the `ref` to the actual DOM node?")},[d,A,C]);let N=D&&!E,ee=(()=>!C||N||O.current===c?"idle":c?"enter":"leave")(),K=Kt(0),G=T(J=>M(J,{enter:()=>{K.addFlag(8),R.current.beforeEnter()},leave:()=>{K.addFlag(4),R.current.beforeLeave()},idle:()=>{}})),X=T(J=>M(J,{enter:()=>{K.removeFlag(8),R.current.afterEnter()},leave:()=>{K.removeFlag(4),R.current.afterLeave()},idle:()=>{}})),ce=qo(()=>{U("hidden"),P(d)},_);$o({container:d,classes:v,direction:ee,onStart:z(J=>{ce.onStart(d,J,G)}),onStop:z(J=>{ce.onStop(d,J,X),J==="leave"&&!Yt(ce)&&(U("hidden"),P(d))})}),(0,V.useEffect)(()=>{N&&(b===1?O.current=null:O.current=c)},[c,N,A]);let H=g,Q={ref:f};return E&&c&&D&&(H={...H,className:yt(g.className,...v.current.enter,...v.current.enterFrom)}),V.default.createElement(qt.Provider,{value:ce},V.default.createElement(Se,{value:M(A,{["visible"]:1,["hidden"]:2})|K.flags},L({ourProps:Q,theirProps:H,defaultTag:Ui,features:Yo,visible:A==="visible",name:"Transition.Child"})))}function Vi(e,t){let{show:n,appear:o=!1,unmount:l,...r}=e,a=(0,V.useRef)(null),i=I(a,t);Ce();let s=be();if(n===void 0&&s!==null&&(n=(s&1)===1),![!0,!1].includes(n))throw new Error("A <Transition /> is used but it is missing a `show={true | false}` prop.");let[u,m]=(0,V.useState)(n?"visible":"hidden"),p=qo(()=>{m("hidden")}),[y,g]=(0,V.useState)(!0),d=(0,V.useRef)([n]);w(()=>{y!==!1&&d.current[d.current.length-1]!==n&&(d.current.push(n),g(!1))},[d,n]);let f=(0,V.useMemo)(()=>({show:n,appear:o,initial:y}),[n,o,y]);(0,V.useEffect)(()=>{if(n)m("visible");else if(!Yt(p))m("hidden");else{let D=a.current;if(!D)return;let A=D.getBoundingClientRect();A.x===0&&A.y===0&&A.width===0&&A.height===0&&m("hidden")}},[n,p]);let b={unmount:l},c=T(()=>{var D;y&&g(!1),(D=e.beforeEnter)==null||D.call(e)}),E=T(()=>{var D;y&&g(!1),(D=e.beforeLeave)==null||D.call(e)});return V.default.createElement(qt.Provider,{value:p},V.default.createElement(Jt.Provider,{value:f},L({ourProps:{...b,as:V.Fragment,children:V.default.createElement(Qo,{ref:i,...b,...r,beforeEnter:c,beforeLeave:E})},theirProps:{},defaultTag:V.Fragment,features:Yo,visible:u==="visible",name:"Transition"})))}function ji(e,t){let n=(0,V.useContext)(Jt)!==null,o=be()!==null;return V.default.createElement(V.default.Fragment,null,!n&&o?V.default.createElement(Nn,{ref:t,...e}):V.default.createElement(Qo,{ref:t,...e}))}var Nn=h(Vi),Qo=h(Bi),Wi=h(ji),Ki=Object.assign(Nn,{Child:Wi,Root:Nn});
+
+
+/***/ }),
+
+/***/ 5594:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+if (true) {
+  module.exports = __webpack_require__(5006)
+} else {}
+
+
+/***/ }),
+
+/***/ 5085:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const react_1 = __importStar(__webpack_require__(7294));
+// ------------------ Helpers
+function isNumber(n) {
+    const number = parseFloat(n);
+    return !isNaN(number) && isFinite(number);
+}
+function isPercentage(height) {
+    // Percentage height
+    return (typeof height === 'string' &&
+        height[height.length - 1] === '%' &&
+        isNumber(height.substring(0, height.length - 1)));
+}
+function hideContent(element, height) {
+    // Check for element?.style is added cause this would fail in tests (react-test-renderer)
+    // Read more here: https://github.com/Stanko/react-animate-height/issues/17
+    if (height === 0 && (element === null || element === void 0 ? void 0 : element.style)) {
+        element.style.display = 'none';
+    }
+}
+function showContent(element, height) {
+    // Check for element?.style is added cause this would fail in tests (react-test-renderer)
+    // Read more here: https://github.com/Stanko/react-animate-height/issues/17
+    if (height === 0 && (element === null || element === void 0 ? void 0 : element.style)) {
+        element.style.display = '';
+    }
+}
+const ANIMATION_STATE_CLASSES = {
+    animating: 'rah-animating',
+    animatingUp: 'rah-animating--up',
+    animatingDown: 'rah-animating--down',
+    animatingToHeightZero: 'rah-animating--to-height-zero',
+    animatingToHeightAuto: 'rah-animating--to-height-auto',
+    animatingToHeightSpecific: 'rah-animating--to-height-specific',
+    static: 'rah-static',
+    staticHeightZero: 'rah-static--height-zero',
+    staticHeightAuto: 'rah-static--height-auto',
+    staticHeightSpecific: 'rah-static--height-specific',
+};
+function getStaticStateClasses(animationStateClasses, height) {
+    return [
+        animationStateClasses.static,
+        height === 0 && animationStateClasses.staticHeightZero,
+        typeof height === 'number' && height > 0
+            ? animationStateClasses.staticHeightSpecific
+            : null,
+        height === 'auto' && animationStateClasses.staticHeightAuto,
+    ]
+        .filter((v) => v)
+        .join(' ');
+}
+// ------------------ Component
+const propsToOmitFromDiv = [
+    'animateOpacity',
+    'animationStateClasses',
+    'applyInlineTransitions',
+    'children',
+    'className',
+    'contentClassName',
+    'contentRef',
+    'delay',
+    'duration',
+    'easing',
+    'height',
+    'onHeightAnimationEnd',
+    'onHeightAnimationStart',
+    'style',
+];
+const AnimateHeight = react_1.default.forwardRef((componentProps, ref) => {
+    // const AnimateHeight = forwardRef((componentProps: AnimateHeightProps, ref) => {
+    // const AnimateHeight: React.FC<AnimateHeightProps> = (componentProps) => {
+    const { animateOpacity = false, animationStateClasses = {}, applyInlineTransitions = true, children, className = '', contentClassName, delay: userDelay = 0, duration: userDuration = 500, easing = 'ease', height, onHeightAnimationEnd, onHeightAnimationStart, style, contentRef, } = componentProps;
+    const divProps = Object.assign({}, componentProps);
+    propsToOmitFromDiv.forEach((propKey) => {
+        delete divProps[propKey];
+    });
+    // ------------------ Initialization
+    const prevHeight = (0, react_1.useRef)(height);
+    const contentElement = (0, react_1.useRef)(null);
+    const animationClassesTimeoutID = (0, react_1.useRef)();
+    const timeoutID = (0, react_1.useRef)();
+    const stateClasses = (0, react_1.useRef)(Object.assign(Object.assign({}, ANIMATION_STATE_CLASSES), animationStateClasses));
+    const isBrowser = typeof window !== 'undefined';
+    const prefersReducedMotion = (0, react_1.useRef)(isBrowser && window.matchMedia
+        ? window.matchMedia('(prefers-reduced-motion)').matches
+        : false);
+    const delay = prefersReducedMotion.current ? 0 : userDelay;
+    const duration = prefersReducedMotion.current ? 0 : userDuration;
+    let initHeight = height;
+    let initOverflow = 'visible';
+    if (typeof height === 'number') {
+        // Reset negative height to 0
+        initHeight = height < 0 ? 0 : height;
+        initOverflow = 'hidden';
+    }
+    else if (isPercentage(initHeight)) {
+        // If value is string "0%" make sure we convert it to number 0
+        initHeight = height === '0%' ? 0 : height;
+        initOverflow = 'hidden';
+    }
+    const [currentHeight, setCurrentHeight] = (0, react_1.useState)(initHeight);
+    const [overflow, setOverflow] = (0, react_1.useState)(initOverflow);
+    const [useTransitions, setUseTransitions] = (0, react_1.useState)(false);
+    const [animationStateClassNames, setAnimationStateClassNames] = (0, react_1.useState)(getStaticStateClasses(stateClasses.current, height));
+    // ------------------ Did mount
+    (0, react_1.useEffect)(() => {
+        // Hide content if height is 0 (to prevent tabbing into it)
+        hideContent(contentElement.current, currentHeight);
+        // This should be explicitly run only on mount
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    // ------------------ Height update
+    (0, react_1.useEffect)(() => {
+        if (height !== prevHeight.current && contentElement.current) {
+            showContent(contentElement.current, prevHeight.current);
+            // Cache content height
+            contentElement.current.style.overflow = 'hidden';
+            const contentHeight = contentElement.current.offsetHeight;
+            contentElement.current.style.overflow = '';
+            // set total animation time
+            const totalDuration = duration + delay;
+            let newHeight;
+            let timeoutHeight;
+            let timeoutOverflow = 'hidden';
+            let timeoutUseTransitions;
+            const isCurrentHeightAuto = prevHeight.current === 'auto';
+            if (typeof height === 'number') {
+                // Reset negative height to 0
+                newHeight = height < 0 ? 0 : height;
+                timeoutHeight = newHeight;
+            }
+            else if (isPercentage(height)) {
+                // If value is string "0%" make sure we convert it to number 0
+                newHeight = height === '0%' ? 0 : height;
+                timeoutHeight = newHeight;
+            }
+            else {
+                // If not, animate to content height
+                // and then reset to auto
+                newHeight = contentHeight; // TODO solve contentHeight = 0
+                timeoutHeight = 'auto';
+                timeoutOverflow = undefined;
+            }
+            if (isCurrentHeightAuto) {
+                // This is the height to be animated to
+                timeoutHeight = newHeight;
+                // If previous height was 'auto'
+                // set starting height explicitly to be able to use transition
+                newHeight = contentHeight;
+            }
+            // Animation classes
+            const newAnimationStateClassNames = [
+                stateClasses.current.animating,
+                (prevHeight.current === 'auto' || height < prevHeight.current) &&
+                    stateClasses.current.animatingUp,
+                (height === 'auto' || height > prevHeight.current) &&
+                    stateClasses.current.animatingDown,
+                timeoutHeight === 0 && stateClasses.current.animatingToHeightZero,
+                timeoutHeight === 'auto' &&
+                    stateClasses.current.animatingToHeightAuto,
+                typeof timeoutHeight === 'number' && timeoutHeight > 0
+                    ? stateClasses.current.animatingToHeightSpecific
+                    : null,
+            ]
+                .filter((v) => v)
+                .join(' ');
+            // Animation classes to be put after animation is complete
+            const timeoutAnimationStateClasses = getStaticStateClasses(stateClasses.current, timeoutHeight);
+            // Set starting height and animating classes
+            // When animating from 'auto' we first need to set fixed height
+            // that change should be animated
+            setCurrentHeight(newHeight);
+            setOverflow('hidden');
+            setUseTransitions(!isCurrentHeightAuto);
+            setAnimationStateClassNames(newAnimationStateClassNames);
+            // Clear timeouts
+            clearTimeout(timeoutID.current);
+            clearTimeout(animationClassesTimeoutID.current);
+            if (isCurrentHeightAuto) {
+                // When animating from 'auto' we use a short timeout to start animation
+                // after setting fixed height above
+                timeoutUseTransitions = true;
+                // Short timeout to allow rendering of the initial animation state first
+                timeoutID.current = setTimeout(() => {
+                    setCurrentHeight(timeoutHeight);
+                    setOverflow(timeoutOverflow);
+                    setUseTransitions(timeoutUseTransitions);
+                    // ANIMATION STARTS, run a callback if it exists
+                    onHeightAnimationStart === null || onHeightAnimationStart === void 0 ? void 0 : onHeightAnimationStart(timeoutHeight);
+                }, 50);
+                // Set static classes and remove transitions when animation ends
+                animationClassesTimeoutID.current = setTimeout(() => {
+                    setUseTransitions(false);
+                    setAnimationStateClassNames(timeoutAnimationStateClasses);
+                    // ANIMATION ENDS
+                    // Hide content if height is 0 (to prevent tabbing into it)
+                    hideContent(contentElement.current, timeoutHeight);
+                    // Run a callback if it exists
+                    onHeightAnimationEnd === null || onHeightAnimationEnd === void 0 ? void 0 : onHeightAnimationEnd(timeoutHeight);
+                }, totalDuration);
+            }
+            else {
+                // ANIMATION STARTS, run a callback if it exists
+                onHeightAnimationStart === null || onHeightAnimationStart === void 0 ? void 0 : onHeightAnimationStart(newHeight);
+                // Set end height, classes and remove transitions when animation is complete
+                timeoutID.current = setTimeout(() => {
+                    setCurrentHeight(timeoutHeight);
+                    setOverflow(timeoutOverflow);
+                    setUseTransitions(false);
+                    setAnimationStateClassNames(timeoutAnimationStateClasses);
+                    // ANIMATION ENDS
+                    // If height is auto, don't hide the content
+                    // (case when element is empty, therefore height is 0)
+                    if (height !== 'auto') {
+                        // Hide content if height is 0 (to prevent tabbing into it)
+                        hideContent(contentElement.current, newHeight); // TODO solve newHeight = 0
+                    }
+                    // Run a callback if it exists
+                    onHeightAnimationEnd === null || onHeightAnimationEnd === void 0 ? void 0 : onHeightAnimationEnd(newHeight);
+                }, totalDuration);
+            }
+        }
+        prevHeight.current = height;
+        return () => {
+            clearTimeout(timeoutID.current);
+            clearTimeout(animationClassesTimeoutID.current);
+        };
+        // This should be explicitly run only on height change
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [height]);
+    // ------------------ Render
+    const componentStyle = Object.assign(Object.assign({}, style), { height: currentHeight, overflow: overflow || (style === null || style === void 0 ? void 0 : style.overflow) });
+    if (useTransitions && applyInlineTransitions) {
+        componentStyle.transition = `height ${duration}ms ${easing} ${delay}ms`;
+        // Include transition passed through styles
+        if (style === null || style === void 0 ? void 0 : style.transition) {
+            componentStyle.transition = `${style.transition}, ${componentStyle.transition}`;
+        }
+        // Add webkit vendor prefix still used by opera, blackberry...
+        componentStyle.WebkitTransition = componentStyle.transition;
+    }
+    const contentStyle = {};
+    if (animateOpacity) {
+        contentStyle.transition = `opacity ${duration}ms ${easing} ${delay}ms`;
+        // Add webkit vendor prefix still used by opera, blackberry...
+        contentStyle.WebkitTransition = contentStyle.transition;
+        if (currentHeight === 0) {
+            contentStyle.opacity = 0;
+        }
+    }
+    // Check if user passed aria-hidden prop
+    const hasAriaHiddenProp = typeof divProps['aria-hidden'] !== 'undefined';
+    const ariaHidden = hasAriaHiddenProp
+        ? divProps['aria-hidden']
+        : height === 0;
+    return (react_1.default.createElement("div", Object.assign({}, divProps, { "aria-hidden": ariaHidden, className: `${animationStateClassNames} ${className}`, style: componentStyle, ref: ref }),
+        react_1.default.createElement("div", { className: contentClassName, style: contentStyle, ref: (el) => {
+                contentElement.current = el;
+                if (contentRef) {
+                    contentRef.current = el;
+                }
+            } }, children)));
+});
+exports.default = AnimateHeight;
 
 
 /***/ }),

@@ -26,6 +26,7 @@
 namespace block_xp\local\controller;
 
 use block_xp;
+use block_xp\di;
 use block_xp\local\config\config;
 use block_xp\local\serializer\level_serializer;
 use block_xp\local\serializer\levels_info_serializer;
@@ -71,12 +72,25 @@ class admin_levels_controller extends admin_route_controller {
             $levelsinfo = new \block_xp\local\xp\algo_levels_info($data, $resolver);
         }
 
-        $serializer = new levels_info_serializer(new level_serializer(new url_serializer()));
+        $urlserializer = new url_serializer();
+        $badgeurlresolver = di::get('badge_url_resolver');
+        $defaultbadges = array_reduce(range(1, 20), function($carry, $level) use ($badgeurlresolver, $urlserializer) {
+            $url = $badgeurlresolver->get_url_for_level($level);
+            $carry[$level] = $urlserializer->serialize($url);
+            return $carry;
+        }, []);
+
+        $serializer = new levels_info_serializer(new level_serializer($urlserializer));
         return [
             'block_xp/ui-levels-lazy',
             [
                 'courseId' => 0,
                 'levelsInfo' => $serializer->serialize($levelsinfo),
+                'defaultBadgeUrls' => $defaultbadges,
+                'addon' => [
+                    'activated' => di::get('addon')->is_activated(),
+                    'promourl' => $this->urlresolver->reverse('admin/promo')->out(false)
+                ]
             ]
         ];
     }
