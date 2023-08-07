@@ -75,7 +75,7 @@ $string['courserules'] = 'Course rules';
 $string['courseselectedcolon'] = 'Course selected:';
 $string['coursesettings'] = 'Course settings';
 $string['coursevisuals'] = 'Course visuals';
-$string['customizelevels'] = 'Customize the levels';
+$string['customizelevels'] = 'Customise the levels';
 $string['dangerzone'] = 'Danger zone';
 $string['defaultlevels'] = 'Default levels';
 $string['defaultrules'] = 'Default rules';
@@ -121,7 +121,7 @@ $string['enablelevelupnotif_help'] = 'When set to \'Yes\', students will be disp
 $string['enablexpgain'] = 'Enable points gain';
 $string['enablexpgain_help'] = 'When set to \'No\', nobody will earn points in the course. This is useful to freeze the points gained, or to enable it at a certain point in time.
 
-Please note that this can also be controlled more granularly using the capability _block/xp:earnxp_.';
+Please note that this can also be controlled more granularity using the capability _block/xp:earnxp_.';
 $string['entersearchterm'] = 'Enter a search term';
 $string['errorcontextcoursemismatchforwholesite'] = 'The URL of this <em>Level Up XP</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up XP</em> to be used \'For the whole site\', however this page expected it to be used \'Per course\'. Please <a href="{$a->nexturl}">click here</a> to navigate to the right page. Search for the admin setting \'block_xp_context\' if you wish to change your configuration.';
 $string['errorcontextcoursemismatchpercourse'] = 'The URL of this <em>Level Up XP</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up XP</em> to be used \'Per course\', but this page expects it to be used \'For the whole site\'. It most likely originates from a <em>block</em> that was added to the dashboard or front page while in a different configuration. You should remove the block from the latter pages, and only use the block from within individual courses.';
@@ -142,7 +142,7 @@ Additional resources:
 - [How are experience points calculated?](https://docs.levelup.plus/xp/docs/getting-started/points-calculation?ref=blockxp_help)
 - [Troubleshooting rules](https://docs.levelup.plus/xp/docs/troubleshooting/event-rule-not-working?ref=blockxp_help)
 ';
-$string['event_user_leveledup'] = 'User leveled up';
+$string['event_user_leveledup'] = 'User levelled up';
 $string['eventis'] = 'The event is {$a}';
 $string['eventname'] = 'Event name';
 $string['eventproperty'] = 'Event property';
@@ -360,7 +360,7 @@ A link to the full leaderboard will automatically be displayed below the table, 
 [xpladder hidelink]
 ```
 
-By default, the table does not include the progress column which displays the progress bar. If such column has been selected in the additional colums in the leaderboard\'s settings, you can use the argument `withprogress` to display it.
+By default, the table does not include the progress column which displays the progress bar. If such column has been selected in the additional columns in the leaderboard\'s settings, you can use the argument `withprogress` to display it.
 
 ```
 [xpladder withprogress]
@@ -432,7 +432,7 @@ $string['taskusagereport'] = 'Usage report';
 $string['total'] = 'Total';
 $string['thankyou'] = 'Thank you!';
 $string['timebetweensameactions'] = 'Time required between identical actions';
-$string['timebetweensameactions_help'] = 'The minimum time required before an action that already happened previously is accepted again. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identifical if the same post is read again. When this value is empty, or equals to zero, it does not apply.';
+$string['timebetweensameactions_help'] = 'The minimum time required before an action that already happened previously is accepted again. An action is considered identical if it was placed in the same context and object, reading a forum post will be considered identical if the same post is read again. When this value is empty, or equals to zero, it does not apply.';
 $string['timeformaxactions'] = 'Time frame for max. actions';
 $string['timeformaxactions_help'] = 'The time frame (in seconds) during which the user should not exceed a maximum number of actions.';
 $string['tinytimenow'] = 'now';
@@ -472,7 +472,7 @@ $string['xp:viewlogs'] = 'View the logs';
 $string['xp:viewreport'] = 'View the report';
 $string['xpplusrequired'] = 'XP+ required';
 $string['xpgaindisabled'] = 'Points gain disabled';
-$string['youleveledupexcl'] = 'You leveled up!';
+$string['youleveledupexcl'] = 'You levelled up!';
 $string['youreachedlevel'] = 'You have reached the level:';
 $string['youreachedlevela'] = 'You have reached level {$a}!';
 $string['yourmessage'] = 'Your message';
