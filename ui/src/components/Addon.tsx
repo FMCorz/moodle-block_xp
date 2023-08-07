@@ -13,10 +13,12 @@ export const IfAddonActivatedOrPromoEnabled: React.FC = ({ children }) => {
 export const AddonRequired = () => {
   const { promourl } = useContext(AddonContext);
   const getStr = useStrings(["xpplusrequired", "unlockfeaturewithxpplus"]);
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault();
   return (
     <a
       href="#"
       role="button"
+      onClick={handleClick} /** Older popovers cause a scroll up. */
       data-toggle="popover"
       data-placement="top"
       data-container="body"

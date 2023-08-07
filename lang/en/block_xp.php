@@ -39,6 +39,7 @@ $string['addlevel'] = 'Add level';
 $string['addoninstallationerror'] = 'We are detecting an issue with the add-on (local_xp), it does not seem to be installed properly. An administrator should finalise its installation.';
 $string['anonymity'] = 'Anonymity';
 $string['anonymity_help'] = 'This setting controls whether participants can see each other\'s name and avatar.';
+$string['apply'] = 'Apply';
 $string['awardaxpwhen'] = '<strong>{$a}</strong> points are earned when:';
 $string['badgeaward'] = 'Badge to award';
 $string['badgeawarddesc'] = 'A badge to award when the user attains the level.';

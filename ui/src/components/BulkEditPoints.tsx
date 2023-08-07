@@ -214,8 +214,7 @@ export const BulkEditPointsModal: React.FC<{
   coef?: BulkEditPointsState["coef"];
 }> = (props) => {
   const [state, dispatch] = useReducer(calculationMethodReducer, props, getDefaultBulkEditPointsState);
-  const getStr = useStrings(["quickeditpoints"], "block_xp");
-  const applyStr = useString("apply", "core");
+  const getStr = useStrings(["quickeditpoints", "apply"], "block_xp");
 
   const setMethod = (p: BulkEditPointsState["method"]) => dispatch({ type: "setMethod", payload: p });
   const setIncrement = (p: BulkEditPointsState["incr"]) => dispatch({ type: "setIncrement", payload: p });
@@ -236,7 +235,7 @@ export const BulkEditPointsModal: React.FC<{
       onClose={handleClose}
       onSave={handleSave}
       title={getStr("quickeditpoints")}
-      saveButtonText={applyStr}
+      saveButtonText={getStr("apply")}
     >
       <BulkEditPoints
         coef={state.coef}

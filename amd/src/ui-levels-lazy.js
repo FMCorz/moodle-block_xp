@@ -4633,7 +4633,8 @@ exports.IfAddonActivatedOrPromoEnabled = IfAddonActivatedOrPromoEnabled;
 var AddonRequired = function () {
     var promourl = (0, react_1.useContext)(contexts_1.AddonContext).promourl;
     var getStr = (0, hooks_1.useStrings)(["xpplusrequired", "unlockfeaturewithxpplus"]);
-    return (react_1.default.createElement("a", { href: "#", role: "button", "data-toggle": "popover", "data-placement": "top", "data-container": "body", "data-content": getStr("unlockfeaturewithxpplus", promourl), "data-html": "true", className: "xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline" }, getStr("xpplusrequired")));
+    var handleClick = function (e) { return e.preventDefault(); };
+    return (react_1.default.createElement("a", { href: "#", role: "button", onClick: handleClick, "data-toggle": "popover", "data-placement": "top", "data-container": "body", "data-content": getStr("unlockfeaturewithxpplus", promourl), "data-html": "true", className: "xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline" }, getStr("xpplusrequired")));
 };
 exports.AddonRequired = AddonRequired;
 
@@ -4790,8 +4791,7 @@ var BulkEditPoints = function (_a) {
 };
 var BulkEditPointsModal = function (props) {
     var _a = (0, react_1.useReducer)(calculationMethodReducer, props, getDefaultBulkEditPointsState), state = _a[0], dispatch = _a[1];
-    var getStr = (0, hooks_1.useStrings)(["quickeditpoints"], "block_xp");
-    var applyStr = (0, hooks_1.useString)("apply", "core");
+    var getStr = (0, hooks_1.useStrings)(["quickeditpoints", "apply"], "block_xp");
     var setMethod = function (p) { return dispatch({ type: "setMethod", payload: p }); };
     var setIncrement = function (p) { return dispatch({ type: "setIncrement", payload: p }); };
     var setBase = function (p) { return dispatch({ type: "setBase", payload: p }); };
@@ -4803,7 +4803,7 @@ var BulkEditPointsModal = function (props) {
     var handleSave = function () {
         props.onSave && props.onSave(state);
     };
-    return (react_1.default.createElement(Modal_1.SaveCancelModal, { show: props.show, onClose: handleClose, onSave: handleSave, title: getStr("quickeditpoints"), saveButtonText: applyStr },
+    return (react_1.default.createElement(Modal_1.SaveCancelModal, { show: props.show, onClose: handleClose, onSave: handleSave, title: getStr("quickeditpoints"), saveButtonText: getStr("apply") },
         react_1.default.createElement(BulkEditPoints, { coef: state.coef, base: state.base, incr: state.incr, method: state.method, onBaseChange: setBase, onCoefChange: setCoef, onIncrementChange: setIncrement, onMethodChange: setMethod })));
 };
 exports.BulkEditPointsModal = BulkEditPointsModal;

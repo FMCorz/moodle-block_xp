@@ -91,6 +91,7 @@ module.exports = {
     // Older versions of Moodle do not understand rgb(... / opacity).
         backgroundOpacity: false,
         borderOpacity: false,
+        divideOpacity: false,
         ringOpacity: false,
         textOpacity: false,
         // Removes the @base.
