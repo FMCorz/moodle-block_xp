@@ -15,7 +15,7 @@ export const SaveCancelModal: React.FC<{
 
   const setSaveButtonText = (text?: string) => {
     if (!modalRef.current || !text) return;
-    const saveBtn = modalRef.current.getFooter()[0].querySelector(modalRef.current.getActionSelector("save"));
+    const saveBtn = modalRef.current.getFooter()[0].querySelector('[data-action="save"]');
     if (!saveBtn) return;
     saveBtn.textContent = saveButtonText;
   };

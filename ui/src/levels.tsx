@@ -635,7 +635,7 @@ const dependencies = makeDependenciesDefinition([
   "core/modal_events",
   "core/modal_factory",
   "core/notification",
-  "core/toast",
+  "?core/toast",
   "jquery",
 ]);
 

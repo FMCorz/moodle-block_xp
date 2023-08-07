@@ -21,7 +21,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/notification'], function($, Notification) {
+define(['jquery', 'core/notification', 'core/log'], function($, Notification, Log) {
 
     /**
      * App launcher.
@@ -36,6 +36,7 @@ define(['jquery', 'core/notification'], function($, Notification) {
         // an object with two properties: `dependencies`, and `startApp`.
         require([mod], function(mod) {
             var dependencies = [];
+            var optionalDependencies = [];
             var dependenciesLoadedCallback = function() {
                 return;
             };
@@ -44,12 +45,28 @@ define(['jquery', 'core/notification'], function($, Notification) {
             if (mod.dependencies) {
                 dependencies = mod.dependencies.list;
                 dependenciesLoadedCallback = mod.dependencies.loader;
+                optionalDependencies = mod.dependencies.optional || [];
             }
-
             // Load the dependencies.
             var loader = $.Deferred();
             require(dependencies, function() {
-                loader.resolve(arguments);
+                const deps = [...arguments];
+                loader.resolve(deps);
+            }, function(err) {
+
+                // Modules that failed to load that are not optional are mocked.
+                err.requireModules.filter(m => optionalDependencies.includes(m)).forEach(module => {
+                    Log.warn(`block_xp launcher: Mocking optional module ${module} as it was not found.`);
+                    require.undef(module);
+                    define(module, function() {
+                        return null;
+                    });
+                });
+
+                // Retrigger the module loading.
+                require(err.requireModules, function() {
+                    // Noop.
+                });
             });
 
             // Once the deps are loaded, pass them to the the app, and start the app.

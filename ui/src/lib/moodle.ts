@@ -1,4 +1,4 @@
-import { fifoCache } from './utils';
+import { fifoCache } from "./utils";
 
 const M = (window as any).M;
 const modules: { [index: string]: any } = {};
@@ -8,14 +8,14 @@ export function getString(id: string, component: string, a?: any) {
 }
 
 export function getUrl(uri: string) {
-  if (uri[0] != '/') {
-    uri = '/' + uri;
+  if (uri[0] != "/") {
+    uri = "/" + uri;
   }
   return M.cfg.wwwroot + uri;
 }
 
 export function hasString(id: string, component: string) {
-  return typeof M.str[component] !== 'undefined' && typeof M.str[component][id] !== 'undefined';
+  return typeof M.str[component] !== "undefined" && typeof M.str[component][id] !== "undefined";
 }
 
 export function getModule(name: string): any {
@@ -36,28 +36,40 @@ export async function loadString(id: string, component: string) {
   const cacheKey = `${id}/${component}`;
   let promise = loadStringCache.get(cacheKey);
   if (!promise) {
-    promise = getModule('core/str').get_string(id, component);
+    promise = getModule("core/str").get_string(id, component);
     loadStringCache.set(cacheKey, promise as Promise<any>);
   }
   return await promise;
 }
 
 export async function loadStrings(ids: string[], component: string) {
-  const cacheKey = `${ids.join(',')}/${component}`;
+  const cacheKey = `${ids.join(",")}/${component}`;
   let promise = loadStringCache.get(cacheKey);
   if (!promise) {
-    promise = getModule('core/str').get_strings(ids.map((id) => ({ key: id, component })));
+    promise = getModule("core/str").get_strings(ids.map((id) => ({ key: id, component })));
     loadStringCache.set(cacheKey, promise as Promise<any>);
   }
   return await promise;
 }
 
 export const makeDependenciesDefinition = (names: string[]) => {
+  let optional: string[] = [];
+
+  const list = names.map((name) => {
+    const isOptional = name.charAt(0) === "?";
+    const module = isOptional ? name.substring(1) : name;
+    if (isOptional) {
+      optional.push(module);
+    }
+    return module;
+  });
+
   return {
-    list: names,
+    list,
+    optional,
     loader: (mods: any[]) => {
       mods.forEach((mod, i) => {
-        setModule(names[i], mod);
+        setModule(list[i], mod);
       });
     },
   };

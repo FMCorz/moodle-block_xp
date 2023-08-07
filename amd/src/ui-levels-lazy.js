@@ -5085,7 +5085,7 @@ var SaveCancelModal = function (_a) {
     var setSaveButtonText = function (text) {
         if (!modalRef.current || !text)
             return;
-        var saveBtn = modalRef.current.getFooter()[0].querySelector(modalRef.current.getActionSelector("save"));
+        var saveBtn = modalRef.current.getFooter()[0].querySelector('[data-action="save"]');
         if (!saveBtn)
             return;
         saveBtn.textContent = saveButtonText;
@@ -5811,7 +5811,7 @@ var dependencies = (0, moodle_1.makeDependenciesDefinition)([
     "core/modal_events",
     "core/modal_factory",
     "core/notification",
-    "core/toast",
+    "?core/toast",
     "jquery",
 ]);
 exports.dependencies = dependencies;
@@ -6200,14 +6200,14 @@ function getString(id, component, a) {
 }
 exports.getString = getString;
 function getUrl(uri) {
-    if (uri[0] != '/') {
-        uri = '/' + uri;
+    if (uri[0] != "/") {
+        uri = "/" + uri;
     }
     return M.cfg.wwwroot + uri;
 }
 exports.getUrl = getUrl;
 function hasString(id, component) {
-    return typeof M.str[component] !== 'undefined' && typeof M.str[component][id] !== 'undefined';
+    return typeof M.str[component] !== "undefined" && typeof M.str[component][id] !== "undefined";
 }
 exports.hasString = hasString;
 function getModule(name) {
@@ -6232,7 +6232,7 @@ function loadString(id, component) {
                     cacheKey = id + "/" + component;
                     promise = loadStringCache.get(cacheKey);
                     if (!promise) {
-                        promise = getModule('core/str').get_string(id, component);
+                        promise = getModule("core/str").get_string(id, component);
                         loadStringCache.set(cacheKey, promise);
                     }
                     return [4 /*yield*/, promise];
@@ -6248,10 +6248,10 @@ function loadStrings(ids, component) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    cacheKey = ids.join(',') + "/" + component;
+                    cacheKey = ids.join(",") + "/" + component;
                     promise = loadStringCache.get(cacheKey);
                     if (!promise) {
-                        promise = getModule('core/str').get_strings(ids.map(function (id) { return ({ key: id, component: component }); }));
+                        promise = getModule("core/str").get_strings(ids.map(function (id) { return ({ key: id, component: component }); }));
                         loadStringCache.set(cacheKey, promise);
                     }
                     return [4 /*yield*/, promise];
@@ -6262,11 +6262,21 @@ function loadStrings(ids, component) {
 }
 exports.loadStrings = loadStrings;
 var makeDependenciesDefinition = function (names) {
+    var optional = [];
+    var list = names.map(function (name) {
+        var isOptional = name.charAt(0) === "?";
+        var module = isOptional ? name.substring(1) : name;
+        if (isOptional) {
+            optional.push(module);
+        }
+        return module;
+    });
     return {
-        list: names,
+        list: list,
+        optional: optional,
         loader: function (mods) {
             mods.forEach(function (mod, i) {
-                setModule(names[i], mod);
+                setModule(list[i], mod);
             });
         },
     };
