@@ -50,6 +50,11 @@ class set_levels_info extends external_api {
             'levels' => new external_multiple_structure(new external_single_structure([
                 'level' => new external_value(PARAM_INT),
                 'xprequired' => new external_value(PARAM_INT),
+                'metadata' => new external_multiple_structure(new external_single_structure([
+                    'name' => new external_value(PARAM_ALPHAEXT),
+                    'value' => new external_value(PARAM_RAW, '', VALUE_OPTIONAL, null),
+                ]), '', VALUE_DEFAULT, []),
+                // Keps for backwards compatibility, but no longer used.
                 'name' => new external_value(PARAM_NOTAGS, '', VALUE_DEFAULT, ''),
                 'description' => new external_value(PARAM_NOTAGS, '', VALUE_DEFAULT, ''),
             ])),
@@ -80,12 +85,10 @@ class set_levels_info extends external_api {
     public static function execute($courseid, $levels, $algo) {
         global $USER;
         $params = self::validate_parameters(self::execute_parameters(), compact('courseid', 'levels', 'algo'));
-        extract($params); // @codingStandardsIgnoreLine
 
         // Pre-checks.
         $worldfactory = di::get('course_world_factory');
         $world = $worldfactory->get_world($courseid);
-        $config = $world->get_config();
         $courseid = $world->get_courseid(); // Ensure that we get the real course ID.
         self::validate_context($world->get_context());
 
@@ -93,15 +96,16 @@ class set_levels_info extends external_api {
         $perms = $world->get_access_permissions();
         $perms->require_manage();
 
-        // Validate the data.
-        $levelsinfo = static::clean_levels_info_data($levels, $algo);
-
-        // Serialise and encode within the config object?
-        // Or better if the levels info can save itself?
-        $config->set('levelsdata', json_encode($levelsinfo->jsonSerialize()));
+        // Save the things.
+        $writer = di::get('levels_info_writer');
+        $writer->save_for_world($world, [
+            'levels' => $params['levels'],
+            'algo' => $params['algo']
+        ]);
 
         // Reset the levels in the store, this is very specific to that store.
         // We probably could write that better in a different manner...
+        // TODO Remove this.
         $store = $world->get_store();
         if ($store instanceof \block_xp\local\xp\course_user_state_store) {
             $store->recalculate_levels();
@@ -126,6 +130,7 @@ class set_levels_info extends external_api {
      *
      * @param array $levels The levels.
      * @param array $algo The algo.
+     * @deprecated Since XP 3.15, use the levels_info_writer instead.
      */
     public static function clean_levels_info_data($levels, $algo) {
         // Sort levels.
@@ -154,7 +159,7 @@ class set_levels_info extends external_api {
                     $carry['name'][$levelnb] = core_text::substr($level['name'], 0, 40);
                 }
                 if (!empty($level['description'])) {
-                    $carry['desc'][$levelnb] = core_text::substr($level['description'], 0, 255);
+                    $carry['desc'][$levelnb] = core_text::substr($level['description'], 0, 280);
                 }
 
                 $lastpts = $xp;

@@ -62,16 +62,6 @@ class admin_levels_controller extends admin_route_controller {
     }
 
     protected function get_react_module() {
-        $config = block_xp\di::get('config');
-
-        $data = json_decode($config->get('levelsdata'), true);
-        $resolver = \block_xp\di::get('badge_url_resolver');
-        if (!$data) {
-            $levelsinfo = \block_xp\local\xp\algo_levels_info::make_from_defaults($resolver);
-        } else {
-            $levelsinfo = new \block_xp\local\xp\algo_levels_info($data, $resolver);
-        }
-
         $urlserializer = new url_serializer();
         $badgeurlresolver = di::get('badge_url_resolver');
         $defaultbadges = array_reduce(range(1, 20), function($carry, $level) use ($badgeurlresolver, $urlserializer) {
@@ -80,7 +70,8 @@ class admin_levels_controller extends admin_route_controller {
             return $carry;
         }, []);
 
-        $serializer = new levels_info_serializer(new level_serializer($urlserializer));
+        $levelsinfo = di::get('levels_info_factory')->get_default_levels_info();
+        $serializer = di::get('serializer_factory')->get_levels_info_serializer();
         return [
             'block_xp/ui-levels-lazy',
             [

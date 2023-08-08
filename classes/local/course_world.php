@@ -32,6 +32,7 @@ use moodle_database;
 use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
 use block_xp\local\factory\badge_url_resolver_course_world_factory;
+use block_xp\local\factory\levels_info_factory;
 
 /**
  * Course World.
@@ -63,10 +64,12 @@ class course_world implements world {
     protected $strategy;
     /** @var course_filter_manager The filter manager. */
     protected $filtermanager;
-    /** @var badge_url_resolver_course_world_factory The resolver factory. */
+    /** @var badge_url_resolver_course_world_factory The badge URL resolver factory. */
     protected $urlresolverfactory;
     /** @var object Observer object cache. */
     protected $statestoreobserver;
+    /** @var levels_info_factory|null The levels info factory. */
+    protected $levelsinfofactory;
 
     /**
      * Constructor.
@@ -74,12 +77,16 @@ class course_world implements world {
      * @param config $config The course config.
      * @param moodle_database $db The DB.
      * @param int $courseid The course ID.
+     * @param badge_url_resolver_course_world_factory $urlresolverfactory The badge URL resolver factory.
+     * @param levels_info_factory|null $levelsinfofactory The levels info factory.
      */
     public function __construct(config $config, moodle_database $db, $courseid,
-            badge_url_resolver_course_world_factory $urlresolverfactory) {
+            badge_url_resolver_course_world_factory $urlresolverfactory,
+            levels_info_factory $levelsinfofactory = null) {
         $this->config = $config;
         $this->courseid = $courseid;
         $this->db = $db;
+        $this->levelsinfofactory = $levelsinfofactory;
         $this->urlresolverfactory = $urlresolverfactory;
 
         // TODO We should move the context out of here, and inject the permissions instead.
@@ -165,14 +172,22 @@ class course_world implements world {
 
     public function get_levels_info() {
         if (!$this->levelsinfo) {
-            $resolver = $this->urlresolverfactory->get_url_resolver($this);
-            $config = $this->get_config();
-            $data = json_decode($config->get('levelsdata'), true);
-            if (!$data) {
-                $this->levelsinfo = \block_xp\local\xp\algo_levels_info::make_from_defaults($resolver);
+
+            // We must apply this check in case an older version of XP+ is used with this.
+            if ($this->levelsinfofactory) {
+                $this->levelsinfo = $this->levelsinfofactory->get_world_levels_info($this);
+
             } else {
-                $this->levelsinfo = new \block_xp\local\xp\algo_levels_info($data, $resolver);
+                $resolver = $this->urlresolverfactory->get_url_resolver($this);
+                $config = $this->get_config();
+                $data = json_decode($config->get('levelsdata'), true);
+                if (!$data) {
+                    $this->levelsinfo = \block_xp\local\xp\algo_levels_info::make_from_defaults($resolver);
+                } else {
+                    $this->levelsinfo = new \block_xp\local\xp\algo_levels_info($data, $resolver);
+                }
             }
+
         }
         return $this->levelsinfo;
     }

@@ -28,6 +28,11 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once(__DIR__ . '/fixtures/events.php');
 
+use block_xp\local\config\config_stack;
+use block_xp\local\config\default_course_world_config;
+use block_xp\local\config\static_config;
+use block_xp\local\course_world;
+use block_xp\local\xp\algo_levels_info;
 use block_xp\tests\base_testcase;
 
 /**
@@ -189,4 +194,139 @@ class course_world_test extends base_testcase {
         $this->assertEquals(1, $DB->count_records('block_xp', ['courseid' => $c2->id]));
         $this->assertEquals(1, $DB->count_records('block_xp_log', ['courseid' => $c2->id]));
     }
+
+    public function test_levels_info_loading() {
+        global $DB;
+        $config = new config_stack([
+            new static_config([
+                'levelsdata' => '{"xp":{"1":0,"2":120,"3":264,"4":437,"5":644,"6":893},"name":{"1":"A","2":"Level Too!",'
+                    . '"3":"aaaa","6":"X"},"desc":{"1":"a","2":"bB","3":"3","5":"five","6":"xx"},"base":120,"coef":1.2,'
+                    . '"usealgo":false}'
+            ]),
+            new default_course_world_config()
+        ]);
+        $world = new course_world($config, $DB, 1, di::get('badge_url_resolver_course_world_factory'));
+        $levelsinfo = $world->get_levels_info();
+
+        $this->assertInstanceOf(algo_levels_info::class, $levelsinfo);
+        $this->assertEquals(120, $levelsinfo->get_base());
+        $this->assertEquals(1.2, $levelsinfo->get_coef());
+        $this->assertEquals(6, $levelsinfo->get_count());
+        $this->assertEquals([
+            1 => 0,
+            2 => 120,
+            3 => 264,
+            4 => 437,
+            5 => 644,
+            6 => 893
+        ], array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+            $carry[$level->get_level()] = $level->get_xp_required();
+            return $carry;
+        }, []));
+
+        $this->assertEquals('A', $levelsinfo->get_level(1)->get_name());
+        $this->assertEquals('a', $levelsinfo->get_level(1)->get_description());
+
+        $config = new config_stack([
+            new static_config([
+                'levelsdata' => '{"xp":{"1":0,"2":120,"3":276,"4":479,"5":742,"6":1085,"7":1531,"8":2110,"9":2863,"10":3842},'
+                    . '"name":[],"desc":[],"base":120,"coef":1.3,"usealgo":true}'
+            ]),
+            new default_course_world_config()
+        ]);
+        $world = new course_world($config, $DB, 1, di::get('badge_url_resolver_course_world_factory'));
+        $levelsinfo = $world->get_levels_info();
+
+        $this->assertInstanceOf(algo_levels_info::class, $levelsinfo);
+        $this->assertEquals(120, $levelsinfo->get_base());
+        $this->assertEquals(1.3, $levelsinfo->get_coef());
+        $this->assertEquals(10, $levelsinfo->get_count());
+        $this->assertEquals([
+            1 => 0,
+            2 => 120,
+            3 => 276,
+            4 => 479,
+            5 => 742,
+            6 => 1085,
+            7 => 1531,
+            8 => 2110,
+            9 => 2863,
+            10 => 3842,
+        ], array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+            $carry[$level->get_level()] = $level->get_xp_required();
+            return $carry;
+        }, []));
+
+        $this->assertEquals('', $levelsinfo->get_level(1)->get_name());
+        $this->assertEquals('', $levelsinfo->get_level(1)->get_description());
+    }
+
+    public function test_levels_info_loading_with_factory() {
+        global $DB;
+        $config = new config_stack([
+            new static_config([
+                'levelsdata' => '{"xp":{"1":0,"2":120,"3":264,"4":437,"5":644,"6":893},"name":{"1":"A","2":"Level Too!",'
+                    . '"3":"aaaa","6":"X"},"desc":{"1":"a","2":"bB","3":"3","5":"five","6":"xx"},"base":120,"coef":1.2,'
+                    . '"usealgo":false}'
+            ]),
+            new default_course_world_config()
+        ]);
+        $world = new course_world($config, $DB, 1, di::get('badge_url_resolver_course_world_factory'),
+            di::get('levels_info_factory'));
+        $levelsinfo = $world->get_levels_info();
+
+        $this->assertInstanceOf(algo_levels_info::class, $levelsinfo);
+        $this->assertEquals(120, $levelsinfo->get_base());
+        $this->assertEquals(1.2, $levelsinfo->get_coef());
+        $this->assertEquals(6, $levelsinfo->get_count());
+        $this->assertEquals([
+            1 => 0,
+            2 => 120,
+            3 => 264,
+            4 => 437,
+            5 => 644,
+            6 => 893
+        ], array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+            $carry[$level->get_level()] = $level->get_xp_required();
+            return $carry;
+        }, []));
+
+        $this->assertEquals('A', $levelsinfo->get_level(1)->get_name());
+        $this->assertEquals('a', $levelsinfo->get_level(1)->get_description());
+
+        $config = new config_stack([
+            new static_config([
+                'levelsdata' => '{"xp":{"1":0,"2":120,"3":276,"4":479,"5":742,"6":1085,"7":1531,"8":2110,"9":2863,"10":3842},'
+                    . '"name":[],"desc":[],"base":120,"coef":1.3,"usealgo":true}'
+            ]),
+            new default_course_world_config()
+        ]);
+        $world = new course_world($config, $DB, 1, di::get('badge_url_resolver_course_world_factory'),
+            di::get('levels_info_factory'));
+        $levelsinfo = $world->get_levels_info();
+
+        $this->assertInstanceOf(algo_levels_info::class, $levelsinfo);
+        $this->assertEquals(120, $levelsinfo->get_base());
+        $this->assertEquals(1.3, $levelsinfo->get_coef());
+        $this->assertEquals(10, $levelsinfo->get_count());
+        $this->assertEquals([
+            1 => 0,
+            2 => 120,
+            3 => 276,
+            4 => 479,
+            5 => 742,
+            6 => 1085,
+            7 => 1531,
+            8 => 2110,
+            9 => 2863,
+            10 => 3842,
+        ], array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+            $carry[$level->get_level()] = $level->get_xp_required();
+            return $carry;
+        }, []));
+
+        $this->assertEquals('', $levelsinfo->get_level(1)->get_name());
+        $this->assertEquals('', $levelsinfo->get_level(1)->get_description());
+    }
+
 }

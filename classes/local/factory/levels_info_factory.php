@@ -15,17 +15,40 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Levels info factory.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2023 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_xp\local\factory;
 
-$plugin->version    = 2023080701;
-$plugin->requires   = 2017111300;   // Moodle 3.4.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_ALPHA;
-$plugin->release    = 'dev';
+use block_xp\local\world;
+
+/**
+ * Levels info factory.
+ *
+ * @package    block_xp
+ * @copyright  2023 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface levels_info_factory {
+
+    /**
+     * Get the default levels info.
+     *
+     * @return \block_xp\local\xp\levels_info
+     */
+    public function get_default_levels_info();
+
+    /**
+     * Get the world's level's info.
+     *
+     * @return \block_xp\local\xp\levels_info
+     */
+    public function get_world_levels_info(world $world);
+
+}

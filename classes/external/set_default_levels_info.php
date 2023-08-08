@@ -47,6 +47,11 @@ class set_default_levels_info extends external_api {
             'levels' => new external_multiple_structure(new external_single_structure([
                 'level' => new external_value(PARAM_INT),
                 'xprequired' => new external_value(PARAM_INT),
+                'metadata' => new external_multiple_structure(new external_single_structure([
+                    'name' => new external_value(PARAM_ALPHAEXT),
+                    'value' => new external_value(PARAM_RAW, '', VALUE_OPTIONAL, null),
+                ]), '', VALUE_DEFAULT, []),
+                // Keps for backwards compatibility, but no longer used.
                 'name' => new external_value(PARAM_NOTAGS, '', VALUE_DEFAULT, ''),
                 'description' => new external_value(PARAM_NOTAGS, '', VALUE_DEFAULT, ''),
             ])),
@@ -84,9 +89,12 @@ class set_default_levels_info extends external_api {
         self::validate_context($context);
         require_capability('moodle/site:config', $context);
 
-        $levelsinfo = set_levels_info::clean_levels_info_data($levels, $algo);
-        $config = di::get('config');
-        $config->set('levelsdata', json_encode($levelsinfo->jsonSerialize()));
+        // Save the things.
+        $writer = di::get('levels_info_writer');
+        $writer->save_defaults([
+            'levels' => $params['levels'],
+            'algo' => $params['algo']
+        ]);
 
         return (object) ['success' => true];
     }

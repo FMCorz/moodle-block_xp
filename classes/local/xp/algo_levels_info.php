@@ -25,6 +25,7 @@
 
 namespace block_xp\local\xp;
 
+use block_xp\local\factory\level_factory;
 use coding_exception;
 use context;
 
@@ -36,7 +37,7 @@ use context;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class algo_levels_info implements levels_info {
+class algo_levels_info implements levels_info, levels_info_with_algo {
 
     /** Default number of levels. */
     const DEFAULT_COUNT = 10;
@@ -65,8 +66,12 @@ class algo_levels_info implements levels_info {
     /** @var string Method */
     protected $method = self::DEFAULT_METHOD;
 
-    /** @var badge_url_resolver The resolver. */
+    /** @var badge_url_resolver|null The badge URL resolver. */
     protected $resolver;
+    /** @var level_factory|null The level factory. */
+    protected $levelfactory;
+    /** @var array The metadata keys. */
+    protected $metadatakeys = [];
 
     /**
      * @var bool Used algo?
@@ -79,21 +84,30 @@ class algo_levels_info implements levels_info {
      *
      * @param array $data Array containing both keys 'xp' and 'desc'. Indexes should start at 1.
      * @param badge_url_resolver $resolver The server resolving badge URLs if any.
+     * @param level_factory $levelfactory The level factory.
      */
-    public function __construct(array $data, badge_url_resolver $resolver = null) {
+    public function __construct(array $data, badge_url_resolver $resolver = null, level_factory $levelfactory = null) {
         $this->data = $data;
-        $this->base = $data['base'];
-        $this->coef = $data['coef'];
-        $this->incr = isset($data['incr']) ? max(0, (int) $data['incr']) : static::DEFAULT_INCR;
 
-        // For legacy reasons, if we do not know the method we fall onto what was the equivalent
+        if (!empty($data['algo'])) {
+            $this->base = isset($data['algo']['base']) ? max(1, (int) $data['algo']['base']) : static::DEFAULT_BASE;
+            $this->coef = isset($data['algo']['coef']) ? max(1, (float) $data['algo']['coef']) : static::DEFAULT_COEF;
+            $this->incr = isset($data['algo']['incr']) ? max(0, (int) $data['algo']['incr']) : static::DEFAULT_INCR;
+            $this->method = $data['algo']['method'];
+        } else {
+            $this->base = max(1, (int) $data['base']);
+            $this->coef = max(1, (float) $data['coef']);
+        }
+
+        // For legacy reasons, if we do not know the method we fall back onto what was the equivalent
         // to the previous algorithm, which is the relative method.
-        $this->method = isset($data['method']) ? $data['method'] : null;
         if (!in_array($this->method, ['flat', 'linear', 'relative'])) {
             $this->method = self::DEFAULT_METHOD;
         }
 
         $this->resolver = $resolver;
+        $this->levelfactory = $levelfactory;
+        $this->metadatakeys = array_diff(array_keys($this->data), ['v', 'xp', 'algo']);
     }
 
     /**
@@ -201,23 +215,25 @@ class algo_levels_info implements levels_info {
      * @return array
      */
     public function jsonSerialize() { // @codingStandardsIgnoreLine.
-        return [
-            'xp' => array_map(function($level) {
-                return $level->get_xp_required();
-            }, $this->get_levels()),
-            'name' => array_filter(array_map(function($level) {
-                return $level instanceof level_with_name ? $level->get_name() : null;
-            }, $this->get_levels())),
-            'desc' => array_filter(array_map(function($level) {
-                return $level instanceof level_with_description ? $level->get_description() : null;
-            }, $this->get_levels())),
-            'base' => $this->base,
-            'coef' => $this->coef,
-            'incr' => $this->incr,
-            'method' => $this->method
-        ];
+        return [];
     }
 
+    /**
+     * Get a level's metadata.
+     *
+     * @param int $level The level number.
+     * @return array Of metadata.
+     */
+    protected function get_level_metadata($level) {
+        return array_reduce($this->metadatakeys, function($carry, $name) use ($level) {
+            $carry[$name] = isset($this->data[$name]) ? $this->data[$name][$level] ?? null : null;
+            return $carry;
+        }, []);
+    }
+
+    /**
+     * Load the levels.
+     */
     protected function load() {
         if ($this->levels !== null) {
             return;
@@ -225,39 +241,59 @@ class algo_levels_info implements levels_info {
 
         $data = $this->data;
         $resolver = $this->resolver;
+        $version = $this->data['v'] ?? 1;
 
-        $this->levels = array_reduce(array_keys($data['xp']), function($carry, $key) use ($data, $resolver) {
-            $level = $key;
-            $desc = isset($data['desc'][$key]) ? $data['desc'][$key] : null;
-            $name = isset($data['name'][$key]) ? $data['name'][$key] : null;
-            if (!$resolver) {
-                $obj = new described_level($level, $data['xp'][$key], $desc, $name);
+        $levels = array_reduce(array_keys($this->data['xp']), function($carry, $key) use ($resolver, $data, $version) {
+            $level = $version === 2 ? $key + 1 : $key;
+
+            if ($this->levelfactory) {
+                $obj = $this->levelfactory->make_level(
+                    $level,
+                    $data['xp'][$key],
+                    $this->get_level_metadata($level),
+                    $resolver
+                );
+
             } else {
-                $obj = new badged_level($level, $data['xp'][$key], $desc, $resolver, $name);
+                // Legacy implementation.
+                $desc = isset($data['desc'][$key]) ? $data['desc'][$key] : null;
+                $name = isset($data['name'][$key]) ? $data['name'][$key] : null;
+                if (!$resolver) {
+                    $obj = new described_level($level, $data['xp'][$key], $desc, $name);
+                } else {
+                    $obj = new badged_level($level, $data['xp'][$key], $desc, $resolver, $name);
+                }
             }
+
             $carry[$level] = $obj;
             return $carry;
         }, []);
+
+        $this->levels = $levels;
         $this->count = count($this->levels);
     }
 
     /**
      * Make levels from the defaults.
      *
-     * @param context $badgecontext The context of the badges, if any.
+     * @param badge_url_resolver $resolver The badge URL resolver.
+     * @param level_factory $levelfactory The level factory.
      * @return self
      */
-    public static function make_from_defaults(badge_url_resolver $resolver = null) {
+    public static function make_from_defaults(badge_url_resolver $resolver = null, level_factory $levelfactory = null) {
         return new self([
-            'method' => self::DEFAULT_METHOD,
-            'base' => self::DEFAULT_BASE,
-            'coef' => self::DEFAULT_COEF,
-            'incr' => self::DEFAULT_INCR,
+            'v' => 2,
+            'algo' => [
+                'method' => self::DEFAULT_METHOD,
+                'base' => self::DEFAULT_BASE,
+                'coef' => self::DEFAULT_COEF,
+                'incr' => self::DEFAULT_INCR,
+            ],
             'xp' => self::get_xp_with_algo(self::DEFAULT_COUNT, self::DEFAULT_BASE, self::DEFAULT_COEF,
                 self::DEFAULT_METHOD, self::DEFAULT_INCR),
             'name' => [],
             'desc' => [],
-        ], $resolver);
+        ], $resolver, $levelfactory);
     }
 
     /**

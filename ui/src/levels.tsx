@@ -1,5 +1,5 @@
 import { Menu } from "@headlessui/react";
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useMemo, useReducer } from "react";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider, useMutation } from "react-query";
 import { AddonRequired, IfAddonActivatedOrPromoEnabled } from "./components/Addon";
@@ -27,6 +27,11 @@ type State = {
   pendingSave: boolean;
 };
 
+enum BADGE_TYPE {
+  Site = 1,
+  Course = 2,
+}
+
 const optionsStates = [
   {
     id: "name",
@@ -47,14 +52,14 @@ const optionsStates = [
     Icon: PaperAirplaneIconSolid,
     yes: "haspopupmessage",
     no: "hasnopopupmessage",
-    checker: (level: LevelType) => false,
+    checker: (level: LevelType) => level.popupmessage && level.popupmessage.trim().length > 0,
   },
   {
     id: "badgeaward",
     Icon: CheckBadgeIconSolid,
     yes: "hasbadgeaward",
     no: "hasnobadgeaward",
-    checker: (level: LevelType) => false,
+    checker: (level: LevelType) => Boolean(level.badgeawardid),
   },
 ];
 
@@ -107,7 +112,7 @@ const reducer = (state: State, [action, payload]: [string, any]): State => {
           if (level !== payload.level) {
             return level;
           }
-          return { ...level, description: payload.desc || null };
+          return { ...level, description: stripTags(payload.desc) || null };
         }),
       });
     case "levelNameChange":
@@ -117,7 +122,27 @@ const reducer = (state: State, [action, payload]: [string, any]): State => {
           if (level !== payload.level) {
             return level;
           }
-          return { ...level, name: payload.name || null };
+          return { ...level, name: stripTags(payload.name) || null };
+        }),
+      });
+    case "levelBadgeAwardIdChange":
+      return markPendingSave({
+        ...state,
+        levels: state.levels.map((level) => {
+          if (level !== payload.level) {
+            return level;
+          }
+          return { ...level, badgeawardid: payload.badgeawardid || null };
+        }),
+      });
+    case "levelPopupMessageChange":
+      return markPendingSave({
+        ...state,
+        levels: state.levels.map((level) => {
+          if (level !== payload.level) {
+            return level;
+          }
+          return { ...level, popupmessage: payload.popupmessage || null };
         }),
       });
     case "levelPointsChange":
@@ -187,13 +212,16 @@ const OptionField: React.FC<{ label: React.ReactNode; note?: React.ReactNode; xp
   );
 };
 
-export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls }: AppProps) => {
+export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badges = [] }: AppProps) => {
   const hasXpPlus = useAddonActivated();
   const [state, dispatch] = useReducer(reducer, { levelsInfo }, getInitialState);
   const levels = state.levels.slice(0, state.nblevels);
   const [expanded, setExpanded] = React.useState<number[]>([]);
   const [bulkEdit, setBulkEdit] = React.useState(false);
   const getStr = useStrings(optionsStatesStringIds.concat(["levelssaved", "unknownbadgea", "levelx"]));
+  const getBadgeStr = useStrings(["coursebadges", "sitebadges"], "core_badges");
+  const getCoreStr = useStrings(["other", "none"], "core");
+
   useUnloadCheck(state.pendingSave);
 
   // Prepare the save mutation.
@@ -206,11 +234,11 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
         args: {
           courseid: courseId ? courseId : undefined,
           levels: levels.map((level) => {
+            const { level: levelnum, xprequired, ...metadata } = level;
             return {
-              level: level.level,
-              xprequired: level.xprequired,
-              name: stripTags(level.name || ""),
-              description: stripTags(level.description || ""),
+              level: levelnum,
+              xprequired: xprequired,
+              metadata: Object.entries(metadata).reduce<{}[]>((carry, [name, value]) => carry.concat([{ name, value }]), []),
             };
           }),
           algo: state.algo,
@@ -229,6 +257,15 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
     }, 2500);
     return () => clearTimeout(t);
   });
+
+  const siteBadges = useMemo(
+    () => badges.filter((b) => b.type === BADGE_TYPE.Site).sort((a, b) => a.name.localeCompare(b.name)),
+    [badges]
+  );
+  const courseBadges = useMemo(
+    () => badges.filter((b) => b.type === BADGE_TYPE.Course).sort((a, b) => a.name.localeCompare(b.name)),
+    [badges]
+  );
 
   const allExpanded = expanded.length === levels.length;
   const handleCollapseExpandAll = () => {
@@ -399,8 +436,15 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
             Array.from({ length: Math.max(0, optionsStates.length - optionStates.length) }).map((_) => null)
           );
 
-          const badgeOptions: { id: number; name: string }[] = [];
-          const isBadgeValueMissing = level.badgeawardid && !badgeOptions.find((b) => b.id === level.badgeawardid);
+          const isBadgeValueMissing =
+            levelsInfo.levels[idx].badgeawardid && !badges.find((b) => b.id === levelsInfo.levels[idx].badgeawardid);
+
+          const handleBadgeAwardIdChange = (e: React.FocusEvent<HTMLSelectElement>) => {
+            dispatch(["levelBadgeAwardIdChange", { level, badgeawardid: parseInt(e.target.value, 10) || null }]);
+          };
+          const handlePopupMessageChange = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+            dispatch(["levelPopupMessageChange", { level, popupmessage: e.target.value }]);
+          };
 
           return (
             <React.Fragment key={`l${level.level}`}>
@@ -535,7 +579,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                           >
                             <Textarea
                               className="xp-w-full"
-                              onChange={(e) => {}}
+                              onBlur={handlePopupMessageChange}
                               defaultValue={level.popupmessage || ""}
                               maxLength={280}
                               rows={2}
@@ -548,15 +592,35 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                             xpPlusRequired={!hasXpPlus}
                           >
                             {courseId ? (
-                              <Select disabled={!hasXpPlus} className="xp-max-w-full xp-w-auto" value={level.badgeawardid ?? ""}>
-                                <option>--</option>
-                                {badgeOptions.map((b) => (
-                                  <option value={b.id} key={b.id}>
-                                    {b.name}
-                                  </option>
-                                ))}
+                              <Select
+                                disabled={!hasXpPlus}
+                                className="xp-max-w-full xp-w-auto"
+                                value={level.badgeawardid ?? ""}
+                                onChange={handleBadgeAwardIdChange}
+                              >
+                                <option>{getCoreStr("none")}</option>
+                                {courseBadges.length ? (
+                                  <optgroup label={getBadgeStr("coursebadges")}>
+                                    {courseBadges.map((b) => (
+                                      <option value={b.id} key={b.id}>
+                                        {b.name}
+                                      </option>
+                                    ))}
+                                  </optgroup>
+                                ) : null}
+                                {siteBadges.length ? (
+                                  <optgroup label={getBadgeStr("sitebadges")}>
+                                    {siteBadges.map((b) => (
+                                      <option value={b.id} key={b.id}>
+                                        {b.name}
+                                      </option>
+                                    ))}
+                                  </optgroup>
+                                ) : null}
                                 {isBadgeValueMissing ? (
-                                  <option value={level.badgeawardid || ""}>{getStr("unknownbadgea", level.badgeawardid)}</option>
+                                  <optgroup label={getCoreStr("other")}>
+                                    <option value={level.badgeawardid || ""}>{getStr("unknownbadgea", level.badgeawardid)}</option>
+                                  </optgroup>
                                 ) : null}
                               </Select>
                             ) : (
@@ -614,6 +678,7 @@ type AppProps = {
   levelsInfo: LevelsInfo;
   resetToDefaultsUrl?: string;
   defaultBadgeUrls: { [index: number]: null | string };
+  badges?: { id: number; name: string; type: BADGE_TYPE }[];
   addon: any;
 };
 

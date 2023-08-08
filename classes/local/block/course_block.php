@@ -182,7 +182,7 @@ class course_block extends block_base {
             foreach ($levels as $levelnum) {
 
                 // Remove invalid level number.
-                if ($levelnum < 1 || $levelnum > $levelsinfo->get_count()) {
+                if ($levelnum <= 1 || $levelnum > $levelsinfo->get_count()) {
                     $service->mark_as_notified($USER->id, $levelnum);
                     continue;
                 }
@@ -192,13 +192,7 @@ class course_block extends block_base {
                 $prevlevel = $levelsinfo->get_level(max(1, $level->get_level() - 1));
 
                 $propsid = html_writer::random_id();
-                echo $renderer->json_script([[
-                    'courseid' => $world->get_courseid(),
-                    'levelnum' => $level->get_level(),
-                    'levelname' => $level instanceof level_with_name ? $level->get_name() : null,
-                    'levelbadge' => $renderer->level_badge($level),
-                    'prevlevelbadge' => $renderer->level_badge($prevlevel),
-                ]], $propsid);
+                echo $renderer->json_script([$this->get_popup_notification_props($renderer, $world, $level, $prevlevel)], $propsid);
                 $PAGE->requires->js_call_amd('block_xp/popup-notification-queue', 'queueFromJson', ["#{$propsid}"]);
             }
         }
@@ -251,6 +245,24 @@ class course_block extends block_base {
         }
 
         return $actions;
+    }
+
+    /**
+     * Get popup notification props.
+     *
+     * @param object $renderer The renderer.
+     * @param \block_xp\local\course_world $world The world.
+     * @param \block_xp\local\xp\level $level The level.
+     * @param \block_xp\local\xp\level $level The previous level.
+     */
+    protected function get_popup_notification_props($renderer, $world, $level, $prevlevel) {
+        return [
+            'courseid' => $world->get_courseid(),
+            'levelnum' => $level->get_level(),
+            'levelname' => $level instanceof level_with_name ? $level->get_name() : null,
+            'levelbadge' => $renderer->level_badge($level),
+            'prevlevelbadge' => $renderer->level_badge($prevlevel),
+        ];
     }
 
     /**

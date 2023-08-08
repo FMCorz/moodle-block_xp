@@ -27,6 +27,8 @@ namespace block_xp;
 defined('MOODLE_INTERNAL') || die();
 
 use block_xp\local\xp\algo_levels_info;
+use block_xp\local\xp\level_with_description;
+use block_xp\local\xp\level_with_name;
 use block_xp\tests\base_testcase;
 
 /**
@@ -165,6 +167,181 @@ class algo_levels_info_test extends base_testcase {
             4 => 1650,
             5 => 2300,
         ], $result);
+    }
+
+    /**
+     * Test make from defaults.
+     *
+     * @covers \block_xp\local\xp\algo_levels_info::make_from_defaults
+     */
+    public function test_make_from_defaults() {
+        $levelsinfo = algo_levels_info::make_from_defaults();
+        $this->assertEquals(10, $levelsinfo->get_count());
+        $this->assertEquals([
+            1 => 0,
+            2 => 120,
+            3 => 276,
+            4 => 479,
+            5 => 742,
+            6 => 1085,
+            7 => 1531,
+            8 => 2110,
+            9 => 2863,
+            10 => 3842,
+        ], $this->get_xp_by_levels($levelsinfo));
+    }
+
+    /**
+     * Test make from defaults.
+     *
+     * @covers \block_xp\local\xp\algo_levels_info::make_from_defaults
+     */
+    public function test_data_parsing() {
+        $sampledata = [
+            'xp' => ['1' => 0, '2' => 120, '3' => 264, '4' => 437, '5' => 644, '6' => 893],
+            'name' =>  [
+                "1" => 'A',
+                "2" => 'Level Too!',
+                "3" => 'aaaa',
+                "6" => 'X'
+            ],
+            'desc' => [
+                '1' => 'a',
+                '2' => 'bB',
+                '3' => '3',
+                '5' => 'five',
+                '6' => 'xx'
+            ],
+            'base' => 120,
+            'coef' => 1.2,
+            'usealgo' => false
+        ];
+        $levelsinfo = new algo_levels_info($sampledata);
+
+        $this->assertEquals(120, $levelsinfo->get_base());
+        $this->assertEquals(1.2, $levelsinfo->get_coef());
+        $this->assertEquals(6, $levelsinfo->get_count());
+        $this->assertEquals([
+            1 => 0,
+            2 => 120,
+            3 => 264,
+            4 => 437,
+            5 => 644,
+            6 => 893
+        ], $this->get_xp_by_levels($levelsinfo));
+        $this->assertEquals([
+            1 => 'A',
+            2 => 'Level Too!',
+            3 => 'aaa',
+            4 => '',
+            5 => '',
+            6 => 'X'
+        ], $this->get_name_by_levels($levelsinfo));
+        $this->assertEquals([
+            1 => 'a',
+            2 => 'Bb',
+            3 => '3',
+            4 => '',
+            5 => 'five',
+            6 => 'xx'
+        ], $this->get_description_by_levels($levelsinfo));
+
+        $sampledata = [
+            'xp' => [
+                '1' => 0,
+                '2' => 120,
+                '3' => 276,
+                '4' => 479,
+                '5' => 742,
+                '6' => 1085,
+                '7' => 1531,
+                '8' => 2110,
+                '9' => 2863,
+                '10' => 3842
+            ],
+            'name' => [],
+            'desc' => [],
+            'base' => 120,
+            'coef' => 1.3,
+            'usealgo' => true
+        ];
+        $levelsinfo = new algo_levels_info($sampledata);
+
+        $this->assertEquals(120, $levelsinfo->get_base());
+        $this->assertEquals(1.3, $levelsinfo->get_coef());
+        $this->assertEquals(10, $levelsinfo->get_count());
+        $this->assertEquals([
+            1 => 0,
+            2 => 120,
+            3 => 276,
+            4 => 479,
+            5 => 742,
+            6 => 1085,
+            7 => 1531,
+            8 => 2110,
+            9 => 2863,
+            10 => 3842,
+        ], $this->get_xp_by_levels($levelsinfo));
+        $this->assertEquals([
+            1 => '',
+            2 => '',
+            3 => '',
+            4 => '',
+            5 => '',
+            6 => '',
+            7 => '',
+            8 => '',
+            9 => '',
+            10 => '',
+        ], $this->get_name_by_levels($levelsinfo));
+        $this->assertEquals([
+            1 => '',
+            2 => '',
+            3 => '',
+            4 => '',
+            5 => '',
+            6 => '',
+            7 => '',
+            8 => '',
+            9 => '',
+            10 => '',
+        ], $this->get_description_by_levels($levelsinfo));
+    }
+
+    /**
+     * Get the XP by levels.
+     *
+     * @param algo_levels_info $levelsinfo The levels info.
+     */
+    protected function get_xp_by_levels($levelsinfo) {
+        return array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+            $carry[$level->get_level()] = $level->get_xp_required();
+            return $carry;
+        }, []);
+    }
+
+    /**
+     * Get the description by levels.
+     *
+     * @param algo_levels_info $levelsinfo The levels info.
+     */
+    protected function get_description_by_levels($levelsinfo) {
+        return array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+            $carry[$level->get_level()] = $level instanceof level_with_description ? $level->get_description() : '';
+            return $carry;
+        }, []);
+    }
+
+    /**
+     * Get the names by levels.
+     *
+     * @param algo_levels_info $levelsinfo The levels info.
+     */
+    protected function get_name_by_levels($levelsinfo) {
+        return array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+            $carry[$level->get_level()] = $level instanceof level_with_name ? $level->get_name() : '';
+            return $carry;
+        }, []);
     }
 
 }

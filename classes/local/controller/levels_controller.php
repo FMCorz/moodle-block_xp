@@ -30,8 +30,6 @@ use block_xp\local\routing\url;
 use block_xp\local\serializer\level_serializer;
 use block_xp\local\serializer\levels_info_serializer;
 use block_xp\local\serializer\url_serializer;
-use block_xp\local\xp\algo_levels_info;
-use coding_exception;
 
 /**
  * Levels controller class.
@@ -75,13 +73,10 @@ class levels_controller extends page_controller {
     }
 
     protected function get_react_module() {
+        global $USER;
+
         $world = $this->world;
         $courseid = $world->get_courseid();
-
-        $levelsinfo = $world->get_levels_info();
-        if (!$levelsinfo instanceof algo_levels_info) {
-            throw new coding_exception("Expecting algo_levels_info class");
-        }
 
         $urlserializer = new url_serializer();
         $badgeurlresolver = di::get('badge_url_resolver_course_world_factory')->get_url_resolver($world);
@@ -91,7 +86,8 @@ class levels_controller extends page_controller {
             return $carry;
         }, []);
 
-        $serializer = new levels_info_serializer(new level_serializer($urlserializer));
+        $levelsinfo = di::get('levels_info_factory')->get_world_levels_info($this->world);
+        $serializer = di::get('serializer_factory')->get_levels_info_serializer();
         return [
             'block_xp/ui-levels-lazy',
             [
@@ -99,6 +95,7 @@ class levels_controller extends page_controller {
                 'levelsInfo' => $serializer->serialize($levelsinfo),
                 'resetToDefaultsUrl' => $this->get_reset_url()->out(false),
                 'defaultBadgeUrls' => $defaultbadges,
+                'badges' => array_values(di::get('badge_manager')->get_compatible_badges($world->get_context(), $USER->id)),
                 'addon' => [
                     'activated' => di::get('addon')->is_activated(),
                     'enablepromo' => (bool) di::get('config')->get('enablepromoincourses'),

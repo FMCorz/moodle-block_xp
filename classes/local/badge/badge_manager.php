@@ -15,17 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Badge manager.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2023 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_xp\local\badge;
 
-$plugin->version    = 2023080701;
-$plugin->requires   = 2017111300;   // Moodle 3.4.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_ALPHA;
-$plugin->release    = 'dev';
+/**
+ * Badge manager.
+ *
+ * @package    block_xp
+ * @copyright  2023 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class badge_manager {
+
+    public function award_badge($userid, $badgeid, $issuerid) {
+    }
+
+    public function get_compatible_badges(\context $context, $userid) {
+        return [];
+    }
+
+}

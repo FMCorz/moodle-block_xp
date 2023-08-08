@@ -28,7 +28,7 @@ namespace block_xp\local\serializer;
 use block_xp\external\external_multiple_structure;
 use block_xp\external\external_single_structure;
 use block_xp\external\external_value;
-use block_xp\local\xp\algo_levels_info;
+use block_xp\local\xp\levels_info_with_algo;
 
 /**
  * Serializer.
@@ -61,7 +61,7 @@ class levels_info_serializer implements serializer_with_read_structure {
             'count' => $info->get_count(),
             // Use array_values() to drop the indexes for json_encode to later create an array.
             'levels' => array_values(array_map([$this->levelserializer, 'serialize'], $info->get_levels())),
-            'algo' => $info instanceof algo_levels_info ? [
+            'algo' => $info instanceof levels_info_with_algo ? [
                 'base' => $info->get_base(),
                 'coef' => $info->get_coef(),
                 'incr' => $info->get_incr(),

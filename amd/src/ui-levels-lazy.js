@@ -5451,6 +5451,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -5485,6 +5496,11 @@ var hooks_1 = __webpack_require__(7909);
 var levels_1 = __webpack_require__(8839);
 var moodle_1 = __webpack_require__(3422);
 var utils_1 = __webpack_require__(6926);
+var BADGE_TYPE;
+(function (BADGE_TYPE) {
+    BADGE_TYPE[BADGE_TYPE["Site"] = 1] = "Site";
+    BADGE_TYPE[BADGE_TYPE["Course"] = 2] = "Course";
+})(BADGE_TYPE || (BADGE_TYPE = {}));
 var optionsStates = [
     {
         id: "name",
@@ -5505,14 +5521,14 @@ var optionsStates = [
         Icon: Icons_1.PaperAirplaneIconSolid,
         yes: "haspopupmessage",
         no: "hasnopopupmessage",
-        checker: function (level) { return false; },
+        checker: function (level) { return level.popupmessage && level.popupmessage.trim().length > 0; },
     },
     {
         id: "badgeaward",
         Icon: Icons_1.CheckBadgeIconSolid,
         yes: "hasbadgeaward",
         no: "hasnobadgeaward",
-        checker: function (level) { return false; },
+        checker: function (level) { return Boolean(level.badgeawardid); },
     },
 ];
 var optionsStatesStringIds = optionsStates.map(function (o) { return o.yes; }).concat(optionsStates.map(function (o) { return o.no; }));
@@ -5546,14 +5562,28 @@ var reducer = function (state, _a) {
                     if (level !== payload.level) {
                         return level;
                     }
-                    return __assign(__assign({}, level), { description: payload.desc || null });
+                    return __assign(__assign({}, level), { description: (0, utils_1.stripTags)(payload.desc) || null });
                 }) }));
         case "levelNameChange":
             return markPendingSave(__assign(__assign({}, state), { levels: state.levels.map(function (level) {
                     if (level !== payload.level) {
                         return level;
                     }
-                    return __assign(__assign({}, level), { name: payload.name || null });
+                    return __assign(__assign({}, level), { name: (0, utils_1.stripTags)(payload.name) || null });
+                }) }));
+        case "levelBadgeAwardIdChange":
+            return markPendingSave(__assign(__assign({}, state), { levels: state.levels.map(function (level) {
+                    if (level !== payload.level) {
+                        return level;
+                    }
+                    return __assign(__assign({}, level), { badgeawardid: payload.badgeawardid || null });
+                }) }));
+        case "levelPopupMessageChange":
+            return markPendingSave(__assign(__assign({}, state), { levels: state.levels.map(function (level) {
+                    if (level !== payload.level) {
+                        return level;
+                    }
+                    return __assign(__assign({}, level), { popupmessage: payload.popupmessage || null });
                 }) }));
         case "levelPointsChange":
             nextLevel = (0, levels_1.getNextLevel)(state.levels, payload.level, state.nblevels);
@@ -5599,13 +5629,15 @@ var OptionField = function (_a) {
         note ? react_2.default.createElement("div", { className: "xp-text-gray-500 xp-mt-1" }, note) : null));
 };
 var App = function (_a) {
-    var courseId = _a.courseId, levelsInfo = _a.levelsInfo, resetToDefaultsUrl = _a.resetToDefaultsUrl, defaultBadgeUrls = _a.defaultBadgeUrls;
+    var courseId = _a.courseId, levelsInfo = _a.levelsInfo, resetToDefaultsUrl = _a.resetToDefaultsUrl, defaultBadgeUrls = _a.defaultBadgeUrls, _b = _a.badges, badges = _b === void 0 ? [] : _b;
     var hasXpPlus = (0, hooks_1.useAddonActivated)();
-    var _b = (0, react_2.useReducer)(reducer, { levelsInfo: levelsInfo }, getInitialState), state = _b[0], dispatch = _b[1];
+    var _c = (0, react_2.useReducer)(reducer, { levelsInfo: levelsInfo }, getInitialState), state = _c[0], dispatch = _c[1];
     var levels = state.levels.slice(0, state.nblevels);
-    var _c = react_2.default.useState([]), expanded = _c[0], setExpanded = _c[1];
-    var _d = react_2.default.useState(false), bulkEdit = _d[0], setBulkEdit = _d[1];
+    var _d = react_2.default.useState([]), expanded = _d[0], setExpanded = _d[1];
+    var _e = react_2.default.useState(false), bulkEdit = _e[0], setBulkEdit = _e[1];
     var getStr = (0, hooks_1.useStrings)(optionsStatesStringIds.concat(["levelssaved", "unknownbadgea", "levelx"]));
+    var getBadgeStr = (0, hooks_1.useStrings)(["coursebadges", "sitebadges"], "core_badges");
+    var getCoreStr = (0, hooks_1.useStrings)(["other", "none"], "core");
     (0, hooks_1.useUnloadCheck)(state.pendingSave);
     // Prepare the save mutation.
     var mutation = (0, react_query_1.useMutation)(function () {
@@ -5617,11 +5649,14 @@ var App = function (_a) {
                 args: {
                     courseid: courseId ? courseId : undefined,
                     levels: levels.map(function (level) {
+                        var levelnum = level.level, xprequired = level.xprequired, metadata = __rest(level, ["level", "xprequired"]);
                         return {
-                            level: level.level,
-                            xprequired: level.xprequired,
-                            name: (0, utils_1.stripTags)(level.name || ""),
-                            description: (0, utils_1.stripTags)(level.description || ""),
+                            level: levelnum,
+                            xprequired: xprequired,
+                            metadata: Object.entries(metadata).reduce(function (carry, _a) {
+                                var name = _a[0], value = _a[1];
+                                return carry.concat([{ name: name, value: value }]);
+                            }, []),
                         };
                     }),
                     algo: state.algo,
@@ -5639,6 +5674,8 @@ var App = function (_a) {
         }, 2500);
         return function () { return clearTimeout(t); };
     });
+    var siteBadges = (0, react_2.useMemo)(function () { return badges.filter(function (b) { return b.type === BADGE_TYPE.Site; }).sort(function (a, b) { return a.name.localeCompare(b.name); }); }, [badges]);
+    var courseBadges = (0, react_2.useMemo)(function () { return badges.filter(function (b) { return b.type === BADGE_TYPE.Course; }).sort(function (a, b) { return a.name.localeCompare(b.name); }); }, [badges]);
     var allExpanded = expanded.length === levels.length;
     var handleCollapseExpandAll = function () {
         setExpanded(allExpanded ? [] : levels.map(function (l) { return l.level; }));
@@ -5725,8 +5762,13 @@ var App = function (_a) {
                 ? optionsStates.filter(function (o) { return ["name", "description", courseId ? null : "badgeawardid"].includes(o.id); })
                 : optionsStates;
             optionStates = optionStates.concat(Array.from({ length: Math.max(0, optionsStates.length - optionStates.length) }).map(function (_) { return null; }));
-            var badgeOptions = [];
-            var isBadgeValueMissing = level.badgeawardid && !badgeOptions.find(function (b) { return b.id === level.badgeawardid; });
+            var isBadgeValueMissing = levelsInfo.levels[idx].badgeawardid && !badges.find(function (b) { return b.id === levelsInfo.levels[idx].badgeawardid; });
+            var handleBadgeAwardIdChange = function (e) {
+                dispatch(["levelBadgeAwardIdChange", { level: level, badgeawardid: parseInt(e.target.value, 10) || null }]);
+            };
+            var handlePopupMessageChange = function (e) {
+                dispatch(["levelPopupMessageChange", { level: level, popupmessage: e.target.value }]);
+            };
             return (react_2.default.createElement(react_2.default.Fragment, { key: "l" + level.level },
                 react_2.default.createElement("div", { className: "xp-relative xp-min-h-28 xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 xp-p-3 xp-overflow-hidden" },
                     react_2.default.createElement("div", { className: "xp-absolute xp--top-4 xp--left-8 xp-text-[10rem] xp-text-gray-50 xp-leading-none xp-pointer-events-none" }, level.level),
@@ -5774,11 +5816,13 @@ var App = function (_a) {
                                 react_2.default.createElement(Input_1.Textarea, { className: "xp-w-full", onBlur: function (e) { return handleLevelDescChange(level, e.target.value); }, defaultValue: level.description || "", maxLength: 280, rows: 2 })),
                             react_2.default.createElement(Addon_1.IfAddonActivatedOrPromoEnabled, null, level.level > 1 ? (react_2.default.createElement(react_2.default.Fragment, null,
                                 react_2.default.createElement(OptionField, { label: react_2.default.createElement(Str_1.default, { id: "popupnotificationmessage" }), note: react_2.default.createElement(Str_1.default, { id: "popupnotificationmessagedesc" }), xpPlusRequired: !hasXpPlus },
-                                    react_2.default.createElement(Input_1.Textarea, { className: "xp-w-full", onChange: function (e) { }, defaultValue: level.popupmessage || "", maxLength: 280, rows: 2, disabled: !hasXpPlus })),
-                                react_2.default.createElement(OptionField, { label: react_2.default.createElement(Str_1.default, { id: "badgeaward" }), note: react_2.default.createElement(Str_1.default, { id: "badgeawarddesc" }), xpPlusRequired: !hasXpPlus }, courseId ? (react_2.default.createElement(Input_1.Select, { disabled: !hasXpPlus, className: "xp-max-w-full xp-w-auto", value: (_a = level.badgeawardid) !== null && _a !== void 0 ? _a : "" },
-                                    react_2.default.createElement("option", null, "--"),
-                                    badgeOptions.map(function (b) { return (react_2.default.createElement("option", { value: b.id, key: b.id }, b.name)); }),
-                                    isBadgeValueMissing ? (react_2.default.createElement("option", { value: level.badgeawardid || "" }, getStr("unknownbadgea", level.badgeawardid))) : null)) : (react_2.default.createElement("div", { className: "alert alert-info xp-m-0" },
+                                    react_2.default.createElement(Input_1.Textarea, { className: "xp-w-full", onBlur: handlePopupMessageChange, defaultValue: level.popupmessage || "", maxLength: 280, rows: 2, disabled: !hasXpPlus })),
+                                react_2.default.createElement(OptionField, { label: react_2.default.createElement(Str_1.default, { id: "badgeaward" }), note: react_2.default.createElement(Str_1.default, { id: "badgeawarddesc" }), xpPlusRequired: !hasXpPlus }, courseId ? (react_2.default.createElement(Input_1.Select, { disabled: !hasXpPlus, className: "xp-max-w-full xp-w-auto", value: (_a = level.badgeawardid) !== null && _a !== void 0 ? _a : "", onChange: handleBadgeAwardIdChange },
+                                    react_2.default.createElement("option", null, getCoreStr("none")),
+                                    courseBadges.length ? (react_2.default.createElement("optgroup", { label: getBadgeStr("coursebadges") }, courseBadges.map(function (b) { return (react_2.default.createElement("option", { value: b.id, key: b.id }, b.name)); }))) : null,
+                                    siteBadges.length ? (react_2.default.createElement("optgroup", { label: getBadgeStr("sitebadges") }, siteBadges.map(function (b) { return (react_2.default.createElement("option", { value: b.id, key: b.id }, b.name)); }))) : null,
+                                    isBadgeValueMissing ? (react_2.default.createElement("optgroup", { label: getCoreStr("other") },
+                                        react_2.default.createElement("option", { value: level.badgeawardid || "" }, getStr("unknownbadgea", level.badgeawardid)))) : null)) : (react_2.default.createElement("div", { className: "alert alert-info xp-m-0" },
                                     react_2.default.createElement(Str_1.default, { id: "cannotbesetindefaults" })))))) : (react_2.default.createElement("div", null,
                                 react_2.default.createElement("div", { className: "xp-text-sm xp-text-gray-500 xp-italic" },
                                     react_2.default.createElement(Str_1.default, { id: "levelupoptionsunavailableforlevelone" }))))))))));

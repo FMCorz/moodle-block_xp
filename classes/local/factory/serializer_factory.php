@@ -15,17 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Serializer factory.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2023 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_xp\local\factory;
 
-$plugin->version    = 2023080701;
-$plugin->requires   = 2017111300;   // Moodle 3.4.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_ALPHA;
-$plugin->release    = 'dev';
+use block_xp\local\serializer\level_serializer;
+use block_xp\local\serializer\levels_info_serializer;
+use block_xp\local\serializer\url_serializer;
+
+/**
+ * Serializer factory.
+ *
+ * @package    block_xp
+ * @copyright  2023 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class serializer_factory {
+
+    public function get_levels_info_serializer() {
+        return new levels_info_serializer($this->get_level_serializer());
+    }
+
+    public function get_level_serializer() {
+        return new level_serializer(new url_serializer());
+    }
+
+}
