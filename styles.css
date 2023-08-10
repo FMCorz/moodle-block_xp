@@ -728,17 +728,17 @@
 .block_xp .xp-animation-delay-\[1\.5s\,2\.5s\,3\.5s\] {
     animation-delay: 1.5s,2.5s,3.5s;
 }
-.block_xp .xp-animation-delay-\[7s\] {
-    animation-delay: 7s;
+.block_xp .xp-animation-delay-\[6s\] {
+    animation-delay: 6s;
 }
 .block_xp .xp-animation-delay-\[3\.8s\] {
     animation-delay: 3.8s;
 }
+.block_xp .xp-animation-delay-\[4\.5s\] {
+    animation-delay: 4.5s;
+}
 .block_xp .xp-animation-delay-\[5s\] {
     animation-delay: 5s;
-}
-.block_xp .xp-animation-delay-\[6s\] {
-    animation-delay: 6s;
 }
 
 /** Cancel overflow of .no-overflow */
