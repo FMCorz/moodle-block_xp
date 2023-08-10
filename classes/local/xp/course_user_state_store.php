@@ -337,7 +337,7 @@ class course_user_state_store implements course_state_store,
 
         if ($record = $this->exists($id)) {
             $prexp = $record->xp;
-            $postxp = $prexp + $amount;
+            $postxp = $amount;
 
             $sql = "UPDATE {{$this->table}}
                        SET xp = :xp,
