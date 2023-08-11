@@ -289,8 +289,9 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
                 'coef' => self::DEFAULT_COEF,
                 'incr' => self::DEFAULT_INCR,
             ],
-            'xp' => self::get_xp_with_algo(self::DEFAULT_COUNT, self::DEFAULT_BASE, self::DEFAULT_COEF,
-                self::DEFAULT_METHOD, self::DEFAULT_INCR),
+            // Version 2 does not index points by level, version 1 used to.
+            'xp' => array_values(self::get_xp_with_algo(self::DEFAULT_COUNT, self::DEFAULT_BASE, self::DEFAULT_COEF,
+                self::DEFAULT_METHOD, self::DEFAULT_INCR)),
             'name' => [],
             'desc' => [],
         ], $resolver, $levelfactory);
