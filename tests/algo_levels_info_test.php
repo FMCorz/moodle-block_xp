@@ -150,14 +150,14 @@ class algo_levels_info_test extends base_testcase {
         $this->assertEquals([
             1 => 0,
             2 => 100,
-            3 => 210,
-            4 => 330,
-            5 => 460,
-            6 => 600,
-            7 => 750,
-            8 => 910,
-            9 => 1080,
-            10 => 1260,
+            3 => 220,
+            4 => 360,
+            5 => 520,
+            6 => 700,
+            7 => 900,
+            8 => 1120,
+            9 => 1360,
+            10 => 1620,
         ], $result);
         $result = algo_levels_info::get_xp_with_algo(5, 500, 1, 'linear', 50);
         $this->assertEquals([
@@ -194,7 +194,7 @@ class algo_levels_info_test extends base_testcase {
     /**
      * Test make from defaults.
      *
-     * @covers \block_xp\local\xp\algo_levels_info::make_from_defaults
+     * @covers \block_xp\local\xp\algo_levels_info
      */
     public function test_data_parsing() {
         $sampledata = [
@@ -232,14 +232,14 @@ class algo_levels_info_test extends base_testcase {
         $this->assertEquals([
             1 => 'A',
             2 => 'Level Too!',
-            3 => 'aaa',
+            3 => 'aaaa',
             4 => '',
             5 => '',
             6 => 'X'
         ], $this->get_name_by_levels($levelsinfo));
         $this->assertEquals([
             1 => 'a',
-            2 => 'Bb',
+            2 => 'bB',
             3 => '3',
             4 => '',
             5 => 'five',

@@ -340,7 +340,17 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
             } else if ($i == 2) {
                 $list[$i] = $base;
             } else {
-                $list[$i] = $base + round($list[$i - 1] * $coef);
+
+                // Before XP 3.15, the calculation used to be base + round(prevLevel * coef),
+                // but in the UI we had switched to the values below (since XP 3.11). So for consistency
+                // we're now using the same method here. This change will only affect default levels in
+                // the admin, that have never been edited before, and new courses. The difference caused
+                // is only +1 point from level 5, to +4 points at level 10, so not dramatic.
+                if ($coef <= 1) {
+                    $list[$i] = $base * ($i - 1);
+                } else {
+                    $list[$i] = round($base * ((1 - $coef ** ($i - 1)) / (1 - $coef)));
+                }
             }
         }
         return $list;
