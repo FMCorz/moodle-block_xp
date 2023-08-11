@@ -183,6 +183,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
         global $DB;
         $data['courseid'] = $this->get_courseid();
         $data['userid'] = $this->get_mappingid('user', $data['userid']);
+        $data['lvl'] = 1; // This is no longer used, and is hardcoded to 1.
         if ($DB->record_exists('block_xp', array('courseid' => $data['courseid'], 'userid' => $data['userid']))) {
             $this->log("block_xp: XP of user with id '{$data['userid']}' not restored, existing entry found", backup::LOG_DEBUG);
             return;

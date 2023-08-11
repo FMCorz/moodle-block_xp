@@ -443,7 +443,6 @@ class privacy_provider_test extends base_testcase {
 
         $this->assertNotEmpty($level);
         $this->assertEquals($userstate->get_xp(), $level->points);
-        $this->assertEquals($userstate->get_level()->get_level(), $level->level);
         $this->assertEquals($u1->id, $level->userid);
 
         $this->assertNotEmpty($logs);

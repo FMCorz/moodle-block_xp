@@ -552,5 +552,15 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2022090112, 'xp');
     }
 
+    if ($oldversion < 2023080702) {
+
+        // The lvl column is deprecated, but kept to avoid breaking external integrations.
+        // Nevertheless, all values are set to the default of 1 to avoid confusion with mixed data.
+        $DB->set_field('block_xp', 'lvl', 1, []);
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2023080702, 'xp');
+    }
+
     return true;
 }

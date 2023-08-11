@@ -103,14 +103,6 @@ class set_levels_info extends external_api {
             'algo' => $params['algo']
         ]);
 
-        // Reset the levels in the store, this is very specific to that store.
-        // We probably could write that better in a different manner...
-        // TODO Remove this.
-        $store = $world->get_store();
-        if ($store instanceof \block_xp\local\xp\course_user_state_store) {
-            $store->recalculate_levels();
-        }
-
         return (object) ['success' => true];
     }
 
@@ -130,7 +122,7 @@ class set_levels_info extends external_api {
      *
      * @param array $levels The levels.
      * @param array $algo The algo.
-     * @deprecated Since XP 3.15, use the levels_info_writer instead.
+     * @deprecated Since Level Up XP 3.15, use the levels_info_writer instead.
      */
     public static function clean_levels_info_data($levels, $algo) {
         // Sort levels.

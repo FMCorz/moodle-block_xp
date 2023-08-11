@@ -116,6 +116,7 @@ class report_table extends table_sql {
         $this->define_headers(array_values($columnsdef));
         $this->init_sql();
 
+        // Level sorting is a fake column sorting that uses the 'xp' column under the hood.
         $this->sortable(true, 'lvl', SORT_DESC);
         $this->no_sorting('userpic');
         $this->no_sorting('progress');
@@ -165,8 +166,7 @@ class report_table extends table_sql {
 
         // Define SQL.
         $this->sql = new stdClass();
-        $this->sql->fields = user_utils::picture_fields('u') . ', u.idnumber, u.email, u.username, ' .
-            'COALESCE(x.lvl, 1) AS lvl, x.xp, ' .
+        $this->sql->fields = user_utils::picture_fields('u') . ', u.idnumber, u.email, u.username, x.xp, ' .
             context_helper::get_preload_record_columns_sql('ctx');
         $this->sql->from = "{user} u
                        JOIN {context} ctx
@@ -366,7 +366,7 @@ class report_table extends table_sql {
 
         // We use a foreach to maintain the order in which the fields were defined.
         foreach ($cols as $field => $sortorder) {
-            if ($field == 'xp') {
+            if ($field === 'xp' || $field === 'lvl') {
                 $field = 'COALESCE(xp, 0)';
             }
             $newcols[$field] = $sortorder;
@@ -386,9 +386,9 @@ class report_table extends table_sql {
         // It should never be empty, but if it is then never mind...
         if (!empty($orderby)) {
 
-            // Ensure that sorting by level sub sorts by xp to avoid random ordering.
-            if (array_key_exists('lvl', $orderby) && !array_key_exists('xp', $orderby)) {
-                $orderby['xp'] = $orderby['lvl'];
+            // If we are sorting by lvl, remove the xp column as we treat them as alises.
+            if (array_key_exists('lvl', $orderby)) {
+                unset($orderby['xp']);
             }
 
             // Always add the user ID, to avoid random ordering.

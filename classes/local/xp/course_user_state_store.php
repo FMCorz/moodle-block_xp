@@ -39,9 +39,10 @@ use block_xp\local\utils\user_utils;
 /**
  * User state course store.
  *
- * This is a repository of XP of each user. It also stores the level of
- * each user in the 'lvl' column, that only for ordering purposes. When
- * you change the levels_info, you must update the stored levels.
+ * This is a repository of XP of each user.
+ *
+ * It also used to store the level of each user in the 'lvl' column, for ordering purposes,
+ * but no longer does. When levels_info were changed, the levels had to be updated.
  *
  * @package    block_xp
  * @copyright  2017 Frédéric Massart
@@ -170,13 +171,6 @@ class course_user_state_store implements course_state_store,
                 'userid' => $id
             ];
             $this->db->execute($sql, $params);
-
-            // Non-atomic level update. We best guess what the XP should be, and go from there.
-            $newxp = $record->xp + $amount;
-            $newlevel = $this->levelsinfo->get_level_from_xp($newxp)->get_level();
-            if ($record->lvl != $newlevel) {
-                $this->db->set_field($this->table, 'lvl', $newlevel, ['courseid' => $this->courseid, 'userid' => $id]);
-            }
         } else {
             $this->insert($id, $amount);
         }
@@ -207,7 +201,6 @@ class course_user_state_store implements course_state_store,
         $record->courseid = $this->courseid;
         $record->userid = $id;
         $record->xp = $amount;
-        $record->lvl = $this->levelsinfo->get_level_from_xp($amount)->get_level();
         $this->db->insert_record($this->table, $record);
     }
 
@@ -274,18 +267,11 @@ class course_user_state_store implements course_state_store,
      *
      * Remember, these values are used for ordering only.
      *
+     * @deprecated Since Level Up XP 3.15 without replacement.
      * @return void
      */
     public function recalculate_levels() {
-        $rows = $this->db->get_recordset($this->table, ['courseid' => $this->courseid]);
-        foreach ($rows as $row) {
-            $level = $this->levelsinfo->get_level_from_xp($row->xp)->get_level();
-            if ($level != $row->lvl) {
-                $row->lvl = $level;
-                $this->db->update_record($this->table, $row);
-            }
-        }
-        $rows->close();
+        debugging('Reclaculating levels has been deprecated and made ineffective, do not use.', DEBUG_DEVELOPER);
     }
 
     /**
@@ -340,15 +326,13 @@ class course_user_state_store implements course_state_store,
             $postxp = $amount;
 
             $sql = "UPDATE {{$this->table}}
-                       SET xp = :xp,
-                           lvl = :lvl
+                       SET xp = :xp
                      WHERE courseid = :courseid
                        AND userid = :userid";
             $params = [
                 'xp' => $amount,
                 'courseid' => $this->courseid,
-                'userid' => $id,
-                'lvl' => $this->levelsinfo->get_level_from_xp($amount)->get_level()
+                'userid' => $id
             ];
             $this->db->execute($sql, $params);
         } else {
