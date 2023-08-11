@@ -29,6 +29,7 @@ use block_xp\external\external_api;
 use block_xp\external\external_multiple_structure;
 use block_xp\external\external_single_structure;
 use block_xp\external\external_value;
+use block_xp\local\backup\restore_context;
 use block_xp\local\config\config;
 use block_xp\local\course_world;
 use block_xp\local\world;
@@ -106,6 +107,27 @@ class levels_info_writer {
     }
 
     /**
+     * Update world after restore.
+     *
+     * @param restore_context $restore The context.
+     * @param world $world The world.
+     */
+    public function update_world_after_restore(restore_context $restore, world $world) {
+
+        // We don't have levels data, or it's invalid, do nothing.
+        $levelsdata = json_decode($world->get_config()->get('levelsdata'), true);
+        if (!$levelsdata) {
+            return;
+        }
+
+        $parts = $this->deconstruct_finaldata($levelsdata);
+        $parts['metadata'] = $this->process_metadata_after_restore($restore, $parts['metadata'], $world);
+        $finaldata = $this->construct_finaldata($parts);
+
+        $world->get_config()->set('levelsdata', json_encode($finaldata));
+    }
+
+    /**
      * Constructor the final data.
      *
      * @param array $parts Data parts.
@@ -144,6 +166,32 @@ class levels_info_writer {
     }
 
     /**
+     * Deconstruct the final data.
+     *
+     * @param array $data The constructed data.
+     * @return array The parts.
+     */
+    protected function deconstruct_finaldata($data) {
+
+        $metadata = [];
+        $metadatakeys = array_diff(array_keys($data), ['v', 'xp', 'algo']);
+        foreach ($metadatakeys as $metakey) {
+            foreach (($data[$metakey] ?? []) as $level => $value) {
+                if (!isset($metadata[$level])) {
+                    $metadata[$level] = [];
+                }
+                $metadata[$level][$metakey] = $value;
+            }
+        }
+
+        return [
+            'points' => $data['xp'],
+            'algo' => $data['algo'] ?? null,
+            'metadata' => $metadata
+        ];
+    }
+
+    /**
      * Get the metadata for the level.
      *
      * @param int $level The level number.
@@ -165,6 +213,18 @@ class levels_info_writer {
         }
 
         return $finaldata;
+    }
+
+    /**
+     * Get the metadata for the level after restore.
+     *
+     * @param restore_context $restore The context.
+     * @param int $level The level number.
+     * @param array $metadata The metadata before processing.
+     * @param world|null $world The world, if any.
+     */
+    protected function get_metadata_for_level_after_restore(restore_context $restore, $level, $metadata, world $world = null) {
+        return $metadata;
     }
 
     /**
@@ -214,6 +274,23 @@ class levels_info_writer {
             $finalmetadata[$level] = array_filter($tmp);
         }
 
+        return $finalmetadata;
+    }
+
+    /**
+     * Process the metadata after restore.
+     *
+     * @param restore_context $restore The context.
+     * @param array $metadata Indexed by level.
+     * @param world|null $world The world, if any.
+     * @return array Indexed by level.
+     */
+    protected function process_metadata_after_restore(restore_context $restore, $metadata, world $world = null) {
+        $finalmetadata = [];
+        foreach ($metadata as $level => $levelmetadata) {
+            $tmp = $this->get_metadata_for_level_after_restore($restore, $level, $levelmetadata, $world);
+            $finalmetadata[$level] = array_filter($tmp);
+        }
         return $finalmetadata;
     }
 

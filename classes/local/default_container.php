@@ -155,7 +155,7 @@ class default_container implements container {
      * @return badge\badge_manager
      */
     protected function get_badge_manager() {
-        return new badge\badge_manager();
+        return new badge\badge_manager($this->get('db'));
     }
 
     /**

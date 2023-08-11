@@ -25,6 +25,9 @@
 
 namespace block_xp\local\badge;
 
+require_once($CFG->libdir . '/badgeslib.php');
+require_once($CFG->dirroot . '/badges/lib/awardlib.php');
+
 /**
  * Badge manager.
  *
@@ -35,11 +38,46 @@ namespace block_xp\local\badge;
  */
 class badge_manager {
 
+    /** @var \moodle_database The DB. */
+    protected $db;
+
+    /**
+     * Constructor.
+     *
+     * @param \moodle_database $db
+     */
+    public function __construct(\moodle_database $db) {
+        $this->db = $db;
+    }
+
+    /**
+     * Award badge (stub).
+     *
+     * @param int $userid The user ID.
+     * @param int $badgeid The badge ID.
+     * @param int $issuerid The issuer ID.
+     */
     public function award_badge($userid, $badgeid, $issuerid) {
     }
 
+    /**
+     * Get compatible badges (stub).
+     *
+     * @param \context $context The context.
+     * @param int $userid The user ID.
+     * @return object[] Indexed by ID.
+     */
     public function get_compatible_badges(\context $context, $userid) {
         return [];
     }
 
+    /**
+     * Whether the badge is a site badge.
+     *
+     * @param int $badgeid The badge ID.
+     * @return bool
+     */
+    public function is_site_badge($badgeid) {
+        return $this->db->record_exists('badge', ['id' => $badgeid, 'type' => BADGE_TYPE_SITE]);
+    }
 }

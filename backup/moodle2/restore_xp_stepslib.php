@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use block_xp\local\backup\restore_context;
+
 /**
  * Block XP restore structure step class.
  *
@@ -203,7 +205,20 @@ class restore_xp_block_structure_step extends restore_structure_step {
      */
     protected function after_restore() {
         global $DB;
+
+        block_xp\di::reset_container();
         $courseid = $this->get_courseid();
+        $restorecontext = restore_context::from_structure_step($this);
+
+        // Update the levels data if needed.
+        try {
+            $factory = block_xp\di::get('course_world_factory');
+            $world = $factory->get_world($courseid);
+            $writer = block_xp\di::get('levels_info_writer');
+            $writer->update_world_after_restore($restorecontext, $world);
+        } catch (Exception $e) {
+            $this->log("block_xp: Running levels_info_writer::update_world_after_restore did not succeed", backup::LOG_DEBUG);
+        }
 
         // Update each filter (the rules).
         $filters = $DB->get_recordset('block_xp_filters', ['courseid' => $courseid]);

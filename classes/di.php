@@ -68,6 +68,15 @@ class di {
     }
 
     /**
+     * Reset the container.
+     *
+     * @return void
+     */
+    public static function reset_container() {
+        static::$container = null;
+    }
+
+    /**
      * Set the container.
      *
      * @param \block_xp\local\container $container The container.
