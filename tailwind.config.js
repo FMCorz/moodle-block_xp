@@ -18,9 +18,9 @@ module.exports = {
             animation: {
                 'badge-incoming': 'pulse-in 500ms ease-in-out 2000ms both',
                 'badge-leaving': [
-                    'fade-in 300ms 500ms backwards',
-                    'wiggle 200ms ease-in-out 1 1000ms',
-                    'scale-out 500ms ease-in-out 1700ms forwards'
+                    'fade-in 300ms 1.5s backwards',
+                    'wiggle 200ms ease-in-out 2.5s 1',
+                    'scale-out 500ms ease-in-out 3.5s forwards'
                 ].join(', '),
                 'badge-ping': 'ping-sm 2s cubic-bezier(0, 0, 0.2, 1) infinite 4000ms',
                 'fade-in': 'fade-in 300ms both'

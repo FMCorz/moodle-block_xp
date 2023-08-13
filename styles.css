@@ -310,7 +310,7 @@
     }
 }
 .block_xp .xp-animate-badge-leaving {
-    animation: xp-fade-in 300ms 500ms backwards, xp-wiggle 200ms ease-in-out 1 1000ms, xp-scale-out 500ms ease-in-out 1700ms forwards;
+    animation: xp-fade-in 300ms 1.5s backwards, xp-wiggle 200ms ease-in-out 2.5s 1, xp-scale-out 500ms ease-in-out 3.5s forwards;
 }
 @keyframes xp-ping-sm {
 
@@ -724,9 +724,6 @@
 }
 .block_xp .xp-animation-delay-\[500ms\] {
     animation-delay: 500ms;
-}
-.block_xp .xp-animation-delay-\[1\.5s\,2\.5s\,3\.5s\] {
-    animation-delay: 1.5s,2.5s,3.5s;
 }
 .block_xp .xp-animation-delay-\[6s\] {
     animation-delay: 6s;
