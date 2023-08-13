@@ -437,7 +437,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
           );
 
           const isBadgeValueMissing =
-            levelsInfo.levels[idx].badgeawardid && !badges.find((b) => b.id === levelsInfo.levels[idx].badgeawardid);
+            levelsInfo.levels[idx]?.badgeawardid && !badges.find((b) => b.id === levelsInfo.levels[idx].badgeawardid);
 
           const handleBadgeAwardIdChange = (e: React.FocusEvent<HTMLSelectElement>) => {
             dispatch(["levelBadgeAwardIdChange", { level, badgeawardid: parseInt(e.target.value, 10) || null }]);
