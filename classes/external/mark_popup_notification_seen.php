@@ -26,7 +26,6 @@
 namespace block_xp\external;
 
 use block_xp\di;
-use core_external\external_value;
 
 /**
  * External function.
