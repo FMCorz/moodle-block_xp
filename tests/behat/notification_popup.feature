@@ -36,7 +36,9 @@ Feature: A student is shown a notification popup when they level up
     And I follow "Edit"
     And I press "Save changes"
     And I am on "Course 1" course homepage
-    Then I should see "You have reached level 2!"
+    And I wait until ".modal-open" "css_element" exists
+    Then I should see "You levelled up!"
+    And "[aria-label='Level #2']" "css_element" should exist
     And I press "Cool, thanks"
     And I click on "Leaderboard" "link" in the "Level up!" "block"
     And the following should exist in the "block_xp-table" table:
