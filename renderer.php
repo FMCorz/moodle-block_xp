@@ -473,7 +473,7 @@ class block_xp_renderer extends plugin_renderer_base {
      */
     public function pagesize_selector($options, $current) {
         $o = '';
-        $o .= html_writer::start_div('text-right');
+        $o .= html_writer::start_div('xp-text-center');
         $o .= html_writer::start_tag('small');
         $o .= get_string('perpagecolon', 'block_xp') . ' ';
 
