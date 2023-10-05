@@ -25,9 +25,11 @@
 
 namespace block_xp\local\controller;
 
+use block_xp\local\course_world;
 use html_writer;
 use moodle_exception;
 use block_xp\local\routing\url;
+use block_xp_filter;
 
 /**
  * Rules controller class.
@@ -68,12 +70,11 @@ class rules_controller extends page_controller {
     }
 
     protected function pre_content() {
-        global $PAGE;
 
         // Reset course rules to defaults.
         if ($this->get_param('reset') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
-                $this->world->reset_filters_to_defaults();
+                $this->world->reset_filters_to_defaults(block_xp_filter::CATEGORY_EVENTS);
                 $this->redirect(new url($this->pageurl));
             }
         }
@@ -95,52 +96,15 @@ class rules_controller extends page_controller {
     }
 
     protected function save_filters($filters, $existingfilters, $category = null) {
-        $filterids = array();
-        foreach ($filters as $filterdata) {
-            $data = $filterdata;
-            $data['ruledata'] = json_encode($data['rule'], true);
-            unset($data['rule']);
-            $data['courseid'] = $this->courseid;
-            if ($category !== null) {
-                $data['category'] = $category;
-            }
-
-            if (!\block_xp_filter::validate_data($data)) {
-                throw new moodle_exception('Data could not be validated');
-            }
-
-            $filter = \block_xp_filter::load_from_data($data);
-            if ($filter->get_id() && !array_key_exists($filter->get_id(), $existingfilters)) {
-                throw new moodle_exception('Invalid filter ID');
-            }
-
-            $filter->save();
-            $filterids[$filter->get_id()] = true;
-        }
-
-        // Check for filters to be deleted.
-        foreach ($existingfilters as $filterid => $filter) {
-            if (!array_key_exists($filterid, $filterids)) {
-                $filter->delete();
-            }
-            unset($existingfilters[$filterid]);
-        }
-
-        if ($category !== null) {
-            $this->filtermanager->invalidate_filters_cache($category);
-        } else {
-            $this->filtermanager->invalidate_filters_cache();
-        }
-
-        return $existingfilters;
+        static::save_rules_filters($this->world, $filters, $existingfilters, $category);
     }
 
     protected function get_page_html_head_title() {
-        return get_string('courserules', 'block_xp');
+        return get_string('eventsrules', 'block_xp');
     }
 
     protected function get_page_heading() {
-        return get_string('courserules', 'block_xp');
+        return get_string('eventsrules', 'block_xp');
     }
 
     /**
@@ -193,10 +157,7 @@ class rules_controller extends page_controller {
                 $this->get_default_filter(),
                 $this->get_available_rules(),
                 $this->userfilters
-            ),
-            get_string('eventsrules', 'block_xp'),
-            null,
-            new \help_icon('eventsrules', 'block_xp')
+            )
         );
     }
 
@@ -234,6 +195,12 @@ class rules_controller extends page_controller {
 
     protected function page_rules_content() {
         $output = $this->get_renderer();
+
+        echo $output->advanced_heading(get_string('eventsrules', 'block_xp'), [
+            'intro' => new \lang_string('eventsrulesintro', 'block_xp'),
+            'help' => new \help_icon('eventsrules', 'block_xp'),
+        ]);
+
         echo $output->render($this->get_widget_group());
     }
 
@@ -253,4 +220,55 @@ class rules_controller extends page_controller {
         );
     }
 
+    /**
+     * Save the rules filters.
+     *
+     * @param course_world $world The course world.
+     * @param array $filters The filters to save.
+     * @param array $existingfilters The list of existing filters.
+     * @param int|null $category The category of filters.
+     */
+    public static function save_rules_filters(course_world $world, $filters, $existingfilters, $category = null) {
+        $courseid = $world->get_courseid();
+        $filtermanager = $world->get_filter_manager();
+
+        $filterids = array();
+        foreach ($filters as $filterdata) {
+            $data = $filterdata;
+            $data['ruledata'] = json_encode($data['rule'], true);
+            unset($data['rule']);
+            $data['courseid'] = $courseid;
+            if ($category !== null) {
+                $data['category'] = $category;
+            }
+
+            if (!\block_xp_filter::validate_data($data)) {
+                throw new moodle_exception('Data could not be validated');
+            }
+
+            $filter = \block_xp_filter::load_from_data($data);
+            if ($filter->get_id() && !array_key_exists($filter->get_id(), $existingfilters)) {
+                throw new moodle_exception('Invalid filter ID');
+            }
+
+            $filter->save();
+            $filterids[$filter->get_id()] = true;
+        }
+
+        // Check for filters to be deleted.
+        foreach ($existingfilters as $filterid => $filter) {
+            if (!array_key_exists($filterid, $filterids)) {
+                $filter->delete();
+            }
+            unset($existingfilters[$filterid]);
+        }
+
+        if ($category !== null) {
+            $filtermanager->invalidate_filters_cache($category);
+        } else {
+            $filtermanager->invalidate_filters_cache();
+        }
+
+        return $existingfilters;
+    }
 }

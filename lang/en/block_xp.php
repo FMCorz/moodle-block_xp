@@ -143,6 +143,7 @@ Additional resources:
 - [How are experience points calculated?](https://docs.levelup.plus/xp/docs/getting-started/points-calculation?ref=blockxp_help)
 - [Troubleshooting rules](https://docs.levelup.plus/xp/docs/troubleshooting/event-rule-not-working?ref=blockxp_help)
 ';
+$string['eventsrulesintro'] = 'Observe actions and attribute points to students as they perform them.';
 $string['event_user_leveledup'] = 'User levelled up';
 $string['eventis'] = 'The event is {$a}';
 $string['eventname'] = 'Event name';
@@ -167,7 +168,7 @@ For her final attempt, Alice scores 60/100, she earns 20 additional points in _L
 
 [More at _Level Up XP_ documentation](https://docs.levelup.plus/xp/docs/how-to/grade-based-rewards?ref=blockxp_help)
 ';
-$string['graderulesintro'] = 'The grade rules allow users to receive points equivalent to the grades they receive.';
+$string['graderulesintro'] = 'The grade rules allow users to receive points equal to the grades they receive.';
 $string['grid'] = 'Grid';
 $string['hasname'] = 'Name set';
 $string['hasnoname'] = 'No name';

@@ -277,11 +277,26 @@ class course_world implements world {
      *
      * This method should only be used temporarily, it can be removed at any time!
      *
+     * @param int|null $category The filters category.
      * @return void
      */
-    public function reset_filters_to_defaults() {
-        $this->get_filter_manager()->purge();
-        $this->get_config()->set('defaultfilters', course_world_config::DEFAULT_FILTERS_MISSING);
+    public function reset_filters_to_defaults($category = null) {
+
+        // This guarantees a fresh and migrated list of filters.
+        $this->filtermanager = null;
+        $filtermanager = $this->get_filter_manager();
+
+        // Reset everything if there is no category.
+        if ($category === null) {
+            $filtermanager->purge();
+            $this->get_config()->set('defaultfilters', course_world_config::DEFAULT_FILTERS_MISSING);
+            $this->filtermanager = null;
+            return;
+        }
+
+        // Reset the filters for the given category.
+        $filtermanager->purge($category);
+        $filtermanager->import_default_filters($category);
     }
 
 }

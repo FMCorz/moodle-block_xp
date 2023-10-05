@@ -201,16 +201,20 @@ class course_filter_manager {
     /**
      * Import the default filters.
      *
+     * @param int|null $category The category.
      * @return void
      */
-    public function import_default_filters() {
+    public function import_default_filters($category = null) {
         $fm = new admin_filter_manager($this->db);
-        $this->import_filters($fm->get_all_filters());
+        $filters = $category !== null ? $fm->get_filters($category) : $fm->get_all_filters();
+        $this->import_filters($filters);
+        $this->invalidate_filters_cache($category);
     }
 
     /**
      * Invalidate the filters cache.
      *
+     * @param int|null $category The category to invalidate for.
      * @return void
      */
     public function invalidate_filters_cache($category = \block_xp_filter::CATEGORY_EVENTS) {
@@ -220,13 +224,20 @@ class course_filter_manager {
     /**
      * Removes all filters.
      *
+     * @param int|null $category The category of filters to remove.
      * @return void
      */
-    public function purge() {
-        $this->db->delete_records('block_xp_filters', ['courseid' => $this->courseid]);
-        // Ideally we shouldn't be clearing all courses' cache, but that is the simplest way
-        // to ensure that all the categories of filters are invalidated within this course.
-        $this->cache->purge();
+    public function purge($category = null) {
+        if ($category === null) {
+            $this->db->delete_records('block_xp_filters', ['courseid' => $this->courseid]);
+            // Ideally we shouldn't be clearing all courses' cache, but that is the simplest way
+            // to ensure that all the categories of filters are invalidated within this course.
+            $this->cache->purge();
+            return;
+        }
+
+        $this->db->delete_records('block_xp_filters', ['courseid' => $this->courseid, 'category' => $category]);
+        $this->invalidate_filters_cache($category);
     }
 
 }
