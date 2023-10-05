@@ -51,6 +51,7 @@ $string['blockappearancemovedtopluginsettings'] = 'The block appearance settings
 $string['cachedef_filters'] = 'Level filters';
 $string['cachedef_ruleevent_eventslist'] = 'List of some events';
 $string['cannotbesetindefaults'] = 'This cannot be set in the default values.';
+$string['cannotearnpoints'] = 'Cannot earn points.';
 $string['cannotshowblockconfig'] = 'I would usually display the appearance settings here, but I could not find your block. To change the block\'s appearance, head back [here]({$a}) (or where you added the block), turn editing mode on, and follow the "Configure" option in the block\'s dropdown. If you cannot find the block, add it to your course again.';
 $string['cannotshowblockconfigsys'] = 'I would usually display the appearance settings here, but I could not find your block. It may be missing from the [front page]({$a->fp}) and the [default dashboard]({$a->mysys}) of your users, or present in both. To edit the settings from here, make sure it only appears in one of them.';
 $string['cheatguard'] = 'Cheat guard';
