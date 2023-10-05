@@ -83,6 +83,17 @@ class addon {
     }
 
     /**
+     * Whether the addon is older than.
+     *
+     * @param int $version The version to test against.
+     * @return bool
+     */
+    public function is_older_than($version) {
+        $localxp = static::get_plugin_info();
+        return !empty($localxp) && $localxp->versiondb < $version;
+    }
+
+    /**
      * Whether the plugin is out of sync.
      *
      * @return bool

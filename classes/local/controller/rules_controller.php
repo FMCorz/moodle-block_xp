@@ -25,6 +25,7 @@
 
 namespace block_xp\local\controller;
 
+use block_xp\di;
 use block_xp\local\course_world;
 use html_writer;
 use moodle_exception;
@@ -43,18 +44,14 @@ class rules_controller extends page_controller {
 
     /** @inheritDoc */
     protected $navname = 'rules';
-
     /** @var string The route name. */
     protected $routename = 'rules';
-
-    /** @var moodleform The form. */
-    protected $form;
-
     /** @var \block_xp\local\course_filter_manager The filter manager. */
     protected $filtermanager;
-
     /** @var array User filters. */
     protected $userfilters;
+    /** @var array Whether to show legacy headings. */
+    protected $legacyheadings;
 
     protected function define_optional_params() {
         return [
@@ -67,6 +64,7 @@ class rules_controller extends page_controller {
         parent::post_login();
         $this->filtermanager = $this->world->get_filter_manager();
         $this->userfilters = $this->filtermanager->get_user_filters();
+        $this->legacyheadings = di::get('addon')->is_older_than(2023100402);
     }
 
     protected function pre_content() {
@@ -157,7 +155,10 @@ class rules_controller extends page_controller {
                 $this->get_default_filter(),
                 $this->get_available_rules(),
                 $this->userfilters
-            )
+            ),
+            $this->legacyheadings ? get_string('eventsrules', 'block_xp') : null,
+            null,
+            $this->legacyheadings ? new \help_icon('eventsrules', 'block_xp') : null
         );
     }
 
@@ -196,16 +197,17 @@ class rules_controller extends page_controller {
     protected function page_rules_content() {
         $output = $this->get_renderer();
 
-        echo $output->advanced_heading(get_string('eventsrules', 'block_xp'), [
-            'intro' => new \lang_string('eventsrulesintro', 'block_xp'),
-            'help' => new \help_icon('eventsrules', 'block_xp'),
-        ]);
+        if (!$this->legacyheadings) {
+            echo $output->advanced_heading(get_string('eventsrules', 'block_xp'), [
+                'intro' => new \lang_string('eventsrulesintro', 'block_xp'),
+                'help' => new \help_icon('eventsrules', 'block_xp'),
+            ]);
+        }
 
         echo $output->render($this->get_widget_group());
     }
 
     protected function page_danger_zone_content() {
-        $forwholesite = \block_xp\di::get('config')->get('context') == CONTEXT_SYSTEM;
         $output = $this->get_renderer();
 
         echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
