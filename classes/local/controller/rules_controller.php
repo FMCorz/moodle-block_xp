@@ -64,7 +64,7 @@ class rules_controller extends page_controller {
         parent::post_login();
         $this->filtermanager = $this->world->get_filter_manager();
         $this->userfilters = $this->filtermanager->get_user_filters();
-        $this->legacyheadings = di::get('addon')->is_older_than(2023100402);
+        $this->legacyheadings = di::get('addon')->is_activated() && di::get('addon')->is_older_than(2023100402);
     }
 
     protected function pre_content() {
