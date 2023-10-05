@@ -112,19 +112,19 @@ class default_settings_maker implements settings_maker {
         // Add the default levels page.
         $settingspage = new admin_externalpage('block_xp_default_levels',
             get_string('defaultlevels', 'block_xp'),
-            $this->urlresolver->reverse('admin/levels'));
+            $this->urlresolver->reverse('admin/levels')->get_compatible_url());
         $settings->add($catname, $settingspage);
 
         // Add the default rules page.
         $settingspage = new admin_externalpage('block_xp_default_rules',
             get_string('defaultrules', 'block_xp'),
-            $this->urlresolver->reverse('admin/rules'));
+            $this->urlresolver->reverse('admin/rules')->get_compatible_url());
         $settings->add($catname, $settingspage);
 
         // Add the default visuals page.
         $settingspage = new admin_externalpage('block_xp_default_visuals',
             get_string('defaultvisuals', 'block_xp'),
-            $this->urlresolver->reverse('admin/visuals'));
+            $this->urlresolver->reverse('admin/visuals')->get_compatible_url());
         $settings->add($catname, $settingspage);
 
         // Add the promo page.
@@ -132,7 +132,7 @@ class default_settings_maker implements settings_maker {
         $localxp = $pluginman->get_plugin_info('local_xp');
         $settingspage = new admin_externalpage('block_xp_promo',
             ($localxp ? '' : '⭐ ') . get_string('navpromo', 'block_xp'),
-            $this->urlresolver->reverse('admin/promo'));
+            $this->urlresolver->reverse('admin/promo')->get_compatible_url());
         $settings->add($catname, $settingspage);
 
         return $settings;
