@@ -106,6 +106,24 @@ $string['displayparticipantsidentity'] = 'Display participants identity';
 $string['displayrank'] = 'Display rank';
 $string['displayrelativerank'] = 'Display a relative rank';
 $string['documentation'] = 'Documentation';
+$string['drops'] = 'Drops';
+$string['dropsintro'] = 'Drops are code snippets directly placed in content that award points when encountered by a user.';
+$string['drops_help'] = '
+In video games, some characters can _drop_ items or experience points on the ground for the player to pick up. These items and points are commonly referred to as drops.
+
+In Level Up XP, drops are shortcodes (e.g. `[xpdrop abcdef]`) that an instructor can place in regular Moodle content. When encountered by a user, these drops will be _picked up_ and a certain amount of points will be awarded.
+
+At present, drops are invisible to the user and passively award points the first time they are encountered.
+
+Drops can be used to cleverly award points when certain type of content is consumed by a student. Here are some ideas:
+
+- Place a drop in the feedback of a quiz only visible for perfect scores
+- Place a drop in deep content to reward their consumption
+- Place a drop in an interesting forum discussion
+- Place a drop in a hard-to-get-to page in a lesson module
+
+[More info](https://docs.levelup.plus/xp/docs/how-to/use-drops?ref=blockxp_help)
+';
 $string['editingdefaultsettingsinwholesitemodenotice'] = '**Attention!** You are not modifying the current active site-wide settings, instead you are editing the default settings values. As Level Up XP is used site-wide, your intention is most likely to change the site-wide settings. [Navigate here]({$a->url}) to change those settings, or follow the "Settings" link from the XP block itself.';
 $string['editinstructions'] = 'Edit information';
 $string['enablecheatguard'] = 'Enable cheat guard';
@@ -220,6 +238,7 @@ $string['moverule'] = 'Move rule';
 $string['name'] = 'Name';
 $string['navbardisplay'] = 'Show in navbar';
 $string['navbardisplay_desc'] = 'When enabled, the level of the user will be displayed in the top navigation bar. If the plugin is used "Per courses", it will only appear in courses. Please note that this functionality is heavily dependent on the theme and may not work well, or not at all, with 3rd party themes. [Learn more](https://docs.levelup.plus/xp/docs/navbar-display)';
+$string['navdrops'] = 'Drops';
 $string['naveventrules'] = 'Event rules';
 $string['navgraderules'] = 'Grade rules';
 $string['navinfos'] = 'Info';

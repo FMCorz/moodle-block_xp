@@ -185,6 +185,13 @@ class default_course_world_navigation_factory implements course_world_navigation
                         'text' => get_string('navgraderules', 'block_xp'),
                         'addonrequired' => !$hasaddon
                     ] : null,
+                    $showpromo || $hasaddon ?
+                    [
+                        'id' => 'drops',
+                        'url' => $urlresolver->reverse('drops', ['courseid' => $courseid]),
+                        'text' => get_string('navdrops', 'block_xp'),
+                        'addonrequired' => !$hasaddon
+                    ] : null,
                 ])
             ];
 

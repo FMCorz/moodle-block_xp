@@ -119,6 +119,15 @@ class default_routes_config extends static_routes_config {
                 ]
             ),
             new route_definition(
+                'drops',
+                '/drops/:courseid',
+                '~^/drops/(\d+)$~',
+                'drops',
+                [
+                    1 => 'courseid'
+                ]
+            ),
+            new route_definition(
                 'visuals',
                 '/visuals/:courseid',
                 '~^/visuals/(\d+)$~',
