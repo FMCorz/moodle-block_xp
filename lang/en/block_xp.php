@@ -198,6 +198,11 @@ $string['hasbadgeaward'] = 'Badge to award set';
 $string['hasnobadgeaward'] = 'No badge to award';
 $string['hideparticipantsidentity'] = 'Hide participants identity';
 $string['hiderank'] = 'Hide rank';
+$string['importpoints'] = 'Import points';
+$string['importpoints_help'] = 'The import may be used to _increase_ students\' points, or to _override_ them with the provided value.
+
+Note that the import __does not__ use the same format as the exported report. The required format is described in the [documentation](https://docs.levelup.plus/xp/docs/how-to/import-points/importing-points-from-csv?ref=localxp_help), where a [sample file](https://docs.levelup.plus/xp/docs/how-to/import-points/importing-points-from-csv?ref=localxp_help#sample-file) is available.';
+$string['importpointsintro'] = 'Import points from a CSV file, and optionally send a message to the recipient.';
 $string['incourses'] = 'In courses';
 $string['ineffective'] = 'Ineffective';
 $string['infos'] = 'Information';
@@ -241,6 +246,7 @@ $string['navbardisplay_desc'] = 'When enabled, the level of the user will be dis
 $string['navdrops'] = 'Drops';
 $string['naveventrules'] = 'Event rules';
 $string['navgraderules'] = 'Grade rules';
+$string['navimport'] = 'Import';
 $string['navinfos'] = 'Info';
 $string['navladder'] = 'Leaderboard';
 $string['navlevels'] = 'Levels';
