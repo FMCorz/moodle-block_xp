@@ -52,7 +52,10 @@ class admin_visuals_controller extends admin_route_controller {
      * @return moodleform
      */
     protected function define_form() {
-        return new \block_xp\form\visuals($this->pageurl->out(false), ['fmoptions' => $this->get_filemanager_options()]);
+        return new \block_xp\form\visuals($this->pageurl->out(false), [
+            'fmoptions' => $this->get_filemanager_options(),
+            'promourl' => $this->urlresolver->reverse('admin/promo')
+        ]);
     }
 
     /**

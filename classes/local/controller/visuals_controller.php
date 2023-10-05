@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/filelib.php');
 
+use block_xp\di;
 use context_course;
 use context_system;
 use html_writer;
@@ -85,6 +86,7 @@ class visuals_controller extends page_controller {
      */
     protected function define_form() {
         return new \block_xp\form\visuals($this->pageurl->out(false), [
+            'showpromo' => di::get('config')->get('enablepromoincourses'),
             'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $this->courseid]),
             'fmoptions' => $this->get_filemanager_options()
         ]);
@@ -178,11 +180,11 @@ class visuals_controller extends page_controller {
     }
 
     protected function get_page_html_head_title() {
-        return get_string('coursevisuals', 'block_xp');
+        return get_string('levelsappearance', 'block_xp');
     }
 
     protected function get_page_heading() {
-        return get_string('coursevisuals', 'block_xp');
+        return get_string('levelsappearance', 'block_xp');
     }
 
     protected function page_content() {

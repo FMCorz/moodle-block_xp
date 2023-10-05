@@ -50,7 +50,7 @@ class visuals extends moodleform {
         $mform->addElement('filemanager', 'badges', get_string('levelbadges', 'block_xp'), null, $this->_customdata['fmoptions']);
         $mform->addHelpButton('badges', 'levelbadges', 'block_xp');
 
-        if (di::get('config')->get('enablepromoincourses')) {
+        if ($this->_customdata['showpromo'] ?? true) {
             $addonrequired = $renderer->render_from_template('block_xp/addon-required', [
                 'promourl' => $this->_customdata['promourl']
             ]);

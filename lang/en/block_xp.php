@@ -75,7 +75,6 @@ $string['coursereport'] = 'Course report';
 $string['courserules'] = 'Course rules';
 $string['courseselectedcolon'] = 'Course selected:';
 $string['coursesettings'] = 'Course settings';
-$string['coursevisuals'] = 'Course visuals';
 $string['currencysign'] = 'Points symbol';
 $string['currencysign_help'] = 'With this setting you can change the meaning of the points. It will be displayed next to the amount of points each user has as a substitute for the reference to _experience points_.
 
@@ -87,7 +86,7 @@ $string['defaultlevels'] = 'Default levels';
 $string['defaultrules'] = 'Default rules';
 $string['defaultrulesformhelp'] = 'Those are the default rules provided by the plugin, they automatically give default points and ignore some redundant events. Your own rules take precedence over them.';
 $string['defaultsettings'] = 'Default settings';
-$string['defaultvisuals'] = 'Default visuals';
+$string['defaultvisuals'] = 'Default appearance';
 $string['deletecondition'] = 'Delete condition';
 $string['deleterule'] = 'Delete rule';
 $string['description'] = 'Description';
@@ -339,7 +338,7 @@ Do you really want to delete the points and logs of this user?';
 $string['reallyresetallcoursestodefaults'] = 'Really reset all courses rules to the default rules? This action is not reversible.';
 $string['reallyresetcourserulestodefaults'] = 'Really reset the course rules to the default rules? This action is not reversible.';
 $string['reallyresetcourselevelstodefaults'] = 'Really reset the course levels to the default levels? This action is not reversible.';
-$string['reallyresetcoursevisualstodefaults'] = 'Really reset the course visuals to the default visuals? This action is not reversible.';
+$string['reallyresetcoursevisualstodefaults'] = 'Really reset the course levels appearance to the default appearance? This action is not reversible.';
 $string['reallyresetdata'] = 'Really reset the levels and points of everyone in this course?';
 $string['reallyresetgroupdata'] = 'Really reset the levels and points of everyone in this group?';
 $string['reallyreverttopluginsdefaults'] = 'Really reset the default rules to the defaults suggested by the plugin? This action is not reversible.';
@@ -357,7 +356,7 @@ $string['resetallcoursestodefaultsintro'] = 'Click the button below to reset all
 $string['resetcourserulestodefaults'] = 'Reset course rules to defaults';
 $string['resetgroupdata'] = 'Reset group data';
 $string['resetlevelstodefaults'] = 'Reset levels to defaults';
-$string['resetvisualstodefaults'] = 'Reset visuals to defaults';
+$string['resetvisualstodefaults'] = 'Reset appearance to defaults';
 $string['resultsfilteredforn'] = 'Results filtered for {$a}.';
 $string['reward'] = 'Reward';
 $string['requires'] = 'Requires';
@@ -573,6 +572,7 @@ $string['xptogo'] = '[[{$a}]] to go';
 
 // Deprecated since 3.15.0
 $string['basexp'] = 'Algorithm base';
+$string['coursevisuals'] = 'Course visuals';
 $string['levelbadgesformhelp'] = 'Name the files [level].[file extension], for instance: 1.png, 2.jpg, etc... The recommended image size is 100x100.';
 $string['levelcount'] = 'Level count';
 $string['leveldesc'] = 'Level description';
