@@ -85,6 +85,7 @@ class visuals_controller extends page_controller {
      */
     protected function define_form() {
         return new \block_xp\form\visuals($this->pageurl->out(false), [
+            'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $this->courseid]),
             'fmoptions' => $this->get_filemanager_options()
         ]);
     }
@@ -184,15 +185,6 @@ class visuals_controller extends page_controller {
         return get_string('coursevisuals', 'block_xp');
     }
 
-    /**
-     * Introduction.
-     *
-     * @return void
-     */
-    protected function intro() {
-        echo html_writer::tag('p', get_string('visualsintro', 'block_xp'));
-    }
-
     protected function page_content() {
         $output = $this->get_renderer();
 
@@ -205,7 +197,9 @@ class visuals_controller extends page_controller {
             return;
         }
 
-        $this->intro();
+        echo $output->advanced_heading(get_string('levelsappearance', 'block_xp'), [
+            'intro' => new \lang_string('visualsintro', 'block_xp'),
+        ]);
 
         $this->get_form()->display();
 
@@ -239,6 +233,15 @@ class visuals_controller extends page_controller {
                 'get'
             )
         );
+    }
+
+    /**
+     * Introduction.
+     *
+     * @deprecated Since XP 3.15 without replacement.
+     * @return void
+     */
+    protected function intro() {
     }
 
 }

@@ -508,6 +508,12 @@ a .block_xp-level {
     display: inline;
 }
 
+/** Hide accepted file types from level badges filemanager. **/
+.block_xp #fitem_id_badges fieldset [name=badges] + p,
+.block_xp #fitem_id_badges fieldset .form-filetypes-descriptions {
+    @apply xp-hidden;
+}
+
 /**
  * CM rule.
  */

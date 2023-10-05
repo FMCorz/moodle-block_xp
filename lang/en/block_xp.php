@@ -76,6 +76,11 @@ $string['courserules'] = 'Course rules';
 $string['courseselectedcolon'] = 'Course selected:';
 $string['coursesettings'] = 'Course settings';
 $string['coursevisuals'] = 'Course visuals';
+$string['currencysign'] = 'Points symbol';
+$string['currencysign_help'] = 'With this setting you can change the meaning of the points. It will be displayed next to the amount of points each user has as a substitute for the reference to _experience points_.
+
+Choose one of the provided symbols, or upload your own!';
+$string['currencysignxp'] = 'XP (Experience points)';
 $string['customizelevels'] = 'Customise the levels';
 $string['dangerzone'] = 'Danger zone';
 $string['defaultlevels'] = 'Default levels';
@@ -217,11 +222,16 @@ $string['ladderempty'] = 'The leaderboard is currently empty, make sure to come 
 $string['learnmore'] = 'Learn more';
 $string['level'] = 'Level';
 $string['levelbadges'] = 'Level badges';
-$string['levelbadgesformhelp'] = 'Name the files [level].[file extension], for instance: 1.png, 2.jpg, etc... The recommended image size is 100x100.';
+$string['levelbadges_help'] = 'Upload images to replace the appearance of individual levels.
+
+The files must be named [level].[file extension], for instance 1.png, 2.jpg, etc.
+
+We recommend images of a size of 100x100 pixels, in any of the following types: GIF, JPEG, PNG and SVG.';
 $string['leveldescriptiondesc'] = 'A short description of the level, displayed to students on the information page.';
 $string['levelpointsstart'] = 'Start';
 $string['levelpointslength'] = 'Length';
 $string['levels'] = 'Levels';
+$string['levelsappearance'] = 'Levels appearance';
 $string['levelssaved'] = 'The levels have been saved.';
 $string['levelup'] = 'Level up!'; // The action, not the brand!
 $string['levelupoptionsunavailableforlevelone'] = 'Options related to attaining the level are unavailable for the first level.';
@@ -257,7 +267,7 @@ $string['navpromo'] = 'XP+';
 $string['navreport'] = 'Report';
 $string['navrules'] = 'Rules';
 $string['navsettings'] = 'Settings';
-$string['navvisuals'] = 'Visuals';
+$string['navvisuals'] = 'Appearance';
 $string['nextlevelin'] = 'next level in';
 $string['nodescription'] = 'No description';
 $string['nologsrecordedyet'] = 'Logs have not been recorded yet.';
@@ -490,7 +500,7 @@ $string['tinytimeolderyearformat'] = '%b %Y';
 $string['unlockfeaturewithxpplus'] = 'Unlock this feature with XP+. <a href="{$a}">Learn more</a>';
 $string['upgradingplugins'] = 'Upgrading the plugins';
 $string['value'] = 'Value';
-$string['visualsintro'] = 'Upload images to customise the appearance of the levels.';
+$string['visualsintro'] = 'Customise the appearance of the levels, and the meaning of the points.';
 $string['wherearexpused'] = 'Where are points used?';
 $string['wherearexpused_desc'] = 'When set to \'In courses\', the points gained will only account for the course in which the block was added to. When set to \'For the whole site\', a user will "level up" in the site rather than selectively per course, all the points gained throughout the site will be used.';
 $string['updateandpreview'] = 'Update and preview';
@@ -563,6 +573,7 @@ $string['xptogo'] = '[[{$a}]] to go';
 
 // Deprecated since 3.15.0
 $string['basexp'] = 'Algorithm base';
+$string['levelbadgesformhelp'] = 'Name the files [level].[file extension], for instance: 1.png, 2.jpg, etc... The recommended image size is 100x100.';
 $string['levelcount'] = 'Level count';
 $string['leveldesc'] = 'Level description';
 $string['leveldesc_help'] = 'A short description of the level, this is displayed on the information page alongside the level itself. You may use this to describe a reward for learners who attain the level, to include instructions on how to work towards this level, to describe the level in a playful manner (e.g. _Only the bravest souls have been known to attain this level_), etc.';
