@@ -33,6 +33,18 @@
     top: 0px;
     bottom: 0px;
 }
+.block_xp .xp-top-0\.5 {
+    top: 0.125rem;
+}
+.block_xp .xp-left-0\.5 {
+    left: 0.125rem;
+}
+.block_xp .xp-top-0 {
+    top: 0px;
+}
+.block_xp .xp-left-0 {
+    left: 0px;
+}
 .block_xp .xp-right-0 {
     right: 0px;
 }
@@ -41,9 +53,6 @@
 }
 .block_xp .xp--left-8 {
     left: -2rem;
-}
-.block_xp .xp-left-0 {
-    left: 0px;
 }
 .block_xp .xp-z-10 {
     z-index: 10;
@@ -353,6 +362,9 @@
 .block_xp .xp-cursor-pointer {
     cursor: pointer;
 }
+.block_xp .xp-grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
 .block_xp .xp-grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -394,9 +406,6 @@
 }
 .block_xp .xp-gap-6 {
     gap: 1.5rem;
-}
-.block_xp .xp-gap-y-4 {
-    row-gap: 1rem;
 }
 .block_xp .xp-divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
     border-color: #f3f4f6;
@@ -498,6 +507,9 @@
 .block_xp .xp-bg-white {
     background-color: #fff;
 }
+.block_xp .xp-p-1 {
+    padding: 0.25rem;
+}
 .block_xp .xp-p-0 {
     padding: 0px;
 }
@@ -593,13 +605,13 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
 }
-.block_xp .xp-text-xs {
-    font-size: 0.75rem;
-    line-height: 1rem;
-}
 .block_xp .xp-text-2xs {
     font-size: 0.6875rem;
     line-height: 1;
+}
+.block_xp .xp-text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
 }
 .block_xp .xp-text-xl {
     font-size: 1.25rem;
@@ -1387,6 +1399,10 @@ a .block_xp-level {
 
     .block_xp .sm\:xp-basis-52 {
         flex-basis: 13rem;
+    }
+
+    .block_xp .sm\:xp-grid-cols-10 {
+        grid-template-columns: repeat(10, minmax(0, 1fr));
     }
 
     .block_xp .sm\:xp-flex-row {
