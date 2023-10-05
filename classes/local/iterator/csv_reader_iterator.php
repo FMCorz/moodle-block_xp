@@ -57,6 +57,8 @@ class csv_reader_iterator implements \Iterator {
         $this->cir = $cir;
     }
 
+    // @codingStandardsIgnoreLine.
+    #[\ReturnTypeWillChange]
     /**
      * Return current value.
      *
@@ -82,6 +84,8 @@ class csv_reader_iterator implements \Iterator {
         }
     }
 
+    // @codingStandardsIgnoreLine.
+    #[\ReturnTypeWillChange]
     /**
      * Return the line number.
      *
@@ -93,6 +97,8 @@ class csv_reader_iterator implements \Iterator {
         return $this->pos + 1;
     }
 
+    // @codingStandardsIgnoreLine.
+    #[\ReturnTypeWillChange]
     /**
      * Go to the next value.
      *
@@ -104,6 +110,8 @@ class csv_reader_iterator implements \Iterator {
         $this->current = $this->cir->next();
     }
 
+    // @codingStandardsIgnoreLine.
+    #[\ReturnTypeWillChange]
     /**
      * Rewind the reader.
      *
@@ -116,6 +124,8 @@ class csv_reader_iterator implements \Iterator {
         $this->cir->close();
     }
 
+    // @codingStandardsIgnoreLine.
+    #[\ReturnTypeWillChange]
     /**
      * Whether the reader is still in a valid state.
      *
