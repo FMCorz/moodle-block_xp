@@ -230,14 +230,6 @@ class rules_controller extends page_controller {
     }
 
     protected function page_plus_promo_content() {
-        $config = \block_xp\di::get('config');
-        if ($config->get('enablepromoincourses')) {
-            $promourl = $this->urlresolver->reverse('promo', ['courseid' => $this->courseid]);
-            echo $this->get_renderer()->notification_without_close(
-                get_string('promorulesdidyouknow', 'block_xp', ['url' => $promourl->out(false)]),
-                \core\output\notification::NOTIFY_INFO
-            );
-        }
     }
 
     protected function page_rules_content() {

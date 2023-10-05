@@ -132,7 +132,7 @@ $string['errornotalllevelsbadgesprovided'] = 'Not all the level badges have been
 $string['errorunknownevent'] = 'Error: unknown event';
 $string['errorunknownmodule'] = 'Error: unknown module';
 $string['errorxprequiredlowerthanpreviouslevel'] = 'The points required are lower than or equal to the previous level.';
-$string['eventsrules'] = 'Events rules';
+$string['eventsrules'] = 'Event rules';
 $string['eventsrules_help'] = 'This plugin is making use of the events to attribute points to actions performed by the students.
 You can use the form below to add your own rules and modify the default ones.
 
@@ -154,6 +154,20 @@ $string['forever'] = 'Forever';
 $string['forthewholesite'] = 'For the whole site';
 $string['give'] = 'give';
 $string['gotofullladder'] = 'Go to full leaderboard';
+$string['graderules'] = 'Grade rules';
+$string['graderules_help'] = '
+Students will earn as many points as their grade.
+A grade of 5/10, and a grade of 5/100 will both award the student 5 points.
+When a student\'s grade changes multiple times, they will earn points equal to the maximum grade they have received.
+Points are never taken away from students, and negative grades are ignored.
+
+Example: Alice submits an assignment, and receives the mark of 40/100. In _Level Up XP_, Alice receives 40 points for her grade.
+Alice reattempts her assignment, but this time her grade is lowered to 25/100. Alice\'s points in _Level Up XP_ do not change.
+For her final attempt, Alice scores 60/100, she earns 20 additional points in _Level Up XP_, her total of points earned is 60.
+
+[More at _Level Up XP_ documentation](https://docs.levelup.plus/xp/docs/how-to/grade-based-rewards?ref=blockxp_help)
+';
+$string['graderulesintro'] = 'The grade rules allow users to receive points equivalent to the grades they receive.';
 $string['grid'] = 'Grid';
 $string['hasname'] = 'Name set';
 $string['hasnoname'] = 'No name';
@@ -205,6 +219,8 @@ $string['moverule'] = 'Move rule';
 $string['name'] = 'Name';
 $string['navbardisplay'] = 'Show in navbar';
 $string['navbardisplay_desc'] = 'When enabled, the level of the user will be displayed in the top navigation bar. If the plugin is used "Per courses", it will only appear in courses. Please note that this functionality is heavily dependent on the theme and may not work well, or not at all, with 3rd party themes. [Learn more](https://docs.levelup.plus/xp/docs/navbar-display)';
+$string['naveventrules'] = 'Event rules';
+$string['navgraderules'] = 'Grade rules';
 $string['navinfos'] = 'Info';
 $string['navladder'] = 'Leaderboard';
 $string['navlevels'] = 'Levels';
