@@ -161,6 +161,16 @@ class default_settings_maker implements settings_maker {
             ]
         ));
 
+        // Whether to show level in navbar.
+        $settings[] = (new admin_setting_configselect('block_xp/navbardisplay',
+            get_string('navbardisplay', 'block_xp'),
+            get_string('navbardisplay_desc', 'block_xp'),
+            $this->defaults->get('navbardisplay'), [
+                '0' => get_string('no', 'core'),
+                '1' => get_string('yes', 'core'),
+            ]
+        ));
+
         // Whether admins can earn points.
         $settings[] = (new admin_setting_configselect('block_xp/adminscanearnxp',
             get_string('adminscanearnxp', 'block_xp'),

@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use block_xp\di;
+
 /**
  * File serving.
  *
@@ -35,8 +37,43 @@
  * @return void|false
  */
 function block_xp_pluginfile($course, $bi, $context, $filearea, $args, $forcedownload, array $options = array()) {
-    $fs = \block_xp\di::get('file_server');
+    $fs = di::get('file_server');
     if ($fs instanceof \block_xp\local\file\block_file_server) {
         $fs->serve_block_file($course, $bi, $context, $filearea, $args, $forcedownload, $options);
     }
+}
+
+/**
+ * Navbar injection.
+ *
+ * @param \renderer_base $output The global renderer.
+ */
+function block_xp_render_navbar_output($output) {
+    global $USER, $COURSE, $PAGE;
+
+    // Never applies if not logged in.
+    if (!$USER->id || isguestuser()) {
+        return '';
+    }
+
+    $config = di::get('config');
+    if (!$config->get('navbardisplay')) {
+        return '';
+    }
+
+    // If we display per course, we require to be in a course, but not the frontpage.
+    $sitewide = $config->get('context') == CONTEXT_SYSTEM;
+    if (!$sitewide && (!$PAGE->context->get_course_context(false) || $COURSE->id == SITEID)) {
+        return '';
+    }
+
+    // Check that the user can see the content.
+    $world = di::get('course_world_factory')->get_world($COURSE->id);
+    $accessperms = $world->get_access_permissions();
+    if (!$accessperms->can_access()) {
+        return '';
+    }
+
+    $renderer = di::get('renderer');
+    return $renderer->navbar_widget($world, $world->get_store()->get_state($USER->id));
 }

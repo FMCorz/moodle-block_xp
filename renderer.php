@@ -377,6 +377,49 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Get the context of the navbar widget.
+     *
+     * @param course_world $world The world.
+     * @param state $state The user's state.
+     * @return array
+     */
+    protected function get_navbar_widget_context(course_world $world, state $state) {
+        $urlresolver = \block_xp\di::get('url_resolver');
+        $worldconfig = $world->get_config();
+
+        $infopageurl = null;
+        if ($worldconfig->get('enableinfos')) {
+            $infopageurl = $urlresolver->reverse('infos', ['courseid' => $world->get_courseid()]);
+        }
+
+        $leaderboardurl = null;
+        if ($worldconfig->get('enableladder')) {
+            $leaderboardurl = $urlresolver->reverse('ladder', ['courseid' => $world->get_courseid()]);
+        }
+
+        $validurls = array_filter([$infopageurl, $leaderboardurl]);
+        $linkurl = reset($validurls) ?: null;
+
+        return [
+            'badgehtml' => $this->small_level_badge($state->get_level()),
+            'linkurl' => $linkurl ? $linkurl->out(false) : null,
+            'infopageurl' => $infopageurl ? $infopageurl->out(false) : null,
+            'leaderboardurl' => $leaderboardurl ? $leaderboardurl->out(false) : null,
+        ];
+    }
+
+    /**
+     * Navbar widget.
+     *
+     * @param course_world $world The world.
+     * @param state $state The user's state.
+     * @return string
+     */
+    public function navbar_widget(course_world $world, state $state) {
+        return $this->render_from_template('block_xp/navbar-widget', $this->get_navbar_widget_context($world, $state));
+    }
+
+    /**
      * New dot.
      *
      * @return string

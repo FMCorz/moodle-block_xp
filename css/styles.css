@@ -29,6 +29,9 @@
     cursor: default;
     @apply xp-select-none;
 }
+a .block_xp-level {
+    cursor: inherit;
+}
 
 .block_xp-level.level-1 {
     background-image: url([[pix:block_xp|1]]);
