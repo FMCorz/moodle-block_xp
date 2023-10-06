@@ -57,6 +57,7 @@ class admin_levels_controller extends admin_route_controller {
     protected function content() {
         $output = $this->get_renderer();
         echo $output->heading(get_string('defaultlevels', 'block_xp'));
+        $this->page_warning_editing_defaults('levels');
         list($module, $props) = $this->get_react_module();
         echo $output->react_module($module, $props);
     }

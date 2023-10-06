@@ -243,6 +243,7 @@ class admin_rules_controller extends admin_route_controller {
             return;
         }
 
+        $this->page_warning_editing_defaults('rules');
         $this->page_plus_promo_content();
         echo html_writer::tag('p', get_string('admindefaultrulesintro', 'block_xp'));
         $this->page_rules_content();

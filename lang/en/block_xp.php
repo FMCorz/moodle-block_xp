@@ -128,7 +128,7 @@ Drops can be used to cleverly award points when certain type of content is consu
 
 [More info](https://docs.levelup.plus/xp/docs/how-to/use-drops?ref=blockxp_help)
 ';
-$string['editingdefaultsettingsinwholesitemodenotice'] = '**Attention!** You are not modifying the current active site-wide settings, instead you are editing the default settings values. As Level Up XP is used site-wide, your intention is most likely to change the site-wide settings. [Navigate here]({$a->url}) to change those settings, or follow the "Settings" link from the XP block itself.';
+$string['editingdefaultsettingsinwholesitemodenotice'] = '**Attention!** You are not modifying the currently active settings, instead you are editing the default values. As Level Up XP is used site-wide, your intention is most likely to change the site-wide settings. [Navigate here]({$a->url}) to change those settings, or follow the "Settings" link from the XP block itself.';
 $string['editinstructions'] = 'Edit information';
 $string['enablecheatguard'] = 'Enable cheat guard';
 $string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive mechanism for preventing students to abuse the system using obvious techniques, such as refreshing the same page endlessly, or repeating the same action over and over again.

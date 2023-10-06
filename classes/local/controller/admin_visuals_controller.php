@@ -138,6 +138,8 @@ class admin_visuals_controller extends admin_route_controller {
 
         echo $output->heading(get_string('defaultvisuals', 'block_xp'));
 
+        $this->page_warning_editing_defaults('visuals');
+
         $this->intro();
 
         $form->display();

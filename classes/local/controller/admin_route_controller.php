@@ -26,6 +26,7 @@
 namespace block_xp\local\controller;
 defined('MOODLE_INTERNAL') || die();
 
+use block_xp\di;
 use coding_exception;
 
 require_once($CFG->libdir . '/adminlib.php');
@@ -79,4 +80,21 @@ abstract class admin_route_controller extends route_controller {
     protected function permissions_checks() {
     }
 
+    /**
+     * Output editing defaults warning, if needed.
+     *
+     * @param string $routename The corresponding route name outside admin.
+     */
+    protected function page_warning_editing_defaults($routename = '') {
+        if (di::get('config')->get('context') != CONTEXT_SYSTEM) {
+            return;
+        }
+        $url = $this->urlresolver->reverse($routename, ['courseid' => SITEID]);
+        echo di::get('renderer')->notification_without_close(strip_tags(
+            markdown_to_html(get_string('editingdefaultsettingsinwholesitemodenotice', 'block_xp', [
+                'url' => $url->out(false)
+            ])),
+            '<a><em><strong>'
+        ), \core\output\notification::NOTIFY_WARNING);
+    }
 }
