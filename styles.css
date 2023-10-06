@@ -1491,6 +1491,10 @@ a .block_xp-level {
 .block_xp .\[\&\>div\]\:xp-row-start-1>div {
     grid-row-start: 1;
 }
+.block_xp .\[\&_\.block\\_xp-level\]\:xp-mx-0 .block_xp-level {
+    margin-left: 0px;
+    margin-right: 0px;
+}
 .block_xp .\[\&_ul\]\:xp-pl-4 ul {
     padding-left: 1rem;
 }
