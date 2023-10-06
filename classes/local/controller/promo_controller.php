@@ -200,7 +200,7 @@ EOT;
         };
 
         echo <<<EOT
-<div class="xp-grid sm:xp-grid-cols-2 xp-gap-4">
+<div class="xp-grid sm:xp-grid-cols-2 xp-gap-4 [&_ul]:xp-pl-4 [&_li]:xp-mb-1">
     {$renderitemstart("trophy", "Greater motivation", "Make learners even more engaged and motivated!")}
         <ul>
             <li>{$new} Insert customised <strong>congratulation messages</strong> when learners receive
