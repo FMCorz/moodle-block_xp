@@ -76,7 +76,8 @@ class set_default_levels_info extends external_api {
     /**
      * External function.
      *
-     * @param int $courseid The course ID.
+     * @param array $levels The levels.
+     * @param array $algo The algo.
      * @return object
      */
     public static function execute($levels, $algo) {

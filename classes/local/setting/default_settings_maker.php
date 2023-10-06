@@ -65,7 +65,6 @@ class default_settings_maker implements settings_maker {
      * @param config $defaults The config object to get the defaults from.
      * @param url_resolver $urlresolver The URL resolver.
      * @param config|null $configlocked The repository of locked config.
-     * @param moodle_database|null $db The database.
      */
     public function __construct(config $defaults, url_resolver $urlresolver, config $configlocked = null) {
         $this->defaults = $defaults;

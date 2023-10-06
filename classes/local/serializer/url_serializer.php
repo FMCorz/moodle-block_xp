@@ -40,6 +40,9 @@ class url_serializer implements serializer_with_read_structure {
     /** @var string The base URL. */
     protected $wsbaseurl;
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         global $CFG;
         $this->iswsrequest = WS_SERVER;

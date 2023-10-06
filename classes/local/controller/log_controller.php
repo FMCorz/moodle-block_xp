@@ -39,12 +39,16 @@ use html_writer;
  */
 class log_controller extends page_controller {
 
+    /** @var string The nav name. */
     protected $navname = 'report';
+    /** @var string The route name. */
     protected $routename = 'log';
+    /** @var bool Whether is wide. */
     protected $iswideview = true;
+    /** @var bool Whether supports groups. */
     protected $supportsgroups = true;
 
-    /** @var int|null The user ID to filter the logs for. Use {@link self::get_user_id} to obtain. */
+    /** @var int|null The user ID to filter the logs for. Use {@see self::get_user_id} to obtain. */
     protected $userid = null;
 
     protected function permissions_checks() {

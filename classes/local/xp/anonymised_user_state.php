@@ -46,9 +46,8 @@ class anonymised_user_state extends user_state {
     /**
      * Constructor.
      *
-     * @param stdClass $user The user object.
-     * @param int $xp The user XP.
-     * @param levels_info $levelsinfo Levels info.
+     * @param user_state $state The state.
+     * @param stdClass $anonuser The user object.
      */
     public function __construct(user_state $state, stdClass $anonuser) {
         $this->anonuser = $anonuser;

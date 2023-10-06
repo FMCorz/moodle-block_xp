@@ -90,7 +90,7 @@ abstract class block_xp_rule implements renderable {
     /**
      * Export the properties and their values.
      *
-     * This must return all the values required by the {@link self::import()} method.
+     * This must return all the values required by the {@see self::import()} method.
      * It also must include the key '_class'.
      *
      * You will have to override this method to add more data, and handle special keys.
@@ -104,7 +104,7 @@ abstract class block_xp_rule implements renderable {
     /**
      * Re-import the values that were exported.
      *
-     * This should not be called directly, use {@link self::create()} instead.
+     * This should not be called directly, use {@see self::create()} instead.
      *
      * Override this method to handle special keys.
      *

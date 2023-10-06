@@ -35,6 +35,9 @@ namespace block_xp\local\task;
  */
 class default_tasks_definition_maker implements tasks_definition_maker {
 
+    /**
+     * Get the tasks definition.
+     */
     public function get_tasks_definition() {
         return [
             [

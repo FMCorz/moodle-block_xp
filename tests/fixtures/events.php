@@ -17,17 +17,31 @@
 /**
  * Block XP test event fixtures.
  *
- * @package    core
+ * @package    block_xp
  * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_xp\event;
 
+/**
+ * Something happened.
+ */
 class something_happened extends \core\event\base {
+
+    /**
+     * Init.
+     */
     public function init() {
         $this->context = \context_system::instance();
     }
+
+    /**
+     * Mock.
+     *
+     * @param array $properties The properties.
+     * @return self
+     */
     public static function mock($properties) {
         $event = static::create(array());
         foreach ($properties as $key => $value) {

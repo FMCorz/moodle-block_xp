@@ -54,6 +54,7 @@ interface config {
     /**
      * Whether the config exists.
      *
+     * @param string $name Name of the config.
      * @return bool
      */
     public function has($name);

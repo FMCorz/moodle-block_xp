@@ -72,7 +72,7 @@ class external_utils {
      * class or function.
      *
      * @param string $str The string to be filtered.
-     * @param context|int $contextorid The context.
+     * @param context|int $context The context, or its ID.
      * @param boolean $striplinks Whether to strip links.
      * @param array $options Options.
      * @return string

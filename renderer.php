@@ -119,7 +119,7 @@ class block_xp_renderer extends plugin_renderer_base {
      * Get a user's picture.
      *
      * @param object $user The user.
-     * @param moodle_url The URL to the picture.
+     * @return moodle_url The URL to the picture.
      */
     public function get_user_picture($user) {
         $pic = new user_picture($user);
@@ -161,6 +161,7 @@ class block_xp_renderer extends plugin_renderer_base {
      * Print a level's badge.
      *
      * @param level $level The level.
+     * @param array $options The options.
      * @return string
      */
     protected function level_badge_with_options(level $level, array $options = []) {
@@ -787,7 +788,7 @@ EOT
      *
      * /!\ We only support one editable widget per page!
      *
-     * @param renderer_base $widget The widget.
+     * @param renderable $widget The widget.
      * @return string
      */
     public function render_filters_widget(renderable $widget) {
@@ -842,7 +843,7 @@ EOT
     /**
      * Render the filters widget group.
      *
-     * @param rendererable $group The group.
+     * @param renderable $element The group.
      * @return string
      */
     public function render_filters_widget_element(renderable $element) {
@@ -859,7 +860,7 @@ EOT
     /**
      * Render the filters widget group.
      *
-     * @param rendererable $group The group.
+     * @param renderable $group The group.
      * @return string
      */
     public function render_filters_widget_group(renderable $group) {
@@ -911,7 +912,7 @@ EOT
      * Get the progress bar mustache context.
      *
      * @param state $state The renderable object.
-     * @param bool $showpercentagetogo Show the percentage to go.
+     * @param bool $percentagetogo Show the percentage to go.
      * @return array
      */
     protected function get_progress_bar_context(state $state, $percentagetogo = false) {
@@ -945,7 +946,7 @@ EOT
      * Returns the progress bar rendered.
      *
      * @param state $state The renderable object.
-     * @param bool $showpercentagetogo Show the percentage to go.
+     * @param bool $percentagetogo Show the percentage to go.
      * @return string HTML produced.
      */
     public function progress_bar(state $state, $percentagetogo = false) {
@@ -1013,7 +1014,7 @@ EOT
     /**
      * Render XP widget.
      *
-     * @param renderable $widget The widget.
+     * @param xp_widget $widget The widget.
      * @return string
      */
     public function render_xp_widget(xp_widget $widget) {
@@ -1041,6 +1042,8 @@ EOT
     /**
      * Sub navigation.
      *
+     * @param array $items The items.
+     * @param string $activenode The active node.
      * @return string
      */
     public function sub_navigation($items, $activenode) {

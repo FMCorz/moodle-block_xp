@@ -45,6 +45,8 @@ class levels_info_serializer implements serializer_with_read_structure {
 
     /**
      * Constructor.
+     *
+     * @param level_serializer $levelserializer The level serializer
      */
     public function __construct(level_serializer $levelserializer) {
         $this->levelserializer = $levelserializer;

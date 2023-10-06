@@ -51,7 +51,7 @@ class neighboured_leaderboard implements leaderboard {
      *
      * @param leaderboard $leaderboard The leaderboard.
      * @param int $objectid The object to be relative to.
-     * @param int $groupid The group ID.
+     * @param int $neighbours The neighbours.
      * @param bool $fallbackontop When true, the ranking will display some results from the top when the
      *                            objectid is not found in the ranking. You probably want to use this
      *                            when the ranking is viewed by a manager.

@@ -90,6 +90,7 @@ class course_level_up_notification_service {
      * Notify a user.
      *
      * @param int $userid The user ID.
+     * @param int $level The level.
      * @return void
      */
     public function notify($userid, $level = 0) {

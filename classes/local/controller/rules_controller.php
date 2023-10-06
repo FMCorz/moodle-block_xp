@@ -42,7 +42,7 @@ use block_xp_filter;
  */
 class rules_controller extends page_controller {
 
-    /** @inheritDoc */
+    /** @var string The nav name. */
     protected $navname = 'rules';
     /** @var string The route name. */
     protected $routename = 'rules';

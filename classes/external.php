@@ -121,7 +121,8 @@ class external extends external_api {
     /**
      * External function.
      *
-     * @param int $courseid The course ID.
+     * @param array $levels The levels.
+     * @param array $algo The algo.
      * @return object
      */
     public static function set_default_levels_info($levels, $algo) {
@@ -159,6 +160,8 @@ class external extends external_api {
      * External function.
      *
      * @param int $courseid The course ID.
+     * @param array $levels The levels.
+     * @param array $algo The algo.
      * @return object
      */
     public static function set_levels_info($courseid, $levels, $algo) {

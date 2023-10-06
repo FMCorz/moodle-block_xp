@@ -97,7 +97,7 @@ class block_xp_filter implements renderable {
     /**
      * Constructor.
      *
-     * Use {@link self::load_from_data()} instead.
+     * Use {@see self::load_from_data()} instead.
      */
     protected function __construct() {
     }
@@ -233,7 +233,7 @@ class block_xp_filter implements renderable {
     }
 
     /**
-     * Load the rule from {@link self::$ruledata}.
+     * Load the rule from {@see self::$ruledata}.
      *
      * @return void
      */
@@ -374,7 +374,7 @@ class block_xp_filter implements renderable {
     /**
      * Validate the rule data.
      *
-     * @param array $data Data to validate.
+     * @param array $ruledata Data to validate.
      * @return bool
      */
     protected static function validate_ruledata($ruledata) {

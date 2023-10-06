@@ -54,7 +54,6 @@ class default_course_world_navigation_factory implements course_world_navigation
      *
      * @param url_resolver $resolver The URL resolver.
      * @param config $adminconfig Admin config.
-     * @param user_indicator $indicator The indicator.
      */
     public function __construct(url_resolver $resolver, config $adminconfig) {
         $this->resolver = $resolver;

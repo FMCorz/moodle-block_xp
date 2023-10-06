@@ -253,7 +253,7 @@ class course_block extends block_base {
      * @param object $renderer The renderer.
      * @param \block_xp\local\course_world $world The world.
      * @param \block_xp\local\xp\level $level The level.
-     * @param \block_xp\local\xp\level $level The previous level.
+     * @param \block_xp\local\xp\level $prevlevel The previous level.
      */
     protected function get_popup_notification_props($renderer, $world, $level, $prevlevel) {
         return [

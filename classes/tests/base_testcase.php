@@ -35,15 +35,27 @@ abstract class base_testcase extends \advanced_testcase {
 
     use setup_trait;
 
+    /**
+     * Setup test.
+     */
     public function setup_test() {
         $this->resetAfterTest();
         $this->reset_container();
     }
 
+    /**
+     * Get world by course ID.
+     *
+     * @param int $courseid The course ID.
+     * @return \block_xp\local\course_world
+     */
     protected function get_world($courseid) {
         return \block_xp\di::get('course_world_factory')->get_world($courseid);
     }
 
+    /**
+     * Reset the container.
+     */
     protected function reset_container() {
         \block_xp\di::set_container(new \block_xp\local\default_container());
     }

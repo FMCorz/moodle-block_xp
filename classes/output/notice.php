@@ -39,13 +39,13 @@ use renderable;
  */
 class notice implements renderable {
 
-    /** @const Success. */
+    /** @var string Success. */
     const SUCCESS = 'success';
-    /** @const warning. */
+    /** @var string warning. */
     const WARNING = 'warning';
-    /** @const info. */
+    /** @var string info. */
     const INFO = 'info';
-    /** @const error. */
+    /** @var string error. */
     const ERROR = 'error';
 
     /** @var string The message. */

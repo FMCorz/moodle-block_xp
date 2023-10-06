@@ -64,6 +64,7 @@ class table_row_config implements config {
      * @param string $table The table.
      * @param config $defaults The defaults.
      * @param array $conditions The conditions to find the record.
+     * @param bool $defaulstifnull Whether to use the defaults when the value is null.
      */
     public function __construct(moodle_database $db, $table, config $defaults, array $conditions = [], $defaulstifnull = false) {
         $this->db = $db;

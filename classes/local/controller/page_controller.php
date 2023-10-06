@@ -148,7 +148,7 @@ abstract class page_controller extends course_route_controller {
     /**
      * The content of the page.
      *
-     * You probably want to look at {@link self::page_content} instead.
+     * You probably want to look at {@see self::page_content} instead.
      *
      * @return void
      */

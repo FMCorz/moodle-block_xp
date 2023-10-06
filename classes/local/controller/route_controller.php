@@ -155,7 +155,7 @@ abstract class route_controller implements controller {
     /**
      * Read and compute the optional params.
      *
-     * This should only be used once, to read the parameters, refer to {@link self::get_param}.
+     * This should only be used once, to read the parameters, refer to {@see self::get_param}.
      *
      * @return array
      */
@@ -196,7 +196,7 @@ abstract class route_controller implements controller {
     /**
      * Handle the request.
      *
-     * @param \block_xp\local\routing\routed_request $request The request.
+     * @param \block_xp\local\routing\request $request The request.
      * @return void
      */
     final public function handle(\block_xp\local\routing\request $request) {

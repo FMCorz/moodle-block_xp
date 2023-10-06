@@ -46,6 +46,8 @@ class level_serializer implements serializer_with_read_structure {
 
     /**
      * Constructor.
+     *
+     * @param url_serializer $urlserializer The URL serializer.
      */
     public function __construct(url_serializer $urlserializer) {
         $this->urlserializer = $urlserializer;

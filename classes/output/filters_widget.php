@@ -54,7 +54,7 @@ class filters_widget implements renderable {
     /**
      * Constructor.
      *
-     * @param object $filter The default filter.
+     * @param block_xp_filter $filter The default filter.
      * @param array $rules Of objects containing:
      *                     - (string) name
      *                     - (block_xp_rule) rule

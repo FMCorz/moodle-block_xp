@@ -45,7 +45,6 @@ class freeform_setting extends \admin_setting {
      *
      * @param string $name Unique name of the setting.
      * @param string|callable $content The content to display.
-     * @param string $heading An optional heading.
      */
     public function __construct($name, $content) {
         $this->content = $content;

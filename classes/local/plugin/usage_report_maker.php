@@ -148,7 +148,6 @@ class usage_report_maker {
      * Get rules usage.
      *
      * @param int $limit How many rules to check.
-     * @param array Where keys are rules usage info.
      */
     public function get_rules_usage($limit = 0) {
         $rulesusage = [

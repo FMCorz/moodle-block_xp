@@ -85,6 +85,8 @@ class restore_context {
     /**
      * Get a mapping.
      *
+     * @param string $name The mapping name.
+     * @param int $oldid The previous ID.
      * @return mixed|null
      */
     public function get_mapping_id($name, $oldid) {

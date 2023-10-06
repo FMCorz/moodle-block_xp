@@ -29,7 +29,6 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/filelib.php');
 
 use block_xp\di;
-use context_course;
 use context_system;
 use html_writer;
 use stdClass;
@@ -46,7 +45,7 @@ use block_xp\local\routing\url;
  */
 class visuals_controller extends page_controller {
 
-    /** @inheritDoc */
+    /** @var string The nav name. */
     protected $navname = 'levels';
     /** @var string The route name. */
     protected $routename = 'visuals';

@@ -35,6 +35,9 @@ namespace block_xp\local\observer;
  */
 class default_observer_rules_maker implements observer_rules_maker {
 
+    /**
+     * Get observer rules.
+     */
     public function get_observer_rules() {
         return [
             [

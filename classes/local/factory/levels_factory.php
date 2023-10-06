@@ -77,6 +77,7 @@ class levels_factory implements levels_info_factory, level_factory {
     /**
      * Get the world's level's info.
      *
+     * @param world $world The world.
      * @return levels_info
      */
     public function get_world_levels_info(world $world) {

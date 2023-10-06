@@ -328,6 +328,7 @@ class levels_info_writer {
     /**
      * Validate and return the metadata from raw data.
      *
+     * @param array $rawdata The raw data.
      * @return array
      */
     protected function validate_raw_data($rawdata) {

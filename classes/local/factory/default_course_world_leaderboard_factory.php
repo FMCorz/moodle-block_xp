@@ -106,7 +106,10 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
     /**
      * Get the leaderboard with config.
      *
-     * @inheritDoc
+     * @param course_world $world The world.
+     * @param config $config The config.
+     * @param course_world $groupid The group ID, or 0 for none or all participants.
+     * @return \block_xp\local\leaderboard\leaderboard
      */
     public function get_course_leaderboard_with_config(course_world $world, config $config, $groupid = 0) {
 

@@ -73,7 +73,7 @@ class course_user_state_store implements course_state_store,
      * @param moodle_database $db The DB.
      * @param levels_info $levelsinfo The levels info.
      * @param int $courseid The course ID.
-     * @param logger $logger The reason logger.
+     * @param reason_collection_logger $logger The reason logger.
      * @param level_up_state_store_observer $observer The observer.
      * @param points_increased_state_store_observer $pointsobserver The observer.
      */

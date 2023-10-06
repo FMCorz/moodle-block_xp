@@ -82,7 +82,7 @@ class anonymised_leaderboard implements leaderboard {
     /**
      * Anonymise the state rank.
      *
-     * @param rank $staterank The state rank.
+     * @param rank $rank The state rank.
      * @return rank
      */
     protected function anonymise_rank(rank $rank) {

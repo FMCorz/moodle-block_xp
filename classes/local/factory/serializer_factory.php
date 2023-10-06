@@ -39,10 +39,16 @@ use block_xp\local\serializer\url_serializer;
  */
 class serializer_factory {
 
+    /**
+     * Get the serializer.
+     */
     public function get_levels_info_serializer() {
         return new levels_info_serializer($this->get_level_serializer());
     }
 
+    /**
+     * Get the serializer.
+     */
     public function get_level_serializer() {
         return new level_serializer(new url_serializer());
     }

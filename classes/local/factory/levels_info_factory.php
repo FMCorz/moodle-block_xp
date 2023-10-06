@@ -47,6 +47,7 @@ interface levels_info_factory {
     /**
      * Get the world's level's info.
      *
+     * @param world $world The world.
      * @return \block_xp\local\xp\levels_info
      */
     public function get_world_levels_info(world $world);

@@ -99,7 +99,8 @@ class admin_rules_controller extends admin_route_controller {
      * Save the filters.
      *
      * @param array $filters Filters data.
-     * @param int $category The category constant.
+     * @param array $existingfilters Existing filters data.
+     * @param int|null $category The category constant.
      * @return void
      */
     protected function save_filters($filters, $existingfilters, $category = null) {
