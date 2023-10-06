@@ -31,6 +31,8 @@ require_once($CFG->libdir . '/adminlib.php');
 use block_xp\di;
 use html_writer;
 use block_xp\local\routing\url;
+use moodle_url;
+use single_button;
 
 /**
  * Promo controller class.
@@ -45,7 +47,7 @@ class promo_controller extends route_controller {
     /** Seen flag. */
     const SEEN_FLAG = 'promo-page-seen';
     /** Page version. */
-    const VERSION = 20220415;
+    const VERSION = 20231006;
 
     /** @var string The normal route name. */
     protected $routename = 'promo';
@@ -154,6 +156,7 @@ class promo_controller extends route_controller {
     protected function content_not_installed() {
         $output = \block_xp\di::get('renderer');
         $siteurl = "https://www.levelup.plus/xp/?ref=plugin_promopage";
+        $getxpstr = get_string('promogetnow', 'block_xp');
 
         if (!$this->is_admin_page()) {
             $config = $this->world->get_config();
@@ -167,152 +170,109 @@ class promo_controller extends route_controller {
             echo $output->notices($this->world);
         }
 
-        echo $output->heading(get_string('discoverlevelupplus', 'block_xp'), 3);
-        echo markdown_to_html(get_string('promointro', 'block_xp'));
+        echo $output->advanced_heading(get_string('discoverlevelupplus', 'block_xp'), [
+            'intro' => get_string('promointro', 'block_xp'),
+            'actions' => [
+                new single_button(new moodle_url($siteurl), $getxpstr, 'get',
+                    defined('single_button::BUTTON_PRIMARY') ? single_button::BUTTON_PRIMARY : true)
+            ]
+        ]);
+        // echo ;
 
         $new = '🆕';
 
+        $renderitemstart = function($icon, $title, $subtitle) use ($output) {
+            return <<<EOT
+            <div class="xp-bg-slate-50 xp-rounded xp-p-4">
+                <div class="xp-pb-4 xp-mb-4 xp-flex xp-gap-4 xp-border-b-white xp-border-0 xp-border-b-2 xp-border-solid">
+                    <div class="xp-w-16 xp-flex-0"><img src="{$output->pix_url($icon, 'block_xp')}" alt="" class="xp-max-w-full"></div>
+                    <div class="xp-grow">
+                        <h4>{$title}</h4>
+                        <p class="xp-m-0 xp-text-gray-700 xp-text-base">{$subtitle}</p>
+                    </div>
+                </div>
+                <div>
+EOT;
+        };
+        $renderitemend = function() {
+            return "</div></div>";
+        };
+
         echo <<<EOT
-<style>
-.block_xp-promo-table td:first-of-type {
-    text-align: center;
-    vertical-align: top;
-    width: 110px;
-    margin-top: 40px;
-}
-.block_xp-promo-table td:first-of-type img {
-    height: 50px;
-}
-.block_xp-promo-table h4 {
-    margin-top: 0;
-}
-.block_xp-promo-table h4,
-.block_xp-promo-table td:first-of-type img {
-    margin-top: 20px;
-}
-.block_xp-promo-table h4 .label {
-    font-size: 14px;
-}
-</style>
-
-<div style="text-center; margin: 1rem 0">
-    <p><a class="btn btn-primary" href="{$siteurl}">
-        Get Level Up XP+ now!
-    </a></p>
-</div>
-
-<table class="block_xp-promo-table">
-    <tr>
-        <td><img src="{$output->pix_url('noun/checklist', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Additional reward methods</h4>
-            <p>More control and methods to award points!</p>
-            <ul>
+<div class="xp-grid sm:xp-grid-cols-2 xp-gap-4">
+    {$renderitemstart("trophy", "Greater motivation", "Make learners even more engaged and motivated!")}
+        <ul>
+            <li>{$new} Insert customised <strong>congratulation messages</strong> when learners receive the level up notification.</li>
+            <li>{$new} <strong>Award a Moodle badge</strong> when learners attain a particular level</li>
+        </ul>
+    {$renderitemend()}
+    {$renderitemstart("noun/checklist", "Extended points strategy", "More control and methods to award points!")}
+        <ul>
             <li><strong>Drops</strong>: award points by placing code snippets anywhere</li>
             <li>Convert <strong>grades</strong> into points</li>
             <li>Reward <strong>activity</strong> and <strong>course completion</strong></li>
-            </ul>
-            <p>Plus convenient rules to:</p>
-            <ul>
-                <li>Target specific courses</li>
-                <li>Target activities by name</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('noun/manual', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Issue individual rewards</h4>
-            <p>Manually award points to specific learners.</p>
+            <li>{$new} Award point via web services <strong>API</strong></li>
+        </ul>
+        <p>Plus convenient rules to:</p>
+        <ul>
+            <li>Target specific courses</li>
+            <li>Target activities by name</li>
+        </ul>
+    {$renderitemend()}
+    {$renderitemstart("noun/manual", "Individual rewards", "Manually award points to one or more learners.")}
             <ul>
                 <li>A great way to <strong>reward offline</strong> or punctual <strong>actions</strong></li>
-                <li>Use our import feature to award points from a spreadsheet</li>
+                <li>Use our <strong>import</strong> feature to award points <strong>from a spreadsheet</strong></li>
             </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('noun/group', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Team leaderboards</h4>
-            <p>Rank groups of learners based on their combined points.</p>
+    {$renderitemend()}
+    {$renderitemstart("noun/group", "Team leaderboards", "Rank teams of learners based on their combined points.")}
             <ul>
-                <li>Make <strong>teams from groups</strong> and cohorts</li>
+                <li>Create the <strong>teams from groups</strong> and cohorts</li>
                 <li>Collaboration and cohesion in a friendly competition</li>
             </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('noun/privacy', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Improved cheat guard</h4>
-            <p>Get better control of learners' rewards.</p>
+    {$renderitemend()}
+    {$renderitemstart("noun/privacy", "Improved cheat guard", "Get better control over learners' rewards.")}
             <ul>
                 <li><strong>Limit</strong> your learners' <strong>rewards</strong> per day (or other time frames)</li>
                 <li>Get peace of mind with a more <strong>robust</strong> and resilient anti-cheat</li>
                 <li><strong>Increase</strong> the <strong>time limits</strong> to greater values</li>
             </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('noun/export', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Import, export &amp; report</h4>
-            <p>Better control and information about your learners' actions.</p>
+    {$renderitemend()}
+    {$renderitemstart("noun/export", "Import, export &amp; report", "Keep track of your learners' actions.")}
             <ul>
                 <li><strong>Export everything</strong>: leaderboards, logs and reports</li>
                 <li>Allocate <strong>points in bulk</strong> from an imported CSV file</li>
                 <li>Logs contain <strong>human-friendly</strong> descriptions and originating locations</li>
             </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('noun/carrots', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Change the meaning of points</h4>
-            <p>Replace the "XP" symbol to give another meaning to the points awarded.</p>
+    {$renderitemend()}
+    {$renderitemstart("noun/carrots", "Change the meaning of points", "Swap the \"XP\" symbol to give it another meaning.")}
             <ul>
                 <li>Choose one of the built-in symbols: 🧱, 💧, 🍃, 💡, 🧩, ⭐</li>
                 <li>Or make your own symbol by uploading an image.</li>
             </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('level', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Additional level badges</h4>
-            <p>Celebrate learners achievements with more badges.</p>
+    {$renderitemend()}
+    {$renderitemstart("level", "Additional level badges", "Celebrate learners achievements with more badges.")}
             <ul>
                 <li><strong>Five new sets</strong> of level badges</li>
                 <li>From cute characters, to progressive levels such as a seed growing into a tree</li>
             </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('noun/help', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Email support</h4>
-            <p>Let us help if something goes wrong</p>
+    {$renderitemend()}
+    {$renderitemstart("noun/help", "Email support", "Let us help if something goes wrong.")}
             <ul>
                 <li>Get direct <strong>email support</strong> from our team.</li>
             </ul>
-        </td>
-    </tr>
-    <tr>
-        <td><img src="{$output->pix_url('noun/heart', 'block_xp')}" alt=""></td>
-        <td>
-            <h4>Support us</h4>
-            <p>Purchasing the add-on directly contributes to the plugin's development.</p>
+    {$renderitemend()}
+    {$renderitemstart("noun/heart", "Support us", "Purchases directly contribute to the plugin's development.")}
             <ul>
                 <li>Bugs will be fixed</li>
                 <li>Requested features will be added</li>
             </ul>
-        </td>
-    </tr>
-</table>
+    {$renderitemend()}
+</div>
 
 <div style="text-align: center; margin: 1rem 0">
     <p><a class="btn btn-primary btn-large btn-lg" href="{$siteurl}">
-        Get Level Up XP+ now!
+        {$getxpstr}
     </a></p>
 </div>
 EOT;
