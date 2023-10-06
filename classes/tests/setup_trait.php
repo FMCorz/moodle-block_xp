@@ -94,7 +94,7 @@ if ($CFG->branch < 310) {
      * @author     Frédéric Massart <fred@branchup.tech>
      * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
      */
-    trait setup_trait {
+    trait setup_trait { // @codingStandardsIgnoreLine
         use setup_trait_310_onwards;
 
         /**

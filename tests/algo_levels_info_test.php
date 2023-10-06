@@ -24,7 +24,6 @@
  */
 
 namespace block_xp;
-defined('MOODLE_INTERNAL') || die();
 
 use block_xp\local\xp\algo_levels_info;
 use block_xp\local\xp\level_with_description;
@@ -199,7 +198,7 @@ class algo_levels_info_test extends base_testcase {
     public function test_data_parsing() {
         $sampledata = [
             'xp' => ['1' => 0, '2' => 120, '3' => 264, '4' => 437, '5' => 644, '6' => 893],
-            'name' =>  [
+            'name' => [
                 "1" => 'A',
                 "2" => 'Level Too!',
                 "3" => 'aaaa',

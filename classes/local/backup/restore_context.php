@@ -29,8 +29,6 @@ use base_logger;
 use context_course;
 use restore_structure_step;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Restore.
  *

@@ -25,6 +25,8 @@
 
 namespace block_xp\local\badge;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->libdir . '/badgeslib.php');
 require_once($CFG->dirroot . '/badges/lib/awardlib.php');
 

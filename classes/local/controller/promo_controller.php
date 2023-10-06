@@ -177,7 +177,6 @@ class promo_controller extends route_controller {
                     defined('single_button::BUTTON_PRIMARY') ? single_button::BUTTON_PRIMARY : true)
             ]
         ]);
-        // echo ;
 
         $new = '🆕';
 
@@ -185,7 +184,9 @@ class promo_controller extends route_controller {
             return <<<EOT
             <div class="xp-bg-slate-50 xp-rounded xp-p-4">
                 <div class="xp-pb-4 xp-mb-4 xp-flex xp-gap-4 xp-border-b-white xp-border-0 xp-border-b-2 xp-border-solid">
-                    <div class="xp-w-16 xp-flex-0"><img src="{$output->pix_url($icon, 'block_xp')}" alt="" class="xp-max-w-full"></div>
+                    <div class="xp-w-16 xp-flex-0">
+                        <img src="{$output->pix_url($icon, 'block_xp')}" alt="" class="xp-max-w-full">
+                    </div>
                     <div class="xp-grow">
                         <h4>{$title}</h4>
                         <p class="xp-m-0 xp-text-gray-700 xp-text-base">{$subtitle}</p>
@@ -202,7 +203,8 @@ EOT;
 <div class="xp-grid sm:xp-grid-cols-2 xp-gap-4">
     {$renderitemstart("trophy", "Greater motivation", "Make learners even more engaged and motivated!")}
         <ul>
-            <li>{$new} Insert customised <strong>congratulation messages</strong> when learners receive the level up notification.</li>
+            <li>{$new} Insert customised <strong>congratulation messages</strong> when learners receive
+                the level up notification.</li>
             <li>{$new} <strong>Award a Moodle badge</strong> when learners attain a particular level</li>
         </ul>
     {$renderitemend()}

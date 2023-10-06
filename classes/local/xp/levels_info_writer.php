@@ -135,7 +135,7 @@ class levels_info_writer {
      */
     protected function construct_finaldata($parts) {
         $finaldata = [
-            'v' =>  2,
+            'v' => 2,
             'xp' => $parts['points'],
         ];
 
