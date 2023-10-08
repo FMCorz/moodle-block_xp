@@ -77,3 +77,27 @@ function block_xp_render_navbar_output($output) {
     $renderer = di::get('renderer');
     return $renderer->navbar_widget($world, $world->get_store()->get_state($USER->id));
 }
+
+/**
+ * Get user preferences.
+ *
+ * @return array
+ */
+function block_xp_user_preferences() {
+    return [
+        'block_xp_notices' => [
+            'type' => PARAM_BOOL,
+            'permissioncallback' => function($user) {
+                global $USER;
+                return $user->id == $USER->id;
+            },
+        ],
+        'block_xp_notice_quest' => [
+            'type' => PARAM_BOOL,
+            'permissioncallback' => function($user) {
+                global $USER;
+                return $user->id == $USER->id;
+            },
+        ]
+    ];
+}

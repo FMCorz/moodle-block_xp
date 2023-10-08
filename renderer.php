@@ -314,16 +314,13 @@ class block_xp_renderer extends plugin_renderer_base {
         if ($notice) {
             list($flag, $textfn) = $notice;
 
-            require_once($CFG->libdir . '/ajax/ajaxlib.php');
-            user_preference_allow_ajax_update($flag, PARAM_BOOL);
-
-            $this->page->requires->js_amd_inline("require([], function() {
+            $this->page->requires->js_amd_inline("require(['core_user/repository'], function(UserRepo) {
                 const flag = '$flag';
                 const n = document.querySelector('.block-xp-rocks');
                 if (!n) return;
                 n.addEventListener('click', function(e) {
                     e.preventDefault();
-                    M.util.set_user_preference(flag, 1);
+                    UserRepo.setUserPreference(flag, true);
                     const notice = document.querySelector('.block-xp-notices');
                     if (!notice) return;
                     notice.style.display = 'none';
