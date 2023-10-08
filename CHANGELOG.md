@@ -1,6 +1,39 @@
 Changelog
 =========
 
+v3.15.0
+-------
+
+New features
+
+- The user level badge can be displayed in the top navigation bar
+- The level up notification animated the transition to the new level
+- Redesign the levels customisation page to simplify setting their points
+- Points shortcode can display the number of points of the current user
+- Admin setting allow admin users to collect points like other users
+
+Quality of life
+
+- Warn admins when they are editing the default settings in site-wide mode
+- The levels can be reset to the admin defaults from the levels page
+- The levels appearance can be reset to the admin defaults from the appearance page
+- Improved the design of several pages
+- Display compatibility checks in the admin general settings page
+- Renamed "Visuals" to "Appearance"
+
+Bug fixes
+
+- Fixed JavaScript error when trying to dismiss notice to managers
+- The level up event could incorrectly trigger when editing user points
+- Other minor fixes and improvements
+
+Technical changes
+
+- Compatibility with Moodle 4.3
+- Plugin declare which Moodle versions are explicitly supported
+
+Read our [release blog post](https://www.levelup.plus/blog/xp-release-3-15/) to learn more.
+
 v3.14.1
 -------
 
