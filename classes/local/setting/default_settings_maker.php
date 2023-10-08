@@ -145,6 +145,9 @@ class default_settings_maker implements settings_maker {
     protected function get_general_settings() {
         $settings = [];
 
+        // Display the compatibility check.
+        $settings[] = new compatibility_check_setting();
+
         // Display a list of recommended plugins.
         $settings[] = new recommended_plugins_setting();
 
