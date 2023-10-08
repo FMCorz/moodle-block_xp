@@ -56,30 +56,30 @@ class compatibility_check_setting extends static_setting {
         $pluginman = core_plugin_manager::instance();
         $addon = di::get('addon');
         $messages = [];
-        $o = '';
 
         $blockxp = $pluginman->get_plugin_info('block_xp');
         $localxp = $pluginman->get_plugin_info('local_xp');
         $humanbranch = moodle_major_version() ?: 'v?';
 
-        if (!empty($blockxp->pluginsupported) && ($CFG->branch < $blockxp->pluginsupported[0]
-                || $CFG->branch > $blockxp->pluginsupported[1])) {
-            $messages[] = [
-                'title' => get_string('potentialmoodleincompatibility', 'block_xp'),
-                'message' => get_string('pluginxmaybeincompatible', 'block_xp',
-                    ['name' => 'Level Up XP', 'component' => 'block_xp', 'version' => $humanbranch]),
-                'url' => 'https://docs.levelup.plus/docs/xp/requirements-compatibility#potential-moodle-incompatibility'
-            ];
-        }
-
-        if ($localxp && (empty($localxp->pluginsupported) || ($CFG->branch < $localxp->pluginsupported[0]
-                || $CFG->branch > $localxp->pluginsupported[1]))) {
-            $messages[] = [
-                'title' => get_string('potentialmoodleincompatibility', 'block_xp'),
-                'message' => get_string('pluginxmaybeincompatible', 'block_xp',
-                    ['name' => 'Level Up XP+', 'component' => 'local_xp', 'version' => $humanbranch]),
-                'url' => 'https://docs.levelup.plus/docs/xp/requirements-compatibility#potential-moodle-incompatibility'
-            ];
+        if ($CFG->branch >= 39) {
+            if (!empty($blockxp->pluginsupported) && ($CFG->branch < $blockxp->pluginsupported[0]
+                    || $CFG->branch > $blockxp->pluginsupported[1])) {
+                $messages[] = [
+                    'title' => get_string('potentialmoodleincompatibility', 'block_xp'),
+                    'message' => get_string('pluginxmaybeincompatible', 'block_xp',
+                        ['name' => 'Level Up XP', 'component' => 'block_xp', 'version' => $humanbranch]),
+                    'url' => 'https://docs.levelup.plus/docs/xp/requirements-compatibility#potential-moodle-incompatibility'
+                ];
+            }
+            if ($localxp && (empty($localxp->pluginsupported) || ($CFG->branch < $localxp->pluginsupported[0]
+                    || $CFG->branch > $localxp->pluginsupported[1]))) {
+                $messages[] = [
+                    'title' => get_string('potentialmoodleincompatibility', 'block_xp'),
+                    'message' => get_string('pluginxmaybeincompatible', 'block_xp',
+                        ['name' => 'Level Up XP+', 'component' => 'local_xp', 'version' => $humanbranch]),
+                    'url' => 'https://docs.levelup.plus/docs/xp/requirements-compatibility#potential-moodle-incompatibility'
+                ];
+            }
         }
 
         if ($addon->get_version_diff() > 270) {
