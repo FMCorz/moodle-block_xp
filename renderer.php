@@ -314,18 +314,37 @@ class block_xp_renderer extends plugin_renderer_base {
         if ($notice) {
             list($flag, $textfn) = $notice;
 
-            $this->page->requires->js_amd_inline("require(['core_user/repository'], function(UserRepo) {
-                const flag = '$flag';
-                const n = document.querySelector('.block-xp-rocks');
-                if (!n) return;
-                n.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    UserRepo.setUserPreference(flag, true);
-                    const notice = document.querySelector('.block-xp-notices');
-                    if (!notice) return;
-                    notice.style.display = 'none';
-                });
-            });");
+            if ($CFG->branch >= 403) {
+                $this->page->requires->js_amd_inline("require(['core_user/repository'], function(UserRepo) {
+                    const flag = '$flag';
+                    const n = document.querySelector('.block-xp-rocks');
+                    if (!n) return;
+                    n.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        UserRepo.setUserPreference(flag, true);
+                        const notice = document.querySelector('.block-xp-notices');
+                        if (!notice) return;
+                        notice.style.display = 'none';
+                    });
+                });");
+
+            } else {
+                require_once($CFG->libdir . '/ajax/ajaxlib.php');
+                user_preference_allow_ajax_update($flag, PARAM_BOOL);
+
+                $this->page->requires->js_amd_inline("require([], function() {
+                    const flag = '$flag';
+                    const n = document.querySelector('.block-xp-rocks');
+                    if (!n) return;
+                    n.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        M.util.set_user_preference(flag, 1);
+                        const notice = document.querySelector('.block-xp-notices');
+                        if (!notice) return;
+                        notice.style.display = 'none';
+                    });
+                });");
+            }
 
             $icon = new pix_icon('t/close', get_string('dismissnotice', 'block_xp'), 'block_xp');
             $actionicon = $this->action_icon(new moodle_url($this->page->url), $icon, null, array('class' => 'block-xp-rocks'));
