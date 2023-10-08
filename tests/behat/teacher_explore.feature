@@ -29,7 +29,7 @@ Feature: A teacher can navigate through the pages of the plugin
     And I click on "Report" "link" in the ".block_xp" "css_element"
     And I click on "Log" "link" in the ".block_xp" "css_element"
     And I click on "Levels" "link" in the ".block_xp" "css_element"
-    And I click on "Visuals" "link" in the ".block_xp" "css_element"
+    And I click on "Appearance" "link" in the ".block_xp" "css_element"
     And I click on "Points" "link" in the ".block_xp" "css_element"
     And I click on "Settings" "link" in the ".block_xp" "css_element"
     And I click on "XP+" "link" in the ".block_xp" "css_element"
