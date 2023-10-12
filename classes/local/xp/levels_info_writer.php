@@ -172,9 +172,15 @@ class levels_info_writer {
      * @return array The parts.
      */
     protected function deconstruct_finaldata($data) {
+        $version = (int) ($data['v'] ?? 1);
+
+        $nonmetakeys = ['v', 'xp', 'algo'];
+        if ($version < 2) {
+            $nonmetakeys = array_merge($nonmetakeys, ['base', 'coef', 'usealgo']);
+        }
 
         $metadata = [];
-        $metadatakeys = array_diff(array_keys($data), ['v', 'xp', 'algo']);
+        $metadatakeys = array_diff(array_keys($data), $nonmetakeys);
         foreach ($metadatakeys as $metakey) {
             foreach (($data[$metakey] ?? []) as $level => $value) {
                 if (!isset($metadata[$level])) {
@@ -184,9 +190,22 @@ class levels_info_writer {
             }
         }
 
+        // Extract the algorithm. Before the version 2, the parameters of the algorithm were defined
+        // differently. You may want to check algo_levels_info for more defaults. Because we're expecting
+        // the final data here, we must convert that to the new format.
+        $algo = $data['algo'] ?? null;
+        if (!$algo && $version < 2) {
+            $algo = [
+                'base' => $data['base'] ?? algo_levels_info::DEFAULT_BASE,
+                'coef' => $data['coef'] ?? algo_levels_info::DEFAULT_COEF,
+                'incr' => algo_levels_info::DEFAULT_INCR,
+                'method' => 'relative',
+            ];
+        }
+
         return [
-            'points' => $data['xp'],
-            'algo' => $data['algo'] ?? null,
+            'points' => array_values($data['xp']), // Forced indexation at zero as it wasn't the case previously.
+            'algo' => $algo,
             'metadata' => $metadata
         ];
     }
