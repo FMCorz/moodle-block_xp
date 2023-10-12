@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v3.15.1
+-------
+
+Bug fixes
+
+- Levels incorrectly started at 2 when restored from pre 3.15.0 backup
+
+
 v3.15.0
 -------
 
