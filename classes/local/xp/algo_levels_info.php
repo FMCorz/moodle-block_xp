@@ -95,8 +95,8 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
             $this->incr = isset($data['algo']['incr']) ? max(0, (int) $data['algo']['incr']) : static::DEFAULT_INCR;
             $this->method = $data['algo']['method'];
         } else {
-            $this->base = max(1, (int) $data['base']);
-            $this->coef = max(1, (float) $data['coef']);
+            $this->base = max(1, (int) ($data['base'] ?? static::DEFAULT_BASE));
+            $this->coef = max(1, (float) ($data['coef'] ?? static::DEFAULT_COEF));
         }
 
         // For legacy reasons, if we do not know the method we fall back onto what was the equivalent
@@ -241,10 +241,10 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
 
         $data = $this->data;
         $resolver = $this->resolver;
-        $version = $this->data['v'] ?? 1;
+        $leveln = 1;
 
-        $levels = array_reduce(array_keys($this->data['xp']), function($carry, $key) use ($resolver, $data, $version) {
-            $level = $version === 2 ? $key + 1 : $key;
+        $levels = array_reduce(array_keys($this->data['xp']), function($carry, $key) use ($resolver, $data, &$leveln) {
+            $level = $leveln++;
 
             if ($this->levelfactory) {
                 $obj = $this->levelfactory->make_level(
