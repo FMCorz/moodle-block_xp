@@ -308,6 +308,102 @@ class algo_levels_info_test extends base_testcase {
     }
 
     /**
+     * Test make from defaults.
+     *
+     * @covers \block_xp\local\xp\algo_levels_info
+     */
+    public function test_data_parsing_with_inconsistencies() {
+        $sampledata = [
+            'xp' => ['1' => 0, '2' => 120, '3' => 264, '4' => 437, '5' => 644, '7' => 893], // Skipped 6 key.
+            'name' => [
+                "0" => 'A', // Invalid key.
+                "2" => 'Level two!',
+            ],
+            'desc' => [
+                '5' => 'Desc 5',
+                '6' => 'Desc 6' // Key does not match level.
+            ],
+            // Missing algo.
+        ];
+        $levelsinfo = new algo_levels_info($sampledata);
+
+        $this->assertEquals(algo_levels_info::DEFAULT_BASE, $levelsinfo->get_base());
+        $this->assertEquals(algo_levels_info::DEFAULT_COEF, $levelsinfo->get_coef());
+        $this->assertEquals(algo_levels_info::DEFAULT_INCR, $levelsinfo->get_incr());
+        $this->assertEquals('relative', $levelsinfo->get_method());
+        $this->assertEquals(6, $levelsinfo->get_count());
+        $this->assertEquals([
+            1 => 0,
+            2 => 120,
+            3 => 264,
+            4 => 437,
+            5 => 644,
+            6 => 893
+        ], $this->get_xp_by_levels($levelsinfo));
+        $this->assertEquals([
+            1 => '',
+            2 => 'Level two!',
+            3 => '',
+            4 => '',
+            5 => '',
+            6 => ''
+        ], $this->get_name_by_levels($levelsinfo));
+        $this->assertEquals([
+            1 => '',
+            2 => '',
+            3 => '',
+            4 => '',
+            5 => 'Desc 5',
+            6 => ''
+        ], $this->get_description_by_levels($levelsinfo));
+
+        $sampledata = [
+            'v' => 2,
+            'xp' => ['1' => 0, '2' => 120, '3' => 264, '4' => 437, '5' => 644, '7' => 893], // Not indexed at 0 and skipped 6.
+            'name' => [
+                "0" => 'A', // Invalid key.
+                "2" => 'Level two!',
+            ],
+            'desc' => [
+                '5' => 'Desc 5',
+                '6' => 'Desc 6' // Key does not match level.
+            ],
+            // Missing algo.
+        ];
+        $levelsinfo = new algo_levels_info($sampledata);
+
+        $this->assertEquals(algo_levels_info::DEFAULT_BASE, $levelsinfo->get_base());
+        $this->assertEquals(algo_levels_info::DEFAULT_COEF, $levelsinfo->get_coef());
+        $this->assertEquals(algo_levels_info::DEFAULT_INCR, $levelsinfo->get_incr());
+        $this->assertEquals('relative', $levelsinfo->get_method());
+        $this->assertEquals(6, $levelsinfo->get_count());
+        $this->assertEquals([
+            1 => 0,
+            2 => 120,
+            3 => 264,
+            4 => 437,
+            5 => 644,
+            6 => 893
+        ], $this->get_xp_by_levels($levelsinfo));
+        $this->assertEquals([
+            1 => '',
+            2 => 'Level two!',
+            3 => '',
+            4 => '',
+            5 => '',
+            6 => ''
+        ], $this->get_name_by_levels($levelsinfo));
+        $this->assertEquals([
+            1 => '',
+            2 => '',
+            3 => '',
+            4 => '',
+            5 => 'Desc 5',
+            6 => ''
+        ], $this->get_description_by_levels($levelsinfo));
+    }
+
+    /**
      * Get the XP by levels.
      *
      * @param algo_levels_info $levelsinfo The levels info.
