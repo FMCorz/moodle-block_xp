@@ -19,13 +19,10 @@ cache:
     - $HOME/.npm
 
 php:
+  - 8.2
   - 8.1
   - 8.0
   - 7.4
-  # - 7.3
-  # - 7.2
-  # - 7.1
-  # - 7.0
 
 env:
   global:
@@ -35,98 +32,48 @@ env:
     - IGNORE_PATHS=db/upgrade.php,classes/form/duration.php,classes/form/itemspertime.php
 
   matrix:
-    - MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_39_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_310_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_311_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_312_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_400_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_401_STABLE DB=pgsql
     - MOODLE_BRANCH=MOODLE_402_STABLE DB=pgsql
-    - MOODLE_BRANCH=MOODLE_402_STABLE DB=mysqli
+    - MOODLE_BRANCH=MOODLE_403_STABLE DB=pgsql
+    - MOODLE_BRANCH=MOODLE_403_STABLE DB=mysqli
     - MOODLE_BRANCH=master DB=pgsql
 
 matrix:
   exclude:
-    # Exclude builds not compatible with 7.0.
-    - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_37_STABLE DB=pgsql
-    - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_38_STABLE DB=pgsql
-    - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_39_STABLE DB=pgsql
-    - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_310_STABLE DB=pgsql
-    - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_311_STABLE DB=pgsql
-    - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_312_STABLE DB=pgsql
-    - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_400_STABLE DB=pgsql
-    - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_401_STABLE DB=pgsql
-    - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=pgsql
-    - php: 7.0
-      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=mysqli
-    - php: 7.0
-      env: MOODLE_BRANCH=master DB=pgsql
-
-    # Exclude builds not compatible with 7.1.
-    - php: 7.1
-      env: MOODLE_BRANCH=MOODLE_39_STABLE DB=pgsql
-    - php: 7.1
-      env: MOODLE_BRANCH=MOODLE_310_STABLE DB=pgsql
-    - php: 7.1
-      env: MOODLE_BRANCH=MOODLE_311_STABLE DB=pgsql
-    - php: 7.1
-      env: MOODLE_BRANCH=MOODLE_312_STABLE DB=pgsql
-    - php: 7.1
-      env: MOODLE_BRANCH=MOODLE_400_STABLE DB=pgsql
-    - php: 7.1
-      env: MOODLE_BRANCH=MOODLE_401_STABLE DB=pgsql
-    - php: 7.1
-      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=pgsql
-    - php: 7.1
-      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=mysqli
-    - php: 7.1
-      env: MOODLE_BRANCH=master DB=pgsql
-
-    # Exclude builds not compatible with 7.3.
-    - php: 7.3
-      env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
-    - php: 7.3
-      env: MOODLE_BRANCH=MOODLE_401_STABLE DB=pgsql
-    - php: 7.3
-      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=pgsql
-    - php: 7.3
-      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=mysqli
-    - php: 7.3
-      env: MOODLE_BRANCH=master DB=pgsql
-
     # Exclude builds not compatible with 7.4.
     - php: 7.4
-      env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
+      env: MOODLE_BRANCH=MOODLE_402_STABLE DB=pgsql
+    - php: 7.4
+      env: MOODLE_BRANCH=MOODLE_403_STABLE DB=pgsql
+    - php: 7.4
+      env: MOODLE_BRANCH=MOODLE_403_STABLE DB=mysqli
+    - php: 7.4
+      env: MOODLE_BRANCH=master DB=pgsql
 
     # Exclude builds not compatible with 8.0.
     - php: 8.0
-      env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
-    - php: 8.0
       env: MOODLE_BRANCH=MOODLE_39_STABLE DB=pgsql
-    - php: 8.0
-      env: MOODLE_BRANCH=MOODLE_310_STABLE DB=pgsql
 
     # Exclude builds not compatible with 8.1.
     - php: 8.1
-      env: MOODLE_BRANCH=MOODLE_34_STABLE DB=pgsql
-    - php: 8.1
       env: MOODLE_BRANCH=MOODLE_39_STABLE DB=pgsql
-    - php: 8.1
-      env: MOODLE_BRANCH=MOODLE_310_STABLE DB=pgsql
     - php: 8.1
       env: MOODLE_BRANCH=MOODLE_311_STABLE DB=pgsql
     - php: 8.1
       env: MOODLE_BRANCH=MOODLE_400_STABLE DB=pgsql
+
+    # Exclude builds not compatible with 8.2.
+    - php: 8.2
+      env: MOODLE_BRANCH=MOODLE_39_STABLE DB=pgsql
+    - php: 8.2
+      env: MOODLE_BRANCH=MOODLE_311_STABLE DB=pgsql
+    - php: 8.2
+      env: MOODLE_BRANCH=MOODLE_400_STABLE DB=pgsql
+    - php: 8.2
+      env: MOODLE_BRANCH=MOODLE_401_STABLE DB=pgsql
 
 before_install:
   - if [[ ${TRAVIS_PHP_VERSION:0:1} -gt 7 ]]; then pecl install xmlrpc-beta; fi
