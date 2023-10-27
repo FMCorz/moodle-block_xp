@@ -49,6 +49,8 @@ jobs:
             php: 8.1
           - moodle-branch: MOODLE_400_STABLE
             php: 8.1
+          - moodle-branch: MOODLE_311_STABLE
+            php: 8.2
           - moodle-branch: MOODLE_400_STABLE
             php: 8.2
           - moodle-branch: MOODLE_401_STABLE
