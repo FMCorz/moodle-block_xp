@@ -33,26 +33,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1']
-        moodle-branch: ['MOODLE_39_STABLE', 'MOODLE_311_STABLE', 'MOODLE_400_STABLE', 'MOODLE_401_STABLE', 'MOODLE_402_STABLE']
+        php: ['7.4', '8.0', '8.1', '8.2']
+        moodle-branch: ['MOODLE_311_STABLE', 'MOODLE_400_STABLE', 'MOODLE_401_STABLE', 'MOODLE_402_STABLE', 'MOODLE_403_STABLE']
         database: [pgsql]
         include:
-          - moodle-branch: MOODLE_402_STABLE
+          - moodle-branch: MOODLE_403_STABLE
             database: mariadb
-            php: 8.1
+            php: 8.2
         exclude:
-          - moodle-branch: MOODLE_39_STABLE
-            php: 7.4
           - moodle-branch: MOODLE_402_STABLE
             php: 7.4
-          - moodle-branch: MOODLE_39_STABLE
-            php: 8.0
-          - moodle-branch: MOODLE_39_STABLE
-            php: 8.1
+          - moodle-branch: MOODLE_403_STABLE
+            php: 7.4
           - moodle-branch: MOODLE_311_STABLE
             php: 8.1
           - moodle-branch: MOODLE_400_STABLE
             php: 8.1
+          - moodle-branch: MOODLE_400_STABLE
+            php: 8.2
+          - moodle-branch: MOODLE_401_STABLE
+            php: 8.2
 
     steps:
       - name: Check out repository code
@@ -84,49 +84,54 @@ jobs:
         env:
           DB: ${{ matrix.database }}
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
+          IGNORE_PATHS: 'vendor/,node_modules/,templates/level-badge.mustache'
 
       - name: PHP Lint
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci phplint
 
       # - name: PHP Copy/Paste Detector
       #   continue-on-error: true # This step will show errors but will not fail
-      #   if: ${{ always() }}
+      #   if: ${{ !cancelled() }}
       #   run: moodle-plugin-ci phpcpd
 
       # - name: PHP Mess Detector
       #   continue-on-error: true # This step will show errors but will not fail
-      #   if: ${{ always() }}
+      #   if: ${{ !cancelled() }}
       #   run: moodle-plugin-ci phpmd
 
       - name: Moodle Code Checker
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci phpcs --max-warnings 0
 
       # - name: Moodle PHPDoc Checker
-      #   if: ${{ always() }}
+      #   if: ${{ !cancelled() }}
       #   run: moodle-plugin-ci phpdoc --max-warnings 0
 
       - name: Validating
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci validate
 
       - name: Check upgrade savepoints
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci savepoints
 
       - name: Mustache Lint
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci mustache
 
       # - name: Grunt
-      #   if: ${{ always() }}
+      #   if: ${{ !cancelled() }}
       #   run: moodle-plugin-ci grunt --max-lint-warnings 0
 
       - name: PHPUnit tests
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci phpunit --fail-on-warning
 
       - name: Behat features
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         run: moodle-plugin-ci behat --profile chrome
+
+      - name: Mark cancelled jobs as failed.
+        if: ${{ cancelled() }}
+        run: exit 1
