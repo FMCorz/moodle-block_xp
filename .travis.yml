@@ -29,7 +29,7 @@ env:
     - PGVER=13
     # Copy/paste from XMLDBEditor should not be linted.
     # Custom form elements are formatted according for formslib, which doesn't match Moodle's style.
-    - IGNORE_PATHS=db/upgrade.php,classes/form/duration.php,classes/form/itemspertime.php
+    - IGNORE_PATHS=db/upgrade.php,classes/form/duration.php,classes/form/itemspertime.php,node_modules/,templates/level-badge.mustache
 
   matrix:
     - MOODLE_BRANCH=MOODLE_39_STABLE DB=pgsql
