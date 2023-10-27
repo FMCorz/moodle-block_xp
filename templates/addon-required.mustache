@@ -37,7 +37,7 @@
 </a>
 {{#js}}
 require([], function() {
-    const htmlContent = {{#quote}}{{#str}} unlockfeaturewithxpplus, block_xp, {{ promourl }} {{/str}}{{/quote}};
+    var htmlContent = {{#quote}}{{#str}} unlockfeaturewithxpplus, block_xp, {{ promourl }} {{/str}}{{/quote}};
     document.getElementById('xp-addon-required-{{ uniqid }}').setAttribute('data-content', htmlContent);
 });
 {{/js}}
