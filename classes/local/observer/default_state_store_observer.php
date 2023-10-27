@@ -87,8 +87,8 @@ class default_state_store_observer implements level_up_state_store_observer, poi
                 'context' => $this->context,
                 'relateduserid' => $id,
                 'other' => [
-                    'level' => $i
-                ]
+                    'level' => $i,
+                ],
             ];
             $lupevent = \block_xp\event\user_leveledup::create($params);
             $lupevent->trigger();

@@ -71,6 +71,9 @@ class leaderboard_table extends flexible_table {
     /** @var bool Whether to show the pagesize selector. */
     protected $showpagesizeselector = false;
 
+    /** @var limit The fence. */
+    protected $fence;
+
     /**
      * Constructor.
      *
@@ -274,7 +277,7 @@ class leaderboard_table extends flexible_table {
         }
 
         $this->wrap_html_start();
-        echo html_writer::start_tag('div', array('class' => 'no-overflow'));
+        echo html_writer::start_tag('div', ['class' => 'no-overflow']);
         echo html_writer::start_tag('table', $this->attributes);
     }
 
@@ -356,7 +359,7 @@ class leaderboard_table extends flexible_table {
     protected function rank_to_keyed_data($rank) {
         $row = (object) [
             'rank' => $rank->get_rank(),
-            'state' => $rank->get_state()
+            'state' => $rank->get_state(),
         ];
         return [
             'fullname' => $this->col_fullname($row),

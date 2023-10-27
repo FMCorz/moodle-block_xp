@@ -65,7 +65,7 @@ class default_instance_finder implements instance_finder {
 
         $params = [
             'name' => preg_replace('/^block_/i', '', $name),
-            'contextid' => $context->id
+            'contextid' => $context->id,
         ];
 
         $records = $this->db->get_records_sql($sql, $params);

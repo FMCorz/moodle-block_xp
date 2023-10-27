@@ -35,6 +35,11 @@ namespace block_xp\local\xp;
  */
 class state_rank implements rank {
 
+    /** @var int The rank. */
+    protected $rank;
+    /** @var state The state. */
+    protected $state;
+
     /**
      * Constructor.
      *

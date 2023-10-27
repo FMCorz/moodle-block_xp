@@ -43,7 +43,7 @@ class something_happened extends \core\event\base {
      * @return self
      */
     public static function mock($properties) {
-        $event = static::create(array());
+        $event = static::create([]);
         foreach ($properties as $key => $value) {
             $event->data[$key] = $value;
         }

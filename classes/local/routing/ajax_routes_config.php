@@ -46,7 +46,7 @@ class ajax_routes_config extends static_routes_config {
                 '~^/notice/([a-z0-9_-]+)/dismiss$~',
                 'ajax_notice_dismiss',
                 [
-                    1 => 'name'
+                    1 => 'name',
                 ]
             ),
         ]);

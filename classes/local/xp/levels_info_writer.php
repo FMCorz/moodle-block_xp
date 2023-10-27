@@ -206,7 +206,7 @@ class levels_info_writer {
         return [
             'points' => array_values($data['xp']), // Forced indexation at zero as it wasn't the case previously.
             'algo' => $algo,
-            'metadata' => $metadata
+            'metadata' => $metadata,
         ];
     }
 
@@ -369,7 +369,7 @@ class levels_info_writer {
                 'base' => new external_value(PARAM_INT),
                 'incr' => new external_value(PARAM_INT),
                 'coef' => new external_value(PARAM_FLOAT),
-            ], '', VALUE_OPTIONAL, null)
+            ], '', VALUE_OPTIONAL, null),
         ]);
 
         $data = external_api::validate_parameters($structure, $rawdata);

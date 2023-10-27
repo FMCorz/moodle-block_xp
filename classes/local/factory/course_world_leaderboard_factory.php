@@ -25,7 +25,7 @@
 
 namespace block_xp\local\factory;
 
-use \block_xp\local\course_world;
+use block_xp\local\course_world;
 
 /**
  * Course world leaderboard factory interface.

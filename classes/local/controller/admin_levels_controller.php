@@ -81,9 +81,9 @@ class admin_levels_controller extends admin_route_controller {
                 'defaultBadgeUrls' => $defaultbadges,
                 'addon' => [
                     'activated' => di::get('addon')->is_activated(),
-                    'promourl' => $this->urlresolver->reverse('admin/promo')->out(false)
-                ]
-            ]
+                    'promourl' => $this->urlresolver->reverse('admin/promo')->out(false),
+                ],
+            ],
         ];
     }
 }

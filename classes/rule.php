@@ -69,8 +69,8 @@ abstract class block_xp_rule implements renderable {
      * @return string
      */
     public function get_form($basename) {
-        return html_writer::empty_tag('input', array('type' => 'hidden', 'name' => $basename . '[_class]',
-            'value' => get_class($this)));
+        return html_writer::empty_tag('input', ['type' => 'hidden', 'name' => $basename . '[_class]',
+            'value' => get_class($this), ]);
     }
 
     /**
@@ -98,7 +98,7 @@ abstract class block_xp_rule implements renderable {
      * @return array Keys are properties, values are the values.
      */
     public function export() {
-        return array('_class' => get_class($this));
+        return ['_class' => get_class($this)];
     }
 
     /**

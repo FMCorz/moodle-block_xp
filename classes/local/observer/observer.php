@@ -45,7 +45,7 @@ class observer {
         $courseid = $event->objectid;
 
         // Clean up the data that could be left behind.
-        $conditions = array('courseid' => $courseid);
+        $conditions = ['courseid' => $courseid];
         $DB->delete_records('block_xp', $conditions);
         $DB->delete_records('block_xp_config', $conditions);
         $DB->delete_records('block_xp_filters', $conditions);
@@ -54,10 +54,10 @@ class observer {
         // Flags. Note that this is based on the actually implementation.
         $sql = $DB->sql_like('name', ':name');
         $DB->delete_records_select('user_preferences', $sql, [
-            'name' => 'block_xp-notice-block_intro_' . $courseid
+            'name' => 'block_xp-notice-block_intro_' . $courseid,
         ]);
         $DB->delete_records_select('user_preferences', $sql, [
-            'name' => 'block_xp_notify_level_up_' . $courseid
+            'name' => 'block_xp_notify_level_up_' . $courseid,
         ]);
 
         // Delete the files.

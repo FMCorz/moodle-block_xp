@@ -139,7 +139,7 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
 
         $item = $this->my_create_element('text', 'points', $this->_options['itemlabel'], [
             'size' => 4,
-            'placeholder' => !empty($this->_options['itemlabel']) ? $this->_options['itemlabel'] : null
+            'placeholder' => !empty($this->_options['itemlabel']) ? $this->_options['itemlabel'] : null,
         ]);
         if (method_exists($item, 'set_force_ltr')) {
             $item->set_force_ltr(true);
@@ -150,7 +150,7 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
         $this->_elements[] = $in;
 
         $time = $this->my_create_element('text', 'time', get_string('time', 'form'), [
-            'size' => 3
+            'size' => 3,
         ]);
         if (method_exists($time, 'set_force_ltr')) {
             $time->set_force_ltr(true);
@@ -215,14 +215,14 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
                 } else {
                     $finalval = [
                         'points' => isset($value['points']) ? max(0, $value['points']) : 0,
-                        'enabled' => !isset($value['enabled']) || !empty($value['enabled'])
+                        'enabled' => !isset($value['enabled']) || !empty($value['enabled']),
                     ];
                     if (!empty($value['time'])) {
                         if (!is_array($value['time'])) {
                             list($time, $timeunit) = $this->seconds_to_unit($value['time']);
                             $finalval += [
                                 'time' => $time,
-                                'timeunit' => $timeunit
+                                'timeunit' => $timeunit,
                             ];
                         } else {
                             $finalval += $value['time'];
@@ -289,8 +289,8 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
 
         return [$this->getName() => [
             'time' => max(0, $values['time'] * $values['timeunit']),
-            'points' => max(0, (int) $values['points'])
-        ]];
+            'points' => max(0, (int) $values['points']),
+        ], ];
     }
 }
 

@@ -24,15 +24,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$definitions = array(
-    'filters' => array(
+$definitions = [
+    'filters' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
-        'staticacceleration' => true
-    ),
+        'staticacceleration' => true,
+    ],
 
-    'ruleevent_eventslist' => array(
+    'ruleevent_eventslist' => [
         'mode' => cache_store::MODE_APPLICATION,
-        'simplekeys' => true
-    )
-);
+        'simplekeys' => true,
+    ],
+];

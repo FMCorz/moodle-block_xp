@@ -62,7 +62,7 @@ class promo_controller extends route_controller {
 
     protected function define_optional_params() {
         return [
-            ['sent', 0, PARAM_INT, false]
+            ['sent', 0, PARAM_INT, false],
         ];
     }
 
@@ -174,8 +174,8 @@ class promo_controller extends route_controller {
             'intro' => get_string('promointro', 'block_xp'),
             'actions' => [
                 new single_button(new moodle_url($siteurl), $getxpstr, 'get',
-                    defined('single_button::BUTTON_PRIMARY') ? single_button::BUTTON_PRIMARY : true)
-            ]
+                    defined('single_button::BUTTON_PRIMARY') ? single_button::BUTTON_PRIMARY : true),
+            ],
         ]);
 
         $new = '🆕';
@@ -308,7 +308,7 @@ EOT;
 
         if ($addon->is_out_of_sync()) {
             echo $output->notification_without_close(markdown_to_html(get_string('pluginsoutofsync', 'block_xp', [
-                'url' => $outofsyncurl->out(false)
+                'url' => $outofsyncurl->out(false),
             ])), 'error');
         }
 

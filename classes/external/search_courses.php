@@ -74,7 +74,7 @@ class search_courses extends external_api {
 
             array_unshift($courses, array_merge((array) $SITE, [
                 'displayname' => external_utils::format_string(get_course_display_name_for_list($SITE),
-                    context_course::instance($SITE->id))
+                    context_course::instance($SITE->id)),
             ]));
         }
 

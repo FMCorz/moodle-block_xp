@@ -55,7 +55,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
     protected function define_structure() {
         global $DB;
 
-        $paths = array();
+        $paths = [];
         $userinfo = $this->get_setting_value('users');
 
         // Define each path.
@@ -95,10 +95,10 @@ class restore_xp_block_structure_step extends restore_structure_step {
             // Removing old preferences.
             $sql = $DB->sql_like('name', ':name');
             $DB->delete_records_select('user_preferences', $sql, [
-                'name' => 'block_xp-notice-block_intro_' . $courseid
+                'name' => 'block_xp-notice-block_intro_' . $courseid,
             ]);
             $DB->delete_records_select('user_preferences', $sql, [
-                'name' => 'block_xp_notify_level_up_' . $courseid
+                'name' => 'block_xp_notify_level_up_' . $courseid,
             ]);
         }
     }
@@ -115,7 +115,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
             $data['defaultfilters'] = \block_xp\local\config\course_world_config::DEFAULT_FILTERS_STATIC;
         }
 
-        if ($DB->record_exists('block_xp_config', array('courseid' => $data['courseid']))) {
+        if ($DB->record_exists('block_xp_config', ['courseid' => $data['courseid']])) {
             $this->log('block_xp: config not restored, existing config was found', backup::LOG_DEBUG);
             return;
         }
@@ -186,7 +186,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
         $data['courseid'] = $this->get_courseid();
         $data['userid'] = $this->get_mappingid('user', $data['userid']);
         $data['lvl'] = 1; // This is no longer used, and is hardcoded to 1.
-        if ($DB->record_exists('block_xp', array('courseid' => $data['courseid'], 'userid' => $data['userid']))) {
+        if ($DB->record_exists('block_xp', ['courseid' => $data['courseid'], 'userid' => $data['userid']])) {
             $this->log("block_xp: XP of user with id '{$data['userid']}' not restored, existing entry found", backup::LOG_DEBUG);
             return;
         }

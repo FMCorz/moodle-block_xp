@@ -98,22 +98,22 @@ class admin_filter_manager {
         $as = new \block_xp_rule_property(\block_xp_rule_base::CT, 'assessable_submitted', 'eventname');
         $au = new \block_xp_rule_property(\block_xp_rule_base::CT, 'assessable_uploaded', 'eventname');
 
-        $list = array();
+        $list = [];
 
-        $ruleset = new \block_xp_ruleset(array($bcmv, $dsc, $sc, $as, $au), \block_xp_ruleset::ANY);
-        $data = array('rule' => $ruleset, 'points' => 0);
+        $ruleset = new \block_xp_ruleset([$bcmv, $dsc, $sc, $as, $au], \block_xp_ruleset::ANY);
+        $data = ['rule' => $ruleset, 'points' => 0];
         $list[] = \block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $c, 'points' => 45);
+        $data = ['rule' => $c, 'points' => 45];
         $list[] = \block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $r, 'points' => 9);
+        $data = ['rule' => $r, 'points' => 9];
         $list[] = \block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $u, 'points' => 3);
+        $data = ['rule' => $u, 'points' => 3];
         $list[] = \block_xp_filter::load_from_data($data);
 
-        $data = array('rule' => $d, 'points' => 0);
+        $data = ['rule' => $d, 'points' => 0];
         $list[] = \block_xp_filter::load_from_data($data);
         return $list;
     }
@@ -188,7 +188,7 @@ class admin_filter_manager {
         // This is dangerously hardcoded, byt let's use this for now to detect all instances to work on.
         $sql = 'courseid > 0 AND defaultfilters != :defaultfilters';
         $courseids = $this->db->get_fieldset_select('block_xp_config', 'courseid', $sql, [
-            'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING
+            'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING,
         ]);
 
         // This is slow, but that's sort of the cleanest way.

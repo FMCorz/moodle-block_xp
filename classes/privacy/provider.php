@@ -361,10 +361,10 @@ class provider implements
         $db = \block_xp\di::get('db');
         $sql = $db->sql_like('name', ':name');
         $db->delete_records_select('user_preferences', $sql, [
-            'name' => 'block_xp-notice-block_intro_' . $courseid
+            'name' => 'block_xp-notice-block_intro_' . $courseid,
         ]);
         $db->delete_records_select('user_preferences', $sql, [
-            'name' => 'block_xp_notify_level_up_' . $courseid
+            'name' => 'block_xp_notify_level_up_' . $courseid,
         ]);
     }
 
@@ -481,7 +481,7 @@ class provider implements
             $prefs[] = (object) [
                 'name' => $name,
                 'value' => $value,
-                'description' => $desc
+                'description' => $desc,
             ];
         }
 

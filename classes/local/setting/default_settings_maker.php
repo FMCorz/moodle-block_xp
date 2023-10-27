@@ -159,7 +159,7 @@ class default_settings_maker implements settings_maker {
             $this->defaults->get('context'),
             [
                 CONTEXT_COURSE => get_string('incourses', 'block_xp'),
-                CONTEXT_SYSTEM => get_string('forthewholesite', 'block_xp')
+                CONTEXT_SYSTEM => get_string('forthewholesite', 'block_xp'),
             ]
         ));
 
@@ -233,7 +233,7 @@ class default_settings_maker implements settings_maker {
             $url = $this->urlresolver->reverse('config', ['courseid' => SITEID]);
             return di::get('renderer')->notification_without_close(strip_tags(
                 markdown_to_html(get_string('editingdefaultsettingsinwholesitemodenotice', 'block_xp', [
-                    'url' => $url->out(false)
+                    'url' => $url->out(false),
                 ])),
                 '<a><em><strong>'
             ), \core\output\notification::NOTIFY_WARNING);
@@ -346,7 +346,7 @@ class default_settings_maker implements settings_maker {
             get_string('configblockrankingsnapshot', 'block_xp'), get_string('configblockrankingsnapshot_help', 'block_xp'),
             $defaults['blockrankingsnapshot'], [
                 0 => get_string('no'),
-                1 => get_string('yes')
+                1 => get_string('yes'),
             ]));
 
         // Block recent activity.
@@ -354,7 +354,7 @@ class default_settings_maker implements settings_maker {
             get_string('configrecentactivity', 'block_xp'), get_string('configrecentactivity_help', 'block_xp'),
             $defaults['blockrecentactivity'], [
                 0 => get_string('no'),
-                3 => get_string('yes')
+                3 => get_string('yes'),
             ]));
 
         return $settings;

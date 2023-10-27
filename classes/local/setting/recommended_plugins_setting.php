@@ -66,7 +66,7 @@ class recommended_plugins_setting extends static_setting {
                 'component' => 'availability_xp',
                 'name' => 'Level Up XP Availability',
                 'description' => get_string('pluginavailabilityxpdesc', 'block_xp'),
-                'url' => new moodle_url('https://moodle.org/plugins/availability_xp')
+                'url' => new moodle_url('https://moodle.org/plugins/availability_xp'),
             ],
             [
                 'component' => 'enrol_xp',
@@ -79,7 +79,7 @@ class recommended_plugins_setting extends static_setting {
                 'name' => 'Shortcodes',
                 'description' => get_string('pluginshortcodesdesc', 'block_xp'),
                 'url' => new moodle_url('https://moodle.org/plugins/filter_shortcodes'),
-            ]
+            ],
         ]);
 
         return di::get('renderer')->render_from_template('block_xp/admin-recommended-plugins', ['plugins' => $plugins]);

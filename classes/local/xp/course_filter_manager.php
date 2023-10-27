@@ -168,8 +168,8 @@ class course_filter_manager {
      */
     public function get_user_filters($category = \block_xp_filter::CATEGORY_EVENTS) {
         $results = $this->db->get_recordset('block_xp_filters', ['courseid' => $this->courseid,
-            'category' => $category], 'sortorder ASC, id ASC');
-        $filters = array();
+            'category' => $category, ], 'sortorder ASC, id ASC');
+        $filters = [];
         foreach ($results as $key => $filter) {
             $filters[$filter->id] = \block_xp_filter::load_from_data($filter);
         }

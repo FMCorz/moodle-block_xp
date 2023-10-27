@@ -73,29 +73,29 @@ class config extends moodleform {
         $mform->addElement('selectyesno', 'enableladder', get_string('enableladder', 'block_xp'));
         $mform->addHelpButton('enableladder', 'enableladder', 'block_xp');
 
-        $mform->addElement('select', 'identitymode', get_string('anonymity', 'block_xp'), array(
+        $mform->addElement('select', 'identitymode', get_string('anonymity', 'block_xp'), [
             course_world_config::IDENTITY_OFF => get_string('hideparticipantsidentity', 'block_xp'),
             course_world_config::IDENTITY_ON => get_string('displayparticipantsidentity', 'block_xp'),
-        ));
+        ]);
         $mform->addHelpButton('identitymode', 'anonymity', 'block_xp');
         $mform->disabledIf('identitymode', 'enableladder', 'eq', 0);
 
-        $mform->addElement('select', 'neighbours', get_string('limitparticipants', 'block_xp'), array(
+        $mform->addElement('select', 'neighbours', get_string('limitparticipants', 'block_xp'), [
             0 => get_string('displayeveryone', 'block_xp'),
             1 => get_string('displayoneneigbour', 'block_xp'),
             2 => get_string('displaynneighbours', 'block_xp', '2'),
             3 => get_string('displaynneighbours', 'block_xp', '3'),
             4 => get_string('displaynneighbours', 'block_xp', '4'),
             5 => get_string('displaynneighbours', 'block_xp', '5'),
-        ));
+        ]);
         $mform->addHelpButton('neighbours', 'limitparticipants', 'block_xp');
         $mform->disabledIf('neighbours', 'enableladder', 'eq', 0);
 
-        $mform->addElement('select', 'rankmode', get_string('ranking', 'block_xp'), array(
+        $mform->addElement('select', 'rankmode', get_string('ranking', 'block_xp'), [
             course_world_config::RANK_OFF => get_string('hiderank', 'block_xp'),
             course_world_config::RANK_ON => get_string('displayrank', 'block_xp'),
             course_world_config::RANK_REL => get_string('displayrelativerank', 'block_xp'),
-        ));
+        ]);
         $mform->addHelpButton('rankmode', 'ranking', 'block_xp');
         $mform->disabledIf('rankmode', 'enableladder', 'eq', 0);
 
@@ -116,7 +116,7 @@ class config extends moodleform {
 
         $mform->addElement('block_xp_form_itemspertime', 'maxactionspertime', get_string('maxactionspertime', 'block_xp'), [
             'maxunit' => 60,
-            'itemlabel' => get_string('actions', 'block_xp')
+            'itemlabel' => get_string('actions', 'block_xp'),
         ]);
         $mform->addHelpButton('maxactionspertime', 'maxactionspertime', 'block_xp');
         $mform->disabledIf('maxactionspertime', 'enablecheatguard', 'eq', 0);
@@ -255,7 +255,7 @@ class config extends moodleform {
         if (isset($data['maxactionspertime']) && isset($data['timeformaxactions'])) {
             $data['maxactionspertime'] = [
                 'points' => (int) $data['maxactionspertime'],
-                'time' => (int) $data['timeformaxactions']
+                'time' => (int) $data['timeformaxactions'],
             ];
             unset($data['timeformaxactions']);
         }

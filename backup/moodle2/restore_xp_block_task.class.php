@@ -61,7 +61,7 @@ class restore_xp_block_task extends restore_block_task {
      * @return array
      */
     public function get_fileareas() {
-        return array();
+        return [];
     }
 
     /**
@@ -75,7 +75,7 @@ class restore_xp_block_task extends restore_block_task {
      * @return array
      */
     public static function define_decode_contents() {
-        return array();
+        return [];
     }
 
     /**
@@ -83,7 +83,7 @@ class restore_xp_block_task extends restore_block_task {
      * @return array
      */
     public static function define_decode_rules() {
-        return array();
+        return [];
     }
 
     /**

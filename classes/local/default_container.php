@@ -244,7 +244,7 @@ class default_container implements container {
      */
     protected function get_config_locked() {
         return new \block_xp\local\config\mdl_locked_config('block_xp', [
-            'identitymode'
+            'identitymode',
         ]);
     }
 

@@ -68,7 +68,7 @@ class user_xp extends moodleform {
      * @return array of errors.
      */
     public function validation($data, $files) {
-        $errors = array();
+        $errors = [];
 
         // Validating the XP points.
         $xp = (int) $data['xp'];

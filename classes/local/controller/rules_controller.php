@@ -56,7 +56,7 @@ class rules_controller extends page_controller {
     protected function define_optional_params() {
         return [
             ['reset', false, PARAM_BOOL, false],
-            ['confirm', false, PARAM_BOOL, false]
+            ['confirm', false, PARAM_BOOL, false],
         ];
     }
 
@@ -89,7 +89,7 @@ class rules_controller extends page_controller {
     }
 
     protected function handle_save() {
-        $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
+        $filters = isset($_POST['filters']) ? $_POST['filters'] : [];
         $this->userfilters = $this->save_filters($filters, $this->userfilters);
     }
 
@@ -131,7 +131,7 @@ class rules_controller extends page_controller {
                 'name' => get_string('ruleset', 'block_xp'),
                 'info' => get_string('rulesetinfo', 'block_xp'),
                 'rule' => new \block_xp_ruleset(),
-            ]
+            ],
         ];
     }
 
@@ -234,7 +234,7 @@ class rules_controller extends page_controller {
         $courseid = $world->get_courseid();
         $filtermanager = $world->get_filter_manager();
 
-        $filterids = array();
+        $filterids = [];
         foreach ($filters as $filterdata) {
             $data = $filterdata;
             $data['ruledata'] = json_encode($data['rule'], true);

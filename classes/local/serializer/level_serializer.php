@@ -66,7 +66,7 @@ class level_serializer implements serializer_with_read_structure {
             'xprequired' => $level->get_xp_required(),
             'badgeurl' => $url ? $this->urlserializer->serialize($url) : $url,
             'name' => $level instanceof level_with_name ? $level->get_name() : null,
-            'description' => $level instanceof level_with_description ? $level->get_description() : null
+            'description' => $level instanceof level_with_description ? $level->get_description() : null,
         ];
     }
 

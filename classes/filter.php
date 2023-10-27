@@ -112,7 +112,7 @@ class block_xp_filter implements renderable {
         if (!$this->id) {
             throw new coding_exception('ID of the filter is unknown.');
         }
-        $DB->delete_records('block_xp_filters', array('id' => $this->id));
+        $DB->delete_records('block_xp_filters', ['id' => $this->id]);
     }
 
     /**

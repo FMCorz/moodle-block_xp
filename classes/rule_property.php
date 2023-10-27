@@ -62,11 +62,11 @@ class block_xp_rule_property extends block_xp_rule_base {
      * @return string
      */
     public function get_description() {
-        return get_string('rulepropertydesc', 'block_xp', (object)array(
+        return get_string('rulepropertydesc', 'block_xp', (object)[
             'property' => $this->property,
             'compare' => get_string('rule:' . $this->compare, 'block_xp'),
-            'value' => $this->value
-        ));
+            'value' => $this->value,
+        ]);
     }
 
     /**
@@ -80,13 +80,13 @@ class block_xp_rule_property extends block_xp_rule_base {
         $o .= html_writer::start_div('xp-flex xp-gap-1');
 
         $o .= html_writer::start_div('xp-min-w-px');
-        $o .= html_writer::select(array(
+        $o .= html_writer::select([
                 'eventname' => get_string('property:eventname', 'block_xp'),
                 'component' => get_string('property:component', 'block_xp'),
                 'action' => get_string('property:action', 'block_xp'),
                 'target' => get_string('property:target', 'block_xp'),
                 'crud' => get_string('property:crud', 'block_xp'),
-            ), $basename . '[property]', $this->property, '', array('id' => '', 'class' => ''));
+            ], $basename . '[property]', $this->property, '', ['id' => '', 'class' => '']);
         $o .= html_writer::end_div();
 
         $o .= html_writer::start_div('xp-min-w-px');
@@ -94,8 +94,8 @@ class block_xp_rule_property extends block_xp_rule_base {
         $o .= html_writer::end_div();
 
         $o .= html_writer::start_div('xp-min-w-px');
-        $o .= html_writer::empty_tag('input', array('type' => 'text', 'name' => $basename . '[value]',
-            'value' => s($this->value), 'class' => 'form-control block_xp-form-control-inline'));
+        $o .= html_writer::empty_tag('input', ['type' => 'text', 'name' => $basename . '[value]',
+            'value' => s($this->value), 'class' => 'form-control block_xp-form-control-inline', ]);
         $o .= html_writer::end_div();
 
         $o .= html_writer::end_div();

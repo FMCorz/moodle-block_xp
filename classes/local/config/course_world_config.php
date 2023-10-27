@@ -79,7 +79,7 @@ class course_world_config extends proxy_config {
         // Note that we set the admin config as immutable, just to make sure we don't change it.
         $defaults = new config_stack([
             new immutable_config($adminconfig),
-            new default_course_world_config()
+            new default_course_world_config(),
         ]);
 
         $config = new \block_xp\local\config\table_row_config($db, 'block_xp_config',

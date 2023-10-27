@@ -171,7 +171,7 @@ class report_controller extends page_controller {
                 new url($this->pageurl->get_compatible_url(), [
                     'resetdata' => 1,
                     'sesskey' => sesskey(),
-                    'group' => $groupid
+                    'group' => $groupid,
                 ]),
                 $strreset,
                 'get'
@@ -191,7 +191,7 @@ class report_controller extends page_controller {
             echo $this->get_renderer()->confirm(
                 empty($groupid) ? get_string('reallyresetdata', 'block_xp') : get_string('reallyresetgroupdata', 'block_xp'),
                 new url($this->pageurl->get_compatible_url(), ['resetdata' => 1, 'confirm' => 1,
-                    'sesskey' => sesskey(), 'group' => $groupid]),
+                    'sesskey' => sesskey(), 'group' => $groupid, ]),
                 new url($this->pageurl->get_compatible_url())
             );
             return;

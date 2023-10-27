@@ -68,7 +68,7 @@ class levels_info_serializer implements serializer_with_read_structure {
                 'coef' => $info->get_coef(),
                 'incr' => $info->get_incr(),
                 'method' => $info->get_method(),
-            ] : null
+            ] : null,
         ];
     }
 
@@ -91,7 +91,7 @@ class levels_info_serializer implements serializer_with_read_structure {
                 'base' => new external_value(PARAM_INT),
                 'coef' => new external_value(PARAM_FLOAT),
                 'incr' => new external_value(PARAM_INT),
-            ], VALUE_OPTIONAL, null)
+            ], VALUE_OPTIONAL, null),
         ], '', $required, $default);
     }
 

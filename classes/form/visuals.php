@@ -52,7 +52,7 @@ class visuals extends moodleform {
 
         if ($this->_customdata['showpromo'] ?? true) {
             $addonrequired = $renderer->render_from_template('block_xp/addon-required', [
-                'promourl' => $this->_customdata['promourl']
+                'promourl' => $this->_customdata['promourl'],
             ]);
             $mform->addElement('select', 'currencytheme', get_string('currencysign', 'block_xp') . ' ' . $addonrequired,
                 ['' => get_string('currencysignxp', 'block_xp')], ['disabled' => 'disabled']);

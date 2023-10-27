@@ -47,7 +47,7 @@ class levels_controller extends page_controller {
     protected function define_optional_params() {
         return [
             ['reset', false, PARAM_BOOL, false],
-            ['confirm', false, PARAM_BOOL, false]
+            ['confirm', false, PARAM_BOOL, false],
         ];
     }
 
@@ -99,9 +99,9 @@ class levels_controller extends page_controller {
                 'addon' => [
                     'activated' => di::get('addon')->is_activated(),
                     'enablepromo' => (bool) di::get('config')->get('enablepromoincourses'),
-                    'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $world->get_courseid()])->out(false)
-                ]
-            ]
+                    'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $world->get_courseid()])->out(false),
+                ],
+            ],
         ];
     }
 

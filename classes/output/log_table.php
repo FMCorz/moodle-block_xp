@@ -71,22 +71,22 @@ class log_table extends table_sql {
         $courseid = $world->get_courseid();
 
         // Define columns.
-        $this->define_columns(array(
+        $this->define_columns([
             'time',
             'fullname',
             'xp',
-            'eventname'
-        ));
-        $this->define_headers(array(
+            'eventname',
+        ]);
+        $this->define_headers([
             get_string('eventtime', 'block_xp'),
             get_string('fullname'),
             get_string('reward', 'block_xp'),
-            get_string('eventname', 'block_xp')
-        ));
+            get_string('eventname', 'block_xp'),
+        ]);
 
         // Define SQL.
         $sqlfrom = '';
-        $sqlparams = array();
+        $sqlparams = [];
         if ($groupid) {
             $sqlfrom = '{block_xp_log} x
                      JOIN {groups_members} gm
@@ -94,7 +94,7 @@ class log_table extends table_sql {
                       AND gm.userid = x.userid
                 LEFT JOIN {user} u
                        ON x.userid = u.id';
-            $sqlparams = array('groupid' => $groupid);
+            $sqlparams = ['groupid' => $groupid];
         } else {
             $sqlfrom = '{block_xp_log} x LEFT JOIN {user} u ON x.userid = u.id';
         }
@@ -104,7 +104,7 @@ class log_table extends table_sql {
         $this->sql->fields = 'x.*, ' . user_utils::name_fields('u');
         $this->sql->from = $sqlfrom;
         $this->sql->where = 'courseid = :courseid';
-        $this->sql->params = array_merge(array('courseid' => $courseid), $sqlparams);
+        $this->sql->params = array_merge(['courseid' => $courseid], $sqlparams);
         if ($this->filterbyuserid) {
             $this->sql->where .= ' AND userid = :userid';
             $this->sql->params = array_merge($this->sql->params, ['userid' => $this->filterbyuserid]);

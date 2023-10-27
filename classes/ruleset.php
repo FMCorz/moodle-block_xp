@@ -52,9 +52,9 @@ class block_xp_ruleset extends block_xp_rule {
      *
      * Those must implement the interface block_xp_rule.
      *
-     * @var string
+     * @var array
      */
-    protected $rules = array();
+    protected $rules = [];
 
     /**
      * Constructor.
@@ -68,7 +68,7 @@ class block_xp_ruleset extends block_xp_rule {
      * @param array $rules The rules to add in this set.
      * @param string $method The method.
      */
-    public function __construct(array $rules = array(), $method = self::ANY) {
+    public function __construct(array $rules = [], $method = self::ANY) {
         $this->rules = $rules;
         $this->method = $method;
     }
@@ -99,11 +99,11 @@ class block_xp_ruleset extends block_xp_rule {
      */
     public function get_form($basename) {
         $o = parent::get_form($basename);
-        $o .= html_writer::select(array(
+        $o .= html_writer::select([
             self::ALL => get_string('ruleset:all', 'block_xp'),
             self::ANY => get_string('ruleset:any', 'block_xp'),
             self::NONE => get_string('ruleset:none', 'block_xp'),
-        ), $basename . '[method]', $this->method, '', array('class' => '', 'id' => ''));
+        ], $basename . '[method]', $this->method, '', ['class' => '', 'id' => '']);
         return $o;
     }
 
@@ -124,7 +124,7 @@ class block_xp_ruleset extends block_xp_rule {
     public function export() {
         $properties = parent::export();
         $properties['method'] = $this->method;
-        $properties['rules'] = array();
+        $properties['rules'] = [];
         foreach ($this->rules as $rule) {
             $properties['rules'][] = $rule->export();
         }
@@ -139,7 +139,7 @@ class block_xp_ruleset extends block_xp_rule {
      */
     protected function import(array $properties) {
         if (isset($properties['rules'])) {
-            $ruleslist = array();
+            $ruleslist = [];
             foreach ($properties['rules'] as $rule) {
                 $ruleobject = block_xp_rule::create($rule);
                 if ($ruleobject) {

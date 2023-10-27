@@ -135,7 +135,7 @@ class block_xp_rule_cm extends block_xp_rule_property {
             'name' => $basename . '[value]',
             'class' => 'cm-rule-contextid',
             'type' => 'hidden',
-            'value' => $this->value
+            'value' => $this->value,
         ]);
 
         if (!$hascm) {
@@ -167,20 +167,20 @@ class block_xp_rule_cm extends block_xp_rule_property {
     protected function get_simple_form($basename) {
         global $COURSE;
         $output = \block_xp\di::get('renderer');
-        $options = array();
+        $options = [];
 
         $valuefound = empty($this->value);
         $modinfo = get_fast_modinfo($this->courseid);
         $courseformat = course_get_format($this->courseid);
 
         foreach ($modinfo->get_sections() as $sectionnum => $cmids) {
-            $modules = array();
+            $modules = [];
             foreach ($cmids as $cmid) {
                 $cm = $modinfo->get_cm($cmid);
                 $modules[$cm->context->id] = $cm->name;
                 $valuefound = $valuefound || $this->value == $cm->context->id;
             }
-            $options[] = array($courseformat->get_section_name($sectionnum) => $modules);
+            $options[] = [$courseformat->get_section_name($sectionnum) => $modules];
         }
 
         if (!$valuefound) {
@@ -188,7 +188,7 @@ class block_xp_rule_cm extends block_xp_rule_property {
         }
 
         $o = block_xp_rule::get_form($basename);
-        $modules = html_writer::select($options, $basename . '[value]', $this->value, '', array('id' => '', 'class' => ''));
+        $modules = html_writer::select($options, $basename . '[value]', $this->value, '', ['id' => '', 'class' => '']);
         $helpicon = $output->help_icon('rulecm', 'block_xp');
 
         $o .= html_writer::start_div('xp-flex xp-gap-1 xp-min-full');

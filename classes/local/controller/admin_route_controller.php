@@ -92,7 +92,7 @@ abstract class admin_route_controller extends route_controller {
         $url = $this->urlresolver->reverse($routename, ['courseid' => SITEID]);
         echo di::get('renderer')->notification_without_close(strip_tags(
             markdown_to_html(get_string('editingdefaultsettingsinwholesitemodenotice', 'block_xp', [
-                'url' => $url->out(false)
+                'url' => $url->out(false),
             ])),
             '<a><em><strong>'
         ), \core\output\notification::NOTIFY_WARNING);

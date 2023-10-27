@@ -46,23 +46,23 @@ class levels_info_writer_test extends base_testcase {
      *
      * @return array
      */
-    public function update_world_after_restore_provider() {
+    public static function update_world_after_restore_provider(): array {
         return [
             [''],
             ['{"xp":{"1":0,"2":120,"3":276,"4":479,"5":742,"6":1085,"7":1531,"8":2110,"9":2863,"10":3842},'
-                . '"name":[],"desc":[],"base":120,"coef":1.3,"usealgo":true}'],
+                . '"name":[],"desc":[],"base":120,"coef":1.3,"usealgo":true}', ],
             ['{"xp":{"1":0,"2":120,"3":264,"4":437,"5":644,"6":893,"7":1192,"8":1550,"9":1980,"10":2496},'
-                . '"name":[],"desc":[],"base":120,"coef":1.2,"usealgo":true}'],
+                . '"name":[],"desc":[],"base":120,"coef":1.2,"usealgo":true}', ],
             ['{"xp":{"1":0,"2":200,"3":300,"4":400,"5":743,"6":1000,"7":1532,"8":2112,"9":2866,"10":3846},'
                 . '"name":{"2":"Num\u00e9ro 2","5":"Name 5"},"desc":{"2":"Desc 2","3":"Desc 3"},'
-                . '"base":120,"coef":1.3,"usealgo":false}'],
+                . '"base":120,"coef":1.3,"usealgo":false}', ],
             ['{"xp":{"1":0,"2":100,"3":210,"4":331,"5":464,"6":611,"7":772,"8":949,"9":1144,"10":1358},'
                 . '"name":{"2":"Niveau 2","3":"Niveau 3","9":"Nom 9"},"desc":{"2":"Desc 2","4":"Desc 4","9":"Desc 9"},'
-                . '"base":100,"coef":1.1000000000000001,"usealgo":true}'],
+                . '"base":100,"coef":1.1000000000000001,"usealgo":true}', ],
             ['{"v":2,"xp":[0,120,276,479,742,1085,1531,2110,2863,3842],'
-                . '"algo":{"base":120,"coef":1.3,"incr":40,"method":"relative"}}'],
+                . '"algo":{"base":120,"coef":1.3,"incr":40,"method":"relative"}}', ],
             ['{"v":2,"xp":[0,80,180,300,440,600],"algo":{"base":80,"coef":1.3,"incr":20,"method":"linear"}}'],
-            ['{"v":2,"xp":[0,77,154,231,308,385,462,539],"algo":{"base":77,"coef":1.3,"incr":20,"method":"flat"}}']
+            ['{"v":2,"xp":[0,77,154,231,308,385,462,539],"algo":{"base":77,"coef":1.3,"incr":20,"method":"flat"}}'],
         ];
     }
 

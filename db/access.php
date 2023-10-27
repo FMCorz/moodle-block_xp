@@ -24,76 +24,76 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
+$capabilities = [
 
     // Whether or not the user can add the block.
-    'block/xp:addinstance' => array(
+    'block/xp:addinstance' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ),
-        'clonepermissionsfrom' => 'moodle/site:manageblocks'
-    ),
+            'manager' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'moodle/site:manageblocks',
+    ],
 
     // Whether or not the user can manage all aspects of the block.
-    'block/xp:manage' => array(
+    'block/xp:manage' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ),
-        'clonepermissionsfrom' => 'block/xp:addinstance'
-    ),
+            'manager' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'block/xp:addinstance',
+    ],
 
     // Whether or not a user can earn experience point.
-    'block/xp:earnxp' => array(
+    'block/xp:earnxp' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'student' => CAP_ALLOW
-        ),
-    ),
+        'archetypes' => [
+            'student' => CAP_ALLOW,
+        ],
+    ],
 
     // Whether or not the user can add the block on their dashboard.
     // We don't allow anyone to add it, the teacher/manager should add it
     // to their default dashboards.
-    'block/xp:myaddinstance' => array(
+    'block/xp:myaddinstance' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array()
-    ),
+        'archetypes' => [],
+    ],
 
     // Whether or not a user can see the block.
-    'block/xp:view' => array(
+    'block/xp:view' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
-            'user' => CAP_ALLOW
-        ),
-    ),
+        'archetypes' => [
+            'user' => CAP_ALLOW,
+        ],
+    ],
 
     // Whether or not a user can see the logs.
-    'block/xp:viewlogs' => array(
+    'block/xp:viewlogs' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ),
-        'clonepermissionsfrom' => 'block/xp:manage'
-    ),
+            'manager' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'block/xp:manage',
+    ],
 
     // Whether or not a user can view the report.
-    'block/xp:viewreport' => array(
+    'block/xp:viewreport' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ),
-        'clonepermissionsfrom' => 'block/xp:manage'
-    )
-);
+            'manager' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'block/xp:manage',
+    ],
+];

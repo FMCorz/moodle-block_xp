@@ -36,7 +36,7 @@ use block_xp\di;
  * @param array $options Array of options.
  * @return void|false
  */
-function block_xp_pluginfile($course, $bi, $context, $filearea, $args, $forcedownload, array $options = array()) {
+function block_xp_pluginfile($course, $bi, $context, $filearea, $args, $forcedownload, array $options = []) {
     $fs = di::get('file_server');
     if ($fs instanceof \block_xp\local\file\block_file_server) {
         $fs->serve_block_file($course, $bi, $context, $filearea, $args, $forcedownload, $options);
@@ -98,6 +98,6 @@ function block_xp_user_preferences() {
                 global $USER;
                 return $user->id == $USER->id;
             },
-        ]
+        ],
     ];
 }

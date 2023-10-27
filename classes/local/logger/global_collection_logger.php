@@ -70,7 +70,7 @@ class global_collection_logger implements collection_logger {
             static::TABLE,
             'time < :time',
             [
-                'time' => $dt->getTimestamp()
+                'time' => $dt->getTimestamp(),
             ]
         );
     }

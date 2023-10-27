@@ -53,7 +53,7 @@ class course_world_collection_strategy_test extends \advanced_testcase {
         $now = time();
         $log = [
             'a' => [$now - 1000, $now - 2000, $now - 100, $now],
-            'b' => [$now - 1000, $now - 2000, $now - 100, $now]
+            'b' => [$now - 1000, $now - 2000, $now - 100, $now],
         ];
         $this->assertFalse(course_world_collection_strategy::is_action_accepted('c', $now, $log, 4, 1000, 0));
         $this->assertTrue(course_world_collection_strategy::is_action_accepted('c', $now, $log, 5, 1000, 0));

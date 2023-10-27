@@ -71,7 +71,7 @@ class block_xp_rule_event extends block_xp_rule_property {
             }
             $name = get_string('colon', 'block_xp', (object) [
                 'a' => $displayname,
-                'b' => $infos['name']
+                'b' => $infos['name'],
             ]);
         } else {
             $name = get_string('unknowneventa', 'block_xp', $this->value);
@@ -116,7 +116,7 @@ class block_xp_rule_event extends block_xp_rule_property {
         }
 
         $modules = html_writer::select($eventslist, $basename . '[value]', $this->value, '',
-            array('id' => '', 'class' => ''));
+            ['id' => '', 'class' => '']);
 
         $o .= html_writer::start_div('xp-flex xp-gap-1');
         $o .= html_writer::start_div('xp-flex xp-items-center');

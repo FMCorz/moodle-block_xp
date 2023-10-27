@@ -35,6 +35,17 @@ namespace block_xp\local\routing;
  */
 class route_definition {
 
+    /** @var string The route name. */
+    protected $name;
+    /** @var string The route URL. */
+    protected $url;
+    /** @var string The regex. */
+    protected $regex;
+    /** @var string The controller name. */
+    protected $controllername;
+    /** @var array The mappings. */
+    protected $mapping;
+
     /**
      * Constructor.
      *

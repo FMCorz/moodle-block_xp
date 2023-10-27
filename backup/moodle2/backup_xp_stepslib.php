@@ -40,18 +40,18 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
         $userinfo = $this->get_setting_value('users');
 
         // Define each element separated.
-        $xpconfig = new backup_nested_element('config', array('courseid'), array(
+        $xpconfig = new backup_nested_element('config', ['courseid'], [
             'enabled', 'levels', 'lastlogpurge', 'enableladder', 'enableinfos', 'levelsdata',
             'enablelevelupnotif', 'enablecustomlevelbadges', 'maxactionspertime', 'timeformaxactions', 'timebetweensameactions',
             'identitymode', 'rankmode', 'neighbours', 'enablecheatguard', 'defaultfilters', 'laddercols', 'instructions',
-            'instructions_format', 'blocktitle', 'blockdescription', 'blockrecentactivity', 'blockrankingsnapshot'
-        ));
+            'instructions_format', 'blocktitle', 'blockdescription', 'blockrecentactivity', 'blockrankingsnapshot',
+        ]);
         $xpfilters = new backup_nested_element('filters');
-        $xpfilter = new backup_nested_element('filter', array('courseid'), array('ruledata', 'points', 'sortorder', 'category'));
+        $xpfilter = new backup_nested_element('filter', ['courseid'], ['ruledata', 'points', 'sortorder', 'category']);
         $xplevels = new backup_nested_element('xps');
-        $xplevel = new backup_nested_element('xp', array('courseid'), array('userid', 'xp'));
+        $xplevel = new backup_nested_element('xp', ['courseid'], ['userid', 'xp']);
         $xplogs = new backup_nested_element('logs');
-        $xplog = new backup_nested_element('log', array('courseid'), array('userid', 'eventname', 'xp', 'time'));
+        $xplog = new backup_nested_element('log', ['courseid'], ['userid', 'eventname', 'xp', 'time']);
 
         // Prepare the structure.
         $xp = $this->prepare_block_structure($xpconfig);
@@ -68,10 +68,10 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
         }
 
         // Define sources.
-        $xpconfig->set_source_table('block_xp_config', array('courseid' => backup::VAR_COURSEID));
-        $xpfilter->set_source_table('block_xp_filters', array('courseid' => backup::VAR_COURSEID));
-        $xplevel->set_source_table('block_xp', array('courseid' => backup::VAR_COURSEID));
-        $xplog->set_source_table('block_xp_log', array('courseid' => backup::VAR_COURSEID));
+        $xpconfig->set_source_table('block_xp_config', ['courseid' => backup::VAR_COURSEID]);
+        $xpfilter->set_source_table('block_xp_filters', ['courseid' => backup::VAR_COURSEID]);
+        $xplevel->set_source_table('block_xp', ['courseid' => backup::VAR_COURSEID]);
+        $xplog->set_source_table('block_xp_log', ['courseid' => backup::VAR_COURSEID]);
 
         // Annotations.
         $xplevel->annotate_ids('user', 'userid');

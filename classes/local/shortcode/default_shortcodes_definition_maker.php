@@ -44,28 +44,28 @@ class default_shortcodes_definition_maker implements shortcodes_definition_maker
         return [
             'xpbadge' => [
                 'callback' => 'block_xp\local\shortcode\handler::xpbadge',
-                'description' => 'shortcode:xpbadge'
+                'description' => 'shortcode:xpbadge',
             ],
             'xpiflevel' => [
                 'callback' => 'block_xp\local\shortcode\handler::xpiflevel',
                 'description' => 'shortcode:xpiflevel',
-                'wraps' => true
+                'wraps' => true,
             ],
             'xpladder' => [
                 'callback' => 'block_xp\local\shortcode\handler::xpladder',
-                'description' => 'shortcode:xpladder'
+                'description' => 'shortcode:xpladder',
             ],
             'xplevelname' => [
                 'callback' => 'block_xp\local\shortcode\handler::xplevelname',
-                'description' => 'shortcode:xplevelname'
+                'description' => 'shortcode:xplevelname',
             ],
             'xppoints' => [
                 'callback' => 'block_xp\local\shortcode\handler::xppoints',
-                'description' => 'shortcode:xppoints'
+                'description' => 'shortcode:xppoints',
             ],
             'xpprogressbar' => [
                 'callback' => 'block_xp\local\shortcode\handler::xpprogressbar',
-                'description' => 'shortcode:xpprogressbar'
+                'description' => 'shortcode:xpprogressbar',
             ],
         ];
     }

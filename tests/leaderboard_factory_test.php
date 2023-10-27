@@ -230,8 +230,8 @@ class leaderboard_factory_test extends base_testcase {
 
         // Without a rank.
         $config = new config_stack([new static_config([
-            'rankmode' => course_world_config::RANK_OFF
-        ]), $world->get_config()]);
+            'rankmode' => course_world_config::RANK_OFF,
+        ]), $world->get_config(), ]);
         $lb = $factory->get_course_leaderboard_with_config($world, $config);
         $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
             [$u8, 0],
@@ -247,8 +247,8 @@ class leaderboard_factory_test extends base_testcase {
         // With a relative rank for u8.
         $this->setUser($u8);
         $config = new config_stack([new static_config([
-            'rankmode' => course_world_config::RANK_REL
-        ]), $world->get_config()]);
+            'rankmode' => course_world_config::RANK_REL,
+        ]), $world->get_config(), ]);
         $lb = $factory->get_course_leaderboard_with_config($world, $config);
         $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
             [$u8, 0],
@@ -264,8 +264,8 @@ class leaderboard_factory_test extends base_testcase {
         // With a relative rank for u2.
         $this->setUser($u2);
         $config = new config_stack([new static_config([
-            'rankmode' => course_world_config::RANK_REL
-        ]), $world->get_config()]);
+            'rankmode' => course_world_config::RANK_REL,
+        ]), $world->get_config(), ]);
         $lb = $factory->get_course_leaderboard_with_config($world, $config);
         $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
             [$u8, 60],
@@ -282,8 +282,8 @@ class leaderboard_factory_test extends base_testcase {
         $this->setUser($u2);
         $config = new config_stack([new static_config([
             'neighbours' => 1,
-            'rankmode' => course_world_config::RANK_REL
-        ]), $world->get_config()]);
+            'rankmode' => course_world_config::RANK_REL,
+        ]), $world->get_config(), ]);
         $lb = $factory->get_course_leaderboard_with_config($world, $config);
         $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
             [$u3, 10],
@@ -306,7 +306,7 @@ class leaderboard_factory_test extends base_testcase {
             'neighbours' => 3,
             'rankmode' => course_world_config::RANK_REL,
             'identitymode' => course_world_config::IDENTITY_OFF,
-        ]), $world->get_config()]);
+        ]), $world->get_config(), ]);
         $lb = $factory->get_course_leaderboard_with_config($world, $config);
         $ranking = array_values(iterator_to_array($lb->get_ranking(new limit(0, 0))));
         $this->assertEquals(30, $ranking[0]->get_rank());

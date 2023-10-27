@@ -75,7 +75,7 @@ class course_user_event_collection_logger implements
             'courseid = :courseid AND time < :time',
             [
                 'courseid' => $this->courseid,
-                'time' => $dt->getTimestamp()
+                'time' => $dt->getTimestamp(),
             ]
         );
     }
@@ -128,7 +128,7 @@ class course_user_event_collection_logger implements
             static::TABLE,
             'courseid = :courseid',
             [
-                'courseid' => $this->courseid
+                'courseid' => $this->courseid,
             ]
         );
     }
@@ -151,7 +151,7 @@ class course_user_event_collection_logger implements
 
         $params = [
             'courseid' => $this->courseid,
-            'groupid' => $groupid
+            'groupid' => $groupid,
         ];
 
         $this->db->execute($sql, $params);
@@ -168,7 +168,7 @@ class course_user_event_collection_logger implements
             static::TABLE,
             [
                 'courseid' => $this->courseid,
-                'userid' => $id
+                'userid' => $id,
             ]
         );
     }

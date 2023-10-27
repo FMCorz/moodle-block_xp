@@ -35,6 +35,11 @@ namespace block_xp\local\sql;
  */
 class limit {
 
+    /** @var int The count. */
+    protected $count;
+    /** @var int The offset. */
+    protected $offset;
+
     /**
      * Constructor.
      *

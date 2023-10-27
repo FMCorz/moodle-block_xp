@@ -38,6 +38,9 @@ class course_level_up_notification_service {
     /** User preference prefix. */
     const USERPREF_NOTIFY = 'block_xp_notify_level_up_';
 
+    /** @var string The key. */
+    protected $key;
+
     /**
      * Constructor.
      *

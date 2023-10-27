@@ -113,7 +113,7 @@ class course_world_instance_finder implements instance_finder, instances_finder_
             'fpcontextid3' => $fpcontext->id,
             'syscontextid' => $context->id,
             'syspagetype' => 'my-index',
-            'syssubpage' => $page->id
+            'syssubpage' => $page->id,
         ];
 
         // Return instances.

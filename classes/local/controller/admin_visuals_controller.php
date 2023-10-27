@@ -54,7 +54,7 @@ class admin_visuals_controller extends admin_route_controller {
     protected function define_form() {
         return new \block_xp\form\visuals($this->pageurl->out(false), [
             'fmoptions' => $this->get_filemanager_options(),
-            'promourl' => $this->urlresolver->reverse('admin/promo')
+            'promourl' => $this->urlresolver->reverse('admin/promo'),
         ]);
     }
 
@@ -102,7 +102,7 @@ class admin_visuals_controller extends admin_route_controller {
             0, $this->get_filemanager_options());
 
         return [
-            'badges' => $draftitemid
+            'badges' => $draftitemid,
         ];
     }
 

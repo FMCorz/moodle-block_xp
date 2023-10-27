@@ -145,7 +145,7 @@ class handler {
 
         // Attributes can be HTML encoded.
         $args = array_combine(array_map(function($key) {
-            return html_entity_decode($key);
+            return html_entity_decode($key, ENT_COMPAT | ENT_HTML401);
         }, array_keys($args)), array_values($args));
 
         // The user types <=3, so they are stored in the < key.

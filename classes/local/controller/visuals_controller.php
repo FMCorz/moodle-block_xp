@@ -56,7 +56,7 @@ class visuals_controller extends page_controller {
     protected function define_optional_params() {
         return [
             ['reset', false, PARAM_BOOL, false],
-            ['confirm', false, PARAM_BOOL, false]
+            ['confirm', false, PARAM_BOOL, false],
         ];
     }
 
@@ -75,7 +75,7 @@ class visuals_controller extends page_controller {
      * @return array
      */
     final protected function get_filemanager_options() {
-        return ['subdirs' => 0, 'accepted_types' => array('.jpg', '.png', '.gif', '.svg')];
+        return ['subdirs' => 0, 'accepted_types' => ['.jpg', '.png', '.gif', '.svg']];
     }
 
     /**
@@ -87,7 +87,7 @@ class visuals_controller extends page_controller {
         return new \block_xp\form\visuals($this->pageurl->out(false), [
             'showpromo' => di::get('config')->get('enablepromoincourses'),
             'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $this->courseid]),
-            'fmoptions' => $this->get_filemanager_options()
+            'fmoptions' => $this->get_filemanager_options(),
         ]);
     }
 
@@ -144,7 +144,7 @@ class visuals_controller extends page_controller {
         }
 
         return [
-            'badges' => $draftitemid
+            'badges' => $draftitemid,
         ];
     }
 

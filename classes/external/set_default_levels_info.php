@@ -60,7 +60,7 @@ class set_default_levels_info extends external_api {
                 'base' => new external_value(PARAM_INT),
                 'incr' => new external_value(PARAM_INT),
                 'coef' => new external_value(PARAM_FLOAT),
-            ])
+            ]),
         ]);
     }
 
@@ -94,7 +94,7 @@ class set_default_levels_info extends external_api {
         $writer = di::get('levels_info_writer');
         $writer->save_defaults([
             'levels' => $params['levels'],
-            'algo' => $params['algo']
+            'algo' => $params['algo'],
         ]);
 
         return (object) ['success' => true];
@@ -107,7 +107,7 @@ class set_default_levels_info extends external_api {
      */
     public static function execute_returns() {
         return new external_single_structure([
-            'success' => new external_value(PARAM_BOOL)
+            'success' => new external_value(PARAM_BOOL),
         ]);
     }
 

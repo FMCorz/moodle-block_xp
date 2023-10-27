@@ -147,7 +147,7 @@ class report_table extends table_sql {
         // are not a member of the group though.
         if (empty($groupid)) {
             $sql = 'SELECT userid FROM {block_xp} WHERE courseid = :courseid';
-            $params = array('courseid' => $courseid);
+            $params = ['courseid' => $courseid];
         } else {
             $sql = 'SELECT b.userid
                       FROM {block_xp} b
@@ -155,7 +155,7 @@ class report_table extends table_sql {
                         ON b.userid = gm.userid
                        AND gm.groupid = :groupid
                      WHERE courseid = :courseid';
-            $params = array('courseid' => $courseid, 'groupid' => $groupid);
+            $params = ['courseid' => $courseid, 'groupid' => $groupid];
         }
         $entries = $this->db->get_recordset_sql($sql, $params);
         foreach ($entries as $entry) {
@@ -175,10 +175,10 @@ class report_table extends table_sql {
                   LEFT JOIN {block_xp} x
                          ON (x.userid = u.id AND x.courseid = :courseid)";
         $this->sql->where = "u.id $insql";
-        $this->sql->params = array_merge($inparams, array(
+        $this->sql->params = array_merge($inparams, [
             'courseid' => $courseid,
-            'contextlevel' => CONTEXT_USER
-        ));
+            'contextlevel' => CONTEXT_USER,
+        ]);
     }
 
     /**

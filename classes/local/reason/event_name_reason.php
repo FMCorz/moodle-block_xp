@@ -35,6 +35,9 @@ namespace block_xp\local\reason;
  */
 class event_name_reason implements reason {
 
+    /** @var string The event name. */
+    protected $eventname;
+
     /**
      * Constructor.
      *

@@ -111,7 +111,7 @@ class course_user_state_store implements course_state_store,
         $params = [
             'contextlevel' => CONTEXT_USER,
             'courseid' => $this->courseid,
-            'userid' => $id
+            'userid' => $id,
         ];
 
         return $this->make_state_from_record($this->db->get_record_sql($sql, $params, MUST_EXIST));
@@ -168,7 +168,7 @@ class course_user_state_store implements course_state_store,
             $params = [
                 'xp' => $amount,
                 'courseid' => $this->courseid,
-                'userid' => $id
+                'userid' => $id,
             ];
             $this->db->execute($sql, $params);
         } else {
@@ -301,7 +301,7 @@ class course_user_state_store implements course_state_store,
 
         $params = [
             'courseid' => $this->courseid,
-            'groupid' => $groupid
+            'groupid' => $groupid,
         ];
 
         $this->db->execute($sql, $params);
@@ -332,7 +332,7 @@ class course_user_state_store implements course_state_store,
             $params = [
                 'xp' => $amount,
                 'courseid' => $this->courseid,
-                'userid' => $id
+                'userid' => $id,
             ];
             $this->db->execute($sql, $params);
         } else {

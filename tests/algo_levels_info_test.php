@@ -202,18 +202,18 @@ class algo_levels_info_test extends base_testcase {
                 "1" => 'A',
                 "2" => 'Level Too!',
                 "3" => 'aaaa',
-                "6" => 'X'
+                "6" => 'X',
             ],
             'desc' => [
                 '1' => 'a',
                 '2' => 'bB',
                 '3' => '3',
                 '5' => 'five',
-                '6' => 'xx'
+                '6' => 'xx',
             ],
             'base' => 120,
             'coef' => 1.2,
-            'usealgo' => false
+            'usealgo' => false,
         ];
         $levelsinfo = new algo_levels_info($sampledata);
 
@@ -226,7 +226,7 @@ class algo_levels_info_test extends base_testcase {
             3 => 264,
             4 => 437,
             5 => 644,
-            6 => 893
+            6 => 893,
         ], $this->get_xp_by_levels($levelsinfo));
         $this->assertEquals([
             1 => 'A',
@@ -234,7 +234,7 @@ class algo_levels_info_test extends base_testcase {
             3 => 'aaaa',
             4 => '',
             5 => '',
-            6 => 'X'
+            6 => 'X',
         ], $this->get_name_by_levels($levelsinfo));
         $this->assertEquals([
             1 => 'a',
@@ -242,7 +242,7 @@ class algo_levels_info_test extends base_testcase {
             3 => '3',
             4 => '',
             5 => 'five',
-            6 => 'xx'
+            6 => 'xx',
         ], $this->get_description_by_levels($levelsinfo));
 
         $sampledata = [
@@ -256,13 +256,13 @@ class algo_levels_info_test extends base_testcase {
                 '7' => 1531,
                 '8' => 2110,
                 '9' => 2863,
-                '10' => 3842
+                '10' => 3842,
             ],
             'name' => [],
             'desc' => [],
             'base' => 120,
             'coef' => 1.3,
-            'usealgo' => true
+            'usealgo' => true,
         ];
         $levelsinfo = new algo_levels_info($sampledata);
 
@@ -321,7 +321,7 @@ class algo_levels_info_test extends base_testcase {
             ],
             'desc' => [
                 '5' => 'Desc 5',
-                '6' => 'Desc 6' // Key does not match level.
+                '6' => 'Desc 6', // Key does not match level.
             ],
             // Missing algo.
         ];
@@ -338,7 +338,7 @@ class algo_levels_info_test extends base_testcase {
             3 => 264,
             4 => 437,
             5 => 644,
-            6 => 893
+            6 => 893,
         ], $this->get_xp_by_levels($levelsinfo));
         $this->assertEquals([
             1 => '',
@@ -346,7 +346,7 @@ class algo_levels_info_test extends base_testcase {
             3 => '',
             4 => '',
             5 => '',
-            6 => ''
+            6 => '',
         ], $this->get_name_by_levels($levelsinfo));
         $this->assertEquals([
             1 => '',
@@ -354,7 +354,7 @@ class algo_levels_info_test extends base_testcase {
             3 => '',
             4 => '',
             5 => 'Desc 5',
-            6 => ''
+            6 => '',
         ], $this->get_description_by_levels($levelsinfo));
 
         $sampledata = [
@@ -366,7 +366,7 @@ class algo_levels_info_test extends base_testcase {
             ],
             'desc' => [
                 '5' => 'Desc 5',
-                '6' => 'Desc 6' // Key does not match level.
+                '6' => 'Desc 6', // Key does not match level.
             ],
             // Missing algo.
         ];
@@ -383,7 +383,7 @@ class algo_levels_info_test extends base_testcase {
             3 => 264,
             4 => 437,
             5 => 644,
-            6 => 893
+            6 => 893,
         ], $this->get_xp_by_levels($levelsinfo));
         $this->assertEquals([
             1 => '',
@@ -391,7 +391,7 @@ class algo_levels_info_test extends base_testcase {
             3 => '',
             4 => '',
             5 => '',
-            6 => ''
+            6 => '',
         ], $this->get_name_by_levels($levelsinfo));
         $this->assertEquals([
             1 => '',
@@ -399,7 +399,7 @@ class algo_levels_info_test extends base_testcase {
             3 => '',
             4 => '',
             5 => 'Desc 5',
-            6 => ''
+            6 => '',
         ], $this->get_description_by_levels($levelsinfo));
     }
 

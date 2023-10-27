@@ -159,10 +159,10 @@ class levels_with_algo extends moodleform {
             'base' => $data->basexp,
             'coef' => $data->coefxp,
             'xp' => [
-                '1' => 0
+                '1' => 0,
             ],
             'desc' => [],
-            'name' => []
+            'name' => [],
         ];
 
         $keys = ['xp', 'desc', 'name'];
@@ -209,7 +209,7 @@ class levels_with_algo extends moodleform {
      * @return array of errors.
      */
     public function validation($data, $files) {
-        $errors = array();
+        $errors = [];
         if ($data['levels'] < 2) {
             $errors['levels'] = get_string('errorlevelsincorrect', 'block_xp');
         }

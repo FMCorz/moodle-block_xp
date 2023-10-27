@@ -287,22 +287,22 @@ class block_xp_renderer extends plugin_renderer_base {
                 function() {
                     $questblogurl = new moodle_url('https://www.levelup.plus/blog/quest-moodle-gamification-plugin?ref=xp_notice');
                     $questurl = new moodle_url('https://www.levelup.plus/quest?ref=xp_notice');
-                    return strip_tags(markdown_to_html(get_string('questreleasenotice', 'block_xp', (object) array(
+                    return strip_tags(markdown_to_html(get_string('questreleasenotice', 'block_xp', (object) [
                         'questblogurl' => $questblogurl->out(false),
-                        'questurl' => $questurl->out(false)
-                    ))), '<a><em><strong>');
-                }
+                        'questurl' => $questurl->out(false),
+                    ])), '<a><em><strong>');
+                },
             ], [
                 $this->noticesflag,
                 function() {
                     $moodleorgurl = new moodle_url('https://moodle.org/plugins/view.php?plugin=block_xp');
                     $githuburl = new moodle_url('https://github.com/FMCorz/moodle-block_xp');
-                    return get_string('likenotice', 'block_xp', (object) array(
+                    return get_string('likenotice', 'block_xp', (object) [
                         'moodleorg' => $moodleorgurl->out(),
-                        'github' => $githuburl->out()
-                    ));
-                }
-            ]
+                        'github' => $githuburl->out(),
+                    ]);
+                },
+            ],
         ];
         foreach ($candidates as $candidate) {
             if (!get_user_preferences($candidate[0], false)) {
@@ -347,7 +347,7 @@ class block_xp_renderer extends plugin_renderer_base {
             }
 
             $icon = new pix_icon('t/close', get_string('dismissnotice', 'block_xp'), 'block_xp');
-            $actionicon = $this->action_icon(new moodle_url($this->page->url), $icon, null, array('class' => 'block-xp-rocks'));
+            $actionicon = $this->action_icon(new moodle_url($this->page->url), $icon, null, ['class' => 'block-xp-rocks']);
 
             $text = html_writer::start_div('xp-flex xp-gap-1');
             $text .= html_writer::div($textfn(), 'xp-flex-1 [&_a]:xp-font-normal [&_a]:xp-underline');
@@ -576,7 +576,7 @@ class block_xp_renderer extends plugin_renderer_base {
      * @param array $options Options.
      * @return string
      */
-    public function render(renderable $renderable, $options = array()) {
+    public function render(renderable $renderable, $options = []) {
         if ($renderable instanceof block_xp_ruleset) {
             return $this->render_block_xp_ruleset($renderable, $options);
         } else if ($renderable instanceof block_xp_rule) {
@@ -599,7 +599,7 @@ class block_xp_renderer extends plugin_renderer_base {
         $o = '';
         $basename = 'filters[' . $i++ . ']';
 
-        $o .= html_writer::start_tag('li', array('class' => 'filter', 'data-basename' => $basename));
+        $o .= html_writer::start_tag('li', ['class' => 'filter', 'data-basename' => $basename]);
 
         if ($filter->is_editable()) {
             $content = '';
@@ -607,18 +607,18 @@ class block_xp_renderer extends plugin_renderer_base {
 
             $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
             $content .= $this->render(new pix_icon('i/dragdrop', get_string('moverule', 'block_xp'), '',
-                array('class' => 'iconsmall filter-move')));
+                ['class' => 'iconsmall filter-move']));
             $content .= html_writer::end_div();
 
             $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex'
                 . ' xp-items-center xp-leading-tight');
             $content .= get_string('awardaxpwhen', 'block_xp',
-                html_writer::empty_tag('input', array(
+                html_writer::empty_tag('input', [
                     'type' => 'text',
                     'value' => $filter->get_points(),
                     'size' => 3,
                     'name' => $basename . '[points]',
-                    'class' => 'form-control block_xp-form-control-inline !xp-mr-1'))
+                    'class' => 'form-control block_xp-form-control-inline !xp-mr-1', ])
             );
             $content .= html_writer::end_div();
 
@@ -629,21 +629,21 @@ class block_xp_renderer extends plugin_renderer_base {
             $content .= html_writer::end_div();
 
             $o .= html_writer::div($content, 'xp-group');
-            $o .= html_writer::empty_tag('input', array(
+            $o .= html_writer::empty_tag('input', [
                     'type' => 'hidden',
                     'value' => $filter->get_id(),
-                    'name' => $basename . '[id]'));
-            $o .= html_writer::empty_tag('input', array(
+                    'name' => $basename . '[id]', ]);
+            $o .= html_writer::empty_tag('input', [
                     'type' => 'hidden',
                     'value' => $filter->get_sortorder(),
-                    'name' => $basename . '[sortorder]'));
+                    'name' => $basename . '[sortorder]', ]);
             $basename .= '[rule]';
 
         } else {
             $o .= html_writer::tag('p', get_string('awardaxpwhen', 'block_xp', $filter->get_points()));
         }
-        $o .= html_writer::start_tag('ul', array('class' => 'filter-rules'));
-        $o .= $this->render($filter->get_rule(), array('iseditable' => $filter->is_editable(), 'basename' => $basename));
+        $o .= html_writer::start_tag('ul', ['class' => 'filter-rules']);
+        $o .= $this->render($filter->get_rule(), ['iseditable' => $filter->is_editable(), 'basename' => $basename]);
         $o .= html_writer::end_tag('ul');
         $o .= html_writer::end_tag('li');
         return $o;
@@ -683,8 +683,8 @@ class block_xp_renderer extends plugin_renderer_base {
             $content = s($rule->get_description());
         }
         $o = '';
-        $o .= html_writer::start_tag('li', array('class' => 'rule rule-type-rule xp-group'));
-        $o .= html_writer::tag('div', $content, array('class' => 'rule-definition', 'data-basename' => $basename));
+        $o .= html_writer::start_tag('li', ['class' => 'rule rule-type-rule xp-group']);
+        $o .= html_writer::tag('div', $content, ['class' => 'rule-definition', 'data-basename' => $basename]);
         $o .= html_writer::end_tag('li');
         return $o;
     }
@@ -701,14 +701,14 @@ class block_xp_renderer extends plugin_renderer_base {
         $iseditable = !empty($options['iseditable']);
         $basename = isset($options['basename']) ? $options['basename'] : '';
         $o = '';
-        $o .= html_writer::start_tag('li', array('class' => 'rule rule-type-ruleset'));
+        $o .= html_writer::start_tag('li', ['class' => 'rule rule-type-ruleset']);
         if ($iseditable) {
             $content = '';
             $content .= html_writer::start_div('xp-flex xp-min-h-10');
 
             $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
             $content .= $this->render(new pix_icon('i/dragdrop', get_string('movecondition', 'block_xp'), '',
-                array('class' => 'iconsmall rule-move')));
+                ['class' => 'iconsmall rule-move']));
             $content .= html_writer::end_div();
 
             $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex'
@@ -724,8 +724,8 @@ class block_xp_renderer extends plugin_renderer_base {
         } else {
             $content = s($ruleset->get_description());
         }
-        $o .= html_writer::tag('div', $content, array('class' => 'rule-definition xp-h-10 xp-group', 'data-basename' => $basename));
-        $o .= html_writer::start_tag('ul', array('class' => 'rule-rules', 'data-basename' => $basename . '[rules]'));
+        $o .= html_writer::tag('div', $content, ['class' => 'rule-definition xp-h-10 xp-group', 'data-basename' => $basename]);
+        $o .= html_writer::start_tag('ul', ['class' => 'rule-rules', 'data-basename' => $basename . '[rules]']);
         foreach ($ruleset->get_rules() as $rule) {
             if ($iseditable) {
                 $options['basename'] = $basename . '[rules][' . $i++ . ']';
@@ -733,9 +733,9 @@ class block_xp_renderer extends plugin_renderer_base {
             $o .= $this->render($rule, $options);
         }
         if ($iseditable) {
-            $o .= html_writer::start_tag('li', array('class' => 'rule-add'));
+            $o .= html_writer::start_tag('li', ['class' => 'rule-add']);
             $o .= $this->action_link('#', get_string('addacondition', 'block_xp'), null, null,
-                new pix_icon('t/add', '', '', array('class' => 'iconsmall')));
+                new pix_icon('t/add', '', '', ['class' => 'iconsmall']));
             $o .= html_writer::end_tag('li');
         }
         $o .= html_writer::end_tag('ul');
@@ -755,7 +755,7 @@ class block_xp_renderer extends plugin_renderer_base {
         return $this->action_link('#', '', null, [
             'class' => $classname . ' supports-hover:xp-opacity-0 supports-hover:xp-pointer-events-none'
                 . ' focus:xp-opacity-100 focus:xp-pointer-events-auto'
-                . ' group-hover:xp-opacity-100 group-hover:xp-pointer-events-auto xp-transition-opacity'
+                . ' group-hover:xp-opacity-100 group-hover:xp-pointer-events-auto xp-transition-opacity',
         ], $icon);
     }
 
@@ -818,7 +818,7 @@ EOT
                 $templatetypes[] = [
                     'name' => $rule->name,
                     'info' => !empty($rule->info) ? $rule->info : null,
-                    'template' => $this->render($rule->rule, ['iseditable' => true, 'basename' => 'XXXXX'])
+                    'template' => $this->render($rule->rule, ['iseditable' => true, 'basename' => 'XXXXX']),
                 ];
             }
 
@@ -826,8 +826,8 @@ EOT
             $this->page->requires->yui_module('moodle-block_xp-filters', 'Y.M.block_xp.Filters.init', [[
                 'containerSelector' => '#' . $containerid,
                 'filter' => $templatefilter,
-                'rules' => $templatetypes
-            ]]);
+                'rules' => $templatetypes,
+            ], ]);
             $this->page->requires->strings_for_js(['pickaconditiontype', 'deleterule', 'deletecondition'], 'block_xp');
             $this->page->requires->strings_for_js(['areyousure'], 'core');
         }
@@ -904,10 +904,10 @@ EOT
 
         echo html_writer::start_tag('p', ['class' => 'block-xp-filters-submit-actions']);
         echo html_writer::empty_tag('input', ['value' => get_string('savechanges'), 'type' => 'submit', 'name' => 'save',
-            'class' => 'btn btn-primary']);
+            'class' => 'btn btn-primary', ]);
         echo ' ';
         echo html_writer::empty_tag('input', ['value' => get_string('cancel'), 'type' => 'submit', 'name' => 'cancel',
-            'class' => 'btn btn-default btn-secondary']);
+            'class' => 'btn btn-default btn-secondary', ]);
         echo html_writer::end_tag('p');
         echo html_writer::end_tag('form');
 
@@ -954,7 +954,7 @@ EOT
             'nonzero' => $pc != 0,
             'percentage' => $pc,
             'percentagehuman' => $pc > 0 ? floor($pc) : ceil($pc),
-            'nextinvaluehtml' => $nextinvalue
+            'nextinvaluehtml' => $nextinvalue,
         ];
     }
 
@@ -1021,7 +1021,7 @@ EOT
                     'date' => userdate($entry->get_date()->getTimestamp()),
                     'dateagotiny' => $this->tiny_time_ago($entry->get_date()),
                     'description' => $entry->get_description(),
-                    'xphtml' => $xp !== null ? $this->xp($xp) : ''
+                    'xphtml' => $xp !== null ? $this->xp($xp) : '',
                 ];
             }, $activity)),
         ]);
@@ -1071,9 +1071,9 @@ EOT
                 }
                 return array_merge($item, [
                     'url' => $url,
-                    'current' => $item['id'] == $activenode
+                    'current' => $item['id'] == $activenode,
                 ]);
-            }, $items)
+            }, $items),
         ]);
     }
 
@@ -1163,7 +1163,7 @@ EOT
 
         if ($link) {
             return html_writer::link($link->out(false), $img, [
-                'class' => 'd-inline-block aabtn'
+                'class' => 'd-inline-block aabtn',
             ]);
         }
 
@@ -1197,7 +1197,7 @@ EOT
         return html_writer::tag(
             'span',
             html_writer::tag('span', $this->xp($amount), [
-                'class' => "xp-inline-block $colourclass xp-px-2 xp-py-0.5 xp-rounded-xl xp-leading-none"
+                'class' => "xp-inline-block $colourclass xp-px-2 xp-py-0.5 xp-rounded-xl xp-leading-none",
             ]),
             ['class' => 'block_xp block_xp-xp-highlight']
         );

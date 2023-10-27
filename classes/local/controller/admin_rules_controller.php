@@ -50,7 +50,7 @@ class admin_rules_controller extends admin_route_controller {
         return [
             ['revert', false, PARAM_BOOL, false],
             ['reset', false, PARAM_BOOL, false],
-            ['confirm', false, PARAM_BOOL, false]
+            ['confirm', false, PARAM_BOOL, false],
         ];
     }
 
@@ -104,7 +104,7 @@ class admin_rules_controller extends admin_route_controller {
      * @return void
      */
     protected function save_filters($filters, $existingfilters, $category = null) {
-        $filterids = array();
+        $filterids = [];
         foreach ($filters as $filterdata) {
             $data = $filterdata;
             $data['ruledata'] = json_encode($data['rule'], true);
@@ -151,17 +151,17 @@ class admin_rules_controller extends admin_route_controller {
             (object) [
                 'name' => get_string('ruleevent', 'block_xp'),
                 'info' => get_string('ruleeventinfo', 'block_xp'),
-                'rule' => new \block_xp_rule_event()
+                'rule' => new \block_xp_rule_event(),
             ],
             (object) [
                 'name' => get_string('ruleproperty', 'block_xp'),
                 'info' => get_string('rulepropertyinfo', 'block_xp'),
-                'rule' => new \block_xp_rule_property()
+                'rule' => new \block_xp_rule_property(),
             ],
             (object) [
                 'name' => get_string('ruleset', 'block_xp'),
                 'info' => get_string('rulesetinfo', 'block_xp'),
-                'rule' => new \block_xp_ruleset()
+                'rule' => new \block_xp_ruleset(),
             ],
         ];
         return $rules;
@@ -170,7 +170,7 @@ class admin_rules_controller extends admin_route_controller {
     /**
      * Get default filters.
      *
-     * @return block_xp_filter
+     * @return \block_xp_filter
      */
     protected function get_default_filter() {
         return \block_xp_filter::load_from_data(['rule' => new \block_xp_ruleset()]);

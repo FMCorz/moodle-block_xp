@@ -50,7 +50,7 @@ class global_collection_strategy implements event_collection_strategy {
      * @param int $contextmode The context mode.
      */
     public function __construct(course_world_factory $worldfactory, $contextmode) {
-        $allowedcontexts = array(CONTEXT_COURSE, CONTEXT_MODULE);
+        $allowedcontexts = [CONTEXT_COURSE, CONTEXT_MODULE];
         if (!empty($contextmode) && $contextmode == CONTEXT_SYSTEM) {
             $allowedcontexts[] = CONTEXT_SYSTEM;
         }

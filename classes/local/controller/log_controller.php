@@ -61,7 +61,7 @@ class log_controller extends page_controller {
 
     protected function define_optional_params() {
         return [
-            ['userid', null, PARAM_INT]
+            ['userid', null, PARAM_INT],
         ];
     }
 

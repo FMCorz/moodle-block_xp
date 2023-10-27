@@ -31,21 +31,21 @@ $functions = [
         'methodname' => 'execute',
         'description' => 'Mark popup notification as seen',
         'type' => 'write',
-        'ajax' => true
+        'ajax' => true,
     ],
     'block_xp_search_courses' => [
         'classname' => 'block_xp\external\search_courses',
         'methodname' => 'execute',
         'description' => 'Search for courses',
         'type' => 'read',
-        'ajax' => true
+        'ajax' => true,
     ],
     'block_xp_search_modules' => [
         'classname' => 'block_xp\external\search_modules',
         'methodname' => 'execute',
         'description' => 'Search modules within a course',
         'type' => 'read',
-        'ajax' => true
+        'ajax' => true,
     ],
     'block_xp_set_default_levels_info' => [
         'classname' => 'block_xp\external\set_default_levels_info',

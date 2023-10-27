@@ -86,7 +86,7 @@ class search_modules extends external_api {
                     $modules[] = [
                         'cmid' => $cm->id,
                         'contextid' => $cm->context->id,
-                        'name' => $cm->get_formatted_name()
+                        'name' => $cm->get_formatted_name(),
                     ];
                 }
             }
@@ -94,7 +94,7 @@ class search_modules extends external_api {
             if (!empty($modules)) {
                 $sections[] = [
                     'name' => $courseformat->get_section_name($sectionnum),
-                    'modules' => $modules
+                    'modules' => $modules,
                 ];
             }
         }
@@ -114,7 +114,7 @@ class search_modules extends external_api {
                 'cmid' => new external_value(PARAM_INT),
                 'contextid' => new external_value(PARAM_INT),
                 'name' => new external_value(PARAM_RAW),
-            ]))
+            ])),
         ]));
     }
 
