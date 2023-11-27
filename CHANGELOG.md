@@ -1,13 +1,20 @@
 Changelog
 =========
 
+v3.15.2
+-------
+
+Technical changes
+
+- Improved compatibility with PHP 8.2
+- Addressing false positive in automated tests
+
 v3.15.1
 -------
 
 Bug fixes
 
 - Levels incorrectly started at 2 when restored from pre 3.15.0 backup
-
 
 v3.15.0
 -------
