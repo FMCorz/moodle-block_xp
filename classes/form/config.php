@@ -80,6 +80,18 @@ class config extends moodleform {
         $mform->addHelpButton('identitymode', 'anonymity', 'block_xp');
         $mform->disabledIf('identitymode', 'enableladder', 'eq', 0);
 
+        $mform->addElement('select', 'defaultlimit', get_string('defaultlimit', 'block_xp'), [
+            0 => get_string('nodefaultlimit', 'block_xp'),
+            5 => get_string('limitton', 'block_xp', '5'),
+            10 => get_string('limitton', 'block_xp', '10'),
+            20 => get_string('limitton', 'block_xp', '20'),
+            30 => get_string('limitton', 'block_xp', '30'),
+            40 => get_string('limitton', 'block_xp', '30'),
+            50 => get_string('limitton', 'block_xp', '30'),
+        ]);
+        $mform->addHelpButton('defaultlimit', 'defaultlimit', 'block_xp');
+        $mform->disabledIf('defaultlimit', 'enableladder', 'eq', 0);
+
         $mform->addElement('select', 'neighbours', get_string('limitparticipants', 'block_xp'), [
             0 => get_string('displayeveryone', 'block_xp'),
             1 => get_string('displayoneneigbour', 'block_xp'),

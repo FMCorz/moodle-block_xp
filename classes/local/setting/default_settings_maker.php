@@ -272,6 +272,20 @@ class default_settings_maker implements settings_maker {
             ]
         ));
 
+        // Default limit.
+        $settings[] = (new admin_setting_configselect('block_xp/defaultlimit',
+            get_string('defaultlimit', 'block_xp'), get_string('defaultlimit_help', 'block_xp'),
+            $defaults['neighbours'], [
+                0 => get_string('nodefaultlimit', 'block_xp'),
+                5 => get_string('limitton', 'block_xp', '5'),
+                10 => get_string('limitton', 'block_xp', '10'),
+                20 => get_string('limitton', 'block_xp', '20'),
+                30 => get_string('limitton', 'block_xp', '30'),
+                40 => get_string('limitton', 'block_xp', '30'),
+                50 => get_string('limitton', 'block_xp', '30'),
+            ]
+        ));
+
         // Neighbours.
         $settings[] = (new admin_setting_configselect('block_xp/neighbours',
             get_string('limitparticipants', 'block_xp'), get_string('limitparticipants_help', 'block_xp'),

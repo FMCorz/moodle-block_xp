@@ -54,6 +54,7 @@
         <FIELD NAME="timebetweensameactions" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="180" SEQUENCE="false" COMMENT="Time required between identical actions"/>
         <FIELD NAME="identitymode" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
         <FIELD NAME="rankmode" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="defaultlimit" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="neighbours" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="defaultfilters" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Flag for the default filters. Defaults to 1, the legacy value (DEFAULT_FILTERS_STATIC)."/>
         <FIELD NAME="laddercols" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="xp,progress" SEQUENCE="false" COMMENT="The additional columns to display in the ladder. Comma-separated list."/>

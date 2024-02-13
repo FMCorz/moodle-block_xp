@@ -57,6 +57,7 @@ class default_course_world_config extends immutable_config {
             'timebetweensameactions' => 180,     // Time between similar actions.
             'identitymode' => course_world_config::IDENTITY_ON, // Identity mode.
             'rankmode' => course_world_config::RANK_ON,         // Rank mode.
+            'defaultlimit' => 0,
             'neighbours' => 0,                                  // Number of neighbours to show on ladder, 0 means everyone.
             'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING,  // Flag about the default filters.
             'laddercols' => 'xp,progress',      // Addditional columns to be displayed on the ladder.

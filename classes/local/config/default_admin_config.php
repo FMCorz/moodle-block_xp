@@ -71,6 +71,7 @@ class default_admin_config extends immutable_config {
             'laddercols' => 'xp,progress',
             'levelsdata' => '',
             'maxactionspertime' => 10,
+            'defaultlimit' => 0,
             'neighbours' => 0,
             'rankmode' => course_world_config::RANK_ON,
             'timebetweensameactions' => 180,
