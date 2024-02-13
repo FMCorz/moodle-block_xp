@@ -25,6 +25,7 @@
 
 namespace block_xp\local\controller;
 
+use block_xp\local\sql\limit;
 use moodle_exception;
 
 /**
@@ -84,14 +85,20 @@ class ladder_controller extends page_controller {
      */
     protected function get_table() {
         global $USER;
+        $options = [
+            'context' => $this->world->get_context(),
+            'identitymode' => $this->world->get_config()->get('identitymode'),
+            'rankmode' => $this->world->get_config()->get('rankmode'),
+        ];
+
+        if ($this->world->get_config()->get('defaultlimit') != 0) {
+            $options['fence'] = new limit($this->world->get_config()->get('defaultlimit'));
+        }
+
         $table = new \block_xp\output\leaderboard_table(
             $this->get_leaderboard(),
             $this->get_renderer(),
-            [
-                'context' => $this->world->get_context(),
-                'identitymode' => $this->world->get_config()->get('identitymode'),
-                'rankmode' => $this->world->get_config()->get('rankmode'),
-            ],
+            $options,
             $USER->id
         );
         $table->show_pagesize_selector(true);
