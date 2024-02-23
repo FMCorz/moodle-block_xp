@@ -68,7 +68,7 @@ class compatibility_check_setting extends static_setting {
                     'title' => get_string('potentialmoodleincompatibility', 'block_xp'),
                     'message' => get_string('pluginxmaybeincompatible', 'block_xp',
                         ['name' => 'Level Up XP', 'component' => 'block_xp', 'version' => $humanbranch]),
-                    'url' => 'https://docs.levelup.plus/docs/xp/requirements-compatibility#potential-moodle-incompatibility',
+                    'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#potential-moodle-incompatibility',
                 ];
             }
             if ($localxp && (empty($localxp->pluginsupported) || ($CFG->branch < $localxp->pluginsupported[0]
@@ -77,7 +77,7 @@ class compatibility_check_setting extends static_setting {
                     'title' => get_string('potentialmoodleincompatibility', 'block_xp'),
                     'message' => get_string('pluginxmaybeincompatible', 'block_xp',
                         ['name' => 'Level Up XP+', 'component' => 'local_xp', 'version' => $humanbranch]),
-                    'url' => 'https://docs.levelup.plus/docs/xp/requirements-compatibility#potential-moodle-incompatibility',
+                    'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#potential-moodle-incompatibility',
                 ];
             }
         }
@@ -86,13 +86,13 @@ class compatibility_check_setting extends static_setting {
             $messages[] = [
                 'title' => get_string('outofsyncexcessive', 'block_xp'),
                 'message' => get_string('outofsyncexcessiveinfo', 'block_xp'),
-                'url' => 'https://docs.levelup.plus/docs/xp/requirements-compatibility#out-of-sync',
+                'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#out-of-sync',
             ];
         } else if ($addon->is_out_of_sync()) {
             $messages[] = [
                 'title' => get_string('outofsync', 'block_xp'),
                 'message' => get_string('outofsyncinfo', 'block_xp'),
-                'url' => 'https://docs.levelup.plus/docs/xp/requirements-compatibility#out-of-sync',
+                'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#out-of-sync',
             ];
         }
 
