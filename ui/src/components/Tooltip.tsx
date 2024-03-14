@@ -16,6 +16,9 @@ export const Tooltip: React.FC<{ children: React.ReactElement; content: string }
 
     $(ref.current).tooltip("enable");
     return () => {
+      if (!ref.current || !$(ref.current).tooltip) {
+        return;
+      }
       $(ref.current).tooltip("dispose");
     };
   }, [content]);
