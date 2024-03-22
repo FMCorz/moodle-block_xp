@@ -178,6 +178,38 @@ class course_filter_manager {
     }
 
     /**
+     * Loosely check if any filter contain any rule.
+     *
+     * @param string[] $ruleclasses The class names.
+     * @param int $category The category constant.
+     * @return bool
+     */
+    public function has_filters_using_rules($ruleclasses, $category = \block_xp_filter::CATEGORY_EVENTS) {
+        if (empty($ruleclasses)) {
+            return false;
+        }
+
+        $params = [];
+        $segments = [];
+        foreach ($ruleclasses as $i => $ruleclass) {
+            $key = 'ruleclass' . $i;
+            $searchfor = '"_class":"' . $ruleclass . '"';
+            $params = array_merge($params, [
+                $key => '%' . $this->db->sql_like_escape(str_replace('\\', '\\\\', $searchfor), '@') . '%',
+            ]);
+            $segments[] = $this->db->sql_like('ruledata', ':' . $key, false, false, false, '@');
+        }
+
+        $sql = 'courseid = :courseid AND category = :category AND (' . implode(' OR ', $segments) . ')';
+        $params = array_merge($params, [
+            'courseid' => $this->courseid,
+            'category' => $category,
+        ]);
+
+        return $this->db->record_exists_select('block_xp_filters', $sql, $params);
+    }
+
+    /**
      * Import filters by appending them.
      *
      * @param array $filters An array of filters.
