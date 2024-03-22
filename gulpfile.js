@@ -36,8 +36,17 @@ function tailwindBuild(cb) {
 
 /** Moodle. */
 
+var moodleGruntAmdIsRunning = false;
+
 function moodleGruntAmd(cb) {
+  if (moodleGruntAmdIsRunning) {
+    cb();
+    return;
+  };
+
+  moodleGruntAmdIsRunning = true;
   exec('grunt amd', function (err, stdout, stderr) {
+    moodleGruntAmdIsRunning = false;
     if (err) {
       console.log(stdout);
       console.log(stderr);
@@ -75,18 +84,30 @@ function webpackBuildFromConfig(config) {
   });
 }
 
-function webpackDev(cb) {
-  return webpackBuildFromConfig(webpackDevConfig);
+function webpackBuildDev(cb) {
+  return webpackBuildFromConfig(webpackDevConfig)
 }
 
-function webpackProd(cb) {
-  return webpackBuildFromConfig(webpackProdConfig);
+function webpackBuildProd(cb) {
+  return webpackBuildFromConfig(webpackProdConfig)
 }
+
+function webpackFixVendorDependencies(cb) {
+  // Change the define definition of the ui-* modules to dependent on the vendor module.
+  return gulp
+    .src(['./amd/src/ui-*.js', '!./amd/src/ui-commons-lazy.js'])
+    .pipe(replace(/^\s*define\s*\(/m, 'define(["block_xp/ui-commons-lazy"],'))
+    .pipe(gulp.dest('./amd/src'));
+}
+
+const postWebpackBuild = gulp.series(webpackFixVendorDependencies);
+const webpackDev = gulp.series(webpackBuildDev, postWebpackBuild);
+const webpackProd = gulp.series(webpackBuildProd, postWebpackBuild);
 
 /** Watch. */
 
 function watchAmd(cb) {
-  return gulp.watch(jsAmdPaths, gulp.series(moodleAmd));
+  return gulp.watch(jsAmdPaths, { delay: 500 }, gulp.series(moodleAmd));
 }
 
 function watchCss(cb) {

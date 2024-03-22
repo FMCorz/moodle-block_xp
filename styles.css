@@ -259,11 +259,19 @@
     flex-basis: auto;
 }
 .block_xp .xp-origin-top-right {
-    transform-origin: top right;
+    -webkit-transform-origin: top right;
+            transform-origin: top right;
 }
 .block_xp .xp-rotate-90 {
     --tw-rotate: 90deg;
-    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    -webkit-transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+@-webkit-keyframes xp-pulse {
+
+    50% {
+        opacity: .5;
+    }
 }
 @keyframes xp-pulse {
 
@@ -272,7 +280,18 @@
     }
 }
 .block_xp .xp-animate-pulse {
-    animation: xp-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    -webkit-animation: xp-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            animation: xp-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@-webkit-keyframes xp-fade-in {
+
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 @keyframes xp-fade-in {
 
@@ -285,7 +304,8 @@
     }
 }
 .block_xp .xp-animate-fade-in {
-    animation: xp-fade-in 300ms both;
+    -webkit-animation: xp-fade-in 300ms both;
+            animation: xp-fade-in 300ms both;
 }
 @keyframes xp-fade-in {
 
@@ -297,14 +317,40 @@
         opacity: 1;
     }
 }
-@keyframes xp-wiggle {
+@-webkit-keyframes xp-wiggle {
 
     0%, 100% {
-        transform: rotate(-3deg);
+        -webkit-transform: rotate(-3deg);
+                transform: rotate(-3deg);
     }
 
     50% {
-        transform: rotate(3deg);
+        -webkit-transform: rotate(3deg);
+                transform: rotate(3deg);
+    }
+}
+@keyframes xp-wiggle {
+
+    0%, 100% {
+        -webkit-transform: rotate(-3deg);
+                transform: rotate(-3deg);
+    }
+
+    50% {
+        -webkit-transform: rotate(3deg);
+                transform: rotate(3deg);
+    }
+}
+@-webkit-keyframes xp-scale-out {
+
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(2);
+                transform: scale(2);
     }
 }
 @keyframes xp-scale-out {
@@ -315,11 +361,25 @@
 
     100% {
         opacity: 0;
-        transform: scale(2);
+        -webkit-transform: scale(2);
+                transform: scale(2);
     }
 }
 .block_xp .xp-animate-badge-leaving {
-    animation: xp-fade-in 300ms 1.5s backwards, xp-wiggle 200ms ease-in-out 2.5s 1, xp-scale-out 500ms ease-in-out 3.5s forwards;
+    -webkit-animation: xp-fade-in 300ms 1.5s backwards, xp-wiggle 200ms ease-in-out 2.5s 1, xp-scale-out 500ms ease-in-out 3.5s forwards;
+            animation: xp-fade-in 300ms 1.5s backwards, xp-wiggle 200ms ease-in-out 2.5s 1, xp-scale-out 500ms ease-in-out 3.5s forwards;
+}
+@-webkit-keyframes xp-ping-sm {
+
+    0% {
+        opacity: 1;
+    }
+
+    50%, 100% {
+        -webkit-transform: scale(1.25);
+                transform: scale(1.25);
+        opacity: 0;
+    }
 }
 @keyframes xp-ping-sm {
 
@@ -328,36 +388,68 @@
     }
 
     50%, 100% {
-        transform: scale(1.25);
+        -webkit-transform: scale(1.25);
+                transform: scale(1.25);
         opacity: 0;
     }
 }
 .block_xp .xp-animate-badge-ping {
-    animation: xp-ping-sm 2s cubic-bezier(0, 0, 0.2, 1) infinite 4000ms;
+    -webkit-animation: xp-ping-sm 2s cubic-bezier(0, 0, 0.2, 1) infinite 4000ms;
+            animation: xp-ping-sm 2s cubic-bezier(0, 0, 0.2, 1) infinite 4000ms;
 }
-@keyframes xp-pulse-in {
+@-webkit-keyframes xp-pulse-in {
 
     0% {
-        transform: scale(0.8);
+        -webkit-transform: scale(0.8);
+                transform: scale(0.8);
         opacity: 0;
     }
 
     50% {
         opacity: .5;
-        transform: scale(1);
+        -webkit-transform: scale(1);
+                transform: scale(1);
     }
 
     80% {
         opacity: 1;
-        transform: scale(1.25);
+        -webkit-transform: scale(1.25);
+                transform: scale(1.25);
     }
 
     100% {
-        transform: scale(1);
+        -webkit-transform: scale(1);
+                transform: scale(1);
+    }
+}
+@keyframes xp-pulse-in {
+
+    0% {
+        -webkit-transform: scale(0.8);
+                transform: scale(0.8);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: .5;
+        -webkit-transform: scale(1);
+                transform: scale(1);
+    }
+
+    80% {
+        opacity: 1;
+        -webkit-transform: scale(1.25);
+                transform: scale(1.25);
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
     }
 }
 .block_xp .xp-animate-badge-incoming {
-    animation: xp-pulse-in 500ms ease-in-out 2000ms both;
+    -webkit-animation: xp-pulse-in 500ms ease-in-out 2000ms both;
+            animation: xp-pulse-in 500ms ease-in-out 2000ms both;
 }
 .block_xp .xp-cursor-pointer {
     cursor: pointer;
@@ -718,7 +810,9 @@
     transition-duration: 150ms;
 }
 .block_xp .xp-transition-transform {
+    transition-property: -webkit-transform;
     transition-property: transform;
+    transition-property: transform, -webkit-transform;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
 }
@@ -766,19 +860,24 @@
     border-top-width: 1px;
 }
 .block_xp .xp-animation-delay-\[500ms\] {
-    animation-delay: 500ms;
+    -webkit-animation-delay: 500ms;
+            animation-delay: 500ms;
 }
 .block_xp .xp-animation-delay-\[6s\] {
-    animation-delay: 6s;
+    -webkit-animation-delay: 6s;
+            animation-delay: 6s;
 }
 .block_xp .xp-animation-delay-\[3\.8s\] {
-    animation-delay: 3.8s;
+    -webkit-animation-delay: 3.8s;
+            animation-delay: 3.8s;
 }
 .block_xp .xp-animation-delay-\[4\.5s\] {
-    animation-delay: 4.5s;
+    -webkit-animation-delay: 4.5s;
+            animation-delay: 4.5s;
 }
 .block_xp .xp-animation-delay-\[5s\] {
-    animation-delay: 5s;
+    -webkit-animation-delay: 5s;
+            animation-delay: 5s;
 }
 
 /** Cancel overflow of .no-overflow */

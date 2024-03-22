@@ -5827,12 +5827,12 @@ var App = function (_a) {
                                     react_2.default.createElement(Str_1.default, { id: "levelpointslength" }))),
                             react_2.default.createElement("div", { className: "xp-grid xp-grid-cols-2 xp-border xp-border-solid xp-border-gray-300 xp-rounded" },
                                 react_2.default.createElement("div", null,
-                                    react_2.default.createElement(NumberInput_1.NumInput, { value: level.xprequired, onChange: function (xp) { return handleXpChange(level, xp); }, disabled: level.level <= 1, className: "xp-min-w-[4ch] xp-w-full xp-rounded-none xp-rounded-l xp-border-0 xp-relative focus:xp-z-10", id: "xp-level-".concat(level.level, "-start") })),
+                                    react_2.default.createElement(NumberInput_1.NumInput, { value: level.xprequired, onChange: function (xp) { return handleXpChange(level, xp); }, disabled: level.level <= 1, className: "xp-h-full xp-min-w-[4ch] xp-w-full xp-rounded-none xp-rounded-l xp-border-0 xp-relative focus:xp-z-10", id: "xp-level-".concat(level.level, "-start") })),
                                 react_2.default.createElement("div", { className: "" },
-                                    react_2.default.createElement("div", { className: "xp-flex-1 xp-relative" },
+                                    react_2.default.createElement("div", { className: "xp-relative xp-w-full x-h-full" },
                                         react_2.default.createElement("div", { className: "xp-pointer-events-none xp-absolute xp-inset-y-0 xp-left-0 xp-flex xp-items-center xp-pl-2 xp-z-20" },
                                             react_2.default.createElement("span", { className: "xp-text-gray-500" }, "+")),
-                                        react_2.default.createElement(NumberInput_1.NumInput, { value: pointsInLevel, onChange: function (xp) { return handleXpChange(nextLevel, level.xprequired + xp); }, disabled: pointsInLevel <= 0, className: "xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 xp-rounded-r xp-pl-6 xp-relative focus:xp-z-10", id: "xp-level-".concat(level.level, "-length") }))))),
+                                        react_2.default.createElement(NumberInput_1.NumInput, { value: pointsInLevel, onChange: function (xp) { return handleXpChange(nextLevel, level.xprequired + xp); }, disabled: pointsInLevel <= 0, className: "xp-h-full xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 xp-rounded-r xp-pl-6 xp-relative focus:xp-z-10", id: "xp-level-".concat(level.level, "-length") }))))),
                         react_2.default.createElement("div", { className: "xp-flex xp-grow xp-items-center xp-justify-center  xp-gap-4" }, optionStates.map(function (o, idx) {
                             if (!o) {
                                 return react_2.default.createElement("div", { key: idx, className: "xp-w-6 xp-h-6 xp-hidden sm:xp-block" });
