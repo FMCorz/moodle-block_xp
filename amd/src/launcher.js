@@ -19,67 +19,10 @@
  * @copyright  2021 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 3.16.0, please use block_xp/react-launcher instead.
  */
 
-define(['jquery', 'core/notification', 'core/log'], function($, Notification, Log) {
-
-    /**
-     * App launcher.
-     *
-     * @param {String} mod The module name.
-     * @param {String} rootId The root ID.
-     * @param {String} propsId The props ID.
-     */
-    function launcher(mod, rootId, propsId) {
-
-        // Load the app module. By convension a module app needs to return
-        // an object with two properties: `dependencies`, and `startApp`.
-        require([mod], function(mod) {
-            var dependencies = [];
-            var optionalDependencies = [];
-            var dependenciesLoadedCallback = function() {
-                return;
-            };
-
-            // If the module defines dependencies, set them up..
-            if (mod.dependencies) {
-                dependencies = mod.dependencies.list;
-                dependenciesLoadedCallback = mod.dependencies.loader;
-                optionalDependencies = mod.dependencies.optional || [];
-            }
-            // Load the dependencies.
-            var loader = $.Deferred();
-            require(dependencies, function() {
-                const deps = [...arguments];
-                loader.resolve(deps);
-            }, function(err) {
-
-                // Modules that failed to load that are not optional are mocked.
-                err.requireModules.filter(m => optionalDependencies.includes(m)).forEach(module => {
-                    Log.warn(`block_xp launcher: Mocking optional module ${module} as it was not found.`);
-                    require.undef(module);
-                    define(module, function() {
-                        return null;
-                    });
-                });
-
-                // Retrigger the module loading.
-                require(err.requireModules, function() {
-                    // Noop.
-                });
-            });
-
-            // Once the deps are loaded, pass them to the the app, and start the app.
-            loader.then(function(depsArg) {
-                var deps = [].slice.call(depsArg);
-                dependenciesLoadedCallback(deps);
-                var props = JSON.parse(document.getElementById(propsId).textContent);
-                mod.startApp(document.getElementById(rootId), props);
-                return;
-            }).catch(Notification.exception);
-
-        });
-    }
-
-    return launcher;
+define(['block_xp/react-launcher', 'core/log'], function(Launcher, Log) {
+    Log.warn('The module block_xp/launcher is deprecated. Please use block_xp/react-launcher instead.');
+    return Launcher.launch;
 });

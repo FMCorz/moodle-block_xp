@@ -981,7 +981,6 @@ EOT
 
         $id = html_writer::random_id('block_xp-react-app');
         $propsid = html_writer::random_id('block_xp-react-app-props');
-        $iconname = $CFG->branch >= 32 ? 'y/loading' : 'i/loading';
 
         $o = '';
         $o .= html_writer::start_div('block_xp-react', ['id' => $id]);
@@ -997,8 +996,8 @@ EOT
         $o .= $this->json_script($props, $propsid);
 
         $this->page->requires->js_amd_inline("
-            require(['block_xp/launcher'], function(launcher) {
-                launcher('$module', '$id', '$propsid');
+            require(['block_xp/react-launcher'], function(Launcher) {
+                Launcher.launch('$module', '$id', '$propsid');
             });
         ");
 
