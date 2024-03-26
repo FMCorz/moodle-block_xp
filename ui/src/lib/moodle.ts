@@ -22,6 +22,15 @@ export function getModule(name: string): any {
   return modules[name];
 }
 
+export async function getModuleAsync(amd: string): Promise<any> {
+  return new Promise((resolve, reject) => {
+    // @ts-ignore
+    window.require([amd], (mod) => {
+      resolve(mod);
+    }, reject);
+  });
+}
+
 export function imageUrl(name: string, component: string) {
   return M.util.image_url(name, component);
 }

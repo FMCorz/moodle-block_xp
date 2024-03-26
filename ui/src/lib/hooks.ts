@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { getString, hasString, isBehatRunning, loadString, loadStrings } from "./moodle";
 import { AddonContext } from "./contexts";
+import { getUniqueId } from "./utils";
 
 export const useAddonActivated = () => {
   return useContext(AddonContext).activated;
@@ -80,6 +81,11 @@ export const useUnloadCheck = (isDirty: boolean) => {
       window.removeEventListener("beforeunload", fn);
     };
   });
+};
+
+export const useUniqueId = () => {
+  const [id] = useState(getUniqueId());
+  return id;
 };
 
 export const useString = (id: string, component: string = "block_xp", a?: any) => {

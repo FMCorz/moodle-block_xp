@@ -1,3 +1,11 @@
+export enum ContextLevel {
+  System = 10,
+  User = 30,
+  CourseCategory = 40,
+  Course = 50,
+  Module = 70,
+}
+
 export interface Level {
   level: number;
   xprequired: number;
