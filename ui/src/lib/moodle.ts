@@ -3,6 +3,14 @@ import { fifoCache } from "./utils";
 const M = (window as any).M;
 const modules: { [index: string]: any } = {};
 
+export async function ajaxRequest<T = any>(method: string, args: any) {
+  const Ajax = await getModuleAsync("core/ajax");
+  return Ajax.call([{
+    methodname: method,
+    args,
+  }])[0] as Promise<T>;
+}
+
 export function getString(id: string, component: string, a?: any) {
   return M.util.get_string(id, component, a);
 }
