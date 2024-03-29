@@ -5,6 +5,19 @@ import Spinner from "./Spinner";
 import Str from "./Str";
 import { classNames } from "../lib/utils";
 
+export const CircleButton = ({ className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+  return (
+    <button
+      className={classNames(
+        "xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full hover:xp-bg-gray-100",
+        className
+      )}
+      type="button"
+      {...props}
+    />
+  );
+};
+
 export const Button: React.FC<{
   disabled?: boolean;
   onClick?: () => void;

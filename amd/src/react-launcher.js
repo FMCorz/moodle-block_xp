@@ -22,8 +22,6 @@
  */
 
 import $ from 'jquery';
-import ModalEvents from 'core/modal_events';
-import ModalFactory from 'core/modal_factory';
 import Pending from 'core/pending';
 import Log from 'core/log';
 import Notification from 'core/notification';
@@ -38,80 +36,6 @@ import Notification from 'core/notification';
 export function launch(mod, rootId, propsId) {
     const props = JSON.parse(document.getElementById(propsId).textContent);
     launchWithProps(mod, rootId, props);
-}
-
-/**
- * App launcher in modal.
- *
- * @param {String} mod The module name.
- * @param {String} propsId The props ID.
- * @param {Object} modalConfig The modal config.
- * @returns {Promise}
- */
-export async function launchInModal(mod, propsId, modalConfig = {}) {
-    const props = JSON.parse(document.getElementById(propsId).textContent);
-    launchInModalWithProps(mod, props, modalConfig);
-}
-
-/**
- * App launcher in modal with props.
- *
- * @param {String} mod The module name.
- * @param {String} props The props.
- * @param {Object} modalConfig The modal config.
- * @returns {Promise}
- */
-async function launchInModalWithProps(mod, props, modalConfig = {}) {
-    const id = `xp-react-launcher-in-modal-${Date.now()}`;
-    const pendingBody = $.Deferred();
-    const modal = await ModalFactory.create({
-        type: ModalFactory.types.SAVE_CANCEL,
-        removeOnClose: true,
-        ...modalConfig,
-        body: pendingBody,
-    });
-    modal.getRoot().addClass('block_xp');
-
-    // Keep the React node height in sync with the modal body to avoid for the modal
-    // to become scrollable. This is required because our current modal content is
-    // absolute and thus requires a hardcoded height.
-    const updateReactNodeHeight = () => {
-        const body = modal.getBody()[0];
-        const reactNode = document.getElementById(id);
-        if (!body || !reactNode) {
-            return;
-        }
-        const height =
-            body.clientHeight - (parseFloat(getComputedStyle(body).paddingTop) + parseFloat(getComputedStyle(body).paddingBottom));
-        reactNode.style.height = `${height}px`;
-    };
-
-    // Register resize events.
-    modal.getRoot().on(ModalEvents.shown, () => {
-        window.addEventListener('resize', updateReactNodeHeight);
-    });
-    modal.getRoot().on(ModalEvents.hidden, () => {
-        window.removeEventListener('resize', updateReactNodeHeight);
-    });
-
-    // Trigger to show.
-    modal.show();
-
-    // Load the dependencies.
-    const {startModalApp, startApp} = await loadModule(mod);
-
-    // Execute the React app when the body is loaded.
-    modal.getRoot().on(ModalEvents.bodyRendered, () => {
-        updateReactNodeHeight();
-        if (startModalApp) {
-            startModalApp(modal, document.getElementById(id), props);
-            return;
-        }
-        startApp(document.getElementById(id), props);
-    });
-
-    // Once loaded, swap for our React div.
-    pendingBody.resolve(`<div class="xp-h-[500px] xp-w-full xp-max-h-full xp-max-w-full" id="${id}"></div>`);
 }
 
 /**

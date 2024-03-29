@@ -562,5 +562,38 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2023080702, 'xp');
     }
 
+    if ($oldversion < 2024040211) {
+
+        // Define table block_xp_rule to be created.
+        $table = new xmldb_table('block_xp_rule');
+
+        // Adding fields to table block_xp_rule.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('contextid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('childcontextid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('points', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('type', XMLDB_TYPE_CHAR, '32', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('filter', XMLDB_TYPE_CHAR, '32', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('filtercourseid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('filtercmid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('filterint1', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('filterchar1', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+
+        // Adding keys to table block_xp_rule.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('contextid', XMLDB_KEY_FOREIGN, ['contextid'], 'context', ['id']);
+
+        // Adding indexes to table block_xp_rule.
+        $table->add_index('contextids', XMLDB_INDEX_NOTUNIQUE, ['contextid', 'childcontextid']);
+
+        // Conditionally launch create table for block_xp_rule.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2024040211, 'xp');
+    }
+
     return true;
 }

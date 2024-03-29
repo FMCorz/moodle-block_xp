@@ -1,7 +1,7 @@
 import { Menu } from "@headlessui/react";
 import React, { useEffect, useMemo, useReducer } from "react";
 import ReactDOM from "react-dom";
-import { QueryClient, QueryClientProvider, useMutation } from "react-query";
+import { QueryClientProvider, useMutation } from "react-query";
 import { AddonRequired, IfAddonActivatedOrPromoEnabled } from "./components/Addon";
 import { BulkEditPointsModal, BulkEditPointsState } from "./components/BulkEditPoints";
 import { AnchorButton, Button, SaveButton } from "./components/Button";
@@ -16,7 +16,8 @@ import { HELP_URL_LEVELS } from "./lib/constants";
 import { AddonContext, makeAddonContextValueFromAppProps } from "./lib/contexts";
 import { useAddonActivated, useStrings, useUnloadCheck } from "./lib/hooks";
 import { computeRequiredPointsWithMethod, getMinimumPointsForLevel, getNextLevel, getPreviousLevel } from "./lib/levels";
-import { getModule, makeDependenciesDefinition } from "./lib/moodle";
+import { ajaxRequest, commonStaticModulesToDependOn, getModule, makeDependenciesDefinition } from "./lib/moodle";
+import { queryClient } from "./lib/query";
 import { Level as LevelType, LevelsInfo, PointCalculationMethod } from "./lib/types";
 import { classNames, stripTags } from "./lib/utils";
 
@@ -228,23 +229,18 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
   const mutation = useMutation(() => {
     // An falsy course ID means admin config.
     const method = courseId ? "block_xp_set_levels_info" : "block_xp_set_default_levels_info";
-    return getModule("core/ajax").call([
-      {
-        methodname: method,
-        args: {
-          courseid: courseId ? courseId : undefined,
-          levels: levels.map((level) => {
-            const { level: levelnum, xprequired, ...metadata } = level;
-            return {
-              level: levelnum,
-              xprequired: xprequired,
-              metadata: Object.entries(metadata).reduce<{}[]>((carry, [name, value]) => carry.concat([{ name, value }]), []),
-            };
-          }),
-          algo: state.algo,
-        },
-      },
-    ])[0];
+    return ajaxRequest(method, {
+      courseid: courseId ? courseId : undefined,
+      levels: levels.map((level) => {
+        const { level: levelnum, xprequired, ...metadata } = level;
+        return {
+          level: levelnum,
+          xprequired: xprequired,
+          metadata: Object.entries(metadata).reduce<{}[]>((carry, [name, value]) => carry.concat([{ name, value }]), []),
+        };
+      }),
+      algo: state.algo,
+    });
   });
 
   // Reset mutation after success.
@@ -665,14 +661,6 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
   );
 };
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    mutations: {
-      onError: (err) => getModule("core/notification").exception(err),
-    },
-  },
-});
-
 type AppProps = {
   courseId: number;
   levelsInfo: LevelsInfo;
@@ -693,15 +681,6 @@ function startApp(node: HTMLElement, props: any) {
   );
 }
 
-const dependencies = makeDependenciesDefinition([
-  "core/str",
-  "core/ajax",
-  "core/modal",
-  "core/modal_events",
-  "core/modal_factory",
-  "core/notification",
-  "?core/toast",
-  "jquery",
-]);
+const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 
 export { dependencies, startApp };

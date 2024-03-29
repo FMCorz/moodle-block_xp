@@ -127,7 +127,6 @@ class course_world implements world {
      * @return context
      */
     public function get_context() {
-        // TODO It seems that we could work around this being public.
         return $this->context;
     }
 

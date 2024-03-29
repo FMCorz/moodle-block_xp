@@ -121,6 +121,26 @@ class user_utils {
     }
 
     /**
+     * Get a user's timezone.
+     *
+     * @param int|object $userorid The user, or its ID.
+     * @return \DateTimeZone
+     */
+    public static function get_timezone($userorid) {
+        global $USER;
+        $user = $userorid;
+
+        if (!is_object($userorid)) {
+            if ($userorid == $USER->id) {
+                $user = $USER;
+            }
+            $user = \core_user::get_user($userorid, '*', MUST_EXIST);
+        }
+
+        return \core_date::get_user_timezone_object($user);
+    }
+
+    /**
      * Get all the name fields.
      *
      * This almost replicates the behaviour of get_all_user_name_fields() whilst seamlessly

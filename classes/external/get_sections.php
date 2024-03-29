@@ -58,8 +58,6 @@ class get_sections extends external_api {
      * @return array
      */
     public static function execute($courseid, $options = []) {
-        global $CFG;
-
         $params = self::validate_parameters(self::execute_parameters(), compact('courseid', 'options'));
         $courseid = $params['courseid'];
         $options = (array) $params['options'];

@@ -40,8 +40,8 @@ interface context_world_factory {
     /**
      * Get the world.
      *
-     * @param int $courseid Course ID.
-     * @return block_xp\local\world
+     * @param \context $context The context.
+     * @return world
      */
     public function get_world_from_context(\context $context): world;
 

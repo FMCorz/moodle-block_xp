@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Context world factory interface.
+ * Context world factory.
  *
  * @package    block_xp
  * @copyright  2024 Frédéric Massart
@@ -26,11 +26,10 @@
 namespace block_xp\local\factory;
 
 use block_xp\local\config\config;
-use block_xp\local\context\context_manager;
 use block_xp\local\world;
 
 /**
- * Context world factory interface.
+ * Context world factory.
  *
  * @package    block_xp
  * @copyright  2024 Frédéric Massart
@@ -56,8 +55,8 @@ class default_context_world_factory implements context_world_factory {
     /**
      * Get the world.
      *
-     * @param int $courseid Course ID.
-     * @return block_xp\local\world
+     * @param \context $context The context.
+     * @return world
      */
     public function get_world_from_context(\context $context): world {
         if ($this->adminconfig->get('context') == CONTEXT_SYSTEM) {

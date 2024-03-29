@@ -22,7 +22,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use block_xp\di;
 use block_xp\local\backup\restore_context;
+use block_xp\local\rulefilter\rulefilter_with_update_after_restore;
 
 /**
  * Block XP restore structure step class.
@@ -62,6 +64,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
         $paths[] = new restore_path_element('block', '/block');
         $paths[] = new restore_path_element('config', '/block/config');
         $paths[] = new restore_path_element('filter', '/block/filters/filter');
+        $paths[] = new restore_path_element('rule', '/block/rules/rule');
 
         if ($userinfo) {
             $paths[] = new restore_path_element('xp', '/block/xps/xp');
@@ -79,6 +82,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
 
         $target = $this->get_task()->get_target();
         $courseid = $this->get_courseid();
+        $coursecontextid = $this->get_task()->get_course_contextid();
 
         // The backup target expects that all content is first being removed. Since deleting the block
         // instance does not delete the data itself, we must manually delete everything.
@@ -91,6 +95,9 @@ class restore_xp_block_structure_step extends restore_structure_step {
             $DB->delete_records('block_xp_config', $conditions);
             $DB->delete_records('block_xp_filters', $conditions);
             $DB->delete_records('block_xp_log', $conditions);
+
+            // Remove rules in course.
+            $DB->delete_records('block_xp_rules', ['contextid' => $coursecontextid]);
 
             // Removing old preferences.
             $sql = $DB->sql_like('name', ':name');
@@ -170,6 +177,8 @@ class restore_xp_block_structure_step extends restore_structure_step {
 
     /**
      * Process log.
+     *
+     * @param array $data The data.
      */
     protected function process_log($data) {
         global $DB;
@@ -179,7 +188,54 @@ class restore_xp_block_structure_step extends restore_structure_step {
     }
 
     /**
+     * Process rule.
+     *
+     * @param array $data The data.
+     */
+    protected function process_rule($data) {
+        global $DB;
+
+        $oldid = $data['id'];
+        $data['contextid'] = $this->get_task()->get_course_contextid();
+        $data['childcontextid'] = 0; // Not relevant when restoring courses.
+        unset($data['id']);
+
+        $type = di::get('rule_type_resolver')->get_type($data['type']);
+        if (!$type) {
+            $this->log("block_xp: Rule with unknown type '{$data['type']}' not restored", backup::LOG_DEBUG);
+            return;
+        }
+
+        $filter = di::get('rule_filter_handler')->get_filter($data['filter']);
+        if (!$filter) {
+            $this->log("block_xp: Rule with unknown filter '{$data['filter']}' not restored", backup::LOG_DEBUG);
+            return;
+        }
+
+        if (!in_array(CONTEXT_COURSE, $filter->get_compatible_context_levels())) {
+            $this->log("block_xp: Skipping disallowed filter '{$data['filter']}' in context", backup::LOG_DEBUG);
+            return;
+        }
+
+        if (!$filter->is_multiple_allowed()) {
+            $dictator = di::get('rule_dictator');
+            $context = $this->get_task()->get_course_context();
+            $testoptions = ['type' => $data['type'], 'filter' => $data['filter']];
+            if ($dictator->count_rules_in_context($context, null, $testoptions) > 0) {
+                $this->log("block_xp: Skipping disallowed multiple rules for '{$data['type']}/{$data['filter']}'", backup::LOG_DEBUG);
+                return;
+            }
+        }
+
+        $newid = $DB->insert_record('block_xp_rule', $data);
+        $this->set_mapping('block_xp_rule', $oldid, $newid);
+        $this->set_mapping('block_xp_rule_oldid', $newid, $oldid);
+    }
+
+    /**
      * Process XP.
+     *
+     * @param array $data The data.
      */
     protected function process_xp($data) {
         global $DB;
@@ -206,18 +262,61 @@ class restore_xp_block_structure_step extends restore_structure_step {
     protected function after_restore() {
         global $DB;
 
-        block_xp\di::reset_container();
+        di::reset_container();
         $courseid = $this->get_courseid();
         $restorecontext = restore_context::from_structure_step($this);
 
         // Update the levels data if needed.
         try {
-            $factory = block_xp\di::get('course_world_factory');
+            $factory = di::get('course_world_factory');
             $world = $factory->get_world($courseid);
-            $writer = block_xp\di::get('levels_info_writer');
+            $writer = di::get('levels_info_writer');
             $writer->update_world_after_restore($restorecontext, $world);
         } catch (Exception $e) {
             $this->log("block_xp: Running levels_info_writer::update_world_after_restore did not succeed", backup::LOG_DEBUG);
+        }
+
+        // Update the rules after restore.
+        try {
+            $dictator = di::get('rule_dictator');
+            $filterhandler = di::get('rule_filter_handler');
+
+            $rules = $dictator->get_rules_in_context($restorecontext->get_course_context());
+            foreach ($rules as $rule) {
+
+                // Check that this was restored just then.
+                $oldid = $restorecontext->get_mapping_id('block_xp_rule_oldid', $rule->get_id());
+                if ($oldid === null) {
+                    continue;
+                }
+
+                // Self-handled update.
+                $filterconfig = $rule->get_filter_config();
+                if (isset($filterconfig->courseid)) {
+                    $filterconfig->courseid = $restorecontext->get_mapping_id('course', $filterconfig->courseid);
+                }
+                if (isset($filterconfig->cmid)) {
+                    $filterconfig->cmid = $restorecontext->get_mapping_id('course_module', $filterconfig->cmid);
+                }
+
+                // Delegated update for other filters.
+                $filter = $filterhandler->get_filter($rule->get_filter_name());
+                if ($filter && $filter instanceof rulefilter_with_update_after_restore) {
+                    $filterconfig = $filter->update_config_after_restore($restorecontext, $filterconfig);
+                }
+
+                // Update the config record.
+                $DB->update_record('block_xp_rule', [
+                    'id' => $rule->get_id(),
+                    'filtercourseid' => $filterconfig->courseid ?? null,
+                    'filtercmid' => $filterconfig->cmid ?? null,
+                    'filterint1' => $filterconfig->int1 ?? null,
+                    'filterchar1' => $filterconfig->char1 ?? null,
+                ]);
+            }
+            // We may eventually need to purge caches here, especially if dictator remembers.
+        } catch (Exception $e) {
+            $this->log("block_xp: Updating rules after restore failed", backup::LOG_DEBUG);
         }
 
         // Update each filter (the rules).
@@ -230,7 +329,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
 
         // Attempt to purge the filters cache. It should not be needed, but just in case.
         try {
-            $factory = block_xp\di::get('course_world_factory');
+            $factory = di::get('course_world_factory');
             $world = $factory->get_world($courseid);
             $filtermanager = $world->get_filter_manager();
             $filtermanager->invalidate_filters_cache();

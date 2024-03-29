@@ -33,3 +33,19 @@ export interface PointCalculationMethod {
   coef: number; // Float. e.g. 1.2 = 20% increase.
   incr: number;
 }
+
+interface ResourceBase<TName extends string|number = string|number> {
+  type?: string;
+  name: TName; // A name uniquely identifying this resource.
+  label: string;
+  description?: string;
+  isavailable?: boolean;
+};
+
+export interface ResourceItem<TName extends string|number = string|number> extends ResourceBase<TName> {}
+
+export interface ResourceHeading<TName extends string|number = string|number> extends ResourceBase<TName> {
+  type: 'header'
+};
+
+export type Resource<TName extends string|number = string|number> = ResourceBase<TName> | ResourceHeading<TName>;

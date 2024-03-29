@@ -70,7 +70,10 @@ class default_container implements container {
         'observer_rules_maker' => true,
         'renderer' => true,
         'router' => true,
+        'rule_dictator' => true,
         'rule_event_lister' => true,
+        'rule_filter_handler' => true,
+        'rule_type_resolver' => true,
         'serializer_factory' => true,
         'settings_maker' => true,
         'shortcodes_definition_maker' => true,
@@ -357,10 +360,10 @@ class default_container implements container {
     /**
      * Get the file server.
      *
-     * @return file_server
+     * @return file\file_server
      */
     protected function get_file_server() {
-        return new \block_xp\local\file\file_server(get_file_storage(), $this->get('config')->get('context'));
+        return new file\file_server(get_file_storage(), $this->get('config')->get('context'));
     }
 
     /**
@@ -429,12 +432,39 @@ class default_container implements container {
     }
 
     /**
+     * Get the rule dictator.
+     *
+     * @return rule\dictator
+     */
+    protected function get_rule_dictator() {
+        return new rule\the_dictator($this->get('db'), $this->get('rule_filter_handler'));
+    }
+
+    /**
      * Get the rule event lister.
      *
      * @return event_lister
      */
     protected function get_rule_event_lister() {
         return new \block_xp\local\rule\event_lister($this->get('config'));
+    }
+
+    /**
+     * Get the rule filter handler.
+     *
+     * @return rulefilter\handler
+     */
+    protected function get_rule_filter_handler() {
+        return new rulefilter\default_handler();
+    }
+
+    /**
+     * Get the rule type resolver.
+     *
+     * @return ruletype\resolver
+     */
+    protected function get_rule_type_resolver() {
+        return new ruletype\default_resolver();
     }
 
     /**

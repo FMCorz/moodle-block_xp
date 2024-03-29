@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 // This file will never be autoloaded, and should never be included either. Its content
 // will never be executed, even if it is loaded by accident. It is only here for compatibility
-// reasons since Moodle has deprecated the top-level context classes and Inteliphense does not
+// reasons since Moodle has deprecated the top-level context classes and Intelephense does not
 // understand the class_alias function (https://github.com/bmewburn/vscode-intelephense/issues/600).
 if (false) {
 

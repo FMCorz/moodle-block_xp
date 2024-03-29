@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
-import { getString, hasString, isBehatRunning, loadString, loadStrings } from "./moodle";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { getModuleAsync, getString, hasString, isBehatRunning, loadString, loadStrings } from "./moodle";
 import { AddonContext } from "./contexts";
 import { getUniqueId } from "./utils";
 
@@ -13,6 +13,47 @@ export const useAnchorButtonProps = (onClick: () => void) => {
     href: "#",
     role: "button",
     ...listeners,
+  };
+};
+
+export const useModules = (modules: string[]) => {
+  const modulesPromise = useRef<Promise<any>>();
+  const modulesRef = useRef<Record<string, any>>();
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (modulesRef.current) return;
+
+    if (!modulesPromise.current) {
+      modulesPromise.current = Promise.all(modules.map((module) => getModuleAsync(module)));
+    }
+
+    let cancelled = false;
+    modulesPromise.current.then((loadedModles) => {
+      if (cancelled) return;
+
+      modulesRef.current = modules.reduce((acc, module, i) => {
+        acc[module] = loadedModles[i];
+        return acc;
+      }, {} as Record<string, any>);
+
+      setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  });
+
+  const getModule = useCallback(
+    (module: string) => {
+      if (!modulesRef.current) return null;
+      return modulesRef.current[module] ?? null;
+    },
+    [ready, modulesRef.current]
+  );
+
+  return {
+    getModule,
   };
 };
 

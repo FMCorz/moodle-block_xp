@@ -977,8 +977,6 @@ EOT
      * @return void
      */
     public function react_module($module, $props) {
-        global $CFG;
-
         $id = html_writer::random_id('block_xp-react-app');
         $propsid = html_writer::random_id('block_xp-react-app-props');
 

@@ -38,6 +38,24 @@ require_once($CFG->dirroot . '/blocks/xp/backup/moodle2/restore_xp_stepslib.php'
 class restore_xp_block_task extends restore_block_task {
 
     /**
+     * Return the course context.
+     *
+     * @return context_course
+     */
+    public function get_course_context() {
+        return context_course::instance($this->get_courseid());
+    }
+
+    /**
+     * Return the course context ID.
+     *
+     * @return int
+     */
+    public function get_course_contextid() {
+        return $this->get_course_context()->id;
+    }
+
+    /**
      * Return the old course context ID.
      *
      * @return int

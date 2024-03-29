@@ -35,9 +35,8 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
      * Define structure.
      */
     protected function define_structure() {
-        global $DB;
-
         $userinfo = $this->get_setting_value('users');
+        $coursecontextid = context_course::instance($this->get_courseid())->id;
 
         // Define each element separated.
         $xpconfig = new backup_nested_element('config', ['courseid'], [
@@ -48,6 +47,9 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
         ]);
         $xpfilters = new backup_nested_element('filters');
         $xpfilter = new backup_nested_element('filter', ['courseid'], ['ruledata', 'points', 'sortorder', 'category']);
+        $xprules = new backup_nested_element('rules');
+        $xprule = new backup_nested_element('rule', ['id'], [ 'points', 'type', 'filter', 'filtercourseid', 'filtercmid',
+            'filterint1', 'filterchar1']);
         $xplevels = new backup_nested_element('xps');
         $xplevel = new backup_nested_element('xp', ['courseid'], ['userid', 'xp']);
         $xplogs = new backup_nested_element('logs');
@@ -58,6 +60,8 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
 
         $xpfilters->add_child($xpfilter);
         $xp->add_child($xpfilters);
+        $xprules->add_child($xprule);
+        $xp->add_child($xprules);
 
         if ($userinfo) {
             $xplevels->add_child($xplevel);
@@ -71,12 +75,13 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
         $xpconfig->set_source_table('block_xp_config', ['courseid' => backup::VAR_COURSEID]);
         $xpfilter->set_source_table('block_xp_filters', ['courseid' => backup::VAR_COURSEID]);
         $xplevel->set_source_table('block_xp', ['courseid' => backup::VAR_COURSEID]);
+        $xprule->set_source_sql('SELECT * FROM {block_xp_rule} WHERE contextid = ?', [['sqlparam' => $coursecontextid]]);
         $xplog->set_source_table('block_xp_log', ['courseid' => backup::VAR_COURSEID]);
 
         // Annotations.
         $xplevel->annotate_ids('user', 'userid');
         $xplog->annotate_ids('user', 'userid');
-        $xp->annotate_files('block_xp', 'badges', null, context_course::instance($this->get_courseid())->id);
+        $xp->annotate_files('block_xp', 'badges', null, $coursecontextid);
 
         // Return the root element.
         return $xp;

@@ -7,6 +7,7 @@
     box-sizing: border-box;
 }
 
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -512,6 +513,11 @@ a .block_xp-level {
 .block_xp #fitem_id_badges fieldset [name=badges] + p,
 .block_xp #fitem_id_badges fieldset .form-filetypes-descriptions {
     @apply xp-hidden;
+}
+
+/** Remove margin on last row of modal forms. */
+.block_xp .modal-form-dialogue form > .row:last-child {
+    @apply !xp-mb-0;
 }
 
 /**

@@ -179,6 +179,13 @@ class default_course_world_navigation_factory implements course_world_navigation
                     ],
                     $showpromo || $hasaddon ?
                     [
+                        'id' => 'completionrules',
+                        'url' => $urlresolver->reverse('completionrules', ['courseid' => $courseid]),
+                        'text' => get_string('navcompletionrules', 'block_xp'),
+                        'addonrequired' => !$hasaddon,
+                    ] : null,
+                    $showpromo || $hasaddon ?
+                    [
                         'id' => 'graderules',
                         'url' => $urlresolver->reverse('graderules', ['courseid' => $courseid]),
                         'text' => get_string('navgraderules', 'block_xp'),

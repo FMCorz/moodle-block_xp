@@ -26,10 +26,31 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
+    'block_xp_create_rule' => [
+        'classname' => 'block_xp\external\create_rule',
+        'methodname' => 'execute',
+        'description' => 'Create a rule',
+        'type' => 'write',
+        'ajax' => true,
+    ],
+    'block_xp_delete_rule' => [
+        'classname' => 'block_xp\external\delete_rule',
+        'methodname' => 'execute',
+        'description' => 'Delete a rule',
+        'type' => 'write',
+        'ajax' => true,
+    ],
+    'block_xp_get_rules' => [
+        'classname' => 'block_xp\external\get_rules',
+        'methodname' => 'execute',
+        'description' => 'Get the rules',
+        'type' => 'read',
+        'ajax' => true,
+    ],
     'block_xp_get_sections' => [
         'classname' => 'block_xp\external\get_sections',
         'methodname' => 'execute',
-        'description' => 'Retrieves the sections prevent in a course',
+        'description' => 'Retrieves the sections present in a course',
         'type' => 'read',
         'ajax' => true,
     ],

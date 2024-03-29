@@ -110,6 +110,15 @@ class default_routes_config extends static_routes_config {
                 ]
             ),
             new route_definition(
+                'completionrules',
+                '/completionrules/:courseid',
+                '~^/completionrules/(\d+)$~',
+                'completion_rules',
+                [
+                    1 => 'courseid',
+                ]
+            ),
+            new route_definition(
                 'graderules',
                 '/graderules/:courseid',
                 '~^/graderules/(\d+)$~',
