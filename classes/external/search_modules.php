@@ -50,6 +50,7 @@ class search_modules extends external_api {
             'query' => new external_value(PARAM_RAW),
             'options' => new external_single_structure([
                 'completionenabled' => new external_value(PARAM_BOOL, '', VALUE_OPTIONAL),
+                'type' => new external_value(PARAM_ALPHANUMEXT, '', VALUE_OPTIONAL),
             ], '', VALUE_DEFAULT, [])
         ]);
     }
@@ -84,7 +85,8 @@ class search_modules extends external_api {
         $completion = new completion_info($modinfo->get_course());
         $sections = [];
 
-        $completionenabled = !empty($options['completionenabled']);
+        $completionenabled = $options['completionenabled'] ?? null;
+        $moduletype = $options['type'] ?? null;
 
         foreach ($modinfo->get_sections() as $sectionnum => $cmids) {
 
@@ -94,8 +96,13 @@ class search_modules extends external_api {
                 $name = $cm->get_formatted_name();
                 $comparablename = core_text::strtolower($name);
 
+                // Filter out modules by type.
+                if ($moduletype !== null && $moduletype !== $cm->modname) {
+                    continue;
+                }
+
                 // Filter out modules that are not enabled for completion.
-                if ($completionenabled && !$completion->is_enabled($cm)) {
+                if ($completionenabled !== null && $completionenabled !== (bool) $completion->is_enabled($cm)) {
                     continue;
                 }
 
