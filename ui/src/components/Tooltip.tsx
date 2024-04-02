@@ -16,10 +16,20 @@ export const Tooltip: React.FC<{ children: React.ReactElement; content: string }
 
     $(ref.current).tooltip("enable");
     return () => {
+      // There is extra caution here, double checking whether the reference still exists,
+      // and is still bound to the tooltip function, and that the tooltip function does
+      // not throw an exception. This is to mitigate themes that redeclare Bootstrap and
+      // end-up causing troubles.
       if (!ref.current || !$(ref.current).tooltip) {
         return;
       }
-      $(ref.current).tooltip("dispose");
+      try {
+        $(ref.current).tooltip("dispose");
+      } catch (e) {
+        try {
+          $(ref.current).tooltip("destroy");
+        } catch (e) {}
+      }
     };
   }, [content]);
 
