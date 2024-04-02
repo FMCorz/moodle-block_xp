@@ -481,12 +481,12 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                           value={level.xprequired}
                           onChange={(xp) => handleXpChange(level, xp)}
                           disabled={level.level <= 1}
-                          className="xp-min-w-[4ch] xp-w-full xp-rounded-none xp-rounded-l xp-border-0 xp-relative focus:xp-z-10"
+                          className="xp-h-full xp-min-w-[4ch] xp-w-full xp-rounded-none xp-rounded-l xp-border-0 xp-relative focus:xp-z-10"
                           id={`xp-level-${level.level}-start`}
                         />
                       </div>
                       <div className="">
-                        <div className="xp-flex-1 xp-relative">
+                        <div className="xp-relative xp-w-full x-h-full">
                           <div className="xp-pointer-events-none xp-absolute xp-inset-y-0 xp-left-0 xp-flex xp-items-center xp-pl-2 xp-z-20">
                             <span className="xp-text-gray-500">+</span>
                           </div>
@@ -494,7 +494,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                             value={pointsInLevel}
                             onChange={(xp) => handleXpChange(nextLevel, level.xprequired + xp)}
                             disabled={pointsInLevel <= 0}
-                            className="xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 xp-rounded-r xp-pl-6 xp-relative focus:xp-z-10"
+                            className="xp-h-full xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 xp-rounded-r xp-pl-6 xp-relative focus:xp-z-10"
                             id={`xp-level-${level.level}-length`}
                           />
                         </div>
