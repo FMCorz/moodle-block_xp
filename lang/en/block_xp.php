@@ -116,7 +116,7 @@ $string['dropsintro'] = 'Drops are code snippets directly placed in content that
 $string['drops_help'] = '
 In video games, some characters can _drop_ items or experience points on the ground for the player to pick up. These items and points are commonly referred to as drops.
 
-In Level Up XP, drops are shortcodes (e.g. `[xpdrop abcdef]`) that an instructor can place in regular Moodle content. When encountered by a user, these drops will be _picked up_ and a certain amount of points will be awarded.
+In Level Up XP, drops are shortcodes (e.g. `[xpdrop id=1 secret=abcdef]`) that an instructor can place in regular Moodle content. When encountered by a user, these drops will be _picked up_ and a certain amount of points will be awarded.
 
 At present, drops are invisible to the user and passively award points the first time they are encountered.
 
