@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use block_xp\di;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/blocks/xp/backup/moodle2/backup_xp_stepslib.php');
@@ -50,6 +52,7 @@ class backup_xp_block_task extends backup_block_task {
 
     /**
      * File areas.
+     *
      * @return array
      */
     public function get_fileareas() {
@@ -64,10 +67,12 @@ class backup_xp_block_task extends backup_block_task {
 
     /**
      * Encore content links.
+     *
      * @param $content string The content.
      * @return string
      */
     public static function encode_content_links($content) {
-        return $content;
+        $manager = di::get('backup_content_manager');
+        return $manager->encode_content_links($content);
     }
 }

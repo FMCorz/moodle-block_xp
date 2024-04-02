@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use block_xp\di;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/blocks/xp/backup/moodle2/restore_xp_stepslib.php');
@@ -37,6 +39,7 @@ class restore_xp_block_task extends restore_block_task {
 
     /**
      * Return the old course context ID.
+     *
      * @return int
      */
     public function get_old_course_contextid() {
@@ -58,6 +61,7 @@ class restore_xp_block_task extends restore_block_task {
 
     /**
      * File areas.
+     *
      * @return array
      */
     public function get_fileareas() {
@@ -72,6 +76,7 @@ class restore_xp_block_task extends restore_block_task {
 
     /**
      * Define decode contents.
+     *
      * @return array
      */
     public static function define_decode_contents() {
@@ -80,18 +85,12 @@ class restore_xp_block_task extends restore_block_task {
 
     /**
      * Define decode rules.
+     *
      * @return array
      */
     public static function define_decode_rules() {
-        return [];
+        $manager = di::get('backup_content_manager');
+        return $manager->get_decode_rules();
     }
 
-    /**
-     * Encore content links.
-     * @param  string $content The content.
-     * @return string
-     */
-    public static function encode_content_links($content) {
-        return $content;
-    }
 }

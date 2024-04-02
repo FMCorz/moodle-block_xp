@@ -44,10 +44,11 @@ class default_container implements container {
         'ajax_base_url' => true,
         'ajax_router' => true,
         'ajax_url_resolver' => true,
-        'base_url' => true,
+        'backup_content_manager' => true,
         'badge_manager' => true,
         'badge_url_resolver' => true,
         'badge_url_resolver_course_world_factory' => true,
+        'base_url' => true,
         'block_class' => true,
         'block_edit_form_class' => true,
         'collection_logger' => true,
@@ -147,6 +148,15 @@ class default_container implements container {
             $this->get('ajax_base_url'),
             $this->get_ajax_routes_config()
         );
+    }
+
+    /**
+     * Get the content manager.
+     *
+     * @return backup\content_manager
+     */
+    protected function get_backup_content_manager() {
+        return new backup\content_manager();
     }
 
     /**

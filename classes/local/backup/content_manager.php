@@ -15,18 +15,43 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * Backup content manager.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2024 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_xp\local\backup;
 
-$plugin->version    = 2024040200;
-$plugin->requires   = 2017111300;   // Moodle 3.4.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.15.2';
-$plugin->supported  = [34, 403];
+/**
+ * Backup content manager.
+ *
+ * @package    block_xp
+ * @copyright  2024 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class content_manager {
+
+    /**
+     * Encode content links.
+     *
+     * @param string $content The content.
+     * @return string
+     */
+    public function encode_content_links($content) {
+        return $content;
+    }
+
+    /**
+     * Get the decode rules.
+     *
+     * @return \restore_decode_rule[]
+     */
+    public function get_decode_rules() {
+        return [];
+    }
+
+}
