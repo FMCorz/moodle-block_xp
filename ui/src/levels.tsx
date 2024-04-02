@@ -345,7 +345,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
           />
           <Menu as="div" className="xp-relative xp-inline-block xp-text-left">
             <div>
-              <Menu.Button className="xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full hover:xp-bg-gray-100">
+              <Menu.Button className="xp-text-inherit xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full hover:xp-bg-gray-100">
                 <span className="sr-only">
                   <Str id="options" component="core" />
                 </span>
