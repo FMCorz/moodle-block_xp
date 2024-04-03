@@ -15,32 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Course world factory interface.
+ * Context world factory interface.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart
+ * @copyright  2024 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_xp\local\factory;
 
+use block_xp\local\world;
+
 /**
- * Course world factory interface.
+ * Context world factory interface.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart
+ * @copyright  2024 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface course_world_factory {
+interface context_world_factory {
 
     /**
      * Get the world.
      *
      * @param int $courseid Course ID.
-     * @return \block_xp\local\course_world
+     * @return block_xp\local\world
      */
-    public function get_world($courseid);
+    public function get_world_from_context(\context $context): world;
 
 }

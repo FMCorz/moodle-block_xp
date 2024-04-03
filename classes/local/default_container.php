@@ -55,6 +55,7 @@ class default_container implements container {
         'collection_strategy' => true,
         'config' => true,
         'config_locked' => true,
+        'context_world_factory' => true,
         'course_world_block_any_instance_finder_in_context' => true,
         'course_world_block_instance_finder' => true,
         'course_world_block_instances_finder_in_context' => true,
@@ -256,6 +257,17 @@ class default_container implements container {
         return new \block_xp\local\config\mdl_locked_config('block_xp', [
             'identitymode',
         ]);
+    }
+
+    /**
+     * Context world factory.
+     *
+     * @return factory\context_world_factory
+     */
+    protected function get_context_world_factory() {
+        $factory = new factory\default_context_world_factory($this->get('config'));
+        $factory->set_course_world_factory($this->get('course_world_factory'));
+        return $factory;
     }
 
     /**
