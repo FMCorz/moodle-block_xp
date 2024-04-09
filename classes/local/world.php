@@ -55,6 +55,13 @@ interface world {
     public function get_config();
 
     /**
+     * Get the context.
+     *
+     * @return \context
+     */
+    public function get_context();
+
+    /**
      * Return the collection strategy.
      *
      * @return \block_xp\local\strategy\collection_strategy
