@@ -69,12 +69,13 @@ class search_courses extends external_api {
         require_once($CFG->dirroot . '/course/externallib.php');
         $courses = \core_course_external::search_courses('search', $query, 0, 25)['courses'];
 
+        $sitehome = get_string('frontpage', 'admin');
         if (strpos(core_text::strtolower($SITE->shortname), $query) !== false
-                || strpos(core_text::strtolower($SITE->fullname), $query) !== false) {
+                || strpos(core_text::strtolower($sitehome), $query) !== false) {
 
             array_unshift($courses, array_merge((array) $SITE, [
-                'displayname' => external_utils::format_string(get_course_display_name_for_list($SITE),
-                    context_course::instance($SITE->id)),
+                'fullname' => $sitehome,
+                'displayname' => $sitehome,
             ]));
         }
 
@@ -85,6 +86,7 @@ class search_courses extends external_api {
                 'displayname' => $course['displayname'],
                 'shortname' => $course['shortname'],
                 'categoryid' => $course['categoryid'],
+                'contextid' => context_course::instance($course['id'])->id,
             ];
         }, $courses));
     }
@@ -101,6 +103,7 @@ class search_courses extends external_api {
             'displayname' => new external_value(PARAM_TEXT),
             'shortname' => new external_value(PARAM_TEXT),
             'categoryid' => new external_value(PARAM_INT),
+            'contextid' => new external_value(PARAM_INT),
         ]));
     }
 
