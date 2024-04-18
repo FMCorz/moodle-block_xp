@@ -81,6 +81,9 @@ class search_modules extends external_api {
         $world->get_access_permissions()->require_manage();
 
         $modinfo = get_fast_modinfo($courseid);
+        if (!can_access_course($modinfo->get_course())) {
+            throw new \require_login_exception('Cannot access course.');
+        }
         $courseformat = course_get_format($courseid);
         $completion = new completion_info($modinfo->get_course());
         $sections = [];
