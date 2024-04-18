@@ -26,6 +26,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
+    'block_xp_get_sections' => [
+        'classname' => 'block_xp\external\get_sections',
+        'methodname' => 'execute',
+        'description' => 'Retrieves the sections prevent in a course',
+        'type' => 'read',
+        'ajax' => true,
+    ],
     'block_xp_mark_popup_notification_seen' => [
         'classname' => 'block_xp\external\mark_popup_notification_seen',
         'methodname' => 'execute',
