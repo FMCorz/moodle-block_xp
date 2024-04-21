@@ -38,14 +38,14 @@ use block_xp\tests\base_testcase;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class algo_levels_info_test extends base_testcase {
+final class algo_levels_info_test extends base_testcase {
 
     /**
      * Test default.
      *
      * @covers \block_xp\local\xp\algo_levels_info::get_xp_with_algo
      */
-    public function test_get_xp_with_algo_default() {
+    public function test_get_xp_with_algo_default(): void {
         $result = algo_levels_info::get_xp_with_algo(10, 120, 1.3);
         $this->assertEquals([
             1 => 0,
@@ -80,7 +80,7 @@ class algo_levels_info_test extends base_testcase {
      *
      * @covers \block_xp\local\xp\algo_levels_info::get_xp_with_algo
      */
-    public function test_get_xp_with_algo_relative_method() {
+    public function test_get_xp_with_algo_relative_method(): void {
         $result = algo_levels_info::get_xp_with_algo(10, 120, 1.3, 'relative');
         $this->assertEquals([
             1 => 0,
@@ -115,7 +115,7 @@ class algo_levels_info_test extends base_testcase {
      *
      * @covers \block_xp\local\xp\algo_levels_info::get_xp_with_algo
      */
-    public function test_get_xp_with_algo_flat_method() {
+    public function test_get_xp_with_algo_flat_method(): void {
         $result = algo_levels_info::get_xp_with_algo(10, 120, 1, 'flat');
         $this->assertEquals([
             1 => 0,
@@ -144,7 +144,7 @@ class algo_levels_info_test extends base_testcase {
      *
      * @covers \block_xp\local\xp\algo_levels_info::get_xp_with_algo
      */
-    public function test_get_xp_with_algo_linear_method() {
+    public function test_get_xp_with_algo_linear_method(): void {
         $result = algo_levels_info::get_xp_with_algo(10, 100, 1, 'linear', 20);
         $this->assertEquals([
             1 => 0,
@@ -173,7 +173,7 @@ class algo_levels_info_test extends base_testcase {
      *
      * @covers \block_xp\local\xp\algo_levels_info::make_from_defaults
      */
-    public function test_make_from_defaults() {
+    public function test_make_from_defaults(): void {
         $levelsinfo = algo_levels_info::make_from_defaults();
         $this->assertEquals(10, $levelsinfo->get_count());
         $this->assertEquals([
@@ -195,7 +195,7 @@ class algo_levels_info_test extends base_testcase {
      *
      * @covers \block_xp\local\xp\algo_levels_info
      */
-    public function test_data_parsing() {
+    public function test_data_parsing(): void {
         $sampledata = [
             'xp' => ['1' => 0, '2' => 120, '3' => 264, '4' => 437, '5' => 644, '6' => 893],
             'name' => [
@@ -312,7 +312,7 @@ class algo_levels_info_test extends base_testcase {
      *
      * @covers \block_xp\local\xp\algo_levels_info
      */
-    public function test_data_parsing_with_inconsistencies() {
+    public function test_data_parsing_with_inconsistencies(): void {
         $sampledata = [
             'xp' => ['1' => 0, '2' => 120, '3' => 264, '4' => 437, '5' => 644, '7' => 893], // Skipped 6 key.
             'name' => [

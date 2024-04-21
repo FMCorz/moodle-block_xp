@@ -50,7 +50,7 @@ class block_xp_filter implements renderable {
      *
      * This is not stored in the database, it is just a flag.
      *
-     * @var boolean
+     * @var bool
      */
     protected $editable = true;
 

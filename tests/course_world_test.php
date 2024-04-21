@@ -43,9 +43,9 @@ use block_xp\tests\base_testcase;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers     \block_xp\local\local\course_world
  */
-class course_world_test extends base_testcase {
+final class course_world_test extends base_testcase {
 
-    public function test_reset_data() {
+    public function test_reset_data(): void {
         global $DB;
 
         $c1 = $this->getDataGenerator()->create_course();
@@ -89,7 +89,7 @@ class course_world_test extends base_testcase {
         $this->assertEquals(1, $DB->count_records('block_xp_log', ['courseid' => $c2->id]));
     }
 
-    public function test_reset_data_with_groups() {
+    public function test_reset_data_with_groups(): void {
         global $DB;
 
         $c1 = $this->getDataGenerator()->create_course();
@@ -140,7 +140,7 @@ class course_world_test extends base_testcase {
         $this->assertEquals(1, $DB->count_records('block_xp_log', ['courseid' => $c2->id]));
     }
 
-    public function test_delete_user_state() {
+    public function test_delete_user_state(): void {
         global $DB;
 
         $c1 = $this->getDataGenerator()->create_course();
@@ -195,7 +195,7 @@ class course_world_test extends base_testcase {
         $this->assertEquals(1, $DB->count_records('block_xp_log', ['courseid' => $c2->id]));
     }
 
-    public function test_levels_info_loading() {
+    public function test_levels_info_loading(): void {
         global $DB;
         $config = new config_stack([
             new static_config([
@@ -261,7 +261,7 @@ class course_world_test extends base_testcase {
         $this->assertEquals('', $levelsinfo->get_level(1)->get_description());
     }
 
-    public function test_levels_info_loading_with_factory() {
+    public function test_levels_info_loading_with_factory(): void {
         global $DB;
         $config = new config_stack([
             new static_config([

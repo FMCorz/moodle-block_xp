@@ -45,14 +45,14 @@ use xmldb_table;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class config_test extends base_testcase {
+final class config_test extends base_testcase {
 
     /**
      * Test MDL locked config.
      *
      * @covers \block_xp\local\config\mdl_locked_config
      */
-    public function test_mdl_locked_config() {
+    public function test_mdl_locked_config(): void {
         global $DB;
 
         $config = new mdl_locked_config('block_xp', ['testa', 'testb']);
@@ -104,7 +104,7 @@ class config_test extends base_testcase {
      *
      * @covers \block_xp\local\config\config_stack
      */
-    public function test_config_stack_with_locked() {
+    public function test_config_stack_with_locked(): void {
         $master = new static_config([
             'testa' => 'abc',
             'testb' => 'def',
@@ -168,7 +168,7 @@ class config_test extends base_testcase {
      *
      * @covers \block_xp\local\config\filtered_config
      */
-    public function test_filtered_config() {
+    public function test_filtered_config(): void {
         $data = [
             'testa' => 'abc',
             'testb' => 'def',
@@ -218,7 +218,7 @@ class config_test extends base_testcase {
      *
      * @covers \block_xp\local\config\table_row_config
      */
-    public function test_table_row_config() {
+    public function test_table_row_config(): void {
         global $DB;
         $this->make_config_table();
 
@@ -293,7 +293,7 @@ class config_test extends base_testcase {
      *
      * @covers \block_xp\local\config\table_row_config
      */
-    public function test_table_row_config_with_null() {
+    public function test_table_row_config_with_null(): void {
         global $DB;
         $this->make_config_table();
 

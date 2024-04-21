@@ -43,8 +43,16 @@ use core_text;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class leaderboard_test extends base_testcase {
+final class leaderboard_test extends base_testcase {
 
+    /**
+     * Get leaderboard.
+     *
+     * @param local\world $world The world.
+     * @param int $groupid The group ID.
+     * @param local\leaderboard\ranker|null $ranker The ranker.
+     * @return local\leaderboard\leaderboard
+     */
     protected function get_leaderboard($world, $groupid = 0, $ranker = null) {
         global $DB, $USER;
         return new course_user_leaderboard(
@@ -62,7 +70,7 @@ class leaderboard_test extends base_testcase {
      *
      * @covers \block_xp\local\leaderboard\course_user_leaderboard
      */
-    public function test_basic_leaderboard() {
+    public function test_basic_leaderboard(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
         $c2 = $dg->create_course();
@@ -145,7 +153,7 @@ class leaderboard_test extends base_testcase {
      *
      * @covers \block_xp\local\leaderboard\course_user_leaderboard
      */
-    public function test_group_leaderboard() {
+    public function test_group_leaderboard(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
         $c2 = $dg->create_course();
@@ -223,7 +231,7 @@ class leaderboard_test extends base_testcase {
      *
      * @covers \block_xp\local\leaderboard\anonymisable_leaderboard
      */
-    public function test_anonymisable_leaderboard() {
+    public function test_anonymisable_leaderboard(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
 
@@ -255,7 +263,7 @@ class leaderboard_test extends base_testcase {
      *
      * @covers \block_xp\local\leaderboard\neighboured_leaderboard
      */
-    public function test_neighboured_leaderboard() {
+    public function test_neighboured_leaderboard(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
 
@@ -346,7 +354,7 @@ class leaderboard_test extends base_testcase {
      *
      * @covers \block_xp\local\leaderboard\neighboured_leaderboard
      */
-    public function test_neighboured_leaderboard_count_and_position() {
+    public function test_neighboured_leaderboard_count_and_position(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
 
@@ -431,7 +439,7 @@ class leaderboard_test extends base_testcase {
      *
      * @covers \block_xp\local\leaderboard\neighboured_leaderboard
      */
-    public function test_neighboured_leaderboard_top_fallback() {
+    public function test_neighboured_leaderboard_top_fallback(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
         $c2 = $dg->create_course();
@@ -528,7 +536,7 @@ class leaderboard_test extends base_testcase {
      *
      * @covers \block_xp\local\leaderboard\neighboured_leaderboard
      */
-    public function test_neighboured_leaderboard_with_limit() {
+    public function test_neighboured_leaderboard_with_limit(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
 
@@ -761,7 +769,7 @@ class leaderboard_test extends base_testcase {
      *
      * @covers \block_xp\local\leaderboard\relative_ranker
      */
-    public function test_relative_ranker() {
+    public function test_relative_ranker(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
 
@@ -795,7 +803,7 @@ class leaderboard_test extends base_testcase {
      *
      * @covers \block_xp\local\leaderboard\relative_ranker
      */
-    public function test_null_ranker() {
+    public function test_null_ranker(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
 
@@ -817,6 +825,12 @@ class leaderboard_test extends base_testcase {
         $this->assert_ranking($lb->get_ranking(new limit(0, 0)), $expected);
     }
 
+    /**
+     * Assert the ranking.
+     *
+     * @param local\xp\rank[] $ranking The ranking.
+     * @param array $expected
+     */
     protected function assert_ranking($ranking, array $expected) {
         $i = 0;
         foreach ($ranking as $rank) {

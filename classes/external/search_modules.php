@@ -51,7 +51,7 @@ class search_modules extends external_api {
             'options' => new external_single_structure([
                 'completionenabled' => new external_value(PARAM_BOOL, '', VALUE_OPTIONAL),
                 'type' => new external_value(PARAM_ALPHANUMEXT, '', VALUE_OPTIONAL),
-            ], '', VALUE_DEFAULT, [])
+            ], '', VALUE_DEFAULT, []),
         ]);
     }
 

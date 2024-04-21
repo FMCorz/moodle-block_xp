@@ -222,7 +222,8 @@ class restore_xp_block_structure_step extends restore_structure_step {
             $context = $this->get_task()->get_course_context();
             $testoptions = ['type' => $data['type'], 'filter' => $data['filter']];
             if ($dictator->count_rules_in_context($context, null, $testoptions) > 0) {
-                $this->log("block_xp: Skipping disallowed multiple rules for '{$data['type']}/{$data['filter']}'", backup::LOG_DEBUG);
+                $this->log("block_xp: Skipping disallowed multiple rules for '{$data['type']}/{$data['filter']}'",
+                    backup::LOG_DEBUG);
                 return;
             }
         }

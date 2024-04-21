@@ -40,7 +40,7 @@ use block_xp\output\xp_widget;
  */
 class block_xp_renderer extends plugin_renderer_base {
 
-    /** @const Notice flag. */
+    /** Notice flag. */
     const NOTICE_FLAG_QUEST = 'block_xp_notice_quest';
 
     /** @var string Notices flag. */

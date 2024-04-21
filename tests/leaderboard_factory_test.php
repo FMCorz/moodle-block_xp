@@ -41,12 +41,12 @@ use block_xp\tests\base_testcase;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers     \block_xp\local\factory\default_course_world_leaderboard_factory
  */
-class leaderboard_factory_test extends base_testcase {
+final class leaderboard_factory_test extends base_testcase {
 
     /**
      * Test the plain factory.
      */
-    public function test_plain_factory_without_groups() {
+    public function test_plain_factory_without_groups(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
 
@@ -186,7 +186,7 @@ class leaderboard_factory_test extends base_testcase {
     /**
      * Test the with_config factory.
      */
-    public function test_factory_with_config_without_groups() {
+    public function test_factory_with_config_without_groups(): void {
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course();
 
@@ -332,6 +332,12 @@ class leaderboard_factory_test extends base_testcase {
         $this->assertEquals($guestuser->id, $ranking[6]->get_state()->get_id());
     }
 
+    /**
+     * Assert the ranking.
+     *
+     * @param local\xp\rank[] $ranking The ranking.
+     * @param array $expected
+     */
     protected function assert_ranking($ranking, array $expected) {
         $i = 0;
         foreach ($ranking as $rank) {

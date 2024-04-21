@@ -43,7 +43,7 @@ class block_xp_ruleset extends block_xp_rule {
      *
      * Accepts any constant value.
      *
-     * @var boolean
+     * @var bool
      */
     protected $method;
 

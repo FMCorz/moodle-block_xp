@@ -36,14 +36,14 @@ use block_xp\tests\base_testcase;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class user_utils_test extends base_testcase {
+final class user_utils_test extends base_testcase {
 
     /**
      * Test.
      *
      * @covers \block_xp\local\utils\user_utils::can_earn_points
      */
-    public function test_can_earn_points_without_context() {
+    public function test_can_earn_points_without_context(): void {
         $u1 = $this->getDataGenerator()->create_user();
         $adminuser = get_admin();
 
@@ -61,7 +61,7 @@ class user_utils_test extends base_testcase {
      *
      * @covers \block_xp\local\utils\user_utils::can_earn_points
      */
-    public function test_can_earn_points_with_excluded_users() {
+    public function test_can_earn_points_with_excluded_users(): void {
         $c1 = $this->getDataGenerator()->create_course();
 
         $guestuser = guest_user();
@@ -86,7 +86,7 @@ class user_utils_test extends base_testcase {
      *
      * @covers \block_xp\local\utils\user_utils::can_earn_points
      */
-    public function test_can_earn_points_for_students() {
+    public function test_can_earn_points_for_students(): void {
         $c1 = $this->getDataGenerator()->create_course();
         $u1 = $this->getDataGenerator()->create_user();
         $u2 = $this->getDataGenerator()->create_user();
@@ -108,7 +108,7 @@ class user_utils_test extends base_testcase {
      *
      * @covers \block_xp\local\utils\user_utils::can_earn_points
      */
-    public function test_can_earn_points_with_global_perm() {
+    public function test_can_earn_points_with_global_perm(): void {
         global $DB;
 
         $guestuser = guest_user();
@@ -140,7 +140,7 @@ class user_utils_test extends base_testcase {
      *
      * @covers \block_xp\local\utils\user_utils::can_earn_points
      */
-    public function test_can_earn_points_for_admins() {
+    public function test_can_earn_points_for_admins(): void {
         $adminuser = get_admin();
 
         $this->assertFalse(user_utils::can_earn_points(\context_system::instance(), $adminuser->id));

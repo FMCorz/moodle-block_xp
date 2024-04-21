@@ -35,13 +35,15 @@ use block_xp\tests\base_testcase;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class world_factory_test extends base_testcase {
+final class world_factory_test extends base_testcase {
 
     /**
+     * Test course world factory.
+     *
      * @covers \block_xp\local\factory\course_world_factory
      * @covers \block_xp\local\factory\default_course_world_factory
      */
-    public function test_course_world_factory() {
+    public function test_course_world_factory(): void {
         $c1 = $this->getDataGenerator()->create_course();
         $c2 = $this->getDataGenerator()->create_course();
 
@@ -72,10 +74,12 @@ class world_factory_test extends base_testcase {
     }
 
     /**
+     * Test course world factory in system.
+     *
      * @covers \block_xp\local\factory\course_world_factory
      * @covers \block_xp\local\factory\default_course_world_factory
      */
-    public function test_course_world_factory_in_system() {
+    public function test_course_world_factory_in_system(): void {
         $c1 = $this->getDataGenerator()->create_course();
         $c2 = $this->getDataGenerator()->create_course();
 
@@ -96,10 +100,12 @@ class world_factory_test extends base_testcase {
     }
 
     /**
+     * Test context world factory.
+     *
      * @covers \block_xp\local\factory\context_world_factory
      * @covers \block_xp\local\factory\default_context_world_factory
      */
-    public function test_context_world_factory() {
+    public function test_context_world_factory(): void {
         $c1 = $this->getDataGenerator()->create_course();
         $c2 = $this->getDataGenerator()->create_course();
 

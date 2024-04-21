@@ -45,7 +45,7 @@ class get_sections extends external_api {
     public static function execute_parameters() {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT),
-            'options' => new external_single_structure([], '', VALUE_DEFAULT, [])
+            'options' => new external_single_structure([], '', VALUE_DEFAULT, []),
         ]);
     }
 

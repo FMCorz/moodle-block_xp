@@ -43,15 +43,21 @@ use block_xp_ruleset;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers     \block_xp\local\xp\course_filter_manager
  */
-class filters_test extends base_testcase {
+final class filters_test extends base_testcase {
 
+    /**
+     * Get the filter manager.
+     *
+     * @param int $courseid The course ID.
+     * @return local\xp\course_filter_manager
+     */
     protected function get_filter_manager($courseid) {
         $world = $this->get_world($courseid);
         $world->get_config()->set('defaultfilters', course_world_config::DEFAULT_FILTERS_STATIC);
         return $world->get_filter_manager();
     }
 
-    public function test_filter_match() {
+    public function test_filter_match(): void {
         $rule = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
         $filter = block_xp_filter::load_from_data(['rule' => $rule]);
 
@@ -62,7 +68,7 @@ class filters_test extends base_testcase {
         $this->assertFalse($filter->match($e));
     }
 
-    public function test_filter_load_rule() {
+    public function test_filter_load_rule(): void {
         $rulec = new block_xp_rule_property(block_xp_rule_base::EQ, 'c', 'crud');
         $e = \block_xp\event\something_happened::mock(['crud' => 'c']);
 
@@ -77,7 +83,7 @@ class filters_test extends base_testcase {
         $this->assertTrue($filter->match($e));
     }
 
-    public function test_standard_filters() {
+    public function test_standard_filters(): void {
         $this->resetAfterTest(true);
 
         $course = $this->getDataGenerator()->create_course();
@@ -94,7 +100,7 @@ class filters_test extends base_testcase {
         $this->assertSame(0, $fm->get_points_for_event($d));
     }
 
-    public function test_custom_filters() {
+    public function test_custom_filters(): void {
         $this->resetAfterTest(true);
 
         $course = $this->getDataGenerator()->create_course();
@@ -165,7 +171,7 @@ class filters_test extends base_testcase {
 
     }
 
-    public function test_validate_data() {
+    public function test_validate_data(): void {
         $this->assertTrue(block_xp_filter::validate_data([]));
 
         // Rule data.
@@ -207,7 +213,7 @@ class filters_test extends base_testcase {
         $this->assertTrue(block_xp_filter::validate_data(['category' => (string) block_xp_filter::CATEGORY_GRADES]));
     }
 
-    public function test_load_from_data() {
+    public function test_load_from_data(): void {
         $filter = block_xp_filter::load_from_data((object) [
             'ruledata' => json_encode(['_class' => 'block_xp_rule_property']),
         ]);

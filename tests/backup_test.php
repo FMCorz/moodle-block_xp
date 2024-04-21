@@ -59,14 +59,14 @@ use restore_dbops;
  * @covers     \restore_xp_block_task
  * @covers     \restore_xp_block_structure_step
  */
-class backup_test extends base_testcase {
+final class backup_test extends base_testcase {
 
     /**
      * Test restore in new course.
      *
      * @covers \backup_xp_block_structure_step
      */
-    public function test_restore_in_new_course() {
+    public function test_restore_in_new_course(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -95,7 +95,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore in new course without users.
      */
-    public function test_restore_in_new_course_without_users() {
+    public function test_restore_in_new_course_without_users(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -118,7 +118,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore merge in other.
      */
-    public function test_restore_merge_in_other() {
+    public function test_restore_merge_in_other(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -149,7 +149,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore delete and merge in other.
      */
-    public function test_restore_delete_and_merge_in_other() {
+    public function test_restore_delete_and_merge_in_other(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -187,7 +187,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore merge in same without change.
      */
-    public function test_restore_merge_in_same_without_change() {
+    public function test_restore_merge_in_same_without_change(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -217,7 +217,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore merge in same with changes.
      */
-    public function test_restore_merge_in_same_with_changes() {
+    public function test_restore_merge_in_same_with_changes(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -256,7 +256,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore delete and merge in same.
      */
-    public function test_restore_delete_and_merge_in_same() {
+    public function test_restore_delete_and_merge_in_same(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -291,7 +291,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore grade filters with non existing.
      */
-    public function test_restore_grade_filter_with_none_existing() {
+    public function test_restore_grade_filter_with_none_existing(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -323,7 +323,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore grade filters with one existing.
      */
-    public function test_restore_grade_filter_with_one_existing() {
+    public function test_restore_grade_filter_with_one_existing(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -356,7 +356,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore grade filters with one non ruleset existing.
      */
-    public function test_restore_grade_filter_with_one_non_ruleset_existing() {
+    public function test_restore_grade_filter_with_one_non_ruleset_existing(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -389,7 +389,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore grade filters with many existing.
      */
-    public function test_restore_grade_filter_with_many_existing() {
+    public function test_restore_grade_filter_with_many_existing(): void {
         global $DB;
 
         $data = $this->setup_courses();
@@ -427,7 +427,7 @@ class backup_test extends base_testcase {
     /**
      * Test restore grade filters with one empty existing.
      */
-    public function test_restore_grade_filter_with_one_empty_existing() {
+    public function test_restore_grade_filter_with_one_empty_existing(): void {
         global $DB;
 
         $data = $this->setup_courses();

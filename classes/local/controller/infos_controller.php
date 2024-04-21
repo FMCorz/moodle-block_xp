@@ -44,8 +44,11 @@ use block_xp\local\routing\url;
  */
 class infos_controller extends page_controller {
 
+    /** @var bool */
     protected $requiremanage = false;
+    /** @var string */
     protected $routename = 'infos';
+    /** @var object */
     protected $form;
 
     protected function permissions_checks() {

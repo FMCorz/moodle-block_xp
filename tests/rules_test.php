@@ -36,14 +36,14 @@ use block_xp_ruleset;
  * @copyright  2014 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class rules_test extends \advanced_testcase {
+final class rules_test extends \advanced_testcase {
 
     /**
      * Test rule property.
      *
      * @covers \block_xp_rule_property
      */
-    public function test_rule_property() {
+    public function test_rule_property(): void {
         $subject = (object) [
             'int' => 10,
             'str' => 'I am here.',
@@ -105,7 +105,7 @@ class rules_test extends \advanced_testcase {
      *
      * @covers \block_xp_ruleset
      */
-    public function test_ruleset() {
+    public function test_ruleset(): void {
         $subject = (object) [
             'int' => 10,
         ];
@@ -146,7 +146,7 @@ class rules_test extends \advanced_testcase {
      *
      * @covers \block_xp_ruleset
      */
-    public function test_nested_ruleset() {
+    public function test_nested_ruleset(): void {
         $subject = (object) [
             'int' => 10,
         ];
@@ -168,7 +168,7 @@ class rules_test extends \advanced_testcase {
      *
      * @covers \block_xp_rule::create
      */
-    public function test_export_create() {
+    public function test_export_create(): void {
         $rule = new block_xp_rule_property(block_xp_rule_base::CT, 'I', 'str');
         $newrule = block_xp_rule::create($rule->export());
         $this->assertEquals($rule, $newrule);

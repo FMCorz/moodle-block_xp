@@ -42,9 +42,9 @@ use block_xp\tests\base_testcase;
  * @covers     \block_xp\local\config\default_course_world_config
  * @covers     \block_xp\local\config\default_admin_config
  */
-class course_world_config_test extends base_testcase {
+final class course_world_config_test extends base_testcase {
 
-    public function test_default_config() {
+    public function test_default_config(): void {
         global $DB;
 
         $defaultcourse = new local\config\default_course_world_config();

@@ -39,9 +39,9 @@ global $CFG;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers     \block_xp\local\stragey\course_world_collection_strategy
  */
-class course_world_collection_strategy_test extends \advanced_testcase {
+final class course_world_collection_strategy_test extends \advanced_testcase {
 
-    public function test_is_action_accepted_no_limit() {
+    public function test_is_action_accepted_no_limit(): void {
         $now = time();
         $log = ['a' => [$now, $now, $now, $now, $now, $now, $now, $now, $now]];
         $this->assertTrue(course_world_collection_strategy::is_action_accepted('a', $now, $log, 0, 0, 0));
@@ -49,7 +49,7 @@ class course_world_collection_strategy_test extends \advanced_testcase {
         $this->assertTrue(course_world_collection_strategy::is_action_accepted('a', $now, $log, 0, 1, 0));
     }
 
-    public function test_is_action_accepted_not_in_log() {
+    public function test_is_action_accepted_not_in_log(): void {
         $now = time();
         $log = [
             'a' => [$now - 1000, $now - 2000, $now - 100, $now],
@@ -60,7 +60,7 @@ class course_world_collection_strategy_test extends \advanced_testcase {
         $this->assertTrue(course_world_collection_strategy::is_action_accepted('c', $now, $log, 0, 0, 1));
     }
 
-    public function test_is_action_accepted_max_actions_in_timeframe() {
+    public function test_is_action_accepted_max_actions_in_timeframe(): void {
         $now = time();
 
         $log = ['a' => [$now, $now, $now, $now, $now, $now, $now, $now, $now]];
@@ -77,7 +77,7 @@ class course_world_collection_strategy_test extends \advanced_testcase {
         $this->assertFalse(course_world_collection_strategy::is_action_accepted('a', $now, $log, 3, 10000, 0));
     }
 
-    public function test_is_action_accepted_time_between_repeated() {
+    public function test_is_action_accepted_time_between_repeated(): void {
         $now = time();
 
         $log = ['a' => [$now, $now, $now, $now, $now, $now, $now, $now, $now]];
@@ -93,7 +93,7 @@ class course_world_collection_strategy_test extends \advanced_testcase {
         $this->assertFalse(course_world_collection_strategy::is_action_accepted('a', $now, $log, 0, 0, 101));
     }
 
-    public function test_is_action_accepted() {
+    public function test_is_action_accepted(): void {
         $now = time();
 
         $log = [

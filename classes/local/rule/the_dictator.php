@@ -84,7 +84,7 @@ class the_dictator implements dictator {
     public function count_rules_in_context(\context $storecontext, \context $childcontext = null, array $options = []) {
         $conditions = [
             'contextid' => $storecontext->id,
-            'childcontextid' => $this->normalise_childcontext_id($storecontext, $childcontext)
+            'childcontextid' => $this->normalise_childcontext_id($storecontext, $childcontext),
         ];
 
         if (!empty($options['type'])) {
