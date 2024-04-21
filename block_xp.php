@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot . '/blocks/moodleblock.class.php');
+
 // Moodle expects a certain class to be found here, so we have to workaround it like this.
 $class = \block_xp\di::get('block_class');
 if (!class_exists($class) || !is_subclass_of($class, 'block_base')) {

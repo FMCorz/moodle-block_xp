@@ -26,6 +26,10 @@
 
 namespace block_xp\local\setting;
 
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->libdir . '/adminlib.php');
+
 /**
  * Static admin setting.
  *
