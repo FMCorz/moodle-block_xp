@@ -159,7 +159,7 @@ class default_settings_maker implements settings_maker {
             $this->defaults->get('context'),
             [
                 CONTEXT_COURSE => get_string('incourses', 'block_xp'),
-                CONTEXT_SYSTEM => get_string('forthewholesite', 'block_xp'),
+                CONTEXT_SYSTEM => get_string('sitewide', 'block_xp'),
             ]
         ));
 

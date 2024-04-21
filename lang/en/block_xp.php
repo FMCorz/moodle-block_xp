@@ -57,7 +57,7 @@ $string['cannotshowblockconfig'] = 'I would usually display the appearance setti
 $string['cannotshowblockconfigsys'] = 'I would usually display the appearance settings here, but I could not find your block. It may be missing from the [front page]({$a->fp}) and the [default dashboard]({$a->mysys}) of your users, or present in both. To edit the settings from here, make sure it only appears in one of them.';
 $string['changecourse'] = 'Change course';
 $string['changetocourse'] = 'Change to course';
-$string['changetositewide'] = 'Back to site-wide';
+$string['changetositewide'] = 'Back to sitewide';
 $string['cheatguard'] = 'Cheat guard';
 $string['chooseacondition'] = 'Choose a condition';
 $string['clearfilter'] = 'Clear filter';
@@ -148,7 +148,7 @@ Drops can be used to cleverly award points when certain type of content is consu
 [More info](https://docs.levelup.plus/xp/docs/how-to/use-drops?ref=blockxp_help)
 ';
 $string['editcondition'] = 'Edit condition';
-$string['editingdefaultsettingsinwholesitemodenotice'] = '**Attention!** You are not modifying the currently active settings, instead you are editing the default values. As Level Up XP is used site-wide, your intention is most likely to change the site-wide settings. [Navigate here]({$a->url}) to change those settings, or follow the "Settings" link from the XP block itself.';
+$string['editingdefaultsettingsinwholesitemodenotice'] = '**Attention!** You are not modifying the currently active settings, instead you are editing the default values. As Level Up XP is used sitewide, your intention is most likely to change the sitewide settings. [Navigate here]({$a->url}) to change those settings, or follow the "Settings" link from the XP block itself.';
 $string['editinstructions'] = 'Edit information';
 $string['enablecheatguard'] = 'Enable cheat guard';
 $string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive mechanism for preventing students to abuse the system using obvious techniques, such as refreshing the same page endlessly, or repeating the same action over and over again.
@@ -166,8 +166,8 @@ $string['enablexpgain_help'] = 'When set to \'No\', nobody will earn points in t
 
 Please note that this can also be controlled more granularity using the capability _block/xp:earnxp_.';
 $string['entersearchterm'] = 'Enter a search term';
-$string['errorcontextcoursemismatchforwholesite'] = 'The URL of this <em>Level Up XP</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up XP</em> to be used \'For the whole site\', however this page expected it to be used \'Per course\'. Please <a href="{$a->nexturl}">click here</a> to navigate to the right page. Search for the admin setting \'block_xp_context\' if you wish to change your configuration.';
-$string['errorcontextcoursemismatchpercourse'] = 'The URL of this <em>Level Up XP</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up XP</em> to be used \'Per course\', but this page expects it to be used \'For the whole site\'. It most likely originates from a <em>block</em> that was added to the dashboard or front page while in a different configuration. You should remove the block from the latter pages, and only use the block from within individual courses.';
+$string['errorcontextcoursemismatchforwholesite'] = 'The URL of this <em>Level Up XP</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up XP</em> to be used \'Sitewide\', however this page expected it to be used \'Per course\'. Please <a href="{$a->nexturl}">click here</a> to navigate to the right page. Search for the admin setting \'block_xp_context\' if you wish to change your configuration.';
+$string['errorcontextcoursemismatchpercourse'] = 'The URL of this <em>Level Up XP</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up XP</em> to be used \'Per course\', but this page expects it to be used \'Sitewide\'. It most likely originates from a <em>block</em> that was added to the dashboard or front page while in a different configuration. You should remove the block from the latter pages, and only use the block from within individual courses.';
 $string['errorformvalues'] = 'There are some issues in the form values, please fix them.';
 $string['errorlevelsincorrect'] = 'The minimum number of levels is 2';
 $string['errornotalllevelsbadgesprovided'] = 'Not all the level badges have been provided. Missing: {$a}';
@@ -212,7 +212,6 @@ $string['filtersectiondesc'] = 'REPLACE ME';
 $string['filterthiscourse'] = 'This course';
 $string['filterthiscoursedesc'] = 'REPLACE ME';
 $string['forever'] = 'Forever';
-$string['forthewholesite'] = 'For the whole site';
 $string['give'] = 'give';
 $string['gotofullladder'] = 'Go to full leaderboard';
 $string['graderules'] = 'Grade rules';
@@ -381,14 +380,14 @@ $string['ranking'] = 'Ranking';
 $string['ranking_help'] = 'The rank is the absolute position of the current user in the leaderboard. The relative rank is the difference in experience points between a user and their neighbours.';
 $string['reallydeleteuserstate'] = 'Deleting a user is only useful to remove them from the leaderboard. For any other reasons, we recommend setting their points to 0 instead. Note that deleting them does not affect their ability to earn points in the future.
 
-Importantly, when using _Level Up XP_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
+Importantly, when using _Level Up XP_ sitewide, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
 
 Do you really want to delete the points of this user?';
 $string['reallydeleteuserstateandlogs'] = 'Deleting a user removes them from the leaderboard and removes all of their associated logs.
 
 Removing logs may enable a user to re-earn points for previous actions. If your intention is only to reset their points, we recommend setting their points to 0 instead. Note that deleting a user does not affect their ability to earn points in the future.
 
-Importantly, when using _Level Up XP_ for the whole site, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
+Importantly, when using _Level Up XP_ sitewide, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
 
 Do you really want to delete the points and logs of this user?';
 $string['reallyresetallcoursestodefaults'] = 'Really reset all courses rules to the default rules? This action is not reversible.';
@@ -453,10 +452,10 @@ $string['ruletypesectioncompletiondesc'] = 'Award points when a course section i
 $string['rulesscope'] = 'Scope';
 $string['rulesscope_help'] = 'The scope of rules determine when they apply.
 
-Rules can be created in two scopes: site-wide and course-specific. Whenever possible, course-specific rules are assessed first, followed by site-wide rules. This approach enables educators to create broad rules applicable across the site (site-wide) and then adjust them for individual courses.
+Rules can be created in two scopes: sitewide and course-specific. Whenever possible, course-specific rules are assessed first, followed by sitewide rules. This approach enables educators to create broad rules applicable across the site (sitewide) and then adjust them for individual courses.
 
-- Site-wide: These rules are effective across the entire site, except when course-specific rules are in place.
-- Course: These rules are applicable only within a specific course. They have priority over site-wide rules.
+- Sitewide: These rules are effective across the entire site, except when course-specific rules are in place.
+- Course: These rules are applicable only within a specific course. They have priority over sitewide rules.
 ';
 $string['searchandselectcourse'] = 'Search and select a course';
 $string['searchandselectmodule'] = 'Search and select an activity or resource';
@@ -549,7 +548,7 @@ The styling of the points will depend on whether an arbitrary value is displayed
 ```
 ';
 $string['shortcode:xpprogressbar'] = 'The current user\'s progress bar towards the next level.';
-$string['sitewide'] = 'Site-wide';
+$string['sitewide'] = 'Sitewide';
 $string['somefeaturesrequireotherplugins'] = 'Some features require additional plugins to be installed.';
 $string['someoneelse'] = 'Someone else';
 $string['somethinghappened'] = 'Something happened';
@@ -575,7 +574,7 @@ $string['upgradingplugins'] = 'Upgrading the plugins';
 $string['value'] = 'Value';
 $string['visualsintro'] = 'Customise the appearance of the levels, and the meaning of the points.';
 $string['wherearexpused'] = 'Where are points used?';
-$string['wherearexpused_desc'] = 'When set to \'In courses\', the points gained will only account for the course in which the block was added to. When set to \'For the whole site\', a user will "level up" in the site rather than selectively per course, all the points gained throughout the site will be used.';
+$string['wherearexpused_desc'] = 'When set to \'In courses\', the points gained will only account for the course in which the block was added to. When set to \'Sitewide\', a user will "level up" in the site rather than selectively per course, all the points gained throughout the site will be used.';
 $string['updateandpreview'] = 'Update and preview';
 $string['urlaccessdeprecated'] = 'Access via this URL is deprecated, please update your links.';
 $string['usagereport'] = 'Share usage report';
@@ -660,3 +659,6 @@ $string['levelname_help'] = 'A short name to display instead of the default _Lev
 $string['privacy:metadata:xp:lvl'] = 'The user\'s level';
 $string['usingalgo'] = 'Using algorithm';
 $string['valuessaved'] = 'The values have been successfully saved.';
+
+// Deprecated since 3.16.0
+$string['forthewholesite'] = 'For the whole site';
