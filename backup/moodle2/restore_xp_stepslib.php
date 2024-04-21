@@ -97,7 +97,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
             $DB->delete_records('block_xp_log', $conditions);
 
             // Remove rules in course.
-            $DB->delete_records('block_xp_rules', ['contextid' => $coursecontextid]);
+            $DB->delete_records('block_xp_rule', ['contextid' => $coursecontextid]);
 
             // Removing old preferences.
             $sql = $DB->sql_like('name', ':name');
