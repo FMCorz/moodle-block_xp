@@ -92,8 +92,8 @@ final class levels_info_writer_test extends base_testcase {
     /**
      * Assert two array of levels are the same.
      *
-     * @param level $levelexpected The expected level.
-     * @param level $levelactual The actual level.
+     * @param level[] $levelsexpected The expected level.
+     * @param level[] $levelsactual The actual level.
      */
     protected function assert_levels_equal($levelsexpected, $levelsactual) {
         $this->assertEquals(count($levelsexpected), count($levelsactual));

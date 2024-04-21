@@ -53,7 +53,6 @@ class get_sections extends external_api {
      * Search modules.
      *
      * @param int $courseid The course ID.
-     * @param string $query The query.
      * @param array $options The options.
      * @return array
      */

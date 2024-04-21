@@ -68,7 +68,7 @@ class backup_xp_block_task extends backup_block_task {
     /**
      * Encore content links.
      *
-     * @param $content string The content.
+     * @param string $content The content.
      * @return string
      */
     public static function encode_content_links($content) {

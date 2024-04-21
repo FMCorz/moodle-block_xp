@@ -42,7 +42,7 @@ class default_resolver implements resolver {
      * Get type by name.
      *
      * @param string $name The type name.
-     * @return type|null
+     * @return ruletype|null
      */
     public function get_type($name): ?ruletype {
         if (!isset($this->types[$name])) {
@@ -55,7 +55,7 @@ class default_resolver implements resolver {
     /**
      * Get type name.
      *
-     * @param type $type The type.
+     * @param ruletype $type The type.
      * @return string
      */
     public function get_type_name(ruletype $type): string {
