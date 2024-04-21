@@ -72,6 +72,7 @@ class usage_report_maker {
             'siteidentifier' => get_site_identifier(),
             'moodle_version' => $CFG->version,
             'moodle_release' => $CFG->release,
+            'php_version' => PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION,
         ];
 
         $data->moodle_flavour = $this->get_flavour();
@@ -96,6 +97,12 @@ class usage_report_maker {
 
         $data->xp_rules = $this->db->count_records_select('block_xp_filters', 'courseid > 0');
         $data->xp_rules_usage = $this->get_rules_usage($data->xp_rules > 5000 ? 5000 : 0);
+
+        $data->xp_ruletypes = $this->db->count_records_select('block_xp_rule', 'contextid > 0');
+        $data->xp_ruletypes_usage = $this->db->get_records_sql_menu(
+            'SELECT type, COUNT(1) AS n FROM {block_xp_rule} WHERE contextid > 0 GROUP BY type');
+        $data->xp_rulefilters_usage = $this->db->get_records_sql_menu(
+            'SELECT filter, COUNT(1) AS n FROM {block_xp_rule} WHERE contextid > 0 GROUP BY filter');
 
         $components = ['availability_xp', 'block_stash', 'enrol_xp', 'filter_shortcodes'];
         $data->plugins = array_reduce($components, function($carry, $component) use ($pluginman) {
