@@ -330,6 +330,7 @@ $string['pointsrequired'] = 'Points required';
 $string['popupnotificationmessage'] = 'Popup notification message';
 $string['popupnotificationmessagedesc'] = 'Optional message to display within the popup notification that congratulates the user for attaining the level.';
 $string['potentialmoodleincompatibility'] = 'Potential Moodle incompatibility';
+$string['previewpopupnotification'] = 'Preview notification';
 $string['privacy:path:addon'] = 'Add-on';
 $string['privacy:path:level'] = 'Level';
 $string['privacy:path:logs'] = 'Logs';

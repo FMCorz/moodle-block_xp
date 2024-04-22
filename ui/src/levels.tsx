@@ -8,7 +8,7 @@ import { AnchorButton, Button, SaveButton } from "./components/Button";
 import Expandable from "./components/Expandable";
 import { Bars3BottomLeftIcon, CheckBadgeIconSolid, LanguageIcon, PaperAirplaneIconSolid } from "./components/Icons";
 import Input, { Select, Textarea } from "./components/Input";
-import Level from "./components/Level";
+import Level, { getLevelHtml } from "./components/Level";
 import { NumInput, NumberInputWithButtons } from "./components/NumberInput";
 import Str from "./components/Str";
 import { Tooltip } from "./components/Tooltip";
@@ -16,7 +16,7 @@ import { HELP_URL_LEVELS } from "./lib/constants";
 import { AddonContext, makeAddonContextValueFromAppProps } from "./lib/contexts";
 import { useAddonActivated, useStrings, useUnloadCheck } from "./lib/hooks";
 import { computeRequiredPointsWithMethod, getMinimumPointsForLevel, getNextLevel, getPreviousLevel } from "./lib/levels";
-import { ajaxRequest, commonStaticModulesToDependOn, getModule, makeDependenciesDefinition } from "./lib/moodle";
+import { ajaxRequest, commonStaticModulesToDependOn, getModule, getModuleAsync, makeDependenciesDefinition } from "./lib/moodle";
 import { queryClient } from "./lib/query";
 import { Level as LevelType, LevelsInfo, PointCalculationMethod } from "./lib/types";
 import { classNames, stripTags } from "./lib/utils";
@@ -213,13 +213,25 @@ const OptionField: React.FC<{ label: React.ReactNode; note?: React.ReactNode; xp
   );
 };
 
+const showLevelUpNotificationPreview = async (level: LevelType, prevLevel: LevelType) => {
+  const PopupModule = await getModuleAsync("block_xp/popup-notification");
+  PopupModule.show({
+    courseid: 0,
+    levelnum: level.level,
+    levelname: level.name,
+    levelbadge: getLevelHtml(level),
+    prevlevelbadge: getLevelHtml(prevLevel),
+    message: level.popupmessage,
+  });
+};
+
 export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badges = [] }: AppProps) => {
   const hasXpPlus = useAddonActivated();
   const [state, dispatch] = useReducer(reducer, { levelsInfo }, getInitialState);
   const levels = state.levels.slice(0, state.nblevels);
   const [expanded, setExpanded] = React.useState<number[]>([]);
   const [bulkEdit, setBulkEdit] = React.useState(false);
-  const getStr = useStrings(optionsStatesStringIds.concat(["levelssaved", "unknownbadgea", "levelx"]));
+  const getStr = useStrings(optionsStatesStringIds.concat(["levelssaved", "unknownbadgea", "levelx", "previewpopupnotification"]));
   const getBadgeStr = useStrings(["coursebadges", "sitebadges"], "core_badges");
   const getCoreStr = useStrings(["other", "none"], "core");
 
@@ -546,15 +558,44 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                 {/** Expanded */}
                 <Expandable expanded={isExpanded} id={`xp-level-${level.level}-options`}>
                   <div className={classNames("sm:xp-ml-[100px] sm:xp-pl-8 xp-space-y-4")}>
-                    <OptionField label={<Str id="name" />}>
-                      <Input
-                        className="xp-min-w-48 x-w-full sm:xp-w-1/2 xp-max-w-full"
-                        onBlur={(e) => handleLevelNameChange(level, e.target.value)}
-                        defaultValue={level.name || ""}
-                        maxLength={40}
-                        type="text"
-                      />
-                    </OptionField>
+                    <div className="xp-flex xp-items-end xp-gap-4">
+                      <div className="xp-flex-1">
+                        <OptionField label={<Str id="name" />}>
+                          <Input
+                            className="xp-min-w-48 x-w-full sm:xp-w-2/3 xp-max-w-full"
+                            onBlur={(e) => handleLevelNameChange(level, e.target.value)}
+                            defaultValue={level.name || ""}
+                            maxLength={40}
+                            type="text"
+                          />
+                        </OptionField>
+                      </div>
+                      {prevLevel ? (
+                        <div className="xp-mb-1.5 xp-h-6 xp-w-6">
+                          <Tooltip content={getStr("previewpopupnotification")}>
+                            <div>
+                              <AnchorButton onClick={() => showLevelUpNotificationPreview(level, prevLevel)}>
+                                <span className="xp-sr-only">{getStr("previewpopupnotification")}</span>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth={1.5}
+                                  stroke="currentColor"
+                                  className="xp-w-6 xp-h-6"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75-1.5.75a3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0L3 16.5m15-3.379a48.474 48.474 0 0 0-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 0 1 3 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 0 1 6 13.12M12.265 3.11a.375.375 0 1 1-.53 0L12 2.845l.265.265Zm-3 0a.375.375 0 1 1-.53 0L9 2.845l.265.265Zm6 0a.375.375 0 1 1-.53 0L15 2.845l.265.265Z"
+                                  />
+                                </svg>
+                              </AnchorButton>
+                            </div>
+                          </Tooltip>
+                        </div>
+                      ) : null}
+                    </div>
                     <OptionField label={<Str id="description" />} note={<Str id="leveldescriptiondesc" />}>
                       <Textarea
                         className="xp-w-full"

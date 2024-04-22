@@ -36,3 +36,14 @@ export const stripTags = (html: string) => {
   tmp.innerHTML = html;
   return tmp.textContent || tmp.innerText || "";
 };
+
+const escapeCharMap: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#039;'
+};
+export const escapeHtml = (text: string) => {
+  return text.replace(/[&<>"']/g, function(m) { return escapeCharMap[m]; });
+}
