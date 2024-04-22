@@ -57,7 +57,7 @@ class levels_controller extends page_controller {
         // Reset levels to defaults.
         if ($this->get_param('reset') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
-                $this->world->get_config()->set('levelsdata', di::get('config')->get('levelsdata'));
+                $this->world->get_config()->set('levelsdata', '');
                 $this->redirect(new url($this->pageurl));
             }
         }

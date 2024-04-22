@@ -25,12 +25,11 @@
 
 namespace block_xp\local\controller;
 
-use block_xp;
 use block_xp\di;
 use block_xp\local\config\config;
-use block_xp\local\serializer\level_serializer;
-use block_xp\local\serializer\levels_info_serializer;
+use block_xp\local\routing\url;
 use block_xp\local\serializer\url_serializer;
+use html_writer;
 
 /**
  * Admin levels controller class.
@@ -49,17 +48,64 @@ class admin_levels_controller extends admin_route_controller {
     /** @var string Admin section name. */
     protected $sectionname = 'block_xp_default_levels';
 
+    protected function define_optional_params() {
+        return [
+            ['reset', false, PARAM_BOOL, false],
+            ['confirm', false, PARAM_BOOL, false],
+        ];
+    }
+
     protected function post_login() {
         parent::post_login();
         $this->config = \block_xp\di::get('config');
     }
 
+    protected function pre_content() {
+        parent::pre_content();
+
+        // Reset levels to defaults.
+        if ($this->get_param('reset') && confirm_sesskey()) {
+            if ($this->get_param('confirm')) {
+                // We should probably move this to the levels_info_writer, although it only knows about config.
+                di::get('db')->set_field_select('block_xp_config', 'levelsdata', '', 'courseid > 0', []);
+                $this->redirect(new url($this->pageurl), get_string('allcoursesreset', 'block_xp'));
+            }
+        }
+
+    }
+
     protected function content() {
         $output = $this->get_renderer();
+        $forwholesite = di::get('config')->get('context') == CONTEXT_SYSTEM;
+
         echo $output->heading(get_string('defaultlevels', 'block_xp'));
+
+        if ($this->get_param('reset')) {
+            echo $output->confirm(
+                get_string('reallyresetallcourselevelstodefaults', 'block_xp'),
+                new url($this->pageurl->get_compatible_url(), ['reset' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
+                new url($this->pageurl->get_compatible_url())
+            );
+            return;
+        }
+
         $this->page_warning_editing_defaults('levels');
         list($module, $props) = $this->get_react_module();
         echo $output->react_module($module, $props);
+
+        // Reset courses.
+        if (!$forwholesite) {
+            echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
+            echo html_writer::tag('p', markdown_to_html(get_string('resetallcoursestodefaultsintro', 'block_xp')));
+            $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
+            echo html_writer::tag('p',
+                $output->single_button(
+                    $url->get_compatible_url(),
+                    get_string('resetallcoursestodefaults', 'block_xp'),
+                    'get'
+                )
+            );
+        }
     }
 
     protected function get_react_module() {

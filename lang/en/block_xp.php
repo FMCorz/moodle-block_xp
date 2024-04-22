@@ -39,6 +39,7 @@ $string['addinstructions'] = 'Add more information';
 $string['additionalresources'] = 'Additional resources';
 $string['addlevel'] = 'Add level';
 $string['addoninstallationerror'] = 'We are detecting an issue with the add-on (local_xp), it does not seem to be installed properly. An administrator should finalise its installation.';
+$string['allcoursesreset'] = 'All courses have been reset.';
 $string['anonymity'] = 'Anonymity';
 $string['anonymity_help'] = 'This setting controls whether participants can see each other\'s name and avatar.';
 $string['apply'] = 'Apply';
@@ -374,9 +375,11 @@ Removing logs may enable a user to re-earn points for previous actions. If your 
 Importantly, when using _Level Up XP_ sitewide, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
 
 Do you really want to delete the points and logs of this user?';
-$string['reallyresetallcoursestodefaults'] = 'Really reset all courses rules to the default rules? This action is not reversible.';
+$string['reallyresetallcoursestodefaults'] = 'Really reset ALL courses rules to the default rules? This action is not reversible.';
 $string['reallyresetcourserulestodefaults'] = 'Really reset the course rules to the default rules? This action is not reversible.';
+$string['reallyresetallcourselevelstodefaults'] = 'Really reset ALL courses levels to the default levels? This action is not reversible.';
 $string['reallyresetcourselevelstodefaults'] = 'Really reset the course levels to the default levels? This action is not reversible.';
+$string['reallyresetallcoursevisualstodefaults'] = 'Really reset ALL courses levels appearance to the default appearance? This action is not reversible.';
 $string['reallyresetcoursevisualstodefaults'] = 'Really reset the course levels appearance to the default appearance? This action is not reversible.';
 $string['reallyresetdata'] = 'Really reset the levels and points of everyone in this course?';
 $string['reallyresetgroupdata'] = 'Really reset the levels and points of everyone in this group?';

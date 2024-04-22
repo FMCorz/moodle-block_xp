@@ -69,7 +69,7 @@ class admin_rules_controller extends admin_route_controller {
         if ($this->get_param('reset') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
                 $this->filtermanager->reset_all_courses_to_defaults();
-                $this->redirect(new url($this->pageurl));
+                $this->redirect(new url($this->pageurl), get_string('allcoursesreset', 'block_xp'));
             }
         }
 

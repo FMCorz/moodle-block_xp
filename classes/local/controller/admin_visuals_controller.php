@@ -28,6 +28,10 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/filelib.php');
 
+use block_xp\di;
+use block_xp\local\config\course_world_config;
+use block_xp\local\routing\url;
+use block_xp\local\world;
 use context_system;
 use html_writer;
 
@@ -45,6 +49,13 @@ class admin_visuals_controller extends admin_route_controller {
     protected $sectionname = 'block_xp_default_visuals';
     /** @var moodleform The form. */
     private $form;
+
+    protected function define_optional_params() {
+        return [
+            ['reset', false, PARAM_BOOL, false],
+            ['confirm', false, PARAM_BOOL, false],
+        ];
+    }
 
     /**
      * Define the form.
@@ -114,6 +125,41 @@ class admin_visuals_controller extends admin_route_controller {
             $this->save_form_data($data);
             $this->redirect();
         }
+
+        // Reset appearance to defaults.
+        if ($this->get_param('reset') && confirm_sesskey()) {
+            if ($this->get_param('confirm')) {
+                $this->reset_all_worlds_to_defaults();
+                $this->redirect(null, get_string('allcoursesreset', 'block_xp'));
+            }
+        }
+    }
+
+    /**
+     * Reset all worlds to defaults.
+     */
+    final protected function reset_all_worlds_to_defaults() {
+        // This is not really the way we should obtain all worlds, but it works.
+        $courseids = di::get('db')->get_fieldset_select('block_xp_config', 'courseid', 'courseid > 0', []);
+        $courseworldfactory = di::get('course_world_factory');
+
+        // This is slow, but that's safer than trying to write to the database directly.
+        foreach ($courseids as $courseid) {
+            $world = $courseworldfactory->get_world($courseid);
+            $this->reset_world_to_defaults($world);
+        }
+    }
+
+    /**
+     * Reset a world to its defaults.
+     *
+     * @param world $world The world.
+     */
+    protected function reset_world_to_defaults(world $world) {
+        $config = $world->get_config();
+        $config->set('enablecustomlevelbadges', course_world_config::CUSTOM_BADGES_MISSING);
+        $fs = get_file_storage();
+        $fs->delete_area_files($world->get_context()->id, 'block_xp', 'badges', 0);
     }
 
     /**
@@ -135,8 +181,18 @@ class admin_visuals_controller extends admin_route_controller {
     protected function content() {
         $form = $this->get_form();
         $output = $this->get_renderer();
+        $forwholesite = di::get('config')->get('context') == CONTEXT_SYSTEM;
 
         echo $output->heading(get_string('defaultvisuals', 'block_xp'));
+
+        if ($this->get_param('reset')) {
+            echo $output->confirm(
+                get_string('reallyresetallcoursevisualstodefaults', 'block_xp'),
+                new url($this->pageurl->get_compatible_url(), ['reset' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
+                new url($this->pageurl->get_compatible_url())
+            );
+            return;
+        }
 
         $this->page_warning_editing_defaults('visuals');
 
@@ -147,6 +203,20 @@ class admin_visuals_controller extends admin_route_controller {
         // Preview.
         echo $output->heading_with_divider(get_string('preview', 'core'));
         $this->preview();
+
+        // Reset courses.
+        if (!$forwholesite) {
+            echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
+            echo html_writer::tag('p', markdown_to_html(get_string('resetallcoursestodefaultsintro', 'block_xp')));
+            $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
+            echo html_writer::tag('p',
+                $output->single_button(
+                    $url->get_compatible_url(),
+                    get_string('resetallcoursestodefaults', 'block_xp'),
+                    'get'
+                )
+            );
+        }
     }
 
     /**
