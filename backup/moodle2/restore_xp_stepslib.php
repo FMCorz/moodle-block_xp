@@ -115,7 +115,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
     /**
      * Process config.
      *
-    * @param array $data
+     * @param array $data
      */
     protected function process_config($data) {
         global $DB;
@@ -136,7 +136,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
     /**
      * Process filter.
      *
-    * @param array $data
+     * @param array $data
      */
     protected function process_filter($data) {
         global $DB;

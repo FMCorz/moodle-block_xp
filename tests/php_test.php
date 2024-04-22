@@ -27,6 +27,8 @@ namespace block_xp;
 
 use block_xp\tests\base_testcase;
 
+defined('MOODLE_INTERNAL') || die();
+
 global $CFG, $DB;
 
 /**
