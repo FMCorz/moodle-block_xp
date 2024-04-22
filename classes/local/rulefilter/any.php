@@ -47,15 +47,15 @@ class any implements rulefilter {
     }
 
     public function get_display_name(): lang_string {
-        return new lang_string('filterany', 'block_xp');
+        return new lang_string('rulefilterany', 'block_xp');
     }
 
     public function get_label_for_config(object $config, ?context $effectivecontext = null): string {
-        return get_string('filterany', 'block_xp');
+        return get_string('rulefilterany', 'block_xp');
     }
 
     public function get_short_description(): lang_string {
-        return new lang_string('filteranydesc', 'block_xp');
+        return new lang_string('rulefilteranydesc', 'block_xp');
     }
 
     public function is_compatible_with_admin(): bool {
