@@ -228,11 +228,11 @@ class visuals_controller extends page_controller {
 
         $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
         echo html_writer::tag('div',
-            $output->single_button(
+            $output->render($output->make_single_button(
                 $url->get_compatible_url(),
                 get_string('resetvisualstodefaults', 'block_xp'),
-                'get'
-            )
+                ['danger' => true]
+            ))
         );
     }
 

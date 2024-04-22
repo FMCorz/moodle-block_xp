@@ -210,11 +210,11 @@ class admin_visuals_controller extends admin_route_controller {
             echo html_writer::tag('p', markdown_to_html(get_string('resetallcoursestodefaultsintro', 'block_xp')));
             $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
             echo html_writer::tag('p',
-                $output->single_button(
+                $output->render($output->make_single_button(
                     $url->get_compatible_url(),
                     get_string('resetallcoursestodefaults', 'block_xp'),
-                    'get'
-                )
+                    ['danger' => true]
+                ))
             );
         }
     }

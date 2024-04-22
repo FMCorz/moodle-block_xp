@@ -573,6 +573,7 @@ $string['tinytimedays'] = '{$a}d';
 $string['tinytimeweeks'] = '{$a}w';
 $string['tinytimewithinayearformat'] = '%b %e';     // No, this is not a regex! @codingStandardsIgnoreLine.
 $string['tinytimeolderyearformat'] = '%b %Y';
+$string['tryme'] = 'Try me';
 $string['unlockfeaturewithxpplus'] = 'Unlock this feature with XP+. <a href="{$a}">Learn more</a>';
 $string['unavailable'] = 'Unavailable';
 $string['upgradingplugins'] = 'Upgrading the plugins';

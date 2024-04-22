@@ -155,6 +155,7 @@ class report_controller extends page_controller {
      * @return single_button[]
      */
     protected function get_bottom_action_buttons() {
+        $output = $this->get_renderer();
         $actions = [];
 
         // Make sure that we can reset for a group only.
@@ -167,14 +168,14 @@ class report_controller extends page_controller {
         }
 
         if (!empty($strreset)) {
-            $actions[] = new single_button(
+            $actions[] = $output->make_single_button(
                 new url($this->pageurl->get_compatible_url(), [
                     'resetdata' => 1,
                     'sesskey' => sesskey(),
                     'group' => $groupid,
                 ]),
                 $strreset,
-                'get'
+                ['danger' => true]
             );
         }
 

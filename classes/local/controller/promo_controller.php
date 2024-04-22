@@ -172,10 +172,7 @@ class promo_controller extends route_controller {
 
         echo $output->advanced_heading(get_string('discoverlevelupplus', 'block_xp'), [
             'intro' => get_string('promointro', 'block_xp'),
-            'actions' => [
-                new single_button(new moodle_url($siteurl), $getxpstr, 'get',
-                    defined('single_button::BUTTON_PRIMARY') ? single_button::BUTTON_PRIMARY : true),
-            ],
+            'actions' => [$output->make_single_button(new moodle_url($siteurl), $getxpstr, ['primary' => true])],
         ]);
 
         $new = '🆕';

@@ -275,8 +275,10 @@ class report_table extends table_sql {
 
         if (isset($row->xp)) {
             $url = new moodle_url($this->baseurl, ['action' => '', 'delete' => 1, 'userid' => $row->id]);
-            $actions[] = new action_menu_link($url, new pix_icon('t/delete', get_string('delete', 'core')),
+            $action = new action_menu_link($url, new pix_icon('t/delete', get_string('delete', 'core')),
                 get_string('delete', 'core'));
+            $action->add_class('text-danger');
+            $actions[] = $action;
         }
 
         return $actions;
