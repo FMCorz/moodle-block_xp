@@ -33,18 +33,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2']
-        moodle-branch: ['MOODLE_311_STABLE', 'MOODLE_400_STABLE', 'MOODLE_401_STABLE', 'MOODLE_402_STABLE', 'MOODLE_403_STABLE']
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
+        moodle-branch:
+          [
+            'MOODLE_311_STABLE',
+            'MOODLE_400_STABLE',
+            'MOODLE_401_STABLE',
+            'MOODLE_402_STABLE',
+            'MOODLE_403_STABLE',
+            'MOODLE_404_STABLE',
+          ]
         database: [pgsql]
         include:
-          - moodle-branch: MOODLE_403_STABLE
+          - moodle-branch: MOODLE_404_STABLE
             database: mariadb
-            php: 8.2
+            php: 8.3
         exclude:
           - moodle-branch: MOODLE_402_STABLE
             php: 7.4
           - moodle-branch: MOODLE_403_STABLE
             php: 7.4
+          - moodle-branch: MOODLE_404_STABLE
+            php: 7.4
+          - moodle-branch: MOODLE_404_STABLE
+            php: 8.0
           - moodle-branch: MOODLE_311_STABLE
             php: 8.1
           - moodle-branch: MOODLE_400_STABLE
@@ -55,10 +67,18 @@ jobs:
             php: 8.2
           - moodle-branch: MOODLE_401_STABLE
             php: 8.2
+          - moodle-branch: MOODLE_311_STABLE
+            php: 8.3
+          - moodle-branch: MOODLE_400_STABLE
+            php: 8.3
+          - moodle-branch: MOODLE_401_STABLE
+            php: 8.3
+          - moodle-branch: MOODLE_402_STABLE
+            php: 8.3
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: plugin
 
@@ -81,8 +101,7 @@ jobs:
           echo "NVM_DIR=$HOME/.nvm" >> $GITHUB_ENV
 
       - name: Install moodle-plugin-ci
-        run: |
-          moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
+        run: moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
         env:
           DB: ${{ matrix.database }}
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
@@ -131,6 +150,7 @@ jobs:
         run: moodle-plugin-ci phpunit --fail-on-warning
 
       - name: Behat features
+        id: behat
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci behat --profile chrome
 
