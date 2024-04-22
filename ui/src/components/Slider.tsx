@@ -109,26 +109,31 @@ export const Slide = ({
 
 export const SlideHeader = ({
   children,
+  title,
   hasBack,
   onBack,
 }: {
   children?: React.ReactNode;
   hasBack?: boolean;
   onBack?: () => void;
+  title?: React.ReactNode;
 }) => {
   return (
-    <div className="xp-mb-2 xp-flex xp-flex-row xp-items-center xp-gap-4">
-      {hasBack ? (
-        <div className="shrink-0 xp-grow-0">
-          <CircleButton onClick={onBack} type="button" className="xp--mr-2">
-            <ChevronLeftIconSolid className="xp-h-6 xp-w-6" />
-            <span className="xp-sr-only">
-              <Str id="back" component="core" />
-            </span>
-          </CircleButton>
-        </div>
-      ) : null}
-      <div className="xp-flex-1">{children}</div>
+    <div className="xp-mb-2">
+      <div className="xp-flex xp-flex-row xp-items-center xp-gap-4">
+        {hasBack ? (
+          <div className="shrink-0 xp-grow-0">
+            <CircleButton onClick={onBack} type="button" className="xp--mr-2">
+              <ChevronLeftIconSolid className="xp-h-6 xp-w-6" />
+              <span className="xp-sr-only">
+                <Str id="back" component="core" />
+              </span>
+            </CircleButton>
+          </div>
+        ) : null}
+        <div className="xp-flex-1 xp-text-lg xp-font-bold">{title}</div>
+      </div>
+      {children}
     </div>
   );
 };
@@ -139,12 +144,14 @@ export const SlideHeaderWithFilter = ({
   onFilterChange,
   filterValue,
   filterPlaceholder,
+  title,
 }: {
   hasBack?: boolean;
   onBack?: () => void;
   onFilterChange?: (value: string) => void;
   filterValue?: string;
   filterPlaceholder?: string;
+  title?: React.ReactNode;
 }) => {
   const filterStr = useString("filterellipsis");
   const handleChange = useCallback(
@@ -155,14 +162,16 @@ export const SlideHeaderWithFilter = ({
   );
 
   return (
-    <SlideHeader hasBack onBack={onBack}>
-      <input
-        className="form-control xp-w-full"
-        type="text"
-        value={filterValue || ""}
-        placeholder={filterPlaceholder || filterStr}
-        onChange={handleChange}
-      />
+    <SlideHeader hasBack={hasBack} onBack={onBack} title={title}>
+      <div className="xp-mt-0.5">
+        <input
+          className="form-control xp-w-full"
+          type="text"
+          value={filterValue || ""}
+          placeholder={filterPlaceholder || filterStr}
+          onChange={handleChange}
+        />
+      </div>
     </SlideHeader>
   );
 };

@@ -16,6 +16,27 @@ export const useAnchorButtonProps = (onClick: () => void) => {
   };
 };
 
+/**
+ * Duplication check hook.
+ *
+ * Usage:
+ *
+ * const isActionPermitted = useDuplicatedActionPreventor();
+ * useEffect(() => {
+ *    if (!isActionPermitted()) return;
+ * })
+ */
+export const useDuplicatedActionPreventor = (msDelay = 100) => {
+  const ref = useRef<number>();
+  return useCallback(() => {
+    if (ref.current && ref.current > Date.now() - msDelay) {
+      return false;
+    }
+    ref.current = Date.now();
+    return true
+  }, []);
+}
+
 export const useModules = (modules: string[]) => {
   const modulesPromise = useRef<Promise<any>>();
   const modulesRef = useRef<Record<string, any>>();

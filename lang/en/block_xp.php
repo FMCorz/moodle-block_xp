@@ -25,6 +25,7 @@
 
 $string['actions'] = 'Actions';
 $string['activityname'] = 'Activity name';
+$string['activityname_help'] = 'The text that the activity name must contain or be equal to. This is not case sensitive.';
 $string['activityoresourceis'] = 'The activity or resource is {$a}';
 $string['addacondition'] = 'Add a condition';
 $string['addarule'] = 'Add a rule';

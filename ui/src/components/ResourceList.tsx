@@ -29,11 +29,14 @@ const ListEntryItem: React.FC<{
   const headingId = useUniqueId();
   const buttonListeners = useRoleButtonListeners(onSelect);
   const disabledOpacityClass = `${!isavailable ? "xp-opacity-60 group-focus:xp-opacity-100 group-hover:xp-opacity-100" : ""}`;
+
   return (
     <div className="xp-p-[0.2rem] xp-relative xp-group focus:xp-z-10 hover:xp-bg-gray-100">
       <div tabIndex={0} role="button" aria-describedby={headingId} className="xp-px-1.5 xp-py-0.5" {...buttonListeners}>
         <div id={headingId} className={`xp-flex`}>
-          <div className={classNames(disabledOpacityClass, "xp-text-xl xp-text-medium")}>{label}</div>
+          <div className={classNames(disabledOpacityClass, "xp-text-medium", description ? "xp-text-xl" : "xp-text-base")}>
+            {label}
+          </div>
           {!isavailable ? (
             <div className="xp-ml-2">
               <span className="badge badge-pill badge-warning">
@@ -53,7 +56,7 @@ const ListEntryItem: React.FC<{
 const ListEntryHeader = ({ label }: { label: string }) => {
   return (
     <div className="xp-px-[0.2rem] xp-bg-gray-200 xp-mt-2 first:xp-mt-0 xp-sticky xp-top-0 xp-z-10">
-      <div className="xp-px-1.5 xp-py-1 xp-text-sm xp-leading-tight xp-uppercase">{label}</div>
+      <div className="xp-px-1.5 xp-py-1 xp-text-sm xp-leading-tight xp-font-bold">{label}</div>
     </div>
   );
 };

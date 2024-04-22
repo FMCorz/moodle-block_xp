@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as ReactDOM from "react-dom";
-import { useModules, useString } from "../lib/hooks";
+import { useDuplicatedActionPreventor, useModules, useString } from "../lib/hooks";
 
 export const SaveCancelModal: React.FC<{
   onClose?: () => void;
@@ -14,6 +14,11 @@ export const SaveCancelModal: React.FC<{
 }> = ({ children, onClose, onSave, show, title, saveButtonText, defaultHeight, large, canSave = true }) => {
   const modalPromise = useRef<Promise<any>>();
   const modalRef = useRef<any>();
+  // In rare instances, we can get double save events. This can happen when we hit enter,
+  // and a new event listener is registered while Moodle is still broadcasting its events
+  // which is then called, and so we get two events. This wouldn't happen if the modal was
+  // not re-rendering, I think.
+  const isSavePermitted = useDuplicatedActionPreventor();
   const { getModule } = useModules(["core/modal_factory", "core/modal_events"]);
   const [ready, setReady] = useState(false);
 
@@ -87,6 +92,7 @@ export const SaveCancelModal: React.FC<{
     const root = modal.getRoot();
 
     const handleSave = (e: Event) => {
+      if (!isSavePermitted()) return;
       onSave && onSave(e);
     };
     const handleClose = () => {
@@ -110,9 +116,6 @@ export const SaveCancelModal: React.FC<{
     const attachResize = () => {
       window.addEventListener("resize", updateReactNodeHeight);
     };
-    const deattachResize = () => {
-      window.addEventListener("resize", updateReactNodeHeight);
-    };
 
     root.on(ModalEvents.save, handleSave);
     root.on(ModalEvents.hidden, handleClose);
@@ -121,7 +124,8 @@ export const SaveCancelModal: React.FC<{
     return () => {
       root.off(ModalEvents.save, handleSave);
       root.off(ModalEvents.hidden, handleClose);
-      root.off(ModalEvents.shown, deattachResize);
+      root.off(ModalEvents.shown, attachResize);
+      window.removeEventListener("resize", updateReactNodeHeight);
     };
   });
 
@@ -163,6 +167,7 @@ export const DeleteModal: React.FC<{
   const modalPromise = useRef<Promise<any>>();
   const modalRef = useRef<any>();
   const [ready, setReady] = useState(false);
+  const isDeletePermitted = useDuplicatedActionPreventor();
   const deleteStr = useString("delete", "core");
   const { getModule } = useModules(["core/modal_factory", "core/modal_events"]);
 
@@ -223,6 +228,7 @@ export const DeleteModal: React.FC<{
     const root = modal.getRoot();
 
     const handleSave = (e: Event) => {
+      if (!isDeletePermitted()) return;
       onDelete && onDelete(e);
     };
     const handleClose = () => {

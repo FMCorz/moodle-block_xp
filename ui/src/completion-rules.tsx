@@ -256,7 +256,7 @@ export const App = (props: AppProps) => {
         filters={currentMethodFilters}
         onClose={() => setIsAdding(false)}
         onSave={({ filter, config }) => {
-          addRuleMutation.mutateAsync({ method: currentRuleType, filter, config });
+          addRuleMutation.mutate({ method: currentRuleType, filter, config });
         }}
       />
       <DeleteModal
@@ -340,13 +340,12 @@ const CompletionRules = ({ rules, type, filters }: { rules?: Rule[]; type: RuleT
     addRule();
   };
 
-  console.log(filteredRules);
   if (!filteredRules?.length) {
     return <NoRulesZeroState onClick={handleAddClick} />;
   }
 
   return (
-    <div>
+    <div className="xp-space-y-4">
       {groupedRules.map(({ filter, rules }) => {
         const ruleFilter = filters.find((f) => f.name === filter);
         if (!ruleFilter) return null;
@@ -380,12 +379,10 @@ const RulesSection = ({
   description: React.ReactNode;
 }) => {
   return (
-    <div className="xp-bg-gray-50 xp-rounded xp-px-1 xp-py-0.5 my-2">
-      <div>
-        <div className="_xp-mt-2 xp-font-bold">{title}</div>
-        <div className="xp-mt-1 xp-mb-2 xp-text-sm xp-text-gray-500">{description}</div>
-        <div className="xp-mt-1 xp-space-y-2">{children}</div>
-      </div>
+    <div>
+      <h5 className="xp-font-bold xp-m-0 xp-mb-1 xp-text-base">{title}</h5>
+      <p className="xp-mb-2 xp-text-sm xp-text-gray-500 xp-m-0">{description}</p>
+      <div className="xp-divide-y xp-divide-gray-200">{children}</div>
     </div>
   );
 };
@@ -402,7 +399,7 @@ const Rule = ({
   onEdit: () => void;
 }) => {
   return (
-    <div className="xp-px-2 xp-py-2 xp-bg-gray-200 xp-rounded">
+    <div className="">
       <div className="xp-flex xp-gap-2">
         <div className="xp-shrink-0 xp-flex xp-items-center">
           <div className="xp-bg-blue-500 xp-min-w-[5ch] xp-text-center xp-text-white xp-rounded xp-px-2 xp-py-0.5 xp-font-bold">

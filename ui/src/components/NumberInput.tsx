@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useAnchorButtonProps, useNumericInputProps } from "../lib/hooks";
 import { classNames } from "../lib/utils";
 import Input from "./Input";
@@ -6,21 +6,35 @@ import Input from "./Input";
 export const NumInput: React.FC<
   Omit<React.HTMLProps<HTMLInputElement>, "onChange" | "value"> & {
     onChange: (n: number) => void;
+    selectOnFocus?: boolean;
     value: number;
   }
-> = ({ className, value, onChange, ...props }) => {
+> = ({ className, value, onChange, selectOnFocus, ...props }) => {
   const inputProps = useNumericInputProps(value, onChange);
-  return <Input type="text" {...inputProps} className={className} {...props} />;
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (!selectOnFocus) return;
+    e.currentTarget.select();
+  };
+
+  return <Input type="text" {...inputProps} className={className} onFocus={handleFocus} {...props} />;
 };
 
 export const PlainNumberInput: React.FC<
   Omit<React.HTMLProps<HTMLInputElement>, "onChange" | "value"> & {
     onChange: (n: number) => void;
+    selectOnFocus?: boolean;
     value: number;
   }
-> = ({ value, onChange, ...props }) => {
+> = ({ value, onChange, selectOnFocus, ...props }) => {
   const inputProps = useNumericInputProps(value, onChange);
-  return <input type="text" {...inputProps} {...props} />;
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (!selectOnFocus) return;
+    e.currentTarget.select();
+  };
+
+  return <input type="text" {...inputProps} onFocus={handleFocus} {...props} />;
 };
 
 export const NumberInputWithButtons: React.FC<{
@@ -30,7 +44,7 @@ export const NumberInputWithButtons: React.FC<{
   max?: number;
   step?: number;
   suffix?: string;
-  inputProps?: Omit<React.HTMLProps<HTMLInputElement>, "value" | "onChange">;
+  inputProps?: Omit<React.HTMLProps<HTMLInputElement>, "value" | "onChange"> & { selectOnFocus?: boolean };
 }> = ({ onChange, value, min, max, suffix, step = 1, inputProps }) => {
   const hasMin = typeof min !== "undefined";
   const hasMax = typeof max !== "undefined";

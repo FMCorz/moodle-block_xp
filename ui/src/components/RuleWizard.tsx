@@ -105,7 +105,15 @@ const CmResourceListSlide = ({
   const [filterTerm, setFilterTerm] = useState("");
   return (
     <Slide
-      header={<SlideHeaderWithFilter hasBack={hasBack} onBack={onBack} filterValue={filterTerm} onFilterChange={setFilterTerm} />}
+      header={
+        <SlideHeaderWithFilter
+          filterValue={filterTerm}
+          onFilterChange={setFilterTerm}
+          hasBack={hasBack}
+          onBack={onBack}
+          title={<Str id="rulefiltercm" />}
+        />
+      }
     >
       <CmResourceList
         options={cmListOptions}
@@ -158,10 +166,11 @@ const CmNameSlide = ({
   setConfig: (data: Record<string, any>) => void;
   onBack?: () => void;
 }) => {
-  const getStr = useStrings(["rule:eq", "rule:contains"]);
+  const defaultValue = 1;
+  const getStr = useStrings(["rule:eq", "rule:contains", "rulefiltercmname"]);
   return (
-    <Slide header={<SlideHeader hasBack onBack={onBack} />}>
-      <div className="">
+    <Slide header={<SlideHeader hasBack onBack={onBack} title={getStr("rulefiltercmname")} />}>
+      <div className="xp-mb-4">
         <label htmlFor="xp-rule-cmname-name" className="xp-m-0">
           <Str id="activityname" />
         </label>
@@ -169,19 +178,24 @@ const CmNameSlide = ({
           <Select
             value={config.filterint1}
             onChange={(e) => setConfig({ filterint1: parseInt(e.currentTarget.value, 10) || 0 })}
+            defaultValue={defaultValue.toString()}
             className="xp-w-auto"
           >
-            <option value="0">{getStr("rule:eq")}</option>
             <option value="1">{getStr("rule:contains")}</option>
+            <option value="0">{getStr("rule:eq")}</option>
           </Select>
           <Input
             id="xp-rule-cmname-name"
             value={config.filterchar1 || ""}
-            onChange={(e) => setConfig({ filterchar1: e.currentTarget.value, filterint1: config.filterint1 ?? 0 })}
+            onChange={(e) => setConfig({ filterchar1: e.currentTarget.value, filterint1: config.filterint1 ?? defaultValue })}
             maxLength={255}
           />
         </div>
+        <p className="xp-text-gray-500 xp-m-0 xp-mt-1">
+          <Str id="activityname_help" />
+        </p>
       </div>
+      <PointsToAwardInput config={config} setConfig={setConfig} />
     </Slide>
   );
 };
@@ -196,6 +210,7 @@ type FilterMethodStuff = {
     onContinue: () => void;
     courseId: number;
   }) => JSX.Element | null;
+  collectsPoints?: boolean;
   hasSlide: boolean;
   isConfigValid: (config: Record<string, any>) => boolean;
   isSlideRequiringSubmit: boolean;
@@ -232,16 +247,22 @@ const filterMethoStuff: Record<string, FilterMethodStuff> = {
   cmname: {
     getSlide: (props) => <CmNameSlide onBack={props.onBack} config={props.config} setConfig={props.setConfig} />,
     hasSlide: true,
-    isConfigValid: (config) => typeof config.filterchar1 === "string" && config.filterchar1.trim() !== "",
+    isConfigValid: (config) =>
+      [0, 1].includes(config?.filterint1) &&
+      typeof config.filterchar1 === "string" &&
+      config.filterchar1.trim() !== "" &&
+      typeof config?.points === "number" &&
+      !isNaN(config.points),
     isSlideRequiringSubmit: true,
+    collectsPoints: true,
   },
   section: {
     getSlide: (props) => (
-      <Slide header={<SlideHeader hasBack={props.hasBack} onBack={props.onBack} />}>
+      <Slide header={<SlideHeader hasBack={props.hasBack} onBack={props.onBack} title={<Str id="rulefiltersection" />} />}>
         <SectionResourceList
           courseId={props.courseId}
           onSelect={(num) => {
-            props.setConfig({ filterint1: num, filtercourseid: props.courseId });
+            props.setConfig({ filterint1: num });
             props.onContinue();
           }}
         />
@@ -274,7 +295,7 @@ type RuleWizardModalProps = {
 const defaultConfig: Record<string, any> = { points: 10 };
 
 export const RuleWizardModal = (props: RuleWizardModalProps) => {
-  const getStr = useStrings(["chooseacondition"]);
+  const getStr = useStrings(["addacondition"]);
   const getCoreStr = useStrings(["continue", "save"], "core");
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [config, setConfig] = useState<Record<string, any>>(defaultConfig);
@@ -318,7 +339,7 @@ export const RuleWizardModal = (props: RuleWizardModalProps) => {
   }, [props.show]);
 
   const methodStuff = selectedMethod ? filterMethoStuff[selectedMethod] ?? null : null;
-  const isLastStep = index === (methodStuff?.hasSlide ? 2 : 1);
+  const isLastStep = index === (methodStuff?.hasSlide && !methodStuff?.collectsPoints ? 2 : 1);
   const isStepContinue = !isLastStep;
   const isStepValid = methodStuff && index === 1 ? methodStuff?.isConfigValid(config) : true;
   const isStepRequiringButton = Boolean(methodStuff?.isSlideRequiringSubmit);
@@ -375,35 +396,57 @@ export const RuleWizardModal = (props: RuleWizardModalProps) => {
       onSave={handleSave}
       onClose={handleClose}
       saveButtonText={isStepContinue ? getCoreStr("continue") : getCoreStr("save")}
-      title={getStr("chooseacondition")}
+      title={getStr("addacondition")}
     >
       <Slider index={index}>
         <Slide>
           <PlainResourceList onSelect={(r) => handleSelected(r.name)} resources={sortedFilters} />
         </Slide>
         {selectedMethod && methodSlide ? methodSlide : null}
-        <Slide header={<SlideHeader hasBack onBack={handleBack} />}>
-          <div className="">
+        {selectedMethod && !methodStuff?.collectsPoints ? (
+          <Slide
+            header={
+              <SlideHeader
+                hasBack
+                onBack={handleBack}
+                title={methodStuff?.hasSlide ? <Str id="pointstoaward" /> : <Str id={`rulefilter${selectedMethod}`} />}
+              />
+            }
+          >
             <div className="">
-              <label htmlFor="xp-rule-pts" className="xp-m-0">
-                <Str id="pointstoaward" />
-              </label>
-              <div>
-                <NumberInputWithButtons
-                  value={config.points}
-                  onChange={(points) => handleAddToConfig({ points })}
-                  min={0}
-                  max={9999999}
-                  inputProps={{ id: "xp-rule-pts", className: "xp-w-24" }}
-                />
-              </div>
-              <p className="xp-text-gray-500 xp-m-0 xp-mt-1">
-                <Str id="pointstoaward_help" />
-              </p>
+              <PointsToAwardInput config={config} setConfig={setConfig} />
             </div>
-          </div>
-        </Slide>
+          </Slide>
+        ) : null}
       </Slider>
     </SaveCancelModal>
+  );
+};
+
+const PointsToAwardInput = ({
+  setConfig,
+  config,
+}: {
+  config: Record<string, any>;
+  setConfig: (data: Record<string, any>) => void;
+}) => {
+  return (
+    <div>
+      <label htmlFor="xp-rule-pointstoaward" className="xp-m-0">
+        <Str id="pointstoaward" />
+      </label>
+      <div>
+        <NumberInputWithButtons
+          value={config.points}
+          onChange={(points) => setConfig({ ...config, points })}
+          min={0}
+          max={9999999}
+          inputProps={{ id: "xp-rule-pointstoaward", className: "xp-w-24", selectOnFocus: true }}
+        />
+      </div>
+      <p className="xp-text-gray-500 xp-m-0 xp-mt-1">
+        <Str id="pointstoaward_help" />
+      </p>
+    </div>
   );
 };
