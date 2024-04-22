@@ -66,30 +66,25 @@ class config extends moodleform {
         $mform->addElement('selectyesno', 'enableinfos', get_string('enableinfos', 'block_xp'));
         $mform->addHelpButton('enableinfos', 'enableinfos', 'block_xp');
 
-        $randomtrymeid = html_writer::random_id();
-        $tryme = $mform->createElement('static', 'levelupnotifunit', '', html_writer::div(
-            html_writer::tag('a', get_string('tryme', 'block_xp'), [
-                'href' => '#',
-                'id' => $randomtrymeid,
-                'role' => 'button',
-                'class' => 'xp-text-xs',
-            ])
-        ));
-        $elements = array_filter([
-            $mform->createElement('selectyesno', 'enablelevelupnotif', ''),
-            $world ? $tryme : null
-        ]);
-        $mform->addGroup($elements, 'enablelevelupnotifgrp', get_string('enablelevelupnotif', 'block_xp'), null, false);
-        $mform->addHelpButton('enablelevelupnotifgrp', 'enablelevelupnotif', 'block_xp');
+        $levelupnotifelements = [$mform->createElement('selectyesno', 'enablelevelupnotif', '')];
         if ($world) {
+            $randomtrymeid = html_writer::random_id();
             $level1 = $world->get_levels_info()->get_level(1);
             $level2 = $world->get_levels_info()->get_level(2);
-            echo $renderer->json_script([
+            $trymedatascript = $renderer->json_script([
                 'courseid' => $world->get_courseid(),
                 'levelnum' => $level2->get_level(),
                 'levelbadge' => $renderer->level_badge($level2),
                 'prevlevelbadge' => $renderer->level_badge($level1),
             ], $randomtrymeid . 'data');
+            $levelupnotifelements[] = $mform->createElement('static', 'levelupnotifunit', '', html_writer::div(
+                html_writer::tag('a', get_string('tryme', 'block_xp'), [
+                    'href' => '#',
+                    'id' => $randomtrymeid,
+                    'role' => 'button',
+                    'class' => 'xp-text-xs',
+                ]) . $trymedatascript
+            ));
             $PAGE->requires->js_amd_inline(<<<EOT
                 require(['block_xp/popup-notification', 'block_xp/role-button'], (PopupModule, RoleButton) => {
                     RoleButton.registerClick('#$randomtrymeid', () => {
@@ -98,6 +93,8 @@ class config extends moodleform {
                 });
             EOT);
         }
+        $mform->addGroup($levelupnotifelements, 'enablelevelupnotifgrp', get_string('enablelevelupnotif', 'block_xp'), null, false);
+        $mform->addHelpButton('enablelevelupnotifgrp', 'enablelevelupnotif', 'block_xp');
 
         $mform->addElement('header', 'hdrladder', get_string('ladder', 'block_xp'));
 
