@@ -200,9 +200,9 @@ EOT;
 <div class="xp-grid sm:xp-grid-cols-2 xp-gap-4 [&_ul]:xp-pl-4 [&_li]:xp-mb-1">
     {$renderitemstart("trophy", "Greater motivation", "Make learners even more engaged and motivated!")}
         <ul>
-            <li>{$new} Insert customised <strong>congratulation messages</strong> when learners receive
+            <li>Insert customised <strong>congratulation messages</strong> when learners receive
                 the level up notification.</li>
-            <li>{$new} <strong>Award a Moodle badge</strong> when learners attain a particular level</li>
+            <li><strong>Award a Moodle badge</strong> when learners attain a particular level</li>
         </ul>
     {$renderitemend()}
     {$renderitemstart("noun/checklist", "Extended points strategy", "More control and methods to award points!")}
@@ -210,7 +210,7 @@ EOT;
             <li><strong>Drops</strong>: award points by placing code snippets anywhere</li>
             <li>Convert <strong>grades</strong> into points</li>
             <li>Reward <strong>activity</strong> and <strong>course completion</strong></li>
-            <li>{$new} Award point via web services <strong>API</strong></li>
+            <li>Award point via web services <strong>API</strong></li>
         </ul>
         <p>Plus convenient rules to:</p>
         <ul>

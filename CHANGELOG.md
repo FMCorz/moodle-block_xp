@@ -1,6 +1,33 @@
 Changelog
 =========
 
+v3.16.0
+-------
+
+New features
+
+- Admins can reset the levels of all courses to the default values
+- Admins can reset the appearance of the levels in all courses to the defaults
+- Massive invisible underground work to support future major improvements
+
+Quality of life
+
+- Renamed "For the whole site" to "Sitewide"
+- Level up notification popup can be previewed from the levels page
+- Dangerous actions are coloured accordingly
+
+Bug fixes
+
+- Mitigated rare issue with tooltips on some themes
+- Other minor fixes and improvements
+
+Technical changes
+
+- Compatibility with Moodle 4.4
+- Raised minimum required version to Moodle 3.11
+
+Read our [release blog post](https://www.levelup.plus/blog/xp-release-3-16/) to learn more.
+
 v3.15.2
 -------
 
