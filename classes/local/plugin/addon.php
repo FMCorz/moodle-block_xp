@@ -48,15 +48,6 @@ class addon {
     }
 
     /**
-     * Get the version difference.
-     *
-     * @return int
-     */
-    public function get_version_diff() {
-        return 0;
-    }
-
-    /**
      * Whether the plugin is activated.
      *
      * @return bool

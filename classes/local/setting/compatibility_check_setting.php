@@ -59,7 +59,22 @@ class compatibility_check_setting extends static_setting {
 
         $blockxp = $pluginman->get_plugin_info('block_xp');
         $localxp = $pluginman->get_plugin_info('local_xp');
+        $recentishlocalxp = 2023100800; // v1.15.0.
         $humanbranch = moodle_major_version() ?: 'v?';
+
+        if ($localxp && $localxp->versiondb < $recentishlocalxp) {
+            $messages[] = [
+                'title' => get_string('outofsyncexcessive', 'block_xp'),
+                'message' => get_string('outofsyncexcessiveinfo', 'block_xp'),
+                'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#out-of-sync',
+            ];
+        } else if ($addon->is_out_of_sync()) {
+            $messages[] = [
+                'title' => get_string('outofsync', 'block_xp'),
+                'message' => get_string('outofsyncinfo', 'block_xp'),
+                'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#out-of-sync',
+            ];
+        }
 
         if ($CFG->branch >= 39) {
             if (!empty($blockxp->pluginsupported) && ($CFG->branch < $blockxp->pluginsupported[0]
@@ -80,20 +95,6 @@ class compatibility_check_setting extends static_setting {
                     'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#potential-moodle-incompatibility',
                 ];
             }
-        }
-
-        if ($addon->get_version_diff() > 270) {
-            $messages[] = [
-                'title' => get_string('outofsyncexcessive', 'block_xp'),
-                'message' => get_string('outofsyncexcessiveinfo', 'block_xp'),
-                'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#out-of-sync',
-            ];
-        } else if ($addon->is_out_of_sync()) {
-            $messages[] = [
-                'title' => get_string('outofsync', 'block_xp'),
-                'message' => get_string('outofsyncinfo', 'block_xp'),
-                'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#out-of-sync',
-            ];
         }
 
         return di::get('renderer')->render_from_template('block_xp/admin-compatibility-check', [
