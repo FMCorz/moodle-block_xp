@@ -10,7 +10,6 @@ export const Tooltip: React.FC<{ children: React.ReactElement; content: string }
       return;
     }
 
-    ref.current.setAttribute("data-toggle", "popover");
     ref.current.setAttribute("data-container", "body");
     ref.current.setAttribute("title", content);
 
