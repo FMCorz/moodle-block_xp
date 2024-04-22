@@ -61,6 +61,16 @@ const stripTags = (html) => {
     tmp.innerHTML = html;
     return tmp.textContent || tmp.innerText || "";
 };
+const escapeCharMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+};
+const escapeHtml = (text) => {
+    return text.replace(/[&<>"']/g, function (m) { return escapeCharMap[m]; });
+};
 
 ;// CONCATENATED MODULE: ./ui/src/components/Dropdown.tsx
 
@@ -222,6 +232,26 @@ const hooks_useAnchorButtonProps = (onClick) => {
         ...listeners,
     };
 };
+/**
+ * Duplication check hook.
+ *
+ * Usage:
+ *
+ * const isActionPermitted = useDuplicatedActionPreventor();
+ * useEffect(() => {
+ *    if (!isActionPermitted()) return;
+ * })
+ */
+const useDuplicatedActionPreventor = (msDelay = 100) => {
+    const ref = (0,react.useRef)();
+    return (0,react.useCallback)(() => {
+        if (ref.current && ref.current > Date.now() - msDelay) {
+            return false;
+        }
+        ref.current = Date.now();
+        return true;
+    }, []);
+};
 const useModules = (modules) => {
     const modulesPromise = (0,react.useRef)();
     const modulesRef = (0,react.useRef)();
@@ -382,6 +412,11 @@ const hooks_useStrings = (ids, component = "block_xp") => {
 const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonText, defaultHeight, large, canSave = true }) => {
     const modalPromise = (0,react.useRef)();
     const modalRef = (0,react.useRef)();
+    // In rare instances, we can get double save events. This can happen when we hit enter,
+    // and a new event listener is registered while Moodle is still broadcasting its events
+    // which is then called, and so we get two events. This wouldn't happen if the modal was
+    // not re-rendering, I think.
+    const isSavePermitted = useDuplicatedActionPreventor();
     const { getModule } = useModules(["core/modal_factory", "core/modal_events"]);
     const [ready, setReady] = (0,react.useState)(false);
     const getSaveButton = (0,react.useCallback)(() => {
@@ -449,6 +484,8 @@ const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonTex
             return;
         const root = modal.getRoot();
         const handleSave = (e) => {
+            if (!isSavePermitted())
+                return;
             onSave && onSave(e);
         };
         const handleClose = () => {
@@ -469,16 +506,14 @@ const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonTex
         const attachResize = () => {
             window.addEventListener("resize", updateReactNodeHeight);
         };
-        const deattachResize = () => {
-            window.addEventListener("resize", updateReactNodeHeight);
-        };
         root.on(ModalEvents.save, handleSave);
         root.on(ModalEvents.hidden, handleClose);
         root.on(ModalEvents.shown, attachResize);
         return () => {
             root.off(ModalEvents.save, handleSave);
             root.off(ModalEvents.hidden, handleClose);
-            root.off(ModalEvents.shown, deattachResize);
+            root.off(ModalEvents.shown, attachResize);
+            window.removeEventListener("resize", updateReactNodeHeight);
         };
     });
     // Update visibility.
@@ -512,6 +547,7 @@ const DeleteModal = ({ children, onClose, onDelete, show, title }) => {
     const modalPromise = (0,react.useRef)();
     const modalRef = (0,react.useRef)();
     const [ready, setReady] = (0,react.useState)(false);
+    const isDeletePermitted = useDuplicatedActionPreventor();
     const deleteStr = hooks_useString("delete", "core");
     const { getModule } = useModules(["core/modal_factory", "core/modal_events"]);
     const getDeleteButton = (0,react.useCallback)(() => {
@@ -565,6 +601,8 @@ const DeleteModal = ({ children, onClose, onDelete, show, title }) => {
             return;
         const root = modal.getRoot();
         const handleSave = (e) => {
+            if (!isDeletePermitted())
+                return;
             onDelete && onDelete(e);
         };
         const handleClose = () => {
@@ -756,13 +794,23 @@ const Textarea = ({ className = '', ...props }) => {
 
 
 
-const NumInput = ({ className, value, onChange, ...props }) => {
+const NumInput = ({ className, value, onChange, selectOnFocus, ...props }) => {
     const inputProps = hooks_useNumericInputProps(value, onChange);
-    return react.createElement(components_Input, { type: "text", ...inputProps, className: className, ...props });
+    const handleFocus = (e) => {
+        if (!selectOnFocus)
+            return;
+        e.currentTarget.select();
+    };
+    return react.createElement(components_Input, { type: "text", ...inputProps, className: className, onFocus: handleFocus, ...props });
 };
-const PlainNumberInput = ({ value, onChange, ...props }) => {
+const PlainNumberInput = ({ value, onChange, selectOnFocus, ...props }) => {
     const inputProps = useNumericInputProps(value, onChange);
-    return React.createElement("input", { type: "text", ...inputProps, ...props });
+    const handleFocus = (e) => {
+        if (!selectOnFocus)
+            return;
+        e.currentTarget.select();
+    };
+    return React.createElement("input", { type: "text", ...inputProps, onFocus: handleFocus, ...props });
 };
 const NumberInputWithButtons = ({ onChange, value, min, max, suffix, step = 1, inputProps }) => {
     const hasMin = typeof min !== "undefined";
@@ -825,7 +873,7 @@ const ListEntryItem = ({ label, description, isavailable = true, onSelect }) => 
     return (react.createElement("div", { className: "xp-p-[0.2rem] xp-relative xp-group focus:xp-z-10 hover:xp-bg-gray-100" },
         react.createElement("div", { tabIndex: 0, role: "button", "aria-describedby": headingId, className: "xp-px-1.5 xp-py-0.5", ...buttonListeners },
             react.createElement("div", { id: headingId, className: `xp-flex` },
-                react.createElement("div", { className: utils_classNames(disabledOpacityClass, "xp-text-xl xp-text-medium") }, label),
+                react.createElement("div", { className: utils_classNames(disabledOpacityClass, "xp-text-medium", description ? "xp-text-xl" : "xp-text-base") }, label),
                 !isavailable ? (react.createElement("div", { className: "xp-ml-2" },
                     react.createElement("span", { className: "badge badge-pill badge-warning" },
                         react.createElement(components_Str, { id: "unavailable" })))) : null),
@@ -833,7 +881,7 @@ const ListEntryItem = ({ label, description, isavailable = true, onSelect }) => 
 };
 const ListEntryHeader = ({ label }) => {
     return (react.createElement("div", { className: "xp-px-[0.2rem] xp-bg-gray-200 xp-mt-2 first:xp-mt-0 xp-sticky xp-top-0 xp-z-10" },
-        react.createElement("div", { className: "xp-px-1.5 xp-py-1 xp-text-sm xp-leading-tight xp-uppercase" }, label)));
+        react.createElement("div", { className: "xp-px-1.5 xp-py-1 xp-text-sm xp-leading-tight xp-font-bold" }, label)));
 };
 const PlainResourceList = ({ resources, onSelect, emptyContent, }) => {
     if (!resources.length) {
@@ -944,22 +992,25 @@ const Slide = ({ children, header, footer, }) => {
         react.createElement("div", { className: "xp-flex xp-flex-col xp-grow xp-overflow-y-auto" }, children),
         footer));
 };
-const SlideHeader = ({ children, hasBack, onBack, }) => {
-    return (react.createElement("div", { className: "xp-mb-2 xp-flex xp-flex-row xp-items-center xp-gap-4" },
-        hasBack ? (react.createElement("div", { className: "shrink-0 xp-grow-0" },
-            react.createElement(CircleButton, { onClick: onBack, type: "button", className: "xp--mr-2" },
-                react.createElement(ChevronLeftIconSolid, { className: "xp-h-6 xp-w-6" }),
-                react.createElement("span", { className: "xp-sr-only" },
-                    react.createElement(components_Str, { id: "back", component: "core" }))))) : null,
-        react.createElement("div", { className: "xp-flex-1" }, children)));
+const SlideHeader = ({ children, title, hasBack, onBack, }) => {
+    return (react.createElement("div", { className: "xp-mb-2" },
+        react.createElement("div", { className: "xp-flex xp-flex-row xp-items-center xp-gap-4" },
+            hasBack ? (react.createElement("div", { className: "shrink-0 xp-grow-0" },
+                react.createElement(CircleButton, { onClick: onBack, type: "button", className: "xp--mr-2" },
+                    react.createElement(ChevronLeftIconSolid, { className: "xp-h-6 xp-w-6" }),
+                    react.createElement("span", { className: "xp-sr-only" },
+                        react.createElement(components_Str, { id: "back", component: "core" }))))) : null,
+            react.createElement("div", { className: "xp-flex-1 xp-text-lg xp-font-bold" }, title)),
+        children));
 };
-const SlideHeaderWithFilter = ({ hasBack, onBack, onFilterChange, filterValue, filterPlaceholder, }) => {
+const SlideHeaderWithFilter = ({ hasBack, onBack, onFilterChange, filterValue, filterPlaceholder, title, }) => {
     const filterStr = hooks_useString("filterellipsis");
     const handleChange = (0,react.useCallback)((e) => {
         onFilterChange && onFilterChange(e.currentTarget.value || "");
     }, [onFilterChange]);
-    return (react.createElement(SlideHeader, { hasBack: true, onBack: onBack },
-        react.createElement("input", { className: "form-control xp-w-full", type: "text", value: filterValue || "", placeholder: filterPlaceholder || filterStr, onChange: handleChange })));
+    return (react.createElement(SlideHeader, { hasBack: hasBack, onBack: onBack, title: title },
+        react.createElement("div", { className: "xp-mt-0.5" },
+            react.createElement("input", { className: "form-control xp-w-full", type: "text", value: filterValue || "", placeholder: filterPlaceholder || filterStr, onChange: handleChange }))));
 };
 
 ;// CONCATENATED MODULE: ./ui/src/components/RuleWizard.tsx
@@ -1014,7 +1065,7 @@ const CmResourceList = ({ courseId, filterTerm, onSelect, resetFilterTerm, optio
 };
 const CmResourceListSlide = ({ courseId, onSelect, hasBack, onBack, cmListOptions, }) => {
     const [filterTerm, setFilterTerm] = (0,react.useState)("");
-    return (react.createElement(Slide, { header: react.createElement(SlideHeaderWithFilter, { hasBack: hasBack, onBack: onBack, filterValue: filterTerm, onFilterChange: setFilterTerm }) },
+    return (react.createElement(Slide, { header: react.createElement(SlideHeaderWithFilter, { filterValue: filterTerm, onFilterChange: setFilterTerm, hasBack: hasBack, onBack: onBack, title: react.createElement(components_Str, { id: "rulefiltercm" }) }) },
         react.createElement(CmResourceList, { options: cmListOptions, courseId: courseId, onSelect: onSelect, filterTerm: filterTerm, resetFilterTerm: () => setFilterTerm("") })));
 };
 const SectionResourceList = ({ courseId, onSelect, options = {} }) => {
@@ -1032,16 +1083,20 @@ const SectionResourceList = ({ courseId, onSelect, options = {} }) => {
     return (react.createElement(PlainResourceList, { resources: resources, onSelect: (r) => onSelect(r.name), emptyContent: react.createElement(EmptyResult, { message: react.createElement(components_Str, { id: "nothingmatchesfilter" }) }) }));
 };
 const CmNameSlide = ({ onBack, config, setConfig, }) => {
-    const getStr = hooks_useStrings(["rule:eq", "rule:contains"]);
-    return (react.createElement(Slide, { header: react.createElement(SlideHeader, { hasBack: true, onBack: onBack }) },
-        react.createElement("div", { className: "" },
+    const defaultValue = 1;
+    const getStr = hooks_useStrings(["rule:eq", "rule:contains", "rulefiltercmname"]);
+    return (react.createElement(Slide, { header: react.createElement(SlideHeader, { hasBack: true, onBack: onBack, title: getStr("rulefiltercmname") }) },
+        react.createElement("div", { className: "xp-mb-4" },
             react.createElement("label", { htmlFor: "xp-rule-cmname-name", className: "xp-m-0" },
                 react.createElement(components_Str, { id: "activityname" })),
             react.createElement("div", { className: "xp-flex xp-gap-2" },
-                react.createElement(Select, { value: config.filterint1, onChange: (e) => setConfig({ filterint1: parseInt(e.currentTarget.value, 10) || 0 }), className: "xp-w-auto" },
-                    react.createElement("option", { value: "0" }, getStr("rule:eq")),
-                    react.createElement("option", { value: "1" }, getStr("rule:contains"))),
-                react.createElement(components_Input, { id: "xp-rule-cmname-name", value: config.filterchar1 || "", onChange: (e) => setConfig({ filterchar1: e.currentTarget.value, filterint1: config.filterint1 ?? 0 }), maxLength: 255 })))));
+                react.createElement(Select, { value: config.filterint1, onChange: (e) => setConfig({ filterint1: parseInt(e.currentTarget.value, 10) || 0 }), defaultValue: defaultValue.toString(), className: "xp-w-auto" },
+                    react.createElement("option", { value: "1" }, getStr("rule:contains")),
+                    react.createElement("option", { value: "0" }, getStr("rule:eq"))),
+                react.createElement(components_Input, { id: "xp-rule-cmname-name", value: config.filterchar1 || "", onChange: (e) => setConfig({ filterchar1: e.currentTarget.value, filterint1: config.filterint1 ?? defaultValue }), maxLength: 255 })),
+            react.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" },
+                react.createElement(components_Str, { id: "activityname_help" }))),
+        react.createElement(PointsToAwardInput, { config: config, setConfig: setConfig })));
 };
 const anyFilterMethodStuff = {
     getSlide: () => null,
@@ -1065,13 +1120,18 @@ const filterMethoStuff = {
     cmname: {
         getSlide: (props) => react.createElement(CmNameSlide, { onBack: props.onBack, config: props.config, setConfig: props.setConfig }),
         hasSlide: true,
-        isConfigValid: (config) => typeof config.filterchar1 === "string" && config.filterchar1.trim() !== "",
+        isConfigValid: (config) => [0, 1].includes(config?.filterint1) &&
+            typeof config.filterchar1 === "string" &&
+            config.filterchar1.trim() !== "" &&
+            typeof config?.points === "number" &&
+            !isNaN(config.points),
         isSlideRequiringSubmit: true,
+        collectsPoints: true,
     },
     section: {
-        getSlide: (props) => (react.createElement(Slide, { header: react.createElement(SlideHeader, { hasBack: props.hasBack, onBack: props.onBack }) },
+        getSlide: (props) => (react.createElement(Slide, { header: react.createElement(SlideHeader, { hasBack: props.hasBack, onBack: props.onBack, title: react.createElement(components_Str, { id: "rulefiltersection" }) }) },
             react.createElement(SectionResourceList, { courseId: props.courseId, onSelect: (num) => {
-                    props.setConfig({ filterint1: num, filtercourseid: props.courseId });
+                    props.setConfig({ filterint1: num });
                     props.onContinue();
                 } }))),
         hasSlide: true,
@@ -1086,7 +1146,7 @@ const filterMethoStuff = {
 };
 const defaultConfig = { points: 10 };
 const RuleWizardModal = (props) => {
-    const getStr = hooks_useStrings(["chooseacondition"]);
+    const getStr = hooks_useStrings(["addacondition"]);
     const getCoreStr = hooks_useStrings(["continue", "save"], "core");
     const [selectedMethod, setSelectedMethod] = (0,react.useState)(null);
     const [config, setConfig] = (0,react.useState)(defaultConfig);
@@ -1123,7 +1183,7 @@ const RuleWizardModal = (props) => {
         }
     }, [props.show]);
     const methodStuff = selectedMethod ? filterMethoStuff[selectedMethod] ?? null : null;
-    const isLastStep = index === (methodStuff?.hasSlide ? 2 : 1);
+    const isLastStep = index === (methodStuff?.hasSlide && !methodStuff?.collectsPoints ? 2 : 1);
     const isStepContinue = !isLastStep;
     const isStepValid = methodStuff && index === 1 ? methodStuff?.isConfigValid(config) : true;
     const isStepRequiringButton = Boolean(methodStuff?.isSlideRequiringSubmit);
@@ -1169,20 +1229,23 @@ const RuleWizardModal = (props) => {
             return wb - wa; // Descending order.
         });
     }, [props.filters]);
-    return (react.createElement(SaveCancelModal, { show: props.show, large: true, defaultHeight: 500, canSave: canClickSaveButton, onSave: handleSave, onClose: handleClose, saveButtonText: isStepContinue ? getCoreStr("continue") : getCoreStr("save"), title: getStr("chooseacondition") },
+    return (react.createElement(SaveCancelModal, { show: props.show, large: true, defaultHeight: 500, canSave: canClickSaveButton, onSave: handleSave, onClose: handleClose, saveButtonText: isStepContinue ? getCoreStr("continue") : getCoreStr("save"), title: getStr("addacondition") },
         react.createElement(Slider, { index: index },
             react.createElement(Slide, null,
                 react.createElement(PlainResourceList, { onSelect: (r) => handleSelected(r.name), resources: sortedFilters })),
             selectedMethod && methodSlide ? methodSlide : null,
-            react.createElement(Slide, { header: react.createElement(SlideHeader, { hasBack: true, onBack: handleBack }) },
+            selectedMethod && !methodStuff?.collectsPoints ? (react.createElement(Slide, { header: react.createElement(SlideHeader, { hasBack: true, onBack: handleBack, title: methodStuff?.hasSlide ? react.createElement(components_Str, { id: "pointstoaward" }) : react.createElement(components_Str, { id: `rulefilter${selectedMethod}` }) }) },
                 react.createElement("div", { className: "" },
-                    react.createElement("div", { className: "" },
-                        react.createElement("label", { htmlFor: "xp-rule-pts", className: "xp-m-0" },
-                            react.createElement(components_Str, { id: "pointstoaward" })),
-                        react.createElement("div", null,
-                            react.createElement(NumberInputWithButtons, { value: config.points, onChange: (points) => handleAddToConfig({ points }), min: 0, max: 9999999, inputProps: { id: "xp-rule-pts", className: "xp-w-24" } })),
-                        react.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" },
-                            react.createElement(components_Str, { id: "pointstoaward_help" }))))))));
+                    react.createElement(PointsToAwardInput, { config: config, setConfig: setConfig })))) : null)));
+};
+const PointsToAwardInput = ({ setConfig, config, }) => {
+    return (react.createElement("div", null,
+        react.createElement("label", { htmlFor: "xp-rule-pointstoaward", className: "xp-m-0" },
+            react.createElement(components_Str, { id: "pointstoaward" })),
+        react.createElement("div", null,
+            react.createElement(NumberInputWithButtons, { value: config.points, onChange: (points) => setConfig({ ...config, points }), min: 0, max: 9999999, inputProps: { id: "xp-rule-pointstoaward", className: "xp-w-24", selectOnFocus: true } })),
+        react.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" },
+            react.createElement(components_Str, { id: "pointstoaward_help" }))));
 };
 
 // EXTERNAL MODULE: ./node_modules/react-query/es/core/queryClient.js + 4 modules
@@ -1373,7 +1436,7 @@ const App = (props) => {
                     react.createElement(tabs/* Tab */.o.Panel, null, "course_completion" in ruleTypesByName ? (react.createElement(CompletionRules, { rules: groupedRules.course_completion, type: ruleTypesByName["course_completion"], filters: props.rulefilters })) : (react.createElement(NotificationError, null,
                         react.createElement(components_Str, { id: "unknowntype", a: "course_completion" }))))))),
         react.createElement(RuleWizardModal, { show: isAdding, courseid: currentCourseId, contextlevel: props.world.contextlevel, method: ruleTypesByName[currentRuleType], filters: currentMethodFilters, onClose: () => setIsAdding(false), onSave: ({ filter, config }) => {
-                addRuleMutation.mutateAsync({ method: currentRuleType, filter, config });
+                addRuleMutation.mutate({ method: currentRuleType, filter, config });
             } }),
         react.createElement(DeleteModal, { show: isDeleting !== null, onClose: () => setIsDeleting(null), onDelete: () => {
                 if (!isDeleting)
@@ -1425,11 +1488,10 @@ const CompletionRules = ({ rules, type, filters }) => {
     const handleAddClick = () => {
         addRule();
     };
-    console.log(filteredRules);
     if (!filteredRules?.length) {
         return react.createElement(NoRulesZeroState, { onClick: handleAddClick });
     }
-    return (react.createElement("div", null, groupedRules.map(({ filter, rules }) => {
+    return (react.createElement("div", { className: "xp-space-y-4" }, groupedRules.map(({ filter, rules }) => {
         const ruleFilter = filters.find((f) => f.name === filter);
         if (!ruleFilter)
             return null;
@@ -1439,17 +1501,16 @@ const CompletionRules = ({ rules, type, filters }) => {
     })));
 };
 const RulesSection = ({ children, title, description, }) => {
-    return (react.createElement("div", { className: "xp-bg-gray-50 xp-rounded xp-px-1 xp-py-0.5 my-2" },
-        react.createElement("div", null,
-            react.createElement("div", { className: "_xp-mt-2 xp-font-bold" }, title),
-            react.createElement("div", { className: "xp-mt-1 xp-mb-2 xp-text-sm xp-text-gray-500" }, description),
-            react.createElement("div", { className: "xp-mt-1 xp-space-y-2" }, children))));
+    return (react.createElement("div", null,
+        react.createElement("h5", { className: "xp-font-bold xp-m-0 xp-mb-1 xp-text-base" }, title),
+        react.createElement("p", { className: "xp-mb-2 xp-text-sm xp-text-gray-500 xp-m-0" }, description),
+        react.createElement("div", { className: "[&>div]:xp-border-0 [&>div]:xp-border-b [&>div]:xp-border-solid [&>div]:xp-border-gray-200" }, children)));
 };
 const Rule = ({ points, label, onDelete, onEdit, }) => {
-    return (react.createElement("div", { className: "xp-px-2 xp-py-2 xp-bg-gray-200 xp-rounded" },
+    return (react.createElement("div", { className: "" },
         react.createElement("div", { className: "xp-flex xp-gap-2" },
             react.createElement("div", { className: "xp-shrink-0 xp-flex xp-items-center" },
-                react.createElement("div", { className: "xp-bg-blue-500 xp-min-w-[5ch] xp-text-center xp-text-white xp-rounded xp-px-2 xp-py-0.5 xp-font-bold" }, points !== null ? `+${points}` : "-")),
+                react.createElement("div", { className: utils_classNames("xp-min-w-[86px] xp-text-center xp-rounded xp-px-2 xp-py-0.5 xp-font-bold xp-tracking-wide", !points ? "xp-bg-gray-200" : "xp-bg-blue-100") }, points !== null ? `${points != 0 ? "+" : ""}${points}` : "-")),
             react.createElement("div", { className: "xp-grow xp-flex xp-items-center" },
                 react.createElement("div", { className: "xp-grow" }, label)),
             react.createElement("div", { className: "xp-shrink-0" },

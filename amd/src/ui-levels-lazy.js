@@ -75,6 +75,16 @@ const stripTags = (html) => {
     tmp.innerHTML = html;
     return tmp.textContent || tmp.innerText || "";
 };
+const escapeCharMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+};
+const escapeHtml = (text) => {
+    return text.replace(/[&<>"']/g, function (m) { return escapeCharMap[m]; });
+};
 
 ;// CONCATENATED MODULE: ./ui/src/lib/moodle.ts
 
@@ -192,6 +202,26 @@ const useAnchorButtonProps = (onClick) => {
         role: "button",
         ...listeners,
     };
+};
+/**
+ * Duplication check hook.
+ *
+ * Usage:
+ *
+ * const isActionPermitted = useDuplicatedActionPreventor();
+ * useEffect(() => {
+ *    if (!isActionPermitted()) return;
+ * })
+ */
+const hooks_useDuplicatedActionPreventor = (msDelay = 100) => {
+    const ref = (0,react.useRef)();
+    return (0,react.useCallback)(() => {
+        if (ref.current && ref.current > Date.now() - msDelay) {
+            return false;
+        }
+        ref.current = Date.now();
+        return true;
+    }, []);
 };
 const hooks_useModules = (modules) => {
     const modulesPromise = (0,react.useRef)();
@@ -371,6 +401,11 @@ const AddonRequired = () => {
 const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonText, defaultHeight, large, canSave = true }) => {
     const modalPromise = (0,react.useRef)();
     const modalRef = (0,react.useRef)();
+    // In rare instances, we can get double save events. This can happen when we hit enter,
+    // and a new event listener is registered while Moodle is still broadcasting its events
+    // which is then called, and so we get two events. This wouldn't happen if the modal was
+    // not re-rendering, I think.
+    const isSavePermitted = hooks_useDuplicatedActionPreventor();
     const { getModule } = hooks_useModules(["core/modal_factory", "core/modal_events"]);
     const [ready, setReady] = (0,react.useState)(false);
     const getSaveButton = (0,react.useCallback)(() => {
@@ -438,6 +473,8 @@ const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonTex
             return;
         const root = modal.getRoot();
         const handleSave = (e) => {
+            if (!isSavePermitted())
+                return;
             onSave && onSave(e);
         };
         const handleClose = () => {
@@ -458,16 +495,14 @@ const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonTex
         const attachResize = () => {
             window.addEventListener("resize", updateReactNodeHeight);
         };
-        const deattachResize = () => {
-            window.addEventListener("resize", updateReactNodeHeight);
-        };
         root.on(ModalEvents.save, handleSave);
         root.on(ModalEvents.hidden, handleClose);
         root.on(ModalEvents.shown, attachResize);
         return () => {
             root.off(ModalEvents.save, handleSave);
             root.off(ModalEvents.hidden, handleClose);
-            root.off(ModalEvents.shown, deattachResize);
+            root.off(ModalEvents.shown, attachResize);
+            window.removeEventListener("resize", updateReactNodeHeight);
         };
     });
     // Update visibility.
@@ -501,6 +536,7 @@ const DeleteModal = ({ children, onClose, onDelete, show, title }) => {
     const modalPromise = useRef();
     const modalRef = useRef();
     const [ready, setReady] = useState(false);
+    const isDeletePermitted = useDuplicatedActionPreventor();
     const deleteStr = useString("delete", "core");
     const { getModule } = useModules(["core/modal_factory", "core/modal_events"]);
     const getDeleteButton = useCallback(() => {
@@ -554,6 +590,8 @@ const DeleteModal = ({ children, onClose, onDelete, show, title }) => {
             return;
         const root = modal.getRoot();
         const handleSave = (e) => {
+            if (!isDeletePermitted())
+                return;
             onDelete && onDelete(e);
         };
         const handleClose = () => {
@@ -688,13 +726,23 @@ const Textarea = ({ className = '', ...props }) => {
 
 
 
-const NumInput = ({ className, value, onChange, ...props }) => {
+const NumInput = ({ className, value, onChange, selectOnFocus, ...props }) => {
     const inputProps = hooks_useNumericInputProps(value, onChange);
-    return react.createElement(components_Input, { type: "text", ...inputProps, className: className, ...props });
+    const handleFocus = (e) => {
+        if (!selectOnFocus)
+            return;
+        e.currentTarget.select();
+    };
+    return react.createElement(components_Input, { type: "text", ...inputProps, className: className, onFocus: handleFocus, ...props });
 };
-const PlainNumberInput = ({ value, onChange, ...props }) => {
+const PlainNumberInput = ({ value, onChange, selectOnFocus, ...props }) => {
     const inputProps = useNumericInputProps(value, onChange);
-    return React.createElement("input", { type: "text", ...inputProps, ...props });
+    const handleFocus = (e) => {
+        if (!selectOnFocus)
+            return;
+        e.currentTarget.select();
+    };
+    return React.createElement("input", { type: "text", ...inputProps, onFocus: handleFocus, ...props });
 };
 const NumberInputWithButtons = ({ onChange, value, min, max, suffix, step = 1, inputProps }) => {
     const hasMin = typeof min !== "undefined";
@@ -966,6 +1014,24 @@ const ChevronLeftIconSolid = ({ className }) => (React.createElement("svg", { xm
 ;// CONCATENATED MODULE: ./ui/src/components/Level.tsx
 
 
+
+
+const getLevelHtml = (level, small, medium) => {
+    const label = getString("levelx", "block_xp", level.level);
+    const classes = `block_xp-level level-${level.level} ${small ? "small" : medium ? "medium" : ""}`;
+    if (level.badgeurl) {
+        return `
+      <div class="${classes + " level-badge"}" aria-label="${escapeHtml(label)}">
+        <img src="${escapeHtml(level.badgeurl)}" alt="${escapeHtml(label)}" />
+      </div>
+    `;
+    }
+    return `
+    <div class="${classes}" aria-label="${escapeHtml(label)}">
+      ${level.level}
+    </div>
+  `;
+};
 const Level = (0,react.forwardRef)(({ level, small, medium }, ref) => {
     const label = hooks_useString("levelx", "block_xp", level.level);
     const classes = "block_xp-level level-" + level.level + (small ? " small" : medium ? " medium" : "");
@@ -987,7 +1053,6 @@ const Tooltip = ({ children, content }) => {
         if (!$ || !ref.current || !$(ref.current).tooltip) {
             return;
         }
-        ref.current.setAttribute("data-toggle", "popover");
         ref.current.setAttribute("data-container", "body");
         ref.current.setAttribute("title", content);
         $(ref.current).tooltip("enable");
@@ -1271,13 +1336,24 @@ const OptionField = ({ label, children, note, xpPlusRequired, }) => {
             react.createElement("div", { className: "xp-mt-1" }, children)),
         note ? react.createElement("div", { className: "xp-text-gray-500 xp-mt-1" }, note) : null));
 };
+const showLevelUpNotificationPreview = async (level, prevLevel) => {
+    const PopupModule = await getModuleAsync("block_xp/popup-notification");
+    PopupModule.show({
+        courseid: 0,
+        levelnum: level.level,
+        levelname: level.name,
+        levelbadge: getLevelHtml(level),
+        prevlevelbadge: getLevelHtml(prevLevel),
+        message: level.popupmessage,
+    });
+};
 const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badges = [] }) => {
     const hasXpPlus = useAddonActivated();
     const [state, dispatch] = (0,react.useReducer)(reducer, { levelsInfo }, getInitialState);
     const levels = state.levels.slice(0, state.nblevels);
     const [expanded, setExpanded] = react.useState([]);
     const [bulkEdit, setBulkEdit] = react.useState(false);
-    const getStr = useStrings(optionsStatesStringIds.concat(["levelssaved", "unknownbadgea", "levelx"]));
+    const getStr = useStrings(optionsStatesStringIds.concat(["levelssaved", "unknownbadgea", "levelx", "previewpopupnotification"]));
     const getBadgeStr = useStrings(["coursebadges", "sitebadges"], "core_badges");
     const getCoreStr = useStrings(["other", "none"], "core");
     useUnloadCheck(state.pendingSave);
@@ -1434,8 +1510,17 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
                                     react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8.25 4.5l7.5 7.5-7.5 7.5" }))))),
                     react.createElement(Expandable, { expanded: isExpanded, id: `xp-level-${level.level}-options` },
                         react.createElement("div", { className: utils_classNames("sm:xp-ml-[100px] sm:xp-pl-8 xp-space-y-4") },
-                            react.createElement(OptionField, { label: react.createElement(components_Str, { id: "name" }) },
-                                react.createElement(components_Input, { className: "xp-min-w-48 x-w-full sm:xp-w-1/2 xp-max-w-full", onBlur: (e) => handleLevelNameChange(level, e.target.value), defaultValue: level.name || "", maxLength: 40, type: "text" })),
+                            react.createElement("div", { className: "xp-flex xp-items-end xp-gap-4" },
+                                react.createElement("div", { className: "xp-flex-1" },
+                                    react.createElement(OptionField, { label: react.createElement(components_Str, { id: "name" }) },
+                                        react.createElement(components_Input, { className: "xp-min-w-48 x-w-full sm:xp-w-2/3 xp-max-w-full", onBlur: (e) => handleLevelNameChange(level, e.target.value), defaultValue: level.name || "", maxLength: 40, type: "text" }))),
+                                prevLevel ? (react.createElement("div", { className: "xp-mb-1.5 xp-h-6 xp-w-6" },
+                                    react.createElement(Tooltip, { content: getStr("previewpopupnotification") },
+                                        react.createElement("div", null,
+                                            react.createElement(AnchorButton, { onClick: () => showLevelUpNotificationPreview(level, prevLevel) },
+                                                react.createElement("span", { className: "xp-sr-only" }, getStr("previewpopupnotification")),
+                                                react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: "xp-w-6 xp-h-6" },
+                                                    react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75-1.5.75a3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0L3 16.5m15-3.379a48.474 48.474 0 0 0-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 0 1 3 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 0 1 6 13.12M12.265 3.11a.375.375 0 1 1-.53 0L12 2.845l.265.265Zm-3 0a.375.375 0 1 1-.53 0L9 2.845l.265.265Zm6 0a.375.375 0 1 1-.53 0L15 2.845l.265.265Z" }))))))) : null),
                             react.createElement(OptionField, { label: react.createElement(components_Str, { id: "description" }), note: react.createElement(components_Str, { id: "leveldescriptiondesc" }) },
                                 react.createElement(Textarea, { className: "xp-w-full", onBlur: (e) => handleLevelDescChange(level, e.target.value), defaultValue: level.description || "", maxLength: 280, rows: 2 })),
                             react.createElement(IfAddonActivatedOrPromoEnabled, null, level.level > 1 ? (react.createElement(react.Fragment, null,
