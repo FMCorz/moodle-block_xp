@@ -382,7 +382,7 @@ const RulesSection = ({
     <div>
       <h5 className="xp-font-bold xp-m-0 xp-mb-1 xp-text-base">{title}</h5>
       <p className="xp-mb-2 xp-text-sm xp-text-gray-500 xp-m-0">{description}</p>
-      <div className="xp-divide-y xp-divide-gray-200">{children}</div>
+      <div className="[&>div]:xp-border-0 [&>div]:xp-border-b [&>div]:xp-border-solid [&>div]:xp-border-gray-200">{children}</div>
     </div>
   );
 };
@@ -402,8 +402,13 @@ const Rule = ({
     <div className="">
       <div className="xp-flex xp-gap-2">
         <div className="xp-shrink-0 xp-flex xp-items-center">
-          <div className="xp-bg-blue-500 xp-min-w-[5ch] xp-text-center xp-text-white xp-rounded xp-px-2 xp-py-0.5 xp-font-bold">
-            {points !== null ? `+${points}` : "-"}
+          <div
+            className={classNames(
+              "xp-min-w-[86px] xp-text-center xp-rounded xp-px-2 xp-py-0.5 xp-font-bold xp-tracking-wide",
+              !points ? "xp-bg-gray-200" : "xp-bg-blue-100"
+            )}
+          >
+            {points !== null ? `${points != 0 ? "+" : ""}${points}` : "-"}
           </div>
         </div>
         <div className="xp-grow xp-flex xp-items-center">
