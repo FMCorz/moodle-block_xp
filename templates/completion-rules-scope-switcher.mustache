@@ -27,13 +27,13 @@
     <div class="xp-flex xp-flex-wrap xp-gap-x-2 xp-gap-y-1">
         <div class="xp-grow">
             <h4 class="xp-m-0 xp-leading-none">
-                <div class="xp-text-2xs xp-font-normal xp-uppercase">{{#str}} rulesscope, block_xp {{/str}}</div>
-                <div>{{ scopename }}{{#scopeurl}}<a href="{{.}}" target="_blank" class="xp-inline-block xp-ml-2 xp-text-base xp-text-inherit"
+                <span class="xp-block xp-text-2xs xp-font-normal xp-uppercase">{{#str}} rulesscope, block_xp {{/str}}</span>
+                <span class="xp-block">{{ scopename }}{{#scopeurl}}<a href="{{.}}" target="_blank" class="xp-inline-block xp-ml-2 xp-text-base xp-text-inherit"
                             title="{{#str}} go, core {{/str}}">
                         <span class="sr-only">{{#str}} go, core {{/str}}</span>
                         <i class="fa fa-external-link" aria-hidden="true"></i>
                     </a>{{/scopeurl}}
-                </div>
+                </span>
             </h4>
         </div>
         <div class="xp-flex xp-gap-2 xp-items-end">
@@ -55,11 +55,11 @@
     </div>
 </div>
 {{#js}}
-require(['block_xp/course-selector'], (CourseSelector) => {
+require(['block_xp/course-selector'], function(CourseSelector) {
     const trigger = document.getElementById('block_xp-course-selector-{{uniqid}}');
     const courseUrlTemplate = "{{ courseurltemplate }}";
     trigger.addEventListener('click', () => {
-        CourseSelector.openCourseSelector((course) => {
+        CourseSelector.openCourseSelector(function(course) {
             window.location.href = courseUrlTemplate.replace('CONTEXTID', course.contextid);
         });
     })

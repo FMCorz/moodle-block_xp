@@ -75,6 +75,8 @@ jobs:
             php: 8.3
           - moodle-branch: MOODLE_402_STABLE
             php: 8.3
+          - moodle-branch: MOODLE_403_STABLE
+            php: 8.3
 
     steps:
       - name: Check out repository code
