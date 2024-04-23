@@ -48,8 +48,6 @@ class default_course_world_factory implements course_world_factory {
     protected $configoverrides;
     /** @var moodle_database The DB. */
     protected $db;
-    /** @var bool For the whole site? */
-    protected $forwholesite = false;
     /** @var badge_url_resolver_course_world_factory The badge URL resolver factory. */
     protected $urlresolverfactory;
     /** @var course_world[] World cache. */
@@ -75,9 +73,6 @@ class default_course_world_factory implements course_world_factory {
         $this->db = $db;
         $this->urlresolverfactory = $urlresolverfactory;
         $this->levelsinfofactory = $levelsinfofactory;
-        if ($adminconfig->get('context') == CONTEXT_SYSTEM) {
-            $this->forwholesite = true;
-        }
 
         // The overrides for a course config are based on the admin settings, for those admin settings that have
         // had their locked status set to true. The whole is immutable to prevent writes on the admin settings.
@@ -95,13 +90,13 @@ class default_course_world_factory implements course_world_factory {
     public function get_world($courseid) {
 
         // When the block was set up for the whole site we attach it to the site course.
-        if ($this->forwholesite) {
+        $sitewide = $this->adminconfig->get('context') == CONTEXT_SYSTEM;
+        if ($sitewide) {
             $courseid = SITEID;
         }
 
         $courseid = intval($courseid);
         if (!isset($this->worlds[$courseid])) {
-
             $courseconfig = new course_world_config($this->adminconfig, $this->db, $courseid);
             $config = new config_stack([$this->configoverrides, $courseconfig]);
 
