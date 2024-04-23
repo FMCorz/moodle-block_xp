@@ -73,10 +73,7 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
     /** @var array The metadata keys. */
     protected $metadatakeys = [];
 
-    /**
-     * @var bool Used algo?
-     * @deprecated Since Level Up XP 3.15 without replacement.
-     */
+    /** @var bool Used algo? Deprecated since Level Up XP 3.15 without replacement. */
     protected $usealgo = false;
 
     /**

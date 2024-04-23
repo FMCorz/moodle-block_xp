@@ -26,6 +26,7 @@
 namespace block_xp;
 
 use block_xp\tests\base_testcase;
+use Generator;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -46,7 +47,7 @@ final class php_test extends base_testcase {
      *
      * @return array
      */
-    public static function php_files_provider() {
+    public static function php_files_provider(): Generator {
         global $CFG;
 
         $xproot = $CFG->dirroot . '/blocks/xp';
@@ -80,7 +81,7 @@ final class php_test extends base_testcase {
      * @dataProvider php_files_provider
      * @covers \block_xp\di
      */
-    public function test_file_inclusion($relpath) {
+    public function test_file_inclusion($relpath): void {
         global $CFG, $DB;
         try {
             require_once($CFG->dirroot . '/blocks/xp' . $relpath);
