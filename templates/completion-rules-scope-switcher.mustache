@@ -56,12 +56,12 @@
 </div>
 {{#js}}
 require(['block_xp/course-selector'], function(CourseSelector) {
-    const trigger = document.getElementById('block_xp-course-selector-{{uniqid}}');
-    const courseUrlTemplate = "{{ courseurltemplate }}";
-    trigger.addEventListener('click', () => {
+    var trigger = document.getElementById('block_xp-course-selector-{{uniqid}}');
+    var courseUrlTemplate = "{{ courseurltemplate }}";
+    trigger.addEventListener('click', function() {
         CourseSelector.openCourseSelector(function(course) {
             window.location.href = courseUrlTemplate.replace('CONTEXTID', course.contextid);
         });
-    })
+    });
 });
 {{/js}}
