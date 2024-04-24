@@ -63,8 +63,6 @@ const BulkEditPoints: React.FC<{
       "difficultyrelativedesc",
       "difficultyrelativeincrdesc",
       "documentation",
-      "pointincrement",
-      "pointincrementdesc",
       "pointsperlevel",
       "recommended",
     ],
