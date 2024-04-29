@@ -59,7 +59,7 @@ interface url_resolver {
      *
      * @param string $name The route name.
      * @param array $params The parameters for the route.
-     * @return \moodle_url
+     * @return \moodle_url|url
      */
     public function reverse($name, array $params = []);
 
