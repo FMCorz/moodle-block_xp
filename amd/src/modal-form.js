@@ -57,7 +57,11 @@ function open(node) {
         // has one field, this may be an issue.
         Compat.markFormSubmitted(Compat.getFormNode(modalForm));
 
-        window.location.reload();
+        if (e.detail && e.detail.redirecturl) {
+            window.location.href = M.cfg.wwwroot + e.detail.redirecturl;
+        } else {
+            window.location.reload();
+        }
     });
 
     modalForm.show();
