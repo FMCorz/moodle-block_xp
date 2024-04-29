@@ -559,6 +559,14 @@ $string['someoneelse'] = 'Someone else';
 $string['somethinghappened'] = 'Something happened';
 $string['taskcollectionloggerpurge'] = 'Purge collection logs';
 $string['taskusagereport'] = 'Usage report';
+$string['teamleaderboard'] = 'Team leaderboard';
+$string['teamleaderboard_help'] = 'The team leaderboard shows a ranking of teams based on the total cumulated points of their members.
+
+The teams can be made out of course groups or cohorts. Options are also to accomodate for different team sizes.
+
+[Learn more](https://docs.levelup.plus/xp/docs/how-to/setup-team-leaderboard/team-leaderboard?ref=blockxp_help)';
+$string['teamleaderboardintro'] = 'The team leaderboard is a ranking of teams based on their members\' points';
+$string['teams'] = 'Teams';
 $string['total'] = 'Total';
 $string['thankyou'] = 'Thank you!';
 $string['timebetweensameactions'] = 'Time required between identical actions';

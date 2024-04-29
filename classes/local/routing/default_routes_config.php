@@ -74,6 +74,15 @@ class default_routes_config extends static_routes_config {
                 ]
             ),
             new route_definition(
+                'group_ladder',
+                '/group/ladder/:courseid',
+                '~^/group/ladder/(\d+)$~',
+                'group_ladder',
+                [
+                    1 => 'courseid',
+                ]
+            ),
+            new route_definition(
                 'levels',
                 '/levels/:courseid',
                 '~^/levels/(\d+)$~',

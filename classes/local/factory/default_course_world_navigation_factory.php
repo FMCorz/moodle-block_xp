@@ -92,9 +92,10 @@ class default_course_world_navigation_factory implements course_world_navigation
         $accessperms = $world->get_access_permissions();
         $hasaddon = di::get('addon')->is_activated();
         $showpromo = $this->adminconfig->get('enablepromoincourses');
+        $config = $world->get_config();
         $canmanage = $accessperms->can_manage();
 
-        if ($world->get_config()->get('enableinfos') || $canmanage) {
+        if ($config->get('enableinfos') || $canmanage) {
             $links[] = [
                 'id' => 'infos',
                 'url' => $urlresolver->reverse('infos', ['courseid' => $courseid]),
@@ -103,18 +104,29 @@ class default_course_world_navigation_factory implements course_world_navigation
         }
 
         $laddernav = null;
-        if ($world->get_config()->get('enableladder') || $canmanage) {
+        if ($config->get('enableladder') || $canmanage) {
             $laddernav = [
                 'id' => 'ladder',
                 'url' => $urlresolver->reverse('ladder', ['courseid' => $courseid]),
                 'text' => get_string('participants', 'block_xp'),
             ];
         }
+
+        $isteamladderenabled = $config->has('enablegroupladder') && (bool) $config->get('enablegroupladder');
+        $teamladdernav = null;
+        if ($isteamladderenabled || ($canmanage && ($showpromo || $hasaddon))) {
+            $teamladdernav = [
+                'id' => 'group_ladder',
+                'url' => $urlresolver->reverse('group_ladder', ['courseid' => $courseid]),
+                'text' => get_string('teams', 'block_xp'),
+                'addonrequired' => !$hasaddon,
+            ];
+        }
         $links[] = [
             'id' => 'ladder',
             'url' => null,
             'text' => get_string('navladder', 'block_xp'),
-            'children' => array_filter([$laddernav]),
+            'children' => array_filter([$laddernav, $teamladdernav]),
         ];
 
         $canviewlogs = $accessperms instanceof access_logs_permissions && $accessperms->can_access_logs();
