@@ -25,10 +25,7 @@
 
 namespace block_xp\form;
 
-use block_xp\di;
-use context;
 use core_form\dynamic_form;
-use moodle_url;
 
 /**
  * Information page form.
@@ -40,26 +37,9 @@ use moodle_url;
  */
 class info extends dynamic_form {
 
-    /** @var \block_xp\world The world. */
-    protected $world;
+    use dynamic_world_trait;
 
-    protected function get_world() {
-        if (!$this->world) {
-            $worldfactory = di::get('context_world_factory');
-            $contextid = $this->optional_param('contextid', 0, PARAM_INT);
-            $this->world = $worldfactory->get_world_from_context(context::instance_by_id($contextid));
-        }
-        return $this->world;
-    }
-
-    protected function get_context_for_dynamic_submission(): context {
-        return $this->get_world()->get_context();
-    }
-
-    protected function check_access_for_dynamic_submission(): void {
-        $perms = $this->get_world()->get_access_permissions();
-        $perms->require_manage();
-    }
+    protected $routename = 'infos';
 
     public function process_dynamic_submission() {
         $config = $this->get_world()->get_config();
@@ -79,11 +59,6 @@ class info extends dynamic_form {
                 'format' => $config->get('instructions_format'),
             ],
         ]);
-    }
-
-    protected function get_page_url_for_dynamic_submission(): moodle_url {
-        $urlresolver = di::get('url_resolver');
-        return $urlresolver->reverse('infos', ['courseid' => $this->world->get_courseid()]);
     }
 
     /**

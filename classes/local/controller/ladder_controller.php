@@ -25,6 +25,7 @@
 
 namespace block_xp\local\controller;
 
+use block_xp\di;
 use moodle_exception;
 
 /**
@@ -153,6 +154,7 @@ class ladder_controller extends page_controller {
     }
 
     protected function page_content() {
+        global $PAGE;
         $output = $this->get_renderer();
 
         $canmanage = $this->world->get_access_permissions()->can_manage();
@@ -161,8 +163,17 @@ class ladder_controller extends page_controller {
                 'intro' => new \lang_string('ladderintro', 'block_xp'),
                 'help' => new \help_icon('ladder', 'block_xp'),
                 'visible' => $this->is_visible_to_viewers(),
-                'actions' => []
+                'menu' => [
+                    [
+                        'label' => get_string('pagesettings', 'block_xp'),
+                        'data-action' => 'open-form',
+                        'data-form-class' => di::get('leaderboard_form_class'),
+                        'data-form-args__contextid' => $this->world->get_context()->id,
+                        'href' => '#'
+                    ]
+                ]
             ]);
+            $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
         }
 
         $this->print_group_menu();
