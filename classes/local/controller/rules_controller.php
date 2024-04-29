@@ -194,32 +194,44 @@ class rules_controller extends page_controller {
     protected function page_plus_promo_content() {
     }
 
+    protected function page_advanced_heading() {
+        global $PAGE;
+        $output = $this->get_renderer();
+        $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
+
+        echo $output->advanced_heading(get_string('eventsrules', 'block_xp'), [
+            'intro' => new \lang_string('eventsrulesintro', 'block_xp'),
+            'help' => new \help_icon('eventsrules', 'block_xp'),
+            'menu' => [
+                [
+                    'label' => get_string('cheatguard', 'block_xp'),
+                    'data-action' => 'open-form',
+                    'data-form-class' => di::get('cheatguard_form_class'),
+                    'data-form-args__contextid' => $this->world->get_context()->id,
+                    'href' => '#'
+                ],
+                [],
+                [
+                    'label' => get_string('resettodefaults', 'block_xp'),
+                    'danger' => true,
+                    'href' => $url
+                ]
+            ]
+        ]);
+        $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
+    }
+
     protected function page_rules_content() {
         $output = $this->get_renderer();
 
         if (!$this->legacyheadings) {
-            echo $output->advanced_heading(get_string('eventsrules', 'block_xp'), [
-                'intro' => new \lang_string('eventsrulesintro', 'block_xp'),
-                'help' => new \help_icon('eventsrules', 'block_xp'),
-            ]);
+            $this->page_advanced_heading();
         }
 
         echo $output->render($this->get_widget_group());
     }
 
     protected function page_danger_zone_content() {
-        $output = $this->get_renderer();
-
-        echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
-
-        $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
-        echo html_writer::tag('p',
-            $output->render($output->make_single_button(
-                $url->get_compatible_url(),
-                get_string('resetcourserulestodefaults', 'block_xp'),
-                ['danger' => true]
-            ))
-        );
     }
 
     /**

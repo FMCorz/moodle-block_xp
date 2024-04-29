@@ -80,8 +80,15 @@ class block_xp_renderer extends plugin_renderer_base {
             'hasmenu' => !empty($menu),
             'menuitems' => array_map(function($item) {
                 $attrs = [];
+                $classes = [];
+                if (empty($item['label'])) {
+                    return ['isdivider' => true];
+                }
                 foreach ($item as $key => $value) {
-                    if ($key === 'label') {
+                    if ($key === 'label' || $key === 'class') {
+                        continue;
+                    } else if ($key === 'danger') {
+                        $classes[] = $value ? 'text-danger' : null;
                         continue;
                     }
                     $attrs[] = [
@@ -92,6 +99,7 @@ class block_xp_renderer extends plugin_renderer_base {
                 return [
                     'label' => $item['label'],
                     'attributes' => $attrs,
+                    'classes' => array_filter($classes),
                 ];
             }, $menu),
         ]);

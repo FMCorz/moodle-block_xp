@@ -66,7 +66,10 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right">
                 {{# menuitems }}
-                    <a class="dropdown-item" {{#attributes}}{{name}}="{{value}}" {{/attributes}}>{{ label }}</a>
+                    {{#isdivider}}<div class="dropdown-divider"></div>{{/isdivider}}
+                    {{^isdivider}}
+                    <a class="dropdown-item {{#classes}}{{.}} {{/classes}}" {{#attributes}}{{name}}="{{value}}" {{/attributes}}>{{ label }}</a>
+                    {{/isdivider}}
                 {{/ menuitems }}
             </div>
         </div>

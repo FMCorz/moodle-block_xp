@@ -51,6 +51,7 @@ class default_container implements container {
         'base_url' => true,
         'block_class' => true,
         'block_edit_form_class' => true,
+        'cheatguard_form_class' => true,
         'collection_logger' => true,
         'collection_strategy' => true,
         'config' => true,
@@ -218,6 +219,15 @@ class default_container implements container {
      */
     protected function get_block_edit_form_class() {
         return 'block_xp\form\edit_form';
+    }
+
+    /**
+     * Cheatguard form class.
+     *
+     * @return string
+     */
+    protected function get_cheatguard_form_class() {
+        return \block_xp\form\cheatguard::class;
     }
 
     /**
