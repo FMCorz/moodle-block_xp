@@ -92,8 +92,9 @@ class default_course_world_navigation_factory implements course_world_navigation
         $accessperms = $world->get_access_permissions();
         $hasaddon = di::get('addon')->is_activated();
         $showpromo = $this->adminconfig->get('enablepromoincourses');
+        $canmanage = $accessperms->can_manage();
 
-        if ($world->get_config()->get('enableinfos')) {
+        if ($world->get_config()->get('enableinfos') || $canmanage) {
             $links[] = [
                 'id' => 'infos',
                 'url' => $urlresolver->reverse('infos', ['courseid' => $courseid]),
@@ -102,7 +103,7 @@ class default_course_world_navigation_factory implements course_world_navigation
         }
 
         $laddernav = null;
-        if ($world->get_config()->get('enableladder')) {
+        if ($world->get_config()->get('enableladder') || $canmanage) {
             $laddernav = [
                 'id' => 'ladder',
                 'url' => $urlresolver->reverse('ladder', ['courseid' => $courseid]),
@@ -148,7 +149,7 @@ class default_course_world_navigation_factory implements course_world_navigation
             ];
         }
 
-        if ($accessperms->can_manage()) {
+        if ($canmanage) {
             $links[] = [
                 'id' => 'levels',
                 'url' => $urlresolver->reverse('levels', ['courseid' => $courseid]),

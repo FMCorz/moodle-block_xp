@@ -308,6 +308,7 @@ $string['outofsync'] = 'Out of sync';
 $string['outofsyncexcessive'] = 'Excessive out of sync';
 $string['outofsyncinfo'] = 'The XP plugins are not compliant with one another which can lead to unexpected issues.';
 $string['outofsyncexcessiveinfo'] = 'XP+ is excessively older than XP which can lead to unexpected issues. To prevent malfunctioning, XP+ may automatically disable itself in the future.';
+$string['pagenotcurrentvisibletostudents'] = 'This page is currently not visible to students.';
 $string['participant'] = 'Participant';
 $string['participants'] = 'Participants';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';

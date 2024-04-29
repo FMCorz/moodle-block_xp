@@ -49,7 +49,9 @@ class ladder_controller extends page_controller {
 
     protected function permissions_checks() {
         parent::permissions_checks();
-        if (!$this->world->get_config()->get('enableladder')) {
+
+        $canmanage = $this->world->get_access_permissions()->can_manage();
+        if (!$this->world->get_config()->get('enableladder') && !$canmanage) {
             throw new moodle_exception('nopermissions', '', '', 'view_ladder_page');
         }
     }
@@ -150,7 +152,15 @@ class ladder_controller extends page_controller {
         return (int) $pagesize;
     }
 
+    protected function page_pre_content() {
+        $output = $this->get_renderer();
+        if (!$this->world->get_config()->get('enableladder')) {
+            echo $output->notification_without_close(get_string('pagenotcurrentvisibletostudents', 'block_xp'), 'warning');
+        }
+    }
+
     protected function page_content() {
+        $this->page_pre_content();
         $this->print_group_menu();
         echo $this->get_table()->out($this->get_page_size(), false);
     }
