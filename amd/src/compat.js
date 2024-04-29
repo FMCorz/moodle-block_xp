@@ -21,8 +21,16 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+import DynamicForm from 'core_form/dynamicform';
+import ModalForm from 'core_form/modalform';
 import Templates from 'core/templates';
 
+/**
+ * Render a template asynchronously.
+ *
+ * @param {String} name
+ * @param {Object} context
+ */
 export const asyncRender = (name, context) => {
     if ('renderForPromise' in Templates) {
         return Templates.renderForPromise(name, context);
@@ -37,3 +45,39 @@ export const asyncRender = (name, context) => {
         });
     });
 };
+
+/**
+ * Get form node.
+ *
+ * @param {ModalForm|DynamicForm} form The form.
+ * @returns {Node}
+ */
+export function getFormNode(form) {
+    try {
+        return form.getFormNode();
+    } catch (e) {
+        if (form instanceof ModalForm) {
+            return form.modal.getRoot().find('form')[0];
+        } else if (form instanceof DynamicForm) {
+            return form.container.querySelector('form');
+        }
+        return document.createElement('form');
+    }
+}
+
+/**
+ * Mark the form as submitted.
+ *
+ * @param {Node} node A DOM node.
+ */
+export function markFormSubmitted(node) {
+    try {
+        require('core_form/changechecker', function(ChangeChecker) {
+            ChangeChecker.markFormSubmitted(node);
+        });
+    } catch (e) {
+        if (typeof M.core_formchangechecker !== 'undefined') {
+            M.core_formchangechecker.set_form_submitted();
+        }
+    }
+}

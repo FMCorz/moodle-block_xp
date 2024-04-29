@@ -53,51 +53,48 @@ class block_xp_renderer extends plugin_renderer_base {
      * @param array $options The options.
      */
     public function advanced_heading($heading, $options = []) {
-        $options = array_merge(['level' => 3, 'actions' => [], 'intro' => null, 'help' => null, 'visible' => null], $options);
+        $options = array_merge(['level' => 3, 'actions' => [], 'intro' => null, 'help' => null, 'visible' => null,
+            'menu' => []], $options);
         $level = (int) $options['level'];
         $actions = (array) $options['actions'];
+        $menu = (array) $options['menu'];
         $intro = !empty($options['intro']) ? $options['intro'] : null;
         $visible = isset($options['visible']) ? (bool) $options['visible'] : null;
         $help = $options['help'] instanceof \help_icon ? $options['help'] : null;
 
-        $visiblelabel = null;
-        $visibleiconname = null;
-        if ($visible === true) {
-            $visibleiconname = 'fa-eye';
-            $visiblelabel = get_string('pagecurrentvisibletoviewers', 'block_xp');
-        } else if ($visible === false) {
-            $visibleiconname = 'fa-eye-slash';
-            $visiblelabel = get_string('pagecurrentnotvisibletoviewers', 'block_xp');
-        }
+        return $this->render_from_template('block_xp/advanced-heading', [
+            'title' => $heading,
+            'level' => $level,
+            'islevel2' => $level === 2,
 
-        if ($visibleiconname !== null) {
-            $heading .= html_writer::tag('span',
-                html_writer::tag('i', '', ['class' => "fa {$visibleiconname}", 'aria-hidden' => "true"]) .
-                html_writer::tag('span', $visiblelabel, ['class' => 'sr-only']), [
-                'data-toggle' => 'tooltip',
-                'title' => $visiblelabel,
-                'class' => 'xp-ml-2 xp-inline-block xp-text-base xp-leading-none',
-            ]);
-        }
+            'hasintro' => !empty($intro),
+            'intro' => $intro,
+            'helpicon' => $help ? $help->export_for_template($this) : null,
 
-        $o = '';
-        $o .= html_writer::start_div('xp-flex xp-mb-6 xp-gap-4');
-        $o .= html_writer::start_div('xp-grow');
-        $o .= html_writer::start_div('');
-        $o .= $this->heading($heading, $level, 'xp-m-0');
-        if (!empty($intro)) {
-            $o .= html_writer::start_div('xp-text-sm xp-text-gray-500 xp-mt-2');
-            $o .= $intro . ' ' . (!empty($help) ? $this->render($help) : '');
-            $o .= html_writer::end_div();
-        }
-        $o .= html_writer::end_div();
-        $o .= html_writer::end_div();
-        $o .= html_writer::start_div('xp-flex xp-flex-wrap xp-gap-4 xp-items-start xp-whitespace-nowrap');
-        $o .= implode('', array_map([$this, 'render'], $actions));
-        $o .= html_writer::end_div();
-        $o .= html_writer::end_div();
+            'hasvisibility' => $visible !== null,
+            'isvisible' => $visible,
 
-        return $o;
+            'hasactions' => !empty($actions),
+            'actions' => array_map([$this, 'render'], $actions),
+
+            'hasmenu' => !empty($menu),
+            'menuitems' => array_map(function($item) {
+                $attrs = [];
+                foreach ($item as $key => $value) {
+                    if ($key === 'label') {
+                        continue;
+                    }
+                    $attrs[] = [
+                        'name' => $key,
+                        'value' => $value instanceof moodle_url ? $value->out(false) : (string) $value,
+                    ];
+                }
+                return [
+                    'label' => $item['label'],
+                    'attributes' => $attrs,
+                ];
+            }, $menu),
+        ]);
     }
 
     /**

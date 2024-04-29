@@ -62,20 +62,6 @@ class infos_controller extends page_controller {
         return (bool) $this->world->get_config()->get('enableinfos');
     }
 
-    protected function pre_content() {
-        if ($this->world->get_access_permissions()->can_manage()) {
-            $redirecturl = new url($this->pageurl, ['edit' => false]);
-            $form = $this->get_form();
-            if ($data = $form->get_data()) {
-                $this->world->get_config()->set('instructions', $data->instructions['text']);
-                $this->world->get_config()->set('instructions_format', $data->instructions['format']);
-                $this->redirect($redirecturl);
-            } else if ($form->is_cancelled()) {
-                $this->redirect($redirecturl);
-            }
-        }
-    }
-
     protected function get_form() {
         if (!$this->form) {
             $this->form = new instructions($this->pageurl->out(false));
@@ -92,6 +78,8 @@ class infos_controller extends page_controller {
     }
 
     protected function page_content() {
+        global $PAGE;
+
         $output = $this->get_renderer();
         $levelsinfo = $this->world->get_levels_info();
         $canmanage = $this->world->get_access_permissions()->can_manage();
@@ -108,46 +96,29 @@ class infos_controller extends page_controller {
                 'intro' => new \lang_string('infosintro', 'block_xp'),
                 'help' => new \help_icon('infos', 'block_xp'),
                 'visible' => $this->is_visible_to_viewers(),
-                'actions' => []
+                'menu' => [
+                    [
+                        'label' => get_string('pagesettings', 'block_xp'),
+                        'data-action' => 'open-form',
+                        'data-form-class' => 'block_xp\form\info',
+                        'data-form-args__contextid' => $this->world->get_context()->id,
+                        'href' => '#'
+                    ],
+                    [
+                        'label' => get_string('customizelevels', 'block_xp'),
+                        'href' => $this->urlresolver->reverse('levels', ['courseid' => $this->world->get_courseid()]),
+                    ]
+                ]
             ]);
+            $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
         }
 
-        if ($isediting) {
-            $form = $this->get_form();
-            $form->set_data((object) ['instructions' => [
-                'text' => $instructions,
-                'format' => $instructionsformat,
-            ], ]);
-            $form->display();
-
-        } else if ($hasinstructions) {
+        if ($hasinstructions) {
             // Display the instructions when not editing.
             echo html_writer::div(format_text($instructions, $instructionsformat), 'block_xp-instructions');
         }
 
-        if (!$isediting && $canmanage) {
-            $editurl = new url($this->pageurl, ['edit' => true]);
-            echo html_writer::tag('p',
-                $output->single_button(
-                    $editurl->get_compatible_url(),
-                    get_string($hasinstructions ? 'editinstructions' : 'addinstructions', 'block_xp'),
-                    'get'
-                )
-            );
-        }
-
         echo $output->levels_grid($levelsinfo->get_levels());
-
-        if ($canmanage) {
-            $levelsurl = $this->urlresolver->reverse('levels', ['courseid' => $this->courseid]);
-            echo html_writer::tag('p',
-                $output->single_button(
-                    $levelsurl->get_compatible_url(),
-                    get_string('customizelevels', 'block_xp'),
-                    'get'
-                )
-            );
-        }
     }
 
 }

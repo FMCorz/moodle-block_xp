@@ -23,12 +23,12 @@
 
 define([], function() {
     /**
-   * Delegate click to a zone.
-   *
-   * @param {String} rootSelector The root selector.
-   * @param {String} nodeSelector The node on which the event must happen.
-   * @param {Function} onClick The callback, receiving the node.
-   */
+     * Delegate click to a zone.
+     *
+     * @param {String} rootSelector The root selector.
+     * @param {String} nodeSelector The node on which the event must happen.
+     * @param {Function} onClick The callback, receiving the node.
+     */
     function delegateClick(rootSelector, nodeSelector, onClick) {
         const nodes = document.querySelectorAll(rootSelector);
 
@@ -62,11 +62,11 @@ define([], function() {
     }
 
     /**
-   * Register a click.
-   *
-   * @param {String} selector The selector.
-   * @param {Function} onClick The callback, receiving the node.
-   */
+     * Register a click.
+     *
+     * @param {String} selector The selector.
+     * @param {Function} onClick The callback, receiving the node.
+     */
     function registerClick(selector, onClick) {
         const nodes = document.querySelectorAll(selector);
 

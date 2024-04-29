@@ -35,7 +35,6 @@ $string['adminscanearnxp_desc'] = 'By default, administrators are not included i
 $string['admindefaultrulesintro'] = 'The following rules will be used as default for courses in which the block is added.';
 $string['admindefaultsettingsintro'] = 'The settings below will be used as defaults when the block is newly added to a course. Some settings can be locked,  in which case their value is strictly enforced in all instances of the plugin.';
 $string['admindefaultvisualsintro'] = 'The following will be used as defaults when the block is newly added to a course.';
-$string['addinstructions'] = 'Add more information';
 $string['additionalresources'] = 'Additional resources';
 $string['addlevel'] = 'Add level';
 $string['addoninstallationerror'] = 'We are detecting an issue with the add-on (local_xp), it does not seem to be installed properly. An administrator should finalise its installation.';
@@ -151,7 +150,6 @@ Drops can be used to cleverly award points when certain type of content is consu
 ';
 $string['editcondition'] = 'Edit condition';
 $string['editingdefaultsettingsinwholesitemodenotice'] = '**Attention!** You are not modifying the currently active settings, instead you are editing the default values. As Level Up XP is used sitewide, your intention is most likely to change the sitewide settings. [Navigate here]({$a->url}) to change those settings, or follow the "Settings" link from the XP block itself.';
-$string['editinstructions'] = 'Edit information';
 $string['enablecheatguard'] = 'Enable cheat guard';
 $string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive mechanism for preventing students to abuse the system using obvious techniques, such as refreshing the same page endlessly, or repeating the same action over and over again.
 
@@ -234,7 +232,8 @@ $string['infos'] = 'Information';
 $string['infos_help'] = 'The information page gives students an overview of the levels, and the points needed to attain them. It also displays the name of each level, as well as the level description.';
 $string['infosintro'] = 'The information page displays the list of levels, and some of their details.';
 $string['installed'] = 'Installed';
-$string['instructions'] = 'More information';
+$string['instructions'] = 'Instructions';
+$string['instructions_help'] = 'The instructions will be displayed on the information page. You may use them to share information and instructions regarding the levels, how to obtain points, etc.';
 $string['invalidxp'] = 'Invalid points value';
 $string['keeplogs'] = 'Keep logs';
 $string['ladder'] = 'Leaderboard';
@@ -314,6 +313,7 @@ $string['outofsyncinfo'] = 'The XP plugins are not compliant with one another wh
 $string['outofsyncexcessiveinfo'] = 'XP+ is excessively older than XP which can lead to unexpected issues. To prevent malfunctioning, XP+ may automatically disable itself in the future.';
 $string['pagecurrentnotvisibletoviewers'] = 'This page is not currently visible to students.';
 $string['pagecurrentvisibletoviewers'] = 'This page is currently visible to students.';
+$string['pagesettings'] = 'Page settings';
 $string['participant'] = 'Participant';
 $string['participants'] = 'Participants';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';
@@ -683,6 +683,8 @@ $string['valuessaved'] = 'The values have been successfully saved.';
 $string['forthewholesite'] = 'For the whole site';
 
 // Deprecated since 3.17.0
+$string['addinstructions'] = 'Add more information';
+$string['editinstructions'] = 'Edit information';
 $string['grid'] = 'Grid';
 $string['list'] = 'List';
 $string['navrules'] = 'Rules';
