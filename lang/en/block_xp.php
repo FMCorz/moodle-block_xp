@@ -213,7 +213,6 @@ For her final attempt, Alice scores 60/100, she earns 20 additional points in _L
 [More at _Level Up XP_ documentation](https://docs.levelup.plus/xp/docs/how-to/grade-based-rewards?ref=blockxp_help)
 ';
 $string['graderulesintro'] = 'The grade rules allow users to receive points equal to the grades they receive.';
-$string['grid'] = 'Grid';
 $string['hasname'] = 'Name set';
 $string['hasnoname'] = 'No name';
 $string['hasdescription'] = 'Description set';
@@ -668,3 +667,6 @@ $string['valuessaved'] = 'The values have been successfully saved.';
 
 // Deprecated since 3.16.0
 $string['forthewholesite'] = 'For the whole site';
+
+// Deprecated since 3.17.0
+$string['grid'] = 'Grid';
