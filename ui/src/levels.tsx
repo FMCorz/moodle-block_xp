@@ -417,7 +417,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                           "xp-text-red-600 xp-block xp-px-6 xp-py-1 xp-no-underline"
                         )}
                       >
-                        <Str id="resetlevelstodefaults" />
+                        <Str id="resettodefaults" />
                       </a>
                     )}
                   </Menu.Item>

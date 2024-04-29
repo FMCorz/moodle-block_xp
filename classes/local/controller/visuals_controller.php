@@ -200,6 +200,13 @@ class visuals_controller extends page_controller {
 
         echo $output->advanced_heading(get_string('levelsappearance', 'block_xp'), [
             'intro' => new \lang_string('visualsintro', 'block_xp'),
+            'menu' => [
+                [
+                    'label' => get_string('resettodefaults', 'block_xp'),
+                    'danger' => true,
+                    'href' => new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()])
+                ],
+            ],
         ]);
 
         $this->get_form()->display();
@@ -222,18 +229,6 @@ class visuals_controller extends page_controller {
     }
 
     protected function page_danger_zone_content() {
-        $output = $this->get_renderer();
-
-        echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
-
-        $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
-        echo html_writer::tag('div',
-            $output->render($output->make_single_button(
-                $url->get_compatible_url(),
-                get_string('resetvisualstodefaults', 'block_xp'),
-                ['danger' => true]
-            ))
-        );
     }
 
     /**
