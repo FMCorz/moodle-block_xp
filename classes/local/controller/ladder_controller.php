@@ -47,15 +47,6 @@ class ladder_controller extends page_controller {
     /** @var string */
     protected $routename = 'ladder';
 
-    protected function permissions_checks() {
-        parent::permissions_checks();
-
-        $canmanage = $this->world->get_access_permissions()->can_manage();
-        if (!$this->world->get_config()->get('enableladder') && !$canmanage) {
-            throw new moodle_exception('nopermissions', '', '', 'view_ladder_page');
-        }
-    }
-
     protected function page_setup() {
         global $PAGE;
         parent::page_setup();
@@ -71,6 +62,15 @@ class ladder_controller extends page_controller {
         return [
             ['pagesize', 0, PARAM_INT, false],
         ];
+    }
+
+    /**
+     * Is visible to viewers?
+     *
+     * @return bool
+     */
+    protected function is_visible_to_viewers() {
+        return (bool) $this->world->get_config()->get('enableladder');
     }
 
     /**
@@ -152,15 +152,19 @@ class ladder_controller extends page_controller {
         return (int) $pagesize;
     }
 
-    protected function page_pre_content() {
-        $output = $this->get_renderer();
-        if (!$this->world->get_config()->get('enableladder')) {
-            echo $output->notification_without_close(get_string('pagenotcurrentvisibletostudents', 'block_xp'), 'warning');
-        }
-    }
-
     protected function page_content() {
-        $this->page_pre_content();
+        $output = $this->get_renderer();
+
+        $canmanage = $this->world->get_access_permissions()->can_manage();
+        if ($canmanage) {
+            echo $output->advanced_heading(get_string('ladder', 'block_xp'), [
+                'intro' => new \lang_string('ladderintro', 'block_xp'),
+                'help' => new \help_icon('ladder', 'block_xp'),
+                'visible' => $this->is_visible_to_viewers(),
+                'actions' => []
+            ]);
+        }
+
         $this->print_group_menu();
         echo $this->get_table()->out($this->get_page_size(), false);
     }

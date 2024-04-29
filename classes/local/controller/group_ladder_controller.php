@@ -44,6 +44,10 @@ class group_ladder_controller extends page_controller {
     /** @var string The route name. */
     protected $routename = 'group_ladder';
 
+    protected function is_visible_to_viewers() {
+        return false;
+    }
+
     protected function pre_content() {
         if (!di::get('config')->get('enablepromoincourses')) {
             return redirect($this->urlresolver->reverse('ladder', ['courseid' => $this->courseid]));
@@ -65,6 +69,7 @@ class group_ladder_controller extends page_controller {
         echo $renderer->advanced_heading(get_string('teamleaderboard', 'block_xp'), [
             'intro' => new \lang_string('teamleaderboardintro', 'block_xp'),
             'help' => new help_icon('teamleaderboard', 'block_xp'),
+            'visible' => $this->is_visible_to_viewers(),
         ]);
 
         echo html_writer::start_div('xp-mt-4');

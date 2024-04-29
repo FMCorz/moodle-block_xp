@@ -60,13 +60,20 @@ abstract class page_controller extends course_route_controller {
      * @return void
      */
     protected function permissions_checks() {
+        $accessperms = $this->world->get_access_permissions();
+
         // We only need one of, ordered in such a way that the most important check is done first.
         if ($this->requiremanage) {
-            $this->world->get_access_permissions()->require_manage();
+            $accessperms->require_manage();
         } else if ($this->requireview) {
-            $this->world->get_access_permissions()->require_access();
+            $accessperms->require_access();
         } else if (!$this->ispublic) {
             throw new coding_exception('Misconfigured controller. Is page public, or are permissions required?');
+        }
+
+        // Check whether the page is visible to viewers.
+        if (!$accessperms->can_manage() && !$this->is_visible_to_viewers()) {
+            throw new \moodle_exception('nopermissions', '', '', 'view_' . $this->get_route_name() . '_page');
         }
     }
 
@@ -143,6 +150,22 @@ abstract class page_controller extends course_route_controller {
      */
     protected function has_sub_navigation() {
         return count($this->get_sub_navigation_items()) > 1;
+    }
+
+    /**
+     * Whether the page is currently visible to viewers.
+     *
+     * This acts as a secondary check to determine whether viewers, that is the
+     * users with the view permission, can view this page. This is not relevant
+     * when the page requires manage access.
+     *
+     * Typically, this would be based on a config setting that would determine
+     * whether a feature is enabled or not.
+     *
+     * @return bool
+     */
+    protected function is_visible_to_viewers() {
+        return true;
     }
 
     /**

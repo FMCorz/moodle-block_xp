@@ -231,11 +231,17 @@ $string['importpointsintro'] = 'Import points from a CSV file, and optionally se
 $string['incourses'] = 'In courses';
 $string['ineffective'] = 'Ineffective';
 $string['infos'] = 'Information';
+$string['infos_help'] = 'The information page gives students an overview of the levels, and the points needed to attain them. It also displays the name of each level, as well as the level description.';
+$string['infosintro'] = 'The information page displays the list of levels, and some of their details.';
 $string['installed'] = 'Installed';
 $string['instructions'] = 'More information';
 $string['invalidxp'] = 'Invalid points value';
 $string['keeplogs'] = 'Keep logs';
 $string['ladder'] = 'Leaderboard';
+$string['ladder_help'] = 'The leaderboard ranks students based on their points. When used in a course with groups, it can create a ranking for each group of student.
+
+Several options are available to customise the leaderboard and the experience it will give to the participants.';
+$string['ladderintro'] = 'The leaderboard shows a ranking of individuals based on their total points.';
 $string['ladderadditionalcols'] = 'Additional columns';
 $string['ladderadditionalcols_help'] = 'This setting determines which additional columns are displayed on the leaderboard. Press the CTRL or CMD key while clicking to select more than one column, or to unselect a selected column.';
 $string['ladderempty'] = 'The leaderboard is currently empty, make sure to come back later!';
@@ -260,7 +266,6 @@ $string['levelx'] = 'Level #{$a}';
 $string['likenotice'] = '<strong>Do you like the plugin?</strong> Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourites</a> on Moodle.org and <a href="{$a->github}" target="_blank">star it on GitHub</a>.';
 $string['limitparticipants'] = 'Limit participants';
 $string['limitparticipants_help'] = 'This setting controls who is displayed in the leaderboard. Neighbours are the participants ranked above and below the current user. For instance, when choosing \'Display 2 neighbours\', only the two participants ranked directly higher and lower than the current user will be displayed.';
-$string['list'] = 'List';
 $string['logging'] = 'Logging';
 $string['manually'] = 'Manually';
 $string['maxactionspertime'] = 'Max. actions in time frame';
@@ -288,7 +293,6 @@ $string['navlog'] = 'Log';
 $string['navpoints'] = 'Points';
 $string['navpromo'] = 'XP+';
 $string['navreport'] = 'Report';
-$string['navrules'] = 'Rules';
 $string['navsettings'] = 'Settings';
 $string['navvisuals'] = 'Appearance';
 $string['nextlevelin'] = 'next level in';
@@ -308,7 +312,8 @@ $string['outofsync'] = 'Out of sync';
 $string['outofsyncexcessive'] = 'Excessive out of sync';
 $string['outofsyncinfo'] = 'The XP plugins are not compliant with one another which can lead to unexpected issues.';
 $string['outofsyncexcessiveinfo'] = 'XP+ is excessively older than XP which can lead to unexpected issues. To prevent malfunctioning, XP+ may automatically disable itself in the future.';
-$string['pagenotcurrentvisibletostudents'] = 'This page is currently not visible to students.';
+$string['pagecurrentnotvisibletoviewers'] = 'This page is not currently visible to students.';
+$string['pagecurrentvisibletoviewers'] = 'This page is currently visible to students.';
 $string['participant'] = 'Participant';
 $string['participants'] = 'Participants';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';
@@ -679,3 +684,5 @@ $string['forthewholesite'] = 'For the whole site';
 
 // Deprecated since 3.17.0
 $string['grid'] = 'Grid';
+$string['list'] = 'List';
+$string['navrules'] = 'Rules';

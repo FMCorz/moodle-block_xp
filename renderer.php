@@ -53,11 +53,32 @@ class block_xp_renderer extends plugin_renderer_base {
      * @param array $options The options.
      */
     public function advanced_heading($heading, $options = []) {
-        $options = array_merge(['level' => 3, 'actions' => [], 'intro' => null, 'help' => null], $options);
+        $options = array_merge(['level' => 3, 'actions' => [], 'intro' => null, 'help' => null, 'visible' => null], $options);
         $level = (int) $options['level'];
         $actions = (array) $options['actions'];
         $intro = !empty($options['intro']) ? $options['intro'] : null;
+        $visible = isset($options['visible']) ? (bool) $options['visible'] : null;
         $help = $options['help'] instanceof \help_icon ? $options['help'] : null;
+
+        $visiblelabel = null;
+        $visibleiconname = null;
+        if ($visible === true) {
+            $visibleiconname = 'fa-eye';
+            $visiblelabel = get_string('pagecurrentvisibletoviewers', 'block_xp');
+        } else if ($visible === false) {
+            $visibleiconname = 'fa-eye-slash';
+            $visiblelabel = get_string('pagecurrentnotvisibletoviewers', 'block_xp');
+        }
+
+        if ($visibleiconname !== null) {
+            $heading .= html_writer::tag('span',
+                html_writer::tag('i', '', ['class' => "fa {$visibleiconname}", 'aria-hidden' => "true"]) .
+                html_writer::tag('span', $visiblelabel, ['class' => 'sr-only']), [
+                'data-toggle' => 'tooltip',
+                'title' => $visiblelabel,
+                'class' => 'xp-ml-2 xp-inline-block xp-text-base xp-leading-none',
+            ]);
+        }
 
         $o = '';
         $o .= html_writer::start_div('xp-flex xp-mb-6 xp-gap-4');

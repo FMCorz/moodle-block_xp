@@ -24,11 +24,7 @@
  */
 
 namespace block_xp\local\controller;
-defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir . '/tablelib.php');
-
-use flexible_table;
 use html_writer;
 use moodle_exception;
 use block_xp\form\instructions;
@@ -51,19 +47,19 @@ class infos_controller extends page_controller {
     /** @var object */
     protected $form;
 
-    protected function permissions_checks() {
-        parent::permissions_checks();
-
-        $canmanage = $this->world->get_access_permissions()->can_manage();
-        if (!$this->world->get_config()->get('enableinfos') && !$canmanage) {
-            throw new moodle_exception('nopermissions', '', '', 'view_infos_page');
-        }
-    }
-
     protected function define_optional_params() {
         return [
             ['edit', false, PARAM_BOOL, true],
         ];
+    }
+
+    /**
+     * Is visible to viewers?
+     *
+     * @return bool
+     */
+    protected function is_visible_to_viewers() {
+        return (bool) $this->world->get_config()->get('enableinfos');
     }
 
     protected function pre_content() {
@@ -95,13 +91,6 @@ class infos_controller extends page_controller {
         return get_string('infos', 'block_xp');
     }
 
-    protected function page_pre_content() {
-        $output = $this->get_renderer();
-        if (!$this->world->get_config()->get('enableinfos')) {
-            echo $output->notification_without_close(get_string('pagenotcurrentvisibletostudents', 'block_xp'), 'warning');
-        }
-    }
-
     protected function page_content() {
         $output = $this->get_renderer();
         $levelsinfo = $this->world->get_levels_info();
@@ -114,7 +103,14 @@ class infos_controller extends page_controller {
         $hasinstructions = !empty($cleanedinstructions);
         $isediting = $this->get_param('edit') && $canmanage;
 
-        $this->page_pre_content();
+        if ($canmanage) {
+            echo $output->advanced_heading(get_string('infos', 'block_xp'), [
+                'intro' => new \lang_string('infosintro', 'block_xp'),
+                'help' => new \help_icon('infos', 'block_xp'),
+                'visible' => $this->is_visible_to_viewers(),
+                'actions' => []
+            ]);
+        }
 
         if ($isediting) {
             $form = $this->get_form();
