@@ -77,8 +77,8 @@ class report_controller extends page_controller {
         }
 
         // Reset data.
-        if ($this->get_param('resetdata') && confirm_sesskey()) {
-            if ($this->get_param('confirm')) {
+        if ($this->get_param('resetdata')) {
+            if ($this->get_param('confirm') && confirm_sesskey()) {
                 $store = $this->world->get_store();
                 if ($this->get_groupid()) {
                     // Make sure that we've got a compatible store first.
@@ -118,11 +118,11 @@ class report_controller extends page_controller {
     }
 
     protected function get_page_html_head_title() {
-        return get_string('coursereport', 'block_xp');
+        return get_string('report', 'block_xp');
     }
 
     protected function get_page_heading() {
-        return get_string('coursereport', 'block_xp');
+        return get_string('report', 'block_xp');
     }
 
     protected function get_form($userid) {
@@ -150,16 +150,18 @@ class report_controller extends page_controller {
     }
 
     /**
-     * Get the bottom action buttons.
+     * Get the advanced heading options.
      *
-     * @return single_button[]
+     * @return array
      */
-    protected function get_bottom_action_buttons() {
-        $output = $this->get_renderer();
-        $actions = [];
+    protected function get_advanced_heading_options() {
+        $groupid = $this->get_groupid();
+        $reseturl = new url($this->pageurl, [
+            'resetdata' => 1,
+            'group' => $groupid,
+        ]);
 
         // Make sure that we can reset for a group only.
-        $groupid = $this->get_groupid();
         $strreset = null;
         if (empty($groupid)) {
             $strreset = get_string('resetcoursedata', 'block_xp');
@@ -167,19 +169,31 @@ class report_controller extends page_controller {
             $strreset = get_string('resetgroupdata', 'block_xp');
         }
 
-        if (!empty($strreset)) {
-            $actions[] = $output->make_single_button(
-                new url($this->pageurl->get_compatible_url(), [
-                    'resetdata' => 1,
-                    'sesskey' => sesskey(),
-                    'group' => $groupid,
-                ]),
-                $strreset,
-                ['danger' => true]
-            );
-        }
+        return [
+            'intro' => new \lang_string('reportintro', 'block_xp'),
+            'menu' => [
+                [], // Divider.
+                $strreset ? [
+                    'label' => $strreset,
+                    'danger' => true,
+                    'href' => $reseturl
+                ] : null
+            ]
+        ];
+    }
 
-        return $actions;
+    /**
+     * Get the bottom action buttons.
+     *
+     * @return single_button[]
+     */
+    protected function get_bottom_action_buttons() {
+        return [];
+    }
+
+    protected function page_advanced_heading() {
+        $output = $this->get_renderer();
+        echo $output->advanced_heading(get_string('report', 'block_xp'), $this->get_advanced_heading_options());
     }
 
     protected function page_content() {
@@ -207,6 +221,9 @@ class report_controller extends page_controller {
             );
             return;
         }
+
+        // Display the heading.
+        $this->page_advanced_heading();
 
         // Use edit form.
         if ($canmanage && !empty($this->form)) {

@@ -91,8 +91,6 @@ $string['congratulationsyouleveledup'] = 'Congratulations!';
 $string['coolthanks'] = 'Cool, thanks!';
 $string['coursea'] = 'Course "{$a}"';
 $string['courselog'] = 'Course log';
-$string['coursereport'] = 'Course report';
-$string['courserules'] = 'Course rules';
 $string['courseselectedcolon'] = 'Course selected:';
 $string['coursesettings'] = 'Course settings';
 $string['currencysign'] = 'Points symbol';
@@ -396,6 +394,8 @@ $string['recommendedplugins'] = 'Recommended plugins';
 $string['releasenotes'] = 'Release notes';
 $string['remaining'] = 'remaining';
 $string['removefilter'] = 'Remove filter';
+$string['report'] = 'Report';
+$string['reportintro'] = 'The report provides details on each participant, and supports acting on them individually or as a whole.';
 $string['reportisempty'] = 'The report is empty, student have yet to earn points.';
 $string['reportisemptyenrolstudents'] = 'The report is empty, have students been enrolled in this course?';
 $string['resetcoursedata'] = 'Reset course data';
@@ -682,6 +682,8 @@ $string['forthewholesite'] = 'For the whole site';
 
 // Deprecated since 3.17.0
 $string['addinstructions'] = 'Add more information';
+$string['coursereport'] = 'Course report';
+$string['courserules'] = 'Course rules';
 $string['editinstructions'] = 'Edit information';
 $string['grid'] = 'Grid';
 $string['list'] = 'List';

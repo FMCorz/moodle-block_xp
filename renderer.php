@@ -62,6 +62,44 @@ class block_xp_renderer extends plugin_renderer_base {
         $visible = isset($options['visible']) ? (bool) $options['visible'] : null;
         $help = $options['help'] instanceof \help_icon ? $options['help'] : null;
 
+        $menuitems = array_values(array_filter(array_map(function($item) {
+            $attrs = [];
+            $classes = [];
+            if (empty($item['label'])) {
+                return ['isdivider' => true];
+            }
+            foreach ($item as $key => $value) {
+                if ($key === 'label' || $key === 'class') {
+                    continue;
+                } else if ($key === 'danger') {
+                    $classes[] = $value ? 'text-danger' : null;
+                    continue;
+                }
+                $attrs[] = [
+                    'name' => $key,
+                    'value' => $value instanceof moodle_url ? $value->out(false) : (string) $value,
+                ];
+            }
+            return [
+                'label' => $item['label'],
+                'attributes' => $attrs,
+                'classes' => array_filter($classes),
+            ];
+        }, $menu)));
+
+        // Filter out orphan or doubled dividers.
+        $menuitems = array_values(array_filter($menuitems, function($v, $k) use ($menuitems) {
+            if (empty($v['isdivider'])) {
+                return true;
+            }
+            if ($k === 0 || $k === count($menuitems) - 1) {
+                return false;
+            } else if (array_key_exists('isdivider', $menuitems[$k - 1] ?? [])) {
+                return false;
+            }
+            return true;
+        }, ARRAY_FILTER_USE_BOTH));
+
         return $this->render_from_template('block_xp/advanced-heading', [
             'title' => $heading,
             'level' => $level,
@@ -77,31 +115,8 @@ class block_xp_renderer extends plugin_renderer_base {
             'hasactions' => !empty($actions),
             'actions' => array_map([$this, 'render'], $actions),
 
-            'hasmenu' => !empty($menu),
-            'menuitems' => array_map(function($item) {
-                $attrs = [];
-                $classes = [];
-                if (empty($item['label'])) {
-                    return ['isdivider' => true];
-                }
-                foreach ($item as $key => $value) {
-                    if ($key === 'label' || $key === 'class') {
-                        continue;
-                    } else if ($key === 'danger') {
-                        $classes[] = $value ? 'text-danger' : null;
-                        continue;
-                    }
-                    $attrs[] = [
-                        'name' => $key,
-                        'value' => $value instanceof moodle_url ? $value->out(false) : (string) $value,
-                    ];
-                }
-                return [
-                    'label' => $item['label'],
-                    'attributes' => $attrs,
-                    'classes' => array_filter($classes),
-                ];
-            }, $menu),
+            'hasmenu' => !empty($menuitems),
+            'menuitems' => $menuitems,
         ]);
     }
 
