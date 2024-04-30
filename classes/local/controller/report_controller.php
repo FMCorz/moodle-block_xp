@@ -56,7 +56,6 @@ class report_controller extends page_controller {
         return [
             ['userid', null, PARAM_INT],
             ['resetdata', 0, PARAM_INT, false],
-            ['action', null, PARAM_ALPHA],
             ['confirm', 0, PARAM_INT, false],
             ['delete', 0, PARAM_INT, false],
             ['page', 0, PARAM_INT],     // To keep the table page in URL.
@@ -93,19 +92,6 @@ class report_controller extends page_controller {
         }
 
         $userid = $this->get_param('userid');
-        $action = $this->get_param('action');
-
-        // Use edit form.
-        if ($action === 'edit' && !empty($userid)) {
-            $form = $this->get_form($userid);
-            $nexturl = new url($this->pageurl, ['userid' => null]);
-            if ($data = $form->get_data()) {
-                $this->world->get_store()->set($userid, $data->xp);
-                $this->redirect($nexturl);
-            } else if ($form->is_cancelled()) {
-                $this->redirect($nexturl);
-            }
-        }
 
         // Delete user.
         if ($this->get_param('delete')) {
@@ -125,6 +111,12 @@ class report_controller extends page_controller {
         return get_string('coursereport', 'block_xp');
     }
 
+    /**
+     * Get the edit form.
+     *
+     * @param int $userid The user ID.
+     * @deprecated Since XP 3.17
+     */
     protected function get_form($userid) {
         if (!$this->form) {
             $state = $this->world->get_store()->get_state($userid);
@@ -197,6 +189,8 @@ class report_controller extends page_controller {
     }
 
     protected function page_content() {
+        global $PAGE;
+
         $canmanage = $this->world->get_access_permissions()->can_manage();
         $output = $this->get_renderer();
         $groupid = $this->get_groupid();
@@ -225,13 +219,6 @@ class report_controller extends page_controller {
         // Display the heading.
         $this->page_advanced_heading();
 
-        // Use edit form.
-        if ($canmanage && !empty($this->form)) {
-            $user = core_user::get_user($this->get_param('userid'));
-            echo $output->heading(fullname($user), 3);
-            $this->form->display();
-        }
-
         // Displaying the report.
         $this->print_group_menu();
         echo html_writer::start_div('xp-cancel-overflow'); // Else dropdown menu is cropped on some versions.
@@ -245,6 +232,8 @@ class report_controller extends page_controller {
                 return $output->render($button);
             }, $actions)));
         }
+
+        $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
     }
 
 }

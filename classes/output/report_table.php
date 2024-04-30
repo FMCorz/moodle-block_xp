@@ -263,8 +263,19 @@ class report_table extends table_sql {
     protected function get_row_actions($row) {
         $actions = [];
 
-        $url = new moodle_url($this->baseurl, ['action' => 'edit', 'userid' => $row->id]);
-        $actions[] = new action_menu_link($url, new pix_icon('t/edit', get_string('edit', 'core')), get_string('edit', 'core'));
+        $actions[] = new action_menu_link(
+            $this->baseurl,
+            new pix_icon('t/edit', get_string('edit', 'core')),
+            get_string('edit', 'core'),
+            false,
+            [
+                'data-action' => 'open-form',
+                'data-form-class' => 'block_xp\form\user_xp',
+                'data-form-args__contextid' => $this->world->get_context()->id,
+                'data-form-args__userid' => $row->id,
+                'data-modal-title' => get_string('edita', 'core', fullname($row)),
+            ]
+        );
 
         if ($this->logaccessperms && $this->logaccessperms->can_access_logs()) {
             $url = $this->urlresolver->reverse('log', ['courseid' => $this->world->get_courseid()]);

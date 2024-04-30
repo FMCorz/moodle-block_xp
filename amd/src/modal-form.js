@@ -40,6 +40,7 @@ function open(node) {
         formClass: formClass,
         args: formArgs,
         returnFocus: node,
+        saveButtonText: modalConfig.saveButtonText,
         modalConfig: {
             title: modalConfig.title ?? node.textContent.slice(0, 100),
         }

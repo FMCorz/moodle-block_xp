@@ -24,10 +24,7 @@
 
 namespace block_xp\form;
 
-defined('MOODLE_INTERNAL') || die();
-require_once($CFG->libdir . '/formslib.php');
-
-use moodleform;
+use core_form\dynamic_form;
 
 /**
  * Block XP user edit form class.
@@ -36,7 +33,39 @@ use moodleform;
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class user_xp extends moodleform {
+class user_xp extends dynamic_form {
+
+    use dynamic_world_trait;
+
+    protected $routename = 'report';
+
+    /**
+     * Get the state.
+     *
+     * This will throw an exception if the state does not already exist for the user.
+     *
+     * @return \block_xp\local\xp\state
+     */
+    protected function get_state() {
+        $userid = $this->optional_param('userid', 0, PARAM_INT);
+        return $this->get_world()->get_store()->get_state($userid);
+    }
+
+    public function process_dynamic_submission() {
+        $state = $this->get_state(); // Acts as validation.
+        $data = $this->get_data();
+        $this->get_world()->get_store()->set($state->get_id(), $data->xp);
+    }
+
+    public function set_data_for_dynamic_submission(): void {
+        $userid = $this->optional_param('userid', 0, PARAM_INT);
+        $state = $this->get_state();
+        $this->set_data([
+            'userid' => $userid,
+            'level' => $state->get_level()->get_level(),
+            'xp' => $state->get_xp(),
+        ]);
+    }
 
     /**
      * Form definintion.
@@ -46,6 +75,10 @@ class user_xp extends moodleform {
     public function definition() {
         $mform = $this->_form;
         $mform->setDisableShortforms(true);
+
+        if ($this->_ajaxformdata) {
+            $mform->addElement('hidden', 'contextid', $this->get_world()->get_context()->id);
+        }
 
         $mform->addElement('hidden', 'userid');
         $mform->setType('userid', PARAM_INT);
@@ -57,7 +90,9 @@ class user_xp extends moodleform {
         $mform->addElement('text', 'xp', get_string('total', 'block_xp'));
         $mform->setType('xp', PARAM_INT);
 
-        $this->add_action_buttons();
+        if (!$this->_ajaxformdata) {
+            $this->add_action_buttons();
+        }
     }
 
     /**
