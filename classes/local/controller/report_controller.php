@@ -197,7 +197,8 @@ class report_controller extends page_controller {
 
         // Confirming reset data.
         if ($canmanage && $this->get_param('resetdata')) {
-            echo $this->get_renderer()->confirm(
+            echo $this->get_renderer()->confirm_reset(
+                empty($groupid) ? get_string('resetcoursedata', 'block_xp') : get_string('resetgroupdata', 'block_xp'),
                 empty($groupid) ? get_string('reallyresetdata', 'block_xp') : get_string('reallyresetgroupdata', 'block_xp'),
                 new url($this->pageurl->get_compatible_url(), ['resetdata' => 1, 'confirm' => 1,
                     'sesskey' => sesskey(), 'group' => $groupid, ]),
@@ -208,10 +209,13 @@ class report_controller extends page_controller {
 
         // Confirming delete data.
         if ($canmanage && $this->get_param('delete')) {
-            echo $this->get_renderer()->confirm(
+            $user = core_user::get_user($this->get_param('userid'));
+            echo $this->get_renderer()->confirm_step(
+                $user ? fullname($user) : get_string('delete', 'core'),
                 markdown_to_html(get_string('reallydeleteuserstateandlogs', 'block_xp')),
                 new url($this->pageurl->get_compatible_url(), ['delete' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
-                new url($this->pageurl->get_compatible_url(), ['userid' => null])
+                new url($this->pageurl->get_compatible_url(), ['userid' => null]),
+                ['confirmlabel' => get_string('delete', 'core')]
             );
             return;
         }

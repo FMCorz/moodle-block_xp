@@ -121,6 +121,50 @@ class block_xp_renderer extends plugin_renderer_base {
     }
 
     /**
+     * Confirm reset.
+     *
+     * @param string $title The title.
+     * @param string $message The message.
+     * @param \moodle_url $confirmurl The confirm URL.
+     * @param \moodle_url $cancelurl The cancel URL.
+     * @param array $options Some options.
+     * @return string
+     */
+    public function confirm_reset($title, $message, \moodle_url $confirmurl, \moodle_url $cancelurl, $options = []) {
+        return $this->confirm_step($title, $message, $confirmurl, $cancelurl, $options + [
+            'confirmlabel' => get_string('reset', 'core'),
+        ]);
+    }
+
+    /**
+     * Confirm step.
+     *
+     * This supercedes the default confirm renderer to accomodate for variation between versions,
+     * and to set our own sensible defaults. For instance, the confirm button is red by default.
+     *
+     * Note that the parameters are not the same as the {@see \core_renderer::confirm}.
+     *
+     * @param string $title The title.
+     * @param string $message The message.
+     * @param \moodle_url $confirmurl The confirm URL.
+     * @param \moodle_url $cancelurl The cancel URL.
+     * @param array $options Some options.
+     * @return string
+     */
+    public function confirm_step($title, $message, \moodle_url $confirmurl, \moodle_url $cancelurl, $options = []) {
+        global $CFG;
+        if ($CFG->branch < 400) {
+            return parent::confirm($message, $confirmurl, $cancelurl);
+        }
+        return parent::confirm($message, $confirmurl, $cancelurl, [
+            'confirmtitle' => $title,
+            'continuestr' => $options['confirmlabel'] ?? null,
+            'cancelstr' => $options['cancellabel'] ?? null,
+            'type' => defined('single_button::BUTTON_DANGER') ? single_button::BUTTON_DANGER : null,
+        ]);
+    }
+
+    /**
      * Render a control menu.
      *
      * @param action_menu_link $actions

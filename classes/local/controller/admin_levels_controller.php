@@ -81,7 +81,8 @@ class admin_levels_controller extends admin_route_controller {
         echo $output->heading(get_string('defaultlevels', 'block_xp'));
 
         if ($this->get_param('reset')) {
-            echo $output->confirm(
+            echo $output->confirm_reset(
+                get_string('resetallcoursestodefaults', 'block_xp'),
                 get_string('reallyresetallcourselevelstodefaults', 'block_xp'),
                 new url($this->pageurl->get_compatible_url(), ['reset' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
                 new url($this->pageurl->get_compatible_url())

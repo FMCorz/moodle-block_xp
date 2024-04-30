@@ -27,8 +27,6 @@ namespace block_xp\local\controller;
 
 use block_xp\di;
 use block_xp\local\routing\url;
-use block_xp\local\serializer\level_serializer;
-use block_xp\local\serializer\levels_info_serializer;
 use block_xp\local\serializer\url_serializer;
 
 /**
@@ -113,7 +111,8 @@ class levels_controller extends page_controller {
         $output = $this->get_renderer();
 
         if ($this->get_param('reset')) {
-            echo $output->confirm(
+            echo $output->confirm_reset(
+                get_string('resettodefaults', 'block_xp'),
                 get_string('reallyresetcourselevelstodefaults', 'block_xp'),
                 new url($this->pageurl->get_compatible_url(), ['reset' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
                 new url($this->pageurl->get_compatible_url())

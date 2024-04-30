@@ -176,7 +176,8 @@ class rules_controller extends page_controller {
         $output = $this->get_renderer();
 
         if ($this->get_param('reset')) {
-            echo $output->confirm(
+            echo $output->confirm_reset(
+                get_string('resettodefaults', 'block_xp'),
                 get_string('reallyresetcourserulestodefaults', 'block_xp'),
                 new url($this->pageurl->get_compatible_url(), ['reset' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
                 new url($this->pageurl->get_compatible_url())

@@ -105,7 +105,6 @@ $string['customizelevels'] = 'Customise the levels';
 $string['dangerzone'] = 'Danger zone';
 $string['defaultlevels'] = 'Default levels';
 $string['defaultrules'] = 'Default rules';
-$string['defaultrulesformhelp'] = 'Those are the default rules provided by the plugin, they automatically give default points and ignore some redundant events. Your own rules take precedence over them.';
 $string['defaultsettings'] = 'Default settings';
 $string['defaultvisuals'] = 'Default appearance';
 $string['deletecondition'] = 'Delete condition';
@@ -382,13 +381,13 @@ Removing logs may enable a user to re-earn points for previous actions. If your 
 Importantly, when using _Level Up XP_ sitewide, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
 
 Do you really want to delete the points and logs of this user?';
-$string['reallyresetallcoursestodefaults'] = 'Really reset ALL courses rules to the default rules? This action is not reversible.';
-$string['reallyresetcourserulestodefaults'] = 'Really reset the course rules to the default rules? This action is not reversible.';
-$string['reallyresetallcourselevelstodefaults'] = 'Really reset ALL courses levels to the default levels? This action is not reversible.';
-$string['reallyresetcourselevelstodefaults'] = 'Really reset the course levels to the default levels? This action is not reversible.';
-$string['reallyresetallcoursevisualstodefaults'] = 'Really reset ALL courses levels appearance to the default appearance? This action is not reversible.';
-$string['reallyresetcoursevisualstodefaults'] = 'Really reset the course levels appearance to the default appearance? This action is not reversible.';
-$string['reallyresetdata'] = 'Really reset the levels and points of everyone in this course?';
+$string['reallyresetallcoursestodefaults'] = 'Are you sure that you want to reset the rules in ALL courses to the default rules? This action is not reversible.';
+$string['reallyresetcourserulestodefaults'] = 'Are you sure that you would like to reset the rules to the default rules? This action is not reversible.';
+$string['reallyresetallcourselevelstodefaults'] = 'Are you sure that you want to reset the levels in ALL courses to the default levels? This action is not reversible.';
+$string['reallyresetcourselevelstodefaults'] = 'Are you sure that you want to reset the levels to the default levels? This action is not reversible.';
+$string['reallyresetallcoursevisualstodefaults'] = 'Are you sure that you want to appearance of the levels in ALL courses to the default appearance? This action is not reversible.';
+$string['reallyresetcoursevisualstodefaults'] = 'Are you sure that you want to reset the appearance of the levels to the default appearance? This action is not reversible.';
+$string['reallyresetdata'] = 'Are you sure that you want to reset the levels and points of everyone in this course? This action is not reversible.';
 $string['reallyresetgroupdata'] = 'Really reset the levels and points of everyone in this group?';
 $string['reallyreverttopluginsdefaults'] = 'Really reset the default rules to the defaults suggested by the plugin? This action is not reversible.';
 $string['recentrewards'] = 'Recent rewards';
@@ -684,6 +683,7 @@ $string['forthewholesite'] = 'For the whole site';
 // Deprecated since 3.17.0
 $string['addinstructions'] = 'Add more information';
 $string['courserules'] = 'Course rules';
+$string['defaultrulesformhelp'] = 'Those are the default rules provided by the plugin, they automatically give default points and ignore some redundant events. Your own rules take precedence over them.';
 $string['editinstructions'] = 'Edit information';
 $string['grid'] = 'Grid';
 $string['list'] = 'List';

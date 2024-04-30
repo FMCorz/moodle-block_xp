@@ -227,15 +227,18 @@ class admin_rules_controller extends admin_route_controller {
         echo $output->heading(get_string('defaultrules', 'block_xp'));
 
         if ($this->get_param('revert')) {
-            echo $output->confirm(
+            echo $output->confirm_step(
+                get_string('reverttopluginsdefaults', 'block_xp'),
                 get_string('reallyreverttopluginsdefaults', 'block_xp'),
                 new url($this->pageurl->get_compatible_url(), ['revert' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
-                new url($this->pageurl->get_compatible_url())
+                new url($this->pageurl->get_compatible_url()),
+                ['confirmlabel' => get_string('revert', 'core')]
             );
             return;
 
         } else if ($this->get_param('reset')) {
-            echo $output->confirm(
+            echo $output->confirm_reset(
+                get_string('resetallcoursestodefaults', 'block_xp'),
                 get_string('reallyresetallcoursestodefaults', 'block_xp'),
                 new url($this->pageurl->get_compatible_url(), ['reset' => 1, 'confirm' => 1, 'sesskey' => sesskey()]),
                 new url($this->pageurl->get_compatible_url())
