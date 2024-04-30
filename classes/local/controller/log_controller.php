@@ -99,9 +99,18 @@ class log_controller extends page_controller {
         return $this->userid;
     }
 
+    protected function page_advanced_heading() {
+        $output = $this->get_renderer();
+        echo $output->advanced_heading(get_string('courselog', 'block_xp'), [
+            'intro' => new \lang_string('courselogintro', 'block_xp'),
+        ]);
+    }
+
     protected function page_content() {
         $userid = $this->get_user_id();
         $singleuser = (bool) $userid;
+
+        $this->page_advanced_heading();
 
         if (!$singleuser) {
             $this->print_group_menu();

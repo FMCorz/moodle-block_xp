@@ -118,11 +118,11 @@ class report_controller extends page_controller {
     }
 
     protected function get_page_html_head_title() {
-        return get_string('report', 'block_xp');
+        return get_string('coursereport', 'block_xp');
     }
 
     protected function get_page_heading() {
-        return get_string('report', 'block_xp');
+        return get_string('coursereport', 'block_xp');
     }
 
     protected function get_form($userid) {
@@ -170,15 +170,15 @@ class report_controller extends page_controller {
         }
 
         return [
-            'intro' => new \lang_string('reportintro', 'block_xp'),
+            'intro' => new \lang_string('coursereportintro', 'block_xp'),
             'menu' => [
                 [], // Divider.
                 $strreset ? [
                     'label' => $strreset,
                     'danger' => true,
                     'href' => $reseturl
-                ] : null
-            ]
+                ] : null,
+            ],
         ];
     }
 
@@ -193,7 +193,7 @@ class report_controller extends page_controller {
 
     protected function page_advanced_heading() {
         $output = $this->get_renderer();
-        echo $output->advanced_heading(get_string('report', 'block_xp'), $this->get_advanced_heading_options());
+        echo $output->advanced_heading(get_string('coursereport', 'block_xp'), $this->get_advanced_heading_options());
     }
 
     protected function page_content() {
