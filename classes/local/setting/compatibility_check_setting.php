@@ -62,6 +62,13 @@ class compatibility_check_setting extends static_setting {
         $recentishlocalxp = 2023100800; // Version 1.15.0.
         $humanbranch = moodle_major_version() ?: 'v?';
 
+        if ($blockxp && strpos($blockxp->release, '-dev') !== false) {
+            $messages[] = [
+                'title' => get_string('unstableversioninstalled', 'block_xp'),
+                'message' => get_string('unstableversioninstalledinfo', 'block_xp', ['version' => $blockxp->release]),
+            ];
+        }
+
         if ($localxp && $localxp->versiondb < $recentishlocalxp) {
             $messages[] = [
                 'title' => get_string('outofsyncexcessive', 'block_xp'),
