@@ -26,12 +26,22 @@
 
 import DynamicForm from 'core_form/dynamicform';
 import Modal from 'core/modal';
-import ModalFactory from 'core/modal_factory';
 import ModalForm from 'core_form/modalform';
-import ModalRegistry from 'core/modal_registry';
 import Templates from 'core/templates';
 
 const IS_MODAL_TYPE_DEPRECATED = 'create' in Modal;
+
+/**
+ * Load an AMD module.
+ *
+ * @param {String} name
+ * @returns {Promise<*>}
+ */
+const getModuleAsync = (name) => {
+    return new Promise((resolve, reject) => {
+        require([name], resolve, reject);
+    });
+};
 
 /**
  * Render a template asynchronously.
@@ -69,15 +79,20 @@ export function createModal(config, ModalClass = Modal) {
         return ModalClass.create(config);
     }
 
-    const typeName = config.type ?? config.template;
-    let type = ModalRegistry.get(typeName);
-    if (!type) {
-        ModalRegistry.register(typeName, ModalClass, config.template);
-    }
+    return Promise.all([
+        getModuleAsync('core/modal_factory'),
+        getModuleAsync('core/modal_registry'),
+    ]).then(([ModalFactory, ModalRegistry]) => {
+        const typeName = config.type ?? config.template;
+        let type = ModalRegistry.get(typeName);
+        if (!type) {
+            ModalRegistry.register(typeName, ModalClass, config.template);
+        }
 
-    return ModalFactory.create({
-        ...config,
-        type: typeName,
+        return ModalFactory.create({
+            ...config,
+            type: typeName,
+        });
     });
 }
 

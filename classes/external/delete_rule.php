@@ -16,18 +16,11 @@
 //
 // https://levelup.plus
 
-/**
- * External function.
- *
- * @package    block_xp
- * @copyright  2024 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\external;
 
 use block_xp\di;
+use context;
+use context_system;
 
 /**
  * External function.
@@ -60,24 +53,38 @@ class delete_rule extends external_api {
         $params = self::validate_parameters(self::execute_parameters(), compact('id'));
         $id = $params['id'];
 
-        // Retrieve the rule.
         $db = di::get('db');
         $rule = $db->get_record('block_xp_rule', ['id' => $id], '*', MUST_EXIST);
-
-        // Resolve the world.
-        $worldfactory = di::get('context_world_factory');
-        $world = $worldfactory->get_world_from_context(\context::instance_by_id($rule->contextid));
-        $context = $world->get_context(); // Ensure that we get the real context.
-        self::validate_context($context);
-
-        // Permission checks.
-        $perms = $world->get_access_permissions();
-        $perms->require_manage();
-
-        // In the future, we will keep the rule if it has logs.
-        $db->delete_records('block_xp_rule', ['id' => $id]);
-
+        $world = self::require_manage_permissions_and_get_world((int) $rule->contextid);
+        if ($world) {
+            $manager = di::get('world_rule_manager_factory')->get_rule_manager($world);
+            $manager->detach();
+            $manager->delete_rule($id);
+        } else {
+            di::get('admin_rule_manager')->delete_rule($id);
+        }
         return true;
+    }
+
+    /**
+     * Require manage permissions for the given context.
+     *
+     * @param int $contextid The context ID, or 0 for admin defaults.
+     * @return ?\block_xp\local\world
+     */
+    protected static function require_manage_permissions_and_get_world($contextid) {
+        if (!$contextid) {
+            $context = context_system::instance();
+            self::validate_context($context);
+            require_capability('moodle/site:config', $context);
+            return;
+        }
+
+        $worldfactory = di::get('context_world_factory');
+        $world = $worldfactory->get_world_from_context(context::instance_by_id($contextid));
+        self::validate_context($world->get_context());
+        $world->get_access_permissions()->require_manage();
+        return $world;
     }
 
     /**

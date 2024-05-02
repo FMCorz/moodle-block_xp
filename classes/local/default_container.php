@@ -28,6 +28,7 @@
 namespace block_xp\local;
 
 use cache;
+use block_xp\di;
 use coding_exception;
 use moodle_url;
 
@@ -43,7 +44,9 @@ class default_container implements container {
 
     /** @var array The objects supported by this container. */
     protected static $supports = [
+        'action_maker' => true,
         'addon' => true,
+        'admin_rule_manager' => true,
         'ajax_base_url' => true,
         'ajax_router' => true,
         'ajax_url_resolver' => true,
@@ -57,10 +60,12 @@ class default_container implements container {
         'block_edit_form_class' => true,
         'bulk_world_config_setter' => true,
         'cheatguard_form_class' => true,
+        'clock' => true,
         'collection_logger' => true,
         'collection_strategy' => true,
         'config' => true,
         'config_locked' => true,
+        'context_collection_logger_factory' => true,
         'context_world_factory' => true,
         'course_world_block_any_instance_finder_in_context' => true,
         'course_world_block_instance_checker' => true,
@@ -76,12 +81,18 @@ class default_container implements container {
         'leaderboard_form_class' => true,
         'levels_info_factory' => true,
         'levels_info_writer' => true,
+        'log_migrators' => true,
         'observer_rules_maker' => true,
+        'reason_from_log_entry_factory' => true,
+        'reason_resolver' => true,
         'renderer' => true,
         'router' => true,
         'rule_dictator' => true,
         'rule_event_lister' => true,
         'rule_filter_handler' => true,
+        'rule_filter_mediator' => true,
+        'rule_form_class' => true,
+        'rule_sorter' => true,
         'rule_type_resolver' => true,
         'serializer_factory' => true,
         'settings_maker' => true,
@@ -92,6 +103,7 @@ class default_container implements container {
         'usage_reporter' => true,
         'user_generic_indicator' => true,
         'user_notice_indicator' => true,
+        'world_rule_manager_factory' => true,
     ];
 
     /** @var array Object instances. */
@@ -115,12 +127,30 @@ class default_container implements container {
     }
 
     /**
+     * Get the action maker.
+     *
+     * @return action\maker
+     */
+    protected function get_action_maker() {
+        return new action\event_action_maker();
+    }
+
+    /**
      * Get the addon.
      *
      * @return plugin\addon
      */
     protected function get_addon() {
         return new plugin\addon();
+    }
+
+    /**
+     * Get the admin rule manager.
+     *
+     * @return rule\admin_rule_manager
+     */
+    protected function get_admin_rule_manager() {
+        return new rule\admin_rule_manager($this->get('db'), $this->get('config'));
     }
 
     /**
@@ -257,6 +287,18 @@ class default_container implements container {
     }
 
     /**
+     * Get the clock.
+     *
+     * @return object
+     */
+    protected function get_clock() {
+        if (interface_exists(\core\clock::class)) {
+            throw new \coding_exception('Incorrect dependency resolution, the clock should be retrieved from core.');
+        }
+        return new compat\clock();
+    }
+
+    /**
      * Get the global collection logger.
      *
      * @return logger
@@ -271,10 +313,13 @@ class default_container implements container {
      * @return collection_strategy
      */
     protected function get_collection_strategy() {
-        return new \block_xp\local\strategy\global_collection_strategy(
+        $strategy = new \block_xp\local\strategy\global_collection_strategy(
             $this->get('course_world_factory'),
             $this->get('config')->get('context')
         );
+        $strategy->set_action_maker($this->get('action_maker'));
+        $strategy->set_context_world_factory($this->get('context_world_factory'));
+        return $strategy;
     }
 
     /**
@@ -300,13 +345,26 @@ class default_container implements container {
     }
 
     /**
+     * Context collection logger factory.
+     *
+     * @return factory\context_collection_logger_factory
+     */
+    protected function get_context_collection_logger_factory() {
+        $factory = new factory\default_context_collection_logger_factory($this->get('db'));
+        $factory->set_reason_resolver(di::get('reason_resolver'));
+        $factory->set_reason_from_log_entry_factory(di::get('reason_from_log_entry_factory'));
+        $factory->set_rule_type_resolver(di::get('rule_type_resolver'));
+        return $factory;
+    }
+
+    /**
      * Context world factory.
      *
      * @return factory\context_world_factory
      */
     protected function get_context_world_factory() {
-        $factory = new factory\default_context_world_factory($this->get('config'));
-        $factory->set_course_world_factory($this->get('course_world_factory'));
+        $factory = new factory\default_context_world_factory(di::get('config'));
+        $factory->set_course_world_factory(di::get('course_world_factory'));
         return $factory;
     }
 
@@ -355,13 +413,15 @@ class default_container implements container {
      * @return course_world_factory
      */
     protected function get_course_world_factory() {
-        return new \block_xp\local\factory\default_course_world_factory(
-            $this->get('config'),
-            $this->get('db'),
-            $this->get('badge_url_resolver_course_world_factory'),
-            $this->get('config_locked'),
-            $this->get('levels_info_factory')
+        $factory = new \block_xp\local\factory\default_course_world_factory(
+            di::get('config'),
+            di::get('db'),
+            di::get('badge_url_resolver_course_world_factory'),
+            di::get('config_locked'),
+            di::get('levels_info_factory')
         );
+        $factory->set_context_collection_logger_factory(di::get('context_collection_logger_factory'));
+        return $factory;
     }
 
     /**
@@ -455,12 +515,41 @@ class default_container implements container {
     }
 
     /**
-     * Get observer rules maker
+     * Get the log migrators.
+     *
+     * @return array
+     */
+    protected function get_log_migrators() {
+        return [new \block_xp\local\logger\migration\migrate_xp_log_to_xp_logs()];
+    }
+
+    /**
+     * Get observer rules maker.
      *
      * @return observer_rules_maker
      */
     protected function get_observer_rules_maker() {
         return new \block_xp\local\observer\default_observer_rules_maker();
+    }
+
+    /**
+     * Get the reason factory from log entry.
+     *
+     * @return factory\reason_from_log_entry_factory
+     */
+    protected function get_reason_from_log_entry_factory() {
+        return new \block_xp\local\factory\reason_factory(
+            di::get('reason_resolver')
+        );
+    }
+
+    /**
+     * Get the reason resolver.
+     *
+     * @return reason\resolver
+     */
+    protected function get_reason_resolver() {
+        return new \block_xp\local\reason\default_resolver();
     }
 
     /**
@@ -504,9 +593,19 @@ class default_container implements container {
      * Get the rule dictator.
      *
      * @return rule\dictator
+     * @deprecated Since v20.0. Use world_rule_manager instead.
      */
     protected function get_rule_dictator() {
         return new rule\the_dictator($this->get('db'), $this->get('rule_filter_handler'));
+    }
+
+    /**
+     * Get the rule sorter.
+     *
+     * @return rule\rule_sorter
+     */
+    protected function get_rule_sorter() {
+        return new rule\rule_sorter($this->get('rule_filter_handler'));
     }
 
     /**
@@ -525,6 +624,24 @@ class default_container implements container {
      */
     protected function get_rule_filter_handler() {
         return new rulefilter\default_handler();
+    }
+
+    /**
+     * Get the rule filter mediator.
+     *
+     * @return rulefilter\filter_mediator
+     */
+    protected function get_rule_filter_mediator() {
+        return new rulefilter\filter_mediator($this->get('rule_filter_handler'));
+    }
+
+    /**
+     * Get the action rule dynamic form class name.
+     *
+     * @return string
+     */
+    protected function get_rule_form_class() {
+        return \block_xp\form\rule::class;
     }
 
     /**
@@ -631,6 +748,15 @@ class default_container implements container {
      */
     protected function get_user_notice_indicator() {
         return new \block_xp\local\indicator\user_notice_indicator($this->get('db'));
+    }
+
+    /**
+     * Get the world rule manager factory.
+     *
+     * @return factory\world_rule_manager_factory
+     */
+    protected function get_world_rule_manager_factory() {
+        return new factory\world_rule_manager_factory($this->get('db'), $this->get('admin_rule_manager'));
     }
 
     /**

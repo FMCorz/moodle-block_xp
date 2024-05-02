@@ -16,15 +16,6 @@
 //
 // https://levelup.plus
 
-/**
- * Handler.
- *
- * @package    block_xp
- * @copyright  2024 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\rulefilter;
 
 use block_xp\local\rulefilter\rulefilter;
@@ -113,6 +104,27 @@ class default_handler implements handler {
     }
 
     /**
+     * Whether the class is a rulefiltere.
+     *
+     * @param string $classname The class name.
+     * @return bool
+     */
+    protected function is_rulefilter_class($classname) {
+        try {
+            $reflector = new \ReflectionClass($classname);
+        } catch (\ReflectionException $e) {
+            return false;
+        }
+
+        if (!$reflector->isInstantiable()) {
+            return false;
+        } else if (!$reflector->implementsInterface(rulefilter::class)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Load a filter.
      *
      * @param string $name The name.
@@ -121,11 +133,8 @@ class default_handler implements handler {
     protected function load_filter($name) {
         $class = "block_xp\\local\\rulefilter\\$name";
         $instance = null;
-        if (class_exists($class)) {
+        if ($this->is_rulefilter_class($class)) {
             $instance = new $class();
-            if (!$instance instanceof rulefilter) {
-                $instance = null;
-            }
         }
         return $instance;
     }
@@ -136,7 +145,23 @@ class default_handler implements handler {
      * @return array
      */
     protected function make_filters_list_with_priority(): array {
-        return ['any' => 0];
+        return [
+            // Course modules.
+            'cm' => 9000,
+            'cmname' => 2000,
+
+            // Sections.
+            'section' => 1000,
+
+            // Course.
+            'thiscourse' => 100,
+
+            // Any.
+            'anycm' => 9,
+            'anysection' => 6,
+            'anycourse' => 3,
+            'any' => 0,
+        ];
     }
 
 }

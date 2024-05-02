@@ -34,6 +34,7 @@ namespace block_xp\local\reason;
  * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 3.17, use event_reason instead.
  */
 class event_name_reason implements reason {
 

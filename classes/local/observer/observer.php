@@ -52,6 +52,9 @@ class observer {
         $DB->delete_records('block_xp_config', $conditions);
         $DB->delete_records('block_xp_filters', $conditions);
         $DB->delete_records('block_xp_log', $conditions);
+        $DB->delete_records('block_xp_logs', ['contextid' => $event->contextid]);
+        $DB->delete_records('block_xp_rule', ['contextid' => $event->contextid]);
+        $DB->delete_records('block_xp_rule', ['childcontextid' => $event->contextid]);
 
         // Flags. Note that this is based on the actually implementation.
         $sql = $DB->sql_like('name', ':name');

@@ -38,6 +38,15 @@ use block_xp\local\rulefilter\rulefilter_with_update_after_restore;
 class restore_xp_block_structure_step extends restore_structure_step {
 
     /**
+     * Get task, overridden to declare return value in PHP docs.
+     *
+     * @return restore_xp_block_task
+     */
+    public function get_task() {
+        return parent::get_task();
+    }
+
+    /**
      * Execution conditions.
      *
      * @return bool
@@ -48,6 +57,12 @@ class restore_xp_block_structure_step extends restore_structure_step {
         // No restore on the front page.
         if ($this->get_courseid() == SITEID) {
             return false;
+        }
+
+        // We reset the container for safety, to remove the local caches. However we do not want to do this while
+        // PHP Unit is running as it can mess with the container when local_xp is present in the file system.
+        if (!PHPUNIT_TEST) {
+            di::reset_container();
         }
 
         return true;
@@ -99,6 +114,7 @@ class restore_xp_block_structure_step extends restore_structure_step {
             $DB->delete_records('block_xp_config', $conditions);
             $DB->delete_records('block_xp_filters', $conditions);
             $DB->delete_records('block_xp_log', $conditions);
+            $DB->delete_records('block_xp_logs', ['contextid' => $coursecontextid]);
 
             // Remove rules in course.
             $DB->delete_records('block_xp_rule', ['contextid' => $coursecontextid]);
@@ -189,6 +205,25 @@ class restore_xp_block_structure_step extends restore_structure_step {
      * @param array $data The data.
      */
     protected function process_log($data) {
+        if (isset($data['eventname'])) {
+            // These are the old logs, from the block_xp_log table, let's just process them as we used to.
+            $this->_process_legacy_log($data);
+            return;
+        }
+
+        // For the moment, we will not restore the logs. This is consistent with the behaviour that has been
+        // in place in XP+ for many years. In fact, in XP+ the logs are not even included in the backup. We may
+        // change this behaviour at a later stage, but it may have a negative effect on the UX as logs could
+        // interfere with the execution of rules, without being obvious. Let's see.
+        return;
+    }
+
+    /**
+     * Process legacy logs.
+     *
+     * @param array $data The data.
+     */
+    protected function _process_legacy_log($data) {
         global $DB;
         $data['courseid'] = $this->get_courseid();
         $data['userid'] = $this->get_mappingid('user', $data['userid']);
@@ -226,10 +261,12 @@ class restore_xp_block_structure_step extends restore_structure_step {
         }
 
         if (!$filter->is_multiple_allowed()) {
-            $dictator = di::get('rule_dictator');
             $context = $this->get_task()->get_course_context();
+            $worldfactory = di::get('context_world_factory');
+            $world = $worldfactory->get_world_from_context($context);
+            $manager = di::get('world_rule_manager_factory')->get_rule_manager($world);
             $testoptions = ['type' => $data['type'], 'filter' => $data['filter']];
-            if ($dictator->count_rules_in_context($context, null, $testoptions) > 0) {
+            if ($manager->count_rules(null, $testoptions) > 0) {
                 $this->log("block_xp: Skipping disallowed multiple rules for '{$data['type']}/{$data['filter']}'",
                     backup::LOG_DEBUG
                 );
@@ -263,20 +300,33 @@ class restore_xp_block_structure_step extends restore_structure_step {
      * After execute.
      */
     protected function after_execute() {
-        $this->add_related_files('block_xp', 'badges', null, $this->task->get_old_course_contextid());
+        $this->add_related_files('block_xp', 'badges', null, $this->get_task()->get_old_course_contextid());
     }
 
     /**
      * After restore.
      */
     protected function after_restore() {
-        global $DB;
+        // We reset the container for safety, to remove the local caches. However we do not want to do this while
+        // PHP Unit is running as it can mess with the container when local_xp is present in the file system.
+        if (!PHPUNIT_TEST) {
+            di::reset_container();
+        }
 
-        di::reset_container();
-        $courseid = $this->get_courseid();
         $restorecontext = restore_context::from_structure_step($this);
 
-        // Update the levels data if needed.
+        $this->after_restore_levels_info_update($restorecontext);
+        $this->after_restore_rules_update($restorecontext);
+        $this->after_restore_filters_update($restorecontext);
+    }
+
+    /**
+     * Update levels info after restore.
+     *
+     * @param restore_context $restorecontext The restore context.
+     */
+    protected function after_restore_levels_info_update(restore_context $restorecontext) {
+        $courseid = $restorecontext->get_course_id();
         try {
             $factory = di::get('course_world_factory');
             $world = $factory->get_world($courseid);
@@ -285,13 +335,23 @@ class restore_xp_block_structure_step extends restore_structure_step {
         } catch (Exception $e) {
             $this->log("block_xp: Running levels_info_writer::update_world_after_restore did not succeed", backup::LOG_DEBUG);
         }
+    }
 
-        // Update the rules after restore.
+    /**
+     * Update rules after restore.
+     *
+     * @param restore_context $restorecontext The restore context.
+     */
+    protected function after_restore_rules_update(restore_context $restorecontext) {
+        global $DB;
+
         try {
-            $dictator = di::get('rule_dictator');
             $filterhandler = di::get('rule_filter_handler');
+            $worldfactory = di::get('context_world_factory');
+            $world = $worldfactory->get_world_from_context($restorecontext->get_course_context());
+            $manager = di::get('world_rule_manager_factory')->get_rule_manager($world);
 
-            $rules = $dictator->get_rules_in_context($restorecontext->get_course_context());
+            $rules = $manager->get_rules();
             foreach ($rules as $rule) {
 
                 // Check that this was restored just then.
@@ -328,8 +388,19 @@ class restore_xp_block_structure_step extends restore_structure_step {
         } catch (Exception $e) {
             $this->log("block_xp: Updating rules after restore failed", backup::LOG_DEBUG);
         }
+    }
 
-        // Update each filter (the rules).
+    /**
+     * Update filters after restore.
+     *
+     * @param restore_context $restorecontext The restore context.
+     */
+    protected function after_restore_filters_update(restore_context $restorecontext) {
+        global $DB;
+
+        $courseid = $restorecontext->get_course_id();
+
+        // Update the filters.
         $filters = $DB->get_recordset('block_xp_filters', ['courseid' => $courseid]);
         foreach ($filters as $filter) {
             $filter = block_xp_filter::load_from_data($filter);

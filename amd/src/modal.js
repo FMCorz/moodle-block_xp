@@ -25,6 +25,7 @@
  */
 
 import ModalCancel from 'core/modal_cancel';
+import ModalSaveCancel from 'core/modal_save_cancel';
 import * as Str from 'core/str';
 import Templates from 'core/templates';
 import * as Compat from 'block_xp/compat';
@@ -33,6 +34,16 @@ import {extractNodeData, getDataFromJsonScript} from 'block_xp/utils';
 
 let simpleOpenModalActionObserverRegistered = false;
 let simpleOpenModalActionObserverSelector = '[data-xp-action="open-modal"]';
+
+/**
+ * Create a save/cancel modal.
+ *
+ * @param {Object} config
+ * @returns {Promise<Modal>}
+ */
+export function createSaveCancelModal(config) {
+    return Compat.createModal(config, ModalSaveCancel);
+}
 
 /**
  * Open the modal.

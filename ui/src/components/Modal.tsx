@@ -1,8 +1,30 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as ReactDOM from "react-dom";
 import { useDuplicatedActionPreventor, useModules, useString } from "../lib/hooks";
+import type { CoreModal, CoreModalFormInstance } from "../lib/types";
 
-export const SaveCancelModal: React.FC<{
+function getModalButton(modal: any, action: string): HTMLButtonElement | null {
+  if (!modal) return null;
+  const btnJq = modal.getFooter().find(modal.getActionSelector(action));
+  return btnJq.length ? btnJq[0] : null;
+}
+
+function getModalFormButton(modalForm: CoreModalFormInstance, action: string): HTMLButtonElement | null {
+  return getModalButton(modalForm?.modal, action);
+}
+
+export const SaveCancelModal = ({
+  children,
+  onClose,
+  onSave,
+  show,
+  title,
+  saveButtonText,
+  defaultHeight,
+  large,
+  canSave = true,
+}: {
+  children: React.ReactNode;
   onClose?: () => void;
   onSave?: (e: Event) => void;
   show?: boolean;
@@ -11,31 +33,25 @@ export const SaveCancelModal: React.FC<{
   large?: boolean;
   saveButtonText?: string;
   defaultHeight?: number;
-}> = ({ children, onClose, onSave, show, title, saveButtonText, defaultHeight, large, canSave = true }) => {
-  const modalPromise = useRef<Promise<any>>();
-  const modalRef = useRef<any>();
+}) => {
+  const modalPromise = useRef<Promise<CoreModal>>();
+  const modalRef = useRef<CoreModal>();
   // In rare instances, we can get double save events. This can happen when we hit enter,
   // and a new event listener is registered while Moodle is still broadcasting its events
   // which is then called, and so we get two events. This wouldn't happen if the modal was
   // not re-rendering, I think.
   const isSavePermitted = useDuplicatedActionPreventor();
-  const { getModule } = useModules(["core/modal_factory", "core/modal_events"]);
+  const { getModule } = useModules(["block_xp/modal", "core/modal_events"] as const);
   const [ready, setReady] = useState(false);
 
-  const getSaveButton = useCallback((): HTMLButtonElement | null => {
-    if (!modalRef.current) return null;
-    const node = modalRef.current.getFooter()[0].querySelector('[data-action="save"]');
-    return node ?? null;
-  }, [modalRef.current]);
-
   const setSaveButtonText = (text?: string) => {
-    const saveBtn = getSaveButton();
+    const saveBtn = getModalButton(modalRef.current, "save");
     if (!saveBtn || !text) return;
     saveBtn.textContent = text;
   };
 
   const setButtonAttribute = (attr: string, value: any) => {
-    const saveBtn = getSaveButton();
+    const saveBtn = getModalButton(modalRef.current, "save");
     if (!saveBtn || !attr) return;
     if (value === null || typeof value === "undefined" || value === false) {
       saveBtn.removeAttribute(attr);
@@ -49,32 +65,36 @@ export const SaveCancelModal: React.FC<{
     let cancelled = false;
     if (modalRef.current) return;
 
-    const ModalFactory = getModule("core/modal_factory");
-    if (!ModalFactory) return;
+    const Modal = getModule("block_xp/modal");
+    if (!Modal) return;
 
     if (!modalPromise.current) {
-      modalPromise.current = ModalFactory.create({
-        type: ModalFactory.types.SAVE_CANCEL,
+      modalPromise.current = Modal.createSaveCancelModal({
         title: title,
         large: large,
         body: `<div class='block_xp' style='${defaultHeight ? `height: ${defaultHeight}px` : ""}'></div>`,
-      }) as Promise<any>;
+      }) as Promise<CoreModal>;
     }
 
-    modalPromise.current.then((modal) => {
-      if (cancelled) return;
+    modalPromise.current
+      .then((modal) => {
+        if (cancelled) return;
 
-      modalRef.current = modal;
+        modalRef.current = modal;
 
-      if (saveButtonText) {
-        setSaveButtonText(saveButtonText);
-      }
-      setReady(true); // State update to force re-render.
+        if (saveButtonText) {
+          setSaveButtonText(saveButtonText);
+        }
+        setReady(true); // State update to force re-render.
 
-      if (show) {
-        modal.show();
-      }
-    });
+        if (show) {
+          modal.show();
+        }
+        return;
+      })
+      .catch(() => {
+        return;
+      });
 
     return () => {
       cancelled = true;
@@ -104,7 +124,7 @@ export const SaveCancelModal: React.FC<{
     // absolute and thus requires a hardcoded height.
     const updateReactNodeHeight = () => {
       const body = modal.getBody()[0];
-      const reactNode = body ? body.querySelector(".block_xp") : null;
+      const reactNode = body ? body.querySelector<HTMLDivElement>(".block_xp") : null;
       if (!body || !reactNode) {
         return;
       }
@@ -137,80 +157,94 @@ export const SaveCancelModal: React.FC<{
     } else {
       modalRef.current.hide();
     }
-  }, [show, modalRef.current]);
+  }, [show, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update title.
   useEffect(() => {
     if (!modalRef.current || !title) return;
     modalRef.current.setTitle(title);
-  }, [title, modalRef.current]);
+  }, [title, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update save button text.
   useEffect(() => {
     setSaveButtonText(saveButtonText);
-  }, [saveButtonText, modalRef.current]);
+  }, [saveButtonText, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update the save button status.
   useEffect(() => {
     setButtonAttribute("disabled", !canSave);
-  }, [canSave, modalRef.current]);
+  }, [canSave, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return modalRef.current ? ReactDOM.createPortal(children, modalRef.current.getBody()[0].querySelector(".block_xp")) : null;
+  return (
+    <>
+      {modalRef.current
+        ? ReactDOM.createPortal(
+            children,
+            modalRef.current.getBody()[0].querySelector<HTMLDivElement>(".block_xp") as HTMLDivElement,
+          )
+        : null}
+    </>
+  );
 };
 
-export const DeleteModal: React.FC<{
+export const DeleteModal = ({
+  children,
+  onClose,
+  onDelete,
+  show,
+  title,
+}: {
+  children: React.ReactNode;
   onClose?: () => void;
   onDelete?: (e: Event) => void;
   show?: boolean;
   title?: string;
-}> = ({ children, onClose, onDelete, show, title }) => {
-  const modalPromise = useRef<Promise<any>>();
-  const modalRef = useRef<any>();
+}) => {
+  const modalPromise = useRef<Promise<CoreModal>>();
+  const modalRef = useRef<CoreModal>();
   const [ready, setReady] = useState(false);
   const isDeletePermitted = useDuplicatedActionPreventor();
   const deleteStr = useString("delete", "core");
-  const { getModule } = useModules(["core/modal_factory", "core/modal_events"]);
-
-  const getDeleteButton = useCallback((): HTMLButtonElement | null => {
-    if (!modalRef.current) return null;
-    const node = modalRef.current.getFooter()[0].querySelector('[data-action="save"]');
-    return node ?? null;
-  }, [modalRef.current]);
+  const { getModule } = useModules(["block_xp/modal", "core/modal_events"] as const);
 
   // Create the modal object.
   useEffect(() => {
     let cancelled = false;
     if (modalRef.current) return;
 
-    const ModalFactory = getModule("core/modal_factory");
-    if (!ModalFactory) return;
+    const Modal = getModule("block_xp/modal");
+    if (!Modal) return;
 
     if (!modalPromise.current) {
-      modalPromise.current = ModalFactory.create({
-        type: ModalFactory.types.SAVE_CANCEL, // We use save_cancel as delete_cancel is only in 4.2.
+      modalPromise.current = Modal.createSaveCancelModal({
         title: title,
         body: `<div class='block_xp'></div>`,
-      }) as Promise<any>;
+      }) as Promise<CoreModal>;
     }
 
-    modalPromise.current.then((modal) => {
-      if (cancelled) return;
+    modalPromise.current
+      .then((modal) => {
+        if (cancelled) return;
 
-      modalRef.current = modal;
+        modalRef.current = modal;
 
-      const deleteButton = getDeleteButton();
-      if (deleteButton) {
-        if (deleteStr) {
-          deleteButton.textContent = deleteStr;
+        const deleteButton = getModalButton(modal, "save");
+        if (deleteButton) {
+          if (deleteStr) {
+            deleteButton.textContent = deleteStr;
+          }
+          deleteButton.classList.add("btn-danger");
         }
-        deleteButton.classList.add("btn-danger");
-      }
-      setReady(true); // State update to force re-render.
+        setReady(true); // State update to force re-render.
 
-      if (show) {
-        modal.show();
-      }
-    });
+        if (show) {
+          modal.show();
+        }
+        return;
+      })
+      .catch(() => {
+        return;
+      });
 
     return () => {
       cancelled = true;
@@ -252,34 +286,48 @@ export const DeleteModal: React.FC<{
     } else {
       modalRef.current.hide();
     }
-  }, [show, modalRef.current]);
+  }, [show, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update title.
   useEffect(() => {
     if (!modalRef.current || !title) return;
     modalRef.current.setTitle(title);
-  }, [title, modalRef.current]);
+  }, [title, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update button.
   useEffect(() => {
     if (!modalRef.current || !deleteStr) return;
-    const btn = getDeleteButton();
+    const btn = getModalButton(modalRef.current, "save");
     if (!btn) return;
     btn.textContent = deleteStr;
-  }, [deleteStr, modalRef.current]);
+  }, [deleteStr, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return modalRef.current ? ReactDOM.createPortal(children, modalRef.current.getBody()[0].querySelector(".block_xp")) : null;
+  return (
+    <>
+      {modalRef.current
+        ? ReactDOM.createPortal(children, modalRef.current.getBody()[0].querySelector(".block_xp") as HTMLDivElement)
+        : null}
+    </>
+  );
 };
 
-export const ModalForm: React.FC<{
+export const ModalForm = ({
+  formClass,
+  formArgs,
+  onClose,
+  onSubmit,
+  saveButtonDisabled,
+  title,
+}: {
   formClass: string;
   formArgs?: Record<string, any>;
   onClose?: () => void;
   onSubmit?: () => void;
+  saveButtonDisabled?: boolean;
   title?: string;
-}> = ({ formClass, formArgs, onClose, onSubmit, title }) => {
-  const modalFormRef = useRef<any>();
-  const { getModule } = useModules(["core_form/modalform", "core/modal_factory", "core/modal_events"]);
+}) => {
+  const modalFormRef = useRef<CoreModalFormInstance | null>();
+  const { getModule } = useModules(["core_form/modalform", "core/modal_events"] as const);
 
   // Create the modal form.
   useEffect(() => {
@@ -309,8 +357,12 @@ export const ModalForm: React.FC<{
     if (!ModalForm || !ModalEvents) return;
 
     const handleLoaded = () => {
-      const root = modalForm.modal.getRoot();
+      const root = modalForm.modal!.getRoot();
       root[0].classList.add("block_xp");
+
+      if (saveButtonDisabled) {
+        getModalFormButton(modalForm, "save")?.setAttribute("disabled", "");
+      }
 
       // Register the onClose event.
       root.on(ModalEvents.hidden, handleClose);
@@ -328,7 +380,8 @@ export const ModalForm: React.FC<{
 
     return () => {
       const modalForm = modalFormRef.current;
-      const root = modalForm?.modal?.getRoot();
+      if (!modalForm) return;
+      const root = modalForm.modal!.getRoot();
       const rootEl = root?.[0];
       rootEl?.removeEventListener(modalForm.events.LOADED, handleLoaded);
       rootEl?.removeEventListener(modalForm.events.FORM_SUBMITTED, handleSubmit);
@@ -341,7 +394,7 @@ export const ModalForm: React.FC<{
     if (!modalFormRef.current) return;
     const modal = modalFormRef.current.modal;
     if (!modal) return;
-    modal.setTitle(title);
+    modal.setTitle(title ?? "");
   }, [title]);
 
   return null;

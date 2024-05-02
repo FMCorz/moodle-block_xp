@@ -61,7 +61,7 @@
         {{/ actions }}
         {{# hasmenu }}
         <div class="dropdown">
-            <button class="btn btn-link btn-icon icon-size-3 rounded-circle" data-bs-toggle="dropdown" data-toggle="dropdown" type="button" aria-expanded="false">
+            <button class="btn btn-link btn-icon icon-size-3 rounded-circle xp-no-underline hover:xp-no-underline" data-bs-toggle="dropdown" data-toggle="dropdown" type="button" aria-expanded="false">
                 <i class="fa fa-ellipsis-v text-dark py-2" aria-hidden="true"></i>
                 <span class="xp-sr-only">{{#str}}menu, block_xp{{/str}}</span>
             </button>
@@ -79,7 +79,7 @@
                             </div>
                             {{# addonrequired }}
                             <div class="xp-flex-0">
-                                <span class="xp-py-0.5 xp-px-1 xp-not-italic xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline xp-font-normal xp-align-middle">XP+</span>
+                                {{> block_xp/addon-tag }}
                             </div>
                             {{/ addonrequired }}
                         </div>

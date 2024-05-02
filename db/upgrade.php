@@ -597,5 +597,122 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2024040211, 'xp');
     }
 
+    if ($oldversion < 2025122200) {
+
+        // Define table block_xp_logs to be created.
+        $table = new xmldb_table('block_xp_logs');
+
+        // Adding fields to table block_xp_logs.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('contextid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('points', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('reason', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('subtype', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('envid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('parentid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('objectid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('ruleid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('reasontypehash', XMLDB_TYPE_CHAR, '9', null, null, null, null);
+        $table->add_field('timerecorded', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table block_xp_logs.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Adding indexes to table block_xp_logs.
+        $table->add_index('ctxrule', XMLDB_INDEX_NOTUNIQUE, ['contextid', 'ruleid']);
+        $table->add_index('ctxuser', XMLDB_INDEX_NOTUNIQUE, ['contextid', 'userid']);
+        $table->add_index('ctxuserpoints', XMLDB_INDEX_NOTUNIQUE, ['contextid', 'userid', 'points']);
+        $table->add_index('ctxuserreasontype', XMLDB_INDEX_NOTUNIQUE, ['contextid', 'userid', 'reasontypehash']);
+        $table->add_index('ctxusertime', XMLDB_INDEX_NOTUNIQUE, ['contextid', 'userid', 'timerecorded']);
+
+        // Conditionally launch create table for block_xp_logs.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2025122200, 'xp');
+    }
+
+    if ($oldversion < 2025122201) {
+
+        // Remove setting value that are no longer recommended.
+        $keeplogs = get_config('block_xp', 'keeplogs');
+        if ($keeplogs > 0 && $keeplogs < 30) {
+            unset_config('keeplogs', 'block_xp');
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2025122201, 'xp');
+    }
+
+    if ($oldversion < 2026031800) {
+
+        // Define field legacysource to be added to block_xp_logs.
+        $table = new xmldb_table('block_xp_logs');
+        $field = new xmldb_field('legacysource', XMLDB_TYPE_INTEGER, '2', null, null, null, null, 'timerecorded');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2026031800, 'xp');
+    }
+
+    if ($oldversion < 2026031801) {
+
+        // Define field legacyid to be added to block_xp_logs.
+        $table = new xmldb_table('block_xp_logs');
+        $field = new xmldb_field('legacyid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'legacysource');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2026031801, 'xp');
+    }
+
+    if ($oldversion < 2026031802) {
+
+        // Define index legacysource (unique) to be added to block_xp_logs.
+        $table = new xmldb_table('block_xp_logs');
+        $index = new xmldb_index('legacysource', XMLDB_INDEX_UNIQUE, ['legacysource', 'legacyid']);
+
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2026031802, 'xp');
+    }
+
+    if ($oldversion < 2026031900) {
+
+        // Schedule the logs migrator task.
+        $task = new \block_xp\task\logs_migrator_adhoc();
+        $task->set_component('block_xp');
+        \core\task\manager::queue_adhoc_task($task, true);
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2026031900, 'xp');
+    }
+
+    if ($oldversion < 2026041600) {
+
+        // Define field defaultactionrules to be added to block_xp_config.
+        $table = new xmldb_table('block_xp_config');
+        $field = new xmldb_field('defaultactionrules', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'neighbours');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2026041600, 'xp');
+    }
+
     return true;
 }

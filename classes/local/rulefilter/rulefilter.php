@@ -16,17 +16,9 @@
 //
 // https://levelup.plus
 
-/**
- * Filter.
- *
- * @package    block_xp
- * @copyright  2024 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\rulefilter;
 
+use action_tester;
 use context;
 use lang_string;
 
@@ -43,11 +35,18 @@ interface rulefilter {
     /**
      * Get action tester.
      *
+     * The return type of this method was block_xp\local\rulefilter\action_tester in XP 3.16,
+     * and it should have become block_xp\local\action\action_tester in XP 20, but as XP+
+     * already implemented this interface, fixing the return type would break implementations.
+     *
+     * And even if we could, the objects implementing action_tester would have to implement
+     * the now deprecated one, which would not work either. So, the return type was removed.
+     *
      * @param context $effectivecontext The effective context.
      * @param object $config The config.
      * @return action_tester
      */
-    public function get_action_tester(context $effectivecontext, object $config): action_tester;
+    public function get_action_tester(context $effectivecontext, object $config);
 
     /**
      * Get compatible context levels.

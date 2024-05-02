@@ -16,15 +16,6 @@
 //
 // https://levelup.plus
 
-/**
- * Handler.
- *
- * @package    block_xp
- * @copyright  2024 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\rulefilter;
 
 use block_xp\local\rulefilter\rulefilter;

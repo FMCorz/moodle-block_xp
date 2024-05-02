@@ -118,6 +118,13 @@ class default_settings_maker implements settings_maker {
         $settingspage->hidden = true;
         $settings->add($catname, $settingspage);
 
+        // Add the default action rules page.
+        $settingspage = new admin_externalpage('block_xp_default_action_rules',
+            get_string('defaultactionrules', 'block_xp'),
+            $this->urlresolver->reverse('admin/actionrules')->get_compatible_url()
+        );
+        $settings->add($catname, $settingspage);
+
         // Add the default levels page.
         $settingspage = new admin_externalpage('block_xp_default_levels',
             get_string('defaultlevels', 'block_xp'),
@@ -234,14 +241,12 @@ class default_settings_maker implements settings_maker {
         // Keeps logs for.
         $settings[] = (new admin_setting_configselect('block_xp/keeplogs',
             get_string('keeplogs', 'block_xp'),
-            '',
+            get_string('keeplogsdesc', 'block_xp'),
             $this->defaults->get('keeplogs'),
             [
                 '0' => get_string('forever', 'block_xp'),
-                '1' => get_string('numday', 'core', 1),
-                '3' => get_string('numdays', 'core', 3),
-                '7' => get_string('numweek', 'core', 1),
                 '30' => get_string('nummonth', 'core', 1),
+                '90' => get_string('nummonths', 'core', 3),
             ]
         ));
 

@@ -2,21 +2,53 @@
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react-hooks/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
         "@typescript-eslint"
     ],
     "rules": {
-        "indent": [
+        "complexity": "off",
+        "consistent-return": "off",
+        "curly": [
             "warn",
-            2
+            "multi-line"
+        ],
+        "indent": "off",
+        "no-constant-condition": "warn",
+        "no-empty": "off",
+        "no-empty-function": "off",
+        "no-nested-ternary": "off",
+        "no-unused-expressions": [
+            "error",
+            {
+                "allowShortCircuit": true
+            }
         ],
         "no-unused-vars": "off",
         "object-curly-spacing": [
+            "warn",
             "always"
         ],
-        "promise/no-native": "off"
+        "promise/avoid-new": "off",
+        "promise/no-native": "off",
+        "react/jsx-no-target-blank": "off",
+        "space-before-function-paren": [
+            "warn",
+            {
+                "named": "never",
+                "anonymous": "always",
+                "asyncArrow": "always"
+            }
+        ],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }

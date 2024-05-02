@@ -43,6 +43,7 @@ interface reason {
      * Get a signature.
      *
      * @return string
+     * @deprecated Since XP 3.17
      */
     public function get_signature();
 
@@ -50,6 +51,7 @@ interface reason {
      * Get the type.
      *
      * @return string
+     * @deprecated Since XP 3.17, use resolver instead.
      */
     public static function get_type();
 
@@ -57,6 +59,7 @@ interface reason {
      * Reloads the object from its signature.
      *
      * @param string $signature The signature.
+     * @deprecated Since XP 3.17
      * @return self
      */
     public static function from_signature($signature);

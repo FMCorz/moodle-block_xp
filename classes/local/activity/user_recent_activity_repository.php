@@ -42,7 +42,7 @@ interface user_recent_activity_repository {
      *
      * @param int $userid The user ID.
      * @param int $count The number of entries.
-     * @return activity
+     * @return activity[]
      */
     public function get_user_recent_activity($userid, $count = 0);
 

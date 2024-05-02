@@ -55,4 +55,11 @@ interface resolver {
      */
     public function get_type_name(ruletype $type): string;
 
+    /**
+     * Get the types.
+     *
+     * @return ruletype[]
+     */
+    public function get_types(): array;
+
 }

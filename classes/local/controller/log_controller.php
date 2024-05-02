@@ -82,8 +82,9 @@ class log_controller extends page_controller {
     }
 
     protected function get_table() {
-        $table = new \block_xp\output\log_table(
+        $table = new \block_xp\output\logs_table(
             $this->world,
+            di::get('reason_from_log_entry_factory'),
             $this->get_groupid(),
             $this->get_user_id()
         );
@@ -132,6 +133,23 @@ class log_controller extends page_controller {
         return $this->userid;
     }
 
+    protected function get_dismissable_filters() {
+        $userid = $this->get_user_id();
+        if (!$userid) {
+            return;
+        }
+
+        $allusers = new url($this->pageurl);
+        $allusers->remove_params('userid');
+        $user = core_user::get_user($userid, '*', MUST_EXIST);
+        return [
+            [
+                'label' => get_string('resultsfilteredforn', 'block_xp', fullname($user)),
+                'removeurl' => $allusers,
+            ]
+        ];
+    }
+
     protected function page_advanced_heading() {
         $output = $this->get_renderer();
         echo $output->advanced_heading(get_string('courselog', 'block_xp'), [
@@ -150,21 +168,32 @@ class log_controller extends page_controller {
 
         if (!$singleuser) {
             $this->print_group_menu();
-        } else {
-            $user = core_user::get_user($userid, '*', MUST_EXIST);
-            $allusers = new url($this->pageurl);
-            $allusers->remove_params('userid');
-            echo html_writer::tag('p', get_string('resultsfilteredforn', 'block_xp', fullname($user))
-                . ' ' . html_writer::link($allusers, get_string('removefilter', 'block_xp')));
         }
 
         // Display the user filter.
         $this->page_user_filter();
 
+        // Display the active dismissable filters.
+        $this->page_dismissable_filters();
+
         // Displaying the report.
         echo html_writer::start_div('xp-cancel-overflow');
         echo $this->get_table()->out(50, !$singleuser && $this->isusingoldxpp);
         echo html_writer::end_div();
+    }
+
+    protected function page_dismissable_filters() {
+        $dismissablefilters = $this->get_dismissable_filters();
+        if (!$dismissablefilters) {
+            return;
+        }
+
+        echo html_writer::start_tag('p');
+        echo implode('<br>', array_map(function ($filter) {
+            return s($filter['label'])
+                . ' ' . html_writer::link($filter['removeurl'], get_string('removefilter', 'block_xp'));
+        }, $dismissablefilters));
+        echo html_writer::end_tag('p');
     }
 
     protected function page_user_filter() {

@@ -184,13 +184,13 @@ class default_course_world_navigation_factory implements course_world_navigation
             ];
             $links[] = [
                 'id' => 'rules',
-                'url' => $urlresolver->reverse('rules', ['courseid' => $courseid]),
+                'url' => $urlresolver->reverse('actionrules', ['courseid' => $courseid]),
                 'text' => get_string('navpoints', 'block_xp'),
                 'children' => array_filter([
                     [
-                        'id' => 'rules',
-                        'url' => $urlresolver->reverse('rules', ['courseid' => $courseid]),
-                        'text' => get_string('naveventrules', 'block_xp'),
+                        'id' => 'actionrules',
+                        'url' => $urlresolver->reverse('actionrules', ['courseid' => $courseid]),
+                        'text' => get_string('navactionrules', 'block_xp'),
                     ],
                     $showpromo || $hasaddon ?
                     [
@@ -199,6 +199,11 @@ class default_course_world_navigation_factory implements course_world_navigation
                         'text' => get_string('navcompletionrules', 'block_xp'),
                         'addonrequired' => !$hasaddon,
                     ] : null,
+                    [
+                        'id' => 'rules',
+                        'url' => $urlresolver->reverse('rules', ['courseid' => $courseid]),
+                        'text' => get_string('naveventrules', 'block_xp'),
+                    ],
                     $showpromo || $hasaddon ?
                     [
                         'id' => 'graderules',

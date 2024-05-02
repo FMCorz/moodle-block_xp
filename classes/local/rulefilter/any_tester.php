@@ -16,18 +16,9 @@
 //
 // https://levelup.plus
 
-/**
- * Filter.
- *
- * @package    block_xp
- * @copyright  2024 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\rulefilter;
 
-use block_xp\local\action\action;
+use block_xp\local\action\tester\bool_tester;
 
 /**
  * Filter.
@@ -36,17 +27,17 @@ use block_xp\local\action\action;
  * @copyright  2024 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 20, use block_xp\local\action\tester\bool_tester instead.
  */
-class any_tester implements action_tester {
+class any_tester extends bool_tester {
 
     /**
-     * Whether the action is passing the constraints.
-     *
-     * @param action $action The action.
-     * @return bool
+     * Constructor.
      */
-    public function is_action_passing_constraints(action $action): bool {
-        return true;
+    public function __construct() {
+        debugging('The class rulefilter\any_tester is deprecated, '
+            . 'use block_xp\local\action\tester\bool_tester instead.', DEBUG_DEVELOPER);
+        parent::__construct(true);
     }
 
 }

@@ -1,6 +1,14 @@
 import React from "react";
+import { Icon } from "../lib/types";
 
 type IconProps = { className?: string };
+
+export const IconRenderer = ({ icon }: { icon: Icon }) => {
+  if (icon.type === "fa") {
+    return <i className={`fa fa-${icon.value}`}></i>;
+  }
+  return null;
+};
 
 export const Bars3BottomLeftIcon = ({ className }: IconProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>

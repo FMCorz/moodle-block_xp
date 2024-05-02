@@ -16,15 +16,6 @@
 //
 // https://levelup.plus
 
-/**
- * Default course world config.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\config;
 
 /**
@@ -60,6 +51,7 @@ class default_course_world_config extends immutable_config {
             'identitymode' => course_world_config::IDENTITY_ON, // Identity mode.
             'rankmode' => course_world_config::RANK_ON, // Rank mode.
             'neighbours' => 0, // Number of neighbours to show on ladder, 0 means everyone.
+            'defaultactionrules' => course_world_config::DEFAULT_ACTION_RULES_MISSING,
             'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING, // Flag about the default filters.
             'laddercols' => 'xp,progress', // Addditional columns to be displayed on the ladder.
             'instructions' => '', // Instructions to display on the info page.

@@ -52,6 +52,16 @@ class di {
         if (!static::$container) {
             static::$container = static::make_container();
         }
+
+        // Get the clock from core if we can.
+        if ($id === 'clock'
+                && class_exists(\core\di::class)
+                && interface_exists(\core\clock::class)
+                && \core\di::get_container()->has(\core\clock::class)
+        ) {
+            return \core\di::get_container()->get(\core\clock::class);
+        }
+
         return static::$container->get($id);
     }
 

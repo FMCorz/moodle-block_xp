@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/xp/db" VERSION="20240421" COMMENT="XMLDB file for Moodle blocks/xp"
+<XMLDB PATH="blocks/xp/db" VERSION="20260416" COMMENT="XMLDB file for Moodle blocks/xp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -17,23 +17,6 @@
       </KEYS>
       <INDEXES>
         <INDEX NAME="courseuser" UNIQUE="true" FIELDS="courseid, userid"/>
-      </INDEXES>
-    </TABLE>
-    <TABLE NAME="block_xp_log" COMMENT="Events captured">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="eventname" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="xp" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="time" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
-      <INDEXES>
-        <INDEX NAME="courseuser" UNIQUE="false" FIELDS="courseid, userid"/>
-        <INDEX NAME="time" UNIQUE="false" FIELDS="time"/>
       </INDEXES>
     </TABLE>
     <TABLE NAME="block_xp_config" COMMENT="Settings">
@@ -55,6 +38,7 @@
         <FIELD NAME="identitymode" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
         <FIELD NAME="rankmode" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
         <FIELD NAME="neighbours" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="defaultactionrules" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="defaultfilters" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Flag for the default filters. Defaults to 1, the legacy value (DEFAULT_FILTERS_STATIC)."/>
         <FIELD NAME="laddercols" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="xp,progress" SEQUENCE="false" COMMENT="The additional columns to display in the ladder. Comma-separated list."/>
         <FIELD NAME="instructions" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
@@ -86,6 +70,52 @@
       <INDEXES>
         <INDEX NAME="courseid" UNIQUE="false" FIELDS="courseid"/>
         <INDEX NAME="courseidcat" UNIQUE="false" FIELDS="courseid, category"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_xp_log" COMMENT="Events captured. Deprecated in favour of block_xp_logs.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="eventname" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="xp" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="time" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="courseuser" UNIQUE="false" FIELDS="courseid, userid"/>
+        <INDEX NAME="time" UNIQUE="false" FIELDS="time"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_xp_logs" COMMENT="Log of points.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="contextid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="points" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="reason" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="subtype" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="envid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="parentid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="objectid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="ruleid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="reasontypehash" TYPE="char" LENGTH="9" NOTNULL="false" SEQUENCE="false" COMMENT="A hash portion for reason and subtype indexing. Collisions are possible, but rare enough for our use case."/>
+        <FIELD NAME="timerecorded" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="legacysource" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="legacyid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="ctxrule" UNIQUE="false" FIELDS="contextid, ruleid"/>
+        <INDEX NAME="ctxuser" UNIQUE="false" FIELDS="contextid, userid"/>
+        <INDEX NAME="ctxuserpoints" UNIQUE="false" FIELDS="contextid, userid, points"/>
+        <INDEX NAME="ctxuserreasontype" UNIQUE="false" FIELDS="contextid, userid, reasontypehash"/>
+        <INDEX NAME="ctxusertime" UNIQUE="false" FIELDS="contextid, userid, timerecorded"/>
+        <INDEX NAME="legacysource" UNIQUE="true" FIELDS="legacysource, legacyid"/>
       </INDEXES>
     </TABLE>
     <TABLE NAME="block_xp_rule" COMMENT="Rules">

@@ -37,7 +37,16 @@ export function getDefaultBulkEditPointsState(props: {
   };
 }
 
-const BulkEditPoints: React.FC<{
+const BulkEditPoints = ({
+  method,
+  base,
+  incr,
+  coef,
+  onBaseChange,
+  onCoefChange,
+  onIncrementChange,
+  onMethodChange,
+}: {
   method: BulkEditPointsState["method"];
   base: BulkEditPointsState["base"];
   incr: BulkEditPointsState["incr"];
@@ -46,7 +55,7 @@ const BulkEditPoints: React.FC<{
   onIncrementChange: (p: BulkEditPointsState["incr"]) => void;
   onBaseChange: (p: BulkEditPointsState["base"]) => void;
   onCoefChange: (p: BulkEditPointsState["coef"]) => void;
-}> = ({ method, base, incr, coef, onBaseChange, onCoefChange, onIncrementChange, onMethodChange }) => {
+}) => {
   const getStr = useStrings(
     [
       "basepoints",
@@ -202,7 +211,7 @@ const BulkEditPoints: React.FC<{
   );
 };
 
-export const BulkEditPointsModal: React.FC<{
+export const BulkEditPointsModal = (props: {
   show?: boolean;
   onClose?: () => void;
   onSave?: (state: BulkEditPointsState) => void;
@@ -210,7 +219,7 @@ export const BulkEditPointsModal: React.FC<{
   base?: BulkEditPointsState["base"];
   incr?: BulkEditPointsState["incr"];
   coef?: BulkEditPointsState["coef"];
-}> = (props) => {
+}) => {
   const [state, dispatch] = useReducer(calculationMethodReducer, props, getDefaultBulkEditPointsState);
   const getStr = useStrings(["quickeditpoints", "apply"], "block_xp");
 

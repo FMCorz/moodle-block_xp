@@ -27,6 +27,8 @@
 
 namespace block_xp\local\rulefilter;
 
+use block_xp\local\action\tester\action_tester;
+use block_xp\local\action\tester\bool_tester;
 use context;
 use lang_string;
 
@@ -41,7 +43,7 @@ use lang_string;
 class any implements rulefilter {
 
     public function get_action_tester(context $effectivecontext, object $config): action_tester {
-        return new any_tester();
+        return new bool_tester();
     }
 
     public function get_compatible_context_levels(): array {

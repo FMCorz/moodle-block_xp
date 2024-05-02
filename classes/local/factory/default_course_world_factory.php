@@ -56,6 +56,8 @@ class default_course_world_factory implements course_world_factory {
     protected $worlds = [];
     /** @var levels_info_factory The levels info factory. */
     protected $levelsinfofactory;
+    /** @var context_collection_logger_factory The collection logger factory. */
+    protected $collectionloggerfactory;
 
     /**
      * Constructor.
@@ -105,14 +107,30 @@ class default_course_world_factory implements course_world_factory {
             $courseconfig = new course_world_config($this->adminconfig, $this->db, $courseid);
             $config = new config_stack([$this->configoverrides, $courseconfig]);
 
-            $this->worlds[$courseid] = new \block_xp\local\course_world($config,
+            $world = new \block_xp\local\course_world($config,
                 $this->db,
                 $courseid,
                 $this->urlresolverfactory,
                 $this->levelsinfofactory
             );
+
+            if ($this->collectionloggerfactory) {
+                $context = $courseid == SITEID ? \context_system::instance() : \context_course::instance($courseid);
+                $world->set_collection_logger($this->collectionloggerfactory->get_logger_from_context($context));
+            }
+
+            $this->worlds[$courseid] = $world;
         }
         return $this->worlds[$courseid];
+    }
+
+    /**
+     * Set the collection logger factory.
+     *
+     * @param context_collection_logger_factory $factory The factory.
+     */
+    public function set_context_collection_logger_factory(context_collection_logger_factory $factory) {
+        $this->collectionloggerfactory = $factory;
     }
 
 }

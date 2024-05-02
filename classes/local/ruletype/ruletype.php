@@ -16,15 +16,6 @@
 //
 // https://levelup.plus
 
-/**
- * Type.
- *
- * @package    block_xp
- * @copyright  2024 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\ruletype;
 
 use block_xp\local\action\action;
@@ -41,19 +32,67 @@ use lang_string;
  */
 interface ruletype {
 
-    /** Unlimited. */
+    /**
+     * Unlimited.
+     *
+     * @deprecated Since XP 20, use ruletype_with_limit instead.
+     */
     const WINDOW_NONE = null;
-    /** Once only. */
+
+    /**
+     * Once only.
+     *
+     * @deprecated Since XP 20, use ruletype_with_limit instead.
+     */
     const WINDOW_ONCE = 'once';
-    /** Daily repeat. */
+
+    /**
+     * Daily repeat.
+     *
+     * @deprecated Since XP 20, use ruletype_with_limit instead.
+      */
     const WINDOW_DAILY = '1d';
-    /** Hourly repeat. */
+
+    /**
+     * Hourly repeat.
+     *
+     * @deprecated Since XP 20, use ruletype_with_limit instead.
+      */
     const WINDOW_HOURLY = '1h';
+
+    /**
+     * Scope none.
+     *
+     * @deprecated Since XP 20, use ruletype_with_limit instead.
+     */
+    const SCOPE_NONE = 0;
+
+    /**
+     * Scope env.
+     *
+     * @deprecated Since XP 20, use ruletype_with_limit instead.
+     */
+    const SCOPE_ENV = 2;
+
+    /**
+     * Scope parent.
+     *
+     * @deprecated Since XP 20, use ruletype_with_limit instead.
+     */
+    const SCOPE_PARENT = 4;
+
+    /**
+     * Scope object.
+     *
+     * @deprecated Since XP 20, use ruletype_with_limit instead.
+     */
+    const SCOPE_OBJECT = 8;
 
     /**
      * Get the list of compatible rule filters.
      *
      * @return string[] The name of the filters.
+     * @deprecated Since XP 20, use ruletype_with_profile instead.
      */
     public function get_compatible_filters(): array;
 
@@ -68,6 +107,7 @@ interface ruletype {
      * Get the repeat window.
      *
      * @return null|string One of the WINDOW_* const, or other arbitrary string.
+     * @deprecated Since XP 20, use ruletype_with_limit instead.
      */
     public function get_repeat_window(): ?string;
 

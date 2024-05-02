@@ -55,7 +55,8 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
         $xplevels = new backup_nested_element('xps');
         $xplevel = new backup_nested_element('xp', ['courseid'], ['userid', 'xp']);
         $xplogs = new backup_nested_element('logs');
-        $xplog = new backup_nested_element('log', ['courseid'], ['userid', 'eventname', 'xp', 'time']);
+        $xplog = new backup_nested_element('log', ['contextid'], ['userid', 'points', 'reason', 'subtype', 'envid',
+            'parentid', 'objectid', 'ruleid', 'reasontypehash', 'timerecorded']);
 
         // Prepare the structure.
         $xp = $this->prepare_block_structure($xpconfig);
@@ -78,7 +79,7 @@ class backup_xp_block_structure_step extends backup_block_structure_step {
         $xpfilter->set_source_table('block_xp_filters', ['courseid' => backup::VAR_COURSEID]);
         $xplevel->set_source_table('block_xp', ['courseid' => backup::VAR_COURSEID]);
         $xprule->set_source_sql('SELECT * FROM {block_xp_rule} WHERE contextid = ?', [['sqlparam' => $coursecontextid]]);
-        $xplog->set_source_table('block_xp_log', ['courseid' => backup::VAR_COURSEID]);
+        $xplog->set_source_sql('SELECT * FROM {block_xp_logs} WHERE contextid = ?', [['sqlparam' => $coursecontextid]]);
 
         // Annotations.
         $xplevel->annotate_ids('user', 'userid');

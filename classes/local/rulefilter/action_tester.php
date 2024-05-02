@@ -16,18 +16,12 @@
 //
 // https://levelup.plus
 
-/**
- * Filter.
- *
- * @package    block_xp
- * @copyright  2024 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\rulefilter;
 
-use block_xp\local\action\action;
+defined('MOODLE_INTERNAL') || die();
+
+debugging('The interface rulefilter\action_tester is deprecated, '
+    . 'use block_xp\local\action\action_tester instead.', DEBUG_DEVELOPER);
 
 /**
  * Filter.
@@ -36,15 +30,9 @@ use block_xp\local\action\action;
  * @copyright  2024 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 20, use block_xp\local\action\action_tester instead.
  */
-interface action_tester {
-
-    /**
-     * Whether the action is passing the constraints.
-     *
-     * @param action $action The action.
-     * @return bool
-     */
-    public function is_action_passing_constraints(action $action): bool;
-
+interface action_tester extends \block_xp\local\action\tester\action_tester {
+    // We keep the interface here because XP+ 1.16 was relying on it and removing it
+    // would break the installations that are upgrading XP without upgrading XP+.
 }

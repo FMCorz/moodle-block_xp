@@ -121,6 +121,15 @@ class default_routes_config extends static_routes_config {
                 ]
             ),
             new route_definition(
+                'actionrules',
+                '/actionrules/:courseid',
+                '~^/actionrules/(\d+)$~',
+                'action_rules',
+                [
+                    1 => 'courseid',
+                ]
+            ),
+            new route_definition(
                 'completionrules',
                 '/completionrules/:courseid',
                 '~^/completionrules/(\d+)$~',
@@ -172,6 +181,12 @@ class default_routes_config extends static_routes_config {
                 '/admin/settings',
                 '~^/admin/settings$~',
                 'admin_settings'
+            ),
+            new route_definition(
+                'admin/actionrules',
+                '/admin/actionrules',
+                '~^/admin/actionrules$~',
+                'admin_action_rules'
             ),
             new route_definition(
                 'admin/levels',

@@ -16,15 +16,6 @@
 //
 // https://levelup.plus
 
-/**
- * Instance.
- *
- * @package    block_xp
- * @copyright  2024 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\rule;
 
 /**
@@ -59,7 +50,12 @@ class static_instance implements instance {
 
     public function get_context(): \context {
         if (!isset($this->context)) {
-            $this->context = \context::instance_by_id($this->record->contextid);
+            // An empty context ID means a default rule, report it as the system context.
+            $this->context = \context::instance_by_id($this->record->contextid ?: SYSCONTEXTID, IGNORE_MISSING);
+            if (!$this->context) {
+                debugging("Context {$this->record->contextid} not found, falling back to system context", DEBUG_DEVELOPER);
+                $this->context = \context_system::instance();
+            }
         }
         return $this->context;
     }
@@ -69,9 +65,12 @@ class static_instance implements instance {
             return null;
         }
         if (!isset($this->childcontext)) {
-            $this->childcontext = \context::instance_by_id($this->record->childcontextid);
+            $this->childcontext = \context::instance_by_id($this->record->childcontextid, IGNORE_MISSING);
+            if (!$this->childcontext) {
+                debugging("Child context {$this->record->childcontextid} not found, ignoring...", DEBUG_DEVELOPER);
+            }
         }
-        return $this->childcontext;
+        return $this->childcontext ?: null;
     }
 
     public function get_points(): int {

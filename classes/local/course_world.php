@@ -27,6 +27,8 @@
 
 namespace block_xp\local;
 
+use block_xp\di;
+use block_xp\local\activity\user_recent_activity_repository;
 use context;
 use context_course;
 use context_system;
@@ -35,6 +37,7 @@ use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
 use block_xp\local\factory\badge_url_resolver_course_world_factory;
 use block_xp\local\factory\levels_info_factory;
+use block_xp\local\logger\collection_logger;
 
 /**
  * Course World.
@@ -123,6 +126,16 @@ class course_world implements world {
                 $this->get_collection_logger(),
                 $this->get_level_up_notification_service()
             );
+            $actionstrategy = new strategy\world_action_collection_strategy(
+                $this,
+                $this->get_collection_logger(),
+                null,
+                di::get('rule_type_resolver'),
+                di::get('rule_filter_handler')
+            );
+            $actionstrategy->set_world_rule_manager(di::get('world_rule_manager_factory')->get_rule_manager($this));
+            $actionstrategy->set_rule_sorter(di::get('rule_sorter'));
+            $this->strategy->set_action_collection_strategy($actionstrategy);
         }
         return $this->strategy;
     }
@@ -257,10 +270,11 @@ class course_world implements world {
     /**
      * Get logger.
      *
-     * @return logger\course_user_event_collection_logger
+     * @return logger\collection_logger
      */
     private function get_collection_logger() {
         if (!$this->logger) {
+            debugging('The collection logger was not set, call set_collection_logger.', DEBUG_DEVELOPER);
             $this->logger = new \block_xp\local\logger\course_user_event_collection_logger($this->db, $this->courseid);
         }
         return $this->logger;
@@ -272,7 +286,12 @@ class course_world implements world {
      * @return user_recent_activity_repository
      */
     public function get_user_recent_activity_repository() {
-        return new \block_xp\local\activity\course_log_recent_activity_repository($this->db, $this->courseid);
+        $logger = $this->get_collection_logger();
+        if (!$logger instanceof user_recent_activity_repository) {
+            debugging('The collection logger is expected to implement user_recent_activity_repository.', DEBUG_DEVELOPER);
+            return new \block_xp\local\activity\course_log_recent_activity_repository($this->db, $this->courseid);
+        }
+        return $logger;
     }
 
     /**
@@ -304,6 +323,15 @@ class course_world implements world {
         // Reset the filters for the given category.
         $filtermanager->purge($category);
         $filtermanager->import_default_filters($category);
+    }
+
+    /**
+     * Set the collection logger.
+     *
+     * @param collection_logger $logger The logger.
+     */
+    public function set_collection_logger(collection_logger $logger) {
+        $this->logger = $logger;
     }
 
 }

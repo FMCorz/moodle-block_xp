@@ -1,7 +1,7 @@
 import React, { cloneElement, useEffect } from "react";
 import { getModule } from "../lib/moodle";
 
-export const Tooltip: React.FC<{ children: React.ReactElement; content: string }> = ({ children, content }) => {
+export const Tooltip = ({ children, content }: { children: React.ReactElement; content: string }) => {
   const ref = React.useRef<HTMLElement | null>(null);
 
   useEffect(() => {

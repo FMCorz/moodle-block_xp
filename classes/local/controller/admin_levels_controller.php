@@ -127,10 +127,6 @@ class admin_levels_controller extends admin_route_controller {
                 'courseId' => 0,
                 'levelsInfo' => $serializer->serialize($levelsinfo),
                 'defaultBadgeUrls' => $defaultbadges,
-                'addon' => [
-                    'activated' => di::get('addon')->is_activated(),
-                    'promourl' => $this->urlresolver->reverse('admin/promo')->out(false),
-                ],
             ],
         ];
     }

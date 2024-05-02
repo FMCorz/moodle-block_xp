@@ -6,7 +6,7 @@ type Items = {
   desc?: React.ReactNode;
 }[];
 
-export const RadioGroup: React.FC<{ items: Items; value: any; onChange: (value: any) => void }> = ({ items, value, onChange }) => {
+export const RadioGroup = ({ items, value, onChange }: { items: Items; value: any; onChange: (value: any) => void }) => {
   const [uniqid] = useState(() => Math.random().toString(12).slice(2));
   return (
     <div className="xp-space-y-2">

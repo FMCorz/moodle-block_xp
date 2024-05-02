@@ -16,15 +16,6 @@
 //
 // https://levelup.plus
 
-/**
- * Course world config.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\config;
 
 use moodle_database;
@@ -63,6 +54,11 @@ class course_world_config extends proxy_config {
     const CUSTOM_BADGES_NOOP = 1;
     /** When the default badges are missing. */
     const CUSTOM_BADGES_MISSING = 2;
+
+    /** When default action rules are customised. */
+    const DEFAULT_ACTION_RULES_NOOP = 0;
+    /** When default action rules are missing. */
+    const DEFAULT_ACTION_RULES_MISSING = 1;
 
     /** @var config The proxied config object. */
     protected $store;

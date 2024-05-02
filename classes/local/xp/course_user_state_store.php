@@ -32,6 +32,7 @@ use moodle_database;
 use stdClass;
 use block_xp\local\logger\collection_logger_with_group_reset;
 use block_xp\local\logger\collection_logger_with_id_reset;
+use block_xp\local\logger\collection_logger;
 use block_xp\local\logger\reason_collection_logger;
 use block_xp\local\observer\level_up_state_store_observer;
 use block_xp\local\observer\points_increased_state_store_observer;
@@ -61,7 +62,7 @@ class course_user_state_store implements course_state_store, state_store_with_de
     protected $levelsinfo;
     /** @var string The DB table. */
     protected $table = 'block_xp';
-    /** @var reason_collection_logger The logger. */
+    /** @var collection_logger The logger. */
     protected $logger;
     /** @var level_up_state_store_observer The observer. */
     protected $observer;
@@ -74,7 +75,7 @@ class course_user_state_store implements course_state_store, state_store_with_de
      * @param moodle_database $db The DB.
      * @param levels_info $levelsinfo The levels info.
      * @param int $courseid The course ID.
-     * @param reason_collection_logger $logger The reason logger.
+     * @param collection_logger $logger The reason logger.
      * @param level_up_state_store_observer $observer The observer.
      * @param points_increased_state_store_observer $pointsobserver The observer.
      */
@@ -82,7 +83,7 @@ class course_user_state_store implements course_state_store, state_store_with_de
         moodle_database $db,
         levels_info $levelsinfo,
         $courseid,
-        reason_collection_logger $logger,
+        collection_logger $logger,
         ?level_up_state_store_observer $observer = null,
         ?points_increased_state_store_observer $pointsobserver = null
     ) {
@@ -193,7 +194,9 @@ class course_user_state_store implements course_state_store, state_store_with_de
      */
     public function increase_with_reason($id, $amount, reason $reason) {
         $this->increase($id, $amount);
-        $this->logger->log_reason($id, $amount, $reason);
+        if ($this->logger instanceof reason_collection_logger) {
+            $this->logger->log_reason($id, $amount, $reason);
+        }
     }
 
     /**

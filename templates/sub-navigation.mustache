@@ -37,7 +37,7 @@
             {{/current}}
             >
           <span class="xp-grow xp-truncate">{{ text }}</span>
-          {{#addonrequired}}<span class="xp-py-0.5 xp-px-1 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline xp-font-normal xp-align-middle">XP+</span>{{/addonrequired}}
+          {{#addonrequired}}{{> block_xp/addon-tag }}{{/addonrequired}}
         </a>
     {{/items}}
 </nav>

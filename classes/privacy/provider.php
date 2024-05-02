@@ -77,6 +77,14 @@ class provider implements
             'time' => 'privacy:metadata:log:time',
         ], 'privacy:metadata:log');
 
+        $collection->add_database_table('block_xp_logs', [
+            'userid' => 'privacy:metadata:log:userid',
+            'reason' => 'privacy:metadata:log:reason',
+            'subtype' => 'privacy:metadata:log:subtype',
+            'points' => 'privacy:metadata:log:xp',
+            'timerecorded' => 'privacy:metadata:log:time',
+        ], 'privacy:metadata:logs');
+
         $collection->add_user_preference('block_xp_notices', 'privacy:metadata:prefnotices');
         $collection->add_user_preference('block_xp-generic-ladder-pagesize', 'privacy:metadata:prefladderpagesize');
         $collection->add_user_preference('block_xp-generic-promo-page-seen', 'privacy:metadata:prefseenpromo');
@@ -173,6 +181,7 @@ class provider implements
         }, $contextlist->get_contexts()));
 
         [$insql, $inparams] = $db->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
+        [$inctxsql, $inctxparams] = $db->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
 
         // Fetch the record of points for each course.
         $sql = "
@@ -195,7 +204,7 @@ class provider implements
         }
         $recordset->close();
 
-        // Fetch the logs.
+        // Fetch the legacy logs.
         $sql = "
             SELECT l.userid, l.eventname, l.xp, l.time, l.courseid
               FROM {block_xp_log} l
@@ -240,6 +249,48 @@ class provider implements
         if ($lastcourseid) {
             $flushlogs($lastcourseid, $logs);
         }
+        $recordset->close();
+
+        // Fetch the logs.
+        $sql = "
+            SELECT l.userid, l.reason, l.subtype, l.points, l.timerecorded, l.contextid
+              FROM {block_xp_logs} l
+             WHERE l.contextid $inctxsql
+               AND l.userid = :userid
+          ORDER BY l.contextid, l.timerecorded";
+        $params = ['userid' => $user->id] + $inctxparams;
+
+        $path = [$levelup, get_string('privacy:path:logs', 'block_xp')];
+        $flushlogs = function($contextid, $data) use ($path) {
+            $context = context::instance_by_id($contextid);
+            writer::with_context($context)->export_data($path, (object) ['data' => $data]);
+        };
+
+        // Export the logs for each context.
+        $recordset = $db->get_recordset_sql($sql, $params);
+        $logs = [];
+        $lastcontextid = null;
+        foreach ($recordset as $record) {
+
+            if ($lastcontextid && $lastcontextid != $record->contextid) {
+                $flushlogs($lastcontextid, $logs);
+                $logs = [];
+            }
+
+            $logs[] = (object) [
+                'reason' => $record->reason,
+                'subtype' => $record->subtype,
+                'timerecorded' => transform::datetime($record->timerecorded),
+                'userid' => transform::user($record->userid),
+                'points' => $record->points,
+            ];
+            $lastcontextid = $record->contextid;
+        }
+
+        // Flush the last iteration.
+        if ($lastcontextid) {
+            $flushlogs($lastcontextid, $logs);
+        }
 
         $recordset->close();
 
@@ -265,6 +316,7 @@ class provider implements
 
         $db->delete_records('block_xp', ['courseid' => $courseid]);
         $db->delete_records('block_xp_log', ['courseid' => $courseid]);
+        $db->delete_records('block_xp_logs', ['contextid' => $context->id]);
 
         // We manually delete the preferences within the context because core cannot find out which
         // preferences we assigned to specific contexts and the users they belong to.
@@ -297,6 +349,11 @@ class provider implements
         $params = ['userid' => $userid] + $inparams;
         $db->delete_records_select('block_xp', $sql, $params);
         $db->delete_records_select('block_xp_log', $sql, $params);
+
+        [$insql, $inparams] = $db->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        $sql = "contextid $insql AND userid = :userid";
+        $params = ['userid' => $userid] + $inparams;
+        $db->delete_records_select('block_xp_logs', $sql, $params);
 
         // Delete the user preferences in each context.
         foreach ($contextlist as $context) {
@@ -334,6 +391,7 @@ class provider implements
         $params = ['courseid' => $courseid] + $inparams;
         $db->delete_records_select('block_xp', $sql, $params);
         $db->delete_records_select('block_xp_log', $sql, $params);
+        $db->delete_records_select('block_xp_logs', "contextid = :ctxid AND userid $insql", ['ctxid' => $context->id] + $inparams);
 
         // Delete the user preferences in the context.
         foreach ($userids as $userid) {

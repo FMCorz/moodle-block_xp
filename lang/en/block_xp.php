@@ -25,12 +25,24 @@
  * @codingStandardsIgnoreFile
  */
 
+$string['actionrules'] = 'Action rules';
+$string['actionrules_help'] = "Action rules allow to create conditions determining when and how many points are given to students.
+
+For each condition type, the rules are evaluated in the order in which they appear on screen. As soon as a condition is satisfied, its points will be given and other conditions will not be evaluated for its type.
+
+Each condition type determines the frequency at which identical actions can be repeated. This method ensures that students do not abuse the system. Additionally, educators can set limits on individual conditions. When a condition has reached its limit, it will skipped as if it did not exist and the following conditions will be evaluated.
+
+[Learn more](https://docs.levelup.plus/xp/docs/action-rules?ref=blockxp_help)";
+$string['actionrulesintro'] = 'Attributes points to students for the actions they take.';
 $string['actions'] = 'Actions';
 $string['activityname'] = 'Activity name';
 $string['activityname_help'] = 'The text that the activity name must contain or be equal to. This is not case sensitive.';
 $string['activityoresourceis'] = 'The activity or resource is {$a}';
 $string['addacondition'] = 'Add a condition';
+$string['addaction'] = 'Add action';
+$string['addanaction'] = 'Add an action';
 $string['addarule'] = 'Add a rule';
+$string['addcondition'] = 'Add condition';
 $string['addondeactivated'] = 'XP+ disabled';
 $string['addondeactivatedinfo'] = 'The XP plugins are incompatible with one another, which resulted in XP+ being disabled. The version {$a->localxpversion} of Level Up XP+ (local_xp) is expected.';
 $string['addonnotactivated'] = 'The addon is not activated.';
@@ -79,16 +91,20 @@ $string['adminnotices'] = 'Admin notices';
 $string['adminnotices_desc'] = 'When enabled, site administrators may occasionally receive important notifications regarding compatibility, security, and the availability of newer versions of Level Up XP+.';
 $string['adminscanearnxp'] = 'Admins can earn points';
 $string['adminscanearnxp_desc'] = 'By default, administrators are not included in the group of users who can earn points. This is because administrators always have the permission _block/xp:earnxp_, allowing them to continuously collect points everywhere. You can use this setting to let administrators also earn points.';
+$string['admindefaultactionrulesintro'] = 'The following action rules will be used as defaults.';
 $string['admindefaultrulesintro'] = 'The following rules will be used as default for courses in which the block is added.';
-$string['admindefaultsettingsintro'] = 'The settings below will be used as defaults when the block is newly added to a course. Some settings can be locked,  in which case their value is strictly enforced in all instances of the plugin.';
+$string['admindefaultsettingsintro'] = 'The settings below will be used as defaults when the block is newly added to a course. Some settings can be locked, in which case their value is strictly enforced in all instances of the plugin.';
 $string['admindefaultvisualsintro'] = 'The following will be used as defaults when the block is newly added to a course.';
 $string['additionalresources'] = 'Additional resources';
 $string['addlevel'] = 'Add level';
 $string['addoninstallationerror'] = 'We are detecting an issue with the add-on (local_xp), it does not seem to be installed properly. An administrator should finalise its installation.';
 $string['allcoursesreset'] = 'All courses have been reset.';
+$string['alreadyused'] = 'Already used';
 $string['anonymity'] = 'Anonymity';
 $string['anonymity_help'] = 'This setting controls whether participants can see each other\'s name and avatar.';
 $string['apply'] = 'Apply';
+$string['availabilityinfoalreadyused'] = 'Already used';
+$string['availabilityinfonotincourse'] = 'Requires to be in the context of a course.';
 $string['awardaxpwhen'] = '<strong>{$a}</strong> points are earned when:';
 $string['badgeaward'] = 'Badge to award';
 $string['badgeawarddesc'] = 'A badge to award when the user attains the level.';
@@ -131,6 +147,7 @@ The rules are evaluated in the order in which they are presented on screen. As s
 $string['completionrulesintro'] = 'Attribute points to students as they complete activities, sections or courses.';
 $string['completionruleslegacyusednotice'] = 'You have existing "Event rules" using completion conditions. We strongly recommend removing them in favour of the methods below as using both "Event rules" and "Completion rules" could double the points awarded.';
 $string['condition'] = 'Condition';
+$string['conditions'] = 'Conditions';
 $string['configdescription'] = 'Introduction';
 $string['configdescription_help'] = 'A short introduction message displayed in the block. Students have the ability to dismiss the message, in which case they won\'t see it again.';
 $string['configheader'] = 'Settings';
@@ -158,6 +175,7 @@ $string['currencysignxp'] = 'XP (Experience points)';
 $string['customizelevels'] = 'Customise the levels';
 $string['dangerzone'] = 'Danger zone';
 $string['dataformat'] = 'Format';
+$string['defaultactionrules'] = 'Default action rules';
 $string['defaultlevels'] = 'Default levels';
 $string['defaultrules'] = 'Default rules';
 $string['defaultsettings'] = 'Default settings';
@@ -204,6 +222,7 @@ Drops can be used to cleverly award points when certain type of content is consu
 [More info](https://docs.levelup.plus/xp/docs/how-to/use-drops?ref=blockxp_help)
 ';
 $string['editcondition'] = 'Edit condition';
+$string['editlimits'] = 'Edit limits';
 $string['editingdefaultsettingsincoursemodenotice'] = '**Attention!** You are not modifying the currently active settings, instead you are editing the default values. To change a course\'s settings, follow the "Settings" link from the XP block itself.';
 $string['editingdefaultsettingsinwholesitemodenotice'] = '**Attention!** You are not modifying the currently active settings, instead you are editing the default values. As Level Up XP is used sitewide, your intention is most likely to change the sitewide settings. [Navigate here]({$a->url}) to change those settings, or follow the "Settings" link from the XP block itself.';
 $string['embedleaderboard'] = 'Embed leaderboard';
@@ -244,7 +263,7 @@ Additional resources:
 - [How are experience points calculated?](https://docs.levelup.plus/xp/docs/getting-started/points-calculation?ref=blockxp_help)
 - [Troubleshooting rules](https://docs.levelup.plus/xp/docs/troubleshooting/event-rule-not-working?ref=blockxp_help)
 ';
-$string['eventsrulesintro'] = 'Observe actions and attribute points to students as they perform them.';
+$string['eventsrulesintro'] = 'Observe events and attribute points to students as they happen. We now recommend using the newer "Action" and "Completion" rules.';
 $string['event_user_leveledup'] = 'User levelled up';
 $string['eventis'] = 'The event is {$a}';
 $string['eventname'] = 'Event name';
@@ -252,6 +271,7 @@ $string['eventproperty'] = 'Event property';
 $string['eventtime'] = 'Event time';
 $string['export'] = 'Export';
 $string['exportdata'] = 'Export data';
+$string['filterbyrule'] = 'Filter by rule';
 $string['filterbyuser'] = 'Filter by user';
 $string['filterellipsis'] = 'Filter...';
 $string['filtermodules'] = 'Filter modules';
@@ -296,6 +316,7 @@ $string['infosintro'] = 'The information page displays the list of levels, and s
 $string['installed'] = 'Installed';
 $string['instructions'] = 'Instructions';
 $string['instructions_help'] = 'The instructions will be displayed on the information page. You may use them to share information and instructions regarding the levels, how to obtain points, etc.';
+$string['intotal'] = 'In total';
 $string['invalidxp'] = 'Invalid points value';
 $string['join'] = 'Join';
 $string['joinleadeboardconfirmnote'] = 'Fantastic, we\'re thrilled to have you on board!
@@ -304,6 +325,7 @@ Please note that once you join there\'s a waiting period before you can leave th
 $string['joinleadeboardlockednote'] = 'You cannot join the leaderboard.';
 $string['joinleaderboard'] = 'Join leaderboard';
 $string['keeplogs'] = 'Keep logs';
+$string['keeplogsdesc'] = 'The duration after which the logs are deleted from the database. The logs are playing an important role, they are used to track awarded points, to identity recent activity, and many other things. Deleting logs can affect how points are distributed over time.';
 $string['ladder'] = 'Leaderboard';
 $string['ladder_help'] = 'The leaderboard ranks students based on their points. When used in a course with groups, it can create a ranking for each group of student.
 
@@ -366,6 +388,7 @@ $string['levelx'] = 'Level #{$a}';
 $string['likenotice'] = 'Are you enjoying Level Up XP? Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourite</a> plugins on Moodle.org.';
 $string['limitparticipants'] = 'Limit participants';
 $string['limitparticipants_help'] = 'This setting controls who is displayed in the leaderboard. Neighbours are the participants ranked above and below the current user. For instance, when choosing \'Display 2 neighbours\', only the two participants ranked directly higher and lower than the current user will be displayed.';
+$string['limits'] = 'Limits';
 $string['logging'] = 'Logging';
 $string['manually'] = 'Manually';
 $string['maxactionspertime'] = 'Max. actions in time frame';
@@ -379,6 +402,7 @@ $string['moverule'] = 'Move rule';
 $string['name'] = 'Name';
 $string['namecontains'] = 'Contains "{$a}"';
 $string['nameequalsto'] = 'Is equal to "{$a}"';
+$string['navactionrules'] = 'Action rules';
 $string['navbardisplay'] = 'Show in navbar';
 $string['navbardisplay_desc'] = 'When enabled, the level of the user will be displayed in the top navigation bar. If the plugin is used "Per courses", it will only appear in courses. Please note that this functionality is heavily dependent on the theme and may not work well, or not at all, with 3rd party themes. [Learn more](https://docs.levelup.plus/xp/docs/navbar-display)';
 $string['navcompletionrules'] = 'Completion';
@@ -398,10 +422,13 @@ $string['navsettings'] = 'Settings';
 $string['navvisuals'] = 'Appearance';
 $string['newversioninstallednotice'] = 'A new version was installed! Discover what\'s new in the [release notes]({$a->releasenotesurl}).';
 $string['nextlevelin'] = 'next level in';
+$string['noactionsyet'] = 'No actions, yet!';
+$string['noactionsyetintro'] = 'Get started by adding an action to observe.';
 $string['noconditionsyet'] = 'No conditions, yet!';
 $string['noconditionsyetintro'] = 'Get started by adding a condition.';
 $string['nodescription'] = 'No description';
 $string['noissuesidentified'] = 'No issues identified';
+$string['nolimit'] = 'No limit';
 $string['nologsrecordedyet'] = 'Logs have not been recorded yet.';
 $string['noname'] = 'No name';
 $string['noneareavailable'] = 'None are available.';
@@ -410,11 +437,33 @@ $string['notesomesettingslocked'] = 'Note that some settings may not be editable
 $string['nothingmatchesfilter'] = 'Nothing matches the filter.';
 $string['notparticipating'] = 'Not participating';
 $string['notranked'] = 'Not ranked';
+$string['nperhoursmall'] = '{$a}/hr';
+$string['nperdaysmall'] = '{$a}/day';
+$string['nperweeksmall'] = '{$a}/wk';
+$string['npermonthsmall'] = '{$a}/mth';
+$string['ntimes'] = '{$a} times';
 $string['numberoflevels'] = 'Number of levels';
 $string['occasionally'] = 'Occasionally';
+$string['once'] = 'Once';
+$string['onceperactivity'] = 'Once per activity';
+$string['onceperassignment'] = 'Once per assignment';
+$string['onceperchapter'] = 'Once per chapter';
+$string['oncepercontentpiece'] = 'Once per content piece';
+$string['oncepercourse'] = 'Once per course';
+$string['onceperdiscussion'] = 'Once per discussion';
+$string['onceperforum'] = 'Once per forum';
+$string['onceperpage'] = 'Once per page';
+$string['onceperquiz'] = 'Once per quiz';
 $string['onlyparticipantscanaccessranking'] = 'Only those participating in the leaderboard can access the rankings.';
 $string['outofsync'] = 'XP plugins incompatibility';
 $string['outofsyncinfo'] = 'The XP plugins are incompatible with one another which can lead to unexpected issues. In the future, XP+ will automatically disable itself. The version {$a->localxpversion} of Level Up XP+ (local_xp) is expected.';
+$string['overalllimit'] = 'Overall limit';
+$string['overalllimitdesc'] = 'The overall limit defines how many times a condition can give points.';
+$string['overalllimit_help'] = "The overall limit defines how many times a condition can give points.
+
+Once a limit is reached, no points will be awarded at all for the action. Use the overall limit to control the maximum number of times points can be awarded during a certain period of time.
+
+[Learn more](https://docs.levelup.plus/xp/docs/action-rules/limits)";
 $string['pagecurrentnotvisibletoviewers'] = 'This page is not currently visible to students.';
 $string['pagecurrentvisibletoviewers'] = 'This page is currently visible to students.';
 $string['pagesettings'] = 'Page settings';
@@ -424,7 +473,20 @@ $string['participatesinleaderboard'] = 'Participates in the leaderboard.';
 $string['participatesnotinleaderboard'] = 'Does not participate in the leaderboard.';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';
 $string['participating'] = 'Participating';
+$string['peractivity'] = 'Per activity';
+$string['perassignment'] = 'Per assignment';
+$string['perchapter'] = 'Per chapter';
+$string['percontentpiece'] = 'Per content piece';
+$string['percourse'] = 'Per course';
+$string['perday'] = 'Per day';
+$string['perdiscussion'] = 'Per discussion';
+$string['perforum'] = 'Per forum';
+$string['perhour'] = 'Per hour';
+$string['permonth'] = 'Per month';
+$string['perpage'] = 'Perpage';
 $string['perpagecolon'] = 'Per page:';
+$string['perquiz'] = 'Per quiz';
+$string['perweek'] = 'Per week';
 $string['pickaconditiontype'] = 'Pick a condition type';
 $string['pluginavailabilityxpdesc'] = 'This plugin lets instructors restrict access to activities based on students\' levels.';
 $string['pluginenrolxpdesc'] = 'This plugin enables automatic enrolment into courses based on a student\'s level in another course.';
@@ -435,6 +497,7 @@ $string['pluginsoutofsync'] = '__XP plugins incompatibility!__
 
 There are compatibility issues between Level Up XP and Level Up XP+. In the future, Level Up XP+ will automatically disable itself if it is not compatible. To prevent this, please contact your site administrator. [Read more]({$a->url})';
 $string['pluginxmaybeincompatible'] = 'This version of {$a->name} ({$a->component}) may be incompatible with Moodle {$a->version}.';
+$string['points'] = 'Points';
 $string['pointstoaward'] = 'Points to award';
 $string['pointstoaward_help'] = 'The number of points to award when the condition is met.';
 $string['pointsintimelinker'] = 'per';
@@ -448,7 +511,10 @@ $string['privacy:path:addon'] = 'Add-on';
 $string['privacy:path:level'] = 'Level';
 $string['privacy:path:logs'] = 'Logs';
 $string['privacy:metadata:log'] = 'Stores a log of events';
+$string['privacy:metadata:logs'] = 'Stores log of points';
 $string['privacy:metadata:log:eventname'] = 'The event name';
+$string['privacy:metadata:log:reason'] = 'The reason';
+$string['privacy:metadata:log:subtype'] = 'The reason\'s sub type.';
 $string['privacy:metadata:log:time'] = 'The date at which it happened';
 $string['privacy:metadata:log:userid'] = 'The user who gained the points';
 $string['privacy:metadata:log:xp'] = 'The points awarded for the event';
@@ -502,12 +568,39 @@ $string['reallyresetcoursevisualstodefaults'] = 'Are you sure that you want to r
 $string['reallyresetdata'] = 'Are you sure that you want to reset the levels and points of everyone in this course? This action is not reversible.';
 $string['reallyresetgroupdata'] = 'Really reset the levels and points of everyone in this group?';
 $string['reallyreverttopluginsdefaults'] = 'Really reset the default rules to the defaults suggested by the plugin? This action is not reversible.';
+$string['reason'] = 'Reason';
+$string['reasonactivityviewed'] = 'Activity viewed';
+$string['reasonassignfeedbackread'] = 'Feedback read';
+$string['reasonassignsubmitted'] = 'Assignment submitted';
+$string['reasonchapterread'] = 'Chapter read';
+$string['reasondatabaseentrycreated'] = 'Database entry created';
+$string['reasondiscussioncreated'] = 'Discussion created';
+$string['reasondiscussionread'] = 'Discussion read';
+$string['reasondiscussionrepliedto'] = 'Replied to discussion';
+$string['reasonfeedbackanswered'] = 'Feedback answered';
+$string['reasonglossaryentrypublished'] = 'Glossary entry published';
+$string['reasonlessoncontentviewed'] = 'Lesson content viewed';
+$string['reasonlessonendreached'] = 'Finished lesson';
+$string['reasonlessonstarted'] = 'Lesson started';
+$string['reasonquizattemptfinished'] = 'Quiz attempt finished';
+$string['reasonquizattemptstarted'] = 'Quiz attempt started';
 $string['recentrewards'] = 'Recent rewards';
 $string['recommended'] = 'Recommended';
 $string['recommendedplugins'] = 'Recommended plugins';
 $string['releasenotes'] = 'Release notes';
 $string['remaining'] = 'remaining';
 $string['removefilter'] = 'Remove filter';
+$string['repeatsallowed'] = 'Repetitions allowed';
+$string['repetitionlimit'] = 'Repetition limit';
+$string['repetitionlimitdesc'] = 'The repetition limit determines when users can repeat similar actions to earn points again.';
+$string['repetitionlimit_help'] = "The repetition limit determines whether users can repeat similar actions and earn points again.
+
+The purpose of the repetition limit is to prevent abusive behaviour and encourage broader engagement. For example, in a forum, you can limit repetitions to once per discussion.
+
+Both the overall limit and the repetition limit apply. When either limit is reached, no points will be awarded.
+
+[Learn more](https://docs.levelup.plus/xp/docs/action-rules/limits)";
+$string['repetitionlimitset'] = 'Repetition limit set';
 $string['reportisempty'] = 'The report is empty, student have yet to earn points.';
 $string['reportisemptyenrolstudents'] = 'The report is empty, have students been enrolled in this course?';
 $string['resetcoursedata'] = 'Reset course data';
@@ -519,6 +612,7 @@ $string['resetgroupdata'] = 'Reset group data';
 $string['resetladderparticiptionofeveryone'] = 'Reset the participation status of everyone';
 $string['resettodefaults'] = 'Reset to defaults';
 $string['resultsfilteredforn'] = 'Results filtered for {$a}.';
+$string['resultsfilteredforrulen'] = 'Results filtered for rule "{$a}".';
 $string['reward'] = 'Reward';
 $string['requires'] = 'Requires';
 $string['reverttopluginsdefaults'] = 'Revert to plugin\'s defaults';
@@ -541,6 +635,7 @@ $string['rulecminfo'] = 'This condition requires that the action takes place in 
 $string['ruleevent'] = 'Specific event';
 $string['ruleeventdesc'] = 'The event is \'{$a->eventname}\'';
 $string['ruleeventinfo'] = 'Choose the action that users must perform out of a curated list of events.';
+$string['rulefilteryalreadyusedbyaction'] = 'This condition is already used by this action and cannot be added multiple times.';
 $string['rulefiltercm'] = 'Specific activity';
 $string['rulefiltercmdesc'] = 'Target a specific activity or resource in the course.';
 $string['rulefiltercmname'] = 'Activity name';
@@ -566,12 +661,42 @@ $string['ruleset:all'] = 'ALL of the conditions are true';
 $string['ruleset:any'] = 'ANY of the conditions are true';
 $string['ruleset:none'] = 'NONE of the conditions are true';
 $string['rulesetinfo'] = 'Combine multiple conditions into one.';
+$string['ruletypeanswerfeedback'] = 'Answer feedback questions';
+$string['ruletypeanswerfeedbackdesc'] = 'When the user answered the questions in a feedback activity.';
 $string['ruletypecmcompletion'] = 'Activity completion';
 $string['ruletypecmcompletiondesc'] = 'Award points when an activity is marked as complete.';
 $string['ruletypecoursecompletion'] = 'Course completion';
 $string['ruletypecoursecompletiondesc'] = 'Award points when a course is marked as complete.';
+$string['ruletypecreatedatabaseentry'] = 'Create a database entry';
+$string['ruletypecreatedatabaseentrydesc'] = "When a user creates new entry in a database activity.";
+$string['ruletypecreateforumdiscussion'] = 'Create a forum discussion';
+$string['ruletypecreateforumdiscussiondesc'] = 'When the user creates a new discussion in a forum activity.';
+$string['ruletypefinishquizattempt'] = 'Finish a quiz attempt';
+$string['ruletypefinishquizattemptdesc'] = 'When the user finishes a quiz attempt.';
+$string['ruletypelimits'] = 'Action limits';
+// TODO Rewrite this.
+$string['ruletypelimits_help'] = "Limits cap how many times a user can perform an action before it stops being accepted.
+
+Limits are most useful for actions that are naturally repeatable, such as posting in a forum or viewing content. If an action is already restricted by its nature or conditions (for example, attempting a quiz that can only be taken once), a limit may not be necessary.
+
+For example, you could allow posting in a forum to count only once per day, or only twice per week per forum. This prevents users from accumulating points by repeating the same action many times over.
+
+[More info](https://docs.levelup.plus/xp/docs/action-rules/limits?ref=blockxp_help)";
+$string['ruletypelimitsintro'] = 'Limits control how many times and how often an action can be accepted for a given user. Once the conditions are met, the action is ignored until the time frame resets.';
+$string['ruletypepublishglossaryentry'] = 'Publish a glossary entry';
+$string['ruletypepublishglossaryentrydesc'] = "When a user's glossary entry is published.";
+$string['ruletypereachlessonend'] = 'Reach end of lesson';
+$string['ruletypereachlessonenddesc'] = 'When the user reaches the end of a lesson activity.';
+$string['ruletypereadassignfeedback'] = 'Read assignment feedback';
+$string['ruletypereadassignfeedbackdesc'] = 'When the user reads the feedback provided to their assignment submission.';
+$string['ruletypereadchapter'] = 'Read chapter';
+$string['ruletypereadchapterdesc'] = 'When the user opens the chapter of a book activity.';
+$string['ruletypereadforumdiscussion'] = 'Read forum discussion';
+$string['ruletypereadforumdiscussiondesc'] = 'When the user views a discussion in a forum activity.';
+$string['ruletypereplyforumdiscussion'] = 'Reply to forum discussion';
+$string['ruletypereplyforumdiscussiondesc'] = 'When the user posted a response to a forum discussion.';
 $string['ruletypesectioncompletion'] = 'Section completion';
-$string['ruletypesectioncompletiondesc'] = 'Award points when a course section is marked as complete.';
+$string['ruletypesectioncompletiondesc'] = 'When all activities in a course section are marked as complete.';
 $string['rulesscope'] = 'Scope';
 $string['rulesscope_help'] = 'The scope of rules determine when they apply.
 
@@ -580,6 +705,22 @@ Rules can be created in two scopes: sitewide and course-specific. Whenever possi
 - Sitewide: These rules are effective across the entire site, except when course-specific rules are in place.
 - Course: These rules are applicable only within a specific course. They have priority over sitewide rules.
 ';
+$string['ruletypestartlesson'] = 'Start lesson';
+$string['ruletypestartlessondesc'] = 'When the user starts a lesson activity.';
+$string['ruletypestartquizattempt'] = 'Start a quiz attempt';
+$string['ruletypestartquizattemptdesc'] = 'When the user starts an attempt in a quiz.';
+$string['ruletypesubmitassignment'] = 'Submit an assignment';
+$string['ruletypesubmitassignmentdesc'] = 'When a user submits an assignment submission.';
+$string['ruletypeviewactivity'] = 'View activity';
+$string['ruletypeviewactivitydesc'] = 'When the user accesses a page in an activity.';
+$string['ruletypeviewconsumecontent'] = 'View content';
+$string['ruletypeviewconsumecontentdesc'] = 'When the user views any type of content, broadly speaking.';
+$string['ruletypeviewcourse'] = 'View course page';
+$string['ruletypeviewcoursedesc'] = 'When the user accesses the course page.';
+$string['ruletypeviewlessoncontent'] = 'View lesson content';
+$string['ruletypeviewlessoncontentdesc'] = 'When the user views the content of a page in a lesson activity.';
+$string['ruletypeviewproducecontent'] = 'Write content';
+$string['ruletypeviewproducecontentdesc'] = 'When the user creates any type of content, broadly speaking.';
 $string['searchandselectcourse'] = 'Search and select a course';
 $string['searchandselectmodule'] = 'Search and select an activity or resource';
 $string['selectcourse'] = 'Select course';
@@ -691,6 +832,8 @@ The teams can be made out of course groups or cohorts. Options are also to accom
 [Learn more](https://docs.levelup.plus/xp/docs/how-to/setup-team-leaderboard/team-leaderboard?ref=blockxp_help)';
 $string['teamleaderboardintro'] = 'The team leaderboard is a ranking of teams based on their members\' points';
 $string['teams'] = 'Teams';
+$string['timeframe'] = 'Time frame';
+$string['timesallowed'] = 'Times allowed';
 $string['total'] = 'Total';
 $string['thankyou'] = 'Thank you!';
 $string['timebetweensameactions'] = 'Time required between identical actions';
@@ -706,16 +849,21 @@ $string['tinytimeweeks'] = '{$a}w';
 $string['tinytimewithinayearformat'] = '%b %e';     // No, this is not a regex! @codingStandardsIgnoreLine.
 $string['tinytimeolderyearformat'] = '%b %Y';
 $string['tryme'] = 'Try me';
+$string['unavailablebecause'] = 'This is not available due to the following:';
+$string['unknown'] = 'Unknown';
+$string['unlimitedrepeats'] = 'Unlimited repeats';
 $string['unlockfeaturewithxpplus'] = 'Unlock this feature with XP+. <a href="{$a}">Learn more</a>';
 $string['unavailable'] = 'Unavailable';
 $string['unstableversioninstalledinfo'] = 'This version of Level Up XP (block_xp) is still in development and considered unstable, please use an official release.';
 $string['upgradingplugins'] = 'Upgrading the plugins';
+$string['upgradetoaddmore'] = 'Upgrade to add more.';
 $string['unstableversioninstalled'] = 'Unstable version installed';
 $string['userladderparticipation'] = 'Leaderboard participation';
 $string['userladderparticipation_help'] = 'Determines whether the user is currently participating in the leaderboard. This does not affect the team leaderboard.';
 $string['userladderparticipationlocked'] = 'Lock participation until';
 $string['userladderparticipationlocked_help'] = 'The date from which the user is free to change their participation preference.';
 $string['value'] = 'Value';
+$string['visitpagetoeditdefaultactionrules'] = 'The action rules are now the recommended way to set rules, visit [this page]({$a}) to customise their defaults.';
 $string['visualsintro'] = 'Customise the appearance of the levels, and the meaning of the points.';
 $string['wherearexpused'] = 'Where are points used?';
 $string['wherearexpused_desc'] = 'When set to \'In courses\', the points gained will only account for the course in which the block was added to. When set to \'Sitewide\', a user will "level up" in the site rather than selectively per course, all the points gained throughout the site will be used.';
@@ -726,6 +874,7 @@ $string['usagereport_desc'] = 'Periodically share anonymous usage information wi
 $string['usealgo'] = 'Use the algorithm';
 $string['usecustomlevelbadges'] = 'Use custom level badges';
 $string['usecustomlevelbadges_help'] = 'When set to yes, you must provide an image for each level.';
+$string['usedefaultlimits'] = 'Use default limits';
 $string['unknownactivitya'] = 'Unknown activity ({$a})';
 $string['unknownbadgea'] = 'Unknown badge ({$a})';
 $string['unknownconditiona'] = 'Unknown condition ({$a})';

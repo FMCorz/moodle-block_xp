@@ -28,6 +28,8 @@
 namespace block_xp\external;
 
 use block_xp\di;
+use context;
+use context_system;
 
 /**
  * External function.
@@ -46,8 +48,8 @@ class get_rules extends external_api {
      */
     public static function execute_parameters() {
         return new external_function_parameters([
+            'kind' => new external_value(PARAM_ALPHANUMEXT, ''),
             'contextid' => new external_value(PARAM_INT),
-            'types' => new external_multiple_structure(new external_value(PARAM_ALPHANUMEXT), '', VALUE_DEFAULT, []),
             'childcontextid' => new external_value(PARAM_INT, '', VALUE_DEFAULT, null),
         ]);
     }
@@ -55,59 +57,74 @@ class get_rules extends external_api {
     /**
      * External function.
      *
+     * @param string $kind The kind of rule.
      * @param int $contextid The context ID.
-     * @param string[] $types The types of rule.
      * @param int $childcontextid The child context ID.
      * @return object[]
      */
-    public static function execute($contextid, $types, $childcontextid = null) {
-        $params = self::validate_parameters(self::execute_parameters(), compact('contextid', 'types', 'childcontextid'));
+    public static function execute($kind, $contextid, $childcontextid = null) {
+        $params = self::validate_parameters(self::execute_parameters(), compact('kind', 'contextid', 'childcontextid'));
+        $kind = $params['kind'];
         $contextid = $params['contextid'];
-        $types = $params['types'];
         $childcontextid = $params['childcontextid'] ?? 0;
 
-        // Pre-checks.
-        $worldfactory = di::get('context_world_factory');
-        $world = $worldfactory->get_world_from_context(\context::instance_by_id($contextid));
-        $context = $world->get_context(); // Ensure that we get the real context.
-        self::validate_context($context);
+        $world = self::require_manage_permissions_and_get_world($contextid);
+        $isadmin = empty($world);
 
-        // Permission checks.
-        $perms = $world->get_access_permissions();
-        $perms->require_manage();
+        $completiontypes = ['cm_completion', 'course_completion', 'section_completion'];
 
-        // Validate the child context.
-        $childcontext = null;
-        if ($childcontextid) {
-            $childcontext = \context::instance_by_id($childcontextid);
-            if (!$context->is_parent_of($childcontext, false)) {
-                throw new \moodle_exception('invalidcontext');
+        if ($isadmin) {
+            $rules = di::get('admin_rule_manager')->get_rules();
+        } else {
+            $context = $world->get_context();
+            $childcontext = null;
+            if ($childcontextid) {
+                $childcontext = \context::instance_by_id($childcontextid);
+                if (!$context->is_parent_of($childcontext, false)) {
+                    throw new \moodle_exception('invalidcontext');
+                }
             }
+
+            $manager = di::get('world_rule_manager_factory')->get_rule_manager($world);
+            $rules = $manager->get_rules($childcontext);
         }
 
-        if (empty($types)) {
-            return [];
+        if ($kind === 'completion') {
+            $rules = array_values(array_filter($rules, function ($rule) use ($completiontypes) {
+                return in_array($rule->get_type_name(), $completiontypes);
+            }));
+        } else {
+            $rules = array_values(array_filter($rules, function ($rule) use ($completiontypes) {
+                return !in_array($rule->get_type_name(), $completiontypes);
+            }));
         }
 
-        $dictator = di::get('rule_dictator');
-        $rules = $dictator->get_rules_of_types_in_context($context, $types, $childcontext);
-        $rules = $dictator->sort_rules_by_priority($rules);
-
-        $filterhandler = di::get('rule_filter_handler');
-        $data = array_values(array_map(function ($instance) use ($filterhandler) {
-            $filter = $filterhandler->get_filter($instance->get_filter_name());
-            $effectivectx = $instance->get_child_context() ?? $instance->get_context();
-            $label = $filter ? $filter->get_label_for_config($instance->get_filter_config(), $effectivectx) : null;
-            return [
-                'id' => $instance->get_id(),
-                'points' => $instance->get_points(),
-                'typename' => $instance->get_type_name(),
-                'filtername' => $instance->get_filter_name(),
-                'label' => $label ?? get_string('unknownconditiona', 'block_xp', $instance->get_filter_name()),
-            ];
+        $rules = di::get('rule_sorter')->sort($rules);
+        $ruleserializer = di::get('serializer_factory')->get_rule_serializer();
+        return array_values(array_map(function ($instance) use ($ruleserializer) {
+            return $ruleserializer->serialize($instance);
         }, $rules));
+    }
 
-        return $data;
+    /**
+     * Require manage permissions for the given context.
+     *
+     * @param int $contextid The context ID, or 0 for admin defaults.
+     * @return ?\block_xp\local\world
+     */
+    protected static function require_manage_permissions_and_get_world($contextid) {
+        if (!$contextid) {
+            $context = context_system::instance();
+            self::validate_context($context);
+            require_capability('moodle/site:config', $context);
+            return;
+        }
+
+        $worldfactory = di::get('context_world_factory');
+        $world = $worldfactory->get_world_from_context(context::instance_by_id($contextid));
+        self::validate_context($world->get_context());
+        $world->get_access_permissions()->require_manage();
+        return $world;
     }
 
     /**
@@ -123,6 +140,16 @@ class get_rules extends external_api {
                 'typename' => new external_value(PARAM_ALPHANUMEXT),
                 'filtername' => new external_value(PARAM_ALPHANUMEXT),
                 'label' => new external_value(PARAM_RAW),
+                'limit' => new external_single_structure([
+                    'max' => new external_value(PARAM_INT),
+                    'timewindow' => new external_value(PARAM_INT),
+                    'scope' => new external_value(PARAM_INT),
+                ], '', VALUE_DEFAULT, null, NULL_ALLOWED),
+                'repeatlimit' => new external_single_structure([
+                    'max' => new external_value(PARAM_INT),
+                    'timewindow' => new external_value(PARAM_INT),
+                    'scope' => new external_value(PARAM_INT),
+                ], '', VALUE_DEFAULT, null, NULL_ALLOWED),
             ])
         );
     }

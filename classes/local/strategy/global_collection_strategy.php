@@ -27,6 +27,9 @@
 
 namespace block_xp\local\strategy;
 
+use block_xp\local\action\maker;
+use block_xp\local\action\maker_from_event;
+use block_xp\local\factory\context_world_factory;
 use block_xp\local\factory\course_world_factory;
 use block_xp\local\utils\user_utils;
 
@@ -40,8 +43,12 @@ use block_xp\local\utils\user_utils;
  */
 class global_collection_strategy implements event_collection_strategy {
 
+    /** @var maker|null The action maker. */
+    protected $actionmaker;
     /** @var array Contexts allowed. */
     protected $allowedcontexts = [];
+    /** @var context_world_factory|null The factory. */
+    protected $contextworldfactory;
     /** @var course_world_factory The course factory. */
     protected $worldfactory;
 
@@ -67,6 +74,17 @@ class global_collection_strategy implements event_collection_strategy {
      * @return void
      */
     public function collect_event(\core\event\base $event) {
+        $this->internal_collect_event_for_actions($event);
+        $this->internal_collect_event($event);
+    }
+
+    /**
+     * Collect event.
+     *
+     * @param \core\event\base $event The event.
+     * @return void
+     */
+    protected function internal_collect_event(\core\event\base $event) {
         $userid = $event->userid;
 
         if ($event->component === 'block_xp') {
@@ -95,6 +113,68 @@ class global_collection_strategy implements event_collection_strategy {
         if ($strategy instanceof event_collection_strategy) {
             $strategy->collect_event($event);
         }
+    }
+
+    /**
+     * Collect event for actions.
+     *
+     * @param \core\event\base $event The event.
+     * @return void
+     */
+    protected function internal_collect_event_for_actions(\core\event\base $event) {
+        if ($event->anonymous) {
+            // Skip all the events marked as anonymous.
+            return;
+        } else if (!in_array($event->contextlevel, $this->allowedcontexts)) {
+            // Ignore events that are not in the right context.
+            return;
+        } else if ($event->is_restored()) {
+            // Ignore restored events.
+            return;
+        }
+
+        // No need to continue, we need this.
+        if (!$this->contextworldfactory) {
+            return;
+        }
+
+        // Make the actions from the event.
+        $actions = [];
+        if ($this->actionmaker instanceof maker_from_event) {
+            $actions = $this->actionmaker->make_from_event($event);
+        }
+
+        // Process each action.
+        foreach ($actions as $action) {
+            // Skip the actions if the user does not have the right to earn XP.
+            if (!user_utils::can_earn_points($action->get_context(), $action->get_user_id())) {
+                continue;
+            }
+
+            $strategy = $this->contextworldfactory->get_world_from_context($action->get_context())->get_collection_strategy();
+            if (!$strategy instanceof action_collection_strategy) {
+                continue;
+            }
+            $strategy->collect_action($action);
+        }
+    }
+
+    /**
+     * Set action maker.
+     *
+     * @param maker $actionmaker The action maker.
+     */
+    public function set_action_maker(maker $actionmaker) {
+        $this->actionmaker = $actionmaker;
+    }
+
+    /**
+     * Set the context world factory.
+     *
+     * @param context_world_factory $factory The factory.
+     */
+    public function set_context_world_factory(context_world_factory $factory) {
+        $this->contextworldfactory = $factory;
     }
 
 }

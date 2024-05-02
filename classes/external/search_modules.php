@@ -122,6 +122,8 @@ class search_modules extends external_api {
                         'cmid' => $cm->id,
                         'contextid' => $cm->context->id,
                         'name' => $cm->get_formatted_name(),
+                        'modname' => $cm->modname,
+                        'completionenabled' => (bool) $completion->is_enabled($cm),
                     ];
                 }
             }
@@ -149,6 +151,8 @@ class search_modules extends external_api {
                 'cmid' => new external_value(PARAM_INT),
                 'contextid' => new external_value(PARAM_INT),
                 'name' => new external_value(PARAM_RAW),
+                'modname' => new external_value(PARAM_ALPHANUMEXT),
+                'completionenabled' => new external_value(PARAM_BOOL),
             ])),
         ]));
     }

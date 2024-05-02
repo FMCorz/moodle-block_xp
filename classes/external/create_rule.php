@@ -28,6 +28,8 @@
 namespace block_xp\external;
 
 use block_xp\di;
+use context;
+use context_system;
 
 /**
  * External function.
@@ -86,20 +88,14 @@ class create_rule extends external_api {
         $filter = $params['filter'];
         $childcontextid = $params['childcontextid'];
 
-        // Pre-checks.
-        $worldfactory = di::get('context_world_factory');
-        $world = $worldfactory->get_world_from_context(\context::instance_by_id($contextid));
-        $context = $world->get_context(); // Ensure that we get the real context.
-        self::validate_context($context);
-
-        // Permission checks.
-        $perms = $world->get_access_permissions();
-        $perms->require_manage();
+        $world = self::require_manage_permissions_and_get_world($contextid);
+        $isadmin = empty($world);
 
         // Validate the child context.
+        $context = $world ? $world->get_context() : context_system::instance();
         $childcontext = null;
-        if ($childcontextid) {
-            $childcontext = \context::instance_by_id($childcontextid);
+        if ($childcontextid && !$isadmin) {
+            $childcontext = context::instance_by_id($childcontextid);
             if (!$context->is_parent_of($childcontext, false)) {
                 throw new \moodle_exception('invalidcontext', 'core_error');
             } else if ($childcontext->contextlevel != CONTEXT_COURSE) {
@@ -112,9 +108,9 @@ class create_rule extends external_api {
         }
         $effectivecontext = $childcontext ?? $context;
 
-        $dictator = di::get('rule_dictator');
         $typeresolver = di::get('rule_type_resolver');
         $filterhandler = di::get('rule_filter_handler');
+        $filtermediator = di::get('rule_filter_mediator');
 
         // Validate type exists.
         $typeinst = $typeresolver->get_type($type['name']);
@@ -128,29 +124,42 @@ class create_rule extends external_api {
             throw new \coding_exception('unknownfilter');
         }
 
-        // The filter is not available in that context.
+        // Validate filter compatibility.
         if (!in_array((int) $effectivecontext->contextlevel, $filterinst->get_compatible_context_levels())) {
+            throw new \moodle_exception('invaliddata', 'core_error');
+        } else if ($isadmin && !$filterinst->is_compatible_with_admin()) {
             throw new \moodle_exception('invaliddata', 'core_error');
         }
 
         // Validate type is compatible with filter.
-        if (!in_array($filter['name'], $typeinst->get_compatible_filters())) {
+        if (!in_array($filter['name'], $filtermediator->get_compatible_filter_names($typeinst))) {
             throw new \moodle_exception('invaliddata', 'core_error');
         }
 
         // Validate multiple.
         if (!$filterinst->is_multiple_allowed()) {
             $testoptions = ['type' => $type['name'], 'filter' => $filter['name']];
-            if ($dictator->count_rules_in_context($context, $childcontext, $testoptions) > 0) {
+            if (!$isadmin) {
+                $manager = di::get('world_rule_manager_factory')->get_rule_manager($world);
+                $count = $manager->count_rules($childcontext, $testoptions);
+            } else {
+                $count = di::get('admin_rule_manager')->count_rules($testoptions);
+            }
+            if ($count > 0) {
                 throw new \coding_exception('multipleentriesnotpermitted');
             }
+        }
+
+        if (!$isadmin) {
+            $manager = $manager ?? di::get('world_rule_manager_factory')->get_rule_manager($world);
+            $manager->detach();
         }
 
         // Save the record.
         $db = di::get('db');
         $ruleid = $db->insert_record('block_xp_rule', (object) [
-            'contextid' => $contextid,
-            'childcontextid' => $childcontextid,
+            'contextid' => $isadmin ? 0 : $contextid,
+            'childcontextid' => $childcontext ? $childcontext->id : 0,
             'points' => max(0, min(9999999, $points)),
             'type' => $type['name'],
             'filter' => $filter['name'],
@@ -161,6 +170,27 @@ class create_rule extends external_api {
         ]);
 
         return $ruleid;
+    }
+
+    /**
+     * Require manage permissions for the given context.
+     *
+     * @param int $contextid The context ID, or 0 for admin defaults.
+     * @return ?\block_xp\local\world
+     */
+    protected static function require_manage_permissions_and_get_world($contextid) {
+        if (!$contextid) {
+            $context = context_system::instance();
+            self::validate_context($context);
+            require_capability('moodle/site:config', $context);
+            return;
+        }
+
+        $worldfactory = di::get('context_world_factory');
+        $world = $worldfactory->get_world_from_context(context::instance_by_id($contextid));
+        self::validate_context($world->get_context());
+        $world->get_access_permissions()->require_manage();
+        return $world;
     }
 
     /**

@@ -3,13 +3,17 @@ import { useAnchorButtonProps, useNumericInputProps } from "../lib/hooks";
 import { classNames } from "../lib/utils";
 import Input from "./Input";
 
-export const NumInput: React.FC<
-  Omit<React.HTMLProps<HTMLInputElement>, "onChange" | "value"> & {
-    onChange: (n: number) => void;
-    selectOnFocus?: boolean;
-    value: number;
-  }
-> = ({ className, value, onChange, selectOnFocus, ...props }) => {
+export const NumInput = ({
+  className,
+  value,
+  onChange,
+  selectOnFocus,
+  ...props
+}: Omit<React.HTMLProps<HTMLInputElement>, "onChange" | "value"> & {
+  onChange: (n: number) => void;
+  selectOnFocus?: boolean;
+  value: number;
+}) => {
   const inputProps = useNumericInputProps(value, onChange);
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -20,13 +24,16 @@ export const NumInput: React.FC<
   return <Input type="text" {...inputProps} className={className} onFocus={handleFocus} {...props} />;
 };
 
-export const PlainNumberInput: React.FC<
-  Omit<React.HTMLProps<HTMLInputElement>, "onChange" | "value"> & {
-    onChange: (n: number) => void;
-    selectOnFocus?: boolean;
-    value: number;
-  }
-> = ({ value, onChange, selectOnFocus, ...props }) => {
+export const PlainNumberInput = ({
+  value,
+  onChange,
+  selectOnFocus,
+  ...props
+}: Omit<React.HTMLProps<HTMLInputElement>, "onChange" | "value"> & {
+  onChange: (n: number) => void;
+  selectOnFocus?: boolean;
+  value: number;
+}) => {
   const inputProps = useNumericInputProps(value, onChange);
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -37,7 +44,15 @@ export const PlainNumberInput: React.FC<
   return <input type="text" {...inputProps} onFocus={handleFocus} {...props} />;
 };
 
-export const NumberInputWithButtons: React.FC<{
+export const NumberInputWithButtons = ({
+  onChange,
+  value,
+  min,
+  max,
+  suffix,
+  step = 1,
+  inputProps,
+}: {
   value: number;
   onChange: (n: number) => void;
   min?: number;
@@ -45,7 +60,7 @@ export const NumberInputWithButtons: React.FC<{
   step?: number;
   suffix?: string;
   inputProps?: Omit<React.HTMLProps<HTMLInputElement>, "value" | "onChange"> & { selectOnFocus?: boolean };
-}> = ({ onChange, value, min, max, suffix, step = 1, inputProps }) => {
+}) => {
   const hasMin = typeof min !== "undefined";
   const hasMax = typeof max !== "undefined";
   const minDisabled = hasMin && min >= value;
@@ -86,7 +101,8 @@ export const NumberInputWithButtons: React.FC<{
       <a
         {...minusProps}
         className={classNames(
-          "xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1 xp-flex xp-items-center xp-justify-center",
+          "xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1",
+          "xp-flex xp-items-center xp-justify-center",
           "focus:xp-z-10",
           minDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit"
         )}
@@ -106,7 +122,8 @@ export const NumberInputWithButtons: React.FC<{
       <a
         {...plusProps}
         className={classNames(
-          "xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1 xp-flex xp-items-center xp-justify-center",
+          "xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1",
+          "xp-flex xp-items-center xp-justify-center",
           "focus:xp-z-10",
           maxDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit"
         )}

@@ -59,10 +59,11 @@ class default_admin_config extends immutable_config {
      */
     public function __construct() {
         parent::__construct(new static_config([
+            'actionrulesstate' => course_world_config::DEFAULT_ACTION_RULES_MISSING,
             'context' => CONTEXT_COURSE,
             'adminscanearnxp' => 0,
             'enablepromoincourses' => 1,
-            'keeplogs' => 3,
+            'keeplogs' => 90,
             'navbardisplay' => 0,
 
             'enablecheatguard' => 1,
@@ -93,6 +94,13 @@ class default_admin_config extends immutable_config {
             'usagereport' => 1,
             'lastusagereport' => 0,
             'usagereportid' => '',
+
+            // Log migration specific settings.
+            'logmigrationenabled' => 1,
+            'logmigrationruninterval' => 60,
+            'logmigrationbatchsize' => 5_000,
+            'logmigrationmaxitems' => 100_000,
+            'logmigrationmaxruntime' => 10 * MINSECS,
         ]));
     }
 

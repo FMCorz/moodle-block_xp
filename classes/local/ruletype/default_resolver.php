@@ -27,6 +27,8 @@
 
 namespace block_xp\local\ruletype;
 
+use core_component;
+
 /**
  * Resolver.
  *
@@ -49,7 +51,8 @@ class default_resolver implements resolver {
     public function get_type($name): ?ruletype {
         if (!isset($this->types[$name])) {
             $class = "block_xp\\local\\ruletype\\$name";
-            $this->types[$name] = class_exists($class) ? new $class() : false;
+            $instance = class_exists($class) ? new $class() : false;
+            $this->types[$name] = $instance && $instance instanceof ruletype ? $instance : false;
         }
         return $this->types[$name] ?: null;
     }
@@ -62,6 +65,48 @@ class default_resolver implements resolver {
      */
     public function get_type_name(ruletype $type): string {
         return str_replace("block_xp\\local\\ruletype\\", '', get_class($type));
+    }
+
+    /**
+     * Get the types.
+     *
+     * @return ruletype[]
+     */
+    public function get_types(): array {
+        return array_values(array_filter(array_map(function($name) {
+            $parts = explode('\\', $name);
+            return $this->get_type(end($parts));
+        }, $this->get_class_name_list())));
+    }
+
+    /**
+     * Get class name list.
+     *
+     * @return string[]
+     */
+    protected function get_class_name_list() {
+        $classes = array_keys(core_component::get_component_classes_in_namespace('block_xp', 'local\\ruletype'));
+        return array_filter($classes, [$this, 'is_valid_class']);
+    }
+
+    /**
+     * Whether it is a valid class.
+     *
+     * @param string $class
+     * @return bool
+     */
+    protected function is_valid_class(string $class) {
+        try {
+            $reflector = new \ReflectionClass($class);
+        } catch (\ReflectionException $e) {
+            return false;
+        }
+
+        if (!$reflector->isSubclassOf('block_xp\local\ruletype\ruletype') || !$reflector->isInstantiable()) {
+            return false;
+        }
+
+        return true;
     }
 
 }

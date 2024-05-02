@@ -27,7 +27,11 @@
 namespace block_xp\tests;
 
 use block_manager;
+use block_xp\local\world;
+use block_xp\local\xp\admin_filter_manager;
+use core_component;
 use moodle_url;
+use ReflectionClass;
 
 /**
  * Base testcase class.
@@ -38,6 +42,12 @@ use moodle_url;
  */
 abstract class base_testcase extends \advanced_testcase {
 
+    /** @var bool */
+    private static $fixtureautoloadregistered = false;
+
+    /** @var \block_xp_generator */
+    protected $xpgenerator;
+
     /**
      * PHP Unit setup method.
      *
@@ -45,6 +55,7 @@ abstract class base_testcase extends \advanced_testcase {
      * usage of the setup_test method was required. We maintain this behaviour for simplicity.
      */
     final public function setUp(): void {
+        self::register_tests_fixtures_autoloader();
         $this->setup_test();
     }
 
@@ -98,6 +109,84 @@ abstract class base_testcase extends \advanced_testcase {
     }
 
     /**
+     * Assert log count.
+     *
+     * @param world $world The world.
+     * @param int $expected The expected count.
+     */
+    protected function assert_log_count(world $world, $expected) {
+        global $DB;
+        $this->assertEquals($expected, $DB->count_records('block_xp_logs', ['contextid' => (int) $world->get_context()->id]));
+    }
+
+    /**
+     * Assert log count for user.
+     *
+     * @param world $world The world.
+     * @param int $userid The user ID.
+     * @param int $expected The expected count.
+     */
+    protected function assert_log_count_for_user(world $world, $userid, $expected) {
+        global $DB;
+        $this->assertEquals($expected, $DB->count_records('block_xp_logs', [
+            'userid' => (int) $userid,
+            'contextid' => (int) $world->get_context()->id
+        ]));
+    }
+
+    /**
+     * Get the frozen clock.
+     *
+     * This skips the test if the clock is not mockable.
+     *
+     * @param int|null $ts
+     * @return \frozen_clock
+     */
+    protected function get_frozen_clock(?int $ts = null): \frozen_clock {
+        if (!method_exists($this, 'mock_clock_with_frozen')) {
+            $this->markTestSkipped('This test requires the ability to mock clocks.');
+        }
+        $this->reset_container(); // Just in case our objects cached the time object.
+        return $this->mock_clock_with_frozen($ts);
+    }
+
+    /**
+     * Get the incrementing clock.
+     *
+     * This skips the test if the clock is not mockable.
+     *
+     * @param int|null $starttime
+     * @return \incrementing_clock
+     */
+    protected function get_incrementing_clock(?int $starttime = null): \incrementing_clock {
+        if (!method_exists($this, 'mock_clock_with_incrementing')) {
+            $this->markTestSkipped('This test requires the ability to mock clocks.');
+        }
+        $this->reset_container(); // Just in case our objects cached the time object.
+        return $this->mock_clock_with_incrementing($starttime);
+    }
+
+    /**
+     * Get instantiable classes.
+     *
+     * @param string $namespace The namespace relative to block_xp.
+     * @param string|null $withinterface The interface the class must implement.
+     * @return Generator<ReflectionClass>
+     */
+    protected function get_instantiable_classes($namespace, $withinterface = null) {
+        $classes = array_keys(core_component::get_component_classes_in_namespace('block_xp', $namespace));
+        foreach ($classes as $classname) {
+            $class = new ReflectionClass($classname);
+            if (!$class->isInstantiable()) {
+                continue;
+            } else if ($withinterface && !$class->implementsInterface($withinterface)) {
+                continue;
+            }
+            yield $class;
+        }
+    }
+
+    /**
      * Get world by course ID.
      *
      * @param int $courseid The course ID.
@@ -108,10 +197,75 @@ abstract class base_testcase extends \advanced_testcase {
     }
 
     /**
+     * Get the generator.
+     *
+     * @return \block_xp_generator
+     */
+    protected function get_xp_generator() {
+        if (!$this->xpgenerator) {
+            $this->xpgenerator = $this->getDataGenerator()->get_plugin_generator('block_xp');
+        }
+        return $this->xpgenerator;
+    }
+
+    /**
      * Reset the container.
      */
     protected function reset_container() {
         \block_xp\di::set_container(new \block_xp\local\default_container());
     }
 
+    /**
+     * Restore the legacy default event rules.
+     *
+     * @return void
+     */
+    protected function restore_legacy_default_event_rules() {
+        // Restore the legacy default event rules.
+        $filters = admin_filter_manager::legacy_default_filters(\block_xp_filter::CATEGORY_EVENTS);
+        foreach ($filters as $filter) {
+            $data = $filter->export();
+            $data->courseid = 0;
+            $filter = \block_xp_filter::load_from_data($data);
+            $filter->save();
+        }
+        (new admin_filter_manager(\block_xp\di::get('db')))->mark_as_customised();
+    }
+
+    /**
+     * Register autoload for fixtures.
+     *
+     * @return void
+     */
+    protected static function register_tests_fixtures_autoloader(): void {
+        if (self::$fixtureautoloadregistered) {
+            return;
+        }
+        $prefixes = static::get_autoload_prefixes();
+        spl_autoload_register(function ($class) use ($prefixes) {
+            global $CFG;
+
+            foreach ($prefixes as $prefix => $basepath) {
+                if (strncmp($class, $prefix, strlen($prefix)) !== 0) {
+                    continue;
+                }
+
+                $relative = substr($class, strlen($prefix));
+                $relative = str_replace('\\', DIRECTORY_SEPARATOR, $relative);
+                $file = $CFG->dirroot . $basepath . $relative . '.php';
+                if (is_readable($file)) {
+                    require_once($file);
+                }
+                return;
+            }
+        }, true, true);
+        self::$fixtureautoloadregistered = true;
+    }
+
+    protected static function get_autoload_prefixes() {
+        return [
+            'block_xp\\tests\\fixtures\\' => '/blocks/xp/tests/fixtures/',
+            'block_xp\\tests\\mocks\\' => '/blocks/xp/tests/mocks/',
+        ];
+    }
 }

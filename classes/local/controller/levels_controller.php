@@ -95,11 +95,6 @@ class levels_controller extends page_controller {
                 'resetToDefaultsUrl' => $this->get_reset_url()->out(false),
                 'defaultBadgeUrls' => $defaultbadges,
                 'badges' => array_values(di::get('badge_manager')->get_compatible_badges($world->get_context(), $USER->id)),
-                'addon' => [
-                    'activated' => di::get('addon')->is_activated(),
-                    'enablepromo' => (bool) di::get('config')->get('enablepromoincourses'),
-                    'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $world->get_courseid()])->out(false),
-                ],
             ],
         ];
     }
@@ -122,7 +117,7 @@ class levels_controller extends page_controller {
         }
 
         [$module, $props] = $this->get_react_module();
-        echo $output->react_module($module, $props);
+        echo $output->react_module($module, $props, $this->world);
 
         $this->page_danger_zone_content();
     }

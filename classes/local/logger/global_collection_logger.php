@@ -46,7 +46,10 @@ use moodle_database;
  */
 class global_collection_logger implements collection_logger {
 
-    /** The table name. */
+    /**
+     * The table name.
+     * @deprecated Since XP 3.17
+     */
     const TABLE = 'block_xp_log';
 
     /** @var moodle_database The DB. */
@@ -68,13 +71,8 @@ class global_collection_logger implements collection_logger {
      * @return void
      */
     public function delete_older_than(DateTime $dt) {
-        $this->db->delete_records_select(
-            static::TABLE,
-            'time < :time',
-            [
-                'time' => $dt->getTimestamp(),
-            ]
-        );
+        $this->db->delete_records_select('block_xp_log', 'time < ?', [$dt->getTimestamp()]);
+        $this->db->delete_records_select('block_xp_logs', 'timerecorded < ?', [$dt->getTimestamp()]);
     }
 
     /**

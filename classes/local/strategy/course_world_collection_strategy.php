@@ -27,11 +27,13 @@
 
 namespace block_xp\local\strategy;
 
+use block_xp\local\action\action;
 use context;
 use block_xp\local\config\config;
+use block_xp\local\logger\collection_logger;
 use block_xp\local\logger\reason_collection_logger;
 use block_xp\local\notification\course_level_up_notification_service;
-use block_xp\local\reason\event_name_reason;
+use block_xp\local\reason\event_reason;
 use block_xp\local\xp\course_filter_manager;
 use block_xp\local\xp\course_user_state_store;
 
@@ -43,7 +45,7 @@ use block_xp\local\xp\course_user_state_store;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_world_collection_strategy implements event_collection_strategy {
+class course_world_collection_strategy implements action_collection_strategy, event_collection_strategy {
 
     /** @var context The context. */
     protected $context;
@@ -53,10 +55,12 @@ class course_world_collection_strategy implements event_collection_strategy {
     protected $store;
     /** @var course_filter_manager The filter manager. */
     protected $filtermanager;
-    /** @var reason_collection_logger The logger. */
+    /** @var collection_logger The logger. */
     protected $logger;
     /** @var course_level_up_notification_service The notification service. */
     protected $levelupnotifificationservice;
+    /** @var action_collection_strategy The action collection strategy. */
+    protected $actioncollectionstrategy;
 
     /**
      * Constructor.
@@ -65,7 +69,7 @@ class course_world_collection_strategy implements event_collection_strategy {
      * @param config $config The config.
      * @param course_user_state_store $store The store.
      * @param course_filter_manager $filtermanager The filter manager.
-     * @param reason_collection_logger $logger The logger.
+     * @param collection_logger $logger The logger.
      * @param course_level_up_notification_service $levelupnotifificationservice The notification service.
      */
     public function __construct(
@@ -73,7 +77,7 @@ class course_world_collection_strategy implements event_collection_strategy {
         config $config,
         course_user_state_store $store,
         course_filter_manager $filtermanager,
-        reason_collection_logger $logger,
+        collection_logger $logger,
         course_level_up_notification_service $levelupnotifificationservice
     ) {
         $this->context = $context;
@@ -82,6 +86,18 @@ class course_world_collection_strategy implements event_collection_strategy {
         $this->filtermanager = $filtermanager;
         $this->logger = $logger;
         $this->levelupnotifificationservice = $levelupnotifificationservice;
+    }
+
+    /**
+     * Handle the action.
+     *
+     * @param action $action The action.
+     * @return void
+     */
+    public function collect_action(action $action) {
+        if ($this->actioncollectionstrategy instanceof action_collection_strategy) {
+            $this->actioncollectionstrategy->collect_action($action);
+        }
     }
 
     /**
@@ -112,7 +128,7 @@ class course_world_collection_strategy implements event_collection_strategy {
         }
 
         // Make up the reason.
-        $reason = new event_name_reason($event->eventname);
+        $reason = event_reason::from_event($event);
 
         // Collect.
         // No need to go through the following if the user did not gain XP.
@@ -120,7 +136,9 @@ class course_world_collection_strategy implements event_collection_strategy {
             $this->store->increase_with_reason($userid, $points, $reason);
         } else {
             // We still want to log the thing.
-            $this->logger->log_reason($userid, $points, $reason);
+            if ($this->logger instanceof reason_collection_logger) {
+                $this->logger->log_reason($userid, $points, $reason);
+            }
         }
     }
 
@@ -227,6 +245,15 @@ class course_world_collection_strategy implements event_collection_strategy {
         }
 
         return true;
+    }
+
+    /**
+     * Set the action collection strategy.
+     *
+     * @param action_collection_strategy $strategy The strategy.
+     */
+    public function set_action_collection_strategy(action_collection_strategy $strategy) {
+        $this->actioncollectionstrategy = $strategy;
     }
 
 }

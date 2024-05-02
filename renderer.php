@@ -24,9 +24,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use block_xp\di;
 use block_xp\local\course_world;
 use block_xp\local\activity\activity;
 use block_xp\local\utils\user_utils;
+use block_xp\local\world;
 use block_xp\local\xp\level;
 use block_xp\local\xp\level_with_badge;
 use block_xp\local\xp\level_with_name;
@@ -1003,7 +1005,7 @@ EOT
                 echo $element->description;
             }
         }
-        $this->render($element->widget);
+        echo ($this->render($element->widget)) ?: '';
     }
 
     /**
@@ -1090,9 +1092,10 @@ EOT
      *
      * @param string $module The AMD name of the module.
      * @param object|array $props The props.
+     * @param world|null $world The world, otherwise we assume being in admin.
      * @return void
      */
-    public function react_module($module, $props) {
+    public function react_module($module, $props, ?world $world = null) {
         $id = html_writer::random_id('block_xp-react-app');
         $propsid = html_writer::random_id('block_xp-react-app-props');
 
@@ -1107,7 +1110,7 @@ EOT
         $o .= html_writer::end_div();
         $o .= html_writer::end_div();
 
-        $o .= $this->json_script($props, $propsid);
+        $o .= $this->json_script($this->react_module_extend_props($props, $world), $propsid);
 
         $this->page->requires->js_amd_inline("
             require(['block_xp/react-launcher'], function(Launcher) {
@@ -1116,6 +1119,38 @@ EOT
         ");
 
         return $o;
+    }
+
+    /**
+     * Extend the props for a react module.
+     *
+     * @param array $props Array of props.
+     * @param world|null $world The world, otherwise we assume being in admin.
+     */
+    protected function react_module_extend_props($props, ?world $world = null) {
+        $urlresolver = di::get('url_resolver');
+        $addonpromourl = $urlresolver->reverse('admin/promo');
+        $worldprops = $props['world'] ?? null;
+
+        if ($world) {
+            $courseid = (int) ($world instanceof course_world ? $world->get_courseid() : $this->page->course->id);
+            $addonpromourl = $urlresolver->reverse('promo', ['courseid' => $courseid]);
+            $worldprops = [
+                'contextid' => (int) $world->get_context()->id,
+                'contextlevel' => (int) $world->get_context()->contextlevel,
+                'contextinstanceid' => (int) $world->get_context()->instanceid,
+                'courseid' => (int) $courseid, // Check JS when removing this as wholesite should use SITEID.
+            ];
+        }
+
+        return array_merge($props, [
+            'world' => $worldprops,
+            'addon' => [
+                'activated' => di::get('addon')->is_activated(),
+                'enablepromo' => $world ? (bool) di::get('config')->get('enablepromoincourses') : true,
+                'promourl' => $addonpromourl->out(false),
+            ]
+        ]);
     }
 
     /**
