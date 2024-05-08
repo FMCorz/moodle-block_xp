@@ -46,7 +46,7 @@ class default_resolver implements resolver {
      */
     public function get_type($name): ?ruletype {
         if (!isset($this->types[$name])) {
-            $class = "block_xp\\local\\ruleype\\$name";
+            $class = "block_xp\\local\\ruletype\\$name";
             $this->types[$name] = class_exists($class) ? new $class() : false;
         }
         return $this->types[$name] ?: null;
