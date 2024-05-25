@@ -71,6 +71,7 @@ class cheatguard extends dynamic_form {
 
         $mform = $this->_form;
         $mform->addElement('hidden', 'contextid', $this->get_world()->get_context()->id);
+        $mform->setType('contextid', PARAM_INT);
 
         $mform->addElement('selectyesno', 'enablecheatguard', get_string('enablecheatguard', 'block_xp'));
         $mform->addHelpButton('enablecheatguard', 'enablecheatguard', 'block_xp');
