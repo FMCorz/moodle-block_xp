@@ -59,6 +59,9 @@ class report_controller extends page_controller {
             ['confirm', 0, PARAM_INT, false],
             ['delete', 0, PARAM_INT, false],
             ['page', 0, PARAM_INT],     // To keep the table page in URL.
+
+            // Deprecated since XP 3.17.
+            ['action', null, PARAM_ALPHA],
         ];
     }
 
