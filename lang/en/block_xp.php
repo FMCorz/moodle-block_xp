@@ -246,6 +246,7 @@ $string['ladderadditionalcols_help'] = 'This setting determines which additional
 $string['ladderempty'] = 'The leaderboard is currently empty, make sure to come back later!';
 $string['learnmore'] = 'Learn more';
 $string['level'] = 'Level';
+$string['levelbadge'] = 'Level badge';
 $string['levelbadges'] = 'Level badges';
 $string['levelbadges_help'] = 'Upload images to replace the appearance of individual levels.
 
