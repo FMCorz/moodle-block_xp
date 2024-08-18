@@ -67,8 +67,13 @@ function block_xp_render_navbar_output($output) {
         return '';
     }
 
-    // Check that the user can see the content.
+    // Check if enabled.
     $world = di::get('course_world_factory')->get_world($COURSE->id);
+    if (!$world->get_config()->get('enabled')) {
+        return;
+    }
+
+    // Check that the user can see the content.
     $accessperms = $world->get_access_permissions();
     if (!$accessperms->can_access()) {
         return '';
