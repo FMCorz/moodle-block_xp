@@ -177,6 +177,9 @@ class block_xp_rule_cm extends block_xp_rule_property {
             $modules = [];
             foreach ($cmids as $cmid) {
                 $cm = $modinfo->get_cm($cmid);
+                if (!empty($cm->deletioninprogress)) {
+                    continue;
+                }
                 $modules[$cm->context->id] = $cm->name;
                 $valuefound = $valuefound || $this->value == $cm->context->id;
             }

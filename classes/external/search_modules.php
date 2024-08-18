@@ -99,6 +99,11 @@ class search_modules extends external_api {
                 $name = $cm->get_formatted_name();
                 $comparablename = core_text::strtolower($name);
 
+                // Skip over the modules that are being deleted.
+                if (!empty($cm->deletioninprogress)) {
+                    continue;
+                }
+
                 // Filter out modules by type.
                 if ($moduletype !== null && $moduletype !== $cm->modname) {
                     continue;
