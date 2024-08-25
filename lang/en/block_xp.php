@@ -235,6 +235,15 @@ $string['installed'] = 'Installed';
 $string['instructions'] = 'Instructions';
 $string['instructions_help'] = 'The instructions will be displayed on the information page. You may use them to share information and instructions regarding the levels, how to obtain points, etc.';
 $string['invalidxp'] = 'Invalid points value';
+$string['isolationdefault'] = 'Default (group mode)';
+$string['isolationcohorts'] = 'Using cohorts';
+$string['isolateparticipants'] = 'Isolate participants';
+$string['isolateparticipants_help'] = "Create separate leaderboards for different groups of people.
+
+- Default (group mode): Follows the course's group mode to create leaderboards for each group.
+- Using cohorts: Only members of the same cohort will appear in a person's leaderboard.
+
+[More info](https://docs.levelup.plus/xp/docs/leaderboard-isolation)";
 $string['keeplogs'] = 'Keep logs';
 $string['ladder'] = 'Leaderboard';
 $string['ladder_help'] = 'The leaderboard ranks students based on their points. When used in a course with groups, it can create a ranking for each group of student.
