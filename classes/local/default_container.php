@@ -391,10 +391,10 @@ class default_container implements container {
     /**
      * Get the leaderboard factory maker.
      *
-     * @return string
+     * @return factory\leaderboard_factory_maker
      */
     protected function get_leaderboard_factory_maker() {
-        return new \block_xp\local\factory\default_leaderboard_factory_maker($this->get('db'), $this->get('config'));
+        return new factory\default_leaderboard_factory_maker($this->get('db'), $this->get('config'));
     }
 
     /**
