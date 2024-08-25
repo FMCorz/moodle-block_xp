@@ -100,7 +100,7 @@ class user_utils {
         $course = get_fast_modinfo($courseid)->get_course();
         $groupmode = groups_get_course_groupmode($course);
         $context = context_course::instance($courseid);
-        $aag = has_capability('moodle/site:accessallgroups', $context);
+        $aag = has_capability('moodle/site:accessallgroups', $context, $userid);
 
         if ($groupmode == NOGROUPS && !$aag) {
             $allowedgroups = [];
