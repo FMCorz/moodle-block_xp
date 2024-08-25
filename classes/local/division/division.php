@@ -14,19 +14,39 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace block_xp\local\division;
+
+use block_xp\local\userfilter\user_filter;
+
 /**
- * Version file.
+ * Division.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2024 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+interface division {
 
-defined('MOODLE_INTERNAL') || die();
+    /**
+     * Get the ID.
+     *
+     * @return string|int
+     */
+    public function get_id();
 
-$plugin->version    = 2024082500;
-$plugin->requires   = 2021051700;   // Moodle 3.11.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.17.0-dev';
-$plugin->supported  = [311, 404];
+    /**
+     * Get the name.
+     *
+     * @return string
+     */
+    public function get_name(): string;
+
+    /**
+     * Get the user filter.
+     *
+     * @return user_filter
+     */
+    public function get_user_filter(): user_filter;
+
+}

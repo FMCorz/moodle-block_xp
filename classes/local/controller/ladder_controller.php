@@ -26,6 +26,8 @@
 namespace block_xp\local\controller;
 
 use block_xp\di;
+use block_xp\local\division\division;
+use block_xp\local\division\group_division;
 use moodle_exception;
 
 /**
@@ -75,13 +77,29 @@ class ladder_controller extends page_controller {
     }
 
     /**
+     * Get the division.
+     *
+     * @return division|null
+     */
+    protected function get_division(): ?division {
+        if ($this->get_groupid()) {
+            return new group_division($this->get_groupid());
+        }
+        return null;
+    }
+
+    /**
      * Get the leadeboard.
      *
      * @return \block_xp\local\leaderboard\leaderboard
      */
     protected function get_leaderboard() {
-        $leaderboardfactory = \block_xp\di::get('course_world_leaderboard_factory');
-        return $leaderboardfactory->get_course_leaderboard($this->world, $this->get_groupid());
+        $division = $this->get_division();
+        $lbf = \block_xp\di::get('leaderboard_factory_maker')->get_leaderboard_factory($this->world);
+        if ($division) {
+            return $lbf->get_leaderboard_for_division($division);
+        }
+        return $lbf->get_leaderboard();
     }
 
     /**

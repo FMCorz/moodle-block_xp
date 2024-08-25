@@ -31,6 +31,8 @@ use moodle_database;
 use stdClass;
 use block_xp\local\iterator\map_recordset;
 use block_xp\local\sql\limit;
+use block_xp\local\userfilter\group_members;
+use block_xp\local\userfilter\user_filter;
 use block_xp\local\utils\user_utils;
 use block_xp\local\xp\levels_info;
 use block_xp\local\xp\state;
@@ -55,25 +57,31 @@ class course_user_leaderboard implements leaderboard {
     protected $course;
     /** @var int The course ID. */
     protected $courseid;
-    /** @var int The group ID. */
-    protected $groupid;
     /** @var levels_info The levels info. */
     protected $levelsinfo;
     /** @var ranker The ranker. */
     protected $ranker;
     /** @var string The DB table. */
     protected $table = 'block_xp';
+    /** @var user_filter The user filter. */
+    protected $userfilter;
 
     /** @var string SQL fields. */
     protected $fields;
     /** @var string SQL from. */
     protected $from;
     /** @var string SQL where. */
-    protected $where;
+    protected $where = '';
     /** @var string SQL order. */
     protected $order;
     /** @var array SQL params. */
-    protected $params;
+    protected $params = [];
+
+    /**
+     * @var int No longer used, this was the group ID.
+     * @deprecated Since XP 3.17, use user_filter instead.
+     */
+    protected $groupid = 0;
 
     /**
      * Constructor.
@@ -83,7 +91,7 @@ class course_user_leaderboard implements leaderboard {
      * @param int $courseid The course ID.
      * @param string[] $columns The name of the columns.
      * @param ranker $ranker An alternative ranker.
-     * @param int $groupid The group ID.
+     * @param int $groupid This should not be used, but kept for backwards compat.
      */
     public function __construct(
             moodle_database $db,
@@ -97,17 +105,27 @@ class course_user_leaderboard implements leaderboard {
         $this->levelsinfo = $levelsinfo;
         $this->courseid = $courseid;
         $this->ranker = $ranker;
-        $this->groupid = $groupid;
         $this->columns = $columns;
+        $this->groupid = $groupid;
 
-        $params = [];
-        $groupsql = '';
-        if ($groupid) {
-            $groupsql = "JOIN {groups_members} gm
-                           ON gm.groupid = :groupid
-                          AND gm.userid = x.userid";
-            $params['groupid'] = $groupid;
+        // We should no longer be using the group ID here, but we handle it gracefully to avoid breaking existing implementations.
+        if (!empty($groupid)) {
+            debugging('The $groupid argument of the leaderboard is deprecated, use set_user_filter() instead.', DEBUG_DEVELOPER);
+            $this->set_user_filter(new group_members($groupid));
         }
+    }
+
+    /**
+     * Prepare the query.
+     */
+    protected function prepare_query() {
+        if (!empty($this->from)) {
+            return;
+        }
+
+        $initialwhere = $this->where;
+        $initialparams = $this->params;
+        $params = [];
 
         // We rename the user ID from fields() to 'useridunused' because the xp table
         // already contains the user ID as 'userid and Oracle would complain if we select
@@ -115,19 +133,34 @@ class course_user_leaderboard implements leaderboard {
         $this->fields = 'x.*, ' .
             user_utils::picture_fields('u', 'useridunused') . ', ' .
             context_helper::get_preload_record_columns_sql('ctx');
+
         $this->from = "{{$this->table}} x
-                       $groupsql
                   JOIN {user} u
                     ON x.userid = u.id
                   JOIN {context} ctx
                     ON ctx.instanceid = u.id
                    AND ctx.contextlevel = :contextlevel";
+        $params += ['contextlevel' => CONTEXT_USER];
+
+
         $this->where = "x.courseid = :courseid";
+        $params += ['courseid' => $this->courseid];
+
+        [$usersql, $userparams] = $this->get_user_ids_sql('x.userid');
+        $this->where .= " AND ($usersql)";
+        $params += $userparams;
+
+        // Some of our existing implementations were adding SQL statements and params in the constructor,
+        // since we moved the SQL building to this method, we need to re-add those.
+        if ($initialwhere) {
+            $this->where .= ' ' . $initialwhere;
+        }
+        if (!empty($initialparams)) {
+            $params += $initialparams;
+        }
+
         $this->order = "x.xp DESC, x.userid ASC";
-        $this->params = $params + [
-            'contextlevel' => CONTEXT_USER,
-            'courseid' => $this->courseid,
-        ];
+        $this->params = $params;
     }
 
     /**
@@ -145,6 +178,7 @@ class course_user_leaderboard implements leaderboard {
      * @return int
      */
     public function get_count() {
+        $this->prepare_query();
         $sql = "SELECT COUNT('x')
                   FROM {$this->from}
                  WHERE {$this->where}";
@@ -158,6 +192,7 @@ class course_user_leaderboard implements leaderboard {
      * @return int|false False when not ranked.
      */
     protected function get_points($id) {
+        $this->prepare_query();
         $sql = "SELECT x.xp
                   FROM {$this->from}
                  WHERE {$this->where}
@@ -187,6 +222,7 @@ class course_user_leaderboard implements leaderboard {
      * @return int Indexed from 0.
      */
     protected function get_position_with_xp($id, $xp) {
+        $this->prepare_query();
         $sql = "SELECT COUNT('x')
                   FROM {$this->from}
                  WHERE {$this->where}
@@ -224,6 +260,7 @@ class course_user_leaderboard implements leaderboard {
      * @return int Indexed from 1.
      */
     protected function get_rank_from_xp($xp) {
+        $this->prepare_query();
         $sql = "SELECT COUNT('x')
                   FROM {$this->from}
                  WHERE {$this->where}
@@ -284,6 +321,7 @@ class course_user_leaderboard implements leaderboard {
      * @return \moodle_recordset
      */
     protected function get_ranking_recordset(limit $limit) {
+        $this->prepare_query();
         $sql = "SELECT {$this->fields}
                   FROM {$this->from}
                  WHERE {$this->where}
@@ -303,6 +341,7 @@ class course_user_leaderboard implements leaderboard {
      * @return state|null
      */
     protected function get_state($id) {
+        $this->prepare_query();
         $sql = "SELECT {$this->fields}
                   FROM {$this->from}
                  WHERE {$this->where}
@@ -310,6 +349,19 @@ class course_user_leaderboard implements leaderboard {
         $params = $this->params + ['userid' => $id];
         $record = $this->db->get_record_sql($sql, $params);
         return !$record ? null : $this->make_state_from_record($record);
+    }
+
+    /**
+     * Get the user ID filtering SQL.
+     *
+     * @param string $useridalias The user ID field alias.
+     * @return array
+     */
+    protected function get_user_ids_sql(string $useridalias) {
+        if (!$this->userfilter) {
+            return ['1=1', []];
+        }
+        return $this->userfilter->get_sql($useridalias);
     }
 
     /**
@@ -325,4 +377,14 @@ class course_user_leaderboard implements leaderboard {
         $xp = !empty($record->xp) ? $record->xp : 0;
         return new user_state($user, $xp, $this->levelsinfo, $this->courseid);
     }
+
+    /**
+     * Set the user filter.
+     *
+     * @param user_filter $filter The filter.
+     */
+    public function set_user_filter(user_filter $filter) {
+        $this->userfilter = $filter;
+    }
+
 }

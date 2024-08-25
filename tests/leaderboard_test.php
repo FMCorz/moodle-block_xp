@@ -206,11 +206,13 @@ final class leaderboard_test extends base_testcase {
         $this->assertEquals(1, $lb->get_rank($u8->id)->get_rank());
 
         $lb = $this->get_leaderboard($world1, $g3->id);
+        $this->assertDebuggingCalled('The $groupid argument of the leaderboard is deprecated, use set_user_filter() instead.');
         $this->assertEquals(0, $lb->get_count());
         $this->assertEquals(null, $lb->get_rank($u1->id));
         $this->assertEquals(null, $lb->get_rank($u8->id));
 
         $lb = $this->get_leaderboard($world1, $g1->id);
+        $this->assertDebuggingCalled('The $groupid argument of the leaderboard is deprecated, use set_user_filter() instead.');
         $this->assertEquals(4, $lb->get_count());
         $this->assertEquals(4, $lb->get_rank($u1->id)->get_rank());
         $this->assertEquals(1, $lb->get_rank($u4->id)->get_rank());
@@ -218,6 +220,7 @@ final class leaderboard_test extends base_testcase {
         $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [[$u4, 1], [$u3, 2], [$u2, 3], [$u1, 4]]);
 
         $lb = $this->get_leaderboard($world1, $g2->id);
+        $this->assertDebuggingCalled('The $groupid argument of the leaderboard is deprecated, use set_user_filter() instead.');
         $this->assertEquals(3, $lb->get_count());
         $this->assertEquals(null, $lb->get_rank($u1->id));
         $this->assertEquals(3, $lb->get_rank($u4->id)->get_rank());

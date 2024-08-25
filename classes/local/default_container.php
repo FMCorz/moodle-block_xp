@@ -66,6 +66,7 @@ class default_container implements container {
         'course_world_navigation_factory' => true,
         'db' => true,
         'file_server' => true,
+        'leaderboard_factory_maker' => true,
         'leaderboard_form_class' => true,
         'levels_info_factory' => true,
         'levels_info_writer' => true,
@@ -385,6 +386,15 @@ class default_container implements container {
     protected function get_levels_info_factory() {
         return new factory\levels_factory($this->get('config'), $this->get('badge_url_resolver'),
             $this->get('badge_url_resolver_course_world_factory'));
+    }
+
+    /**
+     * Get the leaderboard factory maker.
+     *
+     * @return string
+     */
+    protected function get_leaderboard_factory_maker() {
+        return new \block_xp\local\factory\default_leaderboard_factory_maker($this->get('db'), $this->get('config'));
     }
 
     /**

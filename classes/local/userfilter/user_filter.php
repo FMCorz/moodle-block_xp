@@ -15,18 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version file.
+ * User filter.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2024 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_xp\local\userfilter;
 
-$plugin->version    = 2024082500;
-$plugin->requires   = 2021051700;   // Moodle 3.11.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.17.0-dev';
-$plugin->supported  = [311, 404];
+/**
+ * User filter.
+ *
+ * @package    block_xp
+ * @copyright  2024 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+interface user_filter {
+
+    /**
+     * Get the SQL fragment to filter users.
+     *
+     * @return array Containing both SQL fragment, and params.
+     */
+    public function get_sql(string $useridalias): array;
+
+}

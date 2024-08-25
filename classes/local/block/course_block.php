@@ -277,11 +277,10 @@ class course_block extends block_base {
 
         $context = $world->get_context();
         $canedit = $world->get_access_permissions()->can_manage();
-        $adminconfig = \block_xp\di::get('config');
         $indicator = \block_xp\di::get('user_notice_indicator');
         $courseid = $world->get_courseid();
         $config = $world->get_config();
-        $leaderboardfactory = \block_xp\di::get('course_world_leaderboard_factory');
+        $leaderboardfactory = \block_xp\di::get('leaderboard_factory_maker')->get_leaderboard_factory($world);
 
         // Recent activity.
         $activity = [];
@@ -328,12 +327,7 @@ class course_block extends block_base {
         $rankrel = $config->get('rankmode') == course_world_config::RANK_REL;
         if ($config->get('enableladder') && ($rankon || $rankrel)) {
 
-            $groupid = 0;
-            if ($adminconfig->get('context') == CONTEXT_COURSE) {
-                $groupid = user_utils::get_primary_group_id($world->get_courseid(), $USER->id);
-            }
-
-            $leaderboard = $leaderboardfactory->get_course_leaderboard($world, $groupid);
+            $leaderboard = $leaderboardfactory->get_leaderboard();
             $widget->set_rank_is_rel($rankrel);
             $widget->set_show_diffs_in_ranking_snapshot($rankrel || array_key_exists('xp', $leaderboard->get_columns()));
 
