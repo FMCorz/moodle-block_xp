@@ -64,6 +64,7 @@ class leaderboard extends dynamic_form {
         $mform = $this->_form;
 
         $mform->addElement('hidden', 'contextid', $this->get_world()->get_context()->id);
+        $mform->setType('contextid', PARAM_INT);
 
         $mform->addElement('selectyesno', 'enableladder', get_string('enableladder', 'block_xp'));
         $mform->addHelpButton('enableladder', 'enableladder', 'block_xp');
