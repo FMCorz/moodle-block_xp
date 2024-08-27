@@ -847,8 +847,6 @@ const BulkEditPoints = ({ method, base, incr, coef, onBaseChange, onCoefChange, 
         "difficultyrelativedesc",
         "difficultyrelativeincrdesc",
         "documentation",
-        "pointincrement",
-        "pointincrementdesc",
         "pointsperlevel",
         "recommended",
     ], "block_xp");
@@ -1451,7 +1449,7 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
                                 react.createElement(components_Str, { id: "documentation" }))))),
                         resetToDefaultsUrl ? (react.createElement("div", { className: "xp-py-1" },
                             react.createElement(menu/* Menu */.W.Item, null, ({ active, close }) => (react.createElement("a", { href: resetToDefaultsUrl, className: utils_classNames(active ? "xp-bg-gray-100" : null, "xp-text-red-600 xp-block xp-px-6 xp-py-1 xp-no-underline") },
-                                react.createElement(components_Str, { id: "resetlevelstodefaults" })))))) : null)))),
+                                react.createElement(components_Str, { id: "resettodefaults" })))))) : null)))),
         react.createElement("div", { className: "xp-flex xp-flex-col xp-flex-1 xp-gap-4" }, Array.from({ length: state.nblevels }).map((_, idx) => {
             const level = levels[idx] || { level: idx + 1, xprequired: 0 };
             const prevLevel = levels[idx - 1];
