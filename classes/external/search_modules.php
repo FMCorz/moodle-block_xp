@@ -68,7 +68,7 @@ class search_modules extends external_api {
         require_once($CFG->libdir . '/completionlib.php');
 
         $params = self::validate_parameters(self::execute_parameters(), compact('courseid', 'query', 'options'));
-        $courseid = $params['courseid'];
+        $courseid = $params['courseid'] ?: SITEID; // We translate 0 to SITEID.
         $query = core_text::strtolower(trim($params['query']));
         $options = (array) $params['options'];
 
