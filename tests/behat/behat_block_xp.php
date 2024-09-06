@@ -27,8 +27,6 @@
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
-use Behat\Behat\Context\Step\Given as Given;
-
 /**
  * Additional steps definition.
  *
@@ -53,18 +51,38 @@ class behat_block_xp extends behat_base {
     /**
      * Step to edit a student's points.
      *
-     * There are no standard definitions available from 2.7 so we use our own.
-     *
      * @Given /^I follow edit for "(?P<student>(?:[^"]|\\")*)" in XP report$/
      * @param string $studentname
      */
     public function i_follow_edit_for_in_xp_report($studentname) {
-        $xpath = "//td[normalize-space(.)='$studentname']/parent::tr/descendant::*[@title='Edit']/parent::a";
-        if (method_exists($this, 'execute')) {
-            $this->execute('behat_general::i_click_on', [$xpath, 'xpath_element']);
-        } else {
-            return new Given("I click on \"$xpath\" \"xpath_element\"");
-        }
+        $rowxpath = "//tr[contains(normalize-space(.), '$studentname')]";
+
+        $this->execute('behat_general::i_click_on_in_the', [
+            "[data-toggle='dropdown']", "css_element",
+            $rowxpath, "xpath_element"
+        ]);
+
+        $this->execute('behat_general::i_click_on_in_the', [
+            "Edit", "link",
+            $rowxpath, "xpath_element"
+        ]);
+    }
+
+    /**
+     * Step to follow a page menu link.
+     *
+     * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" in the XP page menu$/
+     * @param string $studentname
+     */
+    public function i_follow_foo_in_xp_page_menu($text) {
+        $this->execute('behat_general::i_click_on', [
+            "[data-region='block_xp-page_menu'] [data-toggle='dropdown']", "css_element",
+        ]);
+
+        $this->execute('behat_general::i_click_on_in_the', [
+            "$text", "link",
+            "[data-region='block_xp-page_menu'] .dropdown", "css_element",
+        ]);
     }
 
 }

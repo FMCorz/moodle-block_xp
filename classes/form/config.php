@@ -69,7 +69,8 @@ class config extends moodleform {
         $mform->addElement('selectyesno', 'enableinfos', get_string('enableinfos', 'block_xp'));
         $mform->addHelpButton('enableinfos', 'enableinfos', 'block_xp');
 
-        $levelupnotifelements = [$mform->createElement('selectyesno', 'enablelevelupnotif', '')];
+        $levelupnotifelements = [$mform->createElement('selectyesno', 'enablelevelupnotif',
+            get_string('enablelevelupnotif', 'block_xp'))];
         if ($world) {
             $randomtrymeid = html_writer::random_id();
             $level1 = $world->get_levels_info()->get_level(1);

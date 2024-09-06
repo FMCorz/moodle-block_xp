@@ -1,4 +1,4 @@
-@block @block_xp
+@block @block_xp @javascript
 Feature: A report displays students' progress
   In order to know how my students are doing
   As a teacher
@@ -67,38 +67,35 @@ Feature: A report displays students' progress
     And I am on "Course 1" course homepage
     When I click on "Report" "link" in the "Level up!" "block"
     Then the following should exist in the "block_xp-report-table" table:
-      | Full name     | Level | Total |
+      | First name    | Level | Total |
       | Student One   | 1     | 63    |
       | Student Two   | 1     | 117   |
       | Student Three | 1     | 9     |
     And I set the field "Visible groups" to "Group A"
-    And I click on "Go" "button" in the "#selectgroup" "css_element"
     And I should not see "Student Two"
     And the following should exist in the "block_xp-report-table" table:
-      | Full name   | Level | Total |
+      | First name  | Level | Total |
       | Student One | 1     | 63    |
     And I set the field "Visible groups" to "Group B"
-    And I click on "Go" "button" in the "#selectgroup" "css_element"
     And I should not see "Student One"
     And the following should exist in the "block_xp-report-table" table:
-      | Full name   | Level | Total |
+      | First name  | Level | Total |
       | Student Two | 1     | 117   |
-    And I press "Reset group data"
-    And I press "Continue"
+    And I follow "Reset group data" in the XP page menu
+    And I press "Reset"
     And the following should exist in the "block_xp-report-table" table:
-      | Full name   | Level | Total |
+      | First name  | Level | Total |
       | Student Two | -     | -     |
     And I set the field "Visible groups" to "All participants"
-    And I click on "Go" "button" in the "#selectgroup" "css_element"
     And the following should exist in the "block_xp-report-table" table:
-      | Full name     | Level | Total |
+      | First name    | Level | Total |
       | Student One   | 1     | 63    |
       | Student Two   | -     | -     |
       | Student Three | 1     | 9     |
-    And I press "Reset course data"
-    And I press "Continue"
+    And I follow "Reset course data" in the XP page menu
+    And I press "Reset"
     And the following should exist in the "block_xp-report-table" table:
-      | Full name     | Level | Total |
+      | First name    | Level | Total |
       | Student One   | -     | -     |
       | Student Two   | -     | -     |
       | Student Three | -     | -     |
@@ -124,15 +121,16 @@ Feature: A report displays students' progress
     And I add the "Level Up XP" block
     And I click on "Report" "link" in the "Level up!" "block"
     And the following should exist in the "block_xp-report-table" table:
-      | Full name     | Level | Total |
+      | First name    | Level | Total |
       | Student One   | -     | -     |
       | Student Two   | -     | -     |
     # Click on the edit button for Student One.
     And I follow edit for "Student One" in XP report
     # And I click on "td[normalize-space(.)='Student One']/parent::tr/descendant::img[@title='Edit']/parent::a" "xpath"
+    And I wait until "Edit Student One" "dialogue" exists
     When I set the field "Total" to "512"
     And I press "Save changes"
     Then the following should exist in the "block_xp-report-table" table:
-      | Full name     | Level | Total |
+      | First name    | Level | Total |
       | Student One   | 4     | 512   |
       | Student Two   | -     | -     |

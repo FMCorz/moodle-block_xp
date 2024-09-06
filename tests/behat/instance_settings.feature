@@ -20,15 +20,14 @@ Feature: A teacher can change the settings for their instance
     And I add the "Level Up XP" block
     When I am on "Course 1" course homepage
     And I click on "Settings" "link" in the "Level up!" "block"
-    And the field "Enable the leaderboard" matches value "Yes"
-    And the field "Anonymity" matches value "Display participants identity"
+    And the field "Enable points gain" matches value "Yes"
+    And the field "Enable info page" matches value "Yes"
+    And the field "Enable level up notification" matches value "Yes"
     And the field "Title" matches value "Level up!"
-    And I set the field "Enable the leaderboard" to "No"
-    And I set the field "Anonymity" to "Hide participants identity"
+    And I set the field "Enable info page" to "No"
     And I set the field "Title" to "New level up title"
     And I press "Save changes"
-    Then the field "Enable the leaderboard" matches value "No"
-    And the field "Anonymity" matches value "Hide participants identity"
+    Then the field "Enable info page" matches value "No"
     And the field "Title" matches value "New level up title"
     And I am on "Course 1" course homepage
     And I should see "New level up title"

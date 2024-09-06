@@ -39,8 +39,9 @@ Feature: A student is shown a notification popup when they level up
     And I wait until ".modal-open" "css_element" exists
     Then I should see "You levelled up!"
     And "[aria-label='Level #2']" "css_element" should exist
+    And I wait "4" seconds
     And I press "Cool, thanks"
     And I click on "Leaderboard" "link" in the "Level up!" "block"
     And the following should exist in the "block_xp-table" table:
-      | Full name   | Level | Total |
+      | Participant | Level | Total |
       | Student One | 2     | 120   |
