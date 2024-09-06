@@ -60,6 +60,7 @@ $string['changecourse'] = 'Change course';
 $string['changetocourse'] = 'Change to course';
 $string['changetositewide'] = 'Back to sitewide';
 $string['cheatguard'] = 'Cheat guard';
+$string['cheatguardsettingsmovednotice'] = 'The cheat guard settings were moved to the [event rules page]({$a->url}).';
 $string['chooseacondition'] = 'Choose a condition';
 $string['clearfilter'] = 'Clear filter';
 $string['clicktoselectcm'] = 'Click to select an activity or resource';
@@ -253,6 +254,7 @@ $string['ladderiso_help'] = "Create separate leaderboards for different groups o
 - Using cohorts: Only members of the same cohort will appear in a person's leaderboard.
 
 [More info](https://docs.levelup.plus/xp/docs/leaderboard-isolation)";
+$string['laddersettingsmovednotice'] = 'The leaderboard settings were moved to the [leaderboard page]({$a->url}).';
 $string['learnmore'] = 'Learn more';
 $string['level'] = 'Level';
 $string['levelbadge'] = 'Level badge';
@@ -480,6 +482,7 @@ $string['searchandselectmodule'] = 'Search and select an activity or resource';
 $string['selectcourse'] = 'Select course';
 $string['send'] = 'Send';
 $string['setpoints'] = 'Set points';
+$string['settingsoutdatedxppnotice'] = 'If you are seeing settings below, this means that an outdated version of XP+ is installed. Please ask your administrator to resolve the issue by installing the latest versions.';
 $string['shortcode:xpbadge'] = 'The badge matching the current user\'s level.';
 $string['shortcode:xpladder'] = 'Display a portion of the leaderboard.';
 $string['shortcode:xpladder_help'] = '
