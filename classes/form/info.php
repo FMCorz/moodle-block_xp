@@ -69,6 +69,7 @@ class info extends dynamic_form {
     public function definition() {
         $mform = $this->_form;
         $mform->addElement('hidden', 'contextid', $this->get_world()->get_context()->id);
+        $mform->setType('contextid', PARAM_INT);
 
         $mform->addElement('selectyesno', 'enableinfos', get_string('enableinfos', 'block_xp'));
         $mform->addHelpButton('enableinfos', 'enableinfos', 'block_xp');

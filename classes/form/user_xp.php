@@ -78,6 +78,7 @@ class user_xp extends dynamic_form {
 
         if ($this->_ajaxformdata) {
             $mform->addElement('hidden', 'contextid', $this->get_world()->get_context()->id);
+            $mform->setType('contextid', PARAM_INT);
         }
 
         $mform->addElement('hidden', 'userid');
