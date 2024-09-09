@@ -114,7 +114,6 @@ class report_table extends table_sql {
         $columnsdef = $this->get_columns_definition();
         $this->define_columns(array_keys($columnsdef));
         $this->define_headers(array_values($columnsdef));
-        $this->init_sql();
 
         // Level sorting is a fake column sorting that uses the 'xp' column under the hood.
         $this->sortable(true, 'lvl', SORT_DESC);
@@ -157,12 +156,16 @@ class report_table extends table_sql {
                      WHERE courseid = :courseid';
             $params = ['courseid' => $courseid, 'groupid' => $groupid];
         }
+
         $entries = $this->db->get_recordset_sql($sql, $params);
         foreach ($entries as $entry) {
             $ids[$entry->userid] = $entry->userid;
         }
         $entries->close();
         list($insql, $inparams) = $this->db->get_in_or_equal($ids, SQL_PARAMS_NAMED, 'param', true, null);
+
+        // User filter.
+        [$usersql, $userparams] = $this->generate_user_filter_sql();
 
         // Define SQL.
         $this->sql = new stdClass();
@@ -174,8 +177,8 @@ class report_table extends table_sql {
                         AND ctx.contextlevel = :contextlevel
                   LEFT JOIN {block_xp} x
                          ON (x.userid = u.id AND x.courseid = :courseid)";
-        $this->sql->where = "u.id $insql";
-        $this->sql->params = array_merge($inparams, [
+        $this->sql->where = "u.id $insql AND $usersql";
+        $this->sql->params = array_merge($inparams, $userparams, [
             'courseid' => $courseid,
             'contextlevel' => CONTEXT_USER,
         ]);
@@ -198,6 +201,67 @@ class report_table extends table_sql {
             $cols['actions'] = '';
         }
         return $cols;
+    }
+
+    /**
+     * Generate the user filter SQL.
+     *
+     * @return array
+     */
+    protected function generate_user_filter_sql() {
+        $filterset = $this->get_filterset();
+        error_log(__FILE__ . ':' . __LINE__ . ' ' . json_encode([$filterset]));
+        if (!$filterset || !$filterset->has_filter('term')) {
+            error_log('2');
+            return ['1=1', []];
+        }
+
+        $term = trim($filterset->get_filter('term')->current());
+        if (empty($term)) {
+            error_log('3');
+            return ['1=1', []];
+        }
+
+        $wheres = [];
+        $params = [];
+
+        $nameoptions = [
+            ['firstname' => $term],
+            ['lastname' => $term],
+        ];
+        $nameparts = explode(' ', $term);
+        if (count($nameparts) > 1) {
+            for ($i = 0; $i < count($nameparts) - 1; $i++) {
+                $nameoptions[] = [
+                    'firstname' => implode(' ', array_slice($nameparts, 0, $i + 1)),
+                    'lastname' => implode(' ', array_slice($nameparts, $i + 1)),
+                ];
+            }
+        }
+        foreach ($nameoptions as $i => $option) {
+            $subparams = [];
+            $subsql = [];
+            if (!empty($option['firstname'])) {
+                $paramname = 'usertermfn' . $i;
+                $subsql[] = $this->db->sql_like("u.firstname", ':' . $paramname, false, false);
+                $subparams[$paramname] = $this->db->sql_like_escape($option['firstname']) . '%';
+            }
+            if (!empty($option['lastname'])) {
+                $paramname = 'usertermln' . $i;
+                $subsql[] = $this->db->sql_like("u.lastname", ':' . $paramname, false, false);
+                $subparams[$paramname] = $this->db->sql_like_escape($option['lastname']) . '%';
+            }
+            if (!empty($subsql)) {
+                $wheres[] = '(' . implode(' AND ', $subsql) . ')';
+                $params = array_merge($params, $subparams);
+            }
+        }
+
+        if (empty($wheres)) {
+            return ['1=1', []];
+        }
+
+        return ['((' . implode(') OR (', $wheres) . '))', $params];
     }
 
     /**
@@ -422,6 +486,18 @@ class report_table extends table_sql {
      */
     public function get_sql_sort() {
         return static::construct_order_by($this->get_sort_columns(), []);
+    }
+
+    /**
+     * Out.
+     *
+     * @param int $pagesize The page size.
+     * @param bool $initialbars Whether to use initial bars.
+     * @param string $downloadhelpbutton What is this?
+     */
+    public function out($pagesize, $initialbars, $downloadhelpbutton = '') {
+        $this->init_sql();
+        return parent::out($pagesize, $initialbars, $downloadhelpbutton);
     }
 
     /**

@@ -195,6 +195,7 @@ $string['eventtime'] = 'Event time';
 $string['filterbyuser'] = 'Filter by user';
 $string['filterellipsis'] = 'Filter...';
 $string['filtermodules'] = 'Filter modules';
+$string['filterparticipants'] = 'Filter participants';
 $string['forever'] = 'Forever';
 $string['give'] = 'give';
 $string['gotofullladder'] = 'Go to full leaderboard';

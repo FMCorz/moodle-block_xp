@@ -25,10 +25,14 @@
 
 namespace block_xp\local\controller;
 
+use block_xp\di;
 use core_user;
 use html_writer;
 use single_button;
 use block_xp\local\routing\url;
+use block_xp\output\report_table_filterset;
+use core_table\local\filter\filterset;
+use core_table\local\filter\string_filter;
 
 /**
  * Report controller class.
@@ -47,6 +51,9 @@ class report_controller extends page_controller {
     /** @var string The route name. */
     protected $routename = 'report';
 
+    /** @var bool Whether we're using an old XP+. */
+    protected $isusingoldxpp = false;
+
     /** @var moodleform The form. */
     protected $form;
     /** @var flexible_table The table. */
@@ -58,6 +65,7 @@ class report_controller extends page_controller {
             ['resetdata', 0, PARAM_INT, false],
             ['confirm', 0, PARAM_INT, false],
             ['delete', 0, PARAM_INT, false],
+            ['term', null, PARAM_NOTAGS],
             ['page', 0, PARAM_INT],     // To keep the table page in URL.
 
             // Deprecated since XP 3.17.
@@ -71,6 +79,13 @@ class report_controller extends page_controller {
             throw new \coding_exception('Access permissions object requires report permissions.');
         }
         $accessperms->require_access_report();
+    }
+
+    protected function post_login() {
+        parent::post_login();
+
+        $addon = di::get('addon');
+        $this->isusingoldxpp = $addon->is_older_than(2024090500);
     }
 
     protected function pre_content() {
@@ -140,6 +155,11 @@ class report_controller extends page_controller {
                 $this->get_groupid()
             );
             $this->table->define_baseurl($this->pageurl);
+
+            $filterset = $this->get_filterset();
+            if ($filterset) {
+                $this->table->set_filterset($filterset);
+            }
         }
         return $this->table;
     }
@@ -186,6 +206,19 @@ class report_controller extends page_controller {
         return [];
     }
 
+    /**
+     * Get the filterset.
+     *
+     * @return filterset|null
+     */
+    protected function get_filterset(): ?filterset {
+        $filterset = new report_table_filterset();
+        if ($term = $this->get_param('term')) {
+            $filterset->add_filter(new string_filter('term', null, [$term]));
+        }
+        return $filterset;
+    }
+
     protected function page_advanced_heading() {
         $output = $this->get_renderer();
         echo $output->advanced_heading(get_string('coursereport', 'block_xp'), $this->get_advanced_heading_options());
@@ -226,10 +259,15 @@ class report_controller extends page_controller {
         // Display the heading.
         $this->page_advanced_heading();
 
-        // Displaying the report.
+        // Display the group menu.
         $this->print_group_menu();
+
+        // Display the user filter.
+        $this->page_user_filter();
+
+        // Displaying the report.
         echo html_writer::start_div('xp-cancel-overflow'); // Else dropdown menu is cropped on some versions.
-        echo $this->get_table()->out(20, true);
+        echo $this->get_table()->out(20, $this->isusingoldxpp);
         echo html_writer::end_div();
 
         // Output the bottom actions.
@@ -243,4 +281,23 @@ class report_controller extends page_controller {
         $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
     }
 
+    protected function page_user_filter() {
+        if ($this->isusingoldxpp) {
+            return null;
+        }
+
+        $formfields = [];
+        foreach ($this->pageurl->params() as $name => $value) {
+            if ($name === 'term') {
+                continue;
+            }
+            $formfields[] = ['name' => $name, 'value' => $value];
+        }
+
+        echo $this->get_renderer()->render_from_template('block_xp/table/report-filters', [
+            'term' => $this->get_param('term'),
+            'action' => $this->pageurl->out(false),
+            'hiddenfields' => $formfields
+        ]);
+    }
 }
