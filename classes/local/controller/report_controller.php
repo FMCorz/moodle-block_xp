@@ -170,6 +170,9 @@ class report_controller extends page_controller {
      * @return array
      */
     protected function get_advanced_heading_options() {
+        $config = di::get('config');
+        $hasaddon = di::get('addon')->is_activated();
+
         $groupid = $this->get_groupid();
         $reseturl = new url($this->pageurl, [
             'resetdata' => 1,
@@ -186,14 +189,22 @@ class report_controller extends page_controller {
 
         return [
             'intro' => new \lang_string('coursereportintro', 'block_xp'),
-            'menu' => [
+            'menu' => array_filter([
+                $config->get('enablepromoincourses') && !$hasaddon ? [
+                    'label' => get_string('exportdata', 'block_xp'),
+                    'href' => '#',
+                    'disabled' => true,
+                    'addonrequired' => true
+                ] : null,
                 [], // Divider.
                 $strreset ? [
                     'label' => $strreset,
                     'danger' => true,
                     'href' => $reseturl
                 ] : null,
-            ],
+            ], function($value) {
+                return $value !== null;
+            }),
         ];
     }
 

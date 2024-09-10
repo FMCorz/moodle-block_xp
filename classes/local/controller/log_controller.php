@@ -194,7 +194,16 @@ class log_controller extends page_controller {
      * @return array
      */
     protected function get_page_menu_items() {
-        return [];
+        $config = di::get('config');
+        $hasaddon = di::get('addon')->is_activated();
+        return array_filter([
+            $config->get('enablepromoincourses') && !$hasaddon ? [
+                'label' => get_string('exportdata', 'block_xp'),
+                'href' => '#',
+                'disabled' => true,
+                'addonrequired' => true
+            ] : null,
+        ]);
     }
 
 }
