@@ -103,6 +103,7 @@ class log_controller extends page_controller {
         $output = $this->get_renderer();
         echo $output->advanced_heading(get_string('courselog', 'block_xp'), [
             'intro' => new \lang_string('courselogintro', 'block_xp'),
+            'menu' => $this->get_page_menu_items()
         ]);
     }
 
@@ -123,6 +124,15 @@ class log_controller extends page_controller {
         }
 
         echo $this->get_table()->out(50, !$singleuser);
+    }
+
+    /**
+     * Get the menu items for the page.
+     *
+     * @return array
+     */
+    protected function get_page_menu_items() {
+        return [];
     }
 
 }
