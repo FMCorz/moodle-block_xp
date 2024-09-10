@@ -194,6 +194,7 @@ $string['eventname'] = 'Event name';
 $string['eventproperty'] = 'Event property';
 $string['eventtime'] = 'Event time';
 $string['export'] = 'Export';
+$string['exportdata'] = 'Export data';
 $string['filterbyuser'] = 'Filter by user';
 $string['filterellipsis'] = 'Filter...';
 $string['filtermodules'] = 'Filter modules';
