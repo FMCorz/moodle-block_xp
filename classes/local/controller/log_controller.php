@@ -25,7 +25,11 @@
 
 namespace block_xp\local\controller;
 
+use block_xp\di;
 use block_xp\local\routing\url;
+use block_xp\output\log_table_filterset;
+use core_table\local\filter\filterset;
+use core_table\local\filter\string_filter;
 use core_user;
 use html_writer;
 
@@ -48,6 +52,8 @@ class log_controller extends page_controller {
     /** @var bool Whether supports groups. */
     protected $supportsgroups = true;
 
+    /** @var bool Whether we're using an old XP+. */
+    protected $isusingoldxpp = false;
     /** @var int|null The user ID to filter the logs for. Use {@see self::get_user_id} to obtain. */
     protected $userid = null;
 
@@ -62,7 +68,15 @@ class log_controller extends page_controller {
     protected function define_optional_params() {
         return [
             ['userid', null, PARAM_INT],
+            ['term', null, PARAM_NOTAGS],
         ];
+    }
+
+    protected function post_login() {
+        parent::post_login();
+
+        $addon = di::get('addon');
+        $this->isusingoldxpp = $addon->is_older_than(2024090500);
     }
 
     protected function get_table() {
@@ -72,7 +86,24 @@ class log_controller extends page_controller {
             $this->get_user_id()
         );
         $table->define_baseurl($this->pageurl);
+        $table->set_filterset($this->get_filterset());
         return $table;
+    }
+
+    /**
+     * Get the filterset.
+     *
+     * @return filterset|null
+     */
+    protected function get_filterset(): ?filterset {
+        $filterset = new log_table_filterset();
+        if ($this->get_user_id()) {
+            return $filterset;
+        }
+        if ($term = $this->get_param('term')) {
+            $filterset->add_filter(new string_filter('term', null, [$term]));
+        }
+        return $filterset;
     }
 
     protected function get_page_html_head_title() {
@@ -108,6 +139,8 @@ class log_controller extends page_controller {
     }
 
     protected function page_content() {
+        global $PAGE;
+
         $userid = $this->get_user_id();
         $singleuser = (bool) $userid;
 
@@ -123,7 +156,36 @@ class log_controller extends page_controller {
                 . ' ' . html_writer::link($allusers, get_string('removefilter', 'block_xp')));
         }
 
-        echo $this->get_table()->out(50, !$singleuser);
+
+        // Display the user filter.
+        $this->page_user_filter();
+
+        // Displaying the report.
+        echo html_writer::start_div('xp-cancel-overflow');
+        echo $this->get_table()->out(50, !$singleuser && $this->isusingoldxpp);
+        echo html_writer::end_div();
+
+        $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
+    }
+
+    protected function page_user_filter() {
+        if ($this->isusingoldxpp || $this->get_user_id()) {
+            return null;
+        }
+
+        $formfields = [];
+        foreach ($this->pageurl->params() as $name => $value) {
+            if ($name === 'term') {
+                continue;
+            }
+            $formfields[] = ['name' => $name, 'value' => $value];
+        }
+
+        echo $this->get_renderer()->render_from_template('block_xp/table/report-filters', [
+            'term' => $this->get_param('term'),
+            'action' => $this->pageurl->out(false),
+            'hiddenfields' => $formfields
+        ]);
     }
 
     /**

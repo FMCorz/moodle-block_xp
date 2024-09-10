@@ -210,15 +210,12 @@ class report_table extends table_sql {
      */
     protected function generate_user_filter_sql() {
         $filterset = $this->get_filterset();
-        error_log(__FILE__ . ':' . __LINE__ . ' ' . json_encode([$filterset]));
         if (!$filterset || !$filterset->has_filter('term')) {
-            error_log('2');
             return ['1=1', []];
         }
 
         $term = trim($filterset->get_filter('term')->current());
         if (empty($term)) {
-            error_log('3');
             return ['1=1', []];
         }
 

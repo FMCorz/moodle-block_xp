@@ -300,4 +300,5 @@ class report_controller extends page_controller {
             'hiddenfields' => $formfields
         ]);
     }
+
 }

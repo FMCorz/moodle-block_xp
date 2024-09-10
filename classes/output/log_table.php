@@ -46,12 +46,16 @@ class log_table extends table_sql {
 
     /** @var string The key of the user ID column. */
     public $useridfield = 'userid';
+    /** @var \moodle_database DB. */
+    protected $db;
     /** @var course_world The world. */
     protected $world;
     /** @var renderer_base The renderer. */
     protected $renderer;
     /** @var int Filter by user ID, falsy means not filtering. */
     protected $filterbyuserid;
+    /** @var int The group ID. */
+    protected $groupid;
 
     /**
      * Constructor.
@@ -66,9 +70,8 @@ class log_table extends table_sql {
 
         $this->world = $world;
         $this->renderer = \block_xp\di::get('renderer');
+        $this->db = \block_xp\di::get('db');
         $this->filterbyuserid = $userid;
-
-        $courseid = $world->get_courseid();
 
         // Define columns.
         $this->define_columns([
@@ -83,6 +86,18 @@ class log_table extends table_sql {
             get_string('reward', 'block_xp'),
             get_string('eventname', 'block_xp'),
         ]);
+
+        // Define various table settings.
+        $this->sortable(true, 'time', SORT_DESC);
+        $this->collapsible(false);
+    }
+
+    /**
+     * Init SQL.
+     */
+    protected function init_sql() {
+        $groupid = $this->groupid;
+        $courseid = $this->world->get_courseid();
 
         // Define SQL.
         $sqlfrom = '';
@@ -99,20 +114,19 @@ class log_table extends table_sql {
             $sqlfrom = '{block_xp_log} x LEFT JOIN {user} u ON x.userid = u.id';
         }
 
+        // User filter.
+        [$usersql, $userparams] = $this->generate_user_filter_sql();
+
         // Define SQL.
         $this->sql = new stdClass();
         $this->sql->fields = 'x.*, ' . user_utils::name_fields('u');
         $this->sql->from = $sqlfrom;
-        $this->sql->where = 'courseid = :courseid';
-        $this->sql->params = array_merge(['courseid' => $courseid], $sqlparams);
+        $this->sql->where = "x.courseid = :courseid AND $usersql";
+        $this->sql->params = array_merge(['courseid' => $courseid], $userparams, $sqlparams);
         if ($this->filterbyuserid) {
-            $this->sql->where .= ' AND userid = :userid';
+            $this->sql->where .= ' AND x.userid = :userid';
             $this->sql->params = array_merge($this->sql->params, ['userid' => $this->filterbyuserid]);
         }
-
-        // Define various table settings.
-        $this->sortable(true, 'time', SORT_DESC);
-        $this->collapsible(false);
     }
 
     /**
@@ -150,6 +164,76 @@ class log_table extends table_sql {
      */
     protected function col_xp($row) {
         return $this->renderer->xp($row->xp);
+    }
+
+    /**
+     * Generate the user filter SQL.
+     *
+     * @return array
+     */
+    protected function generate_user_filter_sql() {
+        $filterset = $this->get_filterset();
+        if (!$filterset || !$filterset->has_filter('term')) {
+            return ['1=1', []];
+        }
+
+        $term = trim($filterset->get_filter('term')->current());
+        if (empty($term)) {
+            return ['1=1', []];
+        }
+
+        $wheres = [];
+        $params = [];
+
+        $nameoptions = [
+            ['firstname' => $term],
+            ['lastname' => $term],
+        ];
+        $nameparts = explode(' ', $term);
+        if (count($nameparts) > 1) {
+            for ($i = 0; $i < count($nameparts) - 1; $i++) {
+                $nameoptions[] = [
+                    'firstname' => implode(' ', array_slice($nameparts, 0, $i + 1)),
+                    'lastname' => implode(' ', array_slice($nameparts, $i + 1)),
+                ];
+            }
+        }
+        foreach ($nameoptions as $i => $option) {
+            $subparams = [];
+            $subsql = [];
+            if (!empty($option['firstname'])) {
+                $paramname = 'usertermfn' . $i;
+                $subsql[] = $this->db->sql_like("u.firstname", ':' . $paramname, false, false);
+                $subparams[$paramname] = $this->db->sql_like_escape($option['firstname']) . '%';
+            }
+            if (!empty($option['lastname'])) {
+                $paramname = 'usertermln' . $i;
+                $subsql[] = $this->db->sql_like("u.lastname", ':' . $paramname, false, false);
+                $subparams[$paramname] = $this->db->sql_like_escape($option['lastname']) . '%';
+            }
+            if (!empty($subsql)) {
+                $wheres[] = '(' . implode(' AND ', $subsql) . ')';
+                $params = array_merge($params, $subparams);
+            }
+        }
+
+        if (empty($wheres)) {
+            return ['1=1', []];
+        }
+
+        return ['((' . implode(') OR (', $wheres) . '))', $params];
+    }
+
+    /**
+     * Out.
+     *
+     * @param int $pagesize The page size.
+     * @param bool $initialbars Whether to use initial bars.
+     * @param string $downloadhelpbutton What is this?
+     */
+    public function out($pagesize, $initialbars, $downloadhelpbutton = '') {
+        $this->init_sql();
+        return parent::out($pagesize, $initialbars, $downloadhelpbutton);
     }
 
     /**
