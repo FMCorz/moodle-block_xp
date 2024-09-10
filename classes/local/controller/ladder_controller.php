@@ -181,21 +181,38 @@ class ladder_controller extends page_controller {
                 'intro' => new \lang_string('ladderintro', 'block_xp'),
                 'help' => new \help_icon('ladder', 'block_xp'),
                 'visible' => $this->is_visible_to_viewers(),
-                'menu' => [
-                    [
-                        'label' => get_string('pagesettings', 'block_xp'),
-                        'data-action' => 'open-form',
-                        'data-form-class' => di::get('leaderboard_form_class'),
-                        'data-form-args__contextid' => $this->world->get_context()->id,
-                        'href' => '#'
-                    ]
-                ]
+                'menu' => $this->get_page_menu_items(),
             ]);
             $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
         }
 
         $this->print_group_menu();
         echo $this->get_table()->out($this->get_page_size(), false);
+    }
+
+    /**
+     * Get the menu items.
+     *
+     * @return array
+     */
+    protected function get_page_menu_items() {
+        $config = di::get('config');
+        $hasaddon = di::get('addon')->is_activated();
+        return array_filter([
+            [
+                'label' => get_string('pagesettings', 'block_xp'),
+                'data-action' => 'open-form',
+                'data-form-class' => di::get('leaderboard_form_class'),
+                'data-form-args__contextid' => $this->world->get_context()->id,
+                'href' => '#'
+            ],
+            $config->get('enablepromoincourses') && !$hasaddon ? [
+                'label' => get_string('export', 'block_xp'),
+                'href' => '#',
+                'disabled' => true,
+                'addonrequired' => true
+            ] : null,
+        ]);
     }
 
 }

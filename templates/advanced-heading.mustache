@@ -68,7 +68,21 @@
                 {{# menuitems }}
                     {{#isdivider}}<div class="dropdown-divider"></div>{{/isdivider}}
                     {{^isdivider}}
-                    <a class="dropdown-item {{#classes}}{{.}} {{/classes}}" {{#attributes}}{{name}}="{{value}}" {{/attributes}}>{{ label }}</a>
+                    <a class="dropdown-item
+                        {{#disabled}}disabled xp-not-italic{{/disabled}}
+                        {{#classes}}{{.}} {{/classes}}"
+                        {{#attributes}}{{name}}="{{value}}" {{/attributes}}>
+                        <div class="xp-flex xp-w-full">
+                            <div class="xp-grow">
+                                {{ label }}
+                            </div>
+                            {{# addonrequired }}
+                            <div class="xp-flex-0">
+                                <span class="xp-py-0.5 xp-px-1 xp-not-italic xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline xp-font-normal xp-align-middle">XP+</span>
+                            </div>
+                            {{/ addonrequired }}
+                        </div>
+                    </a>
                     {{/isdivider}}
                 {{/ menuitems }}
             </div>

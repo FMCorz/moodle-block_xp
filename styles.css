@@ -852,6 +852,9 @@
 .block_xp :is(.xp-italic) {
     font-style: italic;
 }
+.block_xp :is(.xp-not-italic) {
+    font-style: normal;
+}
 .block_xp :is(.xp-leading-none) {
     line-height: 1;
 }
@@ -1645,6 +1648,12 @@ a .block_xp-level {
 
     .block_xp :is(.sm\:xp-pl-8) {
         padding-left: 2rem;
+    }
+}
+@media (min-width: 768px) {
+
+    .block_xp :is(.md\:xp-flex-nowrap) {
+        flex-wrap: nowrap;
     }
 }
 @media (min-width: 1024px) {

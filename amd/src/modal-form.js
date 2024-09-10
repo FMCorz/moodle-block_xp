@@ -26,6 +26,11 @@ import ModalForm from 'core_form/modalform';
 import * as Compat from 'block_xp/compat';
 import * as RoleButton from 'block_xp/role-button';
 
+const getButton = (modalForm, action) => {
+    const saveBtnJq = modalForm.modal.getFooter().find(modalForm.modal.getActionSelector(action));
+    return saveBtnJq.length ? saveBtnJq[0] : null;
+};
+
 /**
  * Open the modal.
  *
@@ -48,6 +53,18 @@ function open(node) {
     modalForm.addEventListener(modalForm.events.LOADED, () => {
         const root = modalForm.modal.getRoot();
         root.addClass('block_xp');
+
+        // Set the save button text.
+        const saveBtn = getButton(modalForm, 'save');
+        if (saveBtn && modalConfig.buttons?.save) {
+            if (modalConfig.buttons.save?.label) {
+                saveBtn.textContent = modalConfig.buttons.save?.label;
+            }
+            if (modalConfig.buttons.save?.danger) {
+                saveBtn.classList.remove('btn-primary');
+                saveBtn.classList.add('btn-danger');
+            }
+        }
     });
 
     modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, (e) => {
@@ -63,6 +80,11 @@ function open(node) {
         } else {
             window.location.reload();
         }
+
+        // We hide the modal after a little while in case we stayed on the page.
+        setTimeout(() => {
+            modalForm.modal.hide();
+        }, 1000);
     });
 
     modalForm.show();
@@ -98,7 +120,7 @@ export function registerOpen(selector) {
  * @param {String} prefix The data prefix.
  * @returns {Object}
  */
-function extractNodeData(node, prefix) {
+export function extractNodeData(node, prefix) {
     return Object.keys(node.dataset).filter(k => k.indexOf(prefix) === 0).reduce((carry, k) => {
         let value = node.dataset[k];
         if (value === 'true' || value === 'false') {
@@ -107,19 +129,32 @@ function extractNodeData(node, prefix) {
         let key = k.charAt(prefix.length).toLocaleLowerCase() + k.substring(prefix.length + 1);
 
         if (key.indexOf('__') > -1) {
-            let [parentKey, childKey] = key.split('__', 2);
-            if (parentKey) {
-                return {
-                    ...carry,
-                    [parentKey]: {
-                        ...carry[parentKey] || {},
-                        [childKey]: value
-                    }
-                };
-            }
-            key = childKey;
+            return setAtDepth(carry, key.split('__'), value);
         }
 
         return {...carry, [key]: value};
     }, {});
+}
+
+/**
+ * Set a value at a specific depth in an object.
+ *
+ * @param {Object} obj
+ * @param {String[]} keys
+ * @param {Any} value
+ * @returns {Object}
+ */
+function setAtDepth(obj, keys, value) {
+    let currentObj = obj;
+
+    for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        currentObj[key] = typeof currentObj[key] === 'undefined' ? {} : currentObj[key];
+        currentObj = currentObj[key];
+    }
+
+    const lastKey = keys[keys.length - 1];
+    currentObj[lastKey] = value;
+
+    return obj;
 }

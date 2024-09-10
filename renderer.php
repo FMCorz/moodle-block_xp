@@ -69,7 +69,7 @@ class block_xp_renderer extends plugin_renderer_base {
                 return ['isdivider' => true];
             }
             foreach ($item as $key => $value) {
-                if ($key === 'label' || $key === 'class') {
+                if ($key === 'label' || $key === 'class' || $key === 'disabled' || $key === 'addonrequired') {
                     continue;
                 } else if ($key === 'danger') {
                     $classes[] = $value ? 'text-danger' : null;
@@ -82,6 +82,8 @@ class block_xp_renderer extends plugin_renderer_base {
             }
             return [
                 'label' => $item['label'],
+                'disabled' => !empty($item['disabled']),
+                'addonrequired' => !empty($item['addonrequired']),
                 'attributes' => $attrs,
                 'classes' => array_filter($classes),
             ];
