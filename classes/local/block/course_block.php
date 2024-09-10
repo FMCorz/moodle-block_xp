@@ -192,7 +192,8 @@ class course_block extends block_base {
                 $prevlevel = $levelsinfo->get_level(max(1, $level->get_level() - 1));
 
                 $propsid = html_writer::random_id();
-                echo $renderer->json_script([$this->get_popup_notification_props($renderer, $world, $level, $prevlevel)], $propsid);
+                $this->content->text .= $renderer->json_script(
+                    [$this->get_popup_notification_props($renderer, $world, $level, $prevlevel)], $propsid);
                 $PAGE->requires->js_call_amd('block_xp/popup-notification-queue', 'queueFromJson', ["#{$propsid}"]);
             }
         }
