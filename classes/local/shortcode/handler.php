@@ -388,7 +388,7 @@ class handler {
             return;
         }
         $state = $world->get_store()->get_state($USER->id);
-        return \html_writer::div(di::get('renderer')->progress_bar($state), '', ['style' => 'max-width: 200px']);
+        return \html_writer::div(di::get('renderer')->progress_bar($state), 'block_xp', ['style' => 'max-width: 200px']);
     }
 
 }
