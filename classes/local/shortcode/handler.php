@@ -237,6 +237,11 @@ class handler {
             $limit = new limit($count + min(0, $pos - $before), $offset);
         }
 
+        // Prepare the page.
+        if (!$PAGE->has_set_url() && defined('WS_SERVER') && WS_SERVER) {
+            $PAGE->set_url(di::get('url_resolver')->reverse('ladder', ['courseid' => $world->get_courseid()]));
+        }
+
         // Output the table.
         $config = $world->get_config();
         $baseurl = $PAGE->url;
