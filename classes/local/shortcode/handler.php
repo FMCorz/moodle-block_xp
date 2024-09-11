@@ -266,8 +266,20 @@ class handler {
                 'xp-link-to-full-ladder'
             );
         }
+
+        // Mobile quick fix.
+        $customstyles = '';
+        if (defined('WS_SERVER') && WS_SERVER) {
+            $customstyles = \html_writer::tag('style', <<<EOT
+                .shortcode-xpladder table { width: 100%; }
+                .shortcode-xpladder table th,
+                .shortcode-xpladder table td { padding: .25rem; text-align: left; vertical-align: middle; }
+                .shortcode-xpladder table img { width: var(--core-avatar-size); }
+            EOT);
+        }
+
         return \html_writer::div(
-            $html . $link,
+            $html . $link . $customstyles,
             'shortcode-xpladder'
         );
     }
@@ -365,6 +377,12 @@ class handler {
      */
     public static function xpprogressbar($shortcode, $args, $content, $env, $next) {
         global $USER;
+
+        // Not available on mobile, too many styles are missing.
+        if (defined('WS_SERVER') && WS_SERVER) {
+            return '';
+        }
+
         $world = static::get_world_from_env($env);
         if (!$world) {
             return;
