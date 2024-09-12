@@ -81,6 +81,9 @@ class default_admin_config extends immutable_config {
             'blockrecentactivity' => 3,
             'blockrankingsnapshot' => 1,
 
+            'adminnotices' => 1,
+            'lastoutofsyncnoticekey' => '',
+
             'apiroot' => 'https://backend.levelup.plus/api',
             'usagereport' => 1,
             'lastusagereport' => 0,

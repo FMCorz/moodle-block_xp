@@ -41,6 +41,15 @@ class default_tasks_definition_maker implements tasks_definition_maker {
     public function get_tasks_definition() {
         return [
             [
+                'classname' => 'block_xp\task\admin_notices',
+                'blocking' => 0,
+                'minute' => 'R',
+                'hour' => 'R',
+                'day' => '*',
+                'dayofweek' => 'R',
+                'month' => '*',
+            ],
+            [
                 'classname' => 'block_xp\task\collection_logger_purge',
                 'blocking' => 0,
                 'minute' => 47,

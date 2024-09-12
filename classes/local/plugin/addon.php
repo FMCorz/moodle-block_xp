@@ -38,6 +38,21 @@ namespace block_xp\local\plugin;
 class addon {
 
     /**
+     * Get the expected release version.
+     *
+     * @return string
+     */
+    final public function get_expected_release() {
+        $pluginman = \core_plugin_manager::instance();
+        $blockxp = $pluginman->get_plugin_info('block_xp');
+        $release = $blockxp ? $blockxp->release : '';
+        if (!preg_match('/^([0-9]+)\.([0-9]+)/', $release, $parts)) {
+            return '?';
+        }
+        return ((int) $parts[1]) - 2 . '.' . $parts[2];
+    }
+
+    /**
      * Whether the plugin's release.
      *
      * @return string

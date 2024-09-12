@@ -30,6 +30,29 @@ $string['activityoresourceis'] = 'The activity or resource is {$a}';
 $string['addacondition'] = 'Add a condition';
 $string['addarule'] = 'Add a rule';
 $string['addonnotactivated'] = 'The addon is not activated.';
+$string['adminnoticeoutofsyncmessage'] = 'Level Up XP and Level Up XP+ incompatibility notice!
+
+You are receiving this notice as a warning because the two plugins Level Up XP (block_xp) and Level Up XP+ (local_xp) are currently "out of sync" and incompatible with each other. This issue occurs when XP has been upgraded to a new major version while XP+ remains outdated.
+
+This mismatch can lead to loss of functionality, bugs, and other unexpected consequences. To resolve this, you must upgrade Level Up XP+.
+
+**Important!** In the future, if these plugins are out of sync, Level Up XP+ will automatically disable itself. To prevent this from happening, ensure you do not upgrade Level Up XP to a new major version without also upgrading Level Up XP+.
+
+- Level Up XP (block_xp) version: {$a->blockxpversion}
+- Level Up XP+ (local_xp) version: {$a->localxpversion}
+- Level Up XP+ expected version: {$a->localxpversionexpected}
+
+Additional resources:
+
+- [Upgrading documentation](https://docs.levelup.plus/xp/docs/upgrade)
+- [Compatibility documentation](https://docs.levelup.plus/xp/docs/requirements-compatibility)
+
+--
+
+This notice was sent to all administrators. To disable all admin notices, please visit Level Up XP\'s admin settings.';
+$string['adminnoticeoutofsyncsubject'] = "XP plugins incompatibility notice!";
+$string['adminnotices'] = 'Admin notices';
+$string['adminnotices_desc'] = 'When enabled, site administrators may occasionally receive important notifications regarding compatibility, security, and the availability of newer versions of Level Up XP+.';
 $string['adminscanearnxp'] = 'Admins can earn points';
 $string['adminscanearnxp_desc'] = 'By default, administrators are not included in the group of users who can earn points. This is because administrators always have the permission _block/xp:earnxp_, allowing them to continuously collect points everywhere. You can use this setting to let administrators also earn points.';
 $string['admindefaultrulesintro'] = 'The following rules will be used as default for courses in which the block is added.';
@@ -287,6 +310,7 @@ $string['maxactionspertime'] = 'Max. actions in time frame';
 $string['maxactionspertime_help'] = 'The maximum number of actions that will count for points during the time frame given. Any subsequent action will be ignored. When this value is empty, or equals to zero, it does not apply.';
 $string['maxlevelexcl'] = 'max level!';
 $string['menu'] = 'Menu';
+$string['messageprovider:adminnotice'] = 'Admin notice';
 $string['missing'] = 'Missing';
 $string['movecondition'] = 'Move condition';
 $string['moverule'] = 'Move rule';
@@ -323,10 +347,8 @@ $string['notesomesettingslocked'] = 'Note that some settings may not be editable
 $string['nothingmatchesfilter'] = 'Nothing matches the filter.';
 $string['numberoflevels'] = 'Number of levels';
 $string['occasionally'] = 'Occasionally';
-$string['outofsync'] = 'Out of sync';
-$string['outofsyncexcessive'] = 'Excessive out of sync';
-$string['outofsyncinfo'] = 'The XP plugins are not compliant with one another which can lead to unexpected issues.';
-$string['outofsyncexcessiveinfo'] = 'XP+ is excessively older than XP which can lead to unexpected issues. To prevent malfunctioning, XP+ may automatically disable itself in the future.';
+$string['outofsync'] = 'XP plugins incompatibility';
+$string['outofsyncinfo'] = 'The XP plugins are incompatible with one another which can lead to unexpected issues. In the future, XP+ will automatically disable itself. The version {$a->localxpversion} of Level Up XP+ (local_xp) is expected.';
 $string['pagecurrentnotvisibletoviewers'] = 'This page is not currently visible to students.';
 $string['pagecurrentvisibletoviewers'] = 'This page is currently visible to students.';
 $string['pagesettings'] = 'Page settings';
@@ -577,6 +599,7 @@ $string['sitewide'] = 'Sitewide';
 $string['somefeaturesrequireotherplugins'] = 'Some features require additional plugins to be installed.';
 $string['someoneelse'] = 'Someone else';
 $string['somethinghappened'] = 'Something happened';
+$string['taskadminnotices'] = 'Admin notices';
 $string['taskcollectionloggerpurge'] = 'Purge collection logs';
 $string['taskusagereport'] = 'Usage report';
 $string['teamleaderboard'] = 'Team leaderboard';
@@ -707,6 +730,8 @@ $string['editinstructions'] = 'Edit information';
 $string['grid'] = 'Grid';
 $string['list'] = 'List';
 $string['navrules'] = 'Rules';
+$string['outofsyncexcessive'] = 'Excessive out of sync';
+$string['outofsyncexcessiveinfo'] = 'XP+ is excessively older than XP which can lead to unexpected issues. In the future, XP+ will automatically disable itself.';
 $string['resetcourserulestodefaults'] = 'Reset course rules to defaults';
 $string['resetlevelstodefaults'] = 'Reset levels to defaults';
 $string['resetvisualstodefaults'] = 'Reset appearance to defaults';

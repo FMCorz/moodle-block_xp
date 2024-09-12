@@ -59,7 +59,6 @@ class compatibility_check_setting extends static_setting {
 
         $blockxp = $pluginman->get_plugin_info('block_xp');
         $localxp = $pluginman->get_plugin_info('local_xp');
-        $recentishlocalxp = 2023100800; // Version 1.15.0.
         $humanbranch = moodle_major_version() ?: 'v?';
 
         if ($blockxp && strpos($blockxp->release, '-dev') !== false) {
@@ -69,16 +68,12 @@ class compatibility_check_setting extends static_setting {
             ];
         }
 
-        if ($localxp && $localxp->versiondb < $recentishlocalxp) {
-            $messages[] = [
-                'title' => get_string('outofsyncexcessive', 'block_xp'),
-                'message' => get_string('outofsyncexcessiveinfo', 'block_xp'),
-                'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#out-of-sync',
-            ];
-        } else if ($addon->is_out_of_sync()) {
+        if ($addon->is_out_of_sync()) {
             $messages[] = [
                 'title' => get_string('outofsync', 'block_xp'),
-                'message' => get_string('outofsyncinfo', 'block_xp'),
+                'message' => get_string('outofsyncinfo', 'block_xp', [
+                    'localxpversion' => $addon->get_expected_release()
+                ]),
                 'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#out-of-sync',
             ];
         }

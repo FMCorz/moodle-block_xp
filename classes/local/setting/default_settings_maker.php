@@ -151,6 +151,21 @@ class default_settings_maker implements settings_maker {
         // Display a list of recommended plugins.
         $settings[] = new recommended_plugins_setting();
 
+        // Admin notices.
+        $setting = (new admin_setting_configselect('block_xp/adminnotices',
+            get_string('adminnotices', 'block_xp'),
+            get_string('adminnotices_desc', 'block_xp'),
+            $this->defaults->get('adminnotices'), [
+                '0' => get_string('no', 'core'),
+                '1' => get_string('yes', 'core'),
+            ]
+        ));
+        $setting->set_updatedcallback(function() {
+            $isenabled = (bool) get_config('block_xp', 'adminnotices');
+            \block_xp\task\admin_notices::set_enabled($isenabled);
+        });
+        $settings[] = $setting;
+
         // Context in which the block is enabled.
         $settings[] = (new admin_setting_configselect(
             'block_xp_context',
