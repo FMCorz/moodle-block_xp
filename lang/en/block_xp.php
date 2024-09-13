@@ -361,9 +361,9 @@ $string['pluginavailabilityxpdesc'] = 'This plugin lets instructors restrict acc
 $string['pluginenrolxpdesc'] = 'This plugin enables automatic enrolment into courses based on a student\'s level in another course.';
 $string['pluginshortcodesdesc'] = 'This plugin lets instructors customise their material by including XP related elements (points, level, leaderboard, …) in the content, as well as hiding or showing content based on a student\'s level.';
 $string['pluginname'] = 'Level Up XP';
-$string['pluginsoutofsync'] = '__The plugins are out of sync!__
+$string['pluginsoutofsync'] = '__XP plugins incompatibility!__
 
-This means that you have upgraded _Level Up XP_ but not _Level Up XP+_. While we do our best to try and prevent any issues, some features may no longer function properly, including in _Level Up XP_ itself. We recommend that you upgrade _Level Up XP+_ to its latest release. [Read more]({$a->url})';
+There are compatibility issues between Level Up XP and Level Up XP+. In the future, Level Up XP+ will automatically disable itself if it is not compatible. To prevent this, please contact your site administrator. [Read more]({$a->url})';
 $string['pluginxmaybeincompatible'] = 'This version of {$a->name} ({$a->component}) may be incompatible with Moodle {$a->version}.';
 $string['pointstoaward'] = 'Points to award';
 $string['pointstoaward_help'] = 'The number of points to award when the condition is met.';

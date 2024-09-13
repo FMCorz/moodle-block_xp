@@ -284,7 +284,7 @@ EOT;
         $docsurl = new url('https://docs.levelup.plus/xp/docs?ref=plugin_promopage');
         $releasenotesurl = new url('https://docs.levelup.plus/xp/release-notes?ref=plugin_promopage');
         $upgradeurl = new url('https://docs.levelup.plus/xp/docs/upgrade?ref=plugin_promopage');
-        $outofsyncurl = new url('https://docs.levelup.plus/xp/docs/troubleshooting/plugins-out-of-sync?ref=plugin_promopage');
+        $outofsyncurl = new url('https://docs.levelup.plus/xp/docs/requirements-compatibility?ref=plugin_promopage#out-of-sync');
 
         if (!$this->is_admin_page()) {
             $config = $this->world->get_config();
