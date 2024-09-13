@@ -32,35 +32,35 @@ use context_course;
 class group_division implements division {
 
     /**
-    * The group ID.
-    *
-    * @var int
-    */
+     * The group ID.
+     *
+     * @var int
+     */
     protected $groupid;
 
     /**
-    * Constructor.
-    *
-    * @param int $groupid The group ID.
-    */
+     * Constructor.
+     *
+     * @param int $groupid The group ID.
+     */
     public function __construct(int $groupid) {
         $this->groupid = $groupid;
     }
 
     /**
-    * Get the ID.
-    *
-    * @return int
-    */
+     * Get the ID.
+     *
+     * @return int
+     */
     public function get_id() {
         return $this->groupid;
     }
 
     /**
-    * Get the name.
-    *
-    * @return string
-    */
+     * Get the name.
+     *
+     * @return string
+     */
     public function get_name(): string {
         global $DB;
         if (!$this->groupid) {
@@ -74,10 +74,10 @@ class group_division implements division {
     }
 
     /**
-    * Get the user filter.
-    *
-    * @return user_filter
-    */
+     * Get the user filter.
+     *
+     * @return user_filter
+     */
     public function get_user_filter(): user_filter {
         if (!$this->groupid) {
             return new everyone();

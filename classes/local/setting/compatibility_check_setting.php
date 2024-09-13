@@ -72,7 +72,7 @@ class compatibility_check_setting extends static_setting {
             $messages[] = [
                 'title' => get_string('outofsync', 'block_xp'),
                 'message' => get_string('outofsyncinfo', 'block_xp', [
-                    'localxpversion' => $addon->get_expected_release()
+                    'localxpversion' => $addon->get_expected_release(),
                 ]),
                 'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#out-of-sync',
             ];

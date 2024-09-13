@@ -194,13 +194,13 @@ class report_controller extends page_controller {
                     'label' => get_string('exportdata', 'block_xp'),
                     'href' => '#',
                     'disabled' => true,
-                    'addonrequired' => true
+                    'addonrequired' => true,
                 ] : null,
                 [], // Divider.
                 $strreset ? [
                     'label' => $strreset,
                     'danger' => true,
-                    'href' => $reseturl
+                    'href' => $reseturl,
                 ] : null,
             ], function($value) {
                 return $value !== null;
@@ -308,7 +308,7 @@ class report_controller extends page_controller {
         echo $this->get_renderer()->render_from_template('block_xp/table/report-filters', [
             'term' => $this->get_param('term'),
             'action' => $this->pageurl->out(false),
-            'hiddenfields' => $formfields
+            'hiddenfields' => $formfields,
         ]);
     }
 

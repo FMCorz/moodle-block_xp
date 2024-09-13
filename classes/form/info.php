@@ -39,6 +39,7 @@ class info extends dynamic_form {
 
     use dynamic_world_trait;
 
+    /** @var string */
     protected $routename = 'infos';
 
     public function process_dynamic_submission() {

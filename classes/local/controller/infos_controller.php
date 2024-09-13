@@ -26,9 +26,7 @@
 namespace block_xp\local\controller;
 
 use html_writer;
-use moodle_exception;
 use block_xp\form\instructions;
-use block_xp\local\routing\url;
 
 /**
  * Infos controller class.
@@ -102,13 +100,13 @@ class infos_controller extends page_controller {
                         'data-action' => 'open-form',
                         'data-form-class' => 'block_xp\form\info',
                         'data-form-args__contextid' => $this->world->get_context()->id,
-                        'href' => '#'
+                        'href' => '#',
                     ],
                     [
                         'label' => get_string('customizelevels', 'block_xp'),
                         'href' => $this->urlresolver->reverse('levels', ['courseid' => $this->world->get_courseid()]),
-                    ]
-                ]
+                    ],
+                ],
             ]);
             $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
         }

@@ -142,7 +142,6 @@ class course_user_leaderboard implements leaderboard {
                    AND ctx.contextlevel = :contextlevel";
         $params += ['contextlevel' => CONTEXT_USER];
 
-
         $this->where = "x.courseid = :courseid";
         $params += ['courseid' => $this->courseid];
 

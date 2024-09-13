@@ -205,7 +205,7 @@ class visuals_controller extends page_controller {
                 [
                     'label' => get_string('resettodefaults', 'block_xp'),
                     'danger' => true,
-                    'href' => new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()])
+                    'href' => new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]),
                 ],
             ],
         ]);

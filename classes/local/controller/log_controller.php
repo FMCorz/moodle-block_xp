@@ -134,7 +134,7 @@ class log_controller extends page_controller {
         $output = $this->get_renderer();
         echo $output->advanced_heading(get_string('courselog', 'block_xp'), [
             'intro' => new \lang_string('courselogintro', 'block_xp'),
-            'menu' => $this->get_page_menu_items()
+            'menu' => $this->get_page_menu_items(),
         ]);
     }
 
@@ -155,7 +155,6 @@ class log_controller extends page_controller {
             echo html_writer::tag('p', get_string('resultsfilteredforn', 'block_xp', fullname($user))
                 . ' ' . html_writer::link($allusers, get_string('removefilter', 'block_xp')));
         }
-
 
         // Display the user filter.
         $this->page_user_filter();
@@ -184,7 +183,7 @@ class log_controller extends page_controller {
         echo $this->get_renderer()->render_from_template('block_xp/table/report-filters', [
             'term' => $this->get_param('term'),
             'action' => $this->pageurl->out(false),
-            'hiddenfields' => $formfields
+            'hiddenfields' => $formfields,
         ]);
     }
 
@@ -201,7 +200,7 @@ class log_controller extends page_controller {
                 'label' => get_string('exportdata', 'block_xp'),
                 'href' => '#',
                 'disabled' => true,
-                'addonrequired' => true
+                'addonrequired' => true,
             ] : null,
         ]);
     }

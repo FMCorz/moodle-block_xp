@@ -209,15 +209,15 @@ class rules_controller extends page_controller {
                     'data-action' => 'open-form',
                     'data-form-class' => di::get('cheatguard_form_class'),
                     'data-form-args__contextid' => $this->world->get_context()->id,
-                    'href' => '#'
+                    'href' => '#',
                 ],
                 [],
                 [
                     'label' => get_string('resettodefaults', 'block_xp'),
                     'danger' => true,
-                    'href' => $url
-                ]
-            ]
+                    'href' => $url,
+                ],
+            ],
         ]);
         $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
     }

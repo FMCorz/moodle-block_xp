@@ -53,7 +53,7 @@ class staticfield extends \MoodleQuickForm_static {
         $this->setAttributes($attrs);
     }
 
-    public function toHtml() {
+    public function toHtml() { // @codingStandardsIgnoreLine
         $content = $this->content;
         if (is_callable($content)) {
             $content = $content();
@@ -69,8 +69,8 @@ class staticfield extends \MoodleQuickForm_static {
     /**
      * Register.
      */
-    public static function name(): string  {
-        \MoodleQuickForm::registerElementType('block_xp_staticfield', __FILE__, staticfield::class);
+    public static function name(): string {
+        \MoodleQuickForm::registerElementType('block_xp_staticfield', __FILE__, staticfield::class); // @codingStandardsIgnoreLine
         return 'block_xp_staticfield';
     }
 

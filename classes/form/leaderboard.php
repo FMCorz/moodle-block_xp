@@ -41,6 +41,7 @@ class leaderboard extends dynamic_form {
 
     use dynamic_world_trait;
 
+    /** @var string */
     protected $routename = 'ladder';
 
     public function process_dynamic_submission() {
@@ -78,7 +79,7 @@ class leaderboard extends dynamic_form {
         $els[] = $mform->createElement(staticfield::name(), 'addonrequired', '', function() {
             $renderer = di::get('renderer');
             return $renderer->render_from_template('block_xp/addon-required', [
-                'promourl' => di::get('url_resolver')->reverse('promo', ['courseid' => $this->world->get_courseid()])->out(false)
+                'promourl' => di::get('url_resolver')->reverse('promo', ['courseid' => $this->world->get_courseid()])->out(false),
             ]);
         });
         $mform->addElement('group', 'ladderiso', get_string('ladderiso', 'block_xp'), $els);

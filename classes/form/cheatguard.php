@@ -27,6 +27,8 @@ namespace block_xp\form;
 
 use core_form\dynamic_form;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/duration.php');
 require_once(__DIR__ . '/itemspertime.php');
 
@@ -42,6 +44,7 @@ class cheatguard extends dynamic_form {
 
     use dynamic_world_trait;
 
+    /** @var string */
     protected $routename = 'rules';
 
     public function process_dynamic_submission() {

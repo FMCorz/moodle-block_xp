@@ -59,12 +59,12 @@ class behat_block_xp extends behat_base {
 
         $this->execute('behat_general::i_click_on_in_the', [
             "[data-toggle='dropdown']", "css_element",
-            $rowxpath, "xpath_element"
+            $rowxpath, "xpath_element",
         ]);
 
         $this->execute('behat_general::i_click_on_in_the', [
             "Edit", "link",
-            $rowxpath, "xpath_element"
+            $rowxpath, "xpath_element",
         ]);
     }
 

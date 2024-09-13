@@ -204,13 +204,13 @@ class ladder_controller extends page_controller {
                 'data-action' => 'open-form',
                 'data-form-class' => di::get('leaderboard_form_class'),
                 'data-form-args__contextid' => $this->world->get_context()->id,
-                'href' => '#'
+                'href' => '#',
             ],
             $config->get('enablepromoincourses') && !$hasaddon ? [
                 'label' => get_string('export', 'block_xp'),
                 'href' => '#',
                 'disabled' => true,
-                'addonrequired' => true
+                'addonrequired' => true,
             ] : null,
         ]);
     }

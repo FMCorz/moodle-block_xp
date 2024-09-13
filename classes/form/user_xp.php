@@ -37,6 +37,7 @@ class user_xp extends dynamic_form {
 
     use dynamic_world_trait;
 
+    /** @var string */
     protected $routename = 'report';
 
     /**
