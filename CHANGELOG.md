@@ -1,6 +1,37 @@
 Changelog
 =========
 
+v3.17.0
+-------
+
+New features
+
+- Participants can be searched for by name in the reports and logs
+- Admins will receive important notices about compatibility issues
+- Admin compatibility check now validates if a development version is used
+
+Quality of life
+
+- Managers can view the info and leaderboard pages even when they are not enabled
+- Settings for most features have been moved to their respective pages
+- Most action and setting forms open without leaving the page
+- Other UX and quality of life improvements
+
+Bug fixes
+
+- Delete modules could be displayed in some rule selection screens
+- The navbar display was showing in courses where XP is not enabled
+- The block rendering could cause unexpected issues in the mobile app
+- Fixed rendering issues of some shortcodes in the mobile app
+- Other minor fixes and improvements
+
+Technical changes
+
+- Compatibility with Moodle 4.5
+- Raised minimum required version to Moodle 4.1
+
+Read our [release blog post](https://www.levelup.plus/blog/xp-quest-release-oct-2024/) to learn more.
+
 v3.16.0
 -------
 
