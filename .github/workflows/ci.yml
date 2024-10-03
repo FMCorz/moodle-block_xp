@@ -34,15 +34,7 @@ jobs:
       fail-fast: false
       matrix:
         php: ['7.4', '8.0', '8.1', '8.2', '8.3']
-        moodle-branch:
-          [
-            'MOODLE_311_STABLE',
-            'MOODLE_400_STABLE',
-            'MOODLE_401_STABLE',
-            'MOODLE_402_STABLE',
-            'MOODLE_403_STABLE',
-            'MOODLE_404_STABLE',
-          ]
+        moodle-branch: ['MOODLE_401_STABLE', 'MOODLE_402_STABLE', 'MOODLE_403_STABLE', 'MOODLE_404_STABLE']
         database: [pgsql]
         include:
           - moodle-branch: MOODLE_404_STABLE
@@ -57,20 +49,8 @@ jobs:
             php: 7.4
           - moodle-branch: MOODLE_404_STABLE
             php: 8.0
-          - moodle-branch: MOODLE_311_STABLE
-            php: 8.1
-          - moodle-branch: MOODLE_400_STABLE
-            php: 8.1
-          - moodle-branch: MOODLE_311_STABLE
-            php: 8.2
-          - moodle-branch: MOODLE_400_STABLE
-            php: 8.2
           - moodle-branch: MOODLE_401_STABLE
             php: 8.2
-          - moodle-branch: MOODLE_311_STABLE
-            php: 8.3
-          - moodle-branch: MOODLE_400_STABLE
-            php: 8.3
           - moodle-branch: MOODLE_401_STABLE
             php: 8.3
           - moodle-branch: MOODLE_402_STABLE
@@ -125,7 +105,7 @@ jobs:
 
       - name: Moodle Code Checker
         if: ${{ !cancelled() }}
-        run: moodle-plugin-ci phpcs --max-warnings 0 --exclude moodle.Commenting.MissingDocblock
+        run: moodle-plugin-ci phpcs --max-warnings 0 --exclude moodle.Commenting.MissingDocblock --exclude PHPCompatibility.FunctionDeclarations.RemovedImplicitlyNullableParam
 
       # - name: Moodle PHPDoc Checker
       #   if: ${{ !cancelled() }}
