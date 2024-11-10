@@ -169,7 +169,7 @@ class report_table extends table_sql {
 
         // Define SQL.
         $this->sql = new stdClass();
-        $this->sql->fields = user_utils::picture_fields('u') . ', u.idnumber, u.email, u.username, x.xp, ' .
+        $this->sql->fields = user_utils::picture_fields('u') . ', u.idnumber, u.email, u.username, u.suspended, x.xp, ' .
             context_helper::get_preload_record_columns_sql('ctx');
         $this->sql->from = "{user} u
                        JOIN {context} ctx
@@ -177,7 +177,7 @@ class report_table extends table_sql {
                         AND ctx.contextlevel = :contextlevel
                   LEFT JOIN {block_xp} x
                          ON (x.userid = u.id AND x.courseid = :courseid)";
-        $this->sql->where = "u.id $insql AND $usersql";
+        $this->sql->where = "u.deleted = 0 AND u.id $insql AND $usersql";
         $this->sql->params = array_merge($inparams, $userparams, [
             'courseid' => $courseid,
             'contextlevel' => CONTEXT_USER,
@@ -368,6 +368,20 @@ class report_table extends table_sql {
             return '';
         }
         return $this->renderer->control_menu($this->get_row_actions($row));
+    }
+
+    /**
+     * Formats the column.
+     *
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
+    public function col_fullname($row) {
+        $o = parent::col_fullname($row);
+        if ($row->suspended) {
+            $o .= ' (' . get_string('suspended', 'core') . ')';
+        }
+        return $o;
     }
 
     /**
