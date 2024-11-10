@@ -829,6 +829,67 @@ final class leaderboard_test extends base_testcase {
     }
 
     /**
+     * Test leaderboard with deleted users.
+     *
+     * @covers \block_xp\local\leaderboard\course_user_leaderboard
+     */
+    public function test_leaderboard_with_deleted_users(): void {
+        $dg = $this->getDataGenerator();
+        $c1 = $dg->create_course();
+
+        $u1 = $dg->create_user();
+        $u2 = $dg->create_user();
+        $u3 = $dg->create_user();
+
+        $world1 = $this->get_world($c1->id);
+        $store1 = $world1->get_store();
+        $store1->set($u1->id, 100);
+        $store1->set($u2->id, 90);
+        $store1->set($u3->id, 110);
+
+        delete_user($u1);
+
+        $lb = $this->get_leaderboard($world1);
+        $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
+            [$u3, 1],
+            [$u2, 2],
+        ]);
+        $this->assertNull($lb->get_position($u1->id));
+        $this->assertNull($lb->get_rank($u1->id));
+    }
+
+    /**
+     * Test leaderboard with suspended users.
+     *
+     * @covers \block_xp\local\leaderboard\course_user_leaderboard
+     */
+    public function test_leaderboard_with_suspended_users(): void {
+        $dg = $this->getDataGenerator();
+        $c1 = $dg->create_course();
+
+        $u1 = $dg->create_user();
+        $u2 = $dg->create_user();
+        $u3 = $dg->create_user();
+
+        $world1 = $this->get_world($c1->id);
+        $store1 = $world1->get_store();
+        $store1->set($u1->id, 100);
+        $store1->set($u2->id, 90);
+        $store1->set($u3->id, 110);
+
+        $u1->suspended = 1;
+        user_update_user($u1, false);
+
+        $lb = $this->get_leaderboard($world1);
+        $this->assert_ranking($lb->get_ranking(new limit(0, 0)), [
+            [$u3, 1],
+            [$u2, 2],
+        ]);
+        $this->assertNull($lb->get_position($u1->id));
+        $this->assertNull($lb->get_rank($u1->id));
+    }
+
+    /**
      * Assert the ranking.
      *
      * @param local\xp\rank[] $ranking The ranking.
