@@ -119,9 +119,9 @@ class log_table extends table_sql {
 
         // Define SQL.
         $this->sql = new stdClass();
-        $this->sql->fields = 'x.*, ' . user_utils::name_fields('u');
+        $this->sql->fields = 'x.*, ' . user_utils::name_fields('u') . ', u.suspended';
         $this->sql->from = $sqlfrom;
-        $this->sql->where = "x.courseid = :courseid AND $usersql";
+        $this->sql->where = "u.deleted = 0 AND x.courseid = :courseid AND $usersql";
         $this->sql->params = array_merge(['courseid' => $courseid], $userparams, $sqlparams);
         if ($this->filterbyuserid) {
             $this->sql->where .= ' AND x.userid = :userid';
@@ -136,14 +136,17 @@ class log_table extends table_sql {
      * @return string Output produced.
      */
     public function col_fullname($row) {
-        $fullname = parent::col_fullname($row);
+        $o = parent::col_fullname($row);
+        if ($row->suspended) {
+            $o .= ' (' . get_string('suspended', 'core') . ')';
+        }
         if (!$this->filterbyuserid) {
-            $fullname .= ' ' . $this->renderer->action_icon(
+            $o .= ' ' . $this->renderer->action_icon(
                 new moodle_url($this->baseurl, ['userid' => $row->userid]),
                 new pix_icon('i/search', get_string('filterbyuser', 'block_xp'))
             );
         }
-        return $fullname;
+        return $o;
     }
 
     /**
