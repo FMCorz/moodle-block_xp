@@ -1,6 +1,18 @@
 Changelog
 =========
 
+v3.17.1
+-------
+
+Quality of life
+
+- Suspended users are marked as such in the report and logs
+
+Bug fixes
+
+- Deleted and suspended users are excluded from leaderboards
+- Deleted users are now excluded from the report and logs
+
 v3.17.0
 -------
 
