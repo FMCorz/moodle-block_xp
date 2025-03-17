@@ -58,7 +58,7 @@ class behat_block_xp extends behat_base {
         $rowxpath = "//tr[contains(normalize-space(.), '$studentname')]";
 
         $this->execute('behat_general::i_click_on_in_the', [
-            "[data-toggle='dropdown']", "css_element",
+            '.action-menu [role="button"]', "css_element",
             $rowxpath, "xpath_element",
         ]);
 
@@ -72,7 +72,7 @@ class behat_block_xp extends behat_base {
      * Step to follow a page menu link.
      *
      * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" in the XP page menu$/
-     * @param string $studentname
+     * @param string $text
      */
     public function i_follow_foo_in_xp_page_menu($text) {
         $this->execute('behat_general::i_click_on', [
