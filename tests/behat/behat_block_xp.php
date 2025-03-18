@@ -47,18 +47,19 @@ class behat_block_xp extends behat_base {
      * @return moodle_url
      */
     protected function resolve_page_instance_url(string $type, string $identifier): moodle_url {
-        switch ($type) {
-            case 'info':
-            case 'infos':
-                $context = context_system::instance();
-                if (!in_array(strtolower($identifier), ['sys', 'system'])) {
-                    $courseid = $this->get_course_id($identifier);
-                    $context = context_course::instance($courseid);
-                }
-                $world = di::get('context_world_factory')->get_world_from_context($context);
-                return di::get('url_resolver')->reverse('infos', ['courseid' => $world->get_courseid()]);
+        if ($type === 'info') {
+            $type = 'infos';
+        } else if ($type === 'leaderboard') {
+            $type = 'ladder';
         }
-        throw new \coding_exception("Unknown page type '$type' for page identifier '$identifier'");
+
+        $context = context_system::instance();
+        if (!in_array(strtolower($identifier), ['sys', 'system'])) {
+            $courseid = $this->get_course_id($identifier);
+            $context = context_course::instance($courseid);
+        }
+        $world = di::get('context_world_factory')->get_world_from_context($context);
+        return di::get('url_resolver')->reverse($type, ['courseid' => $world->get_courseid()]);
     }
 
     /**
