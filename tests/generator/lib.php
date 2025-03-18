@@ -36,6 +36,26 @@ class block_xp_generator extends \testing_block_generator {
     }
 
     /**
+     * Create XP.
+     *
+     * @param object|array $data The data.
+     * @return void
+     */
+    public function create_config($data = null) {
+        $data = (object) ($data ?: []);
+
+        if (!isset($data->name)) {
+            throw new \coding_exception('Missing name');
+        } else if (!isset($data->value)) {
+            throw new \coding_exception('Missing value');
+        }
+
+        $context = context::instance_by_id($data->contextid ?? SYSCONTEXTID);
+        $world = di::get('context_world_factory')->get_world_from_context($context);
+        $world->get_config()->set($data->name, $data->value);
+    }
+
+    /**
      * Create a test block instance.
      *
      * @param array|stdClass $record

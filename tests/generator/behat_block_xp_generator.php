@@ -27,9 +27,16 @@ class behat_block_xp_generator extends behat_generator_base {
 
     protected function get_creatable_entities(): array {
         return [
+            'config' => [
+                'datagenerator' => 'config',
+                'required' => ['worldcontext', 'name', 'value'],
+                'switchids' => [
+                    'worldcontext' => 'contextid'
+                ],
+            ],
             'xp' => [
                 'datagenerator' => 'xp',
-                'required' => ['user'],
+                'required' => ['worldcontext', 'user'],
                 'switchids' => [
                     'user' => 'userid',
                     'worldcontext' => 'contextid'

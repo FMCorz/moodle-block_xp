@@ -12,8 +12,8 @@ Feature: The log pages contains logs of points
       | s3       | Ralph     | Dalton   |
       | t1       | Teacher   | One      |
     And the following "courses" exist:
-      | fullname  | shortname | groupmode      |
-      | Course 1  | c1        | 2 |
+      | fullname  | shortname | groupmode |
+      | Course 1  | c1        | 2         |
     And the following "course enrolments" exist:
       | user     | course | role    |
       | s1       | c1     | student |
@@ -23,6 +23,9 @@ Feature: The log pages contains logs of points
     And the following "blocks" exist:
       | blockname | contextlevel | reference |
       | xp        | Course       | c1        |
+    And the following "block_xp > config" exist:
+      | worldcontext | name             | value |
+      | c1           | enablecheatguard | 0     |
     And the following "groups" exist:
       | name     | course | idnumber |
       | Group A  | c1     | ga |
@@ -50,7 +53,7 @@ Feature: The log pages contains logs of points
     And I am on the "Course 1" "Course" page logged in as "s3"
 
   Scenario: Filter logs by participant name
-    And I am on the "c1" "block_xp > log" page logged in as "t1"
+    Given I am on the "c1" "block_xp > log" page logged in as "t1"
     And I should see "Dylan Murphy"
     And I should see "Maddy Cloud"
     And I should see "Ralph Dalton"
@@ -69,3 +72,19 @@ Feature: The log pages contains logs of points
     And I should not see "Dylan Murphy"
     And I should not see "Maddy Cloud"
     And I should see "Ralph Dalton"
+
+  Scenario: Filter logs by group
+    Given I am on the "c1" "block_xp > log" page logged in as "t1"
+    And I should see "Dylan Murphy"
+    And I should see "Maddy Cloud"
+    And I should see "Ralph Dalton"
+    When I set the field "Visible groups" to "Group A"
+    And I press "Go"
+    Then I should see "Dylan Murphy"
+    And I should not see "Maddy Cloud"
+    And I should not see "Ralph Dalton"
+    And I set the field "Visible groups" to "Group B"
+    And I press "Go"
+    And I should not see "Dylan Murphy"
+    And I should see "Maddy Cloud"
+    And I should not see "Ralph Dalton"
