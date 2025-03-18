@@ -121,4 +121,13 @@ class behat_block_xp extends behat_base {
         ]);
     }
 
+    /**
+     * Reset caches.
+     *
+     * @AfterScenario
+     */
+    public function reset_caches() {
+        \block_xp\di::set_container(new \block_xp\local\default_container());
+    }
+
 }

@@ -82,7 +82,7 @@ class di {
      * @param \block_xp\local\container $container The container.
      */
     public static function set_container(\block_xp\local\container $container) {
-        if (!PHPUNIT_TEST) {
+        if (!PHPUNIT_TEST && !defined('BEHAT_TEST')) {
             throw new coding_exception('Containers can only be set during testing.');
         }
         self::$container = $container;
