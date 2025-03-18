@@ -66,6 +66,7 @@ class log_table extends table_sql {
      */
     public function __construct(course_world $world, $groupid, $userid = null) {
         $userid = max(0, (int) $userid);
+        $this->groupid = $groupid;
         parent::__construct('block_xp_log_' . $userid);
 
         $this->world = $world;
