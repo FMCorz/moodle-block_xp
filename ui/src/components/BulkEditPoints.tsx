@@ -94,7 +94,7 @@ const BulkEditPoints: React.FC<{
               label: (
                 <>
                   {getStr("difficultyrelative")}
-                  <div className="badge badge-info xp-ml-2">{getStr("recommended")}</div>
+                  <div className="badge bg-info text-white xp-ml-2">{getStr("recommended")}</div>
                 </>
               ),
               desc: getStr("difficultyrelativedesc"),
