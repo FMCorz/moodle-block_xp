@@ -74,12 +74,23 @@ class behat_block_xp extends behat_base {
     }
 
     /**
-     * Step to edit a student's points.
+     * Step to edit a student from the report.
      *
      * @Given /^I follow edit for "(?P<student>(?:[^"]|\\")*)" in XP report$/
      * @param string $studentname
+     * @deprecated
      */
     public function i_follow_edit_for_in_xp_report($studentname) {
+        return $this->i_follow_foo_for_in_xp_report('Edit', $studentname);
+    }
+
+    /**
+     * Step to follow a link in the XP report.
+     *
+     * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" for "(?P<student>(?:[^"]|\\")*)" in XP report$/
+     * @param string $studentname
+     */
+    public function i_follow_foo_for_in_xp_report($text, $studentname) {
         $rowxpath = "//tr[contains(normalize-space(.), '$studentname')]";
 
         $this->execute('behat_general::i_click_on_in_the', [
@@ -88,7 +99,7 @@ class behat_block_xp extends behat_base {
         ]);
 
         $this->execute('behat_general::i_click_on_in_the', [
-            "Edit", "link",
+            $text, "link",
             $rowxpath, "xpath_element",
         ]);
     }

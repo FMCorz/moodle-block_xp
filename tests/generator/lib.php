@@ -36,6 +36,20 @@ class block_xp_generator extends \testing_block_generator {
     }
 
     /**
+     * Create a test block instance.
+     *
+     * @param array|stdClass $record
+     * @param array $options
+     * @return stdClass The block_instance record
+     */
+    public function create_instance($record = null, $options = []) {
+        $instance = parent::create_instance($record, $options);
+        $context = context::instance_by_id($instance->parentcontextid);
+        $world = di::get('context_world_factory')->get_world_from_context($context);
+        $world->get_config()->set('enabled', true);
+    }
+
+    /**
      * Create XP.
      *
      * @param object|array $data The data.
