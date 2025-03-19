@@ -21,7 +21,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['core/templates', 'core/modal', 'core/modal_events', 'core/notification'], function (
+define(['core/templates', 'core/modal', 'core/modal_events', 'core/notification'], function(
     Templates,
     Modal,
     ModalEvents,
@@ -43,6 +43,8 @@ define(['core/templates', 'core/modal', 'core/modal_events', 'core/notification'
                 const modal = new Modal(html);
                 const footer = modal.getFooter()[0];
                 const hideBtn = footer.querySelector('[data-action="hide"]');
+
+                modal.setRemoveOnClose(true);
 
                 // Prevent dismissing by clicking outside.
                 if (typeof ModalEvents.outsideClick !== 'undefined') {
