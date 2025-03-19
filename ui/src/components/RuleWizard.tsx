@@ -175,7 +175,11 @@ const CmNameSlide = ({
           <Str id="activityname" />
         </label>
         <div className="xp-flex xp-gap-2">
+          <label htmlFor="xp-rule-cmname-method" className="xp-sr-only">
+            <Str id="comparisonmethod" />
+          </label>
           <Select
+            id="xp-rule-cmname-method"
             value={config.filterint1}
             onChange={(e) => setConfig({ filterint1: parseInt(e.currentTarget.value, 10) || 0 })}
             defaultValue={defaultValue.toString()}

@@ -90,6 +90,7 @@ $string['clicktoselectcm'] = 'Click to select an activity or resource';
 $string['cmselector'] = 'Course module selector';
 $string['coefxp'] = 'Algorithm coefficient';
 $string['colon'] = '{$a->a}: {$a->b}';
+$string['comparisonmethod'] = 'Comparison method';
 $string['compatibilitycheck'] = 'Compatibility check';
 $string['completionrules'] = 'Completion rules';
 $string['completionrules_help'] = '
