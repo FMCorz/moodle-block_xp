@@ -354,7 +354,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
           <Menu as="div" className="xp-relative xp-inline-block xp-text-left">
             <div>
               <Menu.Button className="xp-text-inherit xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full hover:xp-bg-gray-100">
-                <span className="sr-only">
+                <span className="xp-sr-only">
                   <Str id="options" component="core" />
                 </span>
                 <svg
@@ -456,7 +456,10 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
 
           return (
             <React.Fragment key={`l${level.level}`}>
-              <div className="xp-relative xp-min-h-28 xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 xp-p-3 xp-overflow-hidden">
+              <fieldset className="xp-relative xp-min-h-28 xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 xp-p-3 xp-overflow-hidden">
+                <legend className="xp-sr-only">
+                  <Str id="levelx" a={level.level} />
+                </legend>
                 <div className="xp-absolute xp--top-4 xp--left-8 xp-text-[10rem] xp-text-gray-50 xp-leading-none xp-pointer-events-none">
                   {level.level}
                 </div>
@@ -544,6 +547,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
+                        aria-hidden="true"
                         className={classNames(
                           "xp-w-6 xp-h-6 xp-transition-transform xp-duration-300",
                           isExpanded ? "xp-rotate-90" : null
@@ -583,6 +587,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                                   strokeWidth={1.5}
                                   stroke="currentColor"
                                   className="xp-w-6 xp-h-6"
+                                  aria-hidden="true"
                                 >
                                   <path
                                     strokeLinecap="round"
@@ -677,7 +682,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                     </IfAddonActivatedOrPromoEnabled>
                   </div>
                 </Expandable>
-              </div>
+              </fieldset>
             </React.Fragment>
           );
         })}

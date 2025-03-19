@@ -1434,7 +1434,7 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
                 react.createElement(menu/* Menu */.W, { as: "div", className: "xp-relative xp-inline-block xp-text-left" },
                     react.createElement("div", null,
                         react.createElement(menu/* Menu */.W.Button, { className: "xp-text-inherit xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full hover:xp-bg-gray-100" },
-                            react.createElement("span", { className: "sr-only" },
+                            react.createElement("span", { className: "xp-sr-only" },
                                 react.createElement(components_Str, { id: "options", component: "core" })),
                             react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5", "aria-hidden": "true" },
                                 react.createElement("path", { d: "M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" })))),
@@ -1468,7 +1468,9 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
                 dispatch(["levelPopupMessageChange", { level, popupmessage: e.target.value }]);
             };
             return (react.createElement(react.Fragment, { key: `l${level.level}` },
-                react.createElement("div", { className: "xp-relative xp-min-h-28 xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 xp-p-3 xp-overflow-hidden" },
+                react.createElement("fieldset", { className: "xp-relative xp-min-h-28 xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 xp-p-3 xp-overflow-hidden" },
+                    react.createElement("legend", { className: "xp-sr-only" },
+                        react.createElement(components_Str, { id: "levelx", a: level.level })),
                     react.createElement("div", { className: "xp-absolute xp--top-4 xp--left-8 xp-text-[10rem] xp-text-gray-50 xp-leading-none xp-pointer-events-none" }, level.level),
                     react.createElement("div", { className: "xp-flex xp-items-center xp-flex-grow xp-gap-4 sm:xp-gap-8 xp-flex-col sm:xp-flex-row xp-relative" },
                         react.createElement("div", { className: "xp-flex-0" },
@@ -1504,7 +1506,7 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
                                     setExpanded(isExpanded ? expanded.filter((e) => e != level.level) : [level.level, ...expanded]);
                                 }, className: "xp-p-2 xp-inline-block sm:xp-mr-1" },
                                 react.createElement("span", { className: "xp-sr-only" }, isExpanded ? react.createElement(components_Str, { id: "collapse", component: "core" }) : react.createElement(components_Str, { id: "expand", component: "core" })),
-                                react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: utils_classNames("xp-w-6 xp-h-6 xp-transition-transform xp-duration-300", isExpanded ? "xp-rotate-90" : null) },
+                                react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", "aria-hidden": "true", className: utils_classNames("xp-w-6 xp-h-6 xp-transition-transform xp-duration-300", isExpanded ? "xp-rotate-90" : null) },
                                     react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8.25 4.5l7.5 7.5-7.5 7.5" }))))),
                     react.createElement(Expandable, { expanded: isExpanded, id: `xp-level-${level.level}-options` },
                         react.createElement("div", { className: utils_classNames("sm:xp-ml-[100px] sm:xp-pl-8 xp-space-y-4") },
@@ -1517,7 +1519,7 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
                                         react.createElement("div", null,
                                             react.createElement(AnchorButton, { onClick: () => showLevelUpNotificationPreview(level, prevLevel) },
                                                 react.createElement("span", { className: "xp-sr-only" }, getStr("previewpopupnotification")),
-                                                react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: "xp-w-6 xp-h-6" },
+                                                react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: "xp-w-6 xp-h-6", "aria-hidden": "true" },
                                                     react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75-1.5.75a3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0L3 16.5m15-3.379a48.474 48.474 0 0 0-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 0 1 3 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 0 1 6 13.12M12.265 3.11a.375.375 0 1 1-.53 0L12 2.845l.265.265Zm-3 0a.375.375 0 1 1-.53 0L9 2.845l.265.265Zm6 0a.375.375 0 1 1-.53 0L15 2.845l.265.265Z" }))))))) : null),
                             react.createElement(OptionField, { label: react.createElement(components_Str, { id: "description" }), note: react.createElement(components_Str, { id: "leveldescriptiondesc" }) },
                                 react.createElement(Textarea, { className: "xp-w-full", onBlur: (e) => handleLevelDescChange(level, e.target.value), defaultValue: level.description || "", maxLength: 280, rows: 2 })),
