@@ -31,14 +31,14 @@
                     {{#isvisible}}
                         <span data-toggle="tooltip" class="xp-inline-block xp-text-base xp-leading-none"
                                 title="{{#str}} pagecurrentvisibletoviewers, block_xp {{/str}}">
-                            <span class="sr-only">{{#str}} pagecurrentvisibletoviewers, block_xp {{/str}}</span>
+                            <span class="xp-sr-only">{{#str}} pagecurrentvisibletoviewers, block_xp {{/str}}</span>
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </span>
                     {{/isvisible}}
                     {{^isvisible}}
                         <span data-toggle="tooltip" class="xp-inline-block xp-text-base xp-leading-none"
                                 title="{{#str}} pagecurrentnotvisibletoviewers, block_xp {{/str}}">
-                            <span class="sr-only">{{#str}} pagecurrentnotvisibletoviewers, block_xp {{/str}}</span>
+                            <span class="xp-sr-only">{{#str}} pagecurrentnotvisibletoviewers, block_xp {{/str}}</span>
                             <i class="fa fa-eye-slash" aria-hidden="true"></i>
                         </span>
                     {{/isvisible}}
@@ -62,7 +62,7 @@
         <div class="dropdown">
             <button class="btn btn-link btn-icon icon-size-3 rounded-circle" data-bs-toggle="dropdown" data-toggle="dropdown" type="button" aria-expanded="false">
                 <i class="fa fa-ellipsis-v text-dark py-2" aria-hidden="true"></i>
-                <span class="sr-only">{{#str}}menu, block_xp{{/str}}</span>
+                <span class="xp-sr-only">{{#str}}menu, block_xp{{/str}}</span>
             </button>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-end">
                 {{# menuitems }}
