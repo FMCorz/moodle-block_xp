@@ -74,9 +74,22 @@ class behat_block_xp extends behat_base {
     }
 
     /**
+     * Step to follow a link in the XP nav.
+     *
+     * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" in( the)? XP nav$/
+     * @param string $text
+     */
+    public function i_follow_foo_in_xp_nav($text) {
+        $this->execute('behat_general::i_click_on_in_the', [
+            $text, "link",
+            '.block_xp-page-nav', "css_element",
+        ]);
+    }
+
+    /**
      * Step to edit a student from the report.
      *
-     * @Given /^I follow edit for "(?P<student>(?:[^"]|\\")*)" in XP report$/
+     * @Given /^I follow edit for "(?P<student>(?:[^"]|\\")*)" in( the)? XP report$/
      * @param string $studentname
      * @deprecated
      */
@@ -87,7 +100,8 @@ class behat_block_xp extends behat_base {
     /**
      * Step to follow a link in the XP report.
      *
-     * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" for "(?P<student>(?:[^"]|\\")*)" in XP report$/
+     * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" for "(?P<student>(?:[^"]|\\")*)" in( the)? XP report$/
+     * @param string $text
      * @param string $studentname
      */
     public function i_follow_foo_for_in_xp_report($text, $studentname) {
@@ -107,7 +121,7 @@ class behat_block_xp extends behat_base {
     /**
      * Step to follow a page menu link.
      *
-     * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" in the XP page menu$/
+     * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" in( the)? XP page menu$/
      * @param string $text
      */
     public function i_follow_foo_in_xp_page_menu($text) {
