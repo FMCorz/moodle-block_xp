@@ -35,6 +35,7 @@ export const openCourseSelector = async(onSelected) => {
     const rootJq = modal.getRoot();
     const root = rootJq[0];
 
+    rootJq.addClass('block_xp');
     rootJq.on(ModalEvents.shown, () => {
         const container = root.querySelector('.search-result-contents');
         const termField = root.querySelector('.search-term-course');

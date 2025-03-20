@@ -197,6 +197,9 @@
 .block_xp :is(.xp--mr-2) {
     margin-right: -0.5rem;
 }
+.block_xp :is(.xp-mb-0) {
+    margin-bottom: 0px;
+}
 .block_xp :is(.xp-mb-1) {
     margin-bottom: 0.25rem;
 }
