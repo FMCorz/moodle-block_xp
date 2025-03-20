@@ -16,19 +16,20 @@
 /**
  * Resource selector.
  *
+ * @module     block_xp/resource-selector
  * @copyright  2018 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/ajax', 'block_xp/throttler'], function($, Ajax, Throttler) {
+define(['jquery', 'block_xp/throttler', 'core/pending'], function($, Throttler, Pending) {
     /**
      * Resource selector.
      *
      * @param {String|jQuery} container The container of the contents.
      * @param {Function} searchFunction The search function.
      * @param {jQuery} searchTermFieldNode The input field in which the use searches.
-    */
+     */
     function ResourceSelector(container, searchFunction, searchTermFieldNode) {
         this._eventNode = $('<div>');
         this.container = $(container);
@@ -87,12 +88,27 @@ define(['jquery', 'core/ajax', 'block_xp/throttler'], function($, Ajax, Throttle
         this.searchResultsNode.hide();
     };
 
+    ResourceSelector.prototype.flagPendingSearch = function() {
+        if (this._pendingSearch) {
+            this._pendingSearch.resolve();
+        }
+        this._pendingSearch = new Pending('resource-selector-search');
+    };
+
+    ResourceSelector.prototype.flagPendingSearchComplete = function() {
+        if (!this._pendingSearch) {
+            return;
+        }
+        this._pendingSearch.resolve();
+        this._pendingSearch = null;
+    };
+
     /**
-   * Get resources.
-   *
-   * @param {String} term The term to get the results from.
-   * @return {Promise}
-   */
+     * Get resources.
+     *
+     * @param {String} term The term to get the results from.
+     * @return {Promise}
+     */
     ResourceSelector.prototype.getResources = function(term) {
         return $.when(this.searchFunction(term));
     };
@@ -111,10 +127,12 @@ define(['jquery', 'core/ajax', 'block_xp/throttler'], function($, Ajax, Throttle
     };
 
     ResourceSelector.prototype._onSearchTermKeyUp = function(e) {
+        this.flagPendingSearch();
         var term = e.target.value;
         if (typeof term !== 'string' || term.length < this.minChars) {
             this.searchingResultsNode.hide();
             this.throttler.cancel();
+            this.flagPendingSearchComplete();
             return;
         }
 
@@ -136,7 +154,12 @@ define(['jquery', 'core/ajax', 'block_xp/throttler'], function($, Ajax, Throttle
 
     ResourceSelector.prototype._performSearchFactory = function(term, searchId) {
         return function() {
-            this._performSearch(term, searchId);
+            this._performSearch(term, searchId).then(function() {
+                this.flagPendingSearchComplete();
+                return;
+            }.bind(this)).catch(function() {
+                this.flagPendingSearchComplete();
+            }.bind(this));
         }.bind(this);
     };
 

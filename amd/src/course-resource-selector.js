@@ -16,44 +16,48 @@
 /**
  * Course resource selector.
  *
+ * @module     block_xp/course-resource-selector
  * @copyright  2018 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+define(['jquery', 'core/ajax', 'block_xp/resource-selector'],
+    function($, Ajax, ResourceSelector, Pending, Notification) {
 
-define(['jquery', 'core/ajax', 'block_xp/resource-selector'], function($, Ajax, ResourceSelector) {
-    /**
-     * Course resource selector.
-     *
-     * @param {String|jQuery} container The container of the contents.
-     * @param {jQuery} searchTermFieldNode The input field in which the use searches.
-     */
-    function CourseResourceSelector(container, searchTermFieldNode) {
-        ResourceSelector.prototype.constructor.apply(this, [container, this.searchFunction.bind(this), searchTermFieldNode]);
-    }
+        /**
+         * Course resource selector.
+         *
+         * @param {String|jQuery} container The container of the contents.
+         * @param {jQuery} searchTermFieldNode The input field in which the use searches.
+         */
+        function CourseResourceSelector(container, searchTermFieldNode) {
+            ResourceSelector.prototype.constructor.apply(this, [container, this.searchFunction.bind(this), searchTermFieldNode]);
+        }
 
-    CourseResourceSelector.prototype = Object.create(ResourceSelector.prototype);
-    CourseResourceSelector.prototype.constructor = CourseResourceSelector;
+        CourseResourceSelector.prototype = Object.create(ResourceSelector.prototype);
+        CourseResourceSelector.prototype.constructor = CourseResourceSelector;
 
-    CourseResourceSelector.prototype.searchFunction = function(term) {
-        var calls = [
-            {
-                methodname: 'block_xp_search_courses',
-                args: { query: term }
-            }
-        ];
+        CourseResourceSelector.prototype.searchFunction = function(term) {
+            var calls = [
+                {
+                    methodname: 'block_xp_search_courses',
+                    args: {query: term}
+                }
+            ];
 
-        return Ajax.call(calls)[0].then(function(results) {
-            return results.map(function(c) {
-                return {
-                    _iscourse: true,
-                    name: c.fullname,
-                    subname: c.shortname,
-                    course: c
-                };
+            return Ajax.call(calls)[0].then(function(results) {
+                return results.map(function(c) {
+                    return {
+                        _iscourse: true,
+                        name: c.fullname,
+                        subname: c.shortname,
+                        course: c
+                    };
+                });
+            }).catch(function(e) {
+                Notification.exception(e);
             });
-        });
-    };
+        };
 
-    return CourseResourceSelector;
-});
+        return CourseResourceSelector;
+    });
