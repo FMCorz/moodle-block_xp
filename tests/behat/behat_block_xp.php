@@ -87,6 +87,19 @@ class behat_block_xp extends behat_base {
     }
 
     /**
+     * Step to follow a link in the XP secondary nav.
+     *
+     * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" in( the)? XP secondary nav$/
+     * @param string $text
+     */
+    public function i_follow_foo_in_xp_secondary_nav($text) {
+        $this->execute('behat_general::i_click_on_in_the', [
+            $text, "link",
+            '#region-main :not(.block_xp-page-nav) nav', "css_element",
+        ]);
+    }
+
+    /**
      * Step to edit a student from the report.
      *
      * @Given /^I follow edit for "(?P<student>(?:[^"]|\\")*)" in( the)? XP report$/
