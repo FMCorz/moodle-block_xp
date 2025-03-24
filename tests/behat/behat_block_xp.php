@@ -75,6 +75,23 @@ class behat_block_xp extends behat_base {
     }
 
     /**
+     * Click on a something if it exists.
+     *
+     * This is useful to write tests that are backwards compatible, for instance when something was renamed or remove.
+     *
+     * @When /^I click on "(?P<element_string>(?:[^"]|\\")*)" "(?P<selector_string>[^"]*)" if it exists$/
+     * @param string $locator
+     * @param string $selectortype
+     */
+    public function i_click_on_foo_if_it_exists($locator, $selectortype) {
+        try {
+            $this->execute('behat_general::i_click_on', [$locator, $selectortype]);
+        } catch (ElementNotFoundException $e) {
+            // Ignore.
+        }
+    }
+
+    /**
      * Delete all XP event rules.
      *
      * @Given /^I delete all XP event rules$/
