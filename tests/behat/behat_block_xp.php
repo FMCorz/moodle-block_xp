@@ -23,6 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use Behat\Mink\Exception\ElementNotFoundException;
 use block_xp\di;
 
 // NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
@@ -71,6 +72,47 @@ class behat_block_xp extends behat_base {
      */
     public function i_am_on_front_page() {
         $this->getSession()->visit($this->locate_path('/?redirect=0'));
+    }
+
+    /**
+     * Delete all XP event rules.
+     *
+     * @Given /^I delete all XP event rules$/
+     */
+    public function i_delete_all_xp_event_rules() {
+        global $CFG;
+
+        $page = $this->getSession()->getPage();
+        while (true) {
+            [$selector, $locator] = $this->transform_selector('link', 'Delete rule');
+            if (!$page->find($selector, $locator)) {
+                break;
+            }
+
+            // The step only works from 4.3, see MDL-78199.
+            if ($CFG->branch >= 403) {
+                $this->execute('behat_general::i_hover_in_the', [
+                    'Delete rule', 'link',
+                    '.filters-list .filter', 'css_element',
+                ]);
+            } else {
+                $this->execute('behat_general::i_hover', ['Delete rule', 'link',]);
+            }
+            $this->execute('behat_general::i_click_on', ['Delete rule', 'link']);
+
+            [$selector, $locator] = $this->transform_selector('dialogue', 'Delete rule');
+            if (!$page->find($selector, $locator)) {
+                continue;
+            }
+            foreach ($this->find_all('dialogue', 'Delete rule', false, false) as $dialogue) {
+                $button = $this->get_node_in_container('button', 'Yes', 'NodeElement', $dialogue);
+                if ($button->isVisible()) {
+                    $button->click();
+                }
+            }
+        }
+
+        $this->execute('behat_general::i_click_on', ['Save changes', 'button']);
     }
 
     /**
