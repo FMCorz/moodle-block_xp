@@ -3,7 +3,7 @@ name: Moodle Plugin CI
 on:
   push:
     branches:
-      - master
+      - ci
 
 jobs:
   test:
@@ -33,30 +33,35 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
-        moodle-branch: ['MOODLE_401_STABLE', 'MOODLE_402_STABLE', 'MOODLE_403_STABLE', 'MOODLE_404_STABLE']
+        php: ['8.1', '8.2', '8.3']
+        moodle-branch: ['MOODLE_401_STABLE', 'MOODLE_404_STABLE', 'MOODLE_405_STABLE']
         database: [pgsql]
         include:
-          - moodle-branch: MOODLE_404_STABLE
+          # PHP 7.4, solely on Moodle 4.1.
+          - moodle-branch: MOODLE_401_STABLE
+            database: pgsql
+            php: 7.4
+
+          # PHP 8.0, with Moodle 4.1.
+          - moodle-branch: MOODLE_401_STABLE
+            database: pgsql
+            php: 8.0
+
+          # MariaDB, test oldest and most recent configurations.
+          - moodle-branch: MOODLE_401_STABLE
+            database: mariadb
+            php: 7.4
+          - moodle-branch: MOODLE_405_STABLE
             database: mariadb
             php: 8.3
+
         exclude:
-          - moodle-branch: MOODLE_402_STABLE
-            php: 7.4
-          - moodle-branch: MOODLE_403_STABLE
-            php: 7.4
-          - moodle-branch: MOODLE_404_STABLE
-            php: 7.4
-          - moodle-branch: MOODLE_404_STABLE
-            php: 8.0
           - moodle-branch: MOODLE_401_STABLE
             php: 8.2
           - moodle-branch: MOODLE_401_STABLE
             php: 8.3
-          - moodle-branch: MOODLE_402_STABLE
-            php: 8.3
-          - moodle-branch: MOODLE_403_STABLE
-            php: 8.3
+          - moodle-branch: MOODLE_500_STABLE
+            php: 8.1
 
     steps:
       - name: Check out repository code
@@ -105,7 +110,7 @@ jobs:
 
       - name: Moodle Code Checker
         if: ${{ !cancelled() }}
-        run: moodle-plugin-ci phpcs --max-warnings 0 --exclude moodle.Commenting.MissingDocblock --exclude PHPCompatibility.FunctionDeclarations.RemovedImplicitlyNullableParam
+        run: moodle-plugin-ci phpcs --max-warnings 0 --exclude moodle.Commenting.MissingDocblock,moodle.Commenting.TodoComment,moodle.Commenting.VariableComment
 
       # - name: Moodle PHPDoc Checker
       #   if: ${{ !cancelled() }}
@@ -123,9 +128,9 @@ jobs:
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci mustache
 
-      # - name: Grunt
-      #   if: ${{ !cancelled() }}
-      #   run: moodle-plugin-ci grunt --max-lint-warnings 0
+      - name: Grunt
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci grunt --max-lint-warnings 0
 
       - name: PHPUnit tests
         if: ${{ !cancelled() }}
@@ -134,7 +139,7 @@ jobs:
       - name: Behat features
         id: behat
         if: ${{ !cancelled() }}
-        run: moodle-plugin-ci behat --profile chrome
+        run: moodle-plugin-ci behat --profile chrome --auto-rerun 0
 
       - name: Mark cancelled jobs as failed.
         if: ${{ cancelled() }}

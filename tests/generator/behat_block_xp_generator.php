@@ -31,7 +31,7 @@ class behat_block_xp_generator extends behat_generator_base {
                 'datagenerator' => 'config',
                 'required' => ['worldcontext', 'name', 'value'],
                 'switchids' => [
-                    'worldcontext' => 'contextid'
+                    'worldcontext' => 'contextid',
                 ],
             ],
             'xp' => [
@@ -39,7 +39,7 @@ class behat_block_xp_generator extends behat_generator_base {
                 'required' => ['worldcontext', 'user'],
                 'switchids' => [
                     'user' => 'userid',
-                    'worldcontext' => 'contextid'
+                    'worldcontext' => 'contextid',
                 ],
             ],
         ];
