@@ -56,7 +56,7 @@ interface collection_logger {
      * @param DateTime|null $time When that happened.
      * @return void
      */
-    public function log($id, $points, $signature, DateTime $time = null);
+    public function log($id, $points, $signature, ?DateTime $time = null);
 
     /**
      * Purge all logs.

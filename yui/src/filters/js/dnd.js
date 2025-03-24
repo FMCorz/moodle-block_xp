@@ -90,7 +90,7 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
         this.syncTargets();
     },
 
-    global_drop_over: function(e) {
+    global_drop_over: function(e) { /* eslint-disable-line */
 
         // Check that drop object belong to correct group.
         if (!e.drop || !e.drop.inGroup(this.groups)) {
@@ -117,7 +117,7 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
      *
      * @param {EventFacade} e
      */
-    drag_end: function(e) {
+    drag_end: function(e) { /* eslint-disable-line */
         this.fire('drag:end', e);
     },
 
@@ -126,7 +126,7 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
      *
      * @param {EventFacade} e
      */
-    drop_hit: function(e) {
+    drop_hit: function(e) { /* eslint-disable-line */
         this.fire('drop:hit', e);
     },
 
@@ -135,7 +135,7 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
      *
      * @param {EventFacade} e
      */
-    drop_over: function(e) {
+    drop_over: function(e) { /* eslint-disable-line */
         this.fire('drop:over', e);
     },
 

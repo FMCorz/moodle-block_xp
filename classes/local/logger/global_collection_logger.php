@@ -84,7 +84,7 @@ class global_collection_logger implements collection_logger {
      * @param DateTime|null $time When that happened.
      * @return void
      */
-    public function log($id, $points, $signature, DateTime $time = null) {
+    public function log($id, $points, $signature, ?DateTime $time = null) {
         // Do nothing. We should not be using this to log.
     }
 

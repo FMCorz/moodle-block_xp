@@ -217,7 +217,7 @@ class levels_info_writer {
      * @param array $metadata The metadata before processing.
      * @param world|null $world The world, if any.
      */
-    protected function get_metadata_for_level($level, $metadata, world $world = null) {
+    protected function get_metadata_for_level($level, $metadata, ?world $world = null) {
 
         // We can only deal with this type of world at the moment.
         $world = $world instanceof course_world ? $world : null;
@@ -242,7 +242,7 @@ class levels_info_writer {
      * @param array $metadata The metadata before processing.
      * @param world|null $world The world, if any.
      */
-    protected function get_metadata_for_level_after_restore(restore_context $restore, $level, $metadata, world $world = null) {
+    protected function get_metadata_for_level_after_restore(restore_context $restore, $level, $metadata, ?world $world = null) {
         return $metadata;
     }
 
@@ -272,7 +272,7 @@ class levels_info_writer {
      * @param world|null $world The world, if any.
      * @return array Indexed by level.
      */
-    protected function process_metadata($data, world $world = null) {
+    protected function process_metadata($data, ?world $world = null) {
 
         // Reorganise metadata per level.
         $rawmetadata = array_reduce($data['levels'], function($carry, $level) {
@@ -304,7 +304,7 @@ class levels_info_writer {
      * @param world|null $world The world, if any.
      * @return array Indexed by level.
      */
-    protected function process_metadata_after_restore(restore_context $restore, $metadata, world $world = null) {
+    protected function process_metadata_after_restore(restore_context $restore, $metadata, ?world $world = null) {
         $finalmetadata = [];
         foreach ($metadata as $level => $levelmetadata) {
             $tmp = $this->get_metadata_for_level_after_restore($restore, $level, $levelmetadata, $world);

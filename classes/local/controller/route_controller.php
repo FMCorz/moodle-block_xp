@@ -260,7 +260,7 @@ abstract class route_controller implements controller {
      * @param string $message The redirect message.
      * @return void
      */
-    final protected function redirect(url $url = null, $message = '') {
+    final protected function redirect(?url $url = null, $message = '') {
         if ($url === null) {
             $url = $this->pageurl;
         }

@@ -2,6 +2,7 @@
 
 const gulp = require('gulp');
 const replace = require('gulp-replace');
+const header = require('gulp-header');
 const exec = require('child_process').exec;
 const postcss = require('gulp-postcss');
 const webpack = require('webpack');
@@ -31,7 +32,14 @@ var cssBuild = gulp.series(tailwindBuild);
 
 function tailwindBuild(cb) {
   // Build Tailwind. This behaves differently depending on NODE_ENV.
-  return gulp.src(cssPaths).pipe(postcss()).pipe(gulp.dest('.'));
+  return gulp.src(cssPaths).pipe(header([
+    '/**',
+    ' * This file is auto-generated. Edit css/styles.css instead.',
+    ' */',
+    '/* stylelint-disable */',
+    '',
+    '',
+  ].join('\n'))).pipe(postcss()).pipe(gulp.dest('.'));
 }
 
 /** Moodle. */

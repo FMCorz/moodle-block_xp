@@ -188,7 +188,7 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
      * @param ranker|null $ranker The ranker.
      * @return leaderboard
      */
-    protected function get_leaderboard_instance(course_world $world, $groupid, array $columns, ranker $ranker = null) {
+    protected function get_leaderboard_instance(course_world $world, $groupid, array $columns, ?ranker $ranker = null) {
         return $this->get_leaderboard_instance_with_config($world, $groupid, $columns, $world->get_config(), $ranker);
     }
 
@@ -203,7 +203,7 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
      * @return leaderboard
      */
     protected function get_leaderboard_instance_with_config(course_world $world, $groupid, array $columns,
-            config $config, ranker $ranker = null) {
+            config $config, ?ranker $ranker = null) {
         return new course_user_leaderboard(
             $this->db,
             $world->get_levels_info(),

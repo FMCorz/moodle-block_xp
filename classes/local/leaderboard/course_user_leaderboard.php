@@ -98,7 +98,7 @@ class course_user_leaderboard implements leaderboard {
             levels_info $levelsinfo,
             $courseid,
             array $columns,
-            ranker $ranker = null,
+            ?ranker $ranker = null,
             $groupid = 0) {
 
         $this->db = $db;

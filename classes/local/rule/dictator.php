@@ -45,7 +45,7 @@ interface dictator {
      * @param array $options Some options (expected to support type, and filter).
      * @return instance[]
      */
-    public function count_rules_in_context(\context $storecontext, \context $childcontext = null, array $options = []);
+    public function count_rules_in_context(\context $storecontext, ?\context $childcontext = null, array $options = []);
 
     /**
      * Get the effective rules.
@@ -72,7 +72,7 @@ interface dictator {
      * @param \context|null $childcontext The child context.
      * @return instance[]
      */
-    public function get_rules_in_context(\context $storecontext, \context $childcontext = null);
+    public function get_rules_in_context(\context $storecontext, ?\context $childcontext = null);
 
     /**
      * Get rules of particular types in context.
@@ -82,7 +82,7 @@ interface dictator {
      * @param \context|null $childcontext The child context.
      * @return instance[]
      */
-    public function get_rules_of_types_in_context(\context $storecontext, array $types, \context $childcontext = null);
+    public function get_rules_of_types_in_context(\context $storecontext, array $types, ?\context $childcontext = null);
 
     /**
      * Sort the rules by priority.

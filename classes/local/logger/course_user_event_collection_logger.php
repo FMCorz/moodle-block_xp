@@ -89,7 +89,7 @@ class course_user_event_collection_logger implements
      * @param DateTime|null $time When that happened.
      * @return void
      */
-    public function log($id, $points, $signature, DateTime $time = null) {
+    public function log($id, $points, $signature, ?DateTime $time = null) {
         $time = $time ? $time : new DateTime();
         $record = new stdClass();
         $record->courseid = $this->courseid;
@@ -114,7 +114,7 @@ class course_user_event_collection_logger implements
      * @param DateTime|null $time When that happened.
      * @return void
      */
-    public function log_reason($id, $points, reason $reason, DateTime $time = null) {
+    public function log_reason($id, $points, reason $reason, ?DateTime $time = null) {
         $this->log($id, $points, $reason->get_signature(), $time);
     }
 

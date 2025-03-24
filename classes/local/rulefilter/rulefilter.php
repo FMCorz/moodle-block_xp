@@ -68,7 +68,7 @@ interface rulefilter {
      * @param context|null $effectivecontext The effective context, if not in admin.
      * @return string
      */
-    public function get_label_for_config(object $config, context $effectivecontext = null): string;
+    public function get_label_for_config(object $config, ?context $effectivecontext = null): string;
 
     /**
      * Get short description.

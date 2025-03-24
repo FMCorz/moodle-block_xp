@@ -1,7 +1,3 @@
-/**
- * All Level Up XP styles are built from the file css/styles.css.
- */
-
 .block_xp * {
     /** For older themes. */
     box-sizing: border-box;
@@ -177,7 +173,7 @@ a .block_xp-level {
  */
 .block_xp-table td {
     /* Using !important because it's late and I can't be bothered looking for an alternative. */
-    vertical-align: middle !important; /* stylelint-disable-line declaration-no-important */
+    vertical-align: middle !important;
 }
 .block_xp-table .col-lvl {
     width: 50px;
@@ -203,7 +199,7 @@ a .block_xp-level {
  * Report table.
  */
 .block_xp-report-table td {
-    vertical-align: middle !important; /* stylelint-disable-line declaration-no-important */
+    vertical-align: middle !important;
 }
 
 /**
@@ -255,7 +251,7 @@ a .block_xp-level {
 }
 .block_xp-notification .moodle-dialogue-bd,
 .block_xp-notification .moodle-dialogue-ft {
-    text-align: center !important; /* stylelint-disable-line declaration-no-important */
+    text-align: center !important;
 }
 .block_xp-notification .level-headline {
     font-size: 1.4em;

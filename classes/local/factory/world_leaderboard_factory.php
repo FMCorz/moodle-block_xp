@@ -73,7 +73,7 @@ class world_leaderboard_factory implements leaderboard_factory {
      * @param world $world The world.
      * @param config|null $configoverride The configure override.
      */
-    public function __construct(moodle_database $db, world $world, config $configoverride = null) {
+    public function __construct(moodle_database $db, world $world, ?config $configoverride = null) {
         $this->db = $db;
         $this->world = $world;
         $this->config = new immutable_config(new config_stack([
@@ -115,7 +115,7 @@ class world_leaderboard_factory implements leaderboard_factory {
      * @param user_filter|null $userfilter The user filter.
      * @return leaderboard
      */
-    protected function assemble_leaderboard(int $targetuserid, user_filter $userfilter = null): leaderboard {
+    protected function assemble_leaderboard(int $targetuserid, ?user_filter $userfilter = null): leaderboard {
 
         // How is the rank computed?
         $ranker = $this->get_ranker($targetuserid);
@@ -215,7 +215,7 @@ class world_leaderboard_factory implements leaderboard_factory {
      * @param ranker|null $ranker The ranker.
      * @return leaderboard
      */
-    protected function get_leaderboard_instance(array $columns, ranker $ranker = null): leaderboard {
+    protected function get_leaderboard_instance(array $columns, ?ranker $ranker = null): leaderboard {
         if (!$this->world instanceof course_world) {
             throw new \coding_exception('This factory only supports course_world instances.');
         }

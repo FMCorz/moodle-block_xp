@@ -82,7 +82,7 @@ class course_world implements world {
      */
     public function __construct(config $config, moodle_database $db, $courseid,
             badge_url_resolver_course_world_factory $urlresolverfactory,
-            levels_info_factory $levelsinfofactory = null) {
+            ?levels_info_factory $levelsinfofactory = null) {
         $this->config = $config;
         $this->courseid = $courseid;
         $this->db = $db;

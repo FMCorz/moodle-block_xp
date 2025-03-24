@@ -88,8 +88,8 @@ class xp_widget implements renderable, templatable {
      * @param array $actions The actions.
      * @param moodle_url|null $recentactivityurl The URL to see more.
      */
-    public function __construct(state $state, array $recentactivity, renderable $intro = null, array $actions,
-            moodle_url $recentactivityurl = null) {
+    public function __construct(state $state, array $recentactivity, ?renderable $intro = null, array $actions = [],
+            ?moodle_url $recentactivityurl = null) {
 
         $this->state = $state;
         $this->intro = $intro;
@@ -136,7 +136,7 @@ class xp_widget implements renderable, templatable {
      *
      * @param level $nextlevel The next level.
      */
-    public function set_next_level(level $nextlevel = null) {
+    public function set_next_level(?level $nextlevel = null) {
         $this->nextlevel = $nextlevel;
     }
 
@@ -154,7 +154,7 @@ class xp_widget implements renderable, templatable {
      *
      * @param rank $rank The rank.
      */
-    public function set_rank(rank $rank = null) {
+    public function set_rank(?rank $rank = null) {
         $this->rank = $rank;
     }
 

@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/yui', 'core/str'], function($, Y, Str) {
+define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, Str, Notification) {
     /**
      * Constructor.
      *
@@ -38,7 +38,8 @@ define(['jquery', 'core/yui', 'core/str'], function($, Y, Str) {
             function() {
                 this._init().then(function() {
                     deferred.resolve();
-                });
+                    return;
+                }).catch(Notification.exception);
             }.bind(this)
         );
     }
@@ -89,7 +90,7 @@ define(['jquery', 'core/yui', 'core/str'], function($, Y, Str) {
         // Render the things.
         this._render().fail(
             function() {
-                Str.get_string('error', 'core')
+                Str.get_string('error', 'core') /* eslint-disable-line */
                     .then(function(a) {
                         return a;
                     })
@@ -153,8 +154,9 @@ define(['jquery', 'core/yui', 'core/str'], function($, Y, Str) {
         this._ready.then(
             function() {
                 this._dialogue.show(e);
+                return;
             }.bind(this)
-        );
+        ).catch(Notification.exception);
     };
 
     /**

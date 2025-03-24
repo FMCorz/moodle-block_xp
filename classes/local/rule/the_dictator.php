@@ -65,7 +65,7 @@ class the_dictator implements dictator {
      * @param \context|null $childcontext The child context.
      * @return int
      */
-    protected function normalise_childcontext_id(\context $storecontext, \context $childcontext = null): int {
+    protected function normalise_childcontext_id(\context $storecontext, ?\context $childcontext = null): int {
         $childcontextid = 0;
         if ($childcontext && $childcontext->is_child_of($storecontext, false)) {
             $childcontextid = $childcontext->id;
@@ -81,7 +81,7 @@ class the_dictator implements dictator {
      * @param array $options Some options (expected to support type, and filter).
      * @return instance[]
      */
-    public function count_rules_in_context(\context $storecontext, \context $childcontext = null, array $options = []) {
+    public function count_rules_in_context(\context $storecontext, ?\context $childcontext = null, array $options = []) {
         $conditions = [
             'contextid' => $storecontext->id,
             'childcontextid' => $this->normalise_childcontext_id($storecontext, $childcontext),
@@ -105,7 +105,7 @@ class the_dictator implements dictator {
      * @param \context|null $childcontext The child context.
      * @return instance[]
      */
-    protected function fetch_rules_in_context(\context $storecontext, \context $childcontext = null) {
+    protected function fetch_rules_in_context(\context $storecontext, ?\context $childcontext = null) {
         $sql = "SELECT r.*, ctx.contextlevel AS contextlevel, childctx.contextlevel AS childcontextlevel
                   FROM {block_xp_rule} r
                   JOIN {context} ctx ON ctx.id = r.contextid
@@ -180,7 +180,7 @@ class the_dictator implements dictator {
      * @param \context|null $childcontext The child context.
      * @return instance[]
      */
-    public function get_rules_in_context(\context $storecontext, \context $childcontext = null) {
+    public function get_rules_in_context(\context $storecontext, ?\context $childcontext = null) {
         $cachekey = $storecontext->id . ':' . ($childcontext ? $childcontext->id : 0);
         if (!isset($this->rulesinctxcache[$cachekey])) {
             $this->rulesinctxcache[$cachekey] = $this->fetch_rules_in_context($storecontext, $childcontext);
@@ -211,7 +211,7 @@ class the_dictator implements dictator {
      * @param \context|null $childcontext The child context.
      * @return instance[]
      */
-    public function get_rules_of_types_in_context(\context $storecontext, array $types, \context $childcontext = null) {
+    public function get_rules_of_types_in_context(\context $storecontext, array $types, ?\context $childcontext = null) {
         // This may not be seen as very efficient, however getting the rules in the context is expected
         // to be cached, and therefore it should be good enough to filter as we do here for now.
         $rules = $this->get_rules_in_context($storecontext, $childcontext);

@@ -47,7 +47,7 @@ class url extends \moodle_url {
      * @param array $params The parameters.
      * @param string $anchor The anchor.
      */
-    public function __construct($url, array $params = null, $anchor = null) {
+    public function __construct($url, ?array $params = null, $anchor = null) {
         if ($url instanceof url) {
             // Make sure we carry that around when cloning the URL.
             $this->slasharg = $url->slasharg;

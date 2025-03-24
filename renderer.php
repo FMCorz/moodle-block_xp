@@ -1125,7 +1125,7 @@ EOT
      * @param moodle_url $moreurl The URL to view more (deprecated).
      * @return string
      */
-    public function recent_activity(array $activity, moodle_url $moreurl = null) {
+    public function recent_activity(array $activity, ?moodle_url $moreurl = null) {
         return $this->render_from_template('block_xp/recent-activity', [
             'hasrecentactivities' => !empty($activity),
             'recentactivities' => array_values(array_map(function($entry) {
@@ -1259,7 +1259,7 @@ EOT
      * @param moodle_url|null $link The link.
      * @return string
      */
-    public function user_avatar(moodle_url $url = null, moodle_url $link = null) {
+    public function user_avatar(?moodle_url $url = null, ?moodle_url $link = null) {
         if (!$url) {
             $url = user_utils::default_picture();
         }

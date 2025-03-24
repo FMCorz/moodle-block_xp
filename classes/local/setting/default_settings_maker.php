@@ -66,7 +66,7 @@ class default_settings_maker implements settings_maker {
      * @param url_resolver $urlresolver The URL resolver.
      * @param config|null $configlocked The repository of locked config.
      */
-    public function __construct(config $defaults, url_resolver $urlresolver, config $configlocked = null) {
+    public function __construct(config $defaults, url_resolver $urlresolver, ?config $configlocked = null) {
         $this->defaults = $defaults;
         $this->urlresolver = $urlresolver;
         $this->configlocked = $configlocked;

@@ -83,7 +83,7 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
      * @param badge_url_resolver $resolver The server resolving badge URLs if any.
      * @param level_factory $levelfactory The level factory.
      */
-    public function __construct(array $data, badge_url_resolver $resolver = null, level_factory $levelfactory = null) {
+    public function __construct(array $data, ?badge_url_resolver $resolver = null, ?level_factory $levelfactory = null) {
         $this->data = $data;
 
         if (!empty($data['algo'])) {
@@ -277,7 +277,7 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
      * @param level_factory $levelfactory The level factory.
      * @return self
      */
-    public static function make_from_defaults(badge_url_resolver $resolver = null, level_factory $levelfactory = null) {
+    public static function make_from_defaults(?badge_url_resolver $resolver = null, ?level_factory $levelfactory = null) {
         return new self([
             'v' => 2,
             'algo' => [

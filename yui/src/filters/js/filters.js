@@ -271,21 +271,18 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
             // The first node is not a link.
             if (isFirstNode && !isLink) {
                 node.insert(this.addFilterLink.cloneNode(true), 'before');
-            }
 
             // The add link is duplicated.
-            else if (!isFirstNode && wasLink && isLink) {
+            } else if (!isFirstNode && wasLink && isLink) {
                 node.remove();
                 return;
-            }
 
             // There are two filters in a row.
-            else if (!isFirstNode && !wasLink && !isLink) {
+            } else if (!isFirstNode && !wasLink && !isLink) {
                 node.insert(this.addFilterLink.cloneNode(true), 'before');
-            }
 
             // The last node is not a link.
-            else if (isLastNode && !isLink) {
+            } else if (isLastNode && !isLink) {
                 node.insert(this.addFilterLink.cloneNode(true), 'after');
             }
 

@@ -51,7 +51,7 @@ class filtered_config extends proxy_config {
      * @param array $allowedkeys Values are allowed keys, use null to allow everything.
      * @param array $excludedkeys Values are excluded keys.
      */
-    public function __construct(config $config, array $allowedkeys = null, array $excludedkeys = null) {
+    public function __construct(config $config, ?array $allowedkeys = null, ?array $excludedkeys = null) {
         parent::__construct($config);
         if ($allowedkeys !== null) {
             $this->allowedkeys = array_flip($allowedkeys);

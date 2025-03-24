@@ -45,6 +45,6 @@ interface leaderboard_factory_maker {
      * @param config $configoverride An optional config override.
      * @return leaderboard_factory
      */
-    public function get_leaderboard_factory(world $world, config $configoverride = null): leaderboard_factory;
+    public function get_leaderboard_factory(world $world, ?config $configoverride = null): leaderboard_factory;
 
 }

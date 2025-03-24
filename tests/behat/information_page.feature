@@ -47,4 +47,3 @@ Feature: The information page can show students the list of students
     And I press "Save changes"
     When I am on the "c1" "Course" page logged in as "s1"
     Then I should not see "Info" in the "Level up!" "block"
-

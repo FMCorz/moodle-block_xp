@@ -47,6 +47,6 @@ interface reason_collection_logger extends collection_logger {
      * @param DateTime|null $time When that happened.
      * @return void
      */
-    public function log_reason($id, $points, reason $reason, DateTime $time = null);
+    public function log_reason($id, $points, reason $reason, ?DateTime $time = null);
 
 }

@@ -78,8 +78,8 @@ class course_user_state_store implements course_state_store,
      * @param points_increased_state_store_observer $pointsobserver The observer.
      */
     public function __construct(moodle_database $db, levels_info $levelsinfo, $courseid,
-            reason_collection_logger $logger, level_up_state_store_observer $observer = null,
-            points_increased_state_store_observer $pointsobserver = null) {
+            reason_collection_logger $logger, ?level_up_state_store_observer $observer = null,
+            ?points_increased_state_store_observer $pointsobserver = null) {
         $this->db = $db;
         $this->levelsinfo = $levelsinfo;
         $this->courseid = $courseid;
