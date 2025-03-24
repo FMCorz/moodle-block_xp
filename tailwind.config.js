@@ -12,6 +12,13 @@ module.exports = {
         './classes/rule_*.php',
         './css/safelist.txt',
         './ui/src/**/*.{js,ts,tsx}',
+
+        '../../local/xp/renderer.php',
+        '../../local/xp/templates/**/*.mustache',
+        '../../local/xp/classes/form/**/*.php',
+        '../../local/xp/classes/local/controller/**/*.php',
+        '../../local/xp/classes/local/rule/*.php',
+        '../../local/xp/classes/local/shortcode/handler.php',
     ],
     theme: {
         extend: {
