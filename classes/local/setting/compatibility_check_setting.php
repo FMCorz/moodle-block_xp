@@ -68,7 +68,16 @@ class compatibility_check_setting extends static_setting {
             ];
         }
 
-        if ($addon->is_out_of_sync()) {
+        if ($addon->is_deactivated()) {
+            $messages[] = [
+                'title' => get_string('addondeactivated', 'block_xp'),
+                'message' => get_string('addondeactivatedinfo', 'block_xp', [
+                    'localxpversion' => $addon->get_expected_release(),
+                ]),
+                'url' => 'https://docs.levelup.plus/xp/docs/addon-deactivated',
+            ];
+
+        } else if ($addon->is_out_of_sync()) {
             $messages[] = [
                 'title' => get_string('outofsync', 'block_xp'),
                 'message' => get_string('outofsyncinfo', 'block_xp', [
