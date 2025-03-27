@@ -40,6 +40,18 @@ function block_xp_env_check_addon_compatibility(environment_results $result) {
 }
 
 /**
+ * Statuc checks.
+ *
+ * @return array
+ */
+function block_xp_status_checks(): array {
+    if (!addon::is_container_present()) {
+        return [];
+    }
+    return [new \block_xp\local\check\addon_compatibility()];
+}
+
+/**
  * File serving.
  *
  * @param stdClass $course The course object.

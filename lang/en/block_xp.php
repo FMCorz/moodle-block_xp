@@ -85,6 +85,7 @@ $string['changetocourse'] = 'Change to course';
 $string['changetositewide'] = 'Back to sitewide';
 $string['cheatguard'] = 'Cheat guard';
 $string['cheatguardsettingsmovednotice'] = 'The cheat guard settings were moved to the [event rules page]({$a->url}).';
+$string['checkaddoncompatibility'] = 'Level Up XP addon compatibility';
 $string['chooseacondition'] = 'Choose a condition';
 $string['clearfilter'] = 'Clear filter';
 $string['clicktoselectcm'] = 'Click to select an activity or resource';
