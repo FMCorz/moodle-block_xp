@@ -30,7 +30,10 @@ $definitions = [
         'simplekeys' => true,
         'staticacceleration' => true,
     ],
-
+    'metadata' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+    ],
     'ruleevent_eventslist' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,

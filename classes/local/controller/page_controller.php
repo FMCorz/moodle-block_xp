@@ -178,6 +178,15 @@ abstract class page_controller extends course_route_controller {
     protected function content() {
         $output = $this->get_renderer();
 
+        // Warn users if the addon was deactivated.
+        if ($this->world->get_access_permissions()->can_manage() && di::get('addon')->is_deactivated()) {
+            echo $output->notification_without_close(strip_tags(markdown_to_html(
+                get_string('erroraddondeactivated', 'block_xp', [
+                    'docsurl' => (new \moodle_url('https://docs.levelup.plus/xp/docs/addon-deactivated'))->out(false)
+                ])), '<a><em><strong>')
+            , notification::NOTIFY_ERROR);
+        }
+
         // Warn users that they are not where they should be.
         if ($this->world->get_access_permissions()->can_manage()) {
             $isforwholesite = di::get('config')->get('context') == CONTEXT_SYSTEM;
