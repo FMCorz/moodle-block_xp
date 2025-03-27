@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<COMPATIBILITY_MATRIX>
+    <PLUGIN name="block_xp">
+        <CUSTOM_CHECKS>
+            <CUSTOM_CHECK file="blocks/xp/lib.php" function="block_xp_env_check_addon_compatibility" level="optional" />
+        </CUSTOM_CHECKS>
+    </PLUGIN>
+</COMPATIBILITY_MATRIX>

@@ -23,6 +23,21 @@
  */
 
 use block_xp\di;
+use block_xp\local\plugin\addon;
+
+/**
+ * Environment check.
+ *
+ * @return environment_results
+ */
+function block_xp_env_check_addon_compatibility(environment_results $result) {
+    if (!addon::is_container_present() || addon::is_compatible()) {
+        return null;
+    }
+    $result->setFeedbackStr(['envcheckaddonincompatibilitymessage', 'block_xp']);
+    $result->setStatus(false);
+    return $result;
+}
 
 /**
  * File serving.
