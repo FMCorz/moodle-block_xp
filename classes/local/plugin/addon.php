@@ -220,6 +220,8 @@ class addon {
      * @return bool
      */
     protected static function is_passing_compatibility_checks(): bool {
+        global $CFG;
+
         $cache = \cache::make('block_xp', 'metadata');
         $compatibility = $cache->get('addoncompatibilitycheckresult');
         if ($compatibility !== false) {
@@ -227,9 +229,17 @@ class addon {
         }
 
         if (!static::is_compatible()) {
-            $cache->set('addoncompatibilitycheckresult', 'false');
-            post_deactivation_adhoc::schedule();
-            return false;
+            $acceptincompatibility = false;
+            $acceptincompatibilitywith = (string) ($CFG->local_xp_accept_incompatibility_with ?? 0);
+            if (!empty($acceptincompatibilitywith)) {
+                $blockxp = \core_plugin_manager::instance()->get_plugin_info('block_xp');
+                $acceptincompatibility = (string) $blockxp->versiondb === $acceptincompatibilitywith;
+            }
+            if (!$acceptincompatibility) {
+                $cache->set('addoncompatibilitycheckresult', 'false');
+                post_deactivation_adhoc::schedule();
+                return false;
+            }
         }
 
         $cache->set('addoncompatibilitycheckresult', 'true');
