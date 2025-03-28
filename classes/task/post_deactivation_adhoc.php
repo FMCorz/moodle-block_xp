@@ -17,41 +17,27 @@
 namespace block_xp\task;
 
 use block_xp\di;
+use core\task\adhoc_task;
 
 /**
- * Admin notices.
+ * Task.
  *
  * @package    block_xp
- * @copyright  2024 Frédéric Massart
+ * @copyright  2025 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class admin_notices extends \core\task\scheduled_task {
+class post_deactivation_adhoc extends adhoc_task {
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function get_name() {
-        return get_string('taskadminnotices', 'block_xp');
-    }
-
-    /**
-     * Execute.
-     */
     public function execute() {
-        $config = di::get('config');
-
-        if (!$config->get('adminnotices')) {
-            mtrace('Admin notices are disabled, disabling task...');
-            static::set_enabled(false);
+        $addon = di::get('addon');
+        if (!$addon->is_deactivated()) {
             return;
         }
 
-        // No add-on, nothing to do so far.
-        $addon = di::get('addon');
-        if (!$addon->is_activated()) {
+        $config = di::get('config');
+        if (!$config->get('adminnotices')) {
+            mtrace('Admin notices are disabled, skipping deactivation notification.');
             return;
         }
 
@@ -65,30 +51,13 @@ class admin_notices extends \core\task\scheduled_task {
             return;
         }
 
-        $this->execute_out_of_sync_notices($blockxp, $localxp);
-    }
-
-    /**
-     * Execute out of sync notices.
-     *
-     * @param \core\plugininfo\base $blockxp The info.
-     * @param \core\plugininfo\base $localxp The info.
-     */
-    protected function execute_out_of_sync_notices($blockxp, $localxp) {
-        $config = di::get('config');
-        $addon = di::get('addon');
-
-        if (!$addon->is_out_of_sync()) {
-            return;
-        }
-
         // Only send once per major version pair.
-        $key = static::get_version_pair_key($blockxp, $localxp);
-        if ($config->get('lastoutofsyncnoticekey') === $key) {
+        $key = admin_notices::get_version_pair_key($blockxp, $localxp);
+        if ($config->get('lastdeactivationnoticekey') === $key) {
             return;
         }
 
-        $contenthtml = markdown_to_html(get_string('adminnoticeoutofsyncmessage', 'block_xp', [
+        $contenthtml = markdown_to_html(get_string('adminnoticeaddondeactivatedmessage', 'block_xp', [
             'blockxpversion' => $blockxp->release . ' (' . $blockxp->versiondb . ')',
             'localxpversion' => $localxp->release . ' (' . $localxp->versiondb . ')',
             'localxpversionexpected' => $addon->get_expected_release(),
@@ -104,7 +73,7 @@ class admin_notices extends \core\task\scheduled_task {
                 $message->name = 'adminnotice';
                 $message->userfrom = $userfrom;
                 $message->userto = $user;
-                $message->subject = get_string('adminnoticeoutofsyncsubject', 'block_xp');
+                $message->subject = get_string('adminnoticeaddondeactivatedsubject', 'block_xp');
                 $message->fullmessage = $contentplain;
                 $message->fullmessageformat = FORMAT_PLAIN;
                 $message->fullmessagehtml = $contenthtml;
@@ -115,38 +84,16 @@ class admin_notices extends \core\task\scheduled_task {
             }
         }
 
-        $config->set('lastoutofsyncnoticekey', $key);
+        $config->set('lastdeactivationnoticekey', $key);
     }
 
     /**
-     * Get a version pair key.
-     *
-     * @param \core\plugininfo\base $blockxp The info.
-     * @param \core\plugininfo\base $localxp The info.
-     * @return string
+     * Schedule this task.
      */
-    public static function get_version_pair_key($blockxp, $localxp) {
-        $xpversion = (string) floor((int) $blockxp->versiondb / 100);
-        $xppversion = (string) floor((int) $localxp->versiondb / 100);
-        return "{$xpversion}:{$xppversion}";
-    }
-
-    /**
-     * Enable or disable the task.
-     *
-     * @param bool $enabled Whether to enable the task.
-     */
-    public static function set_enabled($enabled) {
-        $task = \core\task\manager::get_scheduled_task('\\' . static::class);
-        if (!$task) {
-            return;
-        }
-        $task->set_disabled(!$enabled);
-        try {
-            \core\task\manager::configure_scheduled_task($task);
-        } catch (\moodle_exception $e) {
-            return;
-        }
+    public static function schedule(): void {
+        $task = new static();
+        $task->set_component('block_xp');
+        \core\task\manager::queue_adhoc_task($task, true);
     }
 
 }

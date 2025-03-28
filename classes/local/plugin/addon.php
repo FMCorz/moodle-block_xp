@@ -25,6 +25,8 @@
 
 namespace block_xp\local\plugin;
 
+use block_xp\task\post_deactivation_adhoc;
+
 /**
  * Addon class.
  *
@@ -226,6 +228,7 @@ class addon {
 
         if (!static::is_compatible()) {
             $cache->set('addoncompatibilitycheckresult', 'false');
+            post_deactivation_adhoc::schedule();
             return false;
         }
 

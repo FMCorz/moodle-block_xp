@@ -32,6 +32,26 @@ $string['addarule'] = 'Add a rule';
 $string['addondeactivated'] = 'XP+ disabled';
 $string['addondeactivatedinfo'] = 'The XP plugins are incompatible with one another, which resulted in XP+ being disabled. The version {$a->localxpversion} of Level Up XP+ (local_xp) is expected.';
 $string['addonnotactivated'] = 'The addon is not activated.';
+$string['adminnoticeaddondeactivatedsubject'] = "XP+ plugin disabled!";
+$string['adminnoticeaddondeactivatedmessage'] = 'Level Up XP+ has been disabled!
+
+You are receiving this notice as a warning because Level Up XP+ was disabled to prevent potential issues. The two plugins Level Up XP (block_xp) and Level Up XP+ (local_xp) are currently incompatible with each other. This issue occurs when XP has been upgraded to a new major version while XP+ remains outdated.
+
+This mismatch can lead to loss of functionality, bugs, and other unexpected consequences. To resolve this, you must upgrade Level Up XP+.
+
+- Level Up XP (block_xp) version: {$a->blockxpversion}
+- Level Up XP+ (local_xp) version: {$a->localxpversion}
+- Level Up XP+ expected version: {$a->localxpversionexpected}
+
+Additional resources:
+
+- [Upgrading documentation](https://docs.levelup.plus/xp/docs/upgrade)
+- [XP+ deactivated documentation](https://docs.levelup.plus/xp/docs/addon-deactivated)
+- [Compatibility documentation](https://docs.levelup.plus/xp/docs/requirements-compatibility)
+
+--
+
+This notice was sent to all administrators. To disable all admin notices, please visit Level Up XP\'s admin settings.';
 $string['adminnoticeoutofsyncmessage'] = 'Level Up XP and Level Up XP+ incompatibility notice!
 
 You are receiving this notice as a warning because the two plugins Level Up XP (block_xp) and Level Up XP+ (local_xp) are currently "out of sync" and incompatible with each other. This issue occurs when XP has been upgraded to a new major version while XP+ remains outdated.
