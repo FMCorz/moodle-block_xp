@@ -31,6 +31,7 @@ require_once($CFG->libdir . '/adminlib.php');
 use block_xp\di;
 use html_writer;
 use block_xp\local\routing\url;
+use core\output\notification;
 use moodle_url;
 use single_button;
 
@@ -138,6 +139,15 @@ class promo_controller extends route_controller {
 
     protected function content() {
         self::mark_as_seen();
+
+        // Warn users if the addon was deactivated.
+        if ($this->world->get_access_permissions()->can_manage() && di::get('addon')->is_deactivated()) {
+            echo di::get('renderer')->notification_without_close(strip_tags(markdown_to_html(
+                get_string('erroraddondeactivated', 'block_xp', [
+                    'docsurl' => (new \moodle_url('https://docs.levelup.plus/xp/docs/addon-deactivated'))->out(false)
+                ])), '<a><em><strong>')
+            , notification::NOTIFY_ERROR);
+        }
 
         $addon = \block_xp\di::get('addon');
         if ($addon->is_activated()) {
