@@ -177,12 +177,12 @@ class addon {
         $pluginman = \core_plugin_manager::instance();
         $blockxp = $pluginman->get_plugin_info('block_xp');
         $localxp = static::get_plugin_info();
-        $blockrelease = $blockxp->release ?? '18.0.0';
-        $localrelease = $localxp->release ?? '0.0.1';
-        $major = function ($release) {
-            return (int) explode('.', $release)[0];
+        $blockversion = $blockxp->versiondisk ?? 1000;
+        $localversion = $localxp->versiondisk ?? 100;
+        $major = function ($version) {
+            return floor($version  / 100);
         };
-        return $major($blockrelease) === $major($localrelease);
+        return $major($blockversion) === $major($localversion);
     }
 
     /**
