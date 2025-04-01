@@ -82,7 +82,8 @@ class ladder_controller extends page_controller {
      * @return division|null
      */
     protected function get_division(): ?division {
-        if ($this->get_groupid()) {
+        $groupid = $this->get_groupid();
+        if ($groupid || $groupid === 0) {
             return new group_division($this->get_groupid());
         }
         return null;
