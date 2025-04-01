@@ -19,6 +19,7 @@ export const AddonRequired = () => {
       href="#"
       role="button"
       onClick={handleClick} /** Older popovers cause a scroll up. */
+      data-bs-toggle="popover"
       data-toggle="popover"
       data-placement="top"
       data-container="body"

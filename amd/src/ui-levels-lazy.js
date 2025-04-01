@@ -391,7 +391,7 @@ const AddonRequired = () => {
     const { promourl } = (0,react.useContext)(AddonContext);
     const getStr = useStrings(["xpplusrequired", "unlockfeaturewithxpplus"]);
     const handleClick = (e) => e.preventDefault();
-    return (react.createElement("a", { href: "#", role: "button", onClick: handleClick, "data-toggle": "popover", "data-placement": "top", "data-container": "body", "data-content": getStr("unlockfeaturewithxpplus", promourl), "data-html": "true", className: "xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline" }, getStr("xpplusrequired")));
+    return (react.createElement("a", { href: "#", role: "button", onClick: handleClick, "data-bs-toggle": "popover", "data-toggle": "popover", "data-placement": "top", "data-container": "body", "data-content": getStr("unlockfeaturewithxpplus", promourl), "data-html": "true", className: "xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline" }, getStr("xpplusrequired")));
 };
 
 ;// CONCATENATED MODULE: ./ui/src/components/Modal.tsx

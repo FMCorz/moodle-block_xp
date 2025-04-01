@@ -30,14 +30,14 @@
             <{{#islevel2}}h2{{/islevel2}}{{^islevel2}}h3{{/islevel2}} class="xp-m-0">{{ title }}
                 {{#hasvisibility}}
                     {{#isvisible}}
-                        <span data-toggle="tooltip" class="xp-inline-block xp-text-base xp-leading-none"
+                        <span data-bs-toggle="tooltip" data-toggle="tooltip" class="xp-inline-block xp-text-base xp-leading-none"
                                 title="{{#str}} pagecurrentvisibletoviewers, block_xp {{/str}}">
                             <span class="xp-sr-only">{{#str}} pagecurrentvisibletoviewers, block_xp {{/str}}</span>
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </span>
                     {{/isvisible}}
                     {{^isvisible}}
-                        <span data-toggle="tooltip" class="xp-inline-block xp-text-base xp-leading-none"
+                        <span data-bs-toggle="tooltip" data-toggle="tooltip" class="xp-inline-block xp-text-base xp-leading-none"
                                 title="{{#str}} pagecurrentnotvisibletoviewers, block_xp {{/str}}">
                             <span class="xp-sr-only">{{#str}} pagecurrentnotvisibletoviewers, block_xp {{/str}}</span>
                             <i class="fa fa-eye-slash" aria-hidden="true"></i>
