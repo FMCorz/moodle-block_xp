@@ -16,6 +16,7 @@
 
 namespace block_xp\local\division;
 
+use block_xp\di;
 use block_xp\local\userfilter\everyone;
 use block_xp\local\userfilter\group_members;
 use block_xp\local\userfilter\user_filter;
@@ -62,11 +63,10 @@ class group_division implements division {
      * @return string
      */
     public function get_name(): string {
-        global $DB;
         if (!$this->groupid) {
             return get_string('allparticipants', 'core');
         }
-        $mingroup = $DB->get_record('groups', ['id' => $this->groupid], 'id, name, courseid');
+        $mingroup = di::get('db')->get_record('groups', ['id' => $this->groupid], 'id, name, courseid');
         if (!$mingroup) {
             return '?';
         }
