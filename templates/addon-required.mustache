@@ -32,13 +32,17 @@
     data-placement="top"
     data-container="body"
     data-content=""
+    data-bs-content=""
     data-html="true"
+    data-bs-html="true"
     class="{{#mx}}xp-mx-2{{/mx}} xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline xp-font-normal xp-align-middle">
     {{#str}} xpplusrequired, block_xp {{/str}}
 </a>
 {{#js}}
 require([], function() {
     var htmlContent = {{#quote}}{{#str}} unlockfeaturewithxpplus, block_xp, {{ promourl }} {{/str}}{{/quote}};
-    document.getElementById('xp-addon-required-{{ uniqid }}').setAttribute('data-content', htmlContent);
+    var node = document.getElementById('xp-addon-required-{{ uniqid }}');
+    node.setAttribute('data-content', htmlContent);
+    node.setAttribute('data-bs-content', htmlContent);
 });
 {{/js}}
