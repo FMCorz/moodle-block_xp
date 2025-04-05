@@ -59,6 +59,16 @@ class default_tasks_definition_maker implements tasks_definition_maker {
                 'month' => '*',
             ],
             [
+                'classname' => 'block_xp\task\state_provisioner',
+                'blocking' => 0,
+                'minute' => 'R',
+                'hour' => 4,
+                'day' => '*',
+                'dayofweek' => '*',
+                'month' => '*',
+                'disabled' => 1,
+            ],
+            [
                 'classname' => 'block_xp\task\usage_report',
                 'blocking' => 0,
                 'minute' => 'R',

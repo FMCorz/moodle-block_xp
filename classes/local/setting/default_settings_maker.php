@@ -198,6 +198,21 @@ class default_settings_maker implements settings_maker {
             ]
         ));
 
+        // Whether to enable state provisioning.
+        $setting = (new admin_setting_configselect('block_xp/provisionstates',
+            get_string('provisionstates', 'block_xp'),
+            get_string('provisionstates_desc', 'block_xp'),
+            $this->defaults->get('provisionstates'), [
+                '0' => get_string('no', 'core'),
+                '1' => get_string('yes', 'core'),
+            ]
+        ));
+        $setting->set_updatedcallback(function() {
+            $isenabled = (bool) get_config('block_xp', 'provisionstates');
+            \block_xp\task\state_provisioner::set_enabled($isenabled);
+        });
+        $settings[] = $setting;
+
         // Keeps logs for.
         $settings[] = (new admin_setting_configselect('block_xp/keeplogs',
             get_string('keeplogs', 'block_xp'), '',
