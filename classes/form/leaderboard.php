@@ -85,6 +85,21 @@ class leaderboard extends dynamic_form {
         $mform->addElement('group', 'ladderiso', get_string('ladderiso', 'block_xp'), $els);
         $mform->addHelpButton('ladderiso', 'ladderiso', 'block_xp');
 
+        $els = [];
+        $els[] = $mform->createElement('select', 'choices', '', [
+            get_string('ladderparticipationforced', 'block_xp'),
+            get_string('ladderparticipationoptout', 'block_xp'),
+            get_string('ladderparticipationoptin', 'block_xp'),
+        ], ['disabled' => 'disabled']);
+        $els[] = $mform->createElement(staticfield::name(), 'addonrequired', '', function() {
+            $renderer = di::get('renderer');
+            return $renderer->render_from_template('block_xp/addon-required', [
+                'promourl' => di::get('url_resolver')->reverse('promo', ['courseid' => $this->world->get_courseid()])->out(false),
+            ]);
+        });
+        $mform->addElement('group', 'ladderparticipation', get_string('ladderparticipation', 'block_xp'), $els);
+        $mform->addHelpButton('ladderparticipation', 'ladderparticipation', 'block_xp');
+
         $mform->addElement('select', 'identitymode', get_string('anonymity', 'block_xp'), [
             course_world_config::IDENTITY_OFF => get_string('hideparticipantsidentity', 'block_xp'),
             course_world_config::IDENTITY_ON => get_string('displayparticipantsidentity', 'block_xp'),

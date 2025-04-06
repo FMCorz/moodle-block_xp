@@ -308,6 +308,19 @@ $string['ladderiso_help'] = "Create separate leaderboards for different groups o
 - Using cohorts: Only members of the same cohort will appear in a person's leaderboard.
 
 [More info](https://docs.levelup.plus/xp/docs/leaderboard-isolation)";
+$string['ladderparticipation'] = 'Participation';
+$string['ladderparticipation_help'] = 'Defines whether users are expected to participate in the leaderboard, or whether they can join or leave as per their preference.
+
+- Automatic, no opt-out: All users join the leaderboard automatically and cannot leave it.
+- Automatic, opt-out avaialble: All users automatically join the leaderboard but can choose to leave it.
+- Optional, by opt-in: Users must explicitly join the leaderboard to participate in it.
+
+Users can change their mind and leave or rejoin the leaderboard after opting in or out. However, to prevent unintended behaviour, users joining the leaderboard cannot opt-out for 3 days.
+
+[More info](https://docs.levelup.plus/xp/docs/leaderboard-opt-out)';
+$string['ladderparticipationforced'] = 'Automatic, no opt-out';
+$string['ladderparticipationoptin'] = 'Optional, by opt-in';
+$string['ladderparticipationoptout'] = 'Automatic, opt-out allowed';
 $string['laddersettingsmovednotice'] = 'The leaderboard settings were moved to the [leaderboard page]({$a->url}).';
 $string['learnmore'] = 'Learn more';
 $string['level'] = 'Level';
