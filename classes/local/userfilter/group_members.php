@@ -14,15 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * User filter.
- *
- * @package    block_xp
- * @copyright  2024 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\userfilter;
 
 /**
@@ -53,9 +44,20 @@ class group_members implements user_filter {
      * @return array
      */
     public function get_sql(string $useridalias): array {
-        $sql = "$useridalias IN (SELECT userid FROM {groups_members} WHERE groupid = :groupid)";
-        $params = ['groupid' => (int) $this->groupid];
+        $paramname = static::generate_param_name();
+        $sql = "$useridalias IN (SELECT userid FROM {groups_members} WHERE groupid = :$paramname)";
+        $params = [$paramname => (int) $this->groupid];
         return [$sql, $params];
+    }
+
+    /**
+     * Generate a parameter name.
+     *
+     * @return string
+     */
+    protected static function generate_param_name(): string {
+        static $i = 0;
+        return 'xpufgm' . $i++;
     }
 
 }
