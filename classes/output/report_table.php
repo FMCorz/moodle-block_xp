@@ -121,6 +121,7 @@ class report_table extends table_sql {
         $this->no_sorting('progress');
         $this->collapsible(false);
         $this->set_attribute('class', 'block_xp-report-table');
+        $this->column_class('actions', 'col-actions');
     }
 
     /**
