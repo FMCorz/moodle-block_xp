@@ -41,14 +41,19 @@ function open(node) {
     const formArgs = extractNodeData(node, 'formArgs');
     const modalConfig = extractNodeData(node, 'modal');
 
+    const finalModalConfig = {
+        title: modalConfig.title ?? node.textContent.slice(0, 100),
+    };
+    if ('large' in modalConfig) {
+        finalModalConfig.large = Boolean(modalConfig.large);
+    }
+
     var modalForm = new ModalForm({
         formClass: formClass,
         args: formArgs,
         returnFocus: node,
         saveButtonText: modalConfig.saveButtonText,
-        modalConfig: {
-            title: modalConfig.title ?? node.textContent.slice(0, 100),
-        }
+        modalConfig: finalModalConfig
     });
     modalForm.addEventListener(modalForm.events.LOADED, () => {
         const root = modalForm.modal.getRoot();
@@ -63,6 +68,9 @@ function open(node) {
             if (modalConfig.buttons.save?.danger) {
                 saveBtn.classList.remove('btn-primary');
                 saveBtn.classList.add('btn-danger');
+            }
+            if (modalConfig.buttons.save?.disabled) {
+                saveBtn.setAttribute('disabled', '');
             }
         }
     });
