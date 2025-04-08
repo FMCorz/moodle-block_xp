@@ -204,6 +204,12 @@ a .block_xp-level {
 .block_xp-report-table td {
     vertical-align: middle !important;
 }
+.block_xp-report-table .col-userpic {
+    width: 1px;
+}
+.block_xp-report-table .col-userpic img {
+    margin: 0;
+}
 
 /**
  * Any tables.
