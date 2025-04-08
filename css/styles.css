@@ -175,6 +175,15 @@ a .block_xp-level {
     /* Using !important because it's late and I can't be bothered looking for an alternative. */
     vertical-align: middle !important;
 }
+.block_xp-table .col-actions {
+    width: 1px;
+}
+.block_xp-table .header.col-actions {
+    padding: 0 !important;
+}
+.block_xp-table .col-actions:empty {
+    padding: 0;
+}
 .block_xp-table .col-lvl {
     width: 50px;
     text-align: center;

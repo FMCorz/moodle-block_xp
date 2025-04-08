@@ -29,6 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
 
 use block_xp\local\config\course_world_config;
+use block_xp\local\config\immutable_config;
+use block_xp\local\config\static_config;
 use block_xp\local\leaderboard\leaderboard;
 use block_xp\local\routing\url;
 use block_xp\local\sql\limit;
@@ -52,6 +54,13 @@ class leaderboard_table extends flexible_table {
     protected $context;
     /** @var bool Whether the user can view profiles. */
     protected $canviewprofiles = false;
+    /** @var array The columns to discard. */
+    protected $discardcolumns = [];
+    /** @var array The columns definition where keys are IDs, values are lang strings. */
+    protected $columnsdefinition;
+
+    /** @var config Some config. */
+    protected $config;
 
     /** @var leaderboard The leaderboard. */
     protected $leaderboard;
@@ -88,8 +97,7 @@ class leaderboard_table extends flexible_table {
             array $options,
             $userid
         ) {
-
-        global $CFG, $PAGE, $USER;
+        global $PAGE;
         parent::__construct('block_xp_ladder');
 
         // The user ID we're viewing the ladder for.
@@ -98,6 +106,7 @@ class leaderboard_table extends flexible_table {
         // Block XP stuff.
         $this->leaderboard = $leaderboard;
         $this->xpoutput = $renderer;
+        $this->config = new immutable_config($options['config'] ?? new static_config());
 
         // Check options.
         if (isset($options['context'])) {
@@ -105,29 +114,38 @@ class leaderboard_table extends flexible_table {
         } else {
             $this->context = $PAGE->context;
         }
-        if (isset($options['rankmode'])) {
-            $this->rankmode = $options['rankmode'];
-        }
-        if (isset($options['identitymode'])) {
-            $this->identitymode = $options['identitymode'];
+
+        // Set the common options, prefer the config if set.
+        $optionkeys = ['rankmode', 'identitymode'];
+        foreach ($optionkeys as $optionkey) {
+            if ($this->config->has($optionkey)) {
+                $this->{$optionkey} = $this->config->get($optionkey);
+            } else if (isset($options[$optionkey])) {
+                $this->{$optionkey} = $options[$optionkey];
+            }
         }
         if (isset($options['fence'])) {
             $this->fence = $options['fence'];
         }
-        $leaderboardcols = $this->leaderboard->get_columns();
         if (isset($options['discardcolumns'])) {
-            $leaderboardcols = array_diff_key($leaderboardcols, array_flip($options['discardcolumns']));
+            $this->discardcolumns = $options['discardcolumns'];
         }
 
         $this->canviewprofiles = has_capability('moodle/user:viewdetails', $this->context);
 
-        // Define columns, and headers.
-        $columns = array_keys($leaderboardcols);
-        $headers = array_map(function($header) {
-            return (string) $header;
-        }, array_values($leaderboardcols));
-        $this->define_columns($columns);
-        $this->define_headers($headers);
+        // Init the stuff.
+        $this->init();
+    }
+
+    /**
+     * Init function.
+     *
+     * @return void
+     */
+    protected function init(): void {
+        $columns = $this->get_columns_definition();
+        $this->define_columns(array_keys($columns));
+        $this->define_headers(array_values($columns));
 
         // Define various table settings.
         $this->sortable(false);
@@ -136,6 +154,39 @@ class leaderboard_table extends flexible_table {
         $this->column_class('rank', 'col-rank');
         $this->column_class('level', 'col-lvl');
         $this->column_class('userpic', 'col-userpic');
+        $this->column_class('actions', 'col-actions');
+    }
+
+    /**
+     * Generate the columns definition.
+     *
+     * @return array
+     */
+    protected function generate_columns_definition(): array {
+        $leaderboardcols = array_diff_key($this->leaderboard->get_columns(), $this->discardcolumns);
+        return $leaderboardcols;
+    }
+
+    /**
+     * Get the columns definition.
+     *
+     * @return array
+     */
+    final protected function get_columns_definition() {
+        if (!isset($this->columnsdefinition)) {
+            $this->columnsdefinition = $this->generate_columns_definition();
+        }
+        return $this->columnsdefinition;
+    }
+
+    /**
+     * Get the actions for row.
+     *
+     * @param stdClass $row Table row.
+     * @return action_menu_link[] List of actions.
+     */
+    protected function get_row_actions($row) {
+        return [];
     }
 
     /**
@@ -172,6 +223,20 @@ class leaderboard_table extends flexible_table {
             $this->add_data_keyed($this->rank_to_keyed_data($rank), $classes);
         }
         $this->finish_output();
+    }
+
+    /**
+     * Formats the column actions.
+     *
+     * @param stdClass $row Table row.
+     * @return string Output produced.
+     */
+    protected function col_actions($row) {
+        $actions = $this->get_row_actions($row);
+        if (empty($actions)) {
+            return '';
+        }
+        return $this->xpoutput->control_menu($actions);
     }
 
     /**
@@ -368,6 +433,7 @@ class leaderboard_table extends flexible_table {
             'rank' => $this->col_rank($row),
             'xp' => $this->col_xp($row),
             'userpic' => $this->col_userpic($row),
+            'actions' => isset($this->columns['actions']) ? $this->col_actions($row) : '',
         ];
     }
 

@@ -245,12 +245,12 @@ class handler {
         // Output the table.
         $config = $world->get_config();
         $baseurl = $PAGE->url;
+        $discardcolumns = ['actions'];
         $table = new \block_xp\output\leaderboard_table($leaderboard, di::get('renderer'), [
             'context' => $world->get_context(),
             'fence' => $limit,
-            'rankmode' => $config->get('rankmode'),
-            'identitymode' => $config->get('identitymode'),
-            'discardcolumns' => !empty($args['withprogress']) ? [] : ['progress'],
+            'config' => $config,
+            'discardcolumns' => array_merge($discardcolumns, !empty($args['withprogress']) ? [] : ['progress']),
         ], $USER->id);
         $table->define_baseurl($baseurl);
         ob_start();
