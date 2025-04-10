@@ -170,6 +170,27 @@ class behat_block_xp extends behat_base {
     }
 
     /**
+     * Step to follow a link in the XP leaderboard.
+     *
+     * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" for "(?P<student>(?:[^"]|\\")*)" in the XP leaderboard$/
+     * @param string $text
+     * @param string $studentname
+     */
+    public function i_follow_foo_for_in_xp_leaderboard($text, $studentname) {
+        $rowxpath = "//tr[contains(normalize-space(.), '$studentname')]";
+
+        $this->execute('behat_general::i_click_on_in_the', [
+            '.action-menu [role="button"]', "css_element",
+            $rowxpath, "xpath_element",
+        ]);
+
+        $this->execute('behat_general::i_click_on_in_the', [
+            $text, "link",
+            $rowxpath, "xpath_element",
+        ]);
+    }
+
+    /**
      * Step to follow a link in the XP report.
      *
      * @Given /^I follow "(?P<text>(?:[^"]|\\")*)" for "(?P<student>(?:[^"]|\\")*)" in( the)? XP report$/
@@ -204,6 +225,53 @@ class behat_block_xp extends behat_base {
         $this->execute('behat_general::i_click_on_in_the', [
             "$text", "link",
             "[data-region='block_xp-page_menu'] .dropdown", "css_element",
+        ]);
+    }
+
+    /**
+     * Open the action menu in the XP report.
+     *
+     * @Given /^I open the action menu for "(?P<student>(?:[^"]|\\")*)" in the XP report$/
+     * @param string $studentname
+     */
+    public function i_open_action_menu_for_in_xp_report($studentname) {
+        $rowxpath = "//tr[contains(normalize-space(.), '$studentname')]";
+
+        $this->execute('behat_general::i_click_on_in_the', [
+            '.action-menu [role="button"]', "css_element",
+            $rowxpath, "xpath_element",
+        ]);
+    }
+
+    /**
+     * A table row contains.
+     *
+     * @Given /^the table row "(?P<text>(?:[^"]|\\")*)" should contain "(?P<element>(?:[^"]|\\")*)" "(?P<elementtype>(?:[^"]|\\")*)"$/
+     * @param string $text
+     * @param string $element
+     * @param string $elementtype
+     */
+    public function the_table_row_foo_should_contain($text, $element, $elementtype) {
+        $rowxpath = "//tr[contains(normalize-space(.), '$text')]";
+        $this->execute('behat_general::should_exist_in_the', [
+            $element, $elementtype,
+            $this->find('xpath', $rowxpath), 'NodeElement'
+        ]);
+    }
+
+    /**
+     * A table row does not contain.
+     *
+     * @Given /^the table row "(?P<text>(?:[^"]|\\")*)" should not contain "(?P<element>(?:[^"]|\\")*)" "(?P<elementtype>(?:[^"]|\\")*)"$/
+     * @param string $text
+     * @param string $element
+     * @param string $elementtype
+     */
+    public function the_table_row_foo_should_not_contain($text, $element, $elementtype) {
+        $rowxpath = "//tr[contains(normalize-space(.), '$text')]";
+        $this->execute('behat_general::should_not_exist_in_the', [
+            $element, $elementtype,
+            $this->find('xpath', $rowxpath), 'NodeElement'
         ]);
     }
 
