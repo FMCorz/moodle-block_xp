@@ -357,7 +357,7 @@ $string['levelup'] = 'Level up!'; // The action, not the brand!
 $string['levelupoptionsunavailableforlevelone'] = 'Options related to attaining the level are unavailable for the first level.';
 $string['levelupplus'] = 'Level Up XP+';
 $string['levelx'] = 'Level #{$a}';
-$string['likenotice'] = '<strong>Do you like the plugin?</strong> Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourites</a> on Moodle.org and <a href="{$a->github}" target="_blank">star it on GitHub</a>.';
+$string['likenotice'] = 'Are you enjoying Level Up XP? Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourite</a> plugins on Moodle.org.';
 $string['limitparticipants'] = 'Limit participants';
 $string['limitparticipants_help'] = 'This setting controls who is displayed in the leaderboard. Neighbours are the participants ranked above and below the current user. For instance, when choosing \'Display 2 neighbours\', only the two participants ranked directly higher and lower than the current user will be displayed.';
 $string['logging'] = 'Logging';
@@ -466,7 +466,7 @@ $string['promointroinstalled'] = 'The add-on _Level Up XP+_ is installed on your
 $string['promorulesdidyouknow'] = 'Did you know that with <em>Level Up XP+</em> students can receive points for <em>completing courses</em> and <em>activities</em>, or even receive points according to their <em>grades</em>? <a href="{$a->url}">Discover more here</a>.';
 $string['provisionstates'] = 'Automatic user provisioning';
 $string['provisionstates_desc'] = 'By default, users only appear in the leaderboard (and the report in sitewide mode), after they have been detected by XP. User provisioning is an advanced feature that automatically creates entries for missing users loosely identified by their role. This is done periodically via a scheduled task that runs daily by default. [Learn mode](https://docs.levelup.plus/xp/docs/automatic-user-provisioning)';
-$string['questreleasenotice'] = '🎉 We are excited to announce our **new gamification plugin** called **Level Up Quest** 🥳. Turn your courses into **exciting adventures**, filled with **re-engagement strategies** and **celebrations** 🤯! Check out [Quest\'s website]({$a->questurl}) and our [launch post here]({$a->questblogurl}). 👈';
+$string['questpromonotice'] = 'Take gamification to the next level, discover [Level Up Quest]({$a->questurl}).';
 $string['quickeditpoints'] = 'Quick edit points';
 $string['rank'] = 'Rank';
 $string['ranked'] = 'Ranked';
@@ -806,3 +806,6 @@ $string['outofsyncexcessiveinfo'] = 'XP+ is excessively older than XP which can 
 $string['resetcourserulestodefaults'] = 'Reset course rules to defaults';
 $string['resetlevelstodefaults'] = 'Reset levels to defaults';
 $string['resetvisualstodefaults'] = 'Reset appearance to defaults';
+
+// Deprecated since XP 18
+$string['questreleasenotice'] = 'Take gamification to the next level, discover **Level Up Quest** 🥳. Turn your courses into **exciting adventures**, filled with **re-engagement strategies** and **celebrations** 🤯! Check out [Quest\'s website]({$a->questurl}) and our [launch post here]({$a->questblogurl}). 👈';
