@@ -390,6 +390,7 @@ $string['navpromo'] = 'XP+';
 $string['navreport'] = 'Report';
 $string['navsettings'] = 'Settings';
 $string['navvisuals'] = 'Appearance';
+$string['newversioninstallednotice'] = 'A new version was installed! Discover what\'s new in the [release notes]({$a->releasenotesurl}).';
 $string['nextlevelin'] = 'next level in';
 $string['noconditionsyet'] = 'No conditions, yet!';
 $string['noconditionsyetintro'] = 'Get started by adding a condition.';
