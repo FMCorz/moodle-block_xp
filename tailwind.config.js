@@ -19,6 +19,7 @@ module.exports = {
         '../../local/xp/classes/local/controller/**/*.php',
         '../../local/xp/classes/local/rule/*.php',
         '../../local/xp/classes/local/shortcode/handler.php',
+        '../../local/xp/classes/output/**/*.php',
     ],
     theme: {
         extend: {
