@@ -98,6 +98,7 @@ $string['blockappearancemovedtopluginsettings'] = 'The block appearance settings
 $string['cachedef_filters'] = 'Level filters';
 $string['cachedef_metadata'] = 'Metadata';
 $string['cachedef_ruleevent_eventslist'] = 'List of some events';
+$string['canjoinfromdatex'] = 'You will be able to join from {$a}.';
 $string['cannotbesetindefaults'] = 'This cannot be set in the default values.';
 $string['cannotearnpoints'] = 'Cannot earn points.';
 $string['cannotshowblockconfig'] = 'I would usually display the appearance settings here, but I could not find your block. To change the block\'s appearance, head back [here]({$a}) (or where you added the block), turn editing mode on, and follow the "Configure" option in the block\'s dropdown. If you cannot find the block, add it to your course again.';
@@ -290,6 +291,12 @@ $string['installed'] = 'Installed';
 $string['instructions'] = 'Instructions';
 $string['instructions_help'] = 'The instructions will be displayed on the information page. You may use them to share information and instructions regarding the levels, how to obtain points, etc.';
 $string['invalidxp'] = 'Invalid points value';
+$string['join'] = 'Join';
+$string['joinleadeboardconfirmnote'] = 'Fantastic, we\'re thrilled to have you on board!
+
+Please note that once you join there\'s a waiting period before you can leave the leaderboard if you change your mind.';
+$string['joinleadeboardlockednote'] = 'You cannot join the leaderboard.';
+$string['joinleaderboard'] = 'Join leaderboard';
 $string['keeplogs'] = 'Keep logs';
 $string['ladder'] = 'Leaderboard';
 $string['ladder_help'] = 'The leaderboard ranks students based on their points. When used in a course with groups, it can create a ranking for each group of student.
@@ -309,10 +316,10 @@ $string['ladderiso_help'] = "Create separate leaderboards for different groups o
 
 [More info](https://docs.levelup.plus/xp/docs/leaderboard-isolation)";
 $string['ladderparticipation'] = 'Participation';
-$string['ladderparticipation_help'] = 'Defines whether users are expected to participate in the leaderboard, or whether they can join or leave as per their preference.
+$string['ladderparticipation_help'] = 'Defines if users are expected to participate in the leaderboard, or if they can join or leave as per their preference.
 
 - Automatic, no opt-out: All users join the leaderboard automatically and cannot leave it.
-- Automatic, opt-out avaialble: All users automatically join the leaderboard but can choose to leave it.
+- Automatic, opt-out available: All users automatically join the leaderboard but can choose to leave it.
 - Optional, by opt-in: Users must explicitly join the leaderboard to participate in it.
 
 Users can change their mind and leave or rejoin the leaderboard after opting in or out. However, to prevent unintended behaviour, users joining the leaderboard cannot opt-out for 3 days.
@@ -320,9 +327,18 @@ Users can change their mind and leave or rejoin the leaderboard after opting in 
 [More info](https://docs.levelup.plus/xp/docs/leaderboard-opt-out)';
 $string['ladderparticipationforced'] = 'Automatic, no opt-out';
 $string['ladderparticipationoptin'] = 'Optional, by opt-in';
-$string['ladderparticipationoptout'] = 'Automatic, opt-out allowed';
+$string['ladderparticipationoptout'] = 'Automatic, opt-out available';
+$string['ladderparticipationreset'] = "Remove everyone's recorded participation status.";
+$string['ladderparticipationreset_help'] = 'When checked, the participation status of all users will be erased, and all users will need to opt-in or out again.';
 $string['laddersettingsmovednotice'] = 'The leaderboard settings were moved to the [leaderboard page]({$a->url}).';
 $string['learnmore'] = 'Learn more';
+$string['leave'] = 'Leave';
+$string['leaveleadeboardconfirmnote'] = 'Are you sure that you would like to leave the leaderboard?
+
+Once you leave, you lose access to the rankings, but you can always rejoin later if you change your mind.';
+$string['leaveleadeboardlockednote'] = 'You cannot leave the leaderboard.';
+$string['leaveleadeboardlockeduntilnote'] = 'You cannot leave the leaderboard until {$a}.';
+$string['leaveleaderboard'] = 'Leave leaderboard';
 $string['level'] = 'Level';
 $string['levelbadge'] = 'Level badge';
 $string['levelbadges'] = 'Level badges';
@@ -385,8 +401,11 @@ $string['noneareavailable'] = 'None are available.';
 $string['notecompatibilityissues'] = 'Please note the compatibility issues identified below:';
 $string['notesomesettingslocked'] = 'Note that some settings may not be editable when they have been locked by an administrator.';
 $string['nothingmatchesfilter'] = 'Nothing matches the filter.';
+$string['notparticipating'] = 'Not participating';
+$string['notranked'] = 'Not ranked';
 $string['numberoflevels'] = 'Number of levels';
 $string['occasionally'] = 'Occasionally';
+$string['onlyparticipantscanaccessranking'] = 'Only those participating in the leaderboard can access the rankings.';
 $string['outofsync'] = 'XP plugins incompatibility';
 $string['outofsyncinfo'] = 'The XP plugins are incompatible with one another which can lead to unexpected issues. In the future, XP+ will automatically disable itself. The version {$a->localxpversion} of Level Up XP+ (local_xp) is expected.';
 $string['pagecurrentnotvisibletoviewers'] = 'This page is not currently visible to students.';
@@ -394,7 +413,10 @@ $string['pagecurrentvisibletoviewers'] = 'This page is currently visible to stud
 $string['pagesettings'] = 'Page settings';
 $string['participant'] = 'Participant';
 $string['participants'] = 'Participants';
+$string['participatesinleaderboard'] = 'Participates in the leaderboard.';
+$string['participatesnotinleaderboard'] = 'Does not participate in the leaderboard.';
 $string['participatetolevelup'] = 'Participate in the course to gain experience points and level up!';
+$string['participating'] = 'Participating';
 $string['perpagecolon'] = 'Per page:';
 $string['pickaconditiontype'] = 'Pick a condition type';
 $string['pluginavailabilityxpdesc'] = 'This plugin lets instructors restrict access to activities based on students\' levels.';
@@ -447,6 +469,7 @@ $string['provisionstates_desc'] = 'By default, users only appear in the leaderbo
 $string['questreleasenotice'] = '🎉 We are excited to announce our **new gamification plugin** called **Level Up Quest** 🥳. Turn your courses into **exciting adventures**, filled with **re-engagement strategies** and **celebrations** 🤯! Check out [Quest\'s website]({$a->questurl}) and our [launch post here]({$a->questblogurl}). 👈';
 $string['quickeditpoints'] = 'Quick edit points';
 $string['rank'] = 'Rank';
+$string['ranked'] = 'Ranked';
 $string['ranking'] = 'Ranking';
 $string['ranking_help'] = 'The rank is the absolute position of the current user in the leaderboard. The relative rank is the difference in experience points between a user and their neighbours.';
 $string['reallydeleteuserstate'] = 'Deleting a user is only useful to remove them from the leaderboard. For any other reasons, we recommend setting their points to 0 instead. Note that deleting them does not affect their ability to earn points in the future.
@@ -482,6 +505,7 @@ $string['resetcoursedata'] = 'Reset course data';
 $string['resetallcoursestodefaults'] = 'Reset all courses to defaults';
 $string['resetallcoursestodefaultsintro'] = 'Click the button below to reset all courses to the above defaults.';
 $string['resetgroupdata'] = 'Reset group data';
+$string['resetladderparticiptionofeveryone'] = 'Reset the participation status of everyone';
 $string['resettodefaults'] = 'Reset to defaults';
 $string['resultsfilteredforn'] = 'Results filtered for {$a}.';
 $string['reward'] = 'Reward';
@@ -673,6 +697,10 @@ $string['unavailable'] = 'Unavailable';
 $string['unstableversioninstalledinfo'] = 'This version of Level Up XP (block_xp) is still in development and considered unstable, please use an official release.';
 $string['upgradingplugins'] = 'Upgrading the plugins';
 $string['unstableversioninstalled'] = 'Unstable version installed';
+$string['userladderparticipation'] = 'Leaderboard participation';
+$string['userladderparticipation_help'] = 'Determines whether the user is currently participating in the leaderboard. This does not affect the team leaderboard.';
+$string['userladderparticipationlocked'] = 'Lock participation until';
+$string['userladderparticipationlocked_help'] = 'The date from which the user is free to change their participation preference.';
 $string['value'] = 'Value';
 $string['visualsintro'] = 'Customise the appearance of the levels, and the meaning of the points.';
 $string['wherearexpused'] = 'Where are points used?';
