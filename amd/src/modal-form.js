@@ -166,3 +166,24 @@ function setAtDepth(obj, keys, value) {
 
     return obj;
 }
+
+let simpleOpenFormActionObserverRegistered = false;
+const simpleOpenFormActionObserverSelector = '[data-xp-action="open-form"][data-form-class]';
+
+/**
+ * Register simple open form action observer.
+ */
+export function registerSimpleOpenFormActionObserver() {
+    if (simpleOpenFormActionObserverRegistered) {
+        return;
+    }
+    simpleOpenFormActionObserverRegistered = true;
+    document.body.addEventListener('click', (e) => {
+        const node = e.target.closest(simpleOpenFormActionObserverSelector);
+        if (!node) {
+            return;
+        }
+        e.preventDefault();
+        open(node);
+    });
+}

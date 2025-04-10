@@ -332,7 +332,7 @@ class report_table extends table_sql {
             get_string('edit', 'core'),
             false,
             [
-                'data-action' => 'open-form',
+                'data-xp-action' => 'open-form',
                 'data-form-class' => 'block_xp\form\user_xp',
                 'data-form-args__contextid' => $this->world->get_context()->id,
                 'data-form-args__userid' => $row->id,

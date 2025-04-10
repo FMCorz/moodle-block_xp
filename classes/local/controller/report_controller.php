@@ -298,8 +298,6 @@ class report_controller extends page_controller {
                 return $output->render($button);
             }, $actions)));
         }
-
-        $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
     }
 
     protected function page_user_filter() {

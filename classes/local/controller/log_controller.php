@@ -163,8 +163,6 @@ class log_controller extends page_controller {
         echo html_writer::start_div('xp-cancel-overflow');
         echo $this->get_table()->out(50, !$singleuser && $this->isusingoldxpp);
         echo html_writer::end_div();
-
-        $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
     }
 
     protected function page_user_filter() {

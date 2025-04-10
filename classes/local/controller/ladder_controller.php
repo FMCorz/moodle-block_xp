@@ -186,8 +186,6 @@ class ladder_controller extends page_controller {
         }
 
         $this->page_ranking();
-
-        $PAGE->requires->js_call_amd('block_xp/modal-form', 'registerOpen', ['[data-action="open-form"]']);
     }
 
     /**
@@ -212,7 +210,7 @@ class ladder_controller extends page_controller {
         return array_filter([
             [
                 'label' => get_string('pagesettings', 'block_xp'),
-                'data-action' => 'open-form',
+                'data-xp-action' => 'open-form',
                 'data-form-class' => di::get('leaderboard_form_class'),
                 'data-form-args__contextid' => $this->world->get_context()->id,
                 'href' => '#',
