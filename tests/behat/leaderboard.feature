@@ -37,7 +37,7 @@ Feature: The leaderboard shows a ranking of students based on their points
      | Nathaniel Chambers | 2    | 50    |
      | Allison Black      | 3    | 25    |
      | Tony Pierce        | 4    | 5     |
-    And the "title" attribute of "h3 [title]" "css_element" should contain "This page is currently visible to students"
+    And "This page is currently visible to students" "text" should exist in the "h3 span" "css_element"
     When I am on the "c1" "block_xp > leaderboard" page logged in as "s1"
     Then "h3 [title]" "css_element" should not exist
     And the following should exist in the "table" table:
@@ -72,11 +72,11 @@ Feature: The leaderboard shows a ranking of students based on their points
     And I am on the "c1" "Course" page logged in as "s1"
     And I should see "Leaderboard" in the "Level up!" "block"
     And I am on the "c1" "block_xp > leaderboard" page logged in as "t1"
-    And the "title" attribute of "h3 [title]" "css_element" should contain "This page is currently visible to students"
+    And "This page is currently visible to students" "text" should exist in the "h3 span" "css_element"
     And I follow "Page settings" in the XP page menu
     And I set the field "Enable the leaderboard" to "No"
     When I press "Save changes"
-    Then the "title" attribute of "h3 [title]" "css_element" should contain "This page is not currently visible to students"
+    Then "This page is not currently visible to students" "text" should exist in the "h3 span" "css_element"
     And I am on the "c1" "Course" page logged in as "s1"
     And I should not see "Leaderboard" in the "Level up!" "block"
 
