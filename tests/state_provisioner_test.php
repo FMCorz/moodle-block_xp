@@ -32,8 +32,8 @@ use context_system;
  * @copyright  2025 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @covers     block_xp\task\state_provisioner
- * @covers     block_xp\local\xp\course_user_state_provisioner
+ * @covers     \block_xp\task\state_provisioner
+ * @covers     \block_xp\local\xp\course_user_state_provisioner
  */
 final class state_provisioner_test extends base_testcase {
 
@@ -109,7 +109,6 @@ final class state_provisioner_test extends base_testcase {
             if ($expectedexists) {
                 $this->assert_state_exists($w1, $u2->id);
             } else {
-                // This case shouldn't happen if rolepermission is 'allow' and expectedexists is false, but included for completeness.
                 $this->assert_state_does_not_exist($w1, $u2->id);
             }
         } else {
@@ -283,7 +282,7 @@ final class state_provisioner_test extends base_testcase {
                 'isenabled' => false,
                 'rolepermission' => 'allow',
                 'expectedexists' => false,
-            ]
+            ],
         ];
     }
 
@@ -455,7 +454,7 @@ final class state_provisioner_test extends base_testcase {
      * Run the task.
      */
     protected function run_task(): void {
-        /** @var state_provisioner */
+        /** @var state_provisioner */ // @codingStandardsIgnoreLine
         $task = \core\task\manager::get_scheduled_task(state_provisioner::class);
         $task->set_task_logger(new \null_progress_trace());
         $task->execute();

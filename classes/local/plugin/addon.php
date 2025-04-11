@@ -180,7 +180,7 @@ class addon {
         $blockversion = $blockxp->versiondisk ?? 1000;
         $localversion = $localxp->versiondisk ?? 100;
         $major = function ($version) {
-            return floor($version  / 100);
+            return floor($version / 100);
         };
         return $major($blockversion) === $major($localversion);
     }

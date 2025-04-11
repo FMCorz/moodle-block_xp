@@ -88,6 +88,7 @@ class behat_block_xp extends behat_base {
             $this->execute('behat_general::i_click_on', [$locator, $selectortype]);
         } catch (ElementNotFoundException $e) {
             // Ignore.
+            $e = $e;
         }
     }
 
@@ -113,7 +114,7 @@ class behat_block_xp extends behat_base {
                     '.filters-list .filter', 'css_element',
                 ]);
             } else {
-                $this->execute('behat_general::i_hover', ['Delete rule', 'link',]);
+                $this->execute('behat_general::i_hover', ['Delete rule', 'link']);
             }
             $this->execute('behat_general::i_click_on', ['Delete rule', 'link']);
 
@@ -246,8 +247,8 @@ class behat_block_xp extends behat_base {
     /**
      * A table row contains.
      *
-     * @Given /^the table row "(?P<text>(?:[^"]|\\")*)" should contain "(?P<element>(?:[^"]|\\")*)" "(?P<elementtype>(?:[^"]|\\")*)"$/
-     * @param string $text
+     * @Given /^the table row "(?P<t>(?:[^"]|\\")*)" should contain "(?P<e>(?:[^"]|\\")*)" "(?P<etype>(?:[^"]|\\")*)"$/
+     * @param string $ttext
      * @param string $element
      * @param string $elementtype
      */
@@ -255,14 +256,14 @@ class behat_block_xp extends behat_base {
         $rowxpath = "//tr[contains(normalize-space(.), '$text')]";
         $this->execute('behat_general::should_exist_in_the', [
             $element, $elementtype,
-            $this->find('xpath', $rowxpath), 'NodeElement'
+            $this->find('xpath', $rowxpath), 'NodeElement',
         ]);
     }
 
     /**
      * A table row does not contain.
      *
-     * @Given /^the table row "(?P<text>(?:[^"]|\\")*)" should not contain "(?P<element>(?:[^"]|\\")*)" "(?P<elementtype>(?:[^"]|\\")*)"$/
+     * @Given /^the table row "(?P<t>(?:[^"]|\\")*)" should not contain "(?P<e>(?:[^"]|\\")*)" "(?P<etype>(?:[^"]|\\")*)"$/
      * @param string $text
      * @param string $element
      * @param string $elementtype
@@ -271,7 +272,7 @@ class behat_block_xp extends behat_base {
         $rowxpath = "//tr[contains(normalize-space(.), '$text')]";
         $this->execute('behat_general::should_not_exist_in_the', [
             $element, $elementtype,
-            $this->find('xpath', $rowxpath), 'NodeElement'
+            $this->find('xpath', $rowxpath), 'NodeElement',
         ]);
     }
 

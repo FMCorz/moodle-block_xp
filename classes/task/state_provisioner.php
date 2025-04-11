@@ -52,7 +52,7 @@ class state_provisioner extends \core\task\scheduled_task {
         $logger = $this->logger ?? new text_progress_trace();
 
         if (!$config->get('provisionstates')) {
-            $logger->output('Running task despite setting `provisionstates` being disabled.');
+            $logger->output('Running task despite setting [provisionstates] being disabled.');
         }
 
         if ($config->get('context') == CONTEXT_SYSTEM) {

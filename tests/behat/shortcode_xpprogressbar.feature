@@ -32,4 +32,3 @@ Feature: The xpprogressbar shortcode displays the progress bar
     And I press "Save and display"
     When I am on the "PAGE1" "activity" page logged in as "s1"
     Then "[role='progressbar']" "css_element" should exist
-

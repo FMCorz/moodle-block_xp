@@ -146,7 +146,7 @@ class promo_controller extends route_controller {
         if ($this->world->get_access_permissions()->can_manage() && di::get('addon')->is_deactivated()) {
             echo di::get('renderer')->notification_without_close(strip_tags(markdown_to_html(
                 get_string('erroraddondeactivated', 'block_xp', [
-                    'docsurl' => (new \moodle_url('https://docs.levelup.plus/xp/docs/addon-deactivated'))->out(false)
+                    'docsurl' => (new \moodle_url('https://docs.levelup.plus/xp/docs/addon-deactivated'))->out(false),
                 ])), '<a><em><strong>')
             , notification::NOTIFY_ERROR);
         }
