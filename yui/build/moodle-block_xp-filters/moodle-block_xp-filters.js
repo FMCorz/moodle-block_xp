@@ -330,21 +330,18 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
             // The first node is not a link.
             if (isFirstNode && !isLink) {
                 node.insert(this.addFilterLink.cloneNode(true), 'before');
-            }
 
             // The add link is duplicated.
-            else if (!isFirstNode && wasLink && isLink) {
+            } else if (!isFirstNode && wasLink && isLink) {
                 node.remove();
                 return;
-            }
 
             // There are two filters in a row.
-            else if (!isFirstNode && !wasLink && !isLink) {
+            } else if (!isFirstNode && !wasLink && !isLink) {
                 node.insert(this.addFilterLink.cloneNode(true), 'before');
-            }
 
             // The last node is not a link.
-            else if (isLastNode && !isLink) {
+            } else if (isLastNode && !isLink) {
                 node.insert(this.addFilterLink.cloneNode(true), 'after');
             }
 
@@ -683,7 +680,7 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
         this.syncTargets();
     },
 
-    global_drop_over: function(e) {
+    global_drop_over: function(e) { /* eslint-disable-line */
 
         // Check that drop object belong to correct group.
         if (!e.drop || !e.drop.inGroup(this.groups)) {
@@ -710,7 +707,7 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
      *
      * @param {EventFacade} e
      */
-    drag_end: function(e) {
+    drag_end: function(e) { /* eslint-disable-line */
         this.fire('drag:end', e);
     },
 
@@ -719,7 +716,7 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
      *
      * @param {EventFacade} e
      */
-    drop_hit: function(e) {
+    drop_hit: function(e) { /* eslint-disable-line */
         this.fire('drop:hit', e);
     },
 
@@ -728,7 +725,7 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
      *
      * @param {EventFacade} e
      */
-    drop_over: function(e) {
+    drop_over: function(e) { /* eslint-disable-line */
         this.fire('drop:over', e);
     },
 
