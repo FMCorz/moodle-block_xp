@@ -369,6 +369,9 @@
 .block_xp :is(.xp-max-w-full) {
     max-width: 100%;
 }
+.block_xp :is(.xp-max-w-prose) {
+    max-width: 65ch;
+}
 .block_xp :is(.xp-flex-0) {
     flex: 0 0 auto;
 }
@@ -1170,6 +1173,9 @@ a .block_xp-level {
     /* Using !important because it's late and I can't be bothered looking for an alternative. */
     vertical-align: middle !important;
 }
+.block_xp-table .col-actions:empty {
+    padding: 0;
+}
 .block_xp-table .col-lvl {
     width: 50px;
     text-align: center;
@@ -1195,6 +1201,22 @@ a .block_xp-level {
  */
 .block_xp-report-table td {
     vertical-align: middle !important;
+}
+.block_xp-report-table .col-userpic {
+    width: 1px;
+}
+.block_xp-report-table .col-userpic img {
+    margin: 0;
+}
+
+/**
+ * Any tables.
+ */
+.block_xp table .col-actions {
+    width: 1px;
+}
+.block_xp table .header.col-actions {
+    padding: 0 !important;
 }
 
 /**
@@ -1732,6 +1754,12 @@ a .block_xp-level {
 }
 .block_xp :is(.\[\&_li\]\:xp-mb-1 li) {
     margin-bottom: 0.25rem;
+}
+.block_xp :is(.last\:\[\&_p\]\:xp-m-0 p:last-child) {
+    margin: 0px;
+}
+.block_xp :is(.last\:\[\&_p\]\:xp-mb-0 p:last-child) {
+    margin-bottom: 0px;
 }
 .block_xp :is(.\[\&_ul\]\:xp-pl-4 ul) {
     padding-left: 1rem;
