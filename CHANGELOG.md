@@ -1,6 +1,34 @@
 Changelog
 =========
 
+v18.0
+-----
+
+We dropped the `v3.` prefix of our version number, XP `v18` is the version following `v3.17`.
+
+New features
+
+- Admins can automatically pre-populate the leaderboards with XP participants
+
+Quality of life
+
+- Improved the column sizes of the report table
+- Improved accessibility of the levels management page
+- Improved accessibility of rule to match activities by name
+- Admins are warned before an upgrade if XP+ will be disabled
+- Admins will receive an notification if XP+ becomes disabled
+
+Bug fixes
+
+- Filtering logs by group had no effect
+- Viewing the leaderboard of "All participants" was showing the user's group leaderboard
+
+Technical changes
+
+- The addon XP+ will be disabled when its version is older than XP
+- Great expansion of our automated tests
+- Compatibility with Moodle 5.0
+
 v3.17.1
 -------
 
