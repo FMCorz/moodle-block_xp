@@ -981,9 +981,12 @@
     animation-delay: 6s;
 }
 
-/** Cancel overflow of .no-overflow */
+/** Cancel overflow of .no-overflow (and .table-responsive for now).*/
 .block_xp .xp-cancel-overflow .no-overflow {
     overflow: visible;
+}
+.block_xp .xp-cancel-overflow .table-responsive {
+    overflow-x: visible
 }
 
 /** Legacy styles. */
