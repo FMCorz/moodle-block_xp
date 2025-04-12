@@ -47,7 +47,7 @@ class promo_controller extends route_controller {
     /** Seen flag. */
     const SEEN_FLAG = 'promo-page-seen';
     /** Page version. */
-    const VERSION = 20231006;
+    const VERSION = 20250412;
 
     /** @var string The normal route name. */
     protected $routename = 'promo';
