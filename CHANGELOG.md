@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v18.1
+-----
+
+Bug fixes
+
+- The promo page accessed via the admin settings was not accessible
+
 v18.0
 -----
 
