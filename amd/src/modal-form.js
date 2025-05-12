@@ -42,7 +42,7 @@ function open(node) {
     const modalConfig = extractNodeData(node, 'modal');
 
     const finalModalConfig = {
-        title: modalConfig.title ?? node.textContent.slice(0, 100),
+        title: modalConfig.title ?? node.textContent.trim().slice(0, 100),
     };
     if ('large' in modalConfig) {
         finalModalConfig.large = Boolean(modalConfig.large);
