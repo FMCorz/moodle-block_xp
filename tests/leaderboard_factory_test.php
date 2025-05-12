@@ -71,7 +71,7 @@ final class leaderboard_factory_test extends base_testcase {
         $store->set($u7->id, 170);
         $store->set($u8->id, 180);
 
-        $factory = di::get('course_world_leaderboard_factory');
+        $factory = new \block_xp\local\factory\default_course_world_leaderboard_factory(di::get('db'));
         $lb = $factory->get_course_leaderboard($world);
 
         $this->assertEquals(8, $lb->get_count());

@@ -34,6 +34,7 @@ use block_xp\local\course_world;
  * @copyright  2018 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 3.17, use leaderboard_factory_maker instead.
  */
 interface course_world_leaderboard_factory {
 

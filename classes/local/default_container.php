@@ -333,6 +333,7 @@ class default_container implements container {
      * Get the course world leaderboard factory.
      *
      * @return factory\course_world_leaderboard_factory
+     * @deprecated Since XP 3.17, use leaderboard_factory_maker instead.
      */
     protected function get_course_world_leaderboard_factory() {
         return $this->get('course_world_leaderboard_factory_with_config');
@@ -342,6 +343,7 @@ class default_container implements container {
      * Get the course world leaderboard factory with options.
      *
      * @return factory\course_world_leaderboard_factory_with_config
+     * @deprecated Since XP 3.17, use leaderboard_factory_maker instead.
      */
     protected function get_course_world_leaderboard_factory_with_config() {
         return new \block_xp\local\factory\default_course_world_leaderboard_factory($this->get('db'));
