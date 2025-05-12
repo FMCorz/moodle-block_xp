@@ -84,6 +84,7 @@ Feature: The xpladder shortcode displays the leaderboard
       | Student Three | 8    |
       | Student Two   | 9    |
       | Student One   | 10   |
+    And I should see "Go to full leaderboard"
     And the following should not exist in the "table" table:
       | Participant   |
       | Student Ten   |
@@ -106,6 +107,7 @@ Feature: The xpladder shortcode displays the leaderboard
       | Student Eight | 3    |
       | Student Seven | 4    |
       | Student Six   | 5    |
+    And I should see "Go to full leaderboard"
     And the following should not exist in the "table" table:
       | Participant   |
       | Student Five  |
@@ -129,6 +131,7 @@ Feature: The xpladder shortcode displays the leaderboard
       | Student Eight | 3    |
       | Student Seven | 4    |
       | Student Six   | 5    |
+    And I should see "Go to full leaderboard"
 
   Scenario: The leaderboard does not appear when disabled
     Given the following "block_xp > config" exist:
@@ -141,3 +144,16 @@ Feature: The xpladder shortcode displays the leaderboard
     Then "table" "table" should not exist
     And I should not see "Student Two"
     And I should not see "Student Ten"
+    And I should not see "Go to full leaderboard"
+
+  Scenario: The leaderboard can hide the link to see more
+    Given I am on the "PAGE1" "activity editing" page logged in as "t1"
+    And I set the field "Page content" to "[xpladder hidelink]"
+    And I press "Save and display"
+    When I am on the "PAGE1" "activity" page logged in as "s1"
+    Then the following should exist in the "table" table:
+      | Participant   | Rank |
+      | Student Three | 8    |
+      | Student Two   | 9    |
+      | Student One   | 10   |
+    And I should not see "Go to full leaderboard"
