@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v18.2
+-----
+
+Bug fixes
+
+- The title of some modals could be cropped after a certain length
+
 v18.1
 -----
 
