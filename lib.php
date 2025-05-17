@@ -40,7 +40,7 @@ function block_xp_env_check_addon_compatibility(environment_results $result) {
 }
 
 /**
- * Statuc checks.
+ * Status checks.
  *
  * @return array
  */
@@ -97,7 +97,7 @@ function block_xp_render_navbar_output($output) {
     // Check if enabled.
     $world = di::get('course_world_factory')->get_world($COURSE->id);
     if (!$world->get_config()->get('enabled')) {
-        return;
+        return '';
     }
 
     // Check that the user can see the content.

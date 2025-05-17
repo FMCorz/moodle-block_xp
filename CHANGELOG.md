@@ -7,6 +7,7 @@ v18.2
 Bug fixes
 
 - The title of some modals could be cropped after a certain length
+- Fixed typos in configuration comments and ensured navbar display returns an empty string when disabled
 
 v18.1
 -----
