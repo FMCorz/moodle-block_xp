@@ -69,7 +69,7 @@ class addon_compatibility extends \core\check\check {
      * @return array
      */
     protected function compute_result() {
-        $noissues = [result::OK, get_string('noissuesidentified', 'block_xp'), null];
+        $noissues = [result::OK, get_string('noissuesidentified', 'block_xp'), ''];
         if (!addon::is_container_present()) {
             return $noissues;
         }
