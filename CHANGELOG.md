@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v18.3
+-----
+
+Bug fixes
+
+- Addon compatibility check caused a PHP error in admin system status report
+
 v18.2
 -----
 
