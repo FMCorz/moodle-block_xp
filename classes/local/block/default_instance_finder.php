@@ -27,6 +27,7 @@ namespace block_xp\local\block;
 
 use context;
 use moodle_database;
+use stdClass;
 
 /**
  * Block instance finder.
@@ -41,6 +42,9 @@ class default_instance_finder implements instance_finder {
     /** @var moodle_database The DB. */
     protected $db;
 
+    /** @var \cache_application The cache. */
+    protected $cache;
+
     /**
      * Constructor.
      *
@@ -48,6 +52,7 @@ class default_instance_finder implements instance_finder {
      */
     public function __construct(moodle_database $db) {
         $this->db = $db;
+        $this->cache = \cache::make('block_xp', 'xp_instances');
     }
 
     /**
@@ -58,23 +63,65 @@ class default_instance_finder implements instance_finder {
      * @return block_base Or null when none, or multiple.
      */
     public function get_instance_in_context($name, context $context) {
+        $blockname = preg_replace('/^block_/i', '', $name);
+        $cachekey = $blockname . '_' . $context->id;
+
+        // Try to get from cache first.
+        $cached = $this->cache->get($cachekey);
+        if ($cached !== false) {
+            if ($cached === null) {
+                return null; // Cache hit for no instance or multiple instances.
+            }
+            return block_instance($cached->blockname, $cached);
+        }
+
+        // Not in cache, query database.
         $sql = "SELECT *
                   FROM {block_instances} bi
                  WHERE bi.blockname = :name
                    AND bi.parentcontextid = :contextid";
 
         $params = [
-            'name' => preg_replace('/^block_/i', '', $name),
+            'name' => $blockname,
             'contextid' => $context->id,
         ];
 
         $records = $this->db->get_records_sql($sql, $params);
+
+        // Cache the result.
         if (!$records || count($records) > 1) {
+            $this->cache->set($cachekey, null);
             return null;
         }
 
         $record = reset($records);
+        $this->cache->set($cachekey, $record);
         return block_instance($record->blockname, $record);
+    }
+
+    /**
+     * Add an instance to the cache.
+     *
+     * @param string $name The block name.
+     * @param context $context The context.
+     * @param stdClass $record The block instance record.
+     */
+    public function cache_instance($name, context $context, $record) {
+        $blockname = preg_replace('/^block_/i', '', $name);
+        $cachekey = $blockname . '_' . $context->id;
+        $this->cache->set($cachekey, $record);
+    }
+
+    /**
+     * Remove an instance from the cache.
+     *
+     * @param string $name The block name.
+     * @param context $context The context.
+     */
+    public function uncache_instance($name, context $context) {
+        $blockname = preg_replace('/^block_/i', '', $name);
+        $cachekey = $blockname . '_' . $context->id;
+        $this->cache->delete($cachekey);
     }
 
 }

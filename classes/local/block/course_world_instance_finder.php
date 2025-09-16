@@ -165,6 +165,31 @@ class course_world_instance_finder implements instance_finder, instances_finder_
     }
 
     /**
+     * Add an instance to the cache.
+     *
+     * @param string $name The block name.
+     * @param context $context The context.
+     * @param stdClass $record The block instance record.
+     */
+    public function cache_instance($name, context $context, $record) {
+        if ($this->defaultfinder instanceof default_instance_finder) {
+            $this->defaultfinder->cache_instance($name, $context, $record);
+        }
+    }
+
+    /**
+     * Remove an instance from the cache.
+     *
+     * @param string $name The block name.
+     * @param context $context The context.
+     */
+    public function uncache_instance($name, context $context) {
+        if ($this->defaultfinder instanceof default_instance_finder) {
+            $this->defaultfinder->uncache_instance($name, $context);
+        }
+    }
+
+    /**
      * Require the my API.
      *
      * @return void

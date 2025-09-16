@@ -98,6 +98,7 @@ $string['blockappearancemovedtopluginsettings'] = 'The block appearance settings
 $string['cachedef_filters'] = 'Level filters';
 $string['cachedef_metadata'] = 'Metadata';
 $string['cachedef_ruleevent_eventslist'] = 'List of some events';
+$string['cachedef_xp_instances'] = 'Level Up block instances';
 $string['canjoinfromdatex'] = 'You will be able to join from {$a}.';
 $string['cannotbesetindefaults'] = 'This cannot be set in the default values.';
 $string['cannotearnpoints'] = 'Cannot earn points.';

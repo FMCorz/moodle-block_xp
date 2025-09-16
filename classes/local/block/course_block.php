@@ -94,6 +94,14 @@ class course_block extends block_base {
         // to 'addinstance' or 'myaddinstance' to be given to standard users!
         $world = $this->get_world($this->page->course->id);
         $world->get_config()->set('enabled', true);
+
+        // Cache the new instance.
+        $finder = \block_xp\di::get('course_world_block_instances_finder_in_context');
+        if (method_exists($finder, 'cache_instance')) {
+            $context = context::instance_by_id($this->instance->parentcontextid);
+            $finder->cache_instance('xp', $context, $this->instance);
+        }
+
         return true;
     }
 
@@ -126,6 +134,14 @@ class course_block extends block_base {
         // in that case we disable points gain.
         $world = $this->get_world($this->page->course->id);
         $world->get_config()->set('enabled', false);
+
+        // Remove the instance from cache.
+        $finder = \block_xp\di::get('course_world_block_instances_finder_in_context');
+        if (method_exists($finder, 'uncache_instance')) {
+            $context = context::instance_by_id($this->instance->parentcontextid);
+            $finder->uncache_instance('xp', $context);
+        }
+
         return true;
     }
 
