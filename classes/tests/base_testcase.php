@@ -56,14 +56,24 @@ abstract class base_testcase extends \advanced_testcase {
      * @param string|null $subpagepattern
      */
     protected function add_block_in_context($name, \context $context, $pagetypepattern = null, $subpagepattern = null) {
-        $page = new moodle_page();
-        $page->set_context($context);
-        $page->set_pagetype('page-type');
-        $page->set_url(new moodle_url('/example/view.php'));
-        $blockmanager = new block_manager($page);
+        global $DB, $PAGE;
+
+        $course = null;
+        if ($coursecontext = $context->get_course_context(false)) {
+            $course = $DB->get_record('course', ['id' => $coursecontext->instanceid], '*', MUST_EXIST);
+        }
+
+        $PAGE->set_context($context);
+        $PAGE->set_pagetype('page-type');
+        $PAGE->set_url(new moodle_url('/example/view.php'));
+        if ($course) {
+            $PAGE->set_course($course);
+        }
+
+        $blockmanager = new block_manager($PAGE);
         $blockmanager->add_regions(['xptest'], false);
         $blockmanager->set_default_region('xptest');
-        $blockmanager->add_block($name, 'xptest', 0, false, $pagetypepattern, $subpagepattern);
+        return $blockmanager->add_block($name, 'xptest', 0, false, $pagetypepattern, $subpagepattern);
     }
 
     /**
