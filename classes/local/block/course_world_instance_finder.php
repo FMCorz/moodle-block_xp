@@ -47,6 +47,8 @@ class course_world_instance_finder implements instance_checker, instance_finder,
     protected $db;
     /** @var default_instance_finder The default finder. */
     protected $defaultfinder;
+    /** @var int The dashboard page ID. */
+    protected $dashboardpageid;
 
     /**
      * Constructor.
@@ -121,10 +123,6 @@ class course_world_instance_finder implements instance_checker, instance_finder,
                         )
                 {$orderby}";
 
-        // Get the default dashboard page.
-        $this->require_my_lib();
-        $page = my_get_page(null, MY_PAGE_PRIVATE);
-
         $fpcontext = context_course::instance(SITEID);
         $params = [
             'name' => $name,
@@ -133,7 +131,7 @@ class course_world_instance_finder implements instance_checker, instance_finder,
             'fpcontextid3' => $fpcontext->id,
             'syscontextid' => $context->id,
             'syspagetype' => 'my-index',
-            'syssubpage' => $page->id,
+            'syssubpage' => $this->get_dashboard_page_id(),
         ];
 
         // Return instances.
@@ -200,13 +198,20 @@ class course_world_instance_finder implements instance_checker, instance_finder,
     }
 
     /**
-     * Require the my API.
+     * Get dashboard page ID.
      *
-     * @return void
+     * @return int
      */
-    private function require_my_lib() {
+    protected function get_dashboard_page_id() {
         global $CFG;
-        require_once($CFG->dirroot . '/my/lib.php');
+
+        if (!$this->dashboardpageid) {
+            require_once($CFG->dirroot . '/my/lib.php');
+            $page = my_get_page(null, MY_PAGE_PRIVATE);
+            $this->dashboardpageid = $page->id;
+        }
+
+        return $this->dashboardpageid;
     }
 
 }
