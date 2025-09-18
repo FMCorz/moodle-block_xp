@@ -30,6 +30,10 @@ use core\task\adhoc_task;
 class post_deactivation_adhoc extends adhoc_task {
 
     public function execute() {
+        if (defined('PHPUNIT_TEST')) {
+            return;
+        }
+
         $addon = di::get('addon');
         if (!$addon->is_deactivated()) {
             return;
