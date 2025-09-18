@@ -24,6 +24,10 @@
 
 namespace block_xp\tests;
 
+use block_manager;
+use moodle_page;
+use moodle_url;
+
 /**
  * Base testcase class.
  *
@@ -41,6 +45,25 @@ abstract class base_testcase extends \advanced_testcase {
     public function setup_test() {
         $this->resetAfterTest();
         $this->reset_container();
+    }
+
+    /**
+     * Add a block.
+     *
+     * @param string $name
+     * @param \context $context
+     * @param string|null $pagetypepattern
+     * @param string|null $subpagepattern
+     */
+    protected function add_block_in_context($name, \context $context, $pagetypepattern = null, $subpagepattern = null) {
+        $page = new moodle_page();
+        $page->set_context($context);
+        $page->set_pagetype('page-type');
+        $page->set_url(new moodle_url('/example/view.php'));
+        $blockmanager = new block_manager($page);
+        $blockmanager->add_regions(['xptest'], false);
+        $blockmanager->set_default_region('xptest');
+        $blockmanager->add_block($name, 'xptest', 0, false, $pagetypepattern, $subpagepattern);
     }
 
     /**
