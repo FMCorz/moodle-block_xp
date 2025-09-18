@@ -113,9 +113,9 @@ class course_block extends block_base {
                 return;
             }
 
-            $bifinder = \block_xp\di::get('course_world_block_instances_finder_in_context');
-            $instances = $bifinder->get_instances_in_context('xp', context_system::instance());
-            if (count($instances) > 1) {
+            $bifinder = \block_xp\di::get('course_world_block_instance_checker');
+            $instances = $bifinder->count_instances_in_context('xp', context_system::instance());
+            if ($instances > 1) {
                 // We do not want to disable points gain when we find more than one instance.
                 return;
             }

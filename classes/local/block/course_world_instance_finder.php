@@ -40,11 +40,12 @@ use stdClass;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_world_instance_finder implements instance_finder, instances_finder_in_context, any_instance_finder_in_context {
+class course_world_instance_finder implements instance_checker, instance_finder, instances_finder_in_context,
+        any_instance_finder_in_context {
 
     /** @var moodle_database The DB. */
     protected $db;
-    /** @var instance_finder The default finder. */
+    /** @var default_instance_finder The default finder. */
     protected $defaultfinder;
 
     /**
@@ -58,13 +59,25 @@ class course_world_instance_finder implements instance_finder, instances_finder_
     }
 
     /**
+     * Count instances in context.
+     *
+     * @param string $name The block name.
+     * @param context $context The context to search in.
+     * @return int
+     */
+    public function count_instances_in_context($name, context $context) {
+        return $this->get_candidates_in_context($name, $context, true);
+    }
+
+    /**
      * Get the candidates.
      *
      * @param string $name The name of the block.
      * @param context $context The world context.
+     * @param bool $countonly Whether to only count.
      * @return stdClass[]
      */
-    protected function get_candidates_in_context($name, context $context) {
+    protected function get_candidates_in_context($name, context $context, $countonly = false) {
         $name = preg_replace('/^block_/i', '', $name);
         if ($name !== 'xp') {
             throw new coding_exception('This implementation is only meant to be used with block_xp.');
@@ -74,6 +87,9 @@ class course_world_instance_finder implements instance_finder, instances_finder_
         // and we can defer that to our default finder as we expect to be finding the block
         // on the course page, e.g. there aren't exceptions to take care of yet.
         if ($context instanceof context_course) {
+            if ($countonly) {
+                return $this->defaultfinder->count_instances_in_context($name, $context);
+            }
             $instance = $this->defaultfinder->get_instance_in_context($name, $context);
             if (!$instance) {
                 return [];
@@ -86,7 +102,15 @@ class course_world_instance_finder implements instance_finder, instances_finder_
         // Now, there are two locations we want to be checking: the front page,
         // and the default dashboard of our users. If the front page one exists we
         // take it because the latter can be displayed throughout the entire site.
-        $sql = "SELECT *
+        $select = $countonly ? 'COUNT(1)' : '*';
+        $orderbyctx = "ORDER BY CASE
+                                WHEN bi.parentcontextid = :fpcontextid2 THEN 1
+                                WHEN bi.parentcontextid <> :fpcontextid3 THEN 0
+                                END DESC,
+                                bi.id ASC";
+        $orderby = $countonly ? '' : $orderbyctx;
+
+        $sql = "SELECT {$select}
                   FROM {block_instances} bi
                  WHERE bi.blockname = :name
                    AND (bi.parentcontextid = :fpcontextid
@@ -95,11 +119,7 @@ class course_world_instance_finder implements instance_finder, instances_finder_
                             AND bi.subpagepattern = :syssubpage
                             )
                         )
-              ORDER BY CASE
-                            WHEN bi.parentcontextid = :fpcontextid2 THEN 1
-                            WHEN bi.parentcontextid <> :fpcontextid3 THEN 0
-                       END DESC,
-                       bi.id ASC";
+                {$orderby}";
 
         // Get the default dashboard page.
         $this->require_my_lib();
@@ -117,6 +137,10 @@ class course_world_instance_finder implements instance_finder, instances_finder_
         ];
 
         // Return instances.
+        if ($countonly) {
+            return $this->db->count_records_sql($sql, $params);
+        }
+
         $records = $this->db->get_records_sql($sql, $params);
         return array_map(function($record) {
             return block_instance($record->blockname, $record);
@@ -162,6 +186,17 @@ class course_world_instance_finder implements instance_finder, instances_finder_
      */
     public function get_instances_in_context($name, context $context) {
         return $this->get_candidates_in_context($name, $context);
+    }
+
+    /**
+     * Whether it has an instance in the context.
+     *
+     * @param string $name The block name.
+     * @param context $context The context to search in.
+     * @return bool
+     */
+    public function has_instance_in_context($name, context $context) {
+        return $this->count_instances_in_context($name, $context) > 0;
     }
 
     /**

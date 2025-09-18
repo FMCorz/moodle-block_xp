@@ -36,7 +36,7 @@ use moodle_database;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class default_instance_finder implements instance_finder {
+class default_instance_finder implements instance_finder, instance_checker {
 
     /** @var moodle_database The DB. */
     protected $db;
@@ -48,6 +48,20 @@ class default_instance_finder implements instance_finder {
      */
     public function __construct(moodle_database $db) {
         $this->db = $db;
+    }
+
+    /**
+     * Count instances in context.
+     *
+     * @param string $name The block name, without 'block_'.
+     * @param context $context The context to search in.
+     * @return int
+     */
+    public function count_instances_in_context($name, context $context) {
+        return $this->db->count_records('block_instances', [
+            'blockname' => preg_replace('/^block_/i', '', $name),
+            'parentcontextid' => $context->id,
+        ]);
     }
 
     /**
@@ -75,6 +89,20 @@ class default_instance_finder implements instance_finder {
 
         $record = reset($records);
         return block_instance($record->blockname, $record);
+    }
+
+    /**
+     * Whether it has an instance in the context.
+     *
+     * @param string $name The block name, without 'block_'.
+     * @param context $context The context to search in.
+     * @return bool
+     */
+    public function has_instance_in_context($name, context $context) {
+        return $this->db->record_exists('block_instances', [
+            'blockname' => preg_replace('/^block_/i', '', $name),
+            'parentcontextid' => $context->id,
+        ]);
     }
 
 }

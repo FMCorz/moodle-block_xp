@@ -14,19 +14,36 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace block_xp\local\block;
+
+use context;
+
 /**
- * Version file.
+ * Block instance checker.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2025 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+interface instance_checker {
 
-defined('MOODLE_INTERNAL') || die();
+    /**
+     * Count instances in context.
+     *
+     * @param string $name The block name, without 'block_'.
+     * @param context $context The context to search in.
+     * @return int
+     */
+    public function count_instances_in_context($name, context $context);
 
-$plugin->version    = 2025091701;
-$plugin->requires   = 2022112800;   // Moodle 4.1.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '19.0-dev';
-$plugin->supported  = [401, 500];
+    /**
+     * Whether it has an instance in the context.
+     *
+     * @param string $name The block name, without 'block_'.
+     * @param context $context The context to search in.
+     * @return bool
+     */
+    public function has_instance_in_context($name, context $context);
+
+}

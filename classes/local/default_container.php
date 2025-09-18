@@ -58,6 +58,7 @@ class default_container implements container {
         'config_locked' => true,
         'context_world_factory' => true,
         'course_world_block_any_instance_finder_in_context' => true,
+        'course_world_block_instance_checker' => true,
         'course_world_block_instance_finder' => true,
         'course_world_block_instances_finder_in_context' => true,
         'course_world_factory' => true,
@@ -288,7 +289,7 @@ class default_container implements container {
     /**
      * Get the course world block any instance finder in context.
      *
-     * @return course_world_instance_finder
+     * @return block\course_world_instance_finder
      */
     protected function get_course_world_block_any_instance_finder_in_context() {
         // We know the implementation of the following includes what we need.
@@ -298,7 +299,17 @@ class default_container implements container {
     /**
      * Get the course world block instance finder.
      *
-     * @return course_world_instance_finder
+     * @return block\course_world_instance_finder
+     */
+    protected function get_course_world_block_instance_checker() {
+        // We know the implementation of the following includes what we need.
+        return $this->get('course_world_block_instance_finder');
+    }
+
+    /**
+     * Get the course world block instance finder.
+     *
+     * @return block\course_world_instance_finder
      */
     protected function get_course_world_block_instance_finder() {
         return new \block_xp\local\block\course_world_instance_finder($this->get('db'));
@@ -307,7 +318,7 @@ class default_container implements container {
     /**
      * Get the course world block instances finder in context.
      *
-     * @return course_world_instance_finder
+     * @return block\course_world_instance_finder
      */
     protected function get_course_world_block_instances_finder_in_context() {
         // We know the implementation of the following includes what we need.

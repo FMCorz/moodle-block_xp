@@ -117,6 +117,20 @@ final class course_world_instance_finder_test extends base_testcase {
      * @param int $ninstances
      * @dataProvider data_provider
      */
+    public function test_count_instances_in_context($addto, $checkin, $ninstances) {
+        $contextmap = $this->setup_blocks($addto);
+        $finder = new course_world_instance_finder(di::get('db'));
+        $this->assertEquals($ninstances, $finder->count_instances_in_context('xp', $contextmap[$checkin]));
+    }
+
+    /**
+     * Test.
+     *
+     * @param string[]|string $addto
+     * @param string $checkin
+     * @param int $ninstances
+     * @dataProvider data_provider
+     */
     public function test_get_any_instance_in_context($addto, $checkin, $ninstances) {
 
         // Override case to document a bug. The course finder defers the logic to the default finder
@@ -177,6 +191,20 @@ final class course_world_instance_finder_test extends base_testcase {
         } else {
             $this->assertNull($block);
         }
+    }
+
+    /**
+     * Test.
+     *
+     * @param string[]|string $addto
+     * @param string $checkin
+     * @param int $ninstances
+     * @dataProvider data_provider
+     */
+    public function test_has_instance_in_context($addto, $checkin, $ninstances) {
+        $contextmap = $this->setup_blocks($addto);
+        $finder = new course_world_instance_finder(di::get('db'));
+        $this->assertEquals($ninstances > 0, $finder->has_instance_in_context('xp', $contextmap[$checkin]));
     }
 
 }
