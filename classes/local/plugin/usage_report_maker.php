@@ -95,6 +95,12 @@ class usage_report_maker {
         $data->xp_unique_users = $this->db->count_records_select('block_xp', '', null, 'COUNT(DISTINCT userid)');
         $data->xp_ladders = $this->db->count_records_select('block_xp_config', 'enableladder != ?', [0]);
 
+        $identitymodekey = $this->db->sql_concat("'v'", 'identitymode');
+        $identitymode = $this->db->get_records_sql_menu("SELECT {$identitymodekey}, COUNT(1)
+                                                           FROM {block_xp_config}
+                                                       GROUP BY identitymode");
+        $data->xp_ladders_anonymity = $identitymode;
+
         $data->xp_rules = $this->db->count_records_select('block_xp_filters', 'courseid > 0');
         $data->xp_rules_usage = $this->get_rules_usage($data->xp_rules > 5000 ? 5000 : 0);
 
