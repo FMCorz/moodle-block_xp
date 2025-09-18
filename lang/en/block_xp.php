@@ -95,6 +95,7 @@ $string['basepointslineardesc'] = 'The minimum increment between each level.';
 $string['basepointsrelativedesc'] = 'The number of points to start with.';
 $string['blockappearance'] = 'Block appearance';
 $string['blockappearancemovedtopluginsettings'] = 'The block appearance settings were moved to the plugin\'s settings page.';
+$string['cachedef_block_count'] = 'Block instances count';
 $string['cachedef_filters'] = 'Level filters';
 $string['cachedef_metadata'] = 'Metadata';
 $string['cachedef_ruleevent_eventslist'] = 'List of some events';

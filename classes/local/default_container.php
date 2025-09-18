@@ -25,6 +25,7 @@
 
 namespace block_xp\local;
 
+use cache;
 use coding_exception;
 use moodle_url;
 
@@ -50,6 +51,7 @@ class default_container implements container {
         'badge_url_resolver_course_world_factory' => true,
         'base_url' => true,
         'block_class' => true,
+        'block_count_cache' => true,
         'block_edit_form_class' => true,
         'cheatguard_form_class' => true,
         'collection_logger' => true,
@@ -212,6 +214,15 @@ class default_container implements container {
      */
     protected function get_block_class() {
         return 'block_xp\local\block\course_block';
+    }
+
+    /**
+     * Block count cache.
+     *
+     * @return string
+     */
+    protected function get_block_count_cache() {
+        return cache::make('block_xp', 'block_count');
     }
 
     /**

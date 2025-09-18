@@ -94,6 +94,10 @@ class course_block extends block_base {
         // to 'addinstance' or 'myaddinstance' to be given to standard users!
         $world = $this->get_world($this->page->course->id);
         $world->get_config()->set('enabled', true);
+
+        // Reset the block cache.
+        \block_xp\di::get('block_count_cache')->purge();
+
         return true;
     }
 
@@ -103,29 +107,37 @@ class course_block extends block_base {
      * @return bool
      */
     public function instance_delete() {
-        $db = \block_xp\di::get('db');
         $adminconfig = \block_xp\di::get('config');
+        $shoulddisable = true;
+
+        // Reset the block cache before we use the block finder.
+        \block_xp\di::get('block_count_cache')->purge();
 
         if ($adminconfig->get('context') == CONTEXT_SYSTEM) {
             $context = context::instance_by_id($this->instance->parentcontextid);
             if ($context->contextlevel == CONTEXT_USER) {
                 // Someone is removing their block from their dashboard, do nothing.
-                return;
+                $shoulddisable = false;
+            } else {
+                // If only disable if we're confident the instance deleted is the last one.
+                $bifinder = \block_xp\di::get('course_world_block_instance_checker');
+                $instances = $bifinder->count_instances_in_context('xp', context_system::instance());
+                $shoulddisable = $instances <= 1;
             }
 
-            $bifinder = \block_xp\di::get('course_world_block_instance_checker');
-            $instances = $bifinder->count_instances_in_context('xp', context_system::instance());
-            if ($instances > 1) {
-                // We do not want to disable points gain when we find more than one instance.
-                return;
-            }
         }
 
         // If we got here that's because we are either removing the block from a course,
         // or from the front page, or from the default dashboard. It's not ideal but
         // in that case we disable points gain.
-        $world = $this->get_world($this->page->course->id);
-        $world->get_config()->set('enabled', false);
+        if ($shoulddisable) {
+            $world = $this->get_world($this->page->course->id);
+            $world->get_config()->set('enabled', false);
+        }
+
+        // Reset the block cache.
+        \block_xp\di::get('block_count_cache')->purge();
+
         return true;
     }
 

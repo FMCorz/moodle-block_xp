@@ -25,6 +25,7 @@
 
 namespace block_xp\local\block;
 
+use block_xp\di;
 use context;
 use context_course;
 use context_system;
@@ -47,6 +48,8 @@ class course_world_instance_finder implements instance_checker, instance_finder,
     protected $db;
     /** @var default_instance_finder The default finder. */
     protected $defaultfinder;
+    /** @var \cache The block instances cache. */
+    protected $cache;
     /** @var int The dashboard page ID. */
     protected $dashboardpageid;
 
@@ -58,6 +61,7 @@ class course_world_instance_finder implements instance_checker, instance_finder,
     public function __construct(moodle_database $db) {
         $this->db = $db;
         $this->defaultfinder = new default_instance_finder($db);
+        $this->cache = di::get('block_count_cache');
     }
 
     /**
@@ -68,7 +72,15 @@ class course_world_instance_finder implements instance_checker, instance_finder,
      * @return int
      */
     public function count_instances_in_context($name, context $context) {
-        return $this->get_candidates_in_context($name, $context, true);
+        $key = "{$name}_{$context->id}";
+        $count = $this->cache->get($key);
+
+        if ($count === false) {
+            $count = (int) $this->get_candidates_in_context($name, $context, true);
+            $this->cache->set($key, $count);
+        }
+
+        return (int) $count;
     }
 
     /**
@@ -77,7 +89,7 @@ class course_world_instance_finder implements instance_checker, instance_finder,
      * @param string $name The name of the block.
      * @param context $context The world context.
      * @param bool $countonly Whether to only count.
-     * @return stdClass[]
+     * @return stdClass[]|int
      */
     protected function get_candidates_in_context($name, context $context, $countonly = false) {
         $name = preg_replace('/^block_/i', '', $name);

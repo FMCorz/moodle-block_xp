@@ -25,6 +25,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 $definitions = [
+    'block_count' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'simpledata' => true,
+        'staticacceleration' => true,
+    ],
     'filters' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
