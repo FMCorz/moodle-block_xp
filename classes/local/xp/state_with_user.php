@@ -14,33 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace block_xp\local\xp;
+
 /**
- * User filter.
+ * State with user.
  *
  * @package    block_xp
- * @copyright  2024 Frédéric Massart
+ * @copyright  2025 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace block_xp\local\sql;
-
-/**
- * User filter.
- *
- * @package    block_xp
- * @copyright  2024 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since XP 19, use \block_xp\local\userfilter\user_filter instead.
- */
-interface user_filter {
+interface state_with_user extends state {
 
     /**
-     * Get the SQL fragment to filter users.
+     * Get the user object.
      *
-     * @return array Containing both SQL fragment, and params.
+     * @return \stdClass
      */
-    public function get_sql(string $useridalias): array;
+    public function get_user();
 
 }

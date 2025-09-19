@@ -41,17 +41,17 @@ class anonymised_state implements state_with_subject {
     protected $name;
     /** @var moodle_url|null The pic. */
     protected $pic;
-    /** @var state_with_subject The state. */
+    /** @var state The state. */
     protected $state;
 
     /**
      * Constructor.
      *
-     * @param state_with_subject $state The state to anonymise.
+     * @param state $state The state to anonymise.
      * @param string $name The new name.
      * @param moodle_url $pic The new pic.
      */
-    public function __construct(state_with_subject $state, $name, $pic = null) {
+    public function __construct(state $state, $name, $pic = null) {
         $this->state = $state;
         $this->name = $name;
         $this->pic = $pic;

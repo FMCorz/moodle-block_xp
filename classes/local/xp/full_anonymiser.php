@@ -73,7 +73,7 @@ class full_anonymiser implements state_anonymiser {
             return $state;
         }
 
-        if ($state instanceof user_state) {
+        if ($state instanceof state_with_user || $state instanceof user_state) {
             return new anonymised_user_state($state, $this->anonuser);
         }
 

@@ -29,7 +29,6 @@ use block_xp\local\utils\user_utils;
 use moodle_url;
 use renderable;
 use stdClass;
-use user_picture;
 
 /**
  * User state.
@@ -39,7 +38,7 @@ use user_picture;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class user_state implements renderable, state, state_with_subject {
+class user_state implements renderable, state, state_with_subject, state_with_user {
 
     /** @var int The course ID. */
     protected $courseid;

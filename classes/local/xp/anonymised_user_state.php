@@ -40,16 +40,16 @@ class anonymised_user_state extends user_state {
 
     /** @var stdClass The anonymous user. */
     protected $anonuser;
-    /** @var user_state The user state. */
+    /** @var state The user state. */
     protected $state;
 
     /**
      * Constructor.
      *
-     * @param user_state $state The state.
+     * @param state $state The state.
      * @param stdClass $anonuser The user object.
      */
-    public function __construct(user_state $state, stdClass $anonuser) {
+    public function __construct(state $state, stdClass $anonuser) {
         $this->anonuser = $anonuser;
         $this->state = $state;
     }

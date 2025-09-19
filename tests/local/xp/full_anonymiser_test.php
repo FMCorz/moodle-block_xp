@@ -65,6 +65,13 @@ final class full_anonymiser_test extends base_testcase {
         } else {
             $this->fail('The anonymised state should implement state_with_subject.');
         }
+
+        if ($anonstate instanceof state_with_user) {
+            $this->assertNotEquals($user, $anonstate->get_user());
+            $this->assertEquals($anonuser, $anonstate->get_user());
+        } else {
+            $this->fail('The anonymised state should implement state_with_user.');
+        }
     }
 
     /**
@@ -160,6 +167,94 @@ final class full_anonymiser_test extends base_testcase {
             $this->fail('The anonymised state should implement state_with_subject.');
         }
 
+    }
+
+    /**
+     * Test state with user.
+     */
+    public function test_state_with_user_anonymisation() {
+        $anonuser = $this->getDataGenerator()->create_user(['firstname' => 'Anonymous', 'lastname' => 'User']);
+        $user = $this->getDataGenerator()->create_user();
+
+        // Create a state_with_user that also contains state_with_subject to confirm their anonymity.
+        $state = new class($user) implements state_with_subject, state_with_user {
+            protected $user;
+
+            public function __construct($user) {
+                $this->user = $user;
+            }
+
+            public function get_id() {
+                return $this->user->id;
+            }
+
+            public function get_level() {
+                return new static_level(1, 0);
+            }
+
+            public function get_link() {
+                return new moodle_url('user.php', ['id' => $this->user->id]);
+            }
+
+            public function get_name() {
+                return fullname($this->user);
+            }
+
+            public function get_picture() {
+                return new moodle_url('pic.php', ['id' => $this->user->id]);
+            }
+
+            public function get_ratio_in_level() {
+                return 0;
+            }
+
+            public function get_total_xp_in_level() {
+                return 100;
+            }
+
+            public function get_user() {
+                return $this->user;
+            }
+
+            public function get_xp() {
+                return 0;
+            }
+
+            public function get_xp_in_level() {
+                return 0;
+            }
+        };
+
+        $this->assertEquals($user->id, $state->get_id());
+        $this->assertEquals(fullname($user), $state->get_name());
+        $this->assertNotNull($state->get_link());
+        $this->assertEquals($user, $state->get_user());
+
+        $anonymiser = new full_anonymiser($anonuser, [$user->id]);
+        $anonstate = $anonymiser->anonymise_state($state);
+        $this->assertSame($state, $anonstate);
+
+        $anonymiser = new full_anonymiser($anonuser);
+        $anonstate = $anonymiser->anonymise_state($state);
+        $this->assertNotSame($state, $anonstate);
+
+        $this->assertNotEquals($user->id, $anonstate->get_id());
+        $this->assertEquals($anonuser->id, $anonstate->get_id());
+        if ($anonstate instanceof state_with_subject) {
+            $this->assertNotEquals(fullname($user), $anonstate->get_name());
+            $this->assertNotEquals($state->get_picture(), $anonstate->get_picture());
+            $this->assertEquals(user_utils::default_picture(), $anonstate->get_picture());
+            $this->assertNull($anonstate->get_link());
+        } else {
+            $this->fail('The anonymised state should implement state_with_subject.');
+        }
+
+        if ($anonstate instanceof state_with_user) {
+            $this->assertNotEquals($user, $anonstate->get_user());
+            $this->assertEquals($anonuser, $anonstate->get_user());
+        } else {
+            $this->fail('The anonymised state should implement state_with_user.');
+        }
     }
 
 }
