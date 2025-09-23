@@ -154,7 +154,7 @@ class report_controller extends page_controller {
             $form->set_data(['userid' => $userid, 'level' => $state->get_level()->get_level(), 'xp' => $state->get_xp()]);
             $this->form = $form;
         }
-        return $form;
+        return $this->form;
     }
 
     protected function get_table() {
