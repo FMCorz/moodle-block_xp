@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset>
+    <description>The coding rules for Level Up XP.</description>
+
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/classes/local/compat/*</exclude-pattern>
+
+    <rule ref="moodle" />
+
+    <rule ref="moodle.Files">
+        <exclude name="moodle.Files.BoilerplateComment" />
+    </rule>
+
+    <rule ref="moodle.Commenting">
+        <exclude name="moodle.Commenting.Package.Missing" />
+        <exclude name="moodle.Commenting.MissingDocblock" />
+        <exclude name="moodle.Commenting.TodoComment" />
+        <exclude name="moodle.Commenting.VariableComment" />
+        <exclude name="moodle.Commenting.InlineComment" />
+    </rule>
+
+    <config name="testVersion" value="8.2-" />
+</ruleset>

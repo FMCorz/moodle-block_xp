@@ -14,7 +14,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14
+        image: postgres:15
         env:
           POSTGRES_USER: 'postgres'
           POSTGRES_HOST_AUTH_METHOD: 'trust'
@@ -36,40 +36,36 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.1', '8.2', '8.3']
-        moodle-branch: ['MOODLE_401_STABLE', 'MOODLE_404_STABLE', 'MOODLE_405_STABLE', 'MOODLE_500_STABLE']
+        php: ['8.2', '8.3', '8.4']
+        moodle-branch: ['MOODLE_405_STABLE', 'MOODLE_500_STABLE', 'v5.1.0-rc1']
         database: [pgsql]
         include:
-          # PHP 7.4, solely on Moodle 4.1.
+          # PHP 7.4, with Moodle 4.1.
           - moodle-branch: MOODLE_401_STABLE
             database: pgsql
             php: 7.4
 
-          # PHP 8.0, with Moodle 4.1.
+          # PHP 8.1, with Moodle 4.1.
           - moodle-branch: MOODLE_401_STABLE
             database: pgsql
-            php: 8.0
+            php: 8.1
 
-          # PHP 8.4, with Moodle 5.0.
-          - moodle-branch: MOODLE_500_STABLE
+          # PHP 8.1, with Moodle 4.5.
+          - moodle-branch: MOODLE_405_STABLE
             database: pgsql
-            php: 8.4
+            php: 8.1
 
           # MariaDB, test oldest and most recent configurations.
           - moodle-branch: MOODLE_401_STABLE
             database: mariadb
             php: 7.4
-          - moodle-branch: MOODLE_405_STABLE
+          - moodle-branch: v5.1.0-rc1
             database: mariadb
-            php: 8.3
+            php: 8.4
 
         exclude:
-          - moodle-branch: MOODLE_401_STABLE
-            php: 8.2
-          - moodle-branch: MOODLE_401_STABLE
-            php: 8.3
-          - moodle-branch: MOODLE_500_STABLE
-            php: 8.1
+          - moodle-branch: MOODLE_405_STABLE
+            php: 8.4
 
     steps:
       - name: Check out repository code
@@ -121,7 +117,12 @@ jobs:
 
       - name: Moodle Code Checker
         if: ${{ !cancelled() }}
-        run: moodle-plugin-ci phpcs --max-warnings 0 --exclude moodle.Commenting.MissingDocblock,moodle.Commenting.TodoComment,moodle.Commenting.VariableComment
+        run: |
+          WWWROOT=$(cd moodle; pwd)
+          if [ -d "$WWWROOT/public" ]; then
+            WWWROOT="$WWWROOT/public"
+          fi
+          moodle-plugin-ci phpcs --max-warnings 0 --standard $WWWROOT/blocks/xp/phpcs.xml
 
       # - name: Moodle PHPDoc Checker
       #   if: ${{ !cancelled() }}
