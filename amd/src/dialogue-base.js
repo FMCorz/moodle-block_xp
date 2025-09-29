@@ -1,17 +1,19 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Level Up XP.
 //
-// Moodle is free software: you can redistribute it and/or modify
+// Level Up XP is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Moodle is distributed in the hope that it will be useful,
+// Level Up XP is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://levelup.plus
 
 /**
  * Generic dialogue base.
@@ -23,7 +25,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, Str, Notification) {
+define(['jquery', 'core/yui', 'core/str', 'core/notification'], function ($, Y, Str, Notification) {
     /**
      * Constructor.
      *
@@ -35,8 +37,8 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
         this._ready = deferred.promise();
         Y.use(
             'moodle-core-notification',
-            function() {
-                this._init().then(function() {
+            function () {
+                this._init().then(function () {
                     deferred.resolve();
                     return;
                 }).catch(Notification.exception);
@@ -52,7 +54,7 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
     /**
      * Center the dialogue on screen.
      */
-    DialogueBase.prototype.center = function() {
+    DialogueBase.prototype.center = function () {
         this._dialogue.centerDialogue();
     };
 
@@ -61,7 +63,7 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
      *
      * @return {Void}
      */
-    DialogueBase.prototype._init = function() {
+    DialogueBase.prototype._init = function () {
         var deferred = $.Deferred(),
             loading = Y.Node.create('<p style="text-align: center;"><img src="' + M.util.image_url('y/loading') + '" alt=""></p>'),
             d;
@@ -76,7 +78,7 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
 
         // Destroy on hide.
         var origHide = d.hide;
-        d.hide = function() {
+        d.hide = function () {
             origHide.apply(d, arguments);
             this.destroy();
         }.bind(d);
@@ -89,16 +91,16 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
 
         // Render the things.
         this._render().fail(
-            function() {
+            function () {
                 Str.get_string('error', 'core') /* eslint-disable-line */
-                    .then(function(a) {
+                    .then(function (a) {
                         return a;
                     })
-                    .fail(function() {
+                    .fail(function () {
                         return '';
                     })
                     .always(
-                        function(txt) {
+                        function (txt) {
                             this._setDialogueContent(txt);
                         }.bind(this)
                     );
@@ -109,7 +111,7 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
         return deferred.promise();
     };
 
-    DialogueBase.prototype.close = function() {
+    DialogueBase.prototype.close = function () {
         this.trigger('dialogue-closed');
         this._dialogue.destroy();
         this._eventNode = null;
@@ -121,7 +123,7 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
      * @param {String} selector The selector.
      * @return {jQuery}
      */
-    DialogueBase.prototype.find = function(selector) {
+    DialogueBase.prototype.find = function (selector) {
         return $(this._dialogue.getStdModNode(Y.WidgetStdMod.BODY).getDOMNode()).find(selector);
     };
 
@@ -131,7 +133,7 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
      * @param {String} type The event type.
      * @param {Function} callback The callback, receives Event and extraArgs.
      */
-    DialogueBase.prototype.on = function(type, callback) {
+    DialogueBase.prototype.on = function (type, callback) {
         this._eventNode.on(type, callback);
     };
 
@@ -141,7 +143,7 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
      * This is the method to override to set the content of the dialogue.
      * It must be non-blocking. Also do not forget to center the dialogue.
      */
-    DialogueBase.prototype._render = function() {
+    DialogueBase.prototype._render = function () {
         // Nothing here.
     };
 
@@ -150,9 +152,9 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
      *
      * @param {Event} e The event.
      */
-    DialogueBase.prototype.show = function(e) {
+    DialogueBase.prototype.show = function (e) {
         this._ready.then(
-            function() {
+            function () {
                 this._dialogue.show(e);
                 return;
             }.bind(this)
@@ -164,7 +166,7 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
      *
      * @param {String} content The HTML content.
      */
-    DialogueBase.prototype._setDialogueContent = function(content) {
+    DialogueBase.prototype._setDialogueContent = function (content) {
         this._dialogue.setStdModContent(Y.WidgetStdMod.BODY, content, Y.WidgetStdMod.REPLACE);
     };
 
@@ -173,7 +175,7 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
      *
      * @param {String} title The title.
      */
-    DialogueBase.prototype.setTitle = function(title) {
+    DialogueBase.prototype.setTitle = function (title) {
         this._title = title;
         this._updateDialogueTitle();
     };
@@ -184,14 +186,14 @@ define(['jquery', 'core/yui', 'core/str', 'core/notification'], function($, Y, S
      * @param {String} type The event type.
      * @param {Mixed} extraArgs The extra argument.
      */
-    DialogueBase.prototype.trigger = function(type, extraArgs) {
+    DialogueBase.prototype.trigger = function (type, extraArgs) {
         this._eventNode.trigger(type, extraArgs);
     };
 
     /**
      * Update the dialogue title.
      */
-    DialogueBase.prototype._updateDialogueTitle = function() {
+    DialogueBase.prototype._updateDialogueTitle = function () {
         if (!this._dialogue) {
             return;
         }

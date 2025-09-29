@@ -1,17 +1,19 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Level Up XP.
 //
-// Moodle is free software: you can redistribute it and/or modify
+// Level Up XP is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Moodle is distributed in the hope that it will be useful,
+// Level Up XP is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://levelup.plus
 
 /**
  * Notification of level up.
@@ -44,20 +46,20 @@ var CSS = {
  * @class Notification
  * @constructor
  */
-var NOTIFICATION = function() {
+var NOTIFICATION = function () {
     NOTIFICATION.superclass.constructor.apply(this, arguments);
 };
 Y.namespace('M.block_xp').Notification = Y.extend(NOTIFICATION, M.core.dialogue, {
 
-    initializer: function() {
+    initializer: function () {
         this.display();
     },
 
-    close: function() {
+    close: function () {
         this.hide();
     },
 
-    display: function() {
+    display: function () {
         var footerTpl,
             content,
             hasName,
@@ -175,7 +177,7 @@ Y.Base.modifyAttrs(Y.namespace('M.block_xp.Notification'), {
     },
 
     title: {
-        valueFn: function() {
+        valueFn: function () {
             return M.util.get_string('congratulationsyouleveledup', COMPONENT);
         }
     },
@@ -185,6 +187,6 @@ Y.Base.modifyAttrs(Y.namespace('M.block_xp.Notification'), {
     }
 });
 
-Y.namespace('M.block_xp.Notification').init = function(config) {
+Y.namespace('M.block_xp.Notification').init = function (config) {
     return new NOTIFICATION(config);
 };

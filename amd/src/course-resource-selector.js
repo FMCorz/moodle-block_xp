@@ -1,17 +1,19 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Level Up XP.
 //
-// Moodle is free software: you can redistribute it and/or modify
+// Level Up XP is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Moodle is distributed in the hope that it will be useful,
+// Level Up XP is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://levelup.plus
 
 /**
  * Course resource selector.
@@ -22,7 +24,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/ajax', 'block_xp/resource-selector'],
-    function($, Ajax, ResourceSelector, Pending, Notification) {
+    function ($, Ajax, ResourceSelector, Pending, Notification) {
 
         /**
          * Course resource selector.
@@ -37,16 +39,16 @@ define(['jquery', 'core/ajax', 'block_xp/resource-selector'],
         CourseResourceSelector.prototype = Object.create(ResourceSelector.prototype);
         CourseResourceSelector.prototype.constructor = CourseResourceSelector;
 
-        CourseResourceSelector.prototype.searchFunction = function(term) {
+        CourseResourceSelector.prototype.searchFunction = function (term) {
             var calls = [
                 {
                     methodname: 'block_xp_search_courses',
-                    args: {query: term}
+                    args: { query: term }
                 }
             ];
 
-            return Ajax.call(calls)[0].then(function(results) {
-                return results.map(function(c) {
+            return Ajax.call(calls)[0].then(function (results) {
+                return results.map(function (c) {
                     return {
                         _iscourse: true,
                         name: c.fullname,
@@ -54,7 +56,7 @@ define(['jquery', 'core/ajax', 'block_xp/resource-selector'],
                         course: c
                     };
                 });
-            }).catch(function(e) {
+            }).catch(function (e) {
                 Notification.exception(e);
             });
         };

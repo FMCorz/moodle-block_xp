@@ -1,17 +1,19 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Level Up XP.
 //
-// Moodle is free software: you can redistribute it and/or modify
+// Level Up XP is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Moodle is distributed in the hope that it will be useful,
+// Level Up XP is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.lup.plus
+// along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://levelup.pluslup.plus
 
 /**
  * React app launcher.
@@ -46,7 +48,7 @@ export function launch(mod, rootId, propsId) {
  * @param {Object} props The props.
  */
 async function launchWithProps(mod, rootId, props = {}) {
-    const {startApp} = await loadModule(mod);
+    const { startApp } = await loadModule(mod);
     startApp(document.getElementById(rootId), props);
 }
 
@@ -62,10 +64,10 @@ async function loadModule(mod) {
 
     // Load the app module. By convension a module app needs to return
     // an object with (at least) two properties: `dependencies`, and `startApp`.
-    require([mod], function(mod) {
+    require([mod], function (mod) {
         var dependencies = [];
         var optionalDependencies = [];
-        var dependenciesLoadedCallback = function() {
+        var dependenciesLoadedCallback = function () {
             return;
         };
 
@@ -77,11 +79,11 @@ async function loadModule(mod) {
         }
 
         // Load the dependencies.
-        require([].concat(dependencies), function() {
+        require([].concat(dependencies), function () {
             const deps = [...arguments];
             dependenciesLoadedCallback(deps);
             loader.resolve(mod);
-        }, function(err) {
+        }, function (err) {
 
             // Modules that failed to load that are not optional are mocked.
             err.requireModules
@@ -91,13 +93,13 @@ async function loadModule(mod) {
                     require.undef(module);
                     // Don't ask why, but calling define directly confuses rollup...
                     const fn = define;
-                    fn(module, function() {
+                    fn(module, function () {
                         return null;
                     });
                 });
 
             // Retrigger the module loading.
-            require(err.requireModules, function() {
+            require(err.requireModules, function () {
                 // Noop.
             });
         });

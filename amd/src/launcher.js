@@ -1,17 +1,19 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Level Up XP.
 //
-// Moodle is free software: you can redistribute it and/or modify
+// Level Up XP is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Moodle is distributed in the hope that it will be useful,
+// Level Up XP is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://levelup.plus
 
 /**
  * Launch an app.
@@ -22,7 +24,7 @@
  * @deprecated Since XP 3.16.0, please use block_xp/react-launcher instead.
  */
 
-define(['block_xp/react-launcher', 'core/log'], function(Launcher, Log) {
+define(['block_xp/react-launcher', 'core/log'], function (Launcher, Log) {
     Log.warn('The module block_xp/launcher is deprecated. Please use block_xp/react-launcher instead.');
     return Launcher.launch;
 });

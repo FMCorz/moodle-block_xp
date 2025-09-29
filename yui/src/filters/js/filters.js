@@ -1,17 +1,19 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Level Up XP.
 //
-// Moodle is free software: you can redistribute it and/or modify
+// Level Up XP is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Moodle is distributed in the hope that it will be useful,
+// Level Up XP is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://levelup.plus
 
 /**
  * Filters of level up.
@@ -37,7 +39,7 @@
  * @class Filters
  * @constructor
  */
-var FILTERS = function() {
+var FILTERS = function () {
     FILTERS.superclass.constructor.apply(this, arguments);
 };
 Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
@@ -88,7 +90,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
     /**
      * Initializer.
      */
-    initializer: function() {
+    initializer: function () {
         this.container = Y.one(this.get('containerSelector'));
         this.container.delegate('click', this.addNewFilter, SELECTORS.ADDFILTERBTN, this);
         this.container.delegate('click', this.addNewRule, SELECTORS.ADDRULEBTN, this);
@@ -112,16 +114,16 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
             nodeSelector: SELECTORS.FILTER
         });
 
-        this.filterDnD.on('drag:end', function() {
+        this.filterDnD.on('drag:end', function () {
             this.fixFilterSortorder();
         }, this);
 
-        this.filterDnD.on('drop:over', function() {
+        this.filterDnD.on('drop:over', function () {
             this.fixAddFilterLink();
         }, this);
 
         this.rulesDnD = {};
-        this.container.all(SELECTORS.FILTER).each(function(node) {
+        this.container.all(SELECTORS.FILTER).each(function (node) {
             this.setFilterRulesDnD(node);
         }, this);
     },
@@ -131,7 +133,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      *
      * @param {EventFacade} e
      */
-    addNewFilter: function(e) {
+    addNewFilter: function (e) {
         var link = e.currentTarget.get('parentNode'),
             filterNode = this.getNewFilterTemplate();
 
@@ -152,7 +154,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      *
      * @param {EventFacade} e
      */
-    addNewRule: function(e) {
+    addNewRule: function (e) {
         e.preventDefault();
 
         if (!this.rulepicker) {
@@ -169,7 +171,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * @param {Node} ruleNode The rule node.
      * @return {Number}
      */
-    countChildrenRulesInRule: function(ruleNode) {
+    countChildrenRulesInRule: function (ruleNode) {
         var childrenRulesContainer = ruleNode.one(SELECTORS.RULES);
         return childrenRulesContainer ? childrenRulesContainer.all(SELECTORS.RULE).size() : 0;
     },
@@ -179,11 +181,11 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      *
      * @param  {EventFacade} e
      */
-    deleteFilter: function(e) {
+    deleteFilter: function (e) {
         e.preventDefault();
         var filter = e.currentTarget.ancestor(SELECTORS.FILTER);
 
-        var deleteOperation = function() {
+        var deleteOperation = function () {
             // Delete the fitler.
             filter.remove();
             delete this.rulesDnD[filter.generateID()];
@@ -214,10 +216,10 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      *
      * @param  {EventFacade} e
      */
-    deleteRule: function(e) {
+    deleteRule: function (e) {
         e.preventDefault();
         var rule = e.currentTarget.ancestor(SELECTORS.RULE);
-        var parentRule = rule.ancestor(SELECTORS.RULE, false, Y.bind(function(el) {
+        var parentRule = rule.ancestor(SELECTORS.RULE, false, Y.bind(function (el) {
             return el == this.container;
         }, this));
 
@@ -226,7 +228,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
             return;
         }
 
-        var deleteOperation = function() {
+        var deleteOperation = function () {
             rule.remove(true);
         };
 
@@ -247,7 +249,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
     /**
      * Check and fix the presence of the links to add a filter.
      */
-    fixAddFilterLink: function() {
+    fixAddFilterLink: function () {
         if (!this.canAddFilter) {
             return;
         }
@@ -256,7 +258,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
             lastNode,
             count = nodes.size();
 
-        nodes.each(function(node, index) {
+        nodes.each(function (node, index) {
             var isLink = node.hasClass(CSS.ADDFILTER),
                 isFirstNode = !lastNode,
                 isDeleted = node.getData('deleted'),
@@ -272,16 +274,16 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
             if (isFirstNode && !isLink) {
                 node.insert(this.addFilterLink.cloneNode(true), 'before');
 
-            // The add link is duplicated.
+                // The add link is duplicated.
             } else if (!isFirstNode && wasLink && isLink) {
                 node.remove();
                 return;
 
-            // There are two filters in a row.
+                // There are two filters in a row.
             } else if (!isFirstNode && !wasLink && !isLink) {
                 node.insert(this.addFilterLink.cloneNode(true), 'before');
 
-            // The last node is not a link.
+                // The last node is not a link.
             } else if (isLastNode && !isLink) {
                 node.insert(this.addFilterLink.cloneNode(true), 'after');
             }
@@ -294,11 +296,11 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
     /**
      * Fix the sortorder of the filters.
      */
-    fixFilterSortorder: function() {
+    fixFilterSortorder: function () {
         var filters = this.container.all(SELECTORS.FILTER),
             sortorder = 0;
 
-        filters.each(function(node) {
+        filters.each(function (node) {
             var basename = node.getData('basename'),
                 sortnode = node.one('input[name="' + basename + '[sortorder]"]');
             if (sortnode) {
@@ -316,7 +318,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * @param  {Number} increment
      * @return {String}
      */
-    generateFilterBasename: function(increment) {
+    generateFilterBasename: function (increment) {
         return 'filters[' + increment + ']';
     },
 
@@ -329,7 +331,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * @param  {Number} increment
      * @return {String}
      */
-    generateRuleBasename: function(basename, increment) {
+    generateRuleBasename: function (basename, increment) {
         return basename + '[' + increment + ']';
     },
 
@@ -338,11 +340,11 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      *
      * @return {Number}
      */
-    getNewFilterIncrement: function() {
+    getNewFilterIncrement: function () {
         var filters = this.container.all(SELECTORS.FILTER),
             filterIncrement = 0;
 
-        filters.each(function(node) {
+        filters.each(function (node) {
             var basename = node.getData('basename'),
                 inc = parseInt(/\[([0-9]+)\]$/.exec(basename)[1] || 0, 10);
 
@@ -357,7 +359,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      *
      * @return {Node}
      */
-    getNewFilterTemplate: function() {
+    getNewFilterTemplate: function () {
         var tpl = this.get('filter');
 
         tpl = tpl.replace(this.get('filterTemplateBasename'), this.generateFilterBasename(this.getNewFilterIncrement()));
@@ -370,11 +372,11 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * @param {Node} ruleContainer
      * @return {Number}
      */
-    getNewRuleIncrement: function(ruleContainer) {
+    getNewRuleIncrement: function (ruleContainer) {
         var filters = ruleContainer.all(SELECTORS.CHILDRULESDEFINITIONS),
             increment = 0;
 
-        filters.each(function(node) {
+        filters.each(function (node) {
             var basename = node.getData('basename'),
                 inc = parseInt(/\[([0-9]+)\]$/.exec(basename)[1] || 0, 10);
 
@@ -390,7 +392,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      * @param  {EventFacacde} e
      * @param  {String} ruleId Matching the key of our rules attribute.
      */
-    newRulePicked: function(e, ruleId) {
+    newRulePicked: function (e, ruleId) {
         var rule = this.get('rules')[ruleId],
             tpl = rule.template,
             rulesContainer = this.rulesetTarget.one(SELECTORS.RULES),
@@ -405,9 +407,9 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
     /**
      * Prepare the rule picker dialog.
      */
-    prepareRuleDialog: function() {
+    prepareRuleDialog: function () {
         var rules = [];
-        Y.Object.each(this.get('rules'), function(v, k) {
+        Y.Object.each(this.get('rules'), function (v, k) {
             rules.push({
                 id: k,
                 name: v.name,
@@ -425,7 +427,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
      *
      * @param {Node} filterNode The filter container.
      */
-    setFilterRulesDnD: function(filterNode) {
+    setFilterRulesDnD: function (filterNode) {
         if (!filterNode.one(SELECTORS.RULES)) {
             // If the filter node does not contain the selector, it means that there is only one rule
             // in it, that's the legacy rules. Therefore we ignore this.
@@ -443,7 +445,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
             nodeSelector: SELECTORS.RULE
         });
 
-        this.rulesDnD[filterNode.generateID()].on('drop:hit', function(e) {
+        this.rulesDnD[filterNode.generateID()].on('drop:hit', function (e) {
             var drag = e.drag.get('node'),
                 drop = e.drop.get('node'),
                 initialBasename = drag.one(SELECTORS.RULEDEFINITION).getData('basename'),
@@ -452,7 +454,7 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
                 newBasename = ruleBasename + '[' + newIncrement + ']';
 
             // Update the structure.
-            drag.all('[data-basename], [name]').each(function(node) {
+            drag.all('[data-basename], [name]').each(function (node) {
                 if (node.hasAttribute('data-basename')) {
                     node.setAttribute('data-basename', node.getAttribute('data-basename').replace(initialBasename, newBasename));
                 }
@@ -526,6 +528,6 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
     }
 });
 
-Y.namespace('M.block_xp.Filters').init = function(config) {
+Y.namespace('M.block_xp.Filters').init = function (config) {
     return new FILTERS(config);
 };

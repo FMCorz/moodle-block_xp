@@ -1,17 +1,19 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Level Up XP.
 //
-// Moodle is free software: you can redistribute it and/or modify
+// Level Up XP is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Moodle is distributed in the hope that it will be useful,
+// Level Up XP is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://levelup.plus
 
 /**
  * Course resource module selector.
@@ -21,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/ajax', 'block_xp/throttler', 'block_xp/resource-selector'], function($, Ajax, Throttler, ResourceSelector) {
+define(['jquery', 'core/ajax', 'block_xp/throttler', 'block_xp/resource-selector'], function ($, Ajax, Throttler, ResourceSelector) {
     /**
      * Course module resource selector.
      *
@@ -39,7 +41,7 @@ define(['jquery', 'core/ajax', 'block_xp/throttler', 'block_xp/resource-selector
     CmResourceSelector.prototype = Object.create(ResourceSelector.prototype);
     CmResourceSelector.prototype.constructor = CmResourceSelector;
 
-    CmResourceSelector.prototype.initForCourse = function(courseId) {
+    CmResourceSelector.prototype.initForCourse = function (courseId) {
         if (this.courseId == courseId) {
             // The course has not changed, display the contents right away.
             this.displayResults(this.resources);
@@ -50,7 +52,7 @@ define(['jquery', 'core/ajax', 'block_xp/throttler', 'block_xp/resource-selector
         this.courseId = courseId;
         this.fetchAllForCourse(courseId)
             .then(
-                function(resources) {
+                function (resources) {
                     if (this.courseId != courseId) {
                         // We switched course in the meantime, ignore.
                         return;
@@ -59,13 +61,13 @@ define(['jquery', 'core/ajax', 'block_xp/throttler', 'block_xp/resource-selector
                     this.displayResults(this.resources);
                 }.bind(this)
             )
-            .fail(function() {
+            .fail(function () {
                 this.resources = [];
                 this.displayEmptyResults();
             }.bind(this));
     };
 
-    CmResourceSelector.prototype.fetchAllForCourse = function(courseId) {
+    CmResourceSelector.prototype.fetchAllForCourse = function (courseId) {
         var searchargs = {
             courseid: courseId,
             query: '*'
@@ -78,10 +80,10 @@ define(['jquery', 'core/ajax', 'block_xp/throttler', 'block_xp/resource-selector
             }
         ];
 
-        return Ajax.call(calls)[0].then(function(results) {
-            return results.reduce(function(carry, section) {
+        return Ajax.call(calls)[0].then(function (results) {
+            return results.reduce(function (carry, section) {
                 return carry.concat(
-                    section.modules.map(function(cm) {
+                    section.modules.map(function (cm) {
                         return {
                             _iscm: true,
                             subname: section.name,
@@ -94,12 +96,12 @@ define(['jquery', 'core/ajax', 'block_xp/throttler', 'block_xp/resource-selector
         });
     };
 
-    CmResourceSelector.prototype.filterFunction = function(term) {
+    CmResourceSelector.prototype.filterFunction = function (term) {
         term = (term || '').toLowerCase();
         if (!term) {
             return this.resources;
         }
-        return this.resources.filter(function(cm) {
+        return this.resources.filter(function (cm) {
             return cm.name.toLowerCase().indexOf(term) > -1;
         });
     };
