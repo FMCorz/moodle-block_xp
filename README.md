@@ -1,77 +1,33 @@
-Level Up XP (block_xp) ![GitHub tag](https://img.shields.io/github/tag/FMCorz/moodle-block_xp.svg) ![Travis branch](https://img.shields.io/travis/FMCorz/moodle-block_xp/master.svg)
-====================
+# Level Up XP (block_xp)
 
-Engage your students! A Moodle plugin to gamify your students' learning experience by allowing them to _level up_ in their courses.
+Engage your learners! Level Up XP is Moodle plugin to gamify the learning experience by allowing learners to _level up_ in their courses.
 
-Features
---------
+## Features
 
-- Automatically captures and attributes experience points to students' actions
-- Block that displays current level and progress towards next level
-- Report for teachers to get an overview of their students' levels
-- Notifications to congratulate students as they level up
-- A ladder to display the ranking of the students
-- Ability to set the number of levels and the experience required to get to them
-- Images can be uploaded to customise for the appearance of the levels
-- The amount of experience points earned per event is customizable
-- Page to display the list of levels and a description
-- Experience points are earned per course
-- An event is fired when a student levels up (for developers)
+- Learners earn points and level up at custom thresholds
+- Points earned are based on the actions performed by learners
+- Leaderboard to create a competition between learners
+- Report for instructors to get an overview of their students' levels
+- Notifications to congratulate learners as they level up
+- Large variety of options to create unique gamification experiences
+- And a lot more…, and even more with [XP+](https://www.levelup.plus/xp/?ref=readme)!
 
-### Additional features
+## Setup
 
-Purchasing the _Level Up XP+_ add-on unlocks additional features. [Click here for more details](https://levelup.plus?ref=readme).
+[Install the plugin](https://docs.levelup.plus/xp/docs/install?ref=readme) and [add the block](https://docs.levelup.plus/xp/docs/getting-started/installation/adding-the-block) to a course page.
 
-Requirements
-------------
+## Documentation
 
-Moodle 3.3 or greater.
+The documentation is available at [docs.levelup.plus/xp/](https://docs.levelup.plus/xp/).
 
-Installation
-------------
+## Release notes
 
-Simply install the plugin and add the block to a course page. More details are available here: [Level Up XP documentation](https://docs.levelup.plus/xp/docs/install?ref=readme)
+The release notes are published at [docs.levelup.plus/xp/release-notes](https://docs.levelup.plus/xp/release-notes).
 
-The plugin can also be installed using [composer](https://getcomposer.org/) at [fmcorz/moodle-block_xp](https://packagist.org/packages/fmcorz/moodle-block_xp).
-
-How are experience points calculated?
--------------------------------------
-
-Have a look at this [documentation page](https://docs.levelup.plus/xp/docs/getting-started/points-calculation?ref=readme).
-
-Restricting access based on students' levels
---------------------------------------------
-
-Have a look at this availability plugin [Level](https://github.com/FMCorz/moodle-availability_xp).
-
-Level-based enrolment
----------------------
-
-Have a look at this enrolment plugin [Level](https://github.com/branchup/moodle-enrol_xp).
-
-Shortcodes
-----------
-
-_What are those? Shortcodes can be used in editors throughout Moodle to include or modify the content. The plugin [Shortcodes](https://github.com/branchup/moodle-filter_shortcodes) must be installed to enable them._
-
-Check the [list of supported shortcodes](https://docs.levelup.plus/xp/docs/how-to/use-shortcodes?ref=readme).
-
-How to use one block for all courses
-------------------------------------
-
-In order to gather experience points from all the courses a student is participating in, you have to set the admin setting _Where are experience points used?_ to 'For the whole site'. This setting is located under "Site administration > Plugins > Blocks > Level Up XP". Once set, any block newly or previously added will display the total experience points of your student.
-
-Todo
-----
-
-- Awarding a badge when a student reaches a level (blocked by [MDL-39864](https://tracker.moodle.org/browse/MDL-39864))
-
-Provided by
------------
+## Provided by
 
 [![Branch Up](https://branchup.tech/branch-up-logo-x30.svg)](https://branchup.tech?ref=levelup_readme)
 
-License
--------
+## License
 
 Licensed under the [GNU GPL License](http://www.gnu.org/copyleft/gpl.html).
