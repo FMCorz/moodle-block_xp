@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['core/templates', 'core/modal', 'core/modal_events', 'core/notification'], function (
+define(['core/templates', 'core/modal', 'core/modal_events', 'core/notification'], function(
     Templates,
     Modal,
     ModalEvents,

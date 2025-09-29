@@ -24,7 +24,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'block_xp/throttler', 'core/pending'], function ($, Throttler, Pending) {
+define(['jquery', 'block_xp/throttler', 'core/pending'], function($, Throttler, Pending) {
     /**
      * Resource selector.
      *
@@ -56,23 +56,23 @@ define(['jquery', 'block_xp/throttler', 'core/pending'], function ($, Throttler,
         this.minChars = 3;
     }
 
-    ResourceSelector.prototype.clear = function () {
+    ResourceSelector.prototype.clear = function() {
         this.resultsContainer.empty();
     };
 
-    ResourceSelector.prototype.displayEmptyResults = function () {
+    ResourceSelector.prototype.displayEmptyResults = function() {
         this.searchingResultsNode.hide();
         this.emptyResultsNode.show();
         this.searchResultsNode.hide();
     };
 
-    ResourceSelector.prototype.displayNothing = function () {
+    ResourceSelector.prototype.displayNothing = function() {
         this.searchingResultsNode.hide();
         this.emptyResultsNode.hide();
         this.searchResultsNode.hide();
     };
 
-    ResourceSelector.prototype.displayResults = function (resources) {
+    ResourceSelector.prototype.displayResults = function(resources) {
         if (!resources || !resources.length) {
             this.displayEmptyResults();
             return;
@@ -84,20 +84,20 @@ define(['jquery', 'block_xp/throttler', 'core/pending'], function ($, Throttler,
         this.searchResultsNode.show();
     };
 
-    ResourceSelector.prototype.displaySearching = function () {
+    ResourceSelector.prototype.displaySearching = function() {
         this.searchingResultsNode.show();
         this.emptyResultsNode.hide();
         this.searchResultsNode.hide();
     };
 
-    ResourceSelector.prototype.flagPendingSearch = function () {
+    ResourceSelector.prototype.flagPendingSearch = function() {
         if (this._pendingSearch) {
             this._pendingSearch.resolve();
         }
         this._pendingSearch = new Pending('resource-selector-search');
     };
 
-    ResourceSelector.prototype.flagPendingSearchComplete = function () {
+    ResourceSelector.prototype.flagPendingSearchComplete = function() {
         if (!this._pendingSearch) {
             return;
         }
@@ -111,24 +111,24 @@ define(['jquery', 'block_xp/throttler', 'core/pending'], function ($, Throttler,
      * @param {String} term The term to get the results from.
      * @return {Promise}
      */
-    ResourceSelector.prototype.getResources = function (term) {
+    ResourceSelector.prototype.getResources = function(term) {
         return $.when(this.searchFunction(term));
     };
 
-    ResourceSelector.prototype.onResourceSelected = function (callback) {
+    ResourceSelector.prototype.onResourceSelected = function(callback) {
         this._eventNode.on('resource-selected', callback);
     };
 
-    ResourceSelector.prototype.search = function (term) {
+    ResourceSelector.prototype.search = function(term) {
         this.searchId += 1;
         this._performSearch(term, this.searchId);
     };
 
-    ResourceSelector.prototype.setMinChars = function (minChars) {
+    ResourceSelector.prototype.setMinChars = function(minChars) {
         this.minChars = minChars;
     };
 
-    ResourceSelector.prototype._onSearchTermKeyUp = function (e) {
+    ResourceSelector.prototype._onSearchTermKeyUp = function(e) {
         this.flagPendingSearch();
         var term = e.target.value;
         if (typeof term !== 'string' || term.length < this.minChars) {
@@ -143,7 +143,7 @@ define(['jquery', 'block_xp/throttler', 'core/pending'], function ($, Throttler,
         this.throttler.schedule(this._performSearchFactory(term, this.searchId));
     };
 
-    ResourceSelector.prototype._onSelect = function (e) {
+    ResourceSelector.prototype._onSelect = function(e) {
         e.preventDefault();
         var resource = $(e.target)
             .closest('.resource-node')
@@ -154,21 +154,21 @@ define(['jquery', 'block_xp/throttler', 'core/pending'], function ($, Throttler,
         this._eventNode.trigger('resource-selected', resource);
     };
 
-    ResourceSelector.prototype._performSearchFactory = function (term, searchId) {
-        return function () {
-            this._performSearch(term, searchId).then(function () {
+    ResourceSelector.prototype._performSearchFactory = function(term, searchId) {
+        return function() {
+            this._performSearch(term, searchId).then(function() {
                 this.flagPendingSearchComplete();
                 return;
-            }.bind(this)).catch(function () {
+            }.bind(this)).catch(function() {
                 this.flagPendingSearchComplete();
             }.bind(this));
         }.bind(this);
     };
 
-    ResourceSelector.prototype._performSearch = function (term, scheduledSearchId) {
+    ResourceSelector.prototype._performSearch = function(term, scheduledSearchId) {
         return this.getResources(term)
             .then(
-                function (data) {
+                function(data) {
                     if (this.searchId != scheduledSearchId) {
                         return;
                     }
@@ -176,17 +176,17 @@ define(['jquery', 'block_xp/throttler', 'core/pending'], function ($, Throttler,
                 }.bind(this)
             )
             .fail(
-                function () {
+                function() {
                     this.displayEmptyResults();
                 }.bind(this)
             );
     };
 
-    ResourceSelector.prototype._publishResults = function (resources) {
+    ResourceSelector.prototype._publishResults = function(resources) {
         this.clear();
 
         resources.forEach(
-            function (resource) {
+            function(resource) {
                 var node = this.resourceTemplate.clone();
                 node.find('.resource-name').text(resource.name);
                 if (resource.subname) {
@@ -200,7 +200,7 @@ define(['jquery', 'block_xp/throttler', 'core/pending'], function ($, Throttler,
         );
     };
 
-    ResourceSelector.prototype._setEventListeners = function () {
+    ResourceSelector.prototype._setEventListeners = function() {
         this.searchTermNode.on('keyup', this._onSearchTermKeyUp.bind(this));
         this.searchResultsNode.on('click', 'button', this._onSelect.bind(this));
     };

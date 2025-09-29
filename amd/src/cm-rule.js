@@ -22,7 +22,7 @@
  * @copyright  2018 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/templates', 'core/str', 'block_xp/dialogue-base'], function ($, Templates, Str, DialogueBase) {
+define(['jquery', 'core/templates', 'core/str', 'block_xp/dialogue-base'], function($, Templates, Str, DialogueBase) {
     var SELECTOR_WRAPPER = '.block-xp-filters';
     var SELECTOR_WIDGET = '.block_xp-cm-rule-widget';
     var SELECTOR_WIDGET_TRIGGER = '.block_xp-cm-rule-widget button';
@@ -45,21 +45,21 @@ define(['jquery', 'core/templates', 'core/str', 'block_xp/dialogue-base'], funct
      *
      * @return {Promise} The promise.
      */
-    Dialogue.prototype._render = function () {
+    Dialogue.prototype._render = function() {
         var initWithCourseJson = JSON.stringify(this.initWithCourse);
         return Str.get_string('cmselector', 'block_xp').then(
-            function (title) {
+            function(title) {
                 return Templates.render('block_xp/cm-selector', {
                     initwithcoursejson: initWithCourseJson
                 }).then(
-                    function (html, js) {
+                    function(html, js) {
                         this.setTitle(title);
                         this._setDialogueContent(html);
                         Templates.runTemplateJS(js);
                         this.center();
                         this.find(SELECTOR_RESOURCE_SELECTOR_WRAPPER).on(
                             'cm-selected',
-                            function (e, resource) {
+                            function(e, resource) {
                                 this.trigger('cm-selected', resource);
                                 this.close();
                             }.bind(this)
@@ -76,7 +76,7 @@ define(['jquery', 'core/templates', 'core/str', 'block_xp/dialogue-base'], funct
      * @param {Object} [initWithCourse] The course to initialise with.
      */
     function init(initWithCourse) {
-        $(SELECTOR_WRAPPER).on('click', SELECTOR_WIDGET_TRIGGER, function (e) {
+        $(SELECTOR_WRAPPER).on('click', SELECTOR_WIDGET_TRIGGER, function(e) {
             e.preventDefault();
             var node = $(e.target).closest(SELECTOR_WIDGET);
             if (!node) {
@@ -84,7 +84,7 @@ define(['jquery', 'core/templates', 'core/str', 'block_xp/dialogue-base'], funct
             }
 
             var d = new Dialogue(initWithCourse);
-            d.on('cm-selected', function (e, resource) {
+            d.on('cm-selected', function(e, resource) {
                 var cm = resource.cm;
                 var course = resource.course;
                 node.find('.cm-rule-contextid').val(cm.contextid);

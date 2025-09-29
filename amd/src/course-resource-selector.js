@@ -24,7 +24,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/ajax', 'block_xp/resource-selector'],
-    function ($, Ajax, ResourceSelector, Pending, Notification) {
+    function($, Ajax, ResourceSelector, Pending, Notification) {
 
         /**
          * Course resource selector.
@@ -39,16 +39,16 @@ define(['jquery', 'core/ajax', 'block_xp/resource-selector'],
         CourseResourceSelector.prototype = Object.create(ResourceSelector.prototype);
         CourseResourceSelector.prototype.constructor = CourseResourceSelector;
 
-        CourseResourceSelector.prototype.searchFunction = function (term) {
+        CourseResourceSelector.prototype.searchFunction = function(term) {
             var calls = [
                 {
                     methodname: 'block_xp_search_courses',
-                    args: { query: term }
+                    args: {query: term}
                 }
             ];
 
-            return Ajax.call(calls)[0].then(function (results) {
-                return results.map(function (c) {
+            return Ajax.call(calls)[0].then(function(results) {
+                return results.map(function(c) {
                     return {
                         _iscourse: true,
                         name: c.fullname,
@@ -56,7 +56,7 @@ define(['jquery', 'core/ajax', 'block_xp/resource-selector'],
                         course: c
                     };
                 });
-            }).catch(function (e) {
+            }).catch(function(e) {
                 Notification.exception(e);
             });
         };

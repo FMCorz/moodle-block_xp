@@ -100,7 +100,7 @@ final class instance_test extends base_testcase {
      * @param bool $enabled
      * @dataProvider enabled_when_block_added_provider
      */
-    public function test_enabled_when_block_added($mode, $addto, $checkin, $enabled) {
+    public function test_enabled_when_block_added($mode, $addto, $checkin, $enabled): void {
         $adminconfig = di::get('config');
         $adminconfig->set('context', $mode);
 
@@ -135,7 +135,7 @@ final class instance_test extends base_testcase {
      * @param bool $enabled
      * @dataProvider disabled_when_block_removed_provider
      */
-    public function test_disabled_when_block_removed($mode, $addto, $removeidx, $checkin, $enabled) {
+    public function test_disabled_when_block_removed($mode, $addto, $removeidx, $checkin, $enabled): void {
         $adminconfig = di::get('config');
         $adminconfig->set('context', $mode);
 

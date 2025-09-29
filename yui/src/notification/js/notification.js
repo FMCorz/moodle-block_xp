@@ -46,20 +46,20 @@ var CSS = {
  * @class Notification
  * @constructor
  */
-var NOTIFICATION = function () {
+var NOTIFICATION = function() {
     NOTIFICATION.superclass.constructor.apply(this, arguments);
 };
 Y.namespace('M.block_xp').Notification = Y.extend(NOTIFICATION, M.core.dialogue, {
 
-    initializer: function () {
+    initializer: function() {
         this.display();
     },
 
-    close: function () {
+    close: function() {
         this.hide();
     },
 
-    display: function () {
+    display: function() {
         var footerTpl,
             content,
             hasName,
@@ -177,7 +177,7 @@ Y.Base.modifyAttrs(Y.namespace('M.block_xp.Notification'), {
     },
 
     title: {
-        valueFn: function () {
+        valueFn: function() {
             return M.util.get_string('congratulationsyouleveledup', COMPONENT);
         }
     },
@@ -187,6 +187,6 @@ Y.Base.modifyAttrs(Y.namespace('M.block_xp.Notification'), {
     }
 });
 
-Y.namespace('M.block_xp.Notification').init = function (config) {
+Y.namespace('M.block_xp.Notification').init = function(config) {
     return new NOTIFICATION(config);
 };

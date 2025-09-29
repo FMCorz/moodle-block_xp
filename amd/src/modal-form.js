@@ -142,7 +142,7 @@ export function extractNodeData(node, prefix) {
             return setAtDepth(carry, key.split('__'), value);
         }
 
-        return { ...carry, [key]: value };
+        return {...carry, [key]: value};
     }, {});
 }
 

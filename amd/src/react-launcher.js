@@ -48,7 +48,7 @@ export function launch(mod, rootId, propsId) {
  * @param {Object} props The props.
  */
 async function launchWithProps(mod, rootId, props = {}) {
-    const { startApp } = await loadModule(mod);
+    const {startApp} = await loadModule(mod);
     startApp(document.getElementById(rootId), props);
 }
 
@@ -64,10 +64,10 @@ async function loadModule(mod) {
 
     // Load the app module. By convension a module app needs to return
     // an object with (at least) two properties: `dependencies`, and `startApp`.
-    require([mod], function (mod) {
+    require([mod], function(mod) {
         var dependencies = [];
         var optionalDependencies = [];
-        var dependenciesLoadedCallback = function () {
+        var dependenciesLoadedCallback = function() {
             return;
         };
 
@@ -79,11 +79,11 @@ async function loadModule(mod) {
         }
 
         // Load the dependencies.
-        require([].concat(dependencies), function () {
+        require([].concat(dependencies), function() {
             const deps = [...arguments];
             dependenciesLoadedCallback(deps);
             loader.resolve(mod);
-        }, function (err) {
+        }, function(err) {
 
             // Modules that failed to load that are not optional are mocked.
             err.requireModules
@@ -93,13 +93,13 @@ async function loadModule(mod) {
                     require.undef(module);
                     // Don't ask why, but calling define directly confuses rollup...
                     const fn = define;
-                    fn(module, function () {
+                    fn(module, function() {
                         return null;
                     });
                 });
 
             // Retrigger the module loading.
-            require(err.requireModules, function () {
+            require(err.requireModules, function() {
                 // Noop.
             });
         });

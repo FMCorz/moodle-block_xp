@@ -24,7 +24,7 @@
  * @deprecated Since XP 3.16.0, please use block_xp/react-launcher instead.
  */
 
-define(['block_xp/react-launcher', 'core/log'], function (Launcher, Log) {
+define(['block_xp/react-launcher', 'core/log'], function(Launcher, Log) {
     Log.warn('The module block_xp/launcher is deprecated. Please use block_xp/react-launcher instead.');
     return Launcher.launch;
 });

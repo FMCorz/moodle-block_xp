@@ -89,7 +89,7 @@ final class default_instance_finder_test extends base_testcase {
      * @param int $ninstances
      * @dataProvider data_provider
      */
-    public function test_count_instances_in_context($addto, $checkin, $ninstances) {
+    public function test_count_instances_in_context($addto, $checkin, $ninstances): void {
         $contextmap = $this->setup_blocks($addto);
         $finder = new default_instance_finder(di::get('db'));
         $this->assertEquals($ninstances, $finder->count_instances_in_context('xp', $contextmap[$checkin]));
@@ -103,7 +103,7 @@ final class default_instance_finder_test extends base_testcase {
      * @param int $ninstances
      * @dataProvider data_provider
      */
-    public function test_get_instance_in_context($addto, $checkin, $ninstances) {
+    public function test_get_instance_in_context($addto, $checkin, $ninstances): void {
         $contextmap = $this->setup_blocks($addto);
         $finder = new default_instance_finder(di::get('db'));
         $block = $finder->get_instance_in_context('xp', $contextmap[$checkin]);
@@ -125,7 +125,7 @@ final class default_instance_finder_test extends base_testcase {
      * @param int $ninstances
      * @dataProvider data_provider
      */
-    public function test_has_instance_in_context($addto, $checkin, $ninstances) {
+    public function test_has_instance_in_context($addto, $checkin, $ninstances): void {
         $contextmap = $this->setup_blocks($addto);
         $finder = new default_instance_finder(di::get('db'));
         $this->assertEquals($ninstances > 0, $finder->has_instance_in_context('xp', $contextmap[$checkin]));

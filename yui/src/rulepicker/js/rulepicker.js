@@ -46,22 +46,22 @@ var SELECTORS = {
  * @class RulePicker
  * @constructor
  */
-var PICKER = function () {
+var PICKER = function() {
     PICKER.superclass.constructor.apply(this, arguments);
 };
 Y.namespace('M.block_xp').RulePicker = Y.extend(PICKER, M.core.dialogue, {
 
     prepared: false,
 
-    initializer: function () {
+    initializer: function() {
         this.publish('picked');
     },
 
-    close: function () {
+    close: function() {
         this.hide();
     },
 
-    display: function () {
+    display: function() {
         if (!this.prepared) {
             this.prepare();
         }
@@ -69,14 +69,14 @@ Y.namespace('M.block_xp').RulePicker = Y.extend(PICKER, M.core.dialogue, {
         this.show();
     },
 
-    picked: function (e) {
+    picked: function(e) {
         e.preventDefault();
 
         this.close();
         this.fire('picked', e.currentTarget.getData('id'));
     },
 
-    prepare: function () {
+    prepare: function() {
         var content,
             tpl,
             html;
@@ -142,7 +142,7 @@ Y.Base.modifyAttrs(Y.namespace('M.block_xp.RulePicker'), {
     },
 
     title: {
-        valueFn: function () {
+        valueFn: function() {
             return M.util.get_string('pickaconditiontype', COMPONENT);
         }
     },
@@ -157,6 +157,6 @@ Y.Base.modifyAttrs(Y.namespace('M.block_xp.RulePicker'), {
 
 });
 
-Y.namespace('M.block_xp.RulePicker').init = function (config) {
+Y.namespace('M.block_xp.RulePicker').init = function(config) {
     return new PICKER(config);
 };

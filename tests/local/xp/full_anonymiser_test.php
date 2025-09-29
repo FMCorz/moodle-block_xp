@@ -37,7 +37,7 @@ final class full_anonymiser_test extends base_testcase {
     /**
      * Test user state.
      */
-    public function test_user_state_anonymisation() {
+    public function test_user_state_anonymisation(): void {
         $course = $this->getDataGenerator()->create_course();
         $anonuser = $this->getDataGenerator()->create_user(['firstname' => 'Anonymous', 'lastname' => 'User']);
         $user = $this->getDataGenerator()->create_user();
@@ -79,7 +79,7 @@ final class full_anonymiser_test extends base_testcase {
     /**
      * Test state with subject.
      */
-    public function test_state_with_subject_anonymisation() {
+    public function test_state_with_subject_anonymisation(): void {
         $anonuser = $this->getDataGenerator()->create_user(['firstname' => 'Anonymous', 'lastname' => 'User']);
         $user = $this->getDataGenerator()->create_user();
 
@@ -174,7 +174,7 @@ final class full_anonymiser_test extends base_testcase {
     /**
      * Test state with user.
      */
-    public function test_state_with_user_anonymisation() {
+    public function test_state_with_user_anonymisation(): void {
         $anonuser = $this->getDataGenerator()->create_user(['firstname' => 'Anonymous', 'lastname' => 'User']);
         $user = $this->getDataGenerator()->create_user();
 

@@ -39,7 +39,7 @@ export const asyncRender = (name, context) => {
     }
     return new Promise((resolve, reject) => {
         Templates.render(name, context).then((html, js) => {
-            resolve({ html, js });
+            resolve({html, js});
             return;
         }).catch((err) => {
             reject(err);
@@ -74,7 +74,7 @@ export function getFormNode(form) {
  */
 export function markFormSubmitted(node) {
     try {
-        require('core_form/changechecker', function (ChangeChecker) {
+        require('core_form/changechecker', function(ChangeChecker) {
             ChangeChecker.markFormSubmitted(node);
         });
     } catch (e) {

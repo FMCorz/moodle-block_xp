@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define([], function () {
+define([], function() {
     /**
      * Throttler.
      *
@@ -35,11 +35,11 @@ define([], function () {
         this.time = new Date();
     }
 
-    Throttler.prototype.cancel = function () {
+    Throttler.prototype.cancel = function() {
         clearTimeout(this.timeout);
     };
 
-    Throttler.prototype.schedule = function (callback) {
+    Throttler.prototype.schedule = function(callback) {
         var now = new Date();
         if (this.time.getTime() + this.delay > now) {
             clearTimeout(this.timeout);

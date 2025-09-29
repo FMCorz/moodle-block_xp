@@ -36,7 +36,7 @@
  * @class DnD
  * @constructor
  */
-var DND = function () {
+var DND = function() {
     DND.superclass.constructor.apply(this, arguments);
 };
 Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
@@ -51,7 +51,7 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
     /**
      * Initializer.
      */
-    initializer: function () {
+    initializer: function() {
         this.groups = this.get('groups');
         this.samenodeclass = this.get('nodeClass');
         this.parentnodeclass = this.get('containerClass');
@@ -144,11 +144,11 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
     /**
      * Sync the drop targets.
      */
-    syncTargets: function () {
+    syncTargets: function() {
         this.delegate.syncTargets();
 
         if (this.get('additionalDropsSelector')) {
-            Y.one(this.get('containerSelector')).all(this.get('additionalDropsSelector')).each(function (node) {
+            Y.one(this.get('containerSelector')).all(this.get('additionalDropsSelector')).each(function(node) {
                 this.delegate.createDrop(node, this.groups);
             }, this);
         }
@@ -243,6 +243,6 @@ Y.namespace('M.block_xp.Filters').DnD = Y.extend(DND, M.core.dragdrop, {
     }
 });
 
-Y.namespace('M.block_xp.Filters.DnD').init = function (config) {
+Y.namespace('M.block_xp.Filters.DnD').init = function(config) {
     return new DND(config);
 };

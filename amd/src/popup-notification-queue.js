@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['block_xp/popup-notification', 'core/ajax'], function (PopupNotification, Ajax) {
+define(['block_xp/popup-notification', 'core/ajax'], function(PopupNotification, Ajax) {
     let instances = [];
     let isShowing = false;
 
@@ -53,7 +53,7 @@ define(['block_xp/popup-notification', 'core/ajax'], function (PopupNotification
                         courseid: instance.courseid,
                         level: instance.levelnum
                     }
-                }])[0].fail(function () {
+                }])[0].fail(function() {
                     // Nothing.
                 });
             },

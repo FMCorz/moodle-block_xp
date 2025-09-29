@@ -25,12 +25,12 @@
 
 import Modal from 'core/modal';
 import ModalEvents from 'core/modal_events';
-import { asyncRender } from 'block_xp/compat';
+import {asyncRender} from 'block_xp/compat';
 import CourseResourceSelector from 'block_xp/course-resource-selector';
 import $ from 'jquery';
 
-export const openCourseSelector = async (onSelected) => {
-    const { html } = await asyncRender('block_xp/modal-course-selector', {});
+export const openCourseSelector = async(onSelected) => {
+    const {html} = await asyncRender('block_xp/modal-course-selector', {});
     const modal = new Modal(html);
     modal.setRemoveOnClose(true);
 
@@ -42,7 +42,7 @@ export const openCourseSelector = async (onSelected) => {
         const container = root.querySelector('.search-result-contents');
         const termField = root.querySelector('.search-term-course');
         const cs = new CourseResourceSelector($(container), $(termField));
-        cs.onResourceSelected(function (e, resource) {
+        cs.onResourceSelected(function(e, resource) {
             onSelected(resource.course);
             modal.hide();
         });

@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/ajax', 'block_xp/course-resource-selector', 'block_xp/cm-resource-selector'], function (
+define(['jquery', 'core/ajax', 'block_xp/course-resource-selector', 'block_xp/cm-resource-selector'], function(
     $,
     Ajax,
     CourseResourceSelector,
@@ -46,7 +46,7 @@ define(['jquery', 'core/ajax', 'block_xp/course-resource-selector', 'block_xp/cm
         var cmSearchField = container.find('.search-term-cm');
 
         var cs = new CourseResourceSelector(searchResultsContents, courseSearchField);
-        cs.onResourceSelected(function (e, resource) {
+        cs.onResourceSelected(function(e, resource) {
             if (!resource._iscourse) {
                 return;
             }
@@ -54,7 +54,7 @@ define(['jquery', 'core/ajax', 'block_xp/course-resource-selector', 'block_xp/cm
         });
 
         var cms = new CmResourceSelector(searchResultsContents, cmSearchField);
-        cms.onResourceSelected(function (e, resource) {
+        cms.onResourceSelected(function(e, resource) {
             if (!resource._iscm) {
                 return;
             }
@@ -64,7 +64,7 @@ define(['jquery', 'core/ajax', 'block_xp/course-resource-selector', 'block_xp/cm
             });
         });
 
-        container.find('.course-selection-change').on('click', function () {
+        container.find('.course-selection-change').on('click', function() {
             reset();
         });
 
