@@ -1758,6 +1758,9 @@ a .block_xp-level {
 .block_xp :is(.\[\&_li\]\:xp-mb-1 li) {
     margin-bottom: 0.25rem;
 }
+.block_xp :is(.last\:\[\&_p\]\:xp-m-0 p:last-child) {
+    margin: 0px;
+}
 .block_xp :is(.last\:\[\&_p\]\:xp-mb-0 p:last-child) {
     margin-bottom: 0px;
 }
