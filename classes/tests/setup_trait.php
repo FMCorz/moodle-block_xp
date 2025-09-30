@@ -38,6 +38,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2023 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 19, no longer needed.
  */
 trait setup_trait_310_onwards {
 
@@ -57,6 +58,7 @@ trait setup_trait_310_onwards {
  * @copyright  2023 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 19, no longer needed.
  */
 trait setup_trait_pre_310 {
 
@@ -69,40 +71,22 @@ trait setup_trait_pre_310 {
 
 }
 
-if ($CFG->branch < 310) {
-    /**
-     * Setup trait.
-     *
-     * @package    block_xp
-     * @copyright  2023 Frédéric Massart
-     * @author     Frédéric Massart <fred@branchup.tech>
-     * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-     */
-    trait setup_trait {
-        use setup_trait_pre_310;
+/**
+ * Setup trait.
+ *
+ * @package    block_xp
+ * @copyright  2023 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 19, no longer needed.
+ */
+trait setup_trait { // @codingStandardsIgnoreLine
+    use setup_trait_310_onwards;
 
-        /**
-         * Alias for the standard method.
-         */
-        protected function setup_test() {
-        }
-    }
-} else {
     /**
-     * Setup trait.
-     *
-     * @package    block_xp
-     * @copyright  2023 Frédéric Massart
-     * @author     Frédéric Massart <fred@branchup.tech>
-     * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+     * Alias for the standard method.
      */
-    trait setup_trait { // @codingStandardsIgnoreLine
-        use setup_trait_310_onwards;
-
-        /**
-         * Alias for the standard method.
-         */
-        protected function setup_test() {
-        }
+    protected function setup_test() {
     }
+
 }

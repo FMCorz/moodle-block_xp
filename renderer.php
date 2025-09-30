@@ -157,9 +157,6 @@ class block_xp_renderer extends plugin_renderer_base {
      */
     public function confirm_step($title, $message, \moodle_url $confirmurl, \moodle_url $cancelurl, $options = []) {
         global $CFG;
-        if ($CFG->branch < 400) {
-            return parent::confirm($message, $confirmurl, $cancelurl);
-        }
         return parent::confirm($message, $confirmurl, $cancelurl, [
             'confirmtitle' => $title,
             'continuestr' => $options['confirmlabel'] ?? null,
@@ -994,18 +991,9 @@ EOT
      * @return string
      */
     public function render_filters_widget_group(renderable $group) {
-        global $CFG;
-
         $formid = html_writer::random_id();
 
-        // The form change checker YUI module is deprecated since Moodle 4.0.
-        if ($CFG->branch >= 400) {
-            $this->page->requires->js_call_amd('core_form/changechecker', 'watchFormById', [$formid]);
-        } else {
-            $this->page->requires->string_for_js('changesmadereallygoaway', 'moodle');
-            $this->page->requires->yui_module('moodle-core-formchangechecker', 'M.core_formchangechecker.init',
-                [['formid' => $formid]]);
-        }
+        $this->page->requires->js_call_amd('core_form/changechecker', 'watchFormById', [$formid]);
 
         echo html_writer::start_div('block-xp-filters-group');
         echo html_writer::start_tag('form', ['method' => 'POST', 'class' => 'block-xp-filters', 'id' => $formid]);
@@ -1046,19 +1034,11 @@ EOT
      * @return array
      */
     protected function get_progress_bar_context(state $state, $percentagetogo = false) {
-        global $CFG;
-
         $pc = $state->get_ratio_in_level() * 100;
         $nextinvalue = $this->xp($state->get_total_xp_in_level() - $state->get_xp_in_level());
         if ($percentagetogo) {
             $value = format_float(max(0, 100 - $pc), 1);
-            // Quick hack to support localisation of percentages without having to define a new language
-            // string for older versions. When the string is not available, we provide a sensible fallback.
-            if ($CFG->branch >= 36) {
-                $nextinvalue = get_string('percents', 'core', $value);
-            } else {
-                $nextinvalue = $value . '%';
-            }
+            $nextinvalue = get_string('percents', 'core', $value);
         }
 
         return [

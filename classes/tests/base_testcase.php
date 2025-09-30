@@ -27,7 +27,6 @@
 namespace block_xp\tests;
 
 use block_manager;
-use moodle_page;
 use moodle_url;
 
 /**
@@ -39,10 +38,22 @@ use moodle_url;
  */
 abstract class base_testcase extends \advanced_testcase {
 
-    use setup_trait;
+    /**
+     * PHP Unit setup method.
+     *
+     * This method is final not to be overridden. It was never used directly, instead
+     * usage of the setup_test method was required. We maintain this behaviour for simplicity.
+     */
+    final public function setUp(): void {
+        $this->setup_test();
+    }
 
     /**
      * Setup test.
+     *
+     * Historically added to serve as an alternate method that did not require a return type,
+     * allowing us to define setUp more dynamically to support multiple PHP versions. But
+     * we now keep it as the default method to setup tests.
      */
     public function setup_test() {
         $this->resetAfterTest();
