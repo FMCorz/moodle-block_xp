@@ -58,7 +58,7 @@ abstract class base_testcase extends \advanced_testcase {
      * @param string|null $subpagepattern
      */
     protected function add_block_in_context($name, \context $context, $pagetypepattern = null, $subpagepattern = null) {
-        global $DB, $PAGE;
+        global $CFG, $DB, $PAGE;
 
         $course = null;
         if ($coursecontext = $context->get_course_context(false)) {
@@ -75,7 +75,15 @@ abstract class base_testcase extends \advanced_testcase {
         $blockmanager = new block_manager($PAGE);
         $blockmanager->add_regions(['xptest'], false);
         $blockmanager->set_default_region('xptest');
-        return $blockmanager->add_block($name, 'xptest', 0, false, $pagetypepattern, $subpagepattern);
+        $instance = $blockmanager->add_block($name, 'xptest', 0, false, $pagetypepattern, $subpagepattern);
+
+        // Older versions did not return the instance.
+        if ($instance === null && $CFG->branch <= 401) {
+            $records = $DB->get_records('block_instances', ['blockname' => $name], 'id DESC', '*', 0, 1);
+            $instance = block_instance('xp', reset($records));
+        }
+
+        return $instance;
     }
 
     /**
