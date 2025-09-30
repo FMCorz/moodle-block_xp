@@ -110,6 +110,13 @@ class default_settings_maker implements settings_maker {
         }
         $settings->add($catname, $settingspage);
 
+        // Add the shadow settings page used for special actions.
+        $settingspage = new admin_externalpage('block_xp_default_settingspage',
+            get_string('defaultsettings', 'block_xp'),
+            $this->urlresolver->reverse('admin/settings')->get_compatible_url());
+        $settingspage->hidden = true;
+        $settings->add($catname, $settingspage);
+
         // Add the default levels page.
         $settingspage = new admin_externalpage('block_xp_default_levels',
             get_string('defaultlevels', 'block_xp'),
@@ -259,11 +266,18 @@ class default_settings_maker implements settings_maker {
         // Default settings warning.
         $settings[] = (new freeform_setting('block_xp/hdreditingdefaultsnotice', function() {
             // Use DI directly as an exception.
-            if (di::get('config')->get('context') != CONTEXT_SYSTEM) {
-                return;
+            $config = di::get('config');
+            $renderer = di::get('renderer');
+
+            if ($config->get('context') != CONTEXT_SYSTEM) {
+                return $renderer->notification_without_close(strip_tags(
+                    markdown_to_html(get_string('editingdefaultsettingsincoursemodenotice', 'block_xp')),
+                    '<a><em><strong>'
+                ), \core\output\notification::NOTIFY_WARNING);
             }
+
             $url = $this->urlresolver->reverse('config', ['courseid' => SITEID]);
-            return di::get('renderer')->notification_without_close(strip_tags(
+            return $renderer->notification_without_close(strip_tags(
                 markdown_to_html(get_string('editingdefaultsettingsinwholesitemodenotice', 'block_xp', [
                     'url' => $url->out(false),
                 ])),
@@ -388,6 +402,19 @@ class default_settings_maker implements settings_maker {
                 0 => get_string('no'),
                 3 => get_string('yes'),
             ]));
+
+        // Reset data.
+        if (di::get('config')->get('context') != CONTEXT_SYSTEM) {
+            $settings[] = (new admin_setting_heading('block_xp/hdrresetdata',
+                get_string('resetcourses', 'block_xp'), ''));
+
+            $resultallurl = $this->urlresolver->reverse('admin/settings');
+            $resultallurl->param('action', 'reset');
+            $settings[] = (new static_setting('block_xp/resetallcourses', get_string('resettodefaults', 'block_xp'), '',
+                \html_writer::div(strip_tags(markdown_to_html(get_string('resetallcoursessettingstodefaults', 'block_xp', [
+                    'url' => $resultallurl->out(false),
+                ])), '<a><em><strong>'), 'mb-5')));
+        }
 
         return $settings;
     }

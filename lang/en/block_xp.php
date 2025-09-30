@@ -203,6 +203,7 @@ Drops can be used to cleverly award points when certain type of content is consu
 [More info](https://docs.levelup.plus/xp/docs/how-to/use-drops?ref=blockxp_help)
 ';
 $string['editcondition'] = 'Edit condition';
+$string['editingdefaultsettingsincoursemodenotice'] = '**Attention!** You are not modifying the currently active settings, instead you are editing the default values. To change a course\'s settings, follow the "Settings" link from the XP block itself.';
 $string['editingdefaultsettingsinwholesitemodenotice'] = '**Attention!** You are not modifying the currently active settings, instead you are editing the default values. As Level Up XP is used sitewide, your intention is most likely to change the sitewide settings. [Navigate here]({$a->url}) to change those settings, or follow the "Settings" link from the XP block itself.';
 $string['enablecheatguard'] = 'Enable cheat guard';
 $string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive mechanism for preventing students to abuse the system using obvious techniques, such as refreshing the same page endlessly, or repeating the same action over and over again.
@@ -488,6 +489,7 @@ Removing logs may enable a user to re-earn points for previous actions. If your 
 Importantly, when using _Level Up XP_ sitewide, deleting them will make them disappear from the report, in which case you will not be able to re-assign them points. However, if you are using _Level Up XP_ per course, the student may still appear in the report if they are enrolled in the course.
 
 Do you really want to delete the points and logs of this user?';
+$string['reallyresetallcoursessettingstodefaults'] = 'Are you sure that you want to reset ALL courses to the default settings? This action is not reversible.';
 $string['reallyresetallcoursestodefaults'] = 'Are you sure that you want to reset the rules in ALL courses to the default rules? This action is not reversible.';
 $string['reallyresetcourserulestodefaults'] = 'Are you sure that you would like to reset the rules to the default rules? This action is not reversible.';
 $string['reallyresetallcourselevelstodefaults'] = 'Are you sure that you want to reset the levels in ALL courses to the default levels? This action is not reversible.';
@@ -508,6 +510,8 @@ $string['reportisemptyenrolstudents'] = 'The report is empty, have students been
 $string['resetcoursedata'] = 'Reset course data';
 $string['resetallcoursestodefaults'] = 'Reset all courses to defaults';
 $string['resetallcoursestodefaultsintro'] = 'Click the button below to reset all courses to the above defaults.';
+$string['resetallcoursessettingstodefaults'] = 'Follow this link to [reset all courses to the default settings]({$a->url}). If you have made any changes, they must be saved before. Note that this will override the settings of all courses and is not reversible. This does not affect the default levels, appearance and rules, to reset those please see their corresponding admin pages.';
+$string['resetcourses'] = 'Reset courses';
 $string['resetgroupdata'] = 'Reset group data';
 $string['resetladderparticiptionofeveryone'] = 'Reset the participation status of everyone';
 $string['resettodefaults'] = 'Reset to defaults';

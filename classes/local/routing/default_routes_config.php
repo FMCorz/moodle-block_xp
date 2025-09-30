@@ -168,6 +168,12 @@ class default_routes_config extends static_routes_config {
 
             // Admin routes.
             new route_definition(
+                'admin/settings',
+                '/admin/settings',
+                '~^/admin/settings$~',
+                'admin_settings'
+            ),
+            new route_definition(
                 'admin/levels',
                 '/admin/levels',
                 '~^/admin/levels$~',

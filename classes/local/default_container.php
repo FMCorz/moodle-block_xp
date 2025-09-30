@@ -55,6 +55,7 @@ class default_container implements container {
         'block_class' => true,
         'block_count_cache' => true,
         'block_edit_form_class' => true,
+        'bulk_world_config_setter' => true,
         'cheatguard_form_class' => true,
         'collection_logger' => true,
         'collection_strategy' => true,
@@ -234,6 +235,15 @@ class default_container implements container {
      */
     protected function get_block_edit_form_class() {
         return 'block_xp\form\edit_form';
+    }
+
+    /**
+     * Bulk world config setter.
+     *
+     * @return config\bulk_world_config_setter
+     */
+    protected function get_bulk_world_config_setter() {
+        return new config\bulk_world_config_setter();
     }
 
     /**
