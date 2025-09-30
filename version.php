@@ -31,4 +31,4 @@ $plugin->requires   = 2022112800;   // Moodle 4.1.0.
 $plugin->component  = 'block_xp';
 $plugin->maturity   = MATURITY_STABLE;
 $plugin->release    = '19.0-dev';
-$plugin->supported  = [401, 500];
+$plugin->supported  = [401, 501];
