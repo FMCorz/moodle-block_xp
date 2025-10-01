@@ -74,8 +74,12 @@ class create_rule extends external_api {
      * @return int
      */
     public static function execute($contextid, $points, $type, $filter, $childcontextid = 0) {
-        $params = self::validate_parameters(self::execute_parameters(), compact('contextid', 'type', 'points', 'filter',
-            'childcontextid'));
+        $params = self::validate_parameters(self::execute_parameters(), compact('contextid',
+            'type',
+            'points',
+            'filter',
+            'childcontextid'
+        ));
         $contextid = $params['contextid'];
         $type = $params['type'];
         $points = $params['points'];

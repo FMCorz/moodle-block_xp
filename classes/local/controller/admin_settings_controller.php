@@ -85,7 +85,6 @@ class admin_settings_controller extends admin_route_controller {
             );
             return;
         }
-
     }
 
 }

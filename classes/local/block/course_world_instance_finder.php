@@ -43,8 +43,11 @@ use stdClass;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_world_instance_finder implements instance_checker, instance_finder, instances_finder_in_context,
-        any_instance_finder_in_context {
+class course_world_instance_finder implements
+    any_instance_finder_in_context,
+    instances_finder_in_context,
+    instance_checker,
+    instance_finder {
 
     /** @var moodle_database The DB. */
     protected $db;
@@ -154,7 +157,7 @@ class course_world_instance_finder implements instance_checker, instance_finder,
         }
 
         $records = $this->db->get_records_sql($sql, $params);
-        return array_map(function($record) {
+        return array_map(function ($record) {
             return block_instance($record->blockname, $record);
         }, $records);
     }

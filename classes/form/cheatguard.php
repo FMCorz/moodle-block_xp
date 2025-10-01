@@ -43,7 +43,6 @@ require_once(__DIR__ . '/itemspertime.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class cheatguard extends dynamic_form {
-
     use dynamic_world_trait;
 
     /** @var string */
@@ -90,7 +89,7 @@ class cheatguard extends dynamic_form {
 
         $mform->addElement('block_xp_form_duration', 'timebetweensameactions', get_string('timebetweensameactions', 'block_xp'), [
             'maxunit' => 60,
-            'optional' => false,        // We must set this...
+            'optional' => false, // We must set this...
         ]);
         $mform->addHelpButton('timebetweensameactions', 'timebetweensameactions', 'block_xp');
         $mform->disabledIf('timebetweensameactions', 'enablecheatguard', 'eq', 0);
@@ -102,8 +101,9 @@ class cheatguard extends dynamic_form {
             $promourl = $urlresolver->reverse('promo', ['courseid' => $world->get_courseid()]);
             if ($timeframe > HOURSECS * 6) {
                 $mform->addElement('static', '', '', $renderer->notification_without_close(
-                    get_string('promocheatguard', 'block_xp', ['url' => $promourl->out()]
-                ), 'warning'));
+                    get_string('promocheatguard', 'block_xp', ['url' => $promourl->out()]),
+                    'warning'
+                ));
             }
         }
     }

@@ -73,7 +73,8 @@ class search_courses extends external_api {
 
         $sitehome = get_string('frontpage', 'admin');
         if (strpos(core_text::strtolower($SITE->shortname), $query) !== false
-                || strpos(core_text::strtolower($sitehome), $query) !== false) {
+                || strpos(core_text::strtolower($sitehome), $query) !== false
+        ) {
 
             array_unshift($courses, array_merge((array) $SITE, [
                 'fullname' => $sitehome,
@@ -81,7 +82,7 @@ class search_courses extends external_api {
             ]));
         }
 
-        return array_values(array_map(function($course) {
+        return array_values(array_map(function ($course) {
             return [
                 'id' => $course['id'],
                 'fullname' => $course['fullname'],

@@ -120,7 +120,7 @@ class the_dictator implements dictator {
         ];
         $records = $this->db->get_records_sql($sql, $params);
 
-        return array_values(array_map(function($record) {
+        return array_values(array_map(function ($record) {
             return new static_instance($record);
         }, $records));
     }
@@ -217,7 +217,7 @@ class the_dictator implements dictator {
         // This may not be seen as very efficient, however getting the rules in the context is expected
         // to be cached, and therefore it should be good enough to filter as we do here for now.
         $rules = $this->get_rules_in_context($storecontext, $childcontext);
-        return array_filter($rules, function($rule) use ($types) {
+        return array_filter($rules, function ($rule) use ($types) {
             return in_array($rule->get_type_name(), $types);
         });
     }
@@ -232,7 +232,7 @@ class the_dictator implements dictator {
         // Sort the rules by context level, filter method weight, and then points, all descendingly, and then ID.
         // This means that the deepest context, with the highest weight, and the most points will be evaluated first.
         // Although, the context depth does not currently handle a hierarchy within a context level (like course cat).
-        usort($rules, function($a, $b) {
+        usort($rules, function ($a, $b) {
             $achildcontext = $a->get_child_context();
             $bchildcontext = $b->get_child_context();
 

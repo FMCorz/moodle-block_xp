@@ -146,7 +146,7 @@ class handler {
         $lessgreater = ['<' => null, '<=' => null, '>' => null, '>=' => null];
 
         // Attributes can be HTML encoded.
-        $args = array_combine(array_map(function($key) {
+        $args = array_combine(array_map(function ($key) {
             return html_entity_decode($key, ENT_COMPAT | ENT_HTML401);
         }, array_keys($args)), array_values($args));
 
@@ -168,7 +168,8 @@ class handler {
         }
 
         if ($lessgreater['<'] === null && $lessgreater['<='] === null
-                && $lessgreater['>'] === null && $lessgreater['>='] === null) {
+                && $lessgreater['>'] === null && $lessgreater['>='] === null
+        ) {
             return '';
         } else if ($lessgreater['<'] !== null && $level >= $lessgreater['<']) {
             return '';

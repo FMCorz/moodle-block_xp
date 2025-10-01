@@ -71,8 +71,10 @@ class config extends moodleform {
         $mform->addElement('selectyesno', 'enableinfos', get_string('enableinfos', 'block_xp'));
         $mform->addHelpButton('enableinfos', 'enableinfos', 'block_xp');
 
-        $levelupnotifelements = [$mform->createElement('selectyesno', 'enablelevelupnotif',
-            get_string('enablelevelupnotif', 'block_xp'))];
+        $levelupnotifelements = [$mform->createElement('selectyesno',
+            'enablelevelupnotif',
+            get_string('enablelevelupnotif', 'block_xp')
+        )];
         if ($world) {
             $randomtrymeid = html_writer::random_id();
             $level1 = $world->get_levels_info()->get_level(1);
@@ -104,16 +106,32 @@ class config extends moodleform {
 
         $mform->addElement('header', 'hdrladder', get_string('ladder', 'block_xp'));
 
-        $mform->addElement('html', \html_writer::div($renderer->notification_without_close(
-            strip_tags(markdown_to_html(get_string('laddersettingsmovednotice', 'block_xp', [
-                'url' => ($urlresolver->reverse('ladder', ['courseid' => $world->get_courseid()]))->out(false),
-            ])), '<a>'), 'info'),
-            'xp-my-4'));
+        $mform->addElement('html',
+            \html_writer::div(
+                $renderer->notification_without_close(
+                    strip_tags(
+                        markdown_to_html(get_string('laddersettingsmovednotice',
+                            'block_xp',
+                            ['url' => ($urlresolver->reverse('ladder', ['courseid' => $world->get_courseid()]))->out(false)]
+                        )),
+                        '<a>'
+                    ),
+                    'info'
+                ),
+                'xp-my-4'
+            )
+        );
 
         if ($addonolder) {
-            $mform->addElement('html', \html_writer::div($renderer->notification_without_close(
-                strip_tags(markdown_to_html(get_string('settingsoutdatedxppnotice', 'block_xp')), '<a>'), 'error'),
-                'xp-my-4'));
+            $mform->addElement('html',
+                \html_writer::div(
+                    $renderer->notification_without_close(
+                        strip_tags(markdown_to_html(get_string('settingsoutdatedxppnotice', 'block_xp')), '<a>'),
+                        'error'
+                    ),
+                    'xp-my-4'
+                )
+            );
             $this->define_legacy_ladder_fields($world);
         }
 
@@ -122,16 +140,34 @@ class config extends moodleform {
 
         $mform->addElement('header', 'hdrcheating', get_string('cheatguard', 'block_xp'));
 
-        $mform->addElement('html', \html_writer::div($renderer->notification_without_close(
-            strip_tags(markdown_to_html(get_string('cheatguardsettingsmovednotice', 'block_xp', [
-                'url' => ($urlresolver->reverse('rules', ['courseid' => $world->get_courseid()]))->out(false),
-            ])), '<a>'), 'info'),
-            'xp-my-4'));
+        $mform->addElement('html',
+            \html_writer::div(
+                $renderer->notification_without_close(
+                    strip_tags(
+                        markdown_to_html(
+                            get_string('cheatguardsettingsmovednotice',
+                                'block_xp',
+                                ['url' => ($urlresolver->reverse('rules', ['courseid' => $world->get_courseid()]))->out(false)]
+                            )
+                        ),
+                        '<a>'
+                    ),
+                    'info'
+                ),
+                'xp-my-4'
+            )
+        );
 
         if ($addonolder) {
-            $mform->addElement('html', \html_writer::div($renderer->notification_without_close(
-                strip_tags(markdown_to_html(get_string('settingsoutdatedxppnotice', 'block_xp')), '<a>'), 'error'),
-                'xp-my-4'));
+            $mform->addElement('html',
+                \html_writer::div(
+                    $renderer->notification_without_close(
+                        strip_tags(markdown_to_html(get_string('settingsoutdatedxppnotice', 'block_xp')), '<a>'),
+                        'error'
+                    ),
+                    'xp-my-4'
+                )
+            );
             $this->define_legacy_cheatguard_fields($world);
         }
 
@@ -282,7 +318,7 @@ class config extends moodleform {
 
         $mform->addElement('block_xp_form_duration', 'timebetweensameactions', get_string('timebetweensameactions', 'block_xp'), [
             'maxunit' => 60,
-            'optional' => false,        // We must set this...
+            'optional' => false, // We must set this...
         ]);
         $mform->addHelpButton('timebetweensameactions', 'timebetweensameactions', 'block_xp');
         $mform->disabledIf('timebetweensameactions', 'enablecheatguard', 'eq', 0);
@@ -297,9 +333,14 @@ class config extends moodleform {
             }
 
             if ($timeframe > HOURSECS * 6) {
-                $mform->addElement('static', '', '', $renderer->notification_without_close(
-                    get_string('promocheatguard', 'block_xp', ['url' => $promourl->out()]
-                ), 'warning'));
+                $mform->addElement('static',
+                    '',
+                    '',
+                    $renderer->notification_without_close(
+                        get_string('promocheatguard', 'block_xp', ['url' => $promourl->out()]),
+                        'warning'
+                    )
+                );
             }
         }
     }

@@ -66,10 +66,13 @@ class default_course_world_factory implements course_world_factory {
      * @param config $adminconfiglocked The locked config.
      * @param levels_info_factory $levelsinfofactory The levels info factory.
      */
-    public function __construct(config $adminconfig, moodle_database $db,
-            badge_url_resolver_course_world_factory $urlresolverfactory,
-            config $adminconfiglocked,
-            levels_info_factory $levelsinfofactory) {
+    public function __construct(
+        config $adminconfig,
+        moodle_database $db,
+        badge_url_resolver_course_world_factory $urlresolverfactory,
+        config $adminconfiglocked,
+        levels_info_factory $levelsinfofactory
+    ) {
 
         $this->adminconfig = $adminconfig;
         $this->db = $db;
@@ -102,8 +105,12 @@ class default_course_world_factory implements course_world_factory {
             $courseconfig = new course_world_config($this->adminconfig, $this->db, $courseid);
             $config = new config_stack([$this->configoverrides, $courseconfig]);
 
-            $this->worlds[$courseid] = new \block_xp\local\course_world($config, $this->db, $courseid, $this->urlresolverfactory,
-                $this->levelsinfofactory);
+            $this->worlds[$courseid] = new \block_xp\local\course_world($config,
+                $this->db,
+                $courseid,
+                $this->urlresolverfactory,
+                $this->levelsinfofactory
+            );
         }
         return $this->worlds[$courseid];
     }

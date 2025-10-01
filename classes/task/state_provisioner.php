@@ -64,8 +64,11 @@ class state_provisioner extends \core\task\scheduled_task {
 
         } else {
             $logger->output('Identifying courses where XP is enabled...');
-            $courseids = di::get('db')->get_fieldset_select('block_xp_config', 'courseid',
-                'enabled = ? AND courseid != ?', [1, SITEID]);
+            $courseids = di::get('db')->get_fieldset_select('block_xp_config',
+                'courseid',
+                'enabled = ? AND courseid != ?',
+                [1, SITEID]
+            );
             $ncourses = count($courseids);
             $logger->output("Found $ncourses course(s) where XP is enabled.");
 

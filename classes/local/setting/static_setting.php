@@ -96,8 +96,15 @@ class static_setting extends \admin_setting {
      * @return string
      */
     public function output_html($data, $query = '') {
-        return format_admin_setting($this, $this->visiblename, $this->get_html_content(), $this->description,
-            true, '', null, $query);
+        return format_admin_setting($this,
+            $this->visiblename,
+            $this->get_html_content(),
+            $this->description,
+            true,
+            '',
+            null,
+            $query
+        );
     }
 
 }

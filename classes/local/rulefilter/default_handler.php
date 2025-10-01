@@ -105,7 +105,7 @@ class default_handler implements handler {
      */
     public function get_filters(): array {
         return array_filter(
-            array_reduce($this->filternames, function($carry, $name) {
+            array_reduce($this->filternames, function ($carry, $name) {
                 $carry[$name] = $this->get_filter($name);
                 return $carry;
             }, []),

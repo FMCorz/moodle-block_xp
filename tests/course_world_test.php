@@ -221,7 +221,7 @@ final class course_world_test extends base_testcase {
             4 => 437,
             5 => 644,
             6 => 893,
-        ], array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+        ], array_reduce($levelsinfo->get_levels(), function ($carry, $level) {
             $carry[$level->get_level()] = $level->get_xp_required();
             return $carry;
         }, []));
@@ -254,7 +254,7 @@ final class course_world_test extends base_testcase {
             8 => 2110,
             9 => 2863,
             10 => 3842,
-        ], array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+        ], array_reduce($levelsinfo->get_levels(), function ($carry, $level) {
             $carry[$level->get_level()] = $level->get_xp_required();
             return $carry;
         }, []));
@@ -273,8 +273,12 @@ final class course_world_test extends base_testcase {
             ]),
             new default_course_world_config(),
         ]);
-        $world = new course_world($config, $DB, 1, di::get('badge_url_resolver_course_world_factory'),
-            di::get('levels_info_factory'));
+        $world = new course_world($config,
+            $DB,
+            1,
+            di::get('badge_url_resolver_course_world_factory'),
+            di::get('levels_info_factory')
+        );
         $levelsinfo = $world->get_levels_info();
 
         $this->assertInstanceOf(algo_levels_info::class, $levelsinfo);
@@ -288,7 +292,7 @@ final class course_world_test extends base_testcase {
             4 => 437,
             5 => 644,
             6 => 893,
-        ], array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+        ], array_reduce($levelsinfo->get_levels(), function ($carry, $level) {
             $carry[$level->get_level()] = $level->get_xp_required();
             return $carry;
         }, []));
@@ -303,8 +307,12 @@ final class course_world_test extends base_testcase {
             ]),
             new default_course_world_config(),
         ]);
-        $world = new course_world($config, $DB, 1, di::get('badge_url_resolver_course_world_factory'),
-            di::get('levels_info_factory'));
+        $world = new course_world($config,
+            $DB,
+            1,
+            di::get('badge_url_resolver_course_world_factory'),
+            di::get('levels_info_factory')
+        );
         $levelsinfo = $world->get_levels_info();
 
         $this->assertInstanceOf(algo_levels_info::class, $levelsinfo);
@@ -322,7 +330,7 @@ final class course_world_test extends base_testcase {
             8 => 2110,
             9 => 2863,
             10 => 3842,
-        ], array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+        ], array_reduce($levelsinfo->get_levels(), function ($carry, $level) {
             $carry[$level->get_level()] = $level->get_xp_required();
             return $carry;
         }, []));

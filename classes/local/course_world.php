@@ -82,9 +82,13 @@ class course_world implements world {
      * @param badge_url_resolver_course_world_factory $urlresolverfactory The badge URL resolver factory.
      * @param levels_info_factory|null $levelsinfofactory The levels info factory.
      */
-    public function __construct(config $config, moodle_database $db, $courseid,
-            badge_url_resolver_course_world_factory $urlresolverfactory,
-            ?levels_info_factory $levelsinfofactory = null) {
+    public function __construct(
+        config $config,
+        moodle_database $db,
+        $courseid,
+        badge_url_resolver_course_world_factory $urlresolverfactory,
+        ?levels_info_factory $levelsinfofactory = null
+    ) {
         $this->config = $config;
         $this->courseid = $courseid;
         $this->db = $db;
@@ -228,8 +232,10 @@ class course_world implements world {
      */
     protected function get_state_store_observer() {
         if (!$this->statestoreobserver) {
-            $this->statestoreobserver = new \block_xp\local\observer\default_state_store_observer($this->context, $this->config,
-                $this->get_level_up_notification_service());
+            $this->statestoreobserver = new \block_xp\local\observer\default_state_store_observer($this->context,
+                $this->config,
+                $this->get_level_up_notification_service()
+            );
         }
         return $this->statestoreobserver;
     }

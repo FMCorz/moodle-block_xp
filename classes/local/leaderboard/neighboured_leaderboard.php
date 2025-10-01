@@ -179,7 +179,7 @@ class neighboured_leaderboard implements leaderboard {
      * @return Traversable
      */
     public function get_ranking(limit $customlimit) {
-        list($limit, $total) = $this->get_limit_and_count();
+        [$limit, $total] = $this->get_limit_and_count();
 
         $count = $limit->get_count();
         $offset = $limit->get_offset();

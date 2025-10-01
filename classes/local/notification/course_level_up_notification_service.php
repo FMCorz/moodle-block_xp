@@ -59,7 +59,7 @@ class course_level_up_notification_service {
      */
     public function get_levels($userid) {
         $levels = $this->extract_from_user_prefs_of($userid);
-        usort($levels, function($levela, $levelb) {
+        usort($levels, function ($levela, $levelb) {
             if (!$levela) {
                 return 1;
             } else if (!$levelb) {
@@ -86,7 +86,7 @@ class course_level_up_notification_service {
 
         // Remove the level from the user preference.
         $levels = $this->extract_from_user_prefs_of($userid);
-        $this->save_user_prefs_of($userid, array_filter($levels, function($l) use ($level) {
+        $this->save_user_prefs_of($userid, array_filter($levels, function ($l) use ($level) {
             return $l != $level;
         }));
     }

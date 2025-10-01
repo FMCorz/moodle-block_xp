@@ -96,12 +96,13 @@ class course_user_leaderboard implements leaderboard {
      * @param int $groupid This should not be used, but kept for backwards compat.
      */
     public function __construct(
-            moodle_database $db,
-            levels_info $levelsinfo,
-            $courseid,
-            array $columns,
-            ?ranker $ranker = null,
-            $groupid = 0) {
+        moodle_database $db,
+        levels_info $levelsinfo,
+        $courseid,
+        array $columns,
+        ?ranker $ranker = null,
+        $groupid = 0
+    ) {
 
         $this->db = $db;
         $this->levelsinfo = $levelsinfo;
@@ -280,7 +281,7 @@ class course_user_leaderboard implements leaderboard {
 
         if ($this->ranker) {
             return $this->ranker->rank_states(
-                new map_recordset($recordset, function($record) {
+                new map_recordset($recordset, function ($record) {
                     return $this->make_state_from_record($record);
                 })
             );

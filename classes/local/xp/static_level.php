@@ -35,7 +35,7 @@ namespace block_xp\local\xp;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class static_level implements level, level_with_name, level_with_description, level_with_badge {
+class static_level implements level, level_with_badge, level_with_description, level_with_name {
 
     /** @var int The level. */
     protected $level;

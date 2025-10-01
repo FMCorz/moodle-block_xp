@@ -40,7 +40,6 @@ use core_form\dynamic_form;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class leaderboard extends dynamic_form {
-
     use dynamic_world_trait;
 
     /** @var string */
@@ -78,7 +77,7 @@ class leaderboard extends dynamic_form {
             get_string('ladderisodefault', 'block_xp'),
             get_string('ladderisocohorts', 'block_xp'),
         ], ['disabled' => 'disabled']);
-        $els[] = $mform->createElement(staticfield::name(), 'addonrequired', '', function() {
+        $els[] = $mform->createElement(staticfield::name(), 'addonrequired', '', function () {
             $renderer = di::get('renderer');
             return $renderer->render_from_template('block_xp/addon-required', [
                 'promourl' => di::get('url_resolver')->reverse('promo', ['courseid' => $this->world->get_courseid()])->out(false),
@@ -93,7 +92,7 @@ class leaderboard extends dynamic_form {
             get_string('ladderparticipationoptout', 'block_xp'),
             get_string('ladderparticipationoptin', 'block_xp'),
         ], ['disabled' => 'disabled']);
-        $els[] = $mform->createElement(staticfield::name(), 'addonrequired', '', function() {
+        $els[] = $mform->createElement(staticfield::name(), 'addonrequired', '', function () {
             $renderer = di::get('renderer');
             return $renderer->render_from_template('block_xp/addon-required', [
                 'promourl' => di::get('url_resolver')->reverse('promo', ['courseid' => $this->world->get_courseid()])->out(false),

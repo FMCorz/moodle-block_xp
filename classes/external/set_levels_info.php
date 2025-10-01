@@ -130,7 +130,7 @@ class set_levels_info extends external_api {
      */
     public static function clean_levels_info_data($levels, $algo) {
         // Sort levels.
-        usort($levels, function($l1, $l2) {
+        usort($levels, function ($l1, $l2) {
             return $l1['level'] - $l2['level'];
         });
 
@@ -140,7 +140,7 @@ class set_levels_info extends external_api {
 
         } else {
             $lastpts = null;
-            $levelsdata = array_reduce(array_keys($levels), function($carry, $key) use ($levels, &$lastpts) {
+            $levelsdata = array_reduce(array_keys($levels), function ($carry, $key) use ($levels, &$lastpts) {
                 $level = $levels[$key];
                 $levelnb = $level['level'];
 

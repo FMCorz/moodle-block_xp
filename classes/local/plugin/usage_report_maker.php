@@ -108,12 +108,14 @@ class usage_report_maker {
 
         $data->xp_ruletypes = $this->db->count_records_select('block_xp_rule', 'contextid > 0');
         $data->xp_ruletypes_usage = $this->db->get_records_sql_menu(
-            'SELECT type, COUNT(1) AS n FROM {block_xp_rule} WHERE contextid > 0 GROUP BY type');
+            'SELECT type, COUNT(1) AS n FROM {block_xp_rule} WHERE contextid > 0 GROUP BY type'
+        );
         $data->xp_rulefilters_usage = $this->db->get_records_sql_menu(
-            'SELECT filter, COUNT(1) AS n FROM {block_xp_rule} WHERE contextid > 0 GROUP BY filter');
+            'SELECT filter, COUNT(1) AS n FROM {block_xp_rule} WHERE contextid > 0 GROUP BY filter'
+        );
 
         $components = ['availability_xp', 'block_stash', 'enrol_xp', 'filter_shortcodes'];
-        $data->plugins = array_reduce($components, function($carry, $component) use ($pluginman) {
+        $data->plugins = array_reduce($components, function ($carry, $component) use ($pluginman) {
             $plugininfo = $pluginman->get_plugin_info($component);
             if (!$plugininfo) {
                 return $carry;
@@ -191,7 +193,8 @@ class usage_report_maker {
                 && !empty($recordrules['property']) && $recordrules['property'] === 2
                 && !empty($recordrules['event__mod_book__event__course_module_viewed'])
                 && !empty($recordrules['event__mod_forum__event__discussion_subscription_created'])
-                && !empty($recordrules['event__mod_forum__event__subscription_created'])) {
+                && !empty($recordrules['event__mod_forum__event__subscription_created'])
+            ) {
                     continue;
             }
 

@@ -52,4 +52,3 @@ class something_happened extends \core\event\base {
         return $event;
     }
 }
-

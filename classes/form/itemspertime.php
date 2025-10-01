@@ -32,6 +32,11 @@ global $CFG;
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->libdir . '/form/group.php');
 
+// phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
+// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
+// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
+// phpcs:disable Squiz.Scope.MethodScope.Missing
+
 /**
  * Items per time element class.
  *
@@ -101,7 +106,7 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
                 86400 => get_string('days'),
                 604800 => get_string('weeks'),
             ];
-            $this->_units = array_reduce(array_keys($units), function($carry, $key) use ($units) {
+            $this->_units = array_reduce(array_keys($units), function ($carry, $key) use ($units) {
                 if ($key <= $this->_options['maxunit']) {
                     $carry[$key] = $units[$key];
                 }
@@ -136,7 +141,7 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
      *
      * @return void
      */
-    function _createElements() { // @codingStandardsIgnoreLine
+    function _createElements() {
         $this->_elements = [];
 
         $item = $this->my_create_element('text', 'points', $this->_options['itemlabel'], [
@@ -195,7 +200,7 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
      * @param object $caller calling object
      * @return bool
      */
-    function onQuickFormEvent($event, $arg, &$caller) { // @codingStandardsIgnoreLine
+    function onQuickFormEvent($event, $arg, &$caller) {
         if (method_exists($this, 'setMoodleForm')) {
             $this->setMoodleForm($caller);
         }
@@ -221,7 +226,7 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
                     ];
                     if (!empty($value['time'])) {
                         if (!is_array($value['time'])) {
-                            list($time, $timeunit) = $this->seconds_to_unit($value['time']);
+                            [$time, $timeunit] = $this->seconds_to_unit($value['time']);
                             $finalval += [
                                 'time' => $time,
                                 'timeunit' => $timeunit,
@@ -269,7 +274,7 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
      * @param  bool  $notused Not used.
      * @return array field name => value. The value is the time interval in seconds.
      */
-    function exportValue(&$submitvalues, $notused = false) { // @codingStandardsIgnoreLine
+    function exportValue(&$submitvalues, $notused = false) {
         // Get the values from all the child elements.
         $values = [];
         foreach ($this->_elements as $element) {

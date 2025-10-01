@@ -132,8 +132,10 @@ class admin_filter_manager {
             return $this->get_default_filters($category);
         }
 
-        $results = $this->db->get_recordset('block_xp_filters', ['courseid' => 0, 'category' => $category],
-            'sortorder ASC, id ASC');
+        $results = $this->db->get_recordset('block_xp_filters',
+            ['courseid' => 0, 'category' => $category],
+            'sortorder ASC, id ASC'
+        );
         $filters = [];
         foreach ($results as $key => $filter) {
             $filters[$filter->id] = \block_xp_filter::load_from_data($filter);

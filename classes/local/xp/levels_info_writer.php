@@ -277,8 +277,8 @@ class levels_info_writer {
     protected function process_metadata($data, ?world $world = null) {
 
         // Reorganise metadata per level.
-        $rawmetadata = array_reduce($data['levels'], function($carry, $level) {
-            $carry[$level['level']] = array_reduce($level['metadata'], function($carry, $item) {
+        $rawmetadata = array_reduce($data['levels'], function ($carry, $level) {
+            $carry[$level['level']] = array_reduce($level['metadata'], function ($carry, $item) {
                 $carry[$item['name']] = $item['value'];
                 return $carry;
             }, []);
@@ -326,12 +326,12 @@ class levels_info_writer {
         // Get the levels, and ensure order ascending.
         $levels = $data['levels'];
         core_collator::asort_array_of_arrays_by_key($levels, 'level', core_collator::SORT_NUMERIC);
-        $points = array_values(array_map(function($level) {
+        $points = array_values(array_map(function ($level) {
             return $level['xprequired'];
         }, $levels));
 
         // Ensure the points are increasing.
-        return array_reduce(array_keys($points), function($carry, $idx) use ($points) {
+        return array_reduce(array_keys($points), function ($carry, $idx) use ($points) {
             $xp = $points[$idx];
             $prevxp = array_key_exists($idx - 1, $carry) ? $carry[$idx - 1] : null;
 

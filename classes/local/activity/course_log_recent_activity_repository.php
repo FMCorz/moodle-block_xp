@@ -74,7 +74,7 @@ class course_log_recent_activity_repository implements user_recent_activity_repo
             'userid' => $userid,
         ], 'time DESC, id DESC', '*', 0, $count);
 
-        return array_map(function($row) {
+        return array_map(function ($row) {
             $desc = '';
             $class = $row->eventname;
 
@@ -89,7 +89,6 @@ class course_log_recent_activity_repository implements user_recent_activity_repo
                 $desc,
                 $row->xp
             );
-
         }, $results);
     }
 

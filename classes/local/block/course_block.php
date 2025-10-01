@@ -185,7 +185,7 @@ class course_block extends block_base {
         if ($service->should_be_notified($USER->id)) {
 
             // Get the levels, and remove 0 when the user's level is already in the list.
-            $levels = array_unique(array_map(function($level) use ($state) {
+            $levels = array_unique(array_map(function ($level) use ($state) {
                 if (!$level) {
                     return $state->get_level()->get_level();
                 }
@@ -207,7 +207,9 @@ class course_block extends block_base {
 
                 $propsid = html_writer::random_id();
                 $this->content->text .= $renderer->json_script(
-                    [$this->get_popup_notification_props($renderer, $world, $level, $prevlevel)], $propsid);
+                    [$this->get_popup_notification_props($renderer, $world, $level, $prevlevel)],
+                    $propsid
+                );
                 $PAGE->requires->js_call_amd('block_xp/popup-notification-queue', 'queueFromJson', ["#{$propsid}"]);
             }
         }
@@ -233,28 +235,36 @@ class course_block extends block_base {
         if ($config->get('enableinfos')) {
             $actions[] = new action_link(
                 $urlresolver->reverse('infos', ['courseid' => $courseid]),
-                get_string('navinfos', 'block_xp'), null, null,
+                get_string('navinfos', 'block_xp'),
+                null,
+                null,
                 new pix_icon('i/info', '', 'block_xp')
             );
         }
         if ($config->get('enableladder')) {
             $actions[] = new action_link(
                 $urlresolver->reverse('ladder', ['courseid' => $courseid]),
-                get_string('navladder', 'block_xp'), null, null,
+                get_string('navladder', 'block_xp'),
+                null,
+                null,
                 new pix_icon('i/ladder', '', 'block_xp')
             );
         }
         if ($canaccessreport) {
             $actions[] = new action_link(
                 $urlresolver->reverse('report', ['courseid' => $courseid]),
-                get_string('navreport', 'block_xp'), null, null,
+                get_string('navreport', 'block_xp'),
+                null,
+                null,
                 new pix_icon('i/report', '', 'block_xp')
             );
         }
         if ($canedit) {
             $actions[] = new action_link(
                 $urlresolver->reverse('config', ['courseid' => $courseid]),
-                get_string('navsettings', 'block_xp'), null, null,
+                get_string('navsettings', 'block_xp'),
+                null,
+                null,
                 new pix_icon('i/settings', '', 'block_xp')
             );
         }

@@ -68,7 +68,7 @@ class report_controller extends page_controller {
             ['confirm', 0, PARAM_INT, false],
             ['delete', 0, PARAM_INT, false],
             ['term', null, PARAM_NOTAGS],
-            ['page', 0, PARAM_INT],     // To keep the table page in URL.
+            ['page', 0, PARAM_INT], // To keep the table page in URL.
 
             // Deprecated since XP 3.17.
             ['action', null, PARAM_ALPHA],
@@ -214,7 +214,7 @@ class report_controller extends page_controller {
                     'danger' => true,
                     'href' => $reseturl,
                 ] : null,
-            ], function($value) {
+            ], function ($value) {
                 return $value !== null;
             }),
         ];
@@ -296,7 +296,7 @@ class report_controller extends page_controller {
         // Output the bottom actions.
         $actions = !$canmanage ? [] : $this->get_bottom_action_buttons();
         if (!empty($actions)) {
-            echo html_writer::tag('p', implode('', array_map(function($button) use ($output) {
+            echo html_writer::tag('p', implode('', array_map(function ($button) use ($output) {
                 return $output->render($button);
             }, $actions)));
         }

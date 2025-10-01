@@ -170,7 +170,6 @@ final class filters_test extends base_testcase {
         $this->assertSame(1, $fm->get_points_for_event($e));
         $e = \block_xp\event\something_happened::mock(['crud' => 'r']);
         $this->assertSame(1, $fm->get_points_for_event($e));
-
     }
 
     public function test_validate_data(): void {

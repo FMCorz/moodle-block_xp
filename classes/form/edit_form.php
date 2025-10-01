@@ -51,7 +51,9 @@ class edit_form extends block_edit_form {
     protected function specific_definition($mform) {
         $output = di::get('renderer');
         $mform->addElement('html', $output->notification_without_close(
-            get_string('blockappearancemovedtopluginsettings', 'block_xp'), 'info'));
+            get_string('blockappearancemovedtopluginsettings', 'block_xp'),
+            'info'
+        ));
     }
 
 }

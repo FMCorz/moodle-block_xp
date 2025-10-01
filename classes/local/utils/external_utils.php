@@ -53,8 +53,15 @@ class external_utils {
      * @param array $options Text formatting options.
      * @return array Containing [text, format].
      */
-    public static function format_text($text, $format, $contextorid, $component = null, $filearea = null,
-            $itemid = null, $options = null) {
+    public static function format_text(
+        $text,
+        $format,
+        $contextorid,
+        $component = null,
+        $filearea = null,
+        $itemid = null,
+        $options = null
+    ) {
 
         global $CFG;
         if ($CFG->branch >= 402) {

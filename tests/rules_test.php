@@ -99,7 +99,6 @@ final class rules_test extends \advanced_testcase {
         $this->assertTrue($rule->match($subject));
         $rule = new block_xp_rule_property(block_xp_rule_base::RX, '/^You/', 'str');
         $this->assertFalse($rule->match($subject));
-
     }
 
     /**
@@ -162,7 +161,6 @@ final class rules_test extends \advanced_testcase {
         ], block_xp_ruleset::ALL));
         $rs->add_rule(new block_xp_rule_property(block_xp_rule_base::EQ, 99, 'int'));
         $this->assertTrue($rs->match($subject));
-
     }
 
     /**

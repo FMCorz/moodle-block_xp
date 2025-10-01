@@ -31,6 +31,8 @@ namespace block_xp\tests;
 
 defined('MOODLE_INTERNAL') || die();
 
+// phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
+
 /**
  * Setup trait.
  *
@@ -80,7 +82,7 @@ trait setup_trait_pre_310 {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @deprecated Since XP 19, no longer needed.
  */
-trait setup_trait { // @codingStandardsIgnoreLine
+trait setup_trait {
     use setup_trait_310_onwards;
 
     /**

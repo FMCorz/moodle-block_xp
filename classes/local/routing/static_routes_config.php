@@ -48,7 +48,7 @@ class static_routes_config implements routes_config {
      * @param route_definition[] $routes The routes.
      */
     public function __construct(array $routes) {
-        $this->routes = array_reduce($routes, function($carry, $route) {
+        $this->routes = array_reduce($routes, function ($carry, $route) {
             $carry[$route->get_name()] = $route;
             return $carry;
         }, []);

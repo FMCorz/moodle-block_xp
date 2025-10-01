@@ -52,7 +52,7 @@ class mdl_locked_config extends mdl_config {
      * @param string[] $keys The setting names that are lockable.
      */
     public function __construct($component, array $keys) {
-        parent::__construct($component, new static_config(array_reduce($keys, function($carry, $key) {
+        parent::__construct($component, new static_config(array_reduce($keys, function ($carry, $key) {
             return array_merge($carry, ["{$key}_locked" => false]);
         }, [])));
     }
@@ -74,7 +74,7 @@ class mdl_locked_config extends mdl_config {
      */
     public function get_all() {
         $all = parent::get_all();
-        return array_reduce(array_keys($all), function($carry, $key) use ($all) {
+        return array_reduce(array_keys($all), function ($carry, $key) use ($all) {
             $carry[substr($key, 0, -7)] = (bool) $all[$key];
             return $carry;
         }, []);

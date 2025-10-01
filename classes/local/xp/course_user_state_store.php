@@ -51,8 +51,7 @@ use block_xp\local\utils\user_utils;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_user_state_store implements course_state_store,
-        state_store_with_reason, state_store_with_delete {
+class course_user_state_store implements course_state_store, state_store_with_delete, state_store_with_reason {
 
     /** @var moodle_database The database. */
     protected $db;
@@ -79,9 +78,14 @@ class course_user_state_store implements course_state_store,
      * @param level_up_state_store_observer $observer The observer.
      * @param points_increased_state_store_observer $pointsobserver The observer.
      */
-    public function __construct(moodle_database $db, levels_info $levelsinfo, $courseid,
-            reason_collection_logger $logger, ?level_up_state_store_observer $observer = null,
-            ?points_increased_state_store_observer $pointsobserver = null) {
+    public function __construct(
+        moodle_database $db,
+        levels_info $levelsinfo,
+        $courseid,
+        reason_collection_logger $logger,
+        ?level_up_state_store_observer $observer = null,
+        ?points_increased_state_store_observer $pointsobserver = null
+    ) {
         $this->db = $db;
         $this->levelsinfo = $levelsinfo;
         $this->courseid = $courseid;

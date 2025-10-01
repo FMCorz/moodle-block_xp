@@ -94,11 +94,11 @@ class leaderboard_table extends flexible_table {
      * @param int $userid The user viewing this.
      */
     public function __construct(
-            leaderboard $leaderboard,
-            renderer_base $renderer,
-            array $options,
-            $userid
-        ) {
+        leaderboard $leaderboard,
+        renderer_base $renderer,
+        array $options,
+        $userid
+    ) {
         global $PAGE;
         parent::__construct('block_xp_ladder');
 

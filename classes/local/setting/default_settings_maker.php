@@ -93,7 +93,7 @@ class default_settings_maker implements settings_maker {
         $settingspage->visiblename = get_string('generalsettings', 'admin');
         $settings->add($catname, $settingspage);
         if ($env->is_full_tree()) {
-            array_map(function($setting) use ($settingspage) {
+            array_map(function ($setting) use ($settingspage) {
                 $settingspage->add($setting);
             }, $this->get_general_settings());
         }
@@ -101,7 +101,7 @@ class default_settings_maker implements settings_maker {
         // Default settings page.
         $settingspage = new admin_settingpage('block_xp_default_settings', get_string('defaultsettings', 'block_xp'));
         if ($env->is_full_tree()) {
-            array_map(function($setting) use ($settingspage) {
+            array_map(function ($setting) use ($settingspage) {
                 if ($this->configlocked && $this->configlocked->has($setting->name)) {
                     $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
                 }
@@ -113,26 +113,30 @@ class default_settings_maker implements settings_maker {
         // Add the shadow settings page used for special actions.
         $settingspage = new admin_externalpage('block_xp_default_settingspage',
             get_string('defaultsettings', 'block_xp'),
-            $this->urlresolver->reverse('admin/settings')->get_compatible_url());
+            $this->urlresolver->reverse('admin/settings')->get_compatible_url()
+        );
         $settingspage->hidden = true;
         $settings->add($catname, $settingspage);
 
         // Add the default levels page.
         $settingspage = new admin_externalpage('block_xp_default_levels',
             get_string('defaultlevels', 'block_xp'),
-            $this->urlresolver->reverse('admin/levels')->get_compatible_url());
+            $this->urlresolver->reverse('admin/levels')->get_compatible_url()
+        );
         $settings->add($catname, $settingspage);
 
         // Add the default rules page.
         $settingspage = new admin_externalpage('block_xp_default_rules',
             get_string('defaultrules', 'block_xp'),
-            $this->urlresolver->reverse('admin/rules')->get_compatible_url());
+            $this->urlresolver->reverse('admin/rules')->get_compatible_url()
+        );
         $settings->add($catname, $settingspage);
 
         // Add the default visuals page.
         $settingspage = new admin_externalpage('block_xp_default_visuals',
             get_string('defaultvisuals', 'block_xp'),
-            $this->urlresolver->reverse('admin/visuals')->get_compatible_url());
+            $this->urlresolver->reverse('admin/visuals')->get_compatible_url()
+        );
         $settings->add($catname, $settingspage);
 
         // Add the promo page.
@@ -140,7 +144,8 @@ class default_settings_maker implements settings_maker {
         $localxp = $pluginman->get_plugin_info('local_xp');
         $settingspage = new admin_externalpage('block_xp_promo',
             ($localxp ? '' : '⭐ ') . get_string('navpromo', 'block_xp'),
-            $this->urlresolver->reverse('admin/promo')->get_compatible_url());
+            $this->urlresolver->reverse('admin/promo')->get_compatible_url()
+        );
         $settings->add($catname, $settingspage);
 
         return $settings;
@@ -164,12 +169,13 @@ class default_settings_maker implements settings_maker {
         $setting = (new admin_setting_configselect('block_xp/adminnotices',
             get_string('adminnotices', 'block_xp'),
             get_string('adminnotices_desc', 'block_xp'),
-            $this->defaults->get('adminnotices'), [
+            $this->defaults->get('adminnotices'),
+            [
                 '0' => get_string('no', 'core'),
                 '1' => get_string('yes', 'core'),
             ]
         ));
-        $setting->set_updatedcallback(function() {
+        $setting->set_updatedcallback(function () {
             $isenabled = (bool) get_config('block_xp', 'adminnotices');
             \block_xp\task\admin_notices::set_enabled($isenabled);
         });
@@ -191,7 +197,8 @@ class default_settings_maker implements settings_maker {
         $settings[] = (new admin_setting_configselect('block_xp/navbardisplay',
             get_string('navbardisplay', 'block_xp'),
             get_string('navbardisplay_desc', 'block_xp'),
-            $this->defaults->get('navbardisplay'), [
+            $this->defaults->get('navbardisplay'),
+            [
                 '0' => get_string('no', 'core'),
                 '1' => get_string('yes', 'core'),
             ]
@@ -201,7 +208,8 @@ class default_settings_maker implements settings_maker {
         $settings[] = (new admin_setting_configselect('block_xp/adminscanearnxp',
             get_string('adminscanearnxp', 'block_xp'),
             get_string('adminscanearnxp_desc', 'block_xp'),
-            $this->defaults->get('adminscanearnxp'), [
+            $this->defaults->get('adminscanearnxp'),
+            [
                 '0' => get_string('no', 'core'),
                 '1' => get_string('yes', 'core'),
             ]
@@ -211,12 +219,13 @@ class default_settings_maker implements settings_maker {
         $setting = (new admin_setting_configselect('block_xp/provisionstates',
             get_string('provisionstates', 'block_xp'),
             get_string('provisionstates_desc', 'block_xp'),
-            $this->defaults->get('provisionstates'), [
+            $this->defaults->get('provisionstates'),
+            [
                 '0' => get_string('no', 'core'),
                 '1' => get_string('yes', 'core'),
             ]
         ));
-        $setting->set_updatedcallback(function() {
+        $setting->set_updatedcallback(function () {
             $isenabled = (bool) get_config('block_xp', 'provisionstates');
             \block_xp\task\state_provisioner::set_enabled($isenabled);
         });
@@ -224,8 +233,10 @@ class default_settings_maker implements settings_maker {
 
         // Keeps logs for.
         $settings[] = (new admin_setting_configselect('block_xp/keeplogs',
-            get_string('keeplogs', 'block_xp'), '',
-            $this->defaults->get('keeplogs'), [
+            get_string('keeplogs', 'block_xp'),
+            '',
+            $this->defaults->get('keeplogs'),
+            [
                 '0' => get_string('forever', 'block_xp'),
                 '1' => get_string('numday', 'core', 1),
                 '3' => get_string('numdays', 'core', 3),
@@ -245,7 +256,7 @@ class default_settings_maker implements settings_maker {
                 1 => get_string('occasionally', 'block_xp'),
             ]
         ));
-        $setting->set_updatedcallback(function() {
+        $setting->set_updatedcallback(function () {
             $isenabled = (bool) get_config('block_xp', 'usagereport');
             \block_xp\task\usage_report::set_enabled($isenabled);
         });
@@ -264,7 +275,7 @@ class default_settings_maker implements settings_maker {
         $settings = [];
 
         // Default settings warning.
-        $settings[] = (new freeform_setting('block_xp/hdreditingdefaultsnotice', function() {
+        $settings[] = (new freeform_setting('block_xp/hdreditingdefaultsnotice', function () {
             // Use DI directly as an exception.
             $config = di::get('config');
             $renderer = di::get('renderer');
@@ -293,26 +304,34 @@ class default_settings_maker implements settings_maker {
 
         // Enable the information page?
         $settings[] = (new admin_setting_configcheckbox('block_xp/enableinfos',
-            get_string('enableinfos', 'block_xp'), get_string('enableinfos_help', 'block_xp'),
-            $defaults['enableinfos']));
+            get_string('enableinfos', 'block_xp'),
+            get_string('enableinfos_help', 'block_xp'),
+            $defaults['enableinfos']
+        ));
 
         // Enable the level-up notification?
         $settings[] = (new admin_setting_configcheckbox('block_xp/enablelevelupnotif',
-            get_string('enablelevelupnotif', 'block_xp'), get_string('enablelevelupnotif_help', 'block_xp'),
-            $defaults['enablelevelupnotif']));
+            get_string('enablelevelupnotif', 'block_xp'),
+            get_string('enablelevelupnotif_help', 'block_xp'),
+            $defaults['enablelevelupnotif']
+        ));
 
         // Ladder settings.
         $settings[] = (new admin_setting_heading('block_xp/hdrladder', get_string('ladder', 'block_xp'), ''));
 
         // Enable the ladder?
         $settings[] = (new admin_setting_configcheckbox('block_xp/enableladder',
-            get_string('enableladder', 'block_xp'), get_string('enableladder_help', 'block_xp'),
-            $defaults['enableladder']));
+            get_string('enableladder', 'block_xp'),
+            get_string('enableladder_help', 'block_xp'),
+            $defaults['enableladder']
+        ));
 
         // Anonymity.
         $settings[] = (new admin_setting_configselect('block_xp/identitymode',
-            get_string('anonymity', 'block_xp'), get_string('anonymity_help', 'block_xp'),
-            $defaults['identitymode'], [
+            get_string('anonymity', 'block_xp'),
+            get_string('anonymity_help', 'block_xp'),
+            $defaults['identitymode'],
+            [
                 course_world_config::IDENTITY_OFF => get_string('hideparticipantsidentity', 'block_xp'),
                 course_world_config::IDENTITY_ON => get_string('displayparticipantsidentity', 'block_xp'),
             ]
@@ -320,8 +339,10 @@ class default_settings_maker implements settings_maker {
 
         // Neighbours.
         $settings[] = (new admin_setting_configselect('block_xp/neighbours',
-            get_string('limitparticipants', 'block_xp'), get_string('limitparticipants_help', 'block_xp'),
-            $defaults['neighbours'], [
+            get_string('limitparticipants', 'block_xp'),
+            get_string('limitparticipants_help', 'block_xp'),
+            $defaults['neighbours'],
+            [
                 0 => get_string('displayeveryone', 'block_xp'),
                 1 => get_string('displayoneneigbour', 'block_xp'),
                 2 => get_string('displaynneighbours', 'block_xp', '2'),
@@ -333,8 +354,10 @@ class default_settings_maker implements settings_maker {
 
         // Ranking mode.
         $settings[] = (new admin_setting_configselect('block_xp/rankmode',
-            get_string('ranking', 'block_xp'), get_string('ranking_help', 'block_xp'),
-            $defaults['rankmode'], [
+            get_string('ranking', 'block_xp'),
+            get_string('ranking_help', 'block_xp'),
+            $defaults['rankmode'],
+            [
                 course_world_config::RANK_OFF => get_string('hiderank', 'block_xp'),
                 course_world_config::RANK_ON => get_string('displayrank', 'block_xp'),
                 course_world_config::RANK_REL => get_string('displayrelativerank', 'block_xp'),
@@ -343,8 +366,10 @@ class default_settings_maker implements settings_maker {
 
         // Additional columns.
         $settings[] = (new admin_setting_configmultiselect('block_xp/laddercols',
-            get_string('ladderadditionalcols', 'block_xp'), get_string('ladderadditionalcols_help', 'block_xp'),
-            explode(',', $defaults['laddercols']), [
+            get_string('ladderadditionalcols', 'block_xp'),
+            get_string('ladderadditionalcols_help', 'block_xp'),
+            explode(',', $defaults['laddercols']),
+            [
                 'xp' => get_string('total', 'block_xp'),
                 'progress' => get_string('progress', 'block_xp'),
             ]
@@ -355,65 +380,104 @@ class default_settings_maker implements settings_maker {
 
         // Enable the cheat guard?
         $settings[] = (new admin_setting_configcheckbox('block_xp/enablecheatguard',
-            get_string('enablecheatguard', 'block_xp'), '',
-            $defaults['enablecheatguard']));
+            get_string('enablecheatguard', 'block_xp'),
+            '',
+            $defaults['enablecheatguard']
+        ));
 
         // Max actions per time.
         $settings[] = (new admin_setting_configtext('block_xp/maxactionspertime',
-            get_string('maxactionspertime', 'block_xp'), get_string('maxactionspertime_help', 'block_xp'),
-            $defaults['maxactionspertime'], PARAM_INT));
+            get_string('maxactionspertime', 'block_xp'),
+            get_string('maxactionspertime_help', 'block_xp'),
+            $defaults['maxactionspertime'],
+            PARAM_INT
+        ));
 
         // Time for max actions.
         $settings[] = (new admin_setting_configtext('block_xp/timeformaxactions',
-            get_string('timeformaxactions', 'block_xp'), get_string('timeformaxactions_help', 'block_xp'),
-            $defaults['timeformaxactions'], PARAM_INT));
+            get_string('timeformaxactions', 'block_xp'),
+            get_string('timeformaxactions_help', 'block_xp'),
+            $defaults['timeformaxactions'],
+            PARAM_INT
+        ));
 
         // Time between identical actions.
         $settings[] = (new admin_setting_configtext('block_xp/timebetweensameactions',
-            get_string('timebetweensameactions', 'block_xp'), get_string('timebetweensameactions_help', 'block_xp'),
-            $defaults['timebetweensameactions'], PARAM_INT));
+            get_string('timebetweensameactions', 'block_xp'),
+            get_string('timebetweensameactions_help', 'block_xp'),
+            $defaults['timebetweensameactions'],
+            PARAM_INT
+        ));
 
         // Block appearance settings.
         $settings[] = (new admin_setting_heading('block_xp/hdrblockappearance',
-            get_string('blockappearance', 'block_xp'), ''));
+            get_string('blockappearance', 'block_xp'),
+            ''
+        ));
 
         // Block title.
         $settings[] = (new admin_setting_configtext('block_xp/blocktitle',
-            get_string('configtitle', 'block_xp'), get_string('configtitle_help', 'block_xp'),
-            $defaults['blocktitle'], PARAM_TEXT));
+            get_string('configtitle', 'block_xp'),
+            get_string('configtitle_help', 'block_xp'),
+            $defaults['blocktitle'],
+            PARAM_TEXT
+        ));
 
         // Block description.
         $settings[] = (new admin_setting_configtextarea('block_xp/blockdescription',
-            get_string('configdescription', 'block_xp'), get_string('configdescription_help', 'block_xp'),
-            $defaults['blockdescription'], PARAM_TEXT));
+            get_string('configdescription', 'block_xp'),
+            get_string('configdescription_help', 'block_xp'),
+            $defaults['blockdescription'],
+            PARAM_TEXT
+        ));
 
         // Block ranking snapshot.
         $settings[] = (new admin_setting_configselect('block_xp/blockrankingsnapshot',
-            get_string('configblockrankingsnapshot', 'block_xp'), get_string('configblockrankingsnapshot_help', 'block_xp'),
-            $defaults['blockrankingsnapshot'], [
+            get_string('configblockrankingsnapshot', 'block_xp'),
+            get_string('configblockrankingsnapshot_help', 'block_xp'),
+            $defaults['blockrankingsnapshot'],
+            [
                 0 => get_string('no'),
                 1 => get_string('yes'),
-            ]));
+            ]
+        ));
 
         // Block recent activity.
         $settings[] = (new admin_setting_configselect('block_xp/blockrecentactivity',
-            get_string('configrecentactivity', 'block_xp'), get_string('configrecentactivity_help', 'block_xp'),
-            $defaults['blockrecentactivity'], [
+            get_string('configrecentactivity', 'block_xp'),
+            get_string('configrecentactivity_help', 'block_xp'),
+            $defaults['blockrecentactivity'],
+            [
                 0 => get_string('no'),
                 3 => get_string('yes'),
-            ]));
+            ]
+        ));
 
         // Reset data.
         if (di::get('config')->get('context') != CONTEXT_SYSTEM) {
             $settings[] = (new admin_setting_heading('block_xp/hdrresetdata',
-                get_string('resetcourses', 'block_xp'), ''));
+                get_string('resetcourses', 'block_xp'),
+                ''
+            ));
 
             $resultallurl = $this->urlresolver->reverse('admin/settings');
             $resultallurl->param('action', 'reset');
-            $settings[] = (new static_setting('block_xp/resetallcourses', get_string('resettodefaults', 'block_xp'), '',
-                \html_writer::div(strip_tags(markdown_to_html(get_string('resetallcoursessettingstodefaults', 'block_xp', [
-                    'url' => $resultallurl->out(false),
-                ])), '<a><em><strong>'), 'mb-5')));
+            $settings[] = (new static_setting('block_xp/resetallcourses',
+                get_string('resettodefaults', 'block_xp'),
+                '',
+                \html_writer::div(
+                    strip_tags(
+                        markdown_to_html(
+                            get_string('resetallcoursessettingstodefaults',
+                                'block_xp',
+                                ['url' => $resultallurl->out(false)]
+                            )
+                        ),
+                        '<a><em><strong>'
+                    ),
+                    'mb-5'
+                )
+            ));
         }
 
         return $settings;

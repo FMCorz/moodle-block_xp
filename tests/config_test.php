@@ -162,7 +162,6 @@ final class config_test extends base_testcase {
         $this->assertEquals($master->get('testa'), $stack->get('testa'));
         $this->assertEquals($master->get('testc'), $stack->get('testc'));
         $this->assertFalse($stack->has('testx'));
-
     }
 
     /**

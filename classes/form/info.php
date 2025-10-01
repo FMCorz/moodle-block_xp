@@ -38,7 +38,6 @@ use core_form\dynamic_form;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class info extends dynamic_form {
-
     use dynamic_world_trait;
 
     /** @var string */

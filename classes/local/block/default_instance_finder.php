@@ -38,7 +38,7 @@ use moodle_database;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class default_instance_finder implements instance_finder, instance_checker {
+class default_instance_finder implements instance_checker, instance_finder {
 
     /** @var moodle_database The DB. */
     protected $db;

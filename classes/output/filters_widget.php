@@ -64,8 +64,13 @@ class filters_widget implements renderable {
      * @param bool $editable Whether this is editable.
      * @param array $options Additional options.
      */
-    public function __construct(?block_xp_filter $filter = null, array $rules = [], array $filters = [], $editable = true,
-            array $options = []) {
+    public function __construct(
+        ?block_xp_filter $filter = null,
+        array $rules = [],
+        array $filters = [],
+        $editable = true,
+        array $options = []
+    ) {
         $this->editable = $editable;
         $this->filter = $filter;
         $this->rules = $rules;

@@ -56,7 +56,7 @@ class recommended_plugins_setting extends static_setting {
     protected function get_html_content() {
         $pluginman = core_plugin_manager::instance();
 
-        $plugins = array_map(function($plugin) use ($pluginman) {
+        $plugins = array_map(function ($plugin) use ($pluginman) {
             $isinstalled = !empty($plugin['isinstalled']);
             if (!isset($plugin['isinstalled'])) {
                 $plugininfo = $pluginman->get_plugin_info($plugin['component']);

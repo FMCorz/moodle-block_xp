@@ -42,9 +42,9 @@ use block_xp\local\reason\reason;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_user_event_collection_logger implements
-        reason_collection_logger,
-        collection_logger_with_group_reset,
-        collection_logger_with_id_reset {
+    collection_logger_with_group_reset,
+    collection_logger_with_id_reset,
+    reason_collection_logger {
 
     /** The table name. */
     const TABLE = 'block_xp_log';

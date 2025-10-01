@@ -61,7 +61,7 @@ final class course_world_config_test extends base_testcase {
         // Validate that all keys match the admin value.
         $cfg1 = $this->get_world($c1->id)->get_config();
         foreach ($inheritable as $key) {
-            $this->assertEquals($cfg1->get($key), $config->get($key));;
+            $this->assertEquals($cfg1->get($key), $config->get($key));
         }
 
         // Validate that changing an admin value is populated in the course.
@@ -70,7 +70,7 @@ final class course_world_config_test extends base_testcase {
         $this->assertContains('neighbours', $inheritable);
         $cfg2 = $this->get_world($c2->id)->get_config();
         foreach ($inheritable as $key) {
-            $this->assertEquals($cfg2->get($key), $config->get($key));;
+            $this->assertEquals($cfg2->get($key), $config->get($key));
         }
 
         // After saving the configuration, any more changes to the admin won't have an impact.

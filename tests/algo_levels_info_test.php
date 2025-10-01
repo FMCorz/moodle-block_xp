@@ -411,7 +411,7 @@ final class algo_levels_info_test extends base_testcase {
      * @param algo_levels_info $levelsinfo The levels info.
      */
     protected function get_xp_by_levels($levelsinfo) {
-        return array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+        return array_reduce($levelsinfo->get_levels(), function ($carry, $level) {
             $carry[$level->get_level()] = $level->get_xp_required();
             return $carry;
         }, []);
@@ -423,7 +423,7 @@ final class algo_levels_info_test extends base_testcase {
      * @param algo_levels_info $levelsinfo The levels info.
      */
     protected function get_description_by_levels($levelsinfo) {
-        return array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+        return array_reduce($levelsinfo->get_levels(), function ($carry, $level) {
             $carry[$level->get_level()] = $level instanceof level_with_description ? $level->get_description() : '';
             return $carry;
         }, []);
@@ -435,7 +435,7 @@ final class algo_levels_info_test extends base_testcase {
      * @param algo_levels_info $levelsinfo The levels info.
      */
     protected function get_name_by_levels($levelsinfo) {
-        return array_reduce($levelsinfo->get_levels(), function($carry, $level) {
+        return array_reduce($levelsinfo->get_levels(), function ($carry, $level) {
             $carry[$level->get_level()] = $level instanceof level_with_name ? $level->get_name() : '';
             return $carry;
         }, []);

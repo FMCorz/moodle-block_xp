@@ -118,7 +118,7 @@ class anonymisable_leaderboard implements leaderboard {
      */
     public function get_ranking(limit $limit) {
         $ranking = $this->leaderboard->get_ranking($limit);
-        return new map_iterator($ranking, function($state) {
+        return new map_iterator($ranking, function ($state) {
             return $this->anonymise_rank($state);
         });
     }

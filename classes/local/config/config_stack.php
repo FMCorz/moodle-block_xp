@@ -48,7 +48,7 @@ class config_stack implements config {
      * @param config[] $stack Stack of config objects.
      */
     public function __construct(array $stack) {
-        array_map(function($config) {
+        array_map(function ($config) {
             if (!$config instanceof config) {
                 throw new coding_exception('Invalid config object received.');
             }

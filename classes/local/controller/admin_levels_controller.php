@@ -73,7 +73,6 @@ class admin_levels_controller extends admin_route_controller {
                 $this->redirect(new url($this->pageurl), get_string('allcoursesreset', 'block_xp'));
             }
         }
-
     }
 
     protected function content() {
@@ -93,7 +92,7 @@ class admin_levels_controller extends admin_route_controller {
         }
 
         $this->page_warning_editing_defaults('levels');
-        list($module, $props) = $this->get_react_module();
+        [$module, $props] = $this->get_react_module();
         echo $output->react_module($module, $props);
 
         // Reset courses.
@@ -114,7 +113,7 @@ class admin_levels_controller extends admin_route_controller {
     protected function get_react_module() {
         $urlserializer = new url_serializer();
         $badgeurlresolver = di::get('badge_url_resolver');
-        $defaultbadges = array_reduce(range(1, 20), function($carry, $level) use ($badgeurlresolver, $urlserializer) {
+        $defaultbadges = array_reduce(range(1, 20), function ($carry, $level) use ($badgeurlresolver, $urlserializer) {
             $url = $badgeurlresolver->get_url_for_level($level);
             $carry[$level] = $urlserializer->serialize($url);
             return $carry;

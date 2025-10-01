@@ -259,8 +259,11 @@ class world_leaderboard_factory implements leaderboard_factory {
         // Do we only display the neighbours?
         $config = $this->config;
         if ($config->get('neighbours')) {
-            $leaderboard = new neighboured_leaderboard($leaderboard, $targetuserid, $config->get('neighbours'),
-                $this->world->get_access_permissions()->can_manage($targetuserid));
+            $leaderboard = new neighboured_leaderboard($leaderboard,
+                $targetuserid,
+                $config->get('neighbours'),
+                $this->world->get_access_permissions()->can_manage($targetuserid)
+            );
         }
 
         return $leaderboard;

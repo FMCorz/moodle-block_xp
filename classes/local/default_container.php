@@ -420,8 +420,10 @@ class default_container implements container {
      * @return factory\levels_info_factory
      */
     protected function get_levels_info_factory() {
-        return new factory\levels_factory($this->get('config'), $this->get('badge_url_resolver'),
-            $this->get('badge_url_resolver_course_world_factory'));
+        return new factory\levels_factory($this->get('config'),
+            $this->get('badge_url_resolver'),
+            $this->get('badge_url_resolver_course_world_factory')
+        );
     }
 
     /**

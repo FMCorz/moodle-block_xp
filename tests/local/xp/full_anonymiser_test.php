@@ -88,7 +88,7 @@ final class full_anonymiser_test extends base_testcase {
         $pic = new moodle_url('pic.php', ['id' => $user->id]);
         $name = fullname($user);
 
-        $state = new class($id, $name, $link, $pic) implements state_with_subject {
+        $state = new class ($id, $name, $link, $pic) implements state_with_subject {
             protected $id;
             protected $name;
             protected $link;
@@ -98,7 +98,6 @@ final class full_anonymiser_test extends base_testcase {
                 $this->name = $name;
                 $this->link = $link;
                 $this->pic = $pic;
-
             }
 
             public function get_id() {
@@ -168,7 +167,6 @@ final class full_anonymiser_test extends base_testcase {
         } else {
             $this->fail('The anonymised state should implement state_with_subject.');
         }
-
     }
 
     /**
@@ -179,7 +177,7 @@ final class full_anonymiser_test extends base_testcase {
         $user = $this->getDataGenerator()->create_user();
 
         // Create a state_with_user that also contains state_with_subject to confirm their anonymity.
-        $state = new class($user) implements state_with_subject, state_with_user {
+        $state = new class ($user) implements state_with_subject, state_with_user {
             protected $user;
 
             public function __construct($user) {

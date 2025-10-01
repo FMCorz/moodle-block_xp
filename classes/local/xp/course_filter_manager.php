@@ -218,8 +218,10 @@ class course_filter_manager {
      * @return void
      */
     protected function import_filters(array $filters) {
-        $sortorder = (int) $this->db->get_field('block_xp_filters', 'COALESCE(MAX(sortorder), -1) + 1',
-            ['courseid' => $this->courseid]);
+        $sortorder = (int) $this->db->get_field('block_xp_filters',
+            'COALESCE(MAX(sortorder), -1) + 1',
+            ['courseid' => $this->courseid]
+        );
 
         foreach ($filters as $filter) {
             $record = $filter->export();

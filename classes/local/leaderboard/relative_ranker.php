@@ -73,7 +73,7 @@ class relative_ranker implements ranker {
      */
     public function rank_states($states) {
         $base = $this->relativestate ? $this->relativestate->get_xp() : null;
-        return new map_iterator($states, function($state) use (&$base) {
+        return new map_iterator($states, function ($state) use (&$base) {
             if ($base === null) {
                 $base = $state->get_xp();
             }

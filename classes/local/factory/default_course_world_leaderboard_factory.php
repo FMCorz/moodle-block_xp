@@ -205,8 +205,13 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
      * @param ranker|null $ranker The ranker.
      * @return leaderboard
      */
-    protected function get_leaderboard_instance_with_config(course_world $world, $groupid, array $columns,
-            config $config, ?ranker $ranker = null) {
+    protected function get_leaderboard_instance_with_config(
+        course_world $world,
+        $groupid,
+        array $columns,
+        config $config,
+        ?ranker $ranker = null
+    ) {
         return new course_user_leaderboard(
             $this->db,
             $world->get_levels_info(),
@@ -272,8 +277,11 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
 
         // Do we only display the neighbours?
         if ($config->get('neighbours')) {
-            $leaderboard = new neighboured_leaderboard($leaderboard, $USER->id, $config->get('neighbours'),
-                $world->get_access_permissions()->can_manage());
+            $leaderboard = new neighboured_leaderboard($leaderboard,
+                $USER->id,
+                $config->get('neighbours'),
+                $world->get_access_permissions()->can_manage()
+            );
         }
 
         return $leaderboard;

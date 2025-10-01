@@ -60,7 +60,7 @@ class block_xp_rule_event extends block_xp_rule_property {
         $infos = self::get_event_infos($class);
 
         if ($infos !== false) {
-            list($type, $plugin) = core_component::normalize_component($infos['component']);
+            [$type, $plugin] = core_component::normalize_component($infos['component']);
             if ($type == 'core') {
                 $displayname = get_string('coresystem');
             } else {
@@ -117,8 +117,12 @@ class block_xp_rule_event extends block_xp_rule_property {
             $eventslist[] = [get_string('other') => [$this->value => get_string('unknowneventa', 'block_xp', $this->value)]];
         }
 
-        $modules = html_writer::select($eventslist, $basename . '[value]', $this->value, '',
-            ['id' => '', 'class' => '']);
+        $modules = html_writer::select($eventslist,
+            $basename . '[value]',
+            $this->value,
+            '',
+            ['id' => '', 'class' => '']
+        );
 
         $o .= html_writer::start_div('xp-flex xp-gap-1');
         $o .= html_writer::start_div('xp-flex xp-items-center');

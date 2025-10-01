@@ -60,8 +60,11 @@ class levels_factory implements levels_info_factory, level_factory {
      * @param badge_url_resolver $badgeurlresolver The admin badge URL resolver.
      * @param badge_url_resolver_course_world_factory $badgeurlresolverfactory The badge URL resolver factory.
      */
-    public function __construct(config $config, badge_url_resolver $badgeurlresolver,
-            badge_url_resolver_course_world_factory $badgeurlresolverfactory) {
+    public function __construct(
+        config $config,
+        badge_url_resolver $badgeurlresolver,
+        badge_url_resolver_course_world_factory $badgeurlresolverfactory
+    ) {
         $this->config = $config;
         $this->badgeurlresolver = $badgeurlresolver;
         $this->badgeurlresolverfactory = $badgeurlresolverfactory;

@@ -90,17 +90,22 @@ class xp_widget implements renderable, templatable {
      * @param array $actions The actions.
      * @param moodle_url|null $recentactivityurl The URL to see more.
      */
-    public function __construct(state $state, array $recentactivity, ?renderable $intro = null, array $actions = [],
-            ?moodle_url $recentactivityurl = null) {
+    public function __construct(
+        state $state,
+        array $recentactivity,
+        ?renderable $intro = null,
+        array $actions = [],
+        ?moodle_url $recentactivityurl = null
+    ) {
 
         $this->state = $state;
         $this->intro = $intro;
         $this->recentactivityurl = $recentactivityurl;
 
-        $this->recentactivity = array_filter($recentactivity, function($activity) {
+        $this->recentactivity = array_filter($recentactivity, function ($activity) {
             return $activity instanceof activity;
         });
-        $this->actions = array_filter($actions, function($action) {
+        $this->actions = array_filter($actions, function ($action) {
             return $action instanceof action_link;
         });
     }
@@ -246,7 +251,7 @@ class xp_widget implements renderable, templatable {
             'showranksinrankingsnapshot' => !$this->rankisrel,
             'showdiffsinrankingsnapshot' => $this->showdiffsinrankingsnapshot,
 
-            'rankingsnapshot' => array_values(array_map(function($rank, $idx) use ($fallbackpic, $renderer) {
+            'rankingsnapshot' => array_values(array_map(function ($rank, $idx) use ($fallbackpic, $renderer) {
                 if (!$rank) {
                     return [
                         'idx' => $idx,
@@ -298,7 +303,7 @@ class xp_widget implements renderable, templatable {
 
             // Manager notices.
             'hasmanagernotices' => !empty($this->managernotices),
-            'managernotices' => array_values(array_map(function($notice) use ($renderer) {
+            'managernotices' => array_values(array_map(function ($notice) use ($renderer) {
                 return $renderer->notification_without_close($notice, 'warning');
             }, $this->managernotices)),
         ];

@@ -133,7 +133,7 @@ abstract class page_controller extends course_route_controller {
 
                 // Remove potential duplicates.
                 $seen = [];
-                return array_values(array_filter($children, function($child) use (&$seen) {
+                return array_values(array_filter($children, function ($child) use (&$seen) {
                     if (in_array($child['id'], $seen)) {
                         return false;
                     }
@@ -185,8 +185,8 @@ abstract class page_controller extends course_route_controller {
             echo $output->notification_without_close(strip_tags(markdown_to_html(
                 get_string('erroraddondeactivated', 'block_xp', [
                     'docsurl' => (new \moodle_url('https://docs.levelup.plus/xp/docs/addon-deactivated'))->out(false),
-                ])), '<a><em><strong>')
-            , notification::NOTIFY_ERROR);
+                ])
+            ), '<a><em><strong>'), notification::NOTIFY_ERROR);
         }
 
         // Warn users that they are not where they should be.
@@ -197,13 +197,16 @@ abstract class page_controller extends course_route_controller {
             if (!$isforwholesite && $requestedcourseid == SITEID) {
                 // In per-course, but requesting front page.
                 echo $output->notification_without_close(get_string('errorcontextcoursemismatchpercourse', 'block_xp'),
-                    notification::NOTIFY_WARNING);
+                    notification::NOTIFY_WARNING
+                );
 
             } else if ($isforwholesite && $requestedcourseid != SITEID) {
                 // In for whole site, but requesting individual course.
                 $nexturl = $this->urlresolver->reverse($this->get_route_name(), ['courseid' => $this->courseid]);
-                echo $output->notification_without_close(get_string('errorcontextcoursemismatchforwholesite', 'block_xp',
-                    ['nexturl' => $nexturl->out(false)]), notification::NOTIFY_WARNING);
+                echo $output->notification_without_close(get_string('errorcontextcoursemismatchforwholesite',
+                    'block_xp',
+                    ['nexturl' => $nexturl->out(false)]
+                ), notification::NOTIFY_WARNING);
                 return;
             }
         }
@@ -227,7 +230,6 @@ abstract class page_controller extends course_route_controller {
         $this->page_content();
         echo html_writer::end_div();
         echo html_writer::end_div();
-
     }
 
     /**

@@ -65,12 +65,13 @@ class environment {
      * @param admin_settingpage $settingspage The page to add settings to.
      */
     public function __construct(
-            part_of_admin_tree $adminroot,
-            $parentnodename,
-            $hassiteconfig,
-            \core\plugininfo\block $plugininfo,
-            block_base $blockinstance,
-            admin_settingpage $settingspage) {
+        part_of_admin_tree $adminroot,
+        $parentnodename,
+        $hassiteconfig,
+        \core\plugininfo\block $plugininfo,
+        block_base $blockinstance,
+        admin_settingpage $settingspage
+    ) {
 
         $this->adminroot = $adminroot;
         $this->parentnodename = $parentnodename;

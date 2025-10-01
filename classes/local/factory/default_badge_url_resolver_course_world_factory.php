@@ -39,8 +39,7 @@ use block_xp\local\xp\badge_url_resolver;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class default_badge_url_resolver_course_world_factory
-        implements badge_url_resolver_course_world_factory {
+class default_badge_url_resolver_course_world_factory implements badge_url_resolver_course_world_factory {
 
     /** @var badge_url_resolver Resolver. */
     protected $adminresolver;

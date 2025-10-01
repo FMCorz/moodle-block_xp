@@ -4,8 +4,17 @@
 
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/classes/local/compat/*</exclude-pattern>
+    <exclude-pattern>*/db/upgrade.php</exclude-pattern>
 
-    <rule ref="moodle" />
+    <rule ref="moodle">
+        <!-- Keep extra spacing for code readability. -->
+        <exclude name="PSR12.Classes.OpeningBraceSpace.Found" />
+        <exclude name="PSR12.ControlStructures.ControlStructureSpacing.FirstExpressionLine" />
+        <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody" />
+        <exclude name="PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket" />
+        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpen" />
+        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingBeforeClose" />
+    </rule>
 
     <rule ref="moodle.Files">
         <exclude name="moodle.Files.BoilerplateComment" />

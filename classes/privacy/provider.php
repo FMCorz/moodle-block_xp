@@ -51,11 +51,10 @@ use block_xp\local\privacy\addon_userlist_provider;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
+    \core_privacy\local\request\core_userlist_provider,
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider,
-    \core_privacy\local\request\core_userlist_provider ,
     \core_privacy\local\request\user_preference_provider {
-
     use \core_privacy\local\legacy_polyfill;
 
     /**
@@ -169,11 +168,11 @@ class provider implements
         $user = $contextlist->get_user();
         $levelup = get_string('pluginname', 'block_xp');
 
-        $courseids = array_filter(array_map(function($context) {
+        $courseids = array_filter(array_map(function ($context) {
             return static::get_courseid_from_context($context);
         }, $contextlist->get_contexts()));
 
-        list($insql, $inparams) = $db->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
+        [$insql, $inparams] = $db->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
 
         // Fetch the record of points for each course.
         $sql = "
@@ -206,7 +205,7 @@ class provider implements
         $params = ['userid' => $user->id] + $inparams;
 
         $path = [$levelup, get_string('privacy:path:logs', 'block_xp')];
-        $flushlogs = function($courseid, $data) use ($path) {
+        $flushlogs = function ($courseid, $data) use ($path) {
             $context = static::get_context_from_courseid($courseid);
             writer::with_context($context)->export_data($path, (object) ['data' => $data]);
         };
@@ -288,12 +287,12 @@ class provider implements
         $userid = $user->id;
 
         // Get the corresponding course IDs.
-        $courseids = array_filter(array_map(function($context) {
+        $courseids = array_filter(array_map(function ($context) {
             return static::get_courseid_from_context($context);
         }, $contextlist->get_contexts()));
 
         // Delete all the things.
-        list($insql, $inparams) = $db->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
+        [$insql, $inparams] = $db->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
         $sql = "courseid $insql AND userid = :userid";
         $params = ['userid' => $userid] + $inparams;
         $db->delete_records_select('block_xp', $sql, $params);
@@ -330,7 +329,7 @@ class provider implements
         }
 
         // Delete all the things.
-        list($insql, $inparams) = $db->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+        [$insql, $inparams] = $db->get_in_or_equal($userids, SQL_PARAMS_NAMED);
         $sql = "courseid = :courseid AND userid $insql";
         $params = ['courseid' => $courseid] + $inparams;
         $db->delete_records_select('block_xp', $sql, $params);
@@ -383,12 +382,12 @@ class provider implements
             return;
         }
 
-        $names = array_map(function($pref) {
+        $names = array_map(function ($pref) {
             return $pref->name;
         }, $prefs);
 
         $db = \block_xp\di::get('db');
-        list($insql, $inparams) = $db->get_in_or_equal($names, SQL_PARAMS_NAMED);
+        [$insql, $inparams] = $db->get_in_or_equal($names, SQL_PARAMS_NAMED);
         $params = ['userid' => $userid] + $inparams;
         $db->delete_records_select('user_preferences', "userid = :userid AND name {$insql}", $params);
     }

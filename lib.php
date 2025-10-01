@@ -121,14 +121,14 @@ function block_xp_user_preferences() {
     return [
         'block_xp_notices' => [
             'type' => PARAM_BOOL,
-            'permissioncallback' => function($user) {
+            'permissioncallback' => function ($user) {
                 global $USER;
                 return $user->id == $USER->id;
             },
         ],
         'block_xp_notice_quest' => [
             'type' => PARAM_BOOL,
-            'permissioncallback' => function($user) {
+            'permissioncallback' => function ($user) {
                 global $USER;
                 return $user->id == $USER->id;
             },

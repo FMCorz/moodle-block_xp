@@ -99,7 +99,6 @@ class levels_with_algo extends moodleform {
         $mform->setType('insertlevelshere', PARAM_BOOL);
 
         $this->add_action_buttons();
-
     }
 
     /**
@@ -136,8 +135,11 @@ class levels_with_algo extends moodleform {
             $mform->addRule('lvlname_' . $i, get_string('maximumchars', '', 40), 'maxlength', 40);
             $mform->setType('lvlname_' . $i, PARAM_NOTAGS);
 
-            $el =& $mform->createElement('text', 'lvldesc_' . $i, get_string('leveldesc', 'block_xp'),
-                ['maxlength' => 255, 'size' => 50]);
+            $el =& $mform->createElement('text',
+                'lvldesc_' . $i,
+                get_string('leveldesc', 'block_xp'),
+                ['maxlength' => 255, 'size' => 50]
+            );
             $mform->insertElementBefore($el, 'insertlevelshere');
             $mform->addRule('lvldesc_' . $i, get_string('maximumchars', '', 255), 'maxlength', 255);
             $mform->setType('lvldesc_' . $i, PARAM_NOTAGS);

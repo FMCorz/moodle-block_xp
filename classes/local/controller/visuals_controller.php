@@ -138,11 +138,21 @@ class visuals_controller extends page_controller {
 
         // If the badges are missing, we copy them now.
         if ($config->get('enablecustomlevelbadges') == course_world_config::CUSTOM_BADGES_MISSING) {
-            file_prepare_draft_area($draftitemid, context_system::instance()->id, 'block_xp', 'defaultbadges', 0,
-                $this->get_filemanager_options());
+            file_prepare_draft_area($draftitemid,
+                context_system::instance()->id,
+                'block_xp',
+                'defaultbadges',
+                0,
+                $this->get_filemanager_options()
+            );
         } else {
-            file_prepare_draft_area($draftitemid, $this->get_filemanager_context()->id, 'block_xp', 'badges', 0,
-                $this->get_filemanager_options());
+            file_prepare_draft_area($draftitemid,
+                $this->get_filemanager_context()->id,
+                'block_xp',
+                'badges',
+                0,
+                $this->get_filemanager_options()
+            );
         }
 
         return [
@@ -171,8 +181,13 @@ class visuals_controller extends page_controller {
         $config = $this->world->get_config();
 
         // Save the area.
-        file_save_draft_area_files($data->badges, $this->get_filemanager_context()->id, 'block_xp', 'badges', 0,
-            $this->get_filemanager_options());
+        file_save_draft_area_files($data->badges,
+            $this->get_filemanager_context()->id,
+            'block_xp',
+            'badges',
+            0,
+            $this->get_filemanager_options()
+        );
 
         // When we save, we mark the flag as noop because either we copied the default badges,
         // when we loaded the draft area, or the user saved the page as they were in a legacy state,

@@ -64,7 +64,7 @@ class block_xp_renderer extends plugin_renderer_base {
         $visible = isset($options['visible']) ? (bool) $options['visible'] : null;
         $help = $options['help'] instanceof \help_icon ? $options['help'] : null;
 
-        $menuitems = array_values(array_filter(array_map(function($item) {
+        $menuitems = array_values(array_filter(array_map(function ($item) {
             $attrs = [];
             $classes = [];
             if (empty($item['label'])) {
@@ -92,7 +92,7 @@ class block_xp_renderer extends plugin_renderer_base {
         }, $menu)));
 
         // Filter out orphan or doubled dividers.
-        $menuitems = array_values(array_filter($menuitems, function($v, $k) use ($menuitems) {
+        $menuitems = array_values(array_filter($menuitems, function ($v, $k) use ($menuitems) {
             if (empty($v['isdivider'])) {
                 return true;
             }
@@ -197,8 +197,10 @@ class block_xp_renderer extends plugin_renderer_base {
      */
     public function heading_with_divider($text, $options = []) {
         $options = array_merge(['level' => 3], $options);
-        return html_writer::tag('div', $this->heading($text, $options['level'], 'xp-m-0'),
-            ['class' => 'xp-mb-6 xp-mt-8 xp-border-0 xp-border-solid xp-border-t xp-border-gray-100 xp-pt-8']);
+        return html_writer::tag('div',
+            $this->heading($text, $options['level'], 'xp-m-0'),
+            ['class' => 'xp-mb-6 xp-mt-8 xp-border-0 xp-border-solid xp-border-t xp-border-gray-100 xp-pt-8']
+        );
     }
 
     /**
@@ -294,7 +296,7 @@ class block_xp_renderer extends plugin_renderer_base {
     public function levels_grid(array $levels) {
 
         // If at least one level has a custom name, we will always show the name.
-        $alwaysshowname = array_reduce($levels, function($carry, $level) {
+        $alwaysshowname = array_reduce($levels, function ($carry, $level) {
             $name = $level instanceof \block_xp\local\xp\level_with_name ? $level->get_name() : '';
             return $carry + !empty($name) ? 1 : 0;
         }, 0) > 0;
@@ -370,7 +372,7 @@ class block_xp_renderer extends plugin_renderer_base {
         $candidates = [
             [
                 static::NOTICE_FLAG_QUEST,
-                function() {
+                function () {
                     $questurl = new moodle_url('https://www.levelup.plus/quest?ref=xp_notice');
                     return strip_tags(markdown_to_html(get_string('questpromonotice', 'block_xp', (object) [
                         'questurl' => $questurl->out(false),
@@ -378,7 +380,7 @@ class block_xp_renderer extends plugin_renderer_base {
                 },
             ], [
                 $this->noticesflag,
-                function() {
+                function () {
                     $moodleorgurl = new moodle_url('https://moodle.org/plugins/block_xp');
                     return get_string('likenotice', 'block_xp', (object) [
                         'moodleorg' => $moodleorgurl->out(),
@@ -394,7 +396,7 @@ class block_xp_renderer extends plugin_renderer_base {
         }
 
         if ($notice) {
-            list($flag, $textfn) = $notice;
+            [$flag, $textfn] = $notice;
 
             if ($CFG->branch >= 403) {
                 $this->page->requires->js_amd_inline("require(['core_user/repository'], function(UserRepo) {
@@ -437,7 +439,8 @@ class block_xp_renderer extends plugin_renderer_base {
             $text .= html_writer::end_div();
 
             $o .= html_writer::div($this->notification_without_close($text, 'success'),
-                'block_xp-dismissable-notice block-xp-notices');
+                'block_xp-dismissable-notice block-xp-notices'
+            );
         }
 
         return $o;
@@ -587,7 +590,7 @@ class block_xp_renderer extends plugin_renderer_base {
             if (defined('core\output\notification::NOTIFY_ERROR')) {
                 $error = core\output\notification::NOTIFY_ERROR;
             } else {
-                $error = core\output\notification::NOTIFY_PROBLEM;;
+                $error = core\output\notification::NOTIFY_PROBLEM;
             }
 
             $typemappings = [
@@ -653,7 +656,7 @@ class block_xp_renderer extends plugin_renderer_base {
         $lastindex = count($options) - 1;
 
         foreach ($options as $i => $option) {
-            list($perpage, $url) = $option;
+            [$perpage, $url] = $option;
             $o .= $current == $perpage ? $current : html_writer::link($url, (string) $perpage);
             $o .= $i < $lastindex ? ' - ' : '';
         }
@@ -717,13 +720,17 @@ class block_xp_renderer extends plugin_renderer_base {
             $content .= html_writer::start_div('xp-flex xp-min-h-10 xp-group');
 
             $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
-            $content .= $this->render(new pix_icon('i/dragdrop', get_string('moverule', 'block_xp'), '',
-                ['class' => 'iconsmall filter-move']));
+            $content .= $this->render(new pix_icon('i/dragdrop',
+                get_string('moverule', 'block_xp'),
+                '',
+                ['class' => 'iconsmall filter-move']
+            ));
             $content .= html_writer::end_div();
 
             $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex'
                 . ' xp-items-center xp-leading-tight');
-            $content .= get_string('awardaxpwhen', 'block_xp',
+            $content .= get_string('awardaxpwhen',
+                'block_xp',
                 html_writer::empty_tag('input', [
                     'type' => 'text',
                     'value' => $filter->get_points(),
@@ -776,8 +783,11 @@ class block_xp_renderer extends plugin_renderer_base {
             $content .= html_writer::start_div('xp-flex xp-min-h-10');
 
             $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
-            $content .= $this->render(new pix_icon('i/dragdrop', get_string('movecondition', 'block_xp'), '',
-                ['class' => 'iconsmall rule-move']));
+            $content .= $this->render(new pix_icon('i/dragdrop',
+                get_string('movecondition', 'block_xp'),
+                '',
+                ['class' => 'iconsmall rule-move']
+            ));
             $content .= html_writer::end_div();
 
             $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex xp-items-center'
@@ -818,8 +828,11 @@ class block_xp_renderer extends plugin_renderer_base {
             $content .= html_writer::start_div('xp-flex xp-min-h-10');
 
             $content .= html_writer::start_div('xp-flex-none xp-h-10 xp-flex xp-items-center');
-            $content .= $this->render(new pix_icon('i/dragdrop', get_string('movecondition', 'block_xp'), '',
-                ['class' => 'iconsmall rule-move']));
+            $content .= $this->render(new pix_icon('i/dragdrop',
+                get_string('movecondition', 'block_xp'),
+                '',
+                ['class' => 'iconsmall rule-move']
+            ));
             $content .= html_writer::end_div();
 
             $content .= html_writer::start_div('xp-flex-1 xp-overflow-hidden xp-min-h-full xp-flex'
@@ -845,8 +858,12 @@ class block_xp_renderer extends plugin_renderer_base {
         }
         if ($iseditable) {
             $o .= html_writer::start_tag('li', ['class' => 'rule-add']);
-            $o .= $this->action_link('#', get_string('addacondition', 'block_xp'), null, null,
-                new pix_icon('t/add', '', '', ['class' => 'iconsmall']));
+            $o .= $this->action_link('#',
+                get_string('addacondition', 'block_xp'),
+                null,
+                null,
+                new pix_icon('t/add', '', '', ['class' => 'iconsmall'])
+            );
             $o .= html_writer::end_tag('li');
         }
         $o .= html_writer::end_tag('ul');
@@ -907,7 +924,8 @@ EOT
         $text = html_writer::div($actionicon, 'dismiss-action') . $notice->message;
 
         return html_writer::div($this->notification_without_close($text, $notice->type),
-            'block_xp-dismissable-notice ' . $id);
+            'block_xp-dismissable-notice ' . $id
+        );
     }
 
     /**
@@ -948,8 +966,12 @@ EOT
         $addlink = '';
         if ($widget->editable) {
             $addlink = html_writer::start_tag('li', ['class' => 'filter-add']);
-            $addlink .= $this->action_link('#', get_string('addarule', 'block_xp'), null, null,
-                new pix_icon('t/add', '', '', ['class' => 'iconsmall']));
+            $addlink .= $this->action_link('#',
+                get_string('addarule', 'block_xp'),
+                null,
+                null,
+                new pix_icon('t/add', '', '', ['class' => 'iconsmall'])
+            );
             $addlink .= html_writer::end_tag('li');
         }
 
@@ -1106,7 +1128,7 @@ EOT
     public function recent_activity(array $activity, ?moodle_url $moreurl = null) {
         return $this->render_from_template('block_xp/recent-activity', [
             'hasrecentactivities' => !empty($activity),
-            'recentactivities' => array_values(array_map(function($entry) {
+            'recentactivities' => array_values(array_map(function ($entry) {
                 $xp = $entry instanceof \block_xp\local\activity\activity_with_xp ? $entry->get_xp() : null;
                 return [
                     'date' => userdate($entry->get_date()->getTimestamp()),
@@ -1155,7 +1177,7 @@ EOT
      */
     public function sub_navigation($items, $activenode) {
         return $this->render_from_template('block_xp/sub-navigation', [
-            'items' => array_map(function($item) use ($activenode) {
+            'items' => array_map(function ($item) use ($activenode) {
                 $url = $item['url'];
                 if ($url instanceof moodle_url) {
                     $url = $url->out(false);
@@ -1176,7 +1198,7 @@ EOT
      * @return string The navigation.
      */
     public function tab_navigation($items, $activenode) {
-        $tabs = array_map(function($link) {
+        $tabs = array_map(function ($link) {
             // If we don't have a URL, but we have children take the first child's.
             if (empty($link['url']) && !empty($link['children'])) {
                 $firstchild = reset($link['children']);
@@ -1184,7 +1206,7 @@ EOT
                 $link = array_merge($link, ['url' => $url]);
             }
             return new tabobject($link['id'], $link['url'], $link['text'], clean_param($link['text'], PARAM_NOTAGS));
-        }, array_filter($items, function($item) {
+        }, array_filter($items, function ($item) {
             // Remove the items that define children but do not have any.
             return !isset($item['children']) || !empty($item['children']);
         }));
@@ -1317,7 +1339,7 @@ EOT
     public function xp_widget_navigation(array $actions) {
         $o = '';
         $o .= html_writer::start_tag('nav');
-        $o .= implode('', array_map(function(action_link $action) {
+        $o .= implode('', array_map(function (action_link $action) {
             $content = html_writer::div($this->render($action->icon));
             $content .= html_writer::div($action->text);
             return html_writer::link($action->url, $content, ['class' => 'nav-button']);

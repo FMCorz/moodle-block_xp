@@ -70,7 +70,7 @@ class table_setter_config implements config {
 
     protected function get_columns() {
         if (!isset($this->columns)) {
-            $this->columns = array_flip(array_map(function($col) {
+            $this->columns = array_flip(array_map(function ($col) {
                 return $col->name;
             }, $this->db->get_columns($this->tablename)));
         }

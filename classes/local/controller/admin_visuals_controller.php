@@ -111,8 +111,13 @@ class admin_visuals_controller extends admin_route_controller {
      */
     protected function get_initial_form_data() {
         $draftitemid = file_get_submitted_draft_itemid('badges');
-        file_prepare_draft_area($draftitemid, $this->get_filemanager_context()->id, 'block_xp', 'defaultbadges',
-            0, $this->get_filemanager_options());
+        file_prepare_draft_area($draftitemid,
+            $this->get_filemanager_context()->id,
+            'block_xp',
+            'defaultbadges',
+            0,
+            $this->get_filemanager_options()
+        );
 
         return [
             'badges' => $draftitemid,
@@ -171,8 +176,13 @@ class admin_visuals_controller extends admin_route_controller {
      * @return void
      */
     protected function save_form_data($data) {
-        file_save_draft_area_files($data->badges, $this->get_filemanager_context()->id, 'block_xp', 'defaultbadges', 0,
-            $this->get_filemanager_options());
+        file_save_draft_area_files($data->badges,
+            $this->get_filemanager_context()->id,
+            'block_xp',
+            'defaultbadges',
+            0,
+            $this->get_filemanager_options()
+        );
     }
 
     /**

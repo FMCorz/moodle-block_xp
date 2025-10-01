@@ -36,6 +36,8 @@ global $CFG;
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->libdir . '/form/duration.php');
 
+// phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore
+
 /**
  * Duration element class.
  *
@@ -97,7 +99,7 @@ class block_xp_form_duration extends \MoodleQuickForm_duration {
                 86400 => get_string('days'),
                 604800 => get_string('weeks'),
             ];
-            $this->_units = array_reduce(array_keys($units), function($carry, $key) use ($units) {
+            $this->_units = array_reduce(array_keys($units), function ($carry, $key) use ($units) {
                 if ($key <= $this->_options['maxunit']) {
                     $carry[$key] = $units[$key];
                 }

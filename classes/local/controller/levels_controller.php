@@ -61,7 +61,6 @@ class levels_controller extends page_controller {
                 $this->redirect(new url($this->pageurl));
             }
         }
-
     }
 
     protected function get_page_html_head_title() {
@@ -80,7 +79,7 @@ class levels_controller extends page_controller {
 
         $urlserializer = new url_serializer();
         $badgeurlresolver = di::get('badge_url_resolver_course_world_factory')->get_url_resolver($world);
-        $defaultbadges = array_reduce(range(1, 20), function($carry, $level) use ($badgeurlresolver, $urlserializer) {
+        $defaultbadges = array_reduce(range(1, 20), function ($carry, $level) use ($badgeurlresolver, $urlserializer) {
             $url = $badgeurlresolver->get_url_for_level($level);
             $carry[$level] = $urlserializer->serialize($url);
             return $carry;
@@ -122,7 +121,7 @@ class levels_controller extends page_controller {
             return;
         }
 
-        list($module, $props) = $this->get_react_module();
+        [$module, $props] = $this->get_react_module();
         echo $output->react_module($module, $props);
 
         $this->page_danger_zone_content();

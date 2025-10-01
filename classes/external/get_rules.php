@@ -94,7 +94,7 @@ class get_rules extends external_api {
         $rules = $dictator->sort_rules_by_priority($rules);
 
         $filterhandler = di::get('rule_filter_handler');
-        $data = array_values(array_map(function($instance) use ($filterhandler) {
+        $data = array_values(array_map(function ($instance) use ($filterhandler) {
             $filter = $filterhandler->get_filter($instance->get_filter_name());
             $effectivectx = $instance->get_child_context() ?? $instance->get_context();
             $label = $filter ? $filter->get_label_for_config($instance->get_filter_config(), $effectivectx) : null;

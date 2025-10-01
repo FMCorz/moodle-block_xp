@@ -45,25 +45,25 @@ class default_course_world_config extends immutable_config {
     public function __construct() {
         parent::__construct(new static_config([
             'enabled' => false,
-            'enablecheatguard' => true,   // Enable cheat guard.
-            'enableladder' => true,       // Enable the ladder.
-            'enableinfos' => true,        // Enable the infos page.
-            'levels' => 0,                // Not used any more.
-            'levelsdata' => '',           // JSON encoded value of the levels data.
+            'enablecheatguard' => true, // Enable cheat guard.
+            'enableladder' => true, // Enable the ladder.
+            'enableinfos' => true, // Enable the infos page.
+            'levels' => 0, // Not used any more.
+            'levelsdata' => '', // JSON encoded value of the levels data.
             'enablelevelupnotif' => true, // Enable the level up notification.
             // This used to flag whether we use the custom badges, or not. We changed it to be a flag describing whether
             // we need to copy admin badge, or not, or if we are in the legacy state of not using custom badges.
             'enablecustomlevelbadges' => course_world_config::CUSTOM_BADGES_MISSING,
-            'maxactionspertime' => 10,           // Max actions during timepermaxactions.
-            'timeformaxactions' => 60,           // Time during which max actions cannot be reached.
-            'timebetweensameactions' => 180,     // Time between similar actions.
+            'maxactionspertime' => 10, // Max actions during timepermaxactions.
+            'timeformaxactions' => 60, // Time during which max actions cannot be reached.
+            'timebetweensameactions' => 180, // Time between similar actions.
             'identitymode' => course_world_config::IDENTITY_ON, // Identity mode.
-            'rankmode' => course_world_config::RANK_ON,         // Rank mode.
-            'neighbours' => 0,                                  // Number of neighbours to show on ladder, 0 means everyone.
-            'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING,  // Flag about the default filters.
-            'laddercols' => 'xp,progress',      // Addditional columns to be displayed on the ladder.
-            'instructions' => '',                   // Instructions to display on the info page.
-            'instructions_format' => FORMAT_HTML,   // Instructions format.
+            'rankmode' => course_world_config::RANK_ON, // Rank mode.
+            'neighbours' => 0, // Number of neighbours to show on ladder, 0 means everyone.
+            'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING, // Flag about the default filters.
+            'laddercols' => 'xp,progress', // Addditional columns to be displayed on the ladder.
+            'instructions' => '', // Instructions to display on the info page.
+            'instructions_format' => FORMAT_HTML, // Instructions format.
         ]));
     }
 

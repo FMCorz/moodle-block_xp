@@ -71,8 +71,8 @@ class event_lister {
         $list = [];
 
         $coreevents = $this->get_core_events();
-        $list[] = [get_string('coresystem') => array_reduce(array_keys($coreevents), function($carry, $prefix) use ($coreevents) {
-            return array_merge($carry, array_reduce($coreevents[$prefix], function($carry, $eventclass) use ($prefix) {
+        $list[] = [get_string('coresystem') => array_reduce(array_keys($coreevents), function ($carry, $prefix) use ($coreevents) {
+            return array_merge($carry, array_reduce($coreevents[$prefix], function ($carry, $eventclass) use ($prefix) {
                 $infos = self::get_event_infos($eventclass);
                 if ($infos) {
                     $carry[$infos['eventname']] = get_string('colon', 'block_xp', (object) [
@@ -231,7 +231,7 @@ class event_lister {
         $plugininfo = $pluginmanager->get_plugin_info($component);
 
         // Reduce to the participating, non-deprecated event.
-        $events = array_reduce($eventclasses, function($carry, $class) use ($plugininfo) {
+        $events = array_reduce($eventclasses, function ($carry, $class) use ($plugininfo) {
             $infos = self::get_event_infos($class);
             if (empty($infos)) {
                 // Skip rare case where infos aren't found.

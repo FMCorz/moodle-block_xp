@@ -113,13 +113,13 @@ final class instance_test extends base_testcase {
      * Provider.
      */
     public static function disabled_when_block_removed_provider(): Generator {
-        yield [CONTEXT_SYSTEM, ['fp'], [],  'sys', true];
-        yield [CONTEXT_SYSTEM, ['fp'], 0,  'sys', false];
-        yield [CONTEXT_SYSTEM, ['my'], 0,  'sys', false];
-        yield [CONTEXT_SYSTEM, ['fp', 'u1'], 1, 'sys',  true];
-        yield [CONTEXT_SYSTEM, ['fp', 'my'], 0, 'sys',  true];
-        yield [CONTEXT_SYSTEM, ['fp', 'my'], 1, 'sys',  true];
-        yield [CONTEXT_SYSTEM, ['fp', 'my'], [0, 1], 'sys',  false];
+        yield [CONTEXT_SYSTEM, ['fp'], [], 'sys', true];
+        yield [CONTEXT_SYSTEM, ['fp'], 0, 'sys', false];
+        yield [CONTEXT_SYSTEM, ['my'], 0, 'sys', false];
+        yield [CONTEXT_SYSTEM, ['fp', 'u1'], 1, 'sys', true];
+        yield [CONTEXT_SYSTEM, ['fp', 'my'], 0, 'sys', true];
+        yield [CONTEXT_SYSTEM, ['fp', 'my'], 1, 'sys', true];
+        yield [CONTEXT_SYSTEM, ['fp', 'my'], [0, 1], 'sys', false];
 
         yield [CONTEXT_COURSE, ['c1'], [], 'c1', true];
         yield [CONTEXT_COURSE, ['c1'], [0], 'c1', false];

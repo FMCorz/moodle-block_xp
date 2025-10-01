@@ -206,8 +206,11 @@ final class state_provisioner_test extends base_testcase {
      * @param string $rolepermission
      * @param bool $expectedexists
      */
-    public function test_course_user_state_provisioner_with_system(array $roleincontexts, string $rolepermission,
-            bool $expectedexists): void {
+    public function test_course_user_state_provisioner_with_system(
+        array $roleincontexts,
+        string $rolepermission,
+        bool $expectedexists
+    ): void {
 
         $dg = $this->getDataGenerator();
 

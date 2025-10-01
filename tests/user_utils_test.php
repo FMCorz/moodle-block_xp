@@ -118,7 +118,10 @@ final class user_utils_test extends base_testcase {
         $adminuser = get_admin();
 
         role_change_permission($DB->get_field('role', 'id', ['shortname' => 'user']),
-            \context_system::instance(), 'block/xp:earnxp', CAP_ALLOW);
+            \context_system::instance(),
+            'block/xp:earnxp',
+            CAP_ALLOW
+        );
 
         $c1 = $this->getDataGenerator()->create_course();
         $u1 = $this->getDataGenerator()->create_user();

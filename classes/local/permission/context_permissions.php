@@ -37,7 +37,7 @@ use context;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class context_permissions implements access_permissions, access_logs_permissions, access_report_permissions {
+class context_permissions implements access_logs_permissions, access_permissions, access_report_permissions {
 
     /** @var context The context. */
     protected $context;

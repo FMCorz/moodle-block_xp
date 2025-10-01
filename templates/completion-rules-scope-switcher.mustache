@@ -68,7 +68,7 @@ require(['block_xp/course-selector'], function(CourseSelector) {
     if (backtositewide) {
         backtositewide.addEventListener('click', function(e) {
             e.preventDefault();
-            window.location.href = e.currentTarget.getAttribute('href') + window.location.hash
+            window.location.href = e.currentTarget.getAttribute('href') + window.location.hash;
         });
     }
 });

@@ -69,13 +69,13 @@ class course_world_collection_strategy implements event_collection_strategy {
      * @param course_level_up_notification_service $levelupnotifificationservice The notification service.
      */
     public function __construct(
-            context $context,
-            config $config,
-            course_user_state_store $store,
-            course_filter_manager $filtermanager,
-            reason_collection_logger $logger,
-            course_level_up_notification_service $levelupnotifificationservice
-        ) {
+        context $context,
+        config $config,
+        course_user_state_store $store,
+        course_filter_manager $filtermanager,
+        reason_collection_logger $logger,
+        course_level_up_notification_service $levelupnotifificationservice
+    ) {
         $this->context = $context;
         $this->config = $config;
         $this->store = $store;
@@ -159,7 +159,7 @@ class course_world_collection_strategy implements event_collection_strategy {
             $SESSION->block_xp_cheatguard = [];
         } else {
             // Ensure that all entries are arrays, they may not be when we just upgraded the plugin.
-            $SESSION->block_xp_cheatguard = array_map(function($entry) {
+            $SESSION->block_xp_cheatguard = array_map(function ($entry) {
                 return is_array($entry) ? $entry : [$entry];
             }, $SESSION->block_xp_cheatguard);
         }
@@ -181,8 +181,8 @@ class course_world_collection_strategy implements event_collection_strategy {
         // the last 15min. We want to keep at least 15 min so that when teachers are testing changes,
         // they do not get confused because actions they had just performed no longer gets blocked.
         $timethreshold = $now - max([$maxtime, $actiontime, 900]);
-        $SESSION->block_xp_cheatguard = array_filter(array_map(function($times) use ($maxcount, $timethreshold) {
-            return array_slice(array_filter($times, function($time) use ($timethreshold) {
+        $SESSION->block_xp_cheatguard = array_filter(array_map(function ($times) use ($maxcount, $timethreshold) {
+            return array_slice(array_filter($times, function ($time) use ($timethreshold) {
                 return $time > $timethreshold;
             }), -$maxcount);
         }, $SESSION->block_xp_cheatguard));
@@ -208,8 +208,8 @@ class course_world_collection_strategy implements event_collection_strategy {
 
         if ($maxactions > 0 && $maxintime > 0) {
             $timethreshold = $now - $maxintime;
-            $actionsintimeframe = array_reduce($log, function($carry, $times) use ($timethreshold) {
-                return $carry + array_reduce($times, function($carry, $time) use ($timethreshold) {
+            $actionsintimeframe = array_reduce($log, function ($carry, $times) use ($timethreshold) {
+                return $carry + array_reduce($times, function ($carry, $time) use ($timethreshold) {
                     return $carry + ($time > $timethreshold ? 1 : 0);
                 });
             }, 0);
