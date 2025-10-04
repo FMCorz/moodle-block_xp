@@ -146,11 +146,20 @@
 .block_xp :is(.xp--top-4) {
     top: -1rem;
 }
+.block_xp :is(.xp--top-6) {
+    top: -1.5rem;
+}
 .block_xp :is(.xp-left-0) {
     left: 0px;
 }
 .block_xp :is(.xp-left-0\.5) {
     left: 0.125rem;
+}
+.block_xp :is(.xp-left-2) {
+    left: 0.5rem;
+}
+.block_xp :is(.xp-left-2\.5) {
+    left: 0.625rem;
 }
 .block_xp :is(.xp-right-0) {
     right: 0px;
@@ -197,6 +206,12 @@
 }
 .block_xp :is(.xp--mr-2) {
     margin-right: -0.5rem;
+}
+.block_xp :is(.xp--mt-1) {
+    margin-top: -0.25rem;
+}
+.block_xp :is(.xp--mt-1\.5) {
+    margin-top: -0.375rem;
 }
 .block_xp :is(.xp-mb-0) {
     margin-bottom: 0px;
@@ -402,12 +417,28 @@
 .block_xp :is(.xp-origin-top-right) {
     transform-origin: top right;
 }
+.block_xp :is(.xp--translate-x-1\/2) {
+    --tw-translate-x: -50%;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
 .block_xp :is(.xp--translate-x-full) {
     --tw-translate-x: -100%;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
+.block_xp :is(.xp--translate-y-1) {
+    --tw-translate-y: -0.25rem;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.block_xp :is(.xp--translate-y-1\.5) {
+    --tw-translate-y: -0.375rem;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
 .block_xp :is(.xp-translate-x-full) {
     --tw-translate-x: 100%;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.block_xp :is(.-xp-rotate-6) {
+    --tw-rotate: -6deg;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .block_xp :is(.xp-rotate-90) {
@@ -774,6 +805,9 @@
 .block_xp :is(.xp-pb-4) {
     padding-bottom: 1rem;
 }
+.block_xp :is(.xp-pl-0) {
+    padding-left: 0px;
+}
 .block_xp :is(.xp-pl-2) {
     padding-left: 0.5rem;
 }
@@ -871,6 +905,12 @@
 .block_xp :is(.xp-tracking-wide) {
     letter-spacing: 0.025em;
 }
+.block_xp :is(.\!xp-text-blue-600) {
+    color: #2563eb !important;
+}
+.block_xp :is(.xp-text-current) {
+    color: currentColor;
+}
 .block_xp :is(.xp-text-gray-300) {
     color: #d1d5db;
 }
@@ -911,6 +951,13 @@
     --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.block_xp :is(.xp-transition) {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
 }
 .block_xp :is(.xp-transition-height) {
     transition-property: height;
@@ -1609,6 +1656,9 @@ a .block_xp-level {
 .block_xp :is(.xp-group:hover .group-hover\:xp-pointer-events-auto) {
     pointer-events: auto;
 }
+.block_xp :is(.xp-group:hover .group-hover\:xp-text-inherit) {
+    color: inherit;
+}
 .block_xp :is(.xp-group:hover .group-hover\:xp-opacity-100) {
     opacity: 1;
 }
@@ -1758,10 +1808,10 @@ a .block_xp-level {
 .block_xp :is(.\[\&_li\]\:xp-mb-1 li) {
     margin-bottom: 0.25rem;
 }
-.block_xp :is(.last\:\[\&_p\]\:xp-m-0 p:last-child) {
-    margin: 0px;
-}
 .block_xp :is(.last\:\[\&_p\]\:xp-mb-0 p:last-child) {
+    margin-bottom: 0px;
+}
+.block_xp :is(.last-of-type\:\[\&_p\]\:xp-mb-0 p:last-of-type) {
     margin-bottom: 0px;
 }
 .block_xp :is(.\[\&_ul\]\:xp-pl-4 ul) {
