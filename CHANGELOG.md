@@ -1,6 +1,30 @@
 Changelog
 =========
 
+v19.0
+-----
+
+New features
+
+- Admins can reset all courses to the default admin settings
+- The leaderboard shortcode can display the ranking in any context
+
+Quality of life
+
+- The course selector remembers recently selected entries
+- The leaderboard shortcode is available from the leaderboard page
+
+Bug fixes
+
+- Some buttons were not accessible using the keyboard
+
+Technical changes
+
+- Compatibility with Moodle 5.1
+- Expansion of automated tests
+
+Read our [release blog post](https://www.levelup.plus/blog/xp-quest-release-oct-2025/) to learn more.
+
 v18.3
 -----
 
