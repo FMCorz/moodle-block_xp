@@ -87,6 +87,7 @@ class default_admin_config extends immutable_config {
             'lastdeactivationnoticekey' => '',
             'lastoutofsyncnoticekey' => '',
             'provisionstates' => 0,
+            'shortcodesecret' => '',
 
             'apiroot' => 'https://backend.levelup.plus/api',
             'usagereport' => 1,

@@ -56,6 +56,20 @@ class handler {
     }
 
     /**
+     * Get the world from the context.
+     *
+     * Also check whether the current user has access to the world.
+     *
+     * @param object $env The environment.
+     * @return world|null
+     */
+    protected static function get_world_from_context(\context $context) {
+        $world = di::get('context_world_factory')->get_world_from_context($context);
+        $perms = $world->get_access_permissions();
+        return $perms->can_access() ? $world : null;
+    }
+
+    /**
      * Get the world from the env.
      *
      * Also check whether the current user has access to the world.
@@ -64,20 +78,7 @@ class handler {
      * @return world|null
      */
     protected static function get_world_from_env($env) {
-        $config = di::get('config');
-        $courseid = SITEID;
-
-        if ($config->get('context') == CONTEXT_COURSE) {
-            $context = $env->context->get_course_context(false);
-            if (!$context) {
-                return null;
-            }
-            $courseid = $context->instanceid;
-        }
-
-        $world = di::get('course_world_factory')->get_world($courseid);
-        $perms = $world->get_access_permissions();
-        return $perms->can_access() ? $world : null;
+        return static::get_world_from_context($env->context);
     }
 
     /**
@@ -196,7 +197,19 @@ class handler {
      */
     public static function xpladder($shortcode, $args, $content, $env, $next) {
         global $PAGE, $USER;
-        $world = static::get_world_from_env($env);
+
+        $ctxid = (int) ($args['ctx'] ?? 0);
+        $secret = (string) ($args['secret'] ?? '');
+        $context = null;
+        if (!empty($ctxid)) {
+            $context = \context::instance_by_id($ctxid, IGNORE_MISSING);
+            if (!$context || strlen($secret) < 7 || strpos(static::get_xpladder_secret($context), $secret) !== 0) {
+                return;
+            }
+        }
+
+        // If we have a context, it had to be validated.
+        $world = $context ? static::get_world_from_context($context) : static::get_world_from_env($env);
         if (!$world) {
             return;
         } else if (!$world->get_config()->get('enableladder')) {
@@ -399,4 +412,21 @@ class handler {
         return \html_writer::div(di::get('renderer')->progress_bar($state), 'block_xp', ['style' => 'max-width: 200px']);
     }
 
+    /**
+     * Get the ladder secret.
+     *
+     * @param \context $context
+     * @return string
+     */
+    public static function get_xpladder_secret(\context $context) {
+        $config = di::get('config');
+        $trackersecret = $config->get('shortcodesecret');
+        if (!$trackersecret) {
+            $trackersecret = bin2hex(random_bytes(5));
+            $config->set('shortcodesecret', $trackersecret);
+        }
+
+        // Make unique per code, per context.
+        return substr(sha1("xpladder|{$trackersecret}|{$context->id}"), 0, 7);
+    }
 }
