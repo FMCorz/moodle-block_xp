@@ -27,6 +27,7 @@
 import ModalForm from 'core_form/modalform';
 import * as Compat from 'block_xp/compat';
 import * as RoleButton from 'block_xp/role-button';
+import {extractNodeData} from 'block_xp/utils';
 
 const getButton = (modalForm, action) => {
     const saveBtnJq = modalForm.modal.getFooter().find(modalForm.modal.getActionSelector(action));
@@ -119,54 +120,6 @@ export function registerOpen(selector) {
     RoleButton.registerClick(selector, (node) => {
         open(node);
     });
-}
-
-/**
- * Extract data from dataset.
- *
- * This extracts data at a prefix, and converts in nested objects if needed.
- *
- * @param {Node} node The HTML node.
- * @param {String} prefix The data prefix.
- * @returns {Object}
- */
-export function extractNodeData(node, prefix) {
-    return Object.keys(node.dataset).filter(k => k.indexOf(prefix) === 0).reduce((carry, k) => {
-        let value = node.dataset[k];
-        if (value === 'true' || value === 'false') {
-            value = value === 'true' ? true : false;
-        }
-        let key = k.charAt(prefix.length).toLocaleLowerCase() + k.substring(prefix.length + 1);
-
-        if (key.indexOf('__') > -1) {
-            return setAtDepth(carry, key.split('__'), value);
-        }
-
-        return {...carry, [key]: value};
-    }, {});
-}
-
-/**
- * Set a value at a specific depth in an object.
- *
- * @param {Object} obj
- * @param {String[]} keys
- * @param {Any} value
- * @returns {Object}
- */
-function setAtDepth(obj, keys, value) {
-    let currentObj = obj;
-
-    for (let i = 0; i < keys.length - 1; i++) {
-        const key = keys[i];
-        currentObj[key] = typeof currentObj[key] === 'undefined' ? {} : currentObj[key];
-        currentObj = currentObj[key];
-    }
-
-    const lastKey = keys[keys.length - 1];
-    currentObj[lastKey] = value;
-
-    return obj;
 }
 
 let simpleOpenFormActionObserverRegistered = false;
