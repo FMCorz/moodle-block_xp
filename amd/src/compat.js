@@ -18,14 +18,20 @@
 /**
  * Compat.
  *
+ * @module     block_xp/compat
  * @copyright  2024 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 import DynamicForm from 'core_form/dynamicform';
+import Modal from 'core/modal';
+import ModalFactory from 'core/modal_factory';
 import ModalForm from 'core_form/modalform';
+import ModalRegistry from 'core/modal_registry';
 import Templates from 'core/templates';
+
+const IS_MODAL_TYPE_DEPRECATED = 'create' in Modal;
 
 /**
  * Render a template asynchronously.
@@ -47,6 +53,33 @@ export const asyncRender = (name, context) => {
         });
     });
 };
+
+/**
+ * Create a modal.
+ *
+ * Compatibility function until we drop support for Moodle <4.3.
+ *
+ * @param {Object} config
+ * @param {Function} [ModalClass]
+ * @returns {Promise<Modal>}
+ */
+export function createModal(config, ModalClass = Modal) {
+    if (IS_MODAL_TYPE_DEPRECATED) {
+        delete config.type;
+        return ModalClass.create(config);
+    }
+
+    const typeName = config.type ?? config.template;
+    let type = ModalRegistry.get(typeName);
+    if (!type) {
+        ModalRegistry.register(typeName, ModalClass, config.template);
+    }
+
+    return ModalFactory.create({
+        ...config,
+        type: typeName,
+    });
+}
 
 /**
  * Get form node.
