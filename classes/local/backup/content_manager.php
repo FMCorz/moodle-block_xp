@@ -44,7 +44,7 @@ class content_manager {
      * @return string
      */
     public function encode_content_links($content) {
-        $content = shortcode_xpladder_decode_rule::encode_content($content);
+        $content = xpladder_decode_rule::encode_content($content);
         return $content;
     }
 
@@ -55,7 +55,7 @@ class content_manager {
      */
     public function get_decode_rules() {
         return [
-            new shortcode_xpladder_decode_rule(),
+            new xpladder_decode_rule(),
         ];
     }
 

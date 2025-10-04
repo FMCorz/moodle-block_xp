@@ -33,13 +33,13 @@ require_once($CFG->dirroot . '/backup/util/helper/restore_decode_rule.class.php'
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class shortcode_xpladder_decode_rule extends \restore_decode_rule {
+class xpladder_decode_rule extends \restore_decode_rule {
 
     /**
      * Constructor.
      */
     public function __construct($placeholder = 'BLOCKXPSHORTCODEXPLADDER') {
-        parent::__construct($placeholder, '', 'context');
+        parent::__construct($placeholder, '', ['context', 'top', 'hidelink', 'withprogress']);
     }
 
     /**
@@ -55,18 +55,39 @@ class shortcode_xpladder_decode_rule extends \restore_decode_rule {
 
         foreach ($matches[0] as $key => $tosearch) {
             $context = null;
+            $top = null;
+            $hidelink = null;
+            $withprogress = null;
             foreach ($this->mappings as $mappingkey => $mappingsource) {
-                $oldid = $matches[$mappingkey][$key];
-                $newid = (int) $this->get_mapping('context', $oldid);
-                if ($newid) {
-                    $context = context::instance_by_id($newid);
+                $oldvalue = $matches[$mappingkey][$key];
+                if ($mappingsource === 'context') {
+                    $newid = (int) $this->get_mapping('context', $oldvalue);
+                    if ($newid) {
+                        $context = context::instance_by_id($newid);
+                    }
+                } else if ($mappingsource === 'top') {
+                    $top = (int) $oldvalue;
+                } else if ($mappingsource === 'hidelink') {
+                    $hidelink = (bool) $oldvalue;
+                } else if ($mappingsource === 'withprogress') {
+                    $withprogress = (bool) $oldvalue;
                 }
             }
 
-            $shortcode = "[xpladder]";
+            $shortcode = "[xpladder";
             if ($context) {
-                $shortcode = "[xpladder ctx={$context->id} secret=" . handler::get_xpladder_secret($context) . "]";
+                $shortcode .= " ctx={$context->id} secret=" . handler::get_xpladder_secret($context);
             }
+            if ($top) {
+                $shortcode .= " top={$top}";
+            }
+            if ($hidelink) {
+                $shortcode .= " hidelink";
+            }
+            if ($withprogress) {
+                $shortcode .= " withprogress";
+            }
+            $shortcode .= "]";
             $content = str_replace($tosearch, $shortcode, $content);
         }
 
@@ -92,7 +113,13 @@ class shortcode_xpladder_decode_rule extends \restore_decode_rule {
                 return null;
             }
             return (object) ['hascontent' => false, 'contentprocessor' => function ($args, $content) {
-                return '$@BLOCKXPSHORTCODEXPLADDER*' . ($args['ctx'] ?? '0') . '@$';
+                $top = $args['top'] ?? 0;
+                return '$@BLOCKXPSHORTCODEXPLADDER'
+                    . '*' . ($args['ctx'] ?? '0')
+                    . '*' . ($top === true ? '10' : $top)
+                    . '*' . (($args['hidelink'] ?? false) ? '1' : '0')
+                    . '*' . (($args['withprogress'] ?? false) ? '1' : '0')
+                    . '@$';
             }];
         });
 
@@ -108,7 +135,8 @@ class shortcode_xpladder_decode_rule extends \restore_decode_rule {
      * @return array
      */
     protected function validate_params($linkname, $urltemplate, $mappings) {
-        return ['1' => $mappings];
+        $mappings = (array) $mappings;
+        return array_combine(range(1, count($mappings)), $mappings);
     }
 
 }
