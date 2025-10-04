@@ -673,6 +673,7 @@ The styling of the points will depend on whether an arbitrary value is displayed
 ';
 $string['shortcode:xpprogressbar'] = 'The current user\'s progress bar towards the next level.';
 $string['shortcodeinactiveleaderboarddisabled'] = 'The leaderboard is currently disabled, the shortcode will be inactive. You can enable the leaderboard in its settings.';
+$string['shortcodexpteamladderembedintro'] = 'With the following shortcode, the leaderboard can be embedded anywhere on this site. More options and information can be found in the [documentation](https://docs.levelup.plus/xp/docs/how-to/use-shortcodes).';
 $string['shortcodexpladderembedintro'] = 'With the following shortcode, the leaderboard can be embedded anywhere on this site. More options and information can be found in the [documentation](https://docs.levelup.plus/xp/docs/how-to/use-shortcodes).';
 $string['sitewide'] = 'Sitewide';
 $string['somefeaturesrequireotherplugins'] = 'Some features require additional plugins to be installed.';
