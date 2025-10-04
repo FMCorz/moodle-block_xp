@@ -419,14 +419,7 @@ class handler {
      * @return string
      */
     public static function get_xpladder_secret(\context $context) {
-        $config = di::get('config');
-        $trackersecret = $config->get('shortcodesecret');
-        if (!$trackersecret) {
-            $trackersecret = bin2hex(random_bytes(5));
-            $config->set('shortcodesecret', $trackersecret);
-        }
-
-        // Make unique per code, per context.
-        return substr(sha1("xpladder|{$trackersecret}|{$context->id}"), 0, 7);
+        $secret = di::get('shortcode_secret');
+        return substr(sha1("xpladder|{$secret}|{$context->id}"), 0, 7);
     }
 }

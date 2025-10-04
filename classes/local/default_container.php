@@ -85,6 +85,7 @@ class default_container implements container {
         'rule_type_resolver' => true,
         'serializer_factory' => true,
         'settings_maker' => true,
+        'shortcode_secret' => true,
         'shortcodes_definition_maker' => true,
         'tasks_definition_maker' => true,
         'url_resolver' => true,
@@ -555,6 +556,21 @@ class default_container implements container {
             $this->get('url_resolver'),
             $this->get('config_locked')
         );
+    }
+
+    /**
+     * Get the shortcode secret.
+     *
+     * @return string
+     */
+    protected function get_shortcode_secret() {
+        $config = $this->get('config');
+        $secret = $config->get('shortcodesecret');
+        if (!$secret) {
+            $secret = bin2hex(random_bytes(5));
+            $config->set('shortcodesecret', $secret);
+        }
+        return $secret;
     }
 
     /**
