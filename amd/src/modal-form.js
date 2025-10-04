@@ -133,12 +133,5 @@ export function registerSimpleOpenFormActionObserver() {
         return;
     }
     simpleOpenFormActionObserverRegistered = true;
-    document.body.addEventListener('click', (e) => {
-        const node = e.target.closest(simpleOpenFormActionObserverSelector);
-        if (!node) {
-            return;
-        }
-        e.preventDefault();
-        open(node);
-    });
+    delegateOpen('body', simpleOpenFormActionObserverSelector);
 }

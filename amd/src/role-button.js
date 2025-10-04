@@ -35,7 +35,7 @@ define([], function() {
         const nodes = document.querySelectorAll(rootSelector);
 
         const handleHit = (e) => {
-            const node = e.target.closest('[role=button]');
+            const node = e.target.closest('a,button,[role=button]');
             if (node && node.matches(nodeSelector)) {
                 if (e.defaultPrevented) {
                     return;
@@ -48,7 +48,7 @@ define([], function() {
         nodes.forEach((node) => {
             node.addEventListener('click', handleHit);
 
-            node.addEventListener('mousedown', (e) => {
+            node.addEventListener('keydown', (e) => {
                 if (e.key !== ' ' && e.key !== 'Enter') {
                     return;
                 }
@@ -59,7 +59,16 @@ define([], function() {
                 if (!node.getAttribute('role')) {
                     node.setAttribute('role', 'button');
                 }
+                if (!node.hasAttribute('tabindex')) {
+                    node.setAttribute('tabindex', '0');
+                }
             });
+
+            // When there is a direct onclick function remove it.
+            // We use onclick="return false" to prevent clicks until the event is registered.
+            if (node.onclick) {
+                node.onclick = undefined;
+            }
         });
     }
 
@@ -82,7 +91,7 @@ define([], function() {
             };
 
             node.addEventListener('click', handleHit);
-            node.addEventListener('mousedown', (e) => {
+            node.addEventListener('keydown', (e) => {
                 if (e.key !== ' ' && e.key !== 'Enter') {
                     return;
                 }
@@ -91,6 +100,15 @@ define([], function() {
 
             if (!node.getAttribute('role')) {
                 node.setAttribute('role', 'button');
+            }
+            if (!node.hasAttribute('tabindex')) {
+                node.setAttribute('tabindex', '0');
+            }
+
+            // When there is a direct onclick function remove it.
+            // We use onclick="return false" to prevent clicks until the event is registered.
+            if (node.onclick) {
+                node.onclick = undefined;
             }
         });
     }
