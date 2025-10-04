@@ -30,6 +30,8 @@ namespace block_xp\local\controller;
 use block_xp\di;
 use block_xp\local\division\division;
 use block_xp\local\division\group_division;
+use block_xp\local\shortcode\handler;
+use block_xp\local\utils\text_utils;
 use html_writer;
 
 /**
@@ -176,6 +178,7 @@ class ladder_controller extends page_controller {
     protected function page_content() {
         global $PAGE;
         $output = $this->get_renderer();
+        $PAGE->requires->js_call_amd('block_xp/modal', 'registerSimpleOpenModalActionObserver');
 
         $canmanage = $this->world->get_access_permissions()->can_manage();
         if ($canmanage) {
@@ -209,12 +212,34 @@ class ladder_controller extends page_controller {
     protected function get_page_menu_items() {
         $config = di::get('config');
         $hasaddon = di::get('addon')->is_activated();
+
+        $randomid = \html_writer::random_id();
+        $plugman = \core_plugin_manager::instance();
+        $shortcodes = $plugman->get_plugin_info('filter_shortcodes');
+        $context = $this->world->get_context();
+        $embeddata = [
+            'isavailable' => (bool) $shortcodes && ($shortcodes->is_enabled() ?? true),
+            'isenabled' => (bool) $this->world->get_config()->get('enableladder'),
+            'introformatted' => text_utils::markdown_light(get_string('shortcodexpladderembedintro', 'block_xp')),
+            'pluginrequiredformatted' => text_utils::markdown_light(get_string('pluginshortcodesrequiredtousefeature', 'block_xp')),
+            'snippet' => "[xpladder ctx={$context->id} secret=" . handler::get_xpladder_secret($context) . "]",
+        ];
+        echo $this->get_renderer()->json_script($embeddata, $randomid);
+
         return array_filter([
             [
                 'label' => get_string('pagesettings', 'block_xp'),
                 'data-xp-action' => 'open-form',
                 'data-form-class' => di::get('leaderboard_form_class'),
                 'data-form-args__contextid' => $this->world->get_context()->id,
+                'href' => '#',
+            ],
+            [
+                'label' => get_string('embedleaderboard', 'block_xp'),
+                'data-xp-action' => 'open-modal',
+                'data-template' => 'block_xp/shortcode-xpladder-embed',
+                'data-template-data' => $randomid,
+                'data-modal-title' => get_string('embedleaderboard', 'block_xp'),
                 'href' => '#',
             ],
             $config->get('enablepromoincourses') && !$hasaddon ? [

@@ -1,0 +1,60 @@
+{{!
+    This file is part of Level Up XP.
+
+    Level Up XP is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Level Up XP is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
+
+    https://levelup.plus
+}}
+{{!
+    @template block_xp/shortcode-snippet
+
+    Shortcode snippet.
+
+    Example context (json):
+    {
+        "snippetcode": "[example]"
+    }
+}}
+<div id="xp-snippet-{{uniqid}}" class="xp-flex xp-bg-gray-100 xp-rounded">
+    <pre class="xp-m-0 xp-p-4 xp-flex-1" data-content="snippet">{{$ snippetcode }}{{ shortcode }}{{/ snippetcode }}</pre>
+    <div class="xp-p-4 xp-pl-0">
+        <a href="#" onclick="return false" class="xp-group xp-text-current xp-relative xp--mt-1.5">
+            <div aria-hidden="true" data-element="tooltip" class="xp-inline-block xp-absolute xp--top-6 xp-text-sm xp-bg-black xp-text-white xp-px-2 xp-py-1 xp-left-2.5 xp--translate-x-1/2 xp-rounded xp-pointer-events-none xp-opacity-0 xp-duration-300 xp-transition">{{# str }}copiedexcl, block_xp{{/str}}</div>
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="xp-w-5 xp-h-5 xp-transition xp-text-gray-600 group-hover:xp-text-inherit">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+            </svg>
+            <span class="xp-sr-only">{{#str}}copy, core{{/str}}</span>
+        </a>
+    </div>
+</div>
+{{#js}}
+require(['block_xp/role-button', 'block_xp/utils'], function(RoleButton, Utils) {
+    var snippet = document.querySelector('#xp-snippet-{{uniqid}} [data-content="snippet"]');
+    RoleButton.registerClick('#xp-snippet-{{uniqid}} a', function(button) {
+        Utils.copyToClipboard(snippet.textContent.trim(), button);
+        var tooltip = button.querySelector('[data-element="tooltip"]');
+
+        var svg = button.querySelector('svg');
+        svg.classList.add('-xp-rotate-6', '!xp-text-blue-600');
+        tooltip.classList.add('xp--translate-y-1.5');
+        tooltip.classList.remove('xp-opacity-0');
+
+        setTimeout(function() {
+            tooltip.classList.add('xp-opacity-0');
+            tooltip.classList.remove('xp--translate-y-1.5');
+            svg.classList.remove('-xp-rotate-6', '!xp-text-blue-600');
+        }, 2000);
+    });
+})
+{{/js}}

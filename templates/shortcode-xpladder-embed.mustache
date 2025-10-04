@@ -1,0 +1,44 @@
+{{!
+    This file is part of Level Up XP.
+
+    Level Up XP is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Level Up XP is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
+
+    https://levelup.plus
+}}
+{{!
+    @template block_xp/shortcode-xpladder-embed
+
+    TODO describe template shortcode-xpladder-embed
+
+    Example context (json):
+    {
+    }
+}}
+<div class="xp-mb-4">{{{ introformatted }}}</div>
+
+{{^isavailable}}
+    <div class="alert alert-warning xp-mb-0 last-of-type:[&_p]:xp-mb-0">{{{ pluginrequiredformatted }}}</div>
+{{/isavailable}}
+
+{{# isavailable }}
+    {{^ isenabled }}
+    <div class="alert alert-warning last-of-type:[&_p]:xp-mb-0">{{#str}} shortcodeinactiveleaderboarddisabled, block_xp {{/str}}</div>
+    {{/ isenabled }}
+
+    {{< block_xp/shortcode-snippet }}
+        {{$ snippetcode }}{{ snippet }}{{/ snippetcode }}
+    {{/ block_xp/shortcode-snippet }}
+{{/ isavailable }}
+
+</div>
