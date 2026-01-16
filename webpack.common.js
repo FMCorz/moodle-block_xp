@@ -1,6 +1,6 @@
-const webpack = require('webpack');
 const path = require('path');
 const WrapperPlugin = require('wrapper-webpack-plugin');
+const { HEADER } = require('./webpack.lib.js');
 
 module.exports = {
     target: ['web', 'es2021'],
@@ -47,7 +47,7 @@ module.exports = {
         // Without this, Moodle prevents grunt from compiling the files.
         new WrapperPlugin({
             test: /-lazy\.js$/,
-            header: '/* eslint-disable */\n/* Do not edit directly, refer to ui/ folder. */\n\n',
+            header: HEADER,
             footer: ''
         }),
     ],
