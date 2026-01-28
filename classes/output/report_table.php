@@ -138,35 +138,22 @@ class report_table extends table_sql {
         $groupid = $this->groupid;
 
         // Get all the users that are enrolled and can earn XP.
-        $ids = [];
-        $users = get_enrolled_users($context, 'block/xp:earnxp', $groupid);
-        foreach ($users as $user) {
-            $ids[$user->id] = $user->id;
-        }
-        unset($users);
+        [$enrolledsql, $enrolledparams] = get_enrolled_sql($context, 'block/xp:earnxp', $groupid);
 
         // Get the users which might not be enrolled or are revoked the permission, but still should
         // be displayed in the report for the teachers' benefit. We need to filter out the users which
         // are not a member of the group though.
-        if (empty($groupid)) {
-            $sql = 'SELECT userid FROM {block_xp} WHERE courseid = :courseid';
-            $params = ['courseid' => $courseid];
-        } else {
-            $sql = 'SELECT b.userid
-                      FROM {block_xp} b
-                      JOIN {groups_members} gm
-                        ON b.userid = gm.userid
-                       AND gm.groupid = :groupid
-                     WHERE courseid = :courseid';
-            $params = ['courseid' => $courseid, 'groupid' => $groupid];
+        $inxpsql = 'SELECT userid FROM {block_xp} WHERE courseid = :inxpcourseid';
+        $inxpparams = ['inxpcourseid' => $courseid];
+        if (!empty($groupid)) {
+            $inxpsql = 'SELECT b.userid
+                          FROM {block_xp} b
+                          JOIN {groups_members} gm
+                            ON b.userid = gm.userid
+                           AND gm.groupid = :inxpgroupid
+                         WHERE courseid = :inxpcourseid';
+            $inxpparams = ['inxpcourseid' => $courseid, 'inxpgroupid' => $groupid];
         }
-
-        $entries = $this->db->get_recordset_sql($sql, $params);
-        foreach ($entries as $entry) {
-            $ids[$entry->userid] = $entry->userid;
-        }
-        $entries->close();
-        [$insql, $inparams] = $this->db->get_in_or_equal($ids, SQL_PARAMS_NAMED, 'param', true, null);
 
         // User filter.
         [$usersql, $userparams] = $this->generate_user_filter_sql();
@@ -181,8 +168,10 @@ class report_table extends table_sql {
                         AND ctx.contextlevel = :contextlevel
                   LEFT JOIN {block_xp} x
                          ON (x.userid = u.id AND x.courseid = :courseid)";
-        $this->sql->where = "u.deleted = 0 AND u.id $insql AND $usersql";
-        $this->sql->params = array_merge($inparams, $userparams, [
+        $this->sql->where = "u.deleted = 0
+                         AND u.id IN (($inxpsql) UNION ($enrolledsql))
+                         AND $usersql";
+        $this->sql->params = array_merge($enrolledparams, $inxpparams, $userparams, [
             'courseid' => $courseid,
             'contextlevel' => CONTEXT_USER,
         ]);
