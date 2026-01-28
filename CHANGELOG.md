@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v19.1
+-----
+
+Bug fixes
+
+- Removed table borders from the recent activity in Moodle 5.1
+- The report raised an exception with 65,000+ enrolled users
+
 v19.0
 -----
 
