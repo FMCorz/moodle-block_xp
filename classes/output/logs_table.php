@@ -141,6 +141,7 @@ class logs_table extends table_sql {
         }
 
         // Define various table settings.
+        $this->no_sorting('reason');
         $this->sortable(true, 'timerecorded', SORT_DESC);
         $this->collapsible(false);
     }
