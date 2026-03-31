@@ -137,6 +137,7 @@ module.exports = {
                     values: theme('space'),
                     variants: variants('space'),
                     type: 'any',
+                    supportsNegativeValues: true,
                 }
             );
         }),
