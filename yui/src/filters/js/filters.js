@@ -30,6 +30,28 @@
  */
 
 /**
+ * Confirm delete.
+ *
+ * @param {String} title Translated title
+ * @param {String} question Translated message (plain text)
+ * @param {Function} onConfirm Callback when user confirms
+ */
+var confirmFilterDelete = function(title, question, onConfirm) {
+    require(['block_xp/modal', 'core/modal_events', 'core/notification'], function(Modal, ModalEvents, Notification) {
+        Modal.createConfirmModal({
+            title: title,
+            body: '<p>' + question + '</p>',
+        })
+            .then(function(modal) {
+                modal.getRoot().on(ModalEvents.save, onConfirm);
+                modal.show();
+                return modal;
+            })
+            .catch(Notification.exception);
+    });
+};
+
+/**
  * Filters.
  *
  * Note that this code has many assumption on the DOM structure and it is therefore
@@ -199,12 +221,11 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
         var rulesContainer = filter.one(SELECTORS.FILTERRULES);
         var firstRule = rulesContainer ? rulesContainer.one(SELECTORS.RULE) : null;
         if (firstRule && this.countChildrenRulesInRule(firstRule) > 0) {
-            var confirm = new M.core.confirm({
-                title: M.util.get_string('deleterule', 'block_xp'),
-                question: M.util.get_string('areyousure', 'core'),
-            });
-            confirm.on('complete-yes', deleteOperation, this);
-            confirm.show();
+            confirmFilterDelete(
+                M.util.get_string('deleterule', 'block_xp'),
+                M.util.get_string('areyousure', 'core'),
+                deleteOperation
+            );
             return;
         }
 
@@ -234,12 +255,11 @@ Y.namespace('M.block_xp').Filters = Y.extend(FILTERS, Y.Base, {
 
         // When rule has children, show confirmation.
         if (this.countChildrenRulesInRule(rule) > 0) {
-            var confirm = new M.core.confirm({
-                title: M.util.get_string('deletecondition', 'block_xp'),
-                question: M.util.get_string('areyousure', 'core'),
-            });
-            confirm.on('complete-yes', deleteOperation, this);
-            confirm.show();
+            confirmFilterDelete(
+                M.util.get_string('deletecondition', 'block_xp'),
+                M.util.get_string('areyousure', 'core'),
+                deleteOperation
+            );
             return;
         }
 

@@ -30,10 +30,22 @@ import * as Str from 'core/str';
 import Templates from 'core/templates';
 import * as Compat from 'block_xp/compat';
 import * as RoleButton from 'block_xp/role-button';
-import {extractNodeData, getDataFromJsonScript} from 'block_xp/utils';
+import { extractNodeData, getDataFromJsonScript } from 'block_xp/utils';
 
 let simpleOpenModalActionObserverRegistered = false;
 let simpleOpenModalActionObserverSelector = '[data-xp-action="open-modal"]';
+
+/**
+ * Create a confirmation modal.
+ *
+ * @param {Object} config
+ * @returns {Promise<ModalSaveCancel>}
+ */
+export async function createConfirmModal(config) {
+    const modal = await Compat.createModal(config, ModalSaveCancel);
+    modal.setSaveButtonText(Str.get_string('yes', 'moodle'));
+    return modal;
+}
 
 /**
  * Create a save/cancel modal.

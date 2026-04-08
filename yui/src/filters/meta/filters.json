@@ -4,7 +4,6 @@
         "base",
         "node",
         "moodle-core-dragdrop",
-        "moodle-core-notification-confirm",
         "moodle-block_xp-rulepicker"
     ]
   }
