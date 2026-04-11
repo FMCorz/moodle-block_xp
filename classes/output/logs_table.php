@@ -136,7 +136,7 @@ class logs_table extends table_sql {
         $this->sql->where = "u.deleted = 0 AND x.contextid = :contextid AND $usersql";
         $this->sql->params = array_merge(['contextid' => $world->get_context()->id], $userparams, $sqlparams);
         if ($this->filterbyuserid) {
-            $this->sql->where .= ' AND userid = :userid';
+            $this->sql->where .= ' AND x.userid = :userid';
             $this->sql->params = array_merge($this->sql->params, ['userid' => $this->filterbyuserid]);
         }
 
