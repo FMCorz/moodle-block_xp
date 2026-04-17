@@ -97,7 +97,7 @@ class default_resolver implements resolver {
 
         return [
             'block_xp\\local\\reason\\' . $name . '_reason',
-            'block_xp\\local\\reason\\' . $name
+            'block_xp\\local\\reason\\' . $name,
         ];
     }
 

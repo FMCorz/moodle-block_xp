@@ -44,7 +44,7 @@ Example:
 \$ mdk php public/blocks/xp/cli/migrate_logs.php --execute --batchsize=10000
 ";
 
-list($options, $unrecognized) = cli_get_params(
+[$options, $unrecognized] = cli_get_params(
     [
         'help' => false,
         'batchsize' => 5000,

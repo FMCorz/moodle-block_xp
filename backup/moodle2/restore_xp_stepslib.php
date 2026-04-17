@@ -16,13 +16,8 @@
 //
 // https://levelup.plus
 
-/**
- * Block XP restore steplib.
- *
- * @package    block_xp
- * @copyright  2015 Frédéric Massart - FMCorz.net
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+// phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
+// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 
 use block_xp\di;
 use block_xp\local\backup\restore_context;

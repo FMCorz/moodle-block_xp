@@ -226,7 +226,7 @@ class admin_rules_controller extends admin_route_controller {
     protected function get_widget_group() {
         return new \block_xp\output\filters_widget_group([
             $this->get_action_rules_widget_element(),
-            $this->get_events_widget_element()
+            $this->get_events_widget_element(),
         ]);
     }
 

@@ -73,7 +73,8 @@ trait rules_scope_trait {
         $context = context::instance_by_id($childcontextid, IGNORE_MISSING);
         $worldcontext = $this->world->get_context();
         if (!$context || $context->contextlevel != CONTEXT_COURSE ||
-                !$worldcontext->is_parent_of($context, false)) {
+                !$worldcontext->is_parent_of($context, false)
+        ) {
             return null;
         }
 

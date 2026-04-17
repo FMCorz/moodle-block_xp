@@ -51,8 +51,8 @@ use block_xp\local\privacy\addon_userlist_provider;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-    \core_privacy\local\request\core_userlist_provider,
     \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
     \core_privacy\local\request\plugin\provider,
     \core_privacy\local\request\user_preference_provider {
     use \core_privacy\local\legacy_polyfill;
@@ -261,7 +261,7 @@ class provider implements
         $params = ['userid' => $user->id] + $inctxparams;
 
         $path = [$levelup, get_string('privacy:path:logs', 'block_xp')];
-        $flushlogs = function($contextid, $data) use ($path) {
+        $flushlogs = function ($contextid, $data) use ($path) {
             $context = context::instance_by_id($contextid);
             writer::with_context($context)->export_data($path, (object) ['data' => $data]);
         };

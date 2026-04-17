@@ -39,6 +39,7 @@ use lang_string;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class consume_content implements ruletype, ruletype_with_goal, ruletype_with_limit, ruletype_with_profile, with_iconography {
+    use ruletype_deprecation_filler_trait;
 
     /** Ignored components. */
     const IGNORED_COMPONENTS = [
@@ -73,15 +74,15 @@ class consume_content implements ruletype, ruletype_with_goal, ruletype_with_lim
         'assessable_',
     ];
 
-    use ruletype_deprecation_filler_trait;
-
     public function get_default_limit(): limit_spec {
         return new limit_spec(0, limit_spec::WINDOW_HOURLY);
     }
 
     public function get_default_repeat_limit(): limit_spec {
-        return new limit_spec(1, limit_spec::WINDOW_HOURLY,
-            limit_spec::SCOPE_ENV | limit_spec::SCOPE_OBJECT | limit_spec::SCOPE_PARENT);
+        return new limit_spec(1,
+            limit_spec::WINDOW_HOURLY,
+            limit_spec::SCOPE_ENV | limit_spec::SCOPE_OBJECT | limit_spec::SCOPE_PARENT
+        );
     }
 
     public function get_display_name(): lang_string {

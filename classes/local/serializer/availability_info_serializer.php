@@ -37,7 +37,7 @@ class availability_info_serializer implements serializer {
     public function serialize($info) {
         return [
             'isavailable' => $info->is_available(),
-            'reasons' => array_map(function($reason) {
+            'reasons' => array_map(function ($reason) {
                 return ['code' => $reason->get_code(), 'description' => (string) $reason->get_description()];
             }, $info->get_reasons()),
         ];

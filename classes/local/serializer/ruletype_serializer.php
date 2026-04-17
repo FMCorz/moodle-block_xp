@@ -116,7 +116,7 @@ class ruletype_serializer implements serializer {
         $filters = $this->filtermediator ? $this->filtermediator->get_compatible_filter_names($type) : [];
         $repeatlimitoptions = null;
         if ($type instanceof ruletype_with_limit) {
-            $repeatlimitoptions = array_values(array_map(function($option) {
+            $repeatlimitoptions = array_values(array_map(function ($option) {
                 return $this->serialize_repeat_option($option);
             }, $type->get_repeat_limit_options()));
         }

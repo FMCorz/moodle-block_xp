@@ -59,8 +59,10 @@ class html extends HTML_QuickForm_html {
         if (is_callable($content)) {
             $content = $content();
         }
-        return \html_writer::div((string) ($content ?? ''), '',
-            ['class' => 'fitem form-control-static', 'data-name' => $this->getName()]);
+        return \html_writer::div((string) ($content ?? ''),
+            '',
+            ['class' => 'fitem form-control-static', 'data-name' => $this->getName()]
+        );
     }
 
     /**

@@ -130,7 +130,7 @@ abstract class base_testcase extends \advanced_testcase {
         global $DB;
         $this->assertEquals($expected, $DB->count_records('block_xp_logs', [
             'userid' => (int) $userid,
-            'contextid' => (int) $world->get_context()->id
+            'contextid' => (int) $world->get_context()->id,
         ]));
     }
 

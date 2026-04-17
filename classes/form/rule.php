@@ -232,7 +232,7 @@ class rule extends dynamic_form {
             limit_spec::WINDOW_MONTHLY => get_string('permonth', 'block_xp'),
         ];
 
-        $maxopts = array_reduce([2, 3, 5, 7, 10, 12, 15, 20, 50, 100], function($acc, $value) {
+        $maxopts = array_reduce([2, 3, 5, 7, 10, 12, 15, 20, 50, 100], function ($acc, $value) {
             $acc[$value] = get_string('ntimes', 'block_xp', $value);
             return $acc;
         }, [
@@ -242,7 +242,7 @@ class rule extends dynamic_form {
 
         $mform->addElement('group', 'limitgroup', get_string('overalllimit', 'block_xp') . $labelsuffix, [
             $mform->createElement('select', 'limitmax', get_string('timesallowed', 'block_xp'), $maxopts),
-            $mform->createElement('select', 'limitwindow', get_string('timeframe', 'block_xp'), $timeopts +[
+            $mform->createElement('select', 'limitwindow', get_string('timeframe', 'block_xp'), $timeopts + [
                 limit_spec::WINDOW_NONE => get_string('intotal', 'block_xp'),
             ]),
         ], ' ', false);
@@ -252,7 +252,7 @@ class rule extends dynamic_form {
 
         $repeatoptions = $this->get_repeat_limit_options();
         if (count($repeatoptions) > 0) {
-            $selectopts = array_reduce($repeatoptions, function($acc, $option) {
+            $selectopts = array_reduce($repeatoptions, function ($acc, $option) {
                 $acc[$option->get_value()] = $option->get_once_label();
                 return $acc;
             }, [limit_spec::SCOPE_NONE => get_string('unlimitedrepeats', 'block_xp')]);
@@ -272,7 +272,7 @@ class rule extends dynamic_form {
                 $mform->removeElement('limitgroup');
                 $mform->removeElement('repeatgroup');
             } else {
-                $mform->addElement(html::name(), 'jssink', function() use ($mform) {
+                $mform->addElement(html::name(), 'jssink', function () use ($mform) {
                     global $PAGE;
                     $formid = (string) $mform->getAttribute('id');
                     $PAGE->requires->js_amd_inline(<<<EOT
@@ -297,7 +297,7 @@ class rule extends dynamic_form {
             }
         }
 
-        $mform->addElement(html::name(), 'jsrepeatgroup', function() use ($mform) {
+        $mform->addElement(html::name(), 'jsrepeatgroup', function () use ($mform) {
             global $PAGE;
             $formid = (string) $mform->getAttribute('id');
             $windownone = (int) limit_spec::WINDOW_NONE;
@@ -347,7 +347,7 @@ class rule extends dynamic_form {
         if (!$ruletype instanceof ruletype_with_limit) {
             return [];
         }
-        return array_values(array_filter($ruletype->get_repeat_limit_options(), function($option) {
+        return array_values(array_filter($ruletype->get_repeat_limit_options(), function ($option) {
             return $option->is_compatible_inside_cm() || $this->get_rule()->filter !== 'cm';
         }));
     }

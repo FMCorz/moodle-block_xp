@@ -75,7 +75,8 @@ class event_action_maker implements maker_from_event {
         } else if ($event instanceof \mod_forum\event\post_created) {
             $actions[] = new discussion_replied_to($context, $event->userid, $event->other['discussionid'], $event->objectid);
         } else if ($event instanceof \mod_glossary\event\entry_created
-                || $event instanceof \mod_glossary\event\entry_approved) {
+                || $event instanceof \mod_glossary\event\entry_approved
+        ) {
 
             $entry = $event->get_record_snapshot('glossary_entries', $event->objectid);
             $userid = $entry->userid;
@@ -123,7 +124,7 @@ class event_action_maker implements maker_from_event {
         if ($assign->get_instance()->teamsubmission) {
             // Get group members, but exclude suspended members for consistency as current user may not see them.
             $users = $assign->get_submission_group_members($submission->groupid, true, true);
-            $userids = array_map(function($user) {
+            $userids = array_map(function ($user) {
                 return $user->id;
             }, $users);
         } else if (!empty($submission->userid)) {
@@ -132,7 +133,7 @@ class event_action_maker implements maker_from_event {
 
         $context = $event->get_context();
         $submissionid = $event->objectid;
-        return array_values(array_map(function($userid) use ($context, $submissionid) {
+        return array_values(array_map(function ($userid) use ($context, $submissionid) {
             return new static_action('assign_submission_submitted', $context, $userid, $submissionid);
         }, $userids));
     }

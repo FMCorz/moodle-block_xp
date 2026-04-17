@@ -73,7 +73,7 @@ class default_resolver implements resolver {
      * @return ruletype[]
      */
     public function get_types(): array {
-        return array_values(array_filter(array_map(function($name) {
+        return array_values(array_filter(array_map(function ($name) {
             $parts = explode('\\', $name);
             return $this->get_type(end($parts));
         }, $this->get_class_name_list())));

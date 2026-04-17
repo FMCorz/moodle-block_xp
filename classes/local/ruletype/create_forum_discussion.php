@@ -47,8 +47,12 @@ use lang_string;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class create_forum_discussion implements ruletype, ruletype_with_goal, ruletype_with_limit, ruletype_with_profile, with_iconography {
-
+class create_forum_discussion implements
+    ruletype,
+    ruletype_with_goal,
+    ruletype_with_limit,
+    ruletype_with_profile,
+    with_iconography {
     use ruletype_deprecation_filler_trait;
 
     public function get_default_limit(): limit_spec {

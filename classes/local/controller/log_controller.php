@@ -146,7 +146,7 @@ class log_controller extends page_controller {
             [
                 'label' => get_string('resultsfilteredforn', 'block_xp', fullname($user)),
                 'removeurl' => $allusers,
-            ]
+            ],
         ];
     }
 

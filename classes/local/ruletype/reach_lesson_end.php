@@ -38,7 +38,6 @@ use lang_string;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class reach_lesson_end implements ruletype, ruletype_with_goal, ruletype_with_limit, ruletype_with_profile, with_iconography {
-
     use ruletype_deprecation_filler_trait;
 
     public function get_default_limit(): limit_spec {

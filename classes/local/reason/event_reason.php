@@ -37,8 +37,7 @@ use block_xp\local\action\crud;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class event_reason implements reason, reason_with_short_description, reason_with_rule, reason_with_subtype, reason_with_tracking {
-
+class event_reason implements reason, reason_with_rule, reason_with_short_description, reason_with_subtype, reason_with_tracking {
     use reason_deprecation_filler_trait;
     use reason_rule_trait;
     use reason_subtype_trait;

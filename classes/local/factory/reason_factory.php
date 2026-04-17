@@ -115,7 +115,7 @@ class reason_factory implements reason_from_log_entry_factory {
             // The new standard is for reasons to be instantiated without arguments, we should return here.
             return new $classname();
         } catch (\Throwable $e) {
-            // Do nothing.
+            unset($e);
         }
 
         // Try to mitigate the situation for known cases.
@@ -144,7 +144,7 @@ class reason_factory implements reason_from_log_entry_factory {
                 return new \block_gearup\local\xp\quest_completed_reason(0);
             }
         } catch (\Throwable $e) {
-            // Do nothing.
+            unset($e);
         }
 
         debugging("Reason {$classname} must have a constructor that accepts no arguments.", DEBUG_DEVELOPER);

@@ -227,7 +227,7 @@ class world_rule_manager {
             return true;
         }
 
-        $sorter = function($a, $b) {
+        $sorter = function ($a, $b) {
             if ($a->id != $b->id) {
                 return $a->id - $b->id;
             } else if ($a->points != $b->points) {

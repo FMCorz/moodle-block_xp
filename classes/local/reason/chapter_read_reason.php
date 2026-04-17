@@ -35,8 +35,7 @@ namespace block_xp\local\reason;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class chapter_read_reason implements reason, reason_with_short_description, reason_with_tracking, reason_with_rule {
-
+class chapter_read_reason implements reason, reason_with_rule, reason_with_short_description, reason_with_tracking {
     use reason_deprecation_filler_trait;
     use reason_rule_trait;
     use reason_tracking_trait;

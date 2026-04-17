@@ -36,7 +36,6 @@ namespace block_xp\local\reason;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class forum_discussion_created_reason implements reason, reason_with_rule, reason_with_short_description, reason_with_tracking {
-
     use reason_deprecation_filler_trait;
     use reason_rule_trait;
     use reason_tracking_trait;

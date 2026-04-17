@@ -55,14 +55,14 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class context_collection_logger implements
-        collection_logger,
-        collection_logger_with_group_reset,
-        collection_logger_with_id_reset,
-        reason_collection_logger,
-        reason_occurrence_indicator,
-        reason_limit_indicator,
-        ruletype_occurrence_indicator,
-        user_recent_activity_repository {
+    collection_logger,
+    collection_logger_with_group_reset,
+    collection_logger_with_id_reset,
+    reason_collection_logger,
+    reason_limit_indicator,
+    reason_occurrence_indicator,
+    ruletype_occurrence_indicator,
+    user_recent_activity_repository {
 
     /** @var int The context ID. */
     protected $contextid;
@@ -335,7 +335,7 @@ class context_collection_logger implements
      * @param string $signature A signature.
      * @param DateTime|null $time When that happened.
      */
-    public function log($id, $points, $signature, DateTime $time = null) {
+    public function log($id, $points, $signature, ?DateTime $time = null) {
         debugging("This log method is not implemented, use log_reason instead.", DEBUG_DEVELOPER);
     }
 
@@ -445,7 +445,7 @@ class context_collection_logger implements
             'contextid' => $this->contextid,
             'userid' => $userid,
         ], 'timerecorded DESC, id DESC', '*', 0, $count);
-        return array_map(function($row) {
+        return array_map(function ($row) {
             $reason = $this->reasonfactory ? $this->reasonfactory->get_reason_from_log_entry($row->reason, $row) : null;
             $desc = $reason && $reason instanceof reason_with_short_description ? $reason->get_short_description() : '';
             return new xp_activity(new DateTime('@' . $row->timerecorded), $desc, $row->points);

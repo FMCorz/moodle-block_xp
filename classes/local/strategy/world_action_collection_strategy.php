@@ -76,12 +76,12 @@ class world_action_collection_strategy implements action_collection_strategy {
      * @param rule_filter_handler $rulefilterhandler The rule filter handler.
      */
     public function __construct(
-            world $world,
-            collection_logger $logger,
-            $unused,
-            rule_type_resolver $ruletyperesolver,
-            rule_filter_handler $rulefilterhandler
-        ) {
+        world $world,
+        collection_logger $logger,
+        $unused,
+        rule_type_resolver $ruletyperesolver,
+        rule_filter_handler $rulefilterhandler
+    ) {
         $this->world = $world;
         $this->logger = $logger;
         $this->ruletyperesolver = $ruletyperesolver;

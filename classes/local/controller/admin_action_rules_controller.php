@@ -100,15 +100,15 @@ class admin_action_rules_controller extends admin_route_controller {
      */
     protected function get_react_props(): array {
         $typeserializer = di::get('serializer_factory')->get_ruletype_serializer();
-        $ruletypes = array_values(array_map(function($type) use ($typeserializer) {
+        $ruletypes = array_values(array_map(function ($type) use ($typeserializer) {
             return $typeserializer->serialize($type);
         }, $this->get_rule_types()));
 
         $filterhandler = di::get('rule_filter_handler');
         $filterserializer = di::get('serializer_factory')->get_rulefilter_serializer();
-        $filters = array_values(array_map(function($filter) use ($filterserializer) {
+        $filters = array_values(array_map(function ($filter) use ($filterserializer) {
             return $filterserializer->serialize($filter);
-        }, array_filter($filterhandler->get_filters(), function(rulefilter $filter) {
+        }, array_filter($filterhandler->get_filters(), function (rulefilter $filter) {
             return $filter->is_compatible_with_admin();
         })));
 
@@ -128,8 +128,11 @@ class admin_action_rules_controller extends admin_route_controller {
     protected function get_rule_types() {
         $completiontypes = ['cm_completion', 'course_completion', 'section_completion'];
         $typeresolver = di::get('rule_type_resolver');
-        return array_values(array_filter($typeresolver->get_types(), function(ruletype $type) use ($completiontypes, $typeresolver) {
-            return !in_array($typeresolver->get_type_name($type), $completiontypes);
-        }));
+        return array_values(array_filter(
+            $typeresolver->get_types(),
+            function (ruletype $type) use ($completiontypes, $typeresolver) {
+                return !in_array($typeresolver->get_type_name($type), $completiontypes);
+            }
+        ));
     }
 }

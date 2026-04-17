@@ -1149,7 +1149,7 @@ EOT
                 'activated' => di::get('addon')->is_activated(),
                 'enablepromo' => $world ? (bool) di::get('config')->get('enablepromoincourses') : true,
                 'promourl' => $addonpromourl->out(false),
-            ]
+            ],
         ]);
     }
 

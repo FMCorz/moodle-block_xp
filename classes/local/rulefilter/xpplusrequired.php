@@ -34,7 +34,7 @@ use context;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class xpplusrequired implements rulefilter, has_availability_info {
+abstract class xpplusrequired implements has_availability_info, rulefilter {
 
     final public function get_availability_info(): availability_info {
         return new static_info(false, [new unavailability('xpplusrequired', new \lang_string('xpplusrequired', 'block_xp'))]);

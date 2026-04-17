@@ -32,7 +32,6 @@ use help_icon;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class action_rules_controller extends page_controller {
-
     use rules_scope_trait;
 
     /** @var string The nav name. */
@@ -118,15 +117,15 @@ class action_rules_controller extends page_controller {
         }
 
         $typeserializer = di::get('serializer_factory')->get_ruletype_serializer();
-        $ruletypes = array_values(array_map(function($type) use ($typeserializer) {
+        $ruletypes = array_values(array_map(function ($type) use ($typeserializer) {
             return $typeserializer->serialize($type);
         }, $this->get_rule_types()));
 
         $filterhandler = di::get('rule_filter_handler');
         $filterserializer = di::get('serializer_factory')->get_rulefilter_serializer();
-        $filters = array_values(array_map(function($filter) use ($filterserializer) {
+        $filters = array_values(array_map(function ($filter) use ($filterserializer) {
             return $filterserializer->serialize($filter);
-        }, array_filter($filterhandler->get_filters(), function(rulefilter $filter) use ($currentcontext) {
+        }, array_filter($filterhandler->get_filters(), function (rulefilter $filter) use ($currentcontext) {
             return in_array((int) $currentcontext->contextlevel, $filter->get_compatible_context_levels());
         })));
 
