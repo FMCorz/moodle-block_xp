@@ -4,8 +4,8 @@ define(["block_xp/ui-commons-lazy"],() => { return /******/ (() => { // webpackB
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 791:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ 1791
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
@@ -17,32 +17,28 @@ __webpack_require__.d(__webpack_exports__, {
   startApp: () => (/* binding */ startApp)
 });
 
-// EXTERNAL MODULE: ./node_modules/@headlessui/react/dist/components/menu/menu.js + 13 modules
-var menu = __webpack_require__(929);
+// EXTERNAL MODULE: ./node_modules/@headlessui/react/dist/components/menu/menu.js + 9 modules
+var menu = __webpack_require__(9909);
 // EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(540);
-// EXTERNAL MODULE: ./node_modules/react-dom/index.js
-var react_dom = __webpack_require__(961);
-// EXTERNAL MODULE: ./node_modules/react-query/es/index.js
-var es = __webpack_require__(942);
-;// CONCATENATED MODULE: ./ui/src/lib/contexts.ts
-
-const makeAddonContextValueFromAppProps = (props) => {
-    return {
-        activated: false,
-        enablepromo: true,
-        promourl: "https://www.levelup.plus/xp/",
-        ...(props?.addon ?? {}),
-    };
+var react = __webpack_require__(6540);
+// EXTERNAL MODULE: ./node_modules/react-dom/client.js
+var client = __webpack_require__(5338);
+// EXTERNAL MODULE: ./node_modules/@tanstack/react-query/build/lib/useMutation.mjs + 1 modules
+var useMutation = __webpack_require__(1154);
+// EXTERNAL MODULE: ./node_modules/@tanstack/react-query/build/lib/QueryClientProvider.mjs
+var QueryClientProvider = __webpack_require__(3064);
+;// ./ui/src/lib/utils.ts
+const classNames = (...args) => args.filter(Boolean).join(" ");
+const escapeCharMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
 };
-const AddonContext = (0,react.createContext)({
-    activated: false,
-    enablepromo: true,
-    promourl: "https://www.levelup.plus/xp/", // Local promo page where possible.
-});
-
-;// CONCATENATED MODULE: ./ui/src/lib/utils.ts
-const utils_classNames = (...args) => args.filter(Boolean).join(" ");
+const escapeHtml = (text) => {
+    return text.replace(/[&<>"']/g, function (m) { return escapeCharMap[m]; });
+};
 const fifoCache = (maxItems = 128) => {
     let items = {};
     let keys = [];
@@ -67,26 +63,33 @@ const fifoCache = (maxItems = 128) => {
     };
 };
 let uniqueId = 0;
-const utils_getUniqueId = () => {
+const getUniqueId = () => {
     return `xp-${Date.now()}-${uniqueId++}`;
+};
+const groupBy = (arr, key) => {
+    const map = new Map();
+    for (const entry of arr) {
+        const index = entry[key];
+        if (!map.has(index)) {
+            map.set(index, []);
+        }
+        map.set(index, (map.get(index) ?? []).concat(entry));
+    }
+    return map;
+};
+const mapFrom = (arr, key) => {
+    return new Map(arr.map(entry => ([entry[key], entry])));
 };
 const stripTags = (html) => {
     var tmp = document.createElement("div");
     tmp.innerHTML = html;
     return tmp.textContent || tmp.innerText || "";
 };
-const escapeCharMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-};
-const escapeHtml = (text) => {
-    return text.replace(/[&<>"']/g, function (m) { return escapeCharMap[m]; });
+const uniq = (arr) => {
+    return arr.filter((value, index, self) => self.indexOf(value) === index);
 };
 
-;// CONCATENATED MODULE: ./ui/src/lib/moodle.ts
+;// ./ui/src/lib/moodle.ts
 
 const M = window.M;
 const modules = {};
@@ -96,29 +99,28 @@ const modules = {};
  * Preferrably, modules should be loaded with getModuleAsync, which
  * does not require their definition to be declared in our apps.
  */
-const commonStaticModulesToDependOn = [
-    "core/notification",
-    "core/aria",
-    "?core/toast",
-    "jquery",
-];
+const commonStaticModulesToDependOn = ["core/notification", "core/aria", "?core/toast", "jquery"];
 async function ajaxRequest(method, args) {
     const Ajax = await getModuleAsync("core/ajax");
-    return Ajax.call([{
+    return Ajax.call([
+        {
             methodname: method,
             args,
-        }])[0];
+        },
+    ])[0];
 }
 function getString(id, component, a) {
     return M.util.get_string(id, component, a);
 }
-function getUrl(uri) {
-    if (uri[0] != "/") {
-        uri = "/" + uri;
+function getUrl(uri, searchParams) {
+    const url = new URL(uri, M.cfg.wwwroot);
+    if (searchParams) {
+        url.search = searchParams.toString();
     }
-    return M.cfg.wwwroot + uri;
+    return url.toString();
 }
 function hasString(id, component) {
+    // eslint-disable-next-line no-restricted-properties
     return typeof M.str[component] !== "undefined" && typeof M.str[component][id] !== "undefined";
 }
 function getModule(name) {
@@ -129,7 +131,6 @@ async function getModuleAsync(amd) {
         return modules[amd];
     }
     return new Promise((resolve, reject) => {
-        // @ts-ignore
         window.require([amd], (mod) => {
             modules[amd] = mod;
             resolve(mod);
@@ -142,7 +143,7 @@ function imageUrl(name, component) {
 function isBehatRunning() {
     return M.cfg.behatsiterunning;
 }
-let loadStringCache = fifoCache(64);
+const loadStringCache = fifoCache(64);
 async function loadString(id, component) {
     const cacheKey = `${id}/${component}`;
     let promise = loadStringCache.get(cacheKey);
@@ -164,7 +165,7 @@ async function loadStrings(ids, component) {
     return await promise;
 }
 const makeDependenciesDefinition = (names) => {
-    let optional = [];
+    const optional = [];
     const list = names.map((name) => {
         const isOptional = name.charAt(0) === "?";
         const module = isOptional ? name.substring(1) : name;
@@ -187,13 +188,117 @@ function setModule(name, mod) {
     modules[name] = mod;
 }
 
-;// CONCATENATED MODULE: ./ui/src/lib/hooks.ts
+;// ./ui/src/lib/types.ts
+var ContextLevel;
+(function (ContextLevel) {
+    ContextLevel[ContextLevel["System"] = 10] = "System";
+    ContextLevel[ContextLevel["User"] = 30] = "User";
+    ContextLevel[ContextLevel["CourseCategory"] = 40] = "CourseCategory";
+    ContextLevel[ContextLevel["Course"] = 50] = "Course";
+    ContextLevel[ContextLevel["Module"] = 70] = "Module";
+})(ContextLevel || (ContextLevel = {}));
+var LimitSpecTimeWindow;
+(function (LimitSpecTimeWindow) {
+    LimitSpecTimeWindow[LimitSpecTimeWindow["NONE"] = 0] = "NONE";
+    LimitSpecTimeWindow[LimitSpecTimeWindow["ONEHOUR"] = 1] = "ONEHOUR";
+    LimitSpecTimeWindow[LimitSpecTimeWindow["DAILY"] = 2] = "DAILY";
+    LimitSpecTimeWindow[LimitSpecTimeWindow["WEEKLY"] = 3] = "WEEKLY";
+    LimitSpecTimeWindow[LimitSpecTimeWindow["MONTHLY"] = 4] = "MONTHLY";
+    LimitSpecTimeWindow[LimitSpecTimeWindow["HOUR"] = 5] = "HOUR";
+})(LimitSpecTimeWindow || (LimitSpecTimeWindow = {}));
+var LimitSpecScope;
+(function (LimitSpecScope) {
+    LimitSpecScope[LimitSpecScope["None"] = 0] = "None";
+    LimitSpecScope[LimitSpecScope["Env"] = 2] = "Env";
+    LimitSpecScope[LimitSpecScope["Parent"] = 4] = "Parent";
+    LimitSpecScope[LimitSpecScope["Object"] = 8] = "Object";
+})(LimitSpecScope || (LimitSpecScope = {}));
+var RuleTypeGoal;
+(function (RuleTypeGoal) {
+    RuleTypeGoal["Comms"] = "comms";
+    RuleTypeGoal["Contrib"] = "contrib";
+    RuleTypeGoal["Read"] = "read";
+    RuleTypeGoal["Assess"] = "assess";
+})(RuleTypeGoal || (RuleTypeGoal = {}));
+var RuleTypeProfileSubject;
+(function (RuleTypeProfileSubject) {
+    RuleTypeProfileSubject["Cm"] = "cm";
+    RuleTypeProfileSubject["Section"] = "section";
+    RuleTypeProfileSubject["Course"] = "course";
+})(RuleTypeProfileSubject || (RuleTypeProfileSubject = {}));
+
+;// ./ui/src/lib/contexts.ts
+/* unused harmony import specifier */ var contexts_getUrl;
+/* unused harmony import specifier */ var contexts_ContextLevel;
+
+
+
+const defaultMoodleContext = {
+    id: 0,
+    contextlevel: ContextLevel.System,
+    instanceid: 0,
+};
+const AddonContext = (0,react.createContext)({
+    activated: false,
+    enablepromo: true,
+    promourl: "https://www.levelup.plus/xp/", // Local promo page where possible.
+});
+const RulesSetupContext = (0,react.createContext)({
+    addRule: () => { },
+    editRule: (id) => { },
+    removeRule: (id) => { },
+    context: defaultMoodleContext,
+    types: new Map(),
+    filters: new Map(),
+    filtersUsageByType: new Map(),
+});
+const WorldContext = (0,react.createContext)({
+    context: defaultMoodleContext,
+    courseid: 0,
+    navigateTo: () => { },
+});
+const makeAddonContextValueFromAppProps = (props) => {
+    return {
+        activated: false,
+        enablepromo: true,
+        promourl: "https://www.levelup.plus/xp/",
+        ...(props?.addon ?? {}),
+    };
+};
+const makeWorldContextValueFromAppProps = ({ world }) => {
+    const courseId = world?.courseid ?? (world?.contextlevel === contexts_ContextLevel.Course ? (world?.contextinstanceid ?? 0) : 0);
+    const resolveRoute = (routeName, params) => {
+        // Shallow implementation, does not support all kinds of routes.
+        return contexts_getUrl(`/blocks/xp/index.php/${routeName}/${courseId}`, new URLSearchParams(Object.entries(params ?? {}).map(([key, value]) => [key, value?.toString() ?? ""])));
+    };
+    const navigateTo = (route, params) => {
+        window.location.href = resolveRoute(route, params);
+    };
+    return {
+        context: {
+            id: world?.contextid ?? 0,
+            contextlevel: world?.contextlevel ?? contexts_ContextLevel.System,
+            instanceid: courseId,
+        },
+        courseid: courseId,
+        navigateTo,
+    };
+};
+
+;// ./ui/src/lib/hooks.ts
+/* unused harmony import specifier */ var useContext;
+/* unused harmony import specifier */ var useState;
+/* unused harmony import specifier */ var hooks_AddonContext;
+/* unused harmony import specifier */ var hooks_getUniqueId;
 
 
 
 
 const useAddonActivated = () => {
     return (0,react.useContext)(AddonContext).activated;
+};
+const useAddonPromo = () => {
+    return useContext(hooks_AddonContext).enablepromo;
 };
 const useAnchorButtonProps = (onClick) => {
     const listeners = useRoleButtonListeners(onClick);
@@ -213,7 +318,7 @@ const useAnchorButtonProps = (onClick) => {
  *    if (!isActionPermitted()) return;
  * })
  */
-const hooks_useDuplicatedActionPreventor = (msDelay = 100) => {
+const useDuplicatedActionPreventor = (msDelay = 100) => {
     const ref = (0,react.useRef)();
     return (0,react.useCallback)(() => {
         if (ref.current && ref.current > Date.now() - msDelay) {
@@ -221,9 +326,9 @@ const hooks_useDuplicatedActionPreventor = (msDelay = 100) => {
         }
         ref.current = Date.now();
         return true;
-    }, []);
+    }, []); // eslint-disable-line
 };
-const hooks_useModules = (modules) => {
+const useModules = (modules) => {
     const modulesPromise = (0,react.useRef)();
     const modulesRef = (0,react.useRef)();
     const [ready, setReady] = (0,react.useState)(false);
@@ -234,7 +339,8 @@ const hooks_useModules = (modules) => {
             modulesPromise.current = Promise.all(modules.map((module) => getModuleAsync(module)));
         }
         let cancelled = false;
-        modulesPromise.current.then((loadedModles) => {
+        modulesPromise.current
+            .then((loadedModles) => {
             if (cancelled)
                 return;
             modulesRef.current = modules.reduce((acc, module, i) => {
@@ -242,21 +348,23 @@ const hooks_useModules = (modules) => {
                 return acc;
             }, {});
             setReady(true);
-        });
+            return;
+        })
+            .catch(() => { });
         return () => {
             cancelled = true;
         };
     });
     const getModule = (0,react.useCallback)((module) => {
-        if (!modulesRef.current)
+        if (!ready || !modulesRef.current)
             return null;
-        return modulesRef.current[module] ?? null;
-    }, [ready, modulesRef.current]);
+        return (modulesRef.current[module] ?? null);
+    }, [ready]);
     return {
         getModule,
     };
 };
-const hooks_useNumericInputProps = (value, onChange) => {
+const useNumericInputProps = (value, onChange) => {
     const valueAsString = value.toString();
     const [externalValue, setExternalValue] = (0,react.useState)(valueAsString);
     const [internalValue, setInternalValue] = (0,react.useState)(externalValue);
@@ -265,7 +373,7 @@ const hooks_useNumericInputProps = (value, onChange) => {
             setExternalValue(valueAsString);
             setInternalValue(valueAsString);
         }
-    });
+    }, [valueAsString, externalValue]);
     const handleBlur = (e) => {
         const v = parseInt(internalValue, 10) || 0;
         setExternalValue(v.toString());
@@ -297,8 +405,19 @@ const useRoleButtonListeners = (onClick) => {
         onKeyDown: handleKeyDown,
     };
 };
+const useRuleCreationLimit = () => {
+    const isAddonActivated = useAddonActivated();
+    return !isAddonActivated ? 3 : 0;
+};
+const useHasReachedRuleTypeLimit = (rules) => {
+    const ruleLimit = useRuleCreationLimit();
+    if (ruleLimit <= 0 || !rules) {
+        return false;
+    }
+    return rules?.filter((r) => !["consume_content", "produce_content"].includes(r.typename)).length >= ruleLimit;
+};
 const useUnloadCheck = (isDirty) => {
-    const str = hooks_useString("changesmadereallygoaway", "core");
+    const str = useString("changesmadereallygoaway", "core");
     (0,react.useEffect)(() => {
         const fn = (e) => {
             if (!isDirty || isBehatRunning()) {
@@ -315,10 +434,10 @@ const useUnloadCheck = (isDirty) => {
     });
 };
 const useUniqueId = () => {
-    const [id] = useState(getUniqueId());
+    const [id] = useState(hooks_getUniqueId());
     return id;
 };
-const hooks_useString = (id, component = "block_xp", a) => {
+const useString = (id, component = "block_xp", a) => {
     const wasKnownAtMount = (0,react.useMemo)(() => hasString(id, component), [id, component]);
     const [isLoaded, setLoaded] = (0,react.useState)(false);
     // When the string changes, remove the promise.
@@ -348,6 +467,7 @@ const hooks_useString = (id, component = "block_xp", a) => {
 };
 const useStrings = (ids, component = "block_xp") => {
     const idsForKey = ids.join(",");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const allKnownAtMount = (0,react.useMemo)(() => ids.every((id) => hasString(id, component)), [idsForKey, component]);
     const [isLoaded, setLoaded] = (0,react.useState)(false);
     // When the string changes, remove the promise.
@@ -373,10 +493,16 @@ const useStrings = (ids, component = "block_xp") => {
             cancelled = true;
         };
     });
-    return (id, a) => (hasString(id, component) ? getString(id, component, a) : "​");
+    return (0,react.useCallback)((id, a) => (hasString(id, component) ? getString(id, component, a) : "​"), [component]);
 };
 
-;// CONCATENATED MODULE: ./ui/src/components/Addon.tsx
+;// ./ui/src/components/Addon.tsx
+/* unused harmony import specifier */ var Addon_useContext;
+/* unused harmony import specifier */ var React;
+/* unused harmony import specifier */ var Addon_AddonContext;
+/* unused harmony import specifier */ var Addon_classNames;
+
+
 
 
 
@@ -387,41 +513,89 @@ const IfAddonActivatedOrPromoEnabled = ({ children }) => {
     }
     return react.createElement(react.Fragment, null, children);
 };
-const AddonRequired = () => {
+const IfAddonPromoEnabled = ({ children }) => {
+    const { activated, enablepromo } = Addon_useContext(Addon_AddonContext);
+    if (activated || !enablepromo) {
+        return null;
+    }
+    return React.createElement(React.Fragment, null, children);
+};
+const AddonRequired = (props) => {
     const { promourl } = (0,react.useContext)(AddonContext);
     const getStr = useStrings(["xpplusrequired", "unlockfeaturewithxpplus"]);
     const handleClick = (e) => e.preventDefault();
-    return (react.createElement("a", { href: "#", role: "button", onClick: handleClick, "data-bs-toggle": "popover", "data-toggle": "popover", "data-placement": "top", "data-container": "body", "data-content": getStr("unlockfeaturewithxpplus", promourl), "data-bs-content": getStr("unlockfeaturewithxpplus", promourl), "data-html": "true", "data-bs-html": "true", className: "xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline" }, getStr("xpplusrequired")));
+    const ref = (0,react.useRef)(null);
+    (0,react.useEffect)(() => {
+        const handleClick = (e) => {
+            const $ = getModule("jquery");
+            if (!$ || !ref.current || !$(ref.current).popover) {
+                return;
+            }
+            const target = e.target;
+            if (target.closest(".popover")) {
+                return;
+            }
+            else if (ref.current.contains(target)) {
+                return;
+            }
+            try {
+                $(ref.current).popover("hide");
+            }
+            catch (err) { }
+        };
+        document.body.addEventListener("click", handleClick);
+        return () => document.body.removeEventListener("click", handleClick);
+    });
+    return (react.createElement("a", { ref: ref, href: "#", role: "button", onClick: handleClick, "data-bs-toggle": "popover", "data-toggle": "popover", "data-placement": "top", "data-container": "body", "data-content": getStr("unlockfeaturewithxpplus", promourl), "data-bs-content": getStr("unlockfeaturewithxpplus", promourl), "data-html": "true", "data-bs-html": "true", className: "xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline" }, props.children ? props.children : getStr("xpplusrequired")));
+};
+const AddonRequiredShort = () => {
+    return React.createElement(AddonRequired, null, "XP+");
+};
+const AddonTag = () => {
+    return (React.createElement("span", { className: Addon_classNames("xp-py-0.5 xp-px-1 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white", "xp-rounded xp-no-underline xp-font-normal xp-align-middle xp-select-none") }, "XP+"));
 };
 
-;// CONCATENATED MODULE: ./ui/src/components/Modal.tsx
+// EXTERNAL MODULE: ./node_modules/react-dom/index.js
+var react_dom = __webpack_require__(961);
+;// ./ui/src/components/Modal.tsx
+/* unused harmony import specifier */ var useRef;
+/* unused harmony import specifier */ var Modal_useState;
+/* unused harmony import specifier */ var useEffect;
+/* unused harmony import specifier */ var Modal_React;
+/* unused harmony import specifier */ var ReactDOM;
+/* unused harmony import specifier */ var Modal_useDuplicatedActionPreventor;
+/* unused harmony import specifier */ var Modal_useString;
+/* unused harmony import specifier */ var Modal_useModules;
 
 
 
-const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonText, defaultHeight, large, canSave = true }) => {
+function getModalButton(modal, action) {
+    if (!modal)
+        return null;
+    const btnJq = modal.getFooter().find(modal.getActionSelector(action));
+    return btnJq.length ? btnJq[0] : null;
+}
+function getModalFormButton(modalForm, action) {
+    return getModalButton(modalForm?.modal, action);
+}
+const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonText, defaultHeight, large, canSave = true, }) => {
     const modalPromise = (0,react.useRef)();
     const modalRef = (0,react.useRef)();
     // In rare instances, we can get double save events. This can happen when we hit enter,
     // and a new event listener is registered while Moodle is still broadcasting its events
     // which is then called, and so we get two events. This wouldn't happen if the modal was
     // not re-rendering, I think.
-    const isSavePermitted = hooks_useDuplicatedActionPreventor();
-    const { getModule } = hooks_useModules(["core/modal_factory", "core/modal_events"]);
+    const isSavePermitted = useDuplicatedActionPreventor();
+    const { getModule } = useModules(["block_xp/modal", "core/modal_events"]);
     const [ready, setReady] = (0,react.useState)(false);
-    const getSaveButton = (0,react.useCallback)(() => {
-        if (!modalRef.current)
-            return null;
-        const node = modalRef.current.getFooter()[0].querySelector('[data-action="save"]');
-        return node ?? null;
-    }, [modalRef.current]);
     const setSaveButtonText = (text) => {
-        const saveBtn = getSaveButton();
+        const saveBtn = getModalButton(modalRef.current, "save");
         if (!saveBtn || !text)
             return;
         saveBtn.textContent = text;
     };
     const setButtonAttribute = (attr, value) => {
-        const saveBtn = getSaveButton();
+        const saveBtn = getModalButton(modalRef.current, "save");
         if (!saveBtn || !attr)
             return;
         if (value === null || typeof value === "undefined" || value === false) {
@@ -436,18 +610,18 @@ const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonTex
         let cancelled = false;
         if (modalRef.current)
             return;
-        const ModalFactory = getModule("core/modal_factory");
-        if (!ModalFactory)
+        const Modal = getModule("block_xp/modal");
+        if (!Modal)
             return;
         if (!modalPromise.current) {
-            modalPromise.current = ModalFactory.create({
-                type: ModalFactory.types.SAVE_CANCEL,
+            modalPromise.current = Modal.createSaveCancelModal({
                 title: title,
                 large: large,
                 body: `<div class='block_xp' style='${defaultHeight ? `height: ${defaultHeight}px` : ""}'></div>`,
             });
         }
-        modalPromise.current.then((modal) => {
+        modalPromise.current
+            .then((modal) => {
             if (cancelled)
                 return;
             modalRef.current = modal;
@@ -458,6 +632,10 @@ const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonTex
             if (show) {
                 modal.show();
             }
+            return;
+        })
+            .catch(() => {
+            return;
         });
         return () => {
             cancelled = true;
@@ -515,56 +693,52 @@ const SaveCancelModal = ({ children, onClose, onSave, show, title, saveButtonTex
         else {
             modalRef.current.hide();
         }
-    }, [show, modalRef.current]);
+    }, [show, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
     // Update title.
     (0,react.useEffect)(() => {
         if (!modalRef.current || !title)
             return;
         modalRef.current.setTitle(title);
-    }, [title, modalRef.current]);
+    }, [title, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
     // Update save button text.
     (0,react.useEffect)(() => {
         setSaveButtonText(saveButtonText);
-    }, [saveButtonText, modalRef.current]);
+    }, [saveButtonText, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
     // Update the save button status.
     (0,react.useEffect)(() => {
         setButtonAttribute("disabled", !canSave);
-    }, [canSave, modalRef.current]);
-    return modalRef.current ? react_dom.createPortal(children, modalRef.current.getBody()[0].querySelector(".block_xp")) : null;
+    }, [canSave, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
+    return (react.createElement(react.Fragment, null, modalRef.current
+        ? react_dom.createPortal(children, modalRef.current.getBody()[0].querySelector(".block_xp"))
+        : null));
 };
-const DeleteModal = ({ children, onClose, onDelete, show, title }) => {
+const DeleteModal = ({ children, onClose, onDelete, show, title, }) => {
     const modalPromise = useRef();
     const modalRef = useRef();
-    const [ready, setReady] = useState(false);
-    const isDeletePermitted = useDuplicatedActionPreventor();
-    const deleteStr = useString("delete", "core");
-    const { getModule } = useModules(["core/modal_factory", "core/modal_events"]);
-    const getDeleteButton = useCallback(() => {
-        if (!modalRef.current)
-            return null;
-        const node = modalRef.current.getFooter()[0].querySelector('[data-action="save"]');
-        return node ?? null;
-    }, [modalRef.current]);
+    const [ready, setReady] = Modal_useState(false);
+    const isDeletePermitted = Modal_useDuplicatedActionPreventor();
+    const deleteStr = Modal_useString("delete", "core");
+    const { getModule } = Modal_useModules(["block_xp/modal", "core/modal_events"]);
     // Create the modal object.
     useEffect(() => {
         let cancelled = false;
         if (modalRef.current)
             return;
-        const ModalFactory = getModule("core/modal_factory");
-        if (!ModalFactory)
+        const Modal = getModule("block_xp/modal");
+        if (!Modal)
             return;
         if (!modalPromise.current) {
-            modalPromise.current = ModalFactory.create({
-                type: ModalFactory.types.SAVE_CANCEL, // We use save_cancel as delete_cancel is only in 4.2.
+            modalPromise.current = Modal.createSaveCancelModal({
                 title: title,
                 body: `<div class='block_xp'></div>`,
             });
         }
-        modalPromise.current.then((modal) => {
+        modalPromise.current
+            .then((modal) => {
             if (cancelled)
                 return;
             modalRef.current = modal;
-            const deleteButton = getDeleteButton();
+            const deleteButton = getModalButton(modal, "save");
             if (deleteButton) {
                 if (deleteStr) {
                     deleteButton.textContent = deleteStr;
@@ -575,6 +749,10 @@ const DeleteModal = ({ children, onClose, onDelete, show, title }) => {
             if (show) {
                 modal.show();
             }
+            return;
+        })
+            .catch(() => {
+            return;
         });
         return () => {
             cancelled = true;
@@ -614,27 +792,29 @@ const DeleteModal = ({ children, onClose, onDelete, show, title }) => {
         else {
             modalRef.current.hide();
         }
-    }, [show, modalRef.current]);
+    }, [show, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
     // Update title.
     useEffect(() => {
         if (!modalRef.current || !title)
             return;
         modalRef.current.setTitle(title);
-    }, [title, modalRef.current]);
+    }, [title, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
     // Update button.
     useEffect(() => {
         if (!modalRef.current || !deleteStr)
             return;
-        const btn = getDeleteButton();
+        const btn = getModalButton(modalRef.current, "save");
         if (!btn)
             return;
         btn.textContent = deleteStr;
-    }, [deleteStr, modalRef.current]);
-    return modalRef.current ? ReactDOM.createPortal(children, modalRef.current.getBody()[0].querySelector(".block_xp")) : null;
+    }, [deleteStr, modalRef.current]); // eslint-disable-line react-hooks/exhaustive-deps
+    return (Modal_React.createElement(Modal_React.Fragment, null, modalRef.current
+        ? ReactDOM.createPortal(children, modalRef.current.getBody()[0].querySelector(".block_xp"))
+        : null));
 };
-const ModalForm = ({ formClass, formArgs, onClose, onSubmit, title }) => {
+const ModalForm = ({ formClass, formArgs, onClose, onSubmit, saveButtonDisabled, title, }) => {
     const modalFormRef = useRef();
-    const { getModule } = useModules(["core_form/modalform", "core/modal_factory", "core/modal_events"]);
+    const { getModule } = Modal_useModules(["core_form/modalform", "core/modal_events"]);
     // Create the modal form.
     useEffect(() => {
         if (modalFormRef.current)
@@ -663,6 +843,9 @@ const ModalForm = ({ formClass, formArgs, onClose, onSubmit, title }) => {
         const handleLoaded = () => {
             const root = modalForm.modal.getRoot();
             root[0].classList.add("block_xp");
+            if (saveButtonDisabled) {
+                getModalFormButton(modalForm, "save")?.setAttribute("disabled", "");
+            }
             // Register the onClose event.
             root.on(ModalEvents.hidden, handleClose);
         };
@@ -677,7 +860,9 @@ const ModalForm = ({ formClass, formArgs, onClose, onSubmit, title }) => {
         modalForm.addEventListener(modalForm.events.CANCEL_BUTTON_PRESSED, handleClose);
         return () => {
             const modalForm = modalFormRef.current;
-            const root = modalForm?.modal?.getRoot();
+            if (!modalForm)
+                return;
+            const root = modalForm.modal.getRoot();
             const rootEl = root?.[0];
             rootEl?.removeEventListener(modalForm.events.LOADED, handleLoaded);
             rootEl?.removeEventListener(modalForm.events.FORM_SUBMITTED, handleSubmit);
@@ -691,43 +876,49 @@ const ModalForm = ({ formClass, formArgs, onClose, onSubmit, title }) => {
         const modal = modalFormRef.current.modal;
         if (!modal)
             return;
-        modal.setTitle(title);
+        modal.setTitle(title ?? "");
     }, [title]);
     return null;
 };
 
-;// CONCATENATED MODULE: ./ui/src/components/Str.tsx
+;// ./ui/src/components/Str.tsx
 
 
 const Str = ({ id, component = "block_xp", a }) => {
-    const str = hooks_useString(id, component, a);
+    const str = useString(id, component, a);
     return react.createElement(react.Fragment, null, str || "​");
 };
 /* harmony default export */ const components_Str = (Str);
 
-;// CONCATENATED MODULE: ./ui/src/components/Input.tsx
+;// ./ui/src/components/Input.tsx
+/* unused harmony import specifier */ var Input_React;
 
-const Input = ({ className = '', ...props }) => {
+const Input = ({ className = "", ...props }) => {
     /** Apply those classes for normalised styling across themes and versions. */
     return react.createElement("input", { ...props, className: `xp-m-0 form-control ${className}` });
 };
-const Select = ({ className = '', ...props }) => {
+const Select = ({ className = "", ...props }) => {
     /** Apply those classes for normalised styling across themes and versions. */
-    return react.createElement("select", { ...props, className: `xp-m-0 xp-max-w-auto form-control ${className}` });
+    return react.createElement("select", { ...props, className: `xp-m-0 xp-max-w-auto form-select form-control ${className}` });
 };
-const Textarea = ({ className = '', ...props }) => {
+const Textarea = ({ className = "", ...props }) => {
     /** Apply those classes for normalised styling across themes and versions. */
     return react.createElement("textarea", { ...props, className: `xp-m-0 form-control ${className}` });
 };
+const FieldHelp = ({ children }) => {
+    return Input_React.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, children);
+};
 /* harmony default export */ const components_Input = (Input);
 
-;// CONCATENATED MODULE: ./ui/src/components/NumberInput.tsx
+;// ./ui/src/components/NumberInput.tsx
+/* unused harmony import specifier */ var NumberInput_React;
+/* unused harmony import specifier */ var NumberInput_useNumericInputProps;
 
 
 
 
 const NumInput = ({ className, value, onChange, selectOnFocus, ...props }) => {
-    const inputProps = hooks_useNumericInputProps(value, onChange);
+    const inputProps = useNumericInputProps(value, onChange);
     const handleFocus = (e) => {
         if (!selectOnFocus)
             return;
@@ -736,15 +927,15 @@ const NumInput = ({ className, value, onChange, selectOnFocus, ...props }) => {
     return react.createElement(components_Input, { type: "text", ...inputProps, className: className, onFocus: handleFocus, ...props });
 };
 const PlainNumberInput = ({ value, onChange, selectOnFocus, ...props }) => {
-    const inputProps = useNumericInputProps(value, onChange);
+    const inputProps = NumberInput_useNumericInputProps(value, onChange);
     const handleFocus = (e) => {
         if (!selectOnFocus)
             return;
         e.currentTarget.select();
     };
-    return React.createElement("input", { type: "text", ...inputProps, onFocus: handleFocus, ...props });
+    return NumberInput_React.createElement("input", { type: "text", ...inputProps, onFocus: handleFocus, ...props });
 };
-const NumberInputWithButtons = ({ onChange, value, min, max, suffix, step = 1, inputProps }) => {
+const NumberInputWithButtons = ({ onChange, value, min, max, suffix, step = 1, inputProps, }) => {
     const hasMin = typeof min !== "undefined";
     const hasMax = typeof max !== "undefined";
     const minDisabled = hasMin && min >= value;
@@ -771,23 +962,23 @@ const NumberInputWithButtons = ({ onChange, value, min, max, suffix, step = 1, i
     };
     const { className: inputClassName, ...remainingInputProps } = inputProps ?? {};
     const allInputProps = {
-        className: utils_classNames("xp-h-auto xp-border-0 xp-text-center xp-rounded-none focus:xp-z-10", suffix ? "xp-pr-6" : null, inputClassName || "xp-w-16"),
+        className: classNames("xp-h-auto xp-border-0 xp-text-center xp-rounded-none focus:xp-z-10", suffix ? "xp-pr-6" : null, inputClassName || "xp-w-16"),
         ...remainingInputProps,
     };
     return (react.createElement("div", { className: "xp-inline-flex xp-rounded xp-border xp-border-solid xp-border-gray-300" },
-        react.createElement("a", { ...minusProps, className: utils_classNames("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1 xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", minDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") },
+        react.createElement("a", { ...minusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", minDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") },
             react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5" },
                 react.createElement("path", { fillRule: "evenodd", d: "M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z", clipRule: "evenodd" }))),
         react.createElement("div", { className: "xp-flex-1 xp-relative" },
             react.createElement(NumInput, { onChange: handleChange, value: value, ...allInputProps }),
             suffix ? (react.createElement("div", { className: "xp-pointer-events-none xp-absolute xp-inset-y-0 xp-right-0 xp-flex xp-items-center xp-pr-2" },
                 react.createElement("span", { className: "xp-text-gray-500" }, suffix))) : null),
-        react.createElement("a", { ...plusProps, className: utils_classNames("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1 xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", maxDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") },
+        react.createElement("a", { ...plusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", maxDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") },
             react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5" },
                 react.createElement("path", { d: "M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" })))));
 };
 
-;// CONCATENATED MODULE: ./ui/src/components/RadioGroup.tsx
+;// ./ui/src/components/RadioGroup.tsx
 
 const RadioGroup = ({ items, value, onChange }) => {
     const [uniqid] = (0,react.useState)(() => Math.random().toString(12).slice(2));
@@ -799,10 +990,10 @@ const RadioGroup = ({ items, value, onChange }) => {
             item.desc ? (react.createElement("p", { id: `xp-radiogroup-${uniqid}-${idx}`, className: "xp-text-gray-500 xp-m-0" }, item.desc)) : null))))));
 };
 
-;// CONCATENATED MODULE: ./ui/src/lib/constants.ts
+;// ./ui/src/lib/constants.ts
 const HELP_URL_LEVELS = "https://docs.levelup.plus/xp/docs/levels";
 
-;// CONCATENATED MODULE: ./ui/src/components/BulkEditPoints.tsx
+;// ./ui/src/components/BulkEditPoints.tsx
 
 
 
@@ -831,7 +1022,7 @@ function getDefaultBulkEditPointsState(props) {
         coef: Math.min(5, Math.max(props.coef || 1.3)),
     };
 }
-const BulkEditPoints = ({ method, base, incr, coef, onBaseChange, onCoefChange, onIncrementChange, onMethodChange }) => {
+const BulkEditPoints = ({ method, base, incr, coef, onBaseChange, onCoefChange, onIncrementChange, onMethodChange, }) => {
     const getStr = useStrings([
         "basepoints",
         "basepointslineardesc",
@@ -925,25 +1116,27 @@ const BulkEditPointsModal = (props) => {
         react.createElement(BulkEditPoints, { coef: state.coef, base: state.base, incr: state.incr, method: state.method, onBaseChange: setBase, onCoefChange: setCoef, onIncrementChange: setIncrement, onMethodChange: setMethod })));
 };
 
-;// CONCATENATED MODULE: ./ui/src/components/Pix.tsx
+;// ./ui/src/components/Pix.tsx
 
 
-const Pix = ({ id, component = 'block_xp', className, alt = '' }) => {
+const Pix = ({ id, component = "block_xp", className, alt = "", }) => {
     return react.createElement("img", { src: imageUrl(id, component), alt: alt, className: className });
 };
 /* harmony default export */ const components_Pix = (Pix);
 
-;// CONCATENATED MODULE: ./ui/src/components/Spinner.tsx
+;// ./ui/src/components/Spinner.tsx
 
 
 
 const Spinner = ({ className }) => {
-    const alt = hooks_useString('loadinghelp', 'core');
+    const alt = useString("loadinghelp", "core");
     return react.createElement(components_Pix, { id: "y/loading", component: "core", className: className, alt: alt });
 };
 /* harmony default export */ const components_Spinner = (Spinner);
 
-;// CONCATENATED MODULE: ./ui/src/components/Button.tsx
+;// ./ui/src/components/Button.tsx
+/* unused harmony import specifier */ var Button_React;
+/* unused harmony import specifier */ var Button_classNames;
 
 
 
@@ -951,13 +1144,19 @@ const Spinner = ({ className }) => {
 
 
 const CircleButton = ({ className, ...props }) => {
-    return (React.createElement("button", { className: classNames("xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full hover:xp-bg-gray-100", className), type: "button", ...props }));
+    return (Button_React.createElement("button", { className: Button_classNames("xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full xp-duration-150 xp-transition-colors", "hover:xp-bg-gray-200", className), type: "button", ...props }));
 };
-const Button = ({ onClick, disabled, children, primary, className, type = "button" }) => {
-    const classes = utils_classNames("btn", primary ? "btn-primary" : "btn-default btn-secondary", className);
+const Button = ({ onClick, disabled, children, primary, outline, className, type = "button", }) => {
+    const classes = classNames("btn", primary ? `btn-${outline ? "outline-" : ""}primary` : `btn-default btn-${outline ? "outline-" : ""}secondary`, className);
     return (react.createElement("button", { className: classes, onClick: onClick, disabled: disabled, type: type }, children));
 };
-const SaveButton = ({ onClick, disabled, label, mutation = {}, statePosition = "after" }) => {
+const ExpandCollapseButton = ({ expanded, onToggle, ariaControlsId, }) => {
+    return (react.createElement(AnchorButton, { "aria-expanded": expanded, "aria-controls": ariaControlsId, onClick: onToggle, className: "xp-p-2 xp-inline-block sm:xp-mr-1" },
+        react.createElement("span", { className: "xp-sr-only" }, expanded ? react.createElement(components_Str, { id: "collapse", component: "core" }) : react.createElement(components_Str, { id: "expand", component: "core" })),
+        react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: classNames("xp-w-6 xp-h-6 xp-transition-transform xp-duration-300", expanded ? "xp-rotate-90" : null) },
+            react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8.25 4.5l7.5 7.5-7.5 7.5" }))));
+};
+const SaveButton = ({ onClick, disabled, label, mutation = {}, statePosition = "after", }) => {
     const getStr = useStrings(["changessaved", "error"], "core");
     const { isLoading, isSuccess, isError } = mutation;
     const isStateBefore = statePosition === "before";
@@ -973,12 +1172,12 @@ const SaveButton = ({ onClick, disabled, label, mutation = {}, statePosition = "
 };
 const AnchorButton = ({ children, onClick, className, ...props }) => {
     const anchorButtonProps = useAnchorButtonProps(onClick);
-    return (react.createElement("a", { className: utils_classNames("xp-text-inherit xp-no-underline", className), ...props, ...anchorButtonProps }, children));
+    return (react.createElement("a", { className: classNames("xp-text-inherit xp-no-underline", className), ...props, ...anchorButtonProps }, children));
 };
 
 // EXTERNAL MODULE: ./node_modules/react-animate-height/dist/esm/index.js
-var esm = __webpack_require__(968);
-;// CONCATENATED MODULE: ./ui/src/components/Expandable.tsx
+var esm = __webpack_require__(6968);
+;// ./ui/src/components/Expandable.tsx
 
 
 function Expandable({ expanded, children, id }) {
@@ -996,8 +1195,15 @@ function Expandable({ expanded, children, id }) {
         } }, children));
 }
 
-;// CONCATENATED MODULE: ./ui/src/components/Icons.tsx
+;// ./ui/src/components/Icons.tsx
+/* unused harmony import specifier */ var Icons_React;
 
+const IconRenderer = ({ icon }) => {
+    if (icon.type === "fa") {
+        return Icons_React.createElement("i", { className: `fa fa-${icon.value}` });
+    }
+    return null;
+};
 const Bars3BottomLeftIcon = ({ className }) => (react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", className: className },
     react.createElement("path", { fillRule: "evenodd", d: "M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75H12a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z", clipRule: "evenodd" })));
 const CheckBadgeIconSolid = ({ className }) => (react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", className: className },
@@ -1006,10 +1212,10 @@ const LanguageIcon = ({ className }) => (react.createElement("svg", { xmlns: "ht
     react.createElement("path", { fillRule: "evenodd", d: "M9 2.25a.75.75 0 01.75.75v1.506a49.38 49.38 0 015.343.371.75.75 0 11-.186 1.489c-.66-.083-1.323-.151-1.99-.206a18.67 18.67 0 01-2.969 6.323c.317.384.65.753.998 1.107a.75.75 0 11-1.07 1.052A18.902 18.902 0 019 13.687a18.823 18.823 0 01-5.656 4.482.75.75 0 11-.688-1.333 17.323 17.323 0 005.396-4.353A18.72 18.72 0 015.89 8.598a.75.75 0 011.388-.568A17.21 17.21 0 009 11.224a17.17 17.17 0 002.391-5.165 48.038 48.038 0 00-8.298.307.75.75 0 01-.186-1.489 49.159 49.159 0 015.343-.371V3A.75.75 0 019 2.25zM15.75 9a.75.75 0 01.68.433l5.25 11.25a.75.75 0 01-1.36.634l-1.198-2.567h-6.744l-1.198 2.567a.75.75 0 01-1.36-.634l5.25-11.25A.75.75 0 0115.75 9zm-2.672 8.25h5.344l-2.672-5.726-2.672 5.726z", clipRule: "evenodd" })));
 const PaperAirplaneIconSolid = ({ className }) => (react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", className: className },
     react.createElement("path", { d: "M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" })));
-const ChevronLeftIconSolid = ({ className }) => (React.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: className },
-    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15.75 19.5 8.25 12l7.5-7.5" })));
+const ChevronLeftIconSolid = ({ className }) => (Icons_React.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: className },
+    Icons_React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15.75 19.5 8.25 12l7.5-7.5" })));
 
-;// CONCATENATED MODULE: ./ui/src/components/Level.tsx
+;// ./ui/src/components/Level.tsx
 
 
 
@@ -1031,7 +1237,7 @@ const getLevelHtml = (level, small, medium) => {
   `;
 };
 const Level = (0,react.forwardRef)(({ level, small, medium }, ref) => {
-    const label = hooks_useString("levelx", "block_xp", level.level);
+    const label = useString("levelx", "block_xp", level.level);
     const classes = "block_xp-level level-" + level.level + (small ? " small" : medium ? " medium" : "");
     if (level.badgeurl) {
         return (react.createElement("div", { className: classes + " level-badge", "aria-label": label, ref: ref },
@@ -1041,7 +1247,7 @@ const Level = (0,react.forwardRef)(({ level, small, medium }, ref) => {
 });
 /* harmony default export */ const components_Level = (Level);
 
-;// CONCATENATED MODULE: ./ui/src/components/Tooltip.tsx
+;// ./ui/src/components/Tooltip.tsx
 
 
 const Tooltip = ({ children, content }) => {
@@ -1076,7 +1282,7 @@ const Tooltip = ({ children, content }) => {
     return (0,react.cloneElement)(children, { ref });
 };
 
-;// CONCATENATED MODULE: ./ui/src/lib/levels.ts
+;// ./ui/src/lib/levels.ts
 function computeRequiredPoints(level, base, coef) {
     if (level <= 1) {
         return 0;
@@ -1130,9 +1336,52 @@ const getPreviousLevel = (levels, level) => {
     return levels[Math.max(levels.indexOf(level) - 1, 0)];
 };
 
-// EXTERNAL MODULE: ./node_modules/react-query/es/core/queryClient.js + 4 modules
-var queryClient = __webpack_require__(98);
-;// CONCATENATED MODULE: ./ui/src/lib/query.ts
+// EXTERNAL MODULE: ./node_modules/@tanstack/query-core/build/lib/queryClient.mjs + 4 modules
+var queryClient = __webpack_require__(4968);
+;// ./ui/src/lib/rulelimits.ts
+/* unused harmony import specifier */ var rulelimits_LimitSpecTimeWindow;
+/* unused harmony import specifier */ var rulelimits_LimitSpecScope;
+
+/** Mirrors {@see \block_xp\form\rule::get_default_data()} limit fields when the rule type has defaults. */
+function getInitialLimitFieldsFromRuleType(ruleType) {
+    const dl = ruleType.defaultlimit;
+    const dr = ruleType.defaultrepeatlimit;
+    if (!dl || !dr) {
+        return {
+            limitmax: 0,
+            limitwindow: rulelimits_LimitSpecTimeWindow.NONE,
+            repeatscope: rulelimits_LimitSpecScope.None,
+            repeatwindow: rulelimits_LimitSpecTimeWindow.NONE,
+        };
+    }
+    const isUnlimited = dr.max === 0;
+    return {
+        limitmax: dl.max,
+        limitwindow: dl.timewindow,
+        repeatscope: isUnlimited ? rulelimits_LimitSpecScope.None : dr.scope,
+        repeatwindow: isUnlimited ? dl.timewindow : dr.timewindow,
+    };
+}
+function ruleTypeSupportsLimits(ruleType) {
+    return (ruleType.defaultlimit !== null &&
+        ruleType.defaultlimit !== undefined &&
+        ruleType.defaultrepeatlimit !== null &&
+        ruleType.defaultrepeatlimit !== undefined);
+}
+
+;// ./ui/src/lib/query.ts
+/* unused harmony import specifier */ var useQuery;
+/* unused harmony import specifier */ var useQueryClient;
+/* unused harmony import specifier */ var query_useMutation;
+/* unused harmony import specifier */ var useMemo;
+/* unused harmony import specifier */ var useCallback;
+/* unused harmony import specifier */ var query_useAddonActivated;
+/* unused harmony import specifier */ var query_ajaxRequest;
+/* unused harmony import specifier */ var query_ruleTypeSupportsLimits;
+/* unused harmony import specifier */ var query_getInitialLimitFieldsFromRuleType;
+
+
+
 
 
 const query_queryClient = new queryClient/* QueryClient */.E({
@@ -1146,8 +1395,74 @@ const query_queryClient = new queryClient/* QueryClient */.E({
         },
     },
 });
+const useAddRuleMutation = (contextid, childcontextid, { types }, { onSuccess }) => {
+    const addonActivated = query_useAddonActivated();
+    return query_useMutation(async ({ type, filter, ...config }) => {
+        const ruleid = await query_ajaxRequest("block_xp_create_rule", {
+            contextid,
+            childcontextid: childcontextid ?? 0,
+            points: config.points ?? 0,
+            type: {
+                name: type,
+                char1: config.typechar1 ?? null,
+            },
+            filter: {
+                name: filter,
+                courseid: config.filtercourseid ?? null,
+                cmid: config.filtercmid ?? null,
+                int1: config.filterint1 ?? null,
+                char1: config.filterchar1 ?? null,
+            },
+        });
+        const ruleType = types.get(type);
+        if (addonActivated && !config.usedefaultlimits && ruleType && query_ruleTypeSupportsLimits(ruleType)) {
+            const initialLimits = query_getInitialLimitFieldsFromRuleType(ruleType);
+            await query_ajaxRequest("local_xp_set_rule_limits", {
+                ruleid,
+                limits: {
+                    limitmax: config.limitmax ?? initialLimits.limitmax,
+                    limitwindow: config.limitwindow ?? initialLimits.limitwindow,
+                    repeatscope: config.repeatscope ?? initialLimits.repeatscope,
+                    repeatwindow: config.repeatwindow ?? initialLimits.repeatwindow,
+                },
+            });
+        }
+        return ruleid;
+    }, {
+        onSuccess,
+    });
+};
+const useDeleteRuleMutation = () => {
+    return query_useMutation(async ({ id }) => {
+        return query_ajaxRequest("block_xp_delete_rule", { id });
+    });
+};
+const useRules = (kind, contextid, childcontextid) => {
+    const queryClient = useQueryClient();
+    const queryKey = useMemo(() => [`${kind}-rules`, contextid, childcontextid], [kind, contextid, childcontextid]);
+    const data = useQuery({
+        queryKey,
+        queryFn: async () => {
+            return await query_ajaxRequest("block_xp_get_rules", {
+                kind,
+                contextid,
+                childcontextid,
+            });
+        },
+    });
+    const invalidateQuery = useCallback(() => {
+        queryClient.invalidateQueries({ queryKey });
+    }, [queryClient, queryKey]);
+    return {
+        ...data,
+        invalidateQuery,
+    };
+};
+const invalidateRuleTypeLimitsQuery = (contextid, childcontextid) => {
+    query_queryClient.invalidateQueries({ queryKey: ["ruletype-limits", contextid, childcontextid] });
+};
 
-;// CONCATENATED MODULE: ./ui/src/levels.tsx
+;// ./ui/src/levels.tsx
 
 
 
@@ -1356,7 +1671,7 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
     const getCoreStr = useStrings(["other", "none"], "core");
     useUnloadCheck(state.pendingSave);
     // Prepare the save mutation.
-    const mutation = (0,es.useMutation)(() => {
+    const mutation = (0,useMutation/* useMutation */.n)(() => {
         // An falsy course ID means admin config.
         const method = courseId ? "block_xp_set_levels_info" : "block_xp_set_default_levels_info";
         return ajaxRequest(method, {
@@ -1444,11 +1759,11 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
                                     e.preventDefault();
                                     handleCollapseExpandAll();
                                     close();
-                                }, className: utils_classNames(active ? "xp-bg-gray-100" : null, "xp-text-inherit xp-block xp-px-6 xp-py-1 xp-no-underline") }, allExpanded ? react.createElement(components_Str, { id: "collapseall", component: "core" }) : react.createElement(components_Str, { id: "expandall", component: "core" })))),
-                            react.createElement(menu/* Menu */.W.Item, null, ({ active, close }) => (react.createElement("a", { href: HELP_URL_LEVELS, target: "_blank", rel: "noopener", className: utils_classNames(active ? "xp-bg-gray-100" : null, "xp-text-inherit xp-block xp-px-6 xp-py-1 xp-no-underline") },
+                                }, className: classNames(active ? "xp-bg-gray-100" : null, "xp-text-inherit xp-block xp-px-6 xp-py-1 xp-no-underline") }, allExpanded ? react.createElement(components_Str, { id: "collapseall", component: "core" }) : react.createElement(components_Str, { id: "expandall", component: "core" })))),
+                            react.createElement(menu/* Menu */.W.Item, null, ({ active, close }) => (react.createElement("a", { href: HELP_URL_LEVELS, target: "_blank", rel: "noopener noreferrer", className: classNames(active ? "xp-bg-gray-100" : null, "xp-text-inherit xp-block xp-px-6 xp-py-1 xp-no-underline") },
                                 react.createElement(components_Str, { id: "documentation" }))))),
                         resetToDefaultsUrl ? (react.createElement("div", { className: "xp-py-1" },
-                            react.createElement(menu/* Menu */.W.Item, null, ({ active, close }) => (react.createElement("a", { href: resetToDefaultsUrl, className: utils_classNames(active ? "xp-bg-gray-100" : null, "xp-text-red-600 xp-block xp-px-6 xp-py-1 xp-no-underline") },
+                            react.createElement(menu/* Menu */.W.Item, null, ({ active, close }) => (react.createElement("a", { href: resetToDefaultsUrl, className: classNames(active ? "xp-bg-gray-100" : null, "xp-text-red-600 xp-block xp-px-6 xp-py-1 xp-no-underline") },
                                 react.createElement(components_Str, { id: "resettodefaults" })))))) : null)))),
         react.createElement("div", { className: "xp-flex xp-flex-col xp-flex-1 xp-gap-4" }, Array.from({ length: state.nblevels }).map((_, idx) => {
             const level = levels[idx] || { level: idx + 1, xprequired: 0 };
@@ -1456,6 +1771,7 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
             const nextLevel = levels[idx + 1];
             const pointsInLevel = nextLevel ? nextLevel.xprequired - level.xprequired : 0;
             const isExpanded = expanded.includes(level.level);
+            const expandableId = `xp-level-${level.level}-options`;
             let optionStates = level.level <= 1
                 ? optionsStates.filter((o) => ["name", "description", courseId ? null : "badgeawardid"].includes(o.id))
                 : optionsStates;
@@ -1497,19 +1813,16 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
                             const state = o.checker(level);
                             const label = getStr(state ? o.yes : o.no);
                             return (react.createElement(Tooltip, { content: label, key: idx },
-                                react.createElement("div", { className: utils_classNames("xp-w-6 xp-h-6", !state ? "xp-text-gray-300" : null) },
+                                react.createElement("div", { className: classNames("xp-w-6 xp-h-6", !state ? "xp-text-gray-300" : null) },
                                     react.createElement("span", { className: "xp-sr-only" }, label),
                                     react.createElement(o.Icon, { className: "xp-w-full xp-h-full" }))));
                         })),
                         react.createElement("div", { className: "xp-flex-0 sm:xp--mr-3" },
-                            react.createElement(AnchorButton, { "aria-expanded": isExpanded, "aria-controls": `xp-level-${level.level}-options`, onClick: () => {
+                            react.createElement(ExpandCollapseButton, { expanded: isExpanded, ariaControlsId: expandableId, onToggle: () => {
                                     setExpanded(isExpanded ? expanded.filter((e) => e != level.level) : [level.level, ...expanded]);
-                                }, className: "xp-p-2 xp-inline-block sm:xp-mr-1" },
-                                react.createElement("span", { className: "xp-sr-only" }, isExpanded ? react.createElement(components_Str, { id: "collapse", component: "core" }) : react.createElement(components_Str, { id: "expand", component: "core" })),
-                                react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", "aria-hidden": "true", className: utils_classNames("xp-w-6 xp-h-6 xp-transition-transform xp-duration-300", isExpanded ? "xp-rotate-90" : null) },
-                                    react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8.25 4.5l7.5 7.5-7.5 7.5" }))))),
-                    react.createElement(Expandable, { expanded: isExpanded, id: `xp-level-${level.level}-options` },
-                        react.createElement("div", { className: utils_classNames("sm:xp-ml-[100px] sm:xp-pl-8 xp-space-y-4") },
+                                } }))),
+                    react.createElement(Expandable, { expanded: isExpanded, id: expandableId },
+                        react.createElement("div", { className: classNames("sm:xp-ml-[100px] sm:xp-pl-8 xp-space-y-4") },
                             react.createElement("div", { className: "xp-flex xp-items-end xp-gap-4" },
                                 react.createElement("div", { className: "xp-flex-1" },
                                     react.createElement(OptionField, { label: react.createElement(components_Str, { id: "name" }) },
@@ -1544,15 +1857,16 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
                 react.createElement(SaveButton, { statePosition: "before", onClick: handleSave, mutation: mutation, disabled: !state.pendingSave || mutation.isLoading })))));
 };
 function startApp(node, props) {
-    react_dom.render(react.createElement(AddonContext.Provider, { value: makeAddonContextValueFromAppProps(props) },
-        react.createElement(es.QueryClientProvider, { client: query_queryClient },
-            react.createElement(App, { ...props }))), node);
+    const root = (0,client/* createRoot */.H)(node);
+    root.render(react.createElement(AddonContext.Provider, { value: makeAddonContextValueFromAppProps(props) },
+        react.createElement(QueryClientProvider/* QueryClientProvider */.Ht, { client: query_queryClient },
+            react.createElement(App, { ...props }))));
 }
 const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -1616,18 +1930,6 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/create fake namespace object */
 /******/ 	(() => {
 /******/ 		var getProto = Object.getPrototypeOf ? (obj) => (Object.getPrototypeOf(obj)) : (obj) => (obj.__proto__);
@@ -1649,7 +1951,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 			__webpack_require__.r(ns);
 /******/ 			var def = {};
 /******/ 			leafPrototypes = leafPrototypes || [null, getProto({}), getProto([]), getProto(getProto)];
-/******/ 			for(var current = mode & 2 && value; typeof current == 'object' && !~leafPrototypes.indexOf(current); current = getProto(current)) {
+/******/ 			for(var current = mode & 2 && value; (typeof current == 'object' || typeof current == 'function') && !~leafPrototypes.indexOf(current); current = getProto(current)) {
 /******/ 				Object.getOwnPropertyNames(current).forEach((key) => (def[key] = () => (value[key])));
 /******/ 			}
 /******/ 			def['default'] = () => (value);
@@ -1749,7 +2051,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(791)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(1791)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ 	return __webpack_exports__;
