@@ -1395,7 +1395,9 @@ const CmNameContent = ({ config, setConfig, type }) => {
             react.createElement("label", { htmlFor: "xp-rule-cmname-name", className: "xp-m-0" },
                 react.createElement(components_Str, { id: "activityname" })),
             react.createElement("div", { className: "xp-flex xp-gap-2" },
-                react.createElement(Select, { value: config.filterint1, onChange: (e) => setConfig({ filterint1: parseInt(e.currentTarget.value, 10) || 0 }), defaultValue: defaultValue.toString(), className: "xp-w-auto" },
+                react.createElement("label", { htmlFor: "xp-rule-cmname-method", className: "xp-sr-only" },
+                    react.createElement(components_Str, { id: "comparisonmethod" })),
+                react.createElement(Select, { id: "xp-rule-cmname-method", value: config.filterint1, onChange: (e) => setConfig({ filterint1: parseInt(e.currentTarget.value, 10) || 0 }), defaultValue: defaultValue.toString(), className: "xp-w-auto" },
                     react.createElement("option", { value: "1" }, getStr("rule:contains")),
                     react.createElement("option", { value: "0" }, getStr("rule:eq"))),
                 react.createElement(components_Input, { id: "xp-rule-cmname-name", value: config.filterchar1 || "", onChange: (e) => setConfig({ filterchar1: e.currentTarget.value, filterint1: config.filterint1 ?? defaultValue }), maxLength: 255 })),
@@ -1587,7 +1589,8 @@ const useRulesInfo = (query, deleted) => {
 
 
 
-const slideClasses = "xp-absolute xp-inset-0 xp-transform-gpu xp-transition-transform xp-duration-300";
+
+const slideClasses = classNames("xp-absolute xp-inset-0", !isBehatRunning() ? "xp-transform-gpu xp-transition-transform xp-duration-300" : "");
 const slideNextClasses = `${slideClasses} xp-translate-x-full`;
 const slidePrevClasses = `${slideClasses} xp--translate-x-full`;
 const Slider = ({ children: rawChildren, index }) => {
