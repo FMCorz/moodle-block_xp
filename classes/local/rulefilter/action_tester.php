@@ -20,8 +20,10 @@ namespace block_xp\local\rulefilter;
 
 defined('MOODLE_INTERNAL') || die();
 
-debugging('The interface rulefilter\action_tester is deprecated, '
-    . 'use block_xp\local\action\action_tester instead.', DEBUG_DEVELOPER);
+if (!defined('PHPUNIT_TEST')) {
+    debugging('The interface rulefilter\action_tester is deprecated, '
+        . 'use block_xp\local\action\action_tester instead.', DEBUG_DEVELOPER);
+}
 
 /**
  * Filter.
