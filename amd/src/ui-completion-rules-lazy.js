@@ -109,7 +109,7 @@ const modules = {};
  * Preferrably, modules should be loaded with getModuleAsync, which
  * does not require their definition to be declared in our apps.
  */
-const commonStaticModulesToDependOn = ["core/notification", "core/aria", "?core/toast", "jquery"];
+const commonStaticModulesToDependOn = ["core/notification", "core/aria", "core/pending", "?core/toast", "jquery"];
 async function ajaxRequest(method, args) {
     const Ajax = await getModuleAsync("core/ajax");
     return Ajax.call([
@@ -1892,12 +1892,22 @@ const Dropdown = ({ buttonLabel, items }) => {
 // EXTERNAL MODULE: ./node_modules/react-animate-height/dist/esm/index.js
 var esm = __webpack_require__(6968);
 ;// ./ui/src/components/Expandable.tsx
+/* unused harmony import specifier */ var useRef;
 /* unused harmony import specifier */ var Expandable_React;
 /* unused harmony import specifier */ var AnimateHeight;
+/* unused harmony import specifier */ var Expandable_getModule;
+
 
 
 function Expandable({ expanded, children, id }) {
-    return (Expandable_React.createElement(AnimateHeight, { id: id, height: expanded ? "auto" : 0, applyInlineTransitions: false, animationStateClasses: {
+    const ref = useRef(null);
+    return (Expandable_React.createElement(AnimateHeight, { id: id, height: expanded ? "auto" : 0, applyInlineTransitions: false, onHeightAnimationStart: () => {
+            const Pending = Expandable_getModule("core/pending");
+            ref.current?.reject();
+            ref.current = Pending ? new Pending("block_xp/expandable") : null;
+        }, onHeightAnimationEnd: () => {
+            ref.current?.resolve();
+        }, animationStateClasses: {
             animating: "xp-transition-height xp-duration-500",
             static: "xp-transition-height xp-duration-500",
             animatingUp: "",

@@ -233,3 +233,8 @@ export type CoreModalFormInstance = {
 };
 
 export type CoreModalForm = new (config: any) => CoreModalFormInstance;
+
+export type CorePending = new (pendingKey?: string) => Promise<void> & {
+  resolve: (value?: unknown) => void;
+  reject: (reason?: unknown) => void;
+};

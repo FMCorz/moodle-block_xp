@@ -95,7 +95,7 @@ const modules = {};
  * Preferrably, modules should be loaded with getModuleAsync, which
  * does not require their definition to be declared in our apps.
  */
-const commonStaticModulesToDependOn = ["core/notification", "core/aria", "?core/toast", "jquery"];
+const commonStaticModulesToDependOn = ["core/notification", "core/aria", "core/pending", "?core/toast", "jquery"];
 async function ajaxRequest(method, args) {
     const Ajax = await getModuleAsync("core/ajax");
     return Ajax.call([
@@ -1884,8 +1884,16 @@ var esm = __webpack_require__(6968);
 ;// ./ui/src/components/Expandable.tsx
 
 
+
 function Expandable({ expanded, children, id }) {
-    return (react.createElement(esm/* default */.A, { id: id, height: expanded ? "auto" : 0, applyInlineTransitions: false, animationStateClasses: {
+    const ref = (0,react.useRef)(null);
+    return (react.createElement(esm/* default */.A, { id: id, height: expanded ? "auto" : 0, applyInlineTransitions: false, onHeightAnimationStart: () => {
+            const Pending = getModule("core/pending");
+            ref.current?.reject();
+            ref.current = Pending ? new Pending("block_xp/expandable") : null;
+        }, onHeightAnimationEnd: () => {
+            ref.current?.resolve();
+        }, animationStateClasses: {
             animating: "xp-transition-height xp-duration-500",
             static: "xp-transition-height xp-duration-500",
             animatingUp: "",

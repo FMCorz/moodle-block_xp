@@ -9,7 +9,7 @@ const modules: { [index: string]: any } = {};
  * Preferrably, modules should be loaded with getModuleAsync, which
  * does not require their definition to be declared in our apps.
  */
-export const commonStaticModulesToDependOn = ["core/notification", "core/aria", "?core/toast", "jquery"];
+export const commonStaticModulesToDependOn = ["core/notification", "core/aria", "core/pending", "?core/toast", "jquery"];
 
 export async function ajaxRequest<T = any>(method: string, args: any) {
   const Ajax = await getModuleAsync("core/ajax");
@@ -38,7 +38,7 @@ export function hasString(id: string, component: string) {
   return typeof M.str[component] !== "undefined" && typeof M.str[component][id] !== "undefined";
 }
 
-export function getModule(name: string): any {
+export function getModule<T = any>(name: string): T | undefined {
   return modules[name];
 }
 
