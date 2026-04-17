@@ -583,7 +583,6 @@ function xmldb_block_xp_upgrade($oldversion) {
 
         // Adding keys to table block_xp_rule.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $table->add_key('contextid', XMLDB_KEY_FOREIGN, ['contextid'], 'context', ['id']);
 
         // Adding indexes to table block_xp_rule.
         $table->add_index('contextids', XMLDB_INDEX_NOTUNIQUE, ['contextid', 'childcontextid']);
@@ -712,6 +711,21 @@ function xmldb_block_xp_upgrade($oldversion) {
 
         // Xp savepoint reached.
         upgrade_block_savepoint(true, 2026041600, 'xp');
+    }
+
+    if ($oldversion < 2026041700) {
+
+        // Drop foreign key on contextid (if present) so admin default rules can use contextid 0.
+        $table = new xmldb_table('block_xp_rule');
+        $key = new xmldb_key('contextid');
+        $key->set_attributes(XMLDB_KEY_FOREIGN, ['contextid'], 'context', ['id']);
+
+        if ($dbman->table_exists($table)) {
+            $dbman->drop_key($table, $key);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2026041700, 'xp');
     }
 
     return true;
