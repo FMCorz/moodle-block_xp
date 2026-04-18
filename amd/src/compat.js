@@ -82,11 +82,28 @@ export function createModal(config, ModalClass = Modal) {
     return Promise.all([
         getModuleAsync('core/modal_factory'),
         getModuleAsync('core/modal_registry'),
-    ]).then(([ModalFactory, ModalRegistry]) => {
-        const typeName = config.type ?? config.template;
-        let type = ModalRegistry.get(typeName);
-        if (!type) {
-            ModalRegistry.register(typeName, ModalClass, config.template);
+        getModuleAsync('core/modal_save_cancel'),
+        getModuleAsync('core/modal_cancel'),
+    ]).then(([ModalFactory, ModalRegistry, ModalSaveCancel, ModalCancel]) => {
+        let typeName = config.type ?? config.template;
+
+        // If config does not provide the type or template, guess the type and template from the class object.
+        let legacyName = 'DEFAULT';
+        let legacyTemplate = 'core/modal';
+        if (!typeName) {
+            if (ModalClass === ModalSaveCancel) {
+                legacyName = 'SAVE_CANCEL';
+                legacyTemplate = 'core/modal_save_cancel';
+            } else if (ModalClass === ModalCancel) {
+                legacyName = 'CANCEL';
+                legacyTemplate = 'core/modal_cancel';
+            }
+        }
+
+        typeName = typeName ?? legacyName;
+        if (!ModalRegistry.get(typeName)) {
+            const templateName = config.template ?? legacyTemplate;
+            ModalRegistry.register(typeName, ModalClass, templateName);
         }
 
         return ModalFactory.create({
