@@ -6,15 +6,18 @@ on:
       - ci
 
 env:
-  FILTER_SHORTCODES_TAG: 'v1.1.2'
+  FILTER_SHORTCODES_TAG: 'v1.1.3'
+  TESTS_REPO_TAG: 'v20.0'
 
 jobs:
   test:
     runs-on: ubuntu-22.04
+    env:
+      HAS_TESTS_REPO_SSHKEY: ${{ secrets.TESTS_REPO_SSHKEY != '' }}
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:16
         env:
           POSTGRES_USER: 'postgres'
           POSTGRES_HOST_AUTH_METHOD: 'trust'
@@ -37,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         php: ['8.2', '8.3', '8.4']
-        moodle-branch: ['MOODLE_405_STABLE', 'MOODLE_500_STABLE', 'MOODLE_501_STABLE']
+        moodle-branch: ['MOODLE_405_STABLE', 'MOODLE_500_STABLE', 'MOODLE_501_STABLE', 'MOODLE_502_STABLE']
         database: [pgsql]
         include:
           # PHP 7.4, with Moodle 4.1.
@@ -66,12 +69,28 @@ jobs:
         exclude:
           - moodle-branch: MOODLE_405_STABLE
             php: 8.4
+          - moodle-branch: MOODLE_502_STABLE
+            php: 8.2
 
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
         with:
           path: plugin
+
+      - name: Delete plugin tests content
+        if: ${{ env.HAS_TESTS_REPO_SSHKEY == 'true' }}
+        run: rm -rf plugin/tests/* plugin/tests/.[!.]* plugin/tests/..?*
+
+      - name: Check out private tests repository
+        if: ${{ env.HAS_TESTS_REPO_SSHKEY == 'true' }}
+        uses: actions/checkout@v4
+        with:
+          repository: branchup/block_xp-tests
+          ref: ${{ env.TESTS_REPO_TAG }}
+          path: plugin/tests
+          token: '-'
+          ssh-key: ${{ secrets.TESTS_REPO_SSHKEY }}
 
       - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
