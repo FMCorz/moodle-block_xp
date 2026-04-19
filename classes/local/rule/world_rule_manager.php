@@ -239,10 +239,10 @@ class world_rule_manager {
         usort($adminrecords, $sorter);
 
         $normaliser = function ($record) {
-            $record = (object) (array) $record; // Make sure we don't change the original.
-            unset($record->id);
-            unset($record->contextid);
-            unset($record->childcontextid);
+            $record = (array) $record; // Make sure we don't change the original.
+            unset($record['id']);
+            unset($record['contextid']);
+            unset($record['childcontextid']);
             return $record;
         };
         $worldrecords = array_map($normaliser, $worldrecords);
