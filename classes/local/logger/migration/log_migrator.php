@@ -58,6 +58,8 @@ interface log_migrator {
 
     /**
      * Get the maximum runtime.
+     *
+     * @return int|null Maximum runtime.
      */
     public function get_max_runtime(): ?int;
 

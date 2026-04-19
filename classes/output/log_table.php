@@ -42,7 +42,7 @@ use pix_icon;
  * @package    block_xp
  * @copyright  2014 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since XP 3.17, use logs_table instead.
+ * @deprecated Since XP 20, use logs_table instead.
  */
 class log_table extends table_sql {
 

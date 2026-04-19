@@ -40,7 +40,7 @@ use moodle_database;
  * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since XP 3.17, use context_collection_logger instead.
+ * @deprecated Since XP 20, use context_collection_logger instead.
  */
 class course_log_recent_activity_repository implements user_recent_activity_repository {
 

@@ -593,7 +593,7 @@ class default_container implements container {
      * Get the rule dictator.
      *
      * @return rule\dictator
-     * @deprecated Since v20.0. Use world_rule_manager instead.
+     * @deprecated Since XP 20, use world_rule_manager instead.
      */
     protected function get_rule_dictator() {
         return new rule\the_dictator($this->get('db'), $this->get('rule_filter_handler'));

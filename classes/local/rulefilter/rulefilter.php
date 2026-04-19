@@ -35,7 +35,7 @@ interface rulefilter {
     /**
      * Get action tester.
      *
-     * The return type of this method was block_xp\local\rulefilter\action_tester in XP 3.16,
+     * The return type of this method was block_xp\local\rulefilter\action_tester in XP 19,
      * and it should have become block_xp\local\action\action_tester in XP 20, but as XP+
      * already implemented this interface, fixing the return type would break implementations.
      *

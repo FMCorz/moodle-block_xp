@@ -61,34 +61,6 @@ interface ruletype {
     const WINDOW_HOURLY = '1h';
 
     /**
-     * Scope none.
-     *
-     * @deprecated Since XP 20, use ruletype_with_limit instead.
-     */
-    const SCOPE_NONE = 0;
-
-    /**
-     * Scope env.
-     *
-     * @deprecated Since XP 20, use ruletype_with_limit instead.
-     */
-    const SCOPE_ENV = 2;
-
-    /**
-     * Scope parent.
-     *
-     * @deprecated Since XP 20, use ruletype_with_limit instead.
-     */
-    const SCOPE_PARENT = 4;
-
-    /**
-     * Scope object.
-     *
-     * @deprecated Since XP 20, use ruletype_with_limit instead.
-     */
-    const SCOPE_OBJECT = 8;
-
-    /**
      * Get the list of compatible rule filters.
      *
      * @return string[] The name of the filters.

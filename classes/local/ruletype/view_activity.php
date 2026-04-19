@@ -29,7 +29,6 @@ use block_xp\local\ruletype\profile\profile;
 use block_xp\local\ruletype\ruletype;
 use lang_string;
 
-
 /**
  * Type.
  *

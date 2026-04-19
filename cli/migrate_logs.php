@@ -40,8 +40,8 @@ Options:
 -h, --help             Print out this help
 
 Example:
-\$ mdk php public/blocks/xp/cli/migrate_logs.php
-\$ mdk php public/blocks/xp/cli/migrate_logs.php --execute --batchsize=10000
+\$ php public/blocks/xp/cli/migrate_logs.php
+\$ php public/blocks/xp/cli/migrate_logs.php --execute --batchsize=10000
 ";
 
 [$options, $unrecognized] = cli_get_params(

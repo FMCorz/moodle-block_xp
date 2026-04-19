@@ -38,7 +38,7 @@ use moodle_database;
  * @copyright  2024 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since v20.0. Use world_rule_manager instead.
+ * @deprecated Since XP 20, use world_rule_manager instead.
  */
 class the_dictator implements dictator {
 

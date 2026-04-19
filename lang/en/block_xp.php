@@ -28,9 +28,9 @@
 $string['actionrules'] = 'Action rules';
 $string['actionrules_help'] = "Action rules allow to create conditions determining when and how many points are given to students.
 
-For each condition type, the rules are evaluated in the order in which they appear on screen. As soon as a condition is satisfied, its points will be given and other conditions will not be evaluated for its type.
+For each action, the conditions are evaluated in the order in which they appear on screen. As soon as a condition is satisfied, its points will be given and other conditions will not be evaluated for in the same action.
 
-Each condition type determines the frequency at which identical actions can be repeated. This method ensures that students do not abuse the system. Additionally, educators can set limits on individual conditions. When a condition has reached its limit, it will skipped as if it did not exist and the following conditions will be evaluated.
+Limits can be set on individual conditions. When a condition has reached its limit no points will be given, and the whole action will be skipped.
 
 [Learn more](https://docs.levelup.plus/xp/docs/action-rules?ref=blockxp_help)";
 $string['actionrulesintro'] = 'Attributes points to students for the actions they take.';
@@ -103,7 +103,6 @@ $string['alreadyused'] = 'Already used';
 $string['anonymity'] = 'Anonymity';
 $string['anonymity_help'] = 'This setting controls whether participants can see each other\'s name and avatar.';
 $string['apply'] = 'Apply';
-$string['availabilityinfoalreadyused'] = 'Already used';
 $string['availabilityinfonotincourse'] = 'Requires to be in the context of a course.';
 $string['awardaxpwhen'] = '<strong>{$a}</strong> points are earned when:';
 $string['badgeaward'] = 'Badge to award';
@@ -674,16 +673,6 @@ $string['ruletypecreateforumdiscussion'] = 'Create a forum discussion';
 $string['ruletypecreateforumdiscussiondesc'] = 'When the user creates a new discussion in a forum activity.';
 $string['ruletypefinishquizattempt'] = 'Finish a quiz attempt';
 $string['ruletypefinishquizattemptdesc'] = 'When the user finishes a quiz attempt.';
-$string['ruletypelimits'] = 'Action limits';
-// TODO Rewrite this.
-$string['ruletypelimits_help'] = "Limits cap how many times a user can perform an action before it stops being accepted.
-
-Limits are most useful for actions that are naturally repeatable, such as posting in a forum or viewing content. If an action is already restricted by its nature or conditions (for example, attempting a quiz that can only be taken once), a limit may not be necessary.
-
-For example, you could allow posting in a forum to count only once per day, or only twice per week per forum. This prevents users from accumulating points by repeating the same action many times over.
-
-[More info](https://docs.levelup.plus/xp/docs/action-rules/limits?ref=blockxp_help)";
-$string['ruletypelimitsintro'] = 'Limits control how many times and how often an action can be accepted for a given user. Once the conditions are met, the action is ignored until the time frame resets.';
 $string['ruletypepublishglossaryentry'] = 'Publish a glossary entry';
 $string['ruletypepublishglossaryentrydesc'] = "When a user's glossary entry is published.";
 $string['ruletypereachlessonend'] = 'Reach end of lesson';

@@ -48,7 +48,7 @@ class global_collection_logger implements collection_logger {
 
     /**
      * The table name.
-     * @deprecated Since XP 3.17
+     * @deprecated Since XP 20
      */
     const TABLE = 'block_xp_log';
 

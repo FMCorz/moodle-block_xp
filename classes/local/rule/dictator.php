@@ -27,7 +27,7 @@ use block_xp\local\rule\instance;
  * @copyright  2024 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since v20.0. The dictatorship was overthrown.
+ * @deprecated Since XP 20, the dictatorship was overthrown.
  */
 interface dictator {
 

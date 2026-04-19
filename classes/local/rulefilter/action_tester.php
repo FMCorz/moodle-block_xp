@@ -35,6 +35,6 @@ if (!defined('PHPUNIT_TEST')) {
  * @deprecated Since XP 20, use block_xp\local\action\action_tester instead.
  */
 interface action_tester extends \block_xp\local\action\tester\action_tester {
-    // We keep the interface here because XP+ 1.16 was relying on it and removing it
+    // We keep the interface here because XP+ 19 was relying on it and removing it
     // would break the installations that are upgrading XP without upgrading XP+.
 }
