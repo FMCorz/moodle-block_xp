@@ -1272,6 +1272,7 @@ const RulePointsLimitsForm = ({ config, filterName, ruleType, setConfig, }) => {
         "repeatsallowed",
         "repetitionlimit",
         "repetitionlimitdesc",
+        "repetitiontimeframe",
         "timesallowed",
         "timeframe",
         "unknown",
@@ -1322,7 +1323,7 @@ const RulePointsLimitsForm = ({ config, filterName, ruleType, setConfig, }) => {
                                             react.createElement("option", { value: LimitSpecScope.None, disabled: repeatScope !== LimitSpecScope.None && !isActivated }, getStr("unlimitedrepeats")),
                                             repeatOptions.map((opt) => (react.createElement("option", { key: opt.value, value: opt.value, disabled: opt.value != repeatScope && !isActivated }, opt.oncelabel)))))),
                                 react.createElement(If, { condition: repeatScope !== LimitSpecScope.None },
-                                    react.createElement(TimeFrame, { value: repeatWindow, onChange: (v) => setConfig({ ...config, repeatwindow: v }), label: getStr("timeframe"), noneLabel: getStr("forever") }))),
+                                    react.createElement(TimeFrame, { value: repeatWindow, onChange: (v) => setConfig({ ...config, repeatwindow: v }), label: getStr("repetitiontimeframe"), noneLabel: getStr("forever") }))),
                             react.createElement(FieldHelp, null, getStr("repetitionlimitdesc")))))))));
 };
 const If = ({ condition, children }) => {
