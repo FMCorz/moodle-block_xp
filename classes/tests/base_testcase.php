@@ -266,6 +266,9 @@ abstract class base_testcase extends \advanced_testcase {
         return [
             'block_xp\\tests\\fixtures\\' => '/blocks/xp/tests/fixtures/',
             'block_xp\\tests\\mocks\\' => '/blocks/xp/tests/mocks/',
+
+            // Special case for events that must belong to the event namespace.
+            'block_xp\\event' => '/blocks/xp/tests/fixtures',
         ];
     }
 }
