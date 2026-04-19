@@ -39,6 +39,7 @@ export const RulePointsLimitsForm = ({
     "repeatsallowed",
     "repetitionlimit",
     "repetitionlimitdesc",
+    "repetitiontimeframe",
     "timesallowed",
     "timeframe",
     "unknown",
@@ -142,7 +143,7 @@ export const RulePointsLimitsForm = ({
                     <TimeFrame
                       value={repeatWindow}
                       onChange={(v) => setConfig({ ...config, repeatwindow: v })}
-                      label={getStr("timeframe")}
+                      label={getStr("repetitiontimeframe")}
                       noneLabel={getStr("forever")}
                     />
                   </If>

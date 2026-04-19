@@ -601,6 +601,7 @@ Both the overall limit and the repetition limit apply. When either limit is reac
 
 [Learn more](https://docs.levelup.plus/xp/docs/action-rules/limits)";
 $string['repetitionlimitset'] = 'Repetition limit set';
+$string['repetitiontimeframe'] = 'Repetition time frame';
 $string['reportisempty'] = 'The report is empty, student have yet to earn points.';
 $string['reportisemptyenrolstudents'] = 'The report is empty, have students been enrolled in this course?';
 $string['resetcoursedata'] = 'Reset course data';

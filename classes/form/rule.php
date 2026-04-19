@@ -258,7 +258,7 @@ class rule extends dynamic_form {
             }, [limit_spec::SCOPE_NONE => get_string('unlimitedrepeats', 'block_xp')]);
             $mform->addElement('group', 'repeatgroup', get_string('repetitionlimit', 'block_xp') . $labelsuffix, [
                 $mform->createElement('select', 'repeatscope', get_string('repeatsallowed', 'block_xp'), $selectopts),
-                $mform->createElement('select', 'repeatwindow', get_string('timeframe', 'block_xp'), $timeopts + [
+                $mform->createElement('select', 'repeatwindow', get_string('repetitiontimeframe', 'block_xp'), $timeopts + [
                     limit_spec::WINDOW_NONE => get_string('forever', 'block_xp'),
                 ]),
             ], ' ', false);
