@@ -118,7 +118,7 @@ class world_rule_manager {
      */
     public function get_effective_rules(\context $actioncontext): array {
         if (!$this->is_detached()) {
-            return $this->adminrulemanager->get_rules();
+            return $this->adminrulemanager->get_rules_for_world();
         }
 
         $storecontext = $this->world->get_context();
@@ -201,7 +201,7 @@ class world_rule_manager {
         }
 
         $storecontext = $this->world->get_context();
-        $adminrecords = $this->adminrulemanager->get_records();
+        $adminrecords = $this->adminrulemanager->get_records_for_world();
         $worldrecords = $this->fetch_records_in_context($storecontext, null);
 
         if ($this->are_records_matching($worldrecords, $adminrecords)) {

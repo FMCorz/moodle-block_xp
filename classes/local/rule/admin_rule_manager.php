@@ -38,6 +38,8 @@ class admin_rule_manager {
     protected $db;
     /** @var config The admin config. */
     protected $config;
+    /** @var bool Whether XP is configured sitewide. */
+    protected $issitewide;
 
     /**
      * Constructor.
@@ -48,6 +50,7 @@ class admin_rule_manager {
     public function __construct(moodle_database $db, config $config) {
         $this->db = $db;
         $this->config = $config;
+        $this->issitewide = $config->get('context') == CONTEXT_SYSTEM;
     }
 
     /**
@@ -98,9 +101,20 @@ class admin_rule_manager {
      *
      * @return \stdClass[]
      */
-    public function get_records(): array {
+    protected function get_records(): array {
         $this->ensure_seeded();
         return $this->fetch_records();
+    }
+
+    /**
+     * Get the records prepared for a world.
+     *
+     * @return \stdClass[]
+     */
+    public function get_records_for_world(): array {
+        return array_map(function ($record) {
+            return $this->prepare_record_for_world($record);
+        }, $this->get_records());
     }
 
     /**
@@ -124,6 +138,17 @@ class admin_rule_manager {
         return array_values(array_map(function ($record) {
             return $this->make_instance($record);
         }, $this->get_records()));
+    }
+
+    /**
+     * Get the rules prepared for a world.
+     *
+     * @return instance[]
+     */
+    public function get_rules_for_world(): array {
+        return array_values(array_map(function ($record) {
+            return $this->make_instance($record);
+        }, $this->get_records_for_world()));
     }
 
     /**
@@ -173,6 +198,33 @@ class admin_rule_manager {
      */
     protected function make_instance(\stdClass $record): instance {
         return new static_instance($record);
+    }
+
+    /**
+     * Prepare a record for a world.
+     *
+     * @param \stdClass $record The record.
+     * @return \stdClass
+     */
+    protected function prepare_record_for_world(\stdClass $record): \stdClass {
+        $record = (object) (array) $record;
+        $record->filter = $this->translate_filter_for_world($record->filter);
+        return $record;
+    }
+
+    /**
+     * Translate a filter for a world.
+     *
+     * @param string $filter The filter name.
+     * @return string
+     */
+    protected function translate_filter_for_world(string $filter): string {
+        if ($this->issitewide && $filter === 'thiscourse') {
+            return 'anycourse';
+        } else if (!$this->issitewide && $filter === 'anycourse') {
+            return 'thiscourse';
+        }
+        return $filter;
     }
 
     /**
