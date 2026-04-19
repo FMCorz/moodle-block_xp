@@ -380,7 +380,7 @@ class context_collection_logger implements
             'objectid' => $objectid,
             'ruleid' => $reason instanceof reason_with_rule ? $reason->get_rule_id() : null,
             'reasontypehash' => $this->get_reason_type_hash($reason),
-            'timerecorded' => $time ? $time->getTimestamp() : time(),
+            'timerecorded' => $time ? $time->getTimestamp() : di::get('clock')->time(),
         ];
         $this->db->insert_record($this->table, $record);
     }
