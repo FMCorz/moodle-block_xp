@@ -79,7 +79,7 @@ class view_lesson_content implements ruletype, ruletype_with_goal, ruletype_with
     }
 
     public function is_action_compatible(action $action): bool {
-        return $action->get_type() === 'database_entry_created';
+        return $action->get_type() === 'lesson_content_viewed';
     }
 
     public function is_action_satisfying_requirements(action $action): bool {

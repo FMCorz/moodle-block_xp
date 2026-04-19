@@ -77,7 +77,7 @@ class reach_lesson_end implements ruletype, ruletype_with_goal, ruletype_with_li
     }
 
     public function is_action_compatible(action $action): bool {
-        return $action->get_type() === 'database_entry_created';
+        return $action->get_type() === 'lesson_ended';
     }
 
     public function is_action_satisfying_requirements(action $action): bool {
