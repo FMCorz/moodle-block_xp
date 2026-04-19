@@ -7,7 +7,7 @@ on:
 
 env:
   FILTER_SHORTCODES_TAG: 'v1.1.3'
-  TESTS_REPO_TAG: 'v20.0'
+  TESTS_REPO_TAG: 'master'
 
 jobs:
   test:
@@ -62,7 +62,7 @@ jobs:
           - moodle-branch: MOODLE_401_STABLE
             database: mariadb
             php: 7.4
-          - moodle-branch: MOODLE_501_STABLE
+          - moodle-branch: MOODLE_502_STABLE
             database: mariadb
             php: 8.4
 
@@ -170,7 +170,7 @@ jobs:
       - name: Behat features
         id: behat
         if: ${{ !cancelled() }}
-        run: moodle-plugin-ci behat --profile chrome --auto-rerun 0
+        run: moodle-plugin-ci behat --profile chrome --auto-rerun 1
 
       - name: Mark cancelled jobs as failed.
         if: ${{ cancelled() }}
