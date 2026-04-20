@@ -4,7 +4,7 @@ define(["block_xp/ui-commons-lazy"],() => { return /******/ (() => { // webpackB
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 5399
+/***/ 8917
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -1478,18 +1478,9 @@ const sectionConfigSettings = {
     contentRequiresSubmit: false,
 };
 
-;// ./ui/src/components/rulefilter/unavailable.tsx
+;// ./ui/src/components/UnavailableContent.tsx
 
 
-const getUnavailableConfigSettings = (filter) => {
-    return {
-        hasContent: true,
-        getContent: (props) => react.createElement(UnavailableContent, { availabilityInfo: filter.availabilityinfo }),
-        contentIncludesPoints: false,
-        contentRequiresSubmit: true,
-        isConfigValid: () => false,
-    };
-};
 const UnavailableContent = ({ availabilityInfo }) => {
     return (react.createElement(react.Fragment, null,
         react.createElement("p", null,
@@ -1497,6 +1488,19 @@ const UnavailableContent = ({ availabilityInfo }) => {
         react.createElement("ul", null, availabilityInfo?.reasons.map((ai, idx) => {
             return react.createElement("li", { key: `${ai.code}-${idx}` }, ai.description);
         }))));
+};
+
+;// ./ui/src/components/rulefilter/unavailable.tsx
+
+
+const getUnavailableConfigSettings = (filter) => {
+    return {
+        hasContent: true,
+        getContent: () => react.createElement(UnavailableContent, { availabilityInfo: filter.availabilityinfo }),
+        contentIncludesPoints: false,
+        contentRequiresSubmit: true,
+        isConfigValid: () => false,
+    };
 };
 
 ;// ./ui/src/components/rulefilter/unknown.tsx
@@ -1725,6 +1729,22 @@ const SlideHeaderWithFilter = ({ hasBack, onBack, onFilterChange, filterValue, f
 
 
 
+
+const getUnavailableTypeSettings = (type) => {
+    return {
+        hasContent: true,
+        getContent: () => react.createElement(UnavailableContent, { availabilityInfo: type.availabilityinfo }),
+    };
+};
+const shouldDisplayResource = (availabilityInfo, enablepromo) => {
+    const isUnavailable = availabilityInfo?.isavailable === false;
+    const isXpPlusRequired = availabilityInfo?.reasons.some((r) => r.code === "xpplusrequired");
+    const isXpPremiumRequired = availabilityInfo?.reasons.some((r) => r.code === "xppremiumrequired");
+    if (isUnavailable && isXpPlusRequired && !enablepromo && !isXpPremiumRequired) {
+        return false;
+    }
+    return true;
+};
 const AddRuleModal = ({ onSave, onClose, show, selectedType, }) => {
     const { filters, filtersUsageByType, types } = react.useContext(RulesSetupContext);
     return (react.createElement(RuleWizard, { onSave: onSave, onCancel: onClose, selectedType: selectedType, filters: filters, types: types, filtersUsageByType: filtersUsageByType }, ({ onNext, onCancel, children, nextButtonText, title, canNext }) => {
@@ -1744,24 +1764,19 @@ function RuleWizard({ children, onSave, onCancel, selectedType: preselectedType,
     const [selectedFilter, setSelectedFilter] = (0,react.useState)();
     const [compatibleFilters, setCompatibleFilters] = (0,react.useState)([]);
     const [filterSettings, setFilterSettings] = (0,react.useState)();
+    const [typeSettings, setTypeSettings] = (0,react.useState)();
     const [config, setConfig] = (0,react.useState)({ points: 10 });
     const filterIsAutomaticallySelected = compatibleFilters.length === 1 && autoSelectFilter;
     const typesAsResources = (0,react.useMemo)(() => Array.from(types.values())
+        .filter((type) => shouldDisplayResource(type.availabilityinfo, enablepromo))
         .sort((a, b) => a.label.localeCompare(b.label))
-        .map((type) => ({ ...type, themecolor: getTypeThemeColor(type) })), [types]);
+        .map((type) => ({ ...type, themecolor: getTypeThemeColor(type) })), [types, enablepromo]);
     const hasPreselectedType = Boolean(preselectedType) && types.has(preselectedType);
     const handleSelectedType = (0,react.useCallback)((type) => {
+        const typeIsAvailable = type.availabilityinfo?.isavailable ?? true;
         const ruleFilters = Array.from(filters.values())
             .filter((filter) => types.get(type.name)?.filters.includes(filter.name))
-            .filter((filter) => {
-            const isUnavailable = filter.availabilityinfo?.isavailable === false;
-            const isXpPlusRequired = filter.availabilityinfo?.reasons.some((r) => r.code === "xpplusrequired");
-            const isXpPremiumRequired = filter.availabilityinfo?.reasons.some((r) => r.code === "xppremiumrequired");
-            if (isUnavailable && isXpPlusRequired && !enablepromo && !isXpPremiumRequired) {
-                return false;
-            }
-            return true;
-        })
+            .filter((filter) => shouldDisplayResource(filter.availabilityinfo, enablepromo))
             .map((filter) => {
             if (!filter.ismultipleallowed && filtersUsageByType.get(type.name)?.includes(filter.name)) {
                 return {
@@ -1782,10 +1797,11 @@ function RuleWizard({ children, onSave, onCancel, selectedType: preselectedType,
             .sort((a, b) => a.label.localeCompare(b.label));
         setCompatibleFilters(ruleFilters);
         setSelectedType(type.name);
+        setTypeSettings(!typeIsAvailable ? getUnavailableTypeSettings(type) : undefined);
         const filterToSelect = filterIsAutomaticallySelected ? ruleFilters[0] : null;
         // Code here is mostly a copy of handleSelectedFilter!
-        setSelectedFilter(filterToSelect ? filterToSelect.name : undefined);
-        setFilterSettings(filterToSelect ? getFilterContentSettings(filterToSelect) : undefined);
+        setSelectedFilter(typeIsAvailable && filterToSelect ? filterToSelect.name : undefined);
+        setFilterSettings(typeIsAvailable && filterToSelect ? getFilterContentSettings(filterToSelect) : undefined);
         setConfig({ points: 10 });
         setIndex(hasPreselectedType ? 0 : 1);
     }, [filters, hasPreselectedType, types, filtersUsageByType, filterIsAutomaticallySelected, getStr, enablepromo]);
@@ -1796,12 +1812,16 @@ function RuleWizard({ children, onSave, onCancel, selectedType: preselectedType,
         setIndex((index) => index + 1);
     }, []);
     const { canClickSaveButton, isStepContinue } = (0,react.useMemo)(() => {
-        const hasFilterSelection = !filterIsAutomaticallySelected;
-        const hasFilterContent = selectedFilter && filterSettings?.hasContent;
-        const hasPointsStep = !selectedFilter || !filterSettings?.hasContent || !filterSettings?.contentIncludesPoints;
-        let steps = ["type", "filter", "filtercontent", "points"];
+        const hasTypeContent = Boolean(selectedType && typeSettings?.hasContent);
+        const hasFilterSelection = !hasTypeContent && !filterIsAutomaticallySelected;
+        const hasFilterContent = Boolean(selectedFilter && filterSettings?.hasContent);
+        const hasPointsStep = !hasTypeContent && (!selectedFilter || !filterSettings?.hasContent || !filterSettings?.contentIncludesPoints);
+        let steps = ["type", "typecontent", "filter", "filtercontent", "points"];
         if (hasPreselectedType) {
             steps = steps.filter((step) => step !== "type");
+        }
+        if (!hasTypeContent) {
+            steps = steps.filter((step) => step !== "typecontent");
         }
         if (!hasFilterSelection) {
             steps = steps.filter((step) => step !== "filter");
@@ -1813,21 +1833,28 @@ function RuleWizard({ children, onSave, onCancel, selectedType: preselectedType,
             steps = steps.filter((step) => step !== "points");
         }
         const nSlides = steps.length;
-        const isLastStep = selectedType && selectedFilter && index === nSlides - 1;
+        const hasRequiredSelection = Boolean(selectedType && (selectedFilter || hasTypeContent));
+        const isLastStep = hasRequiredSelection && index === nSlides - 1;
         const isStepContinue = !isLastStep;
         const currentStep = steps[index];
+        const isTypeContentStep = currentStep === "typecontent";
         const isFilterContentStep = currentStep === "filtercontent";
         const isPointsStep = currentStep === "points";
         let isStepValid = true;
-        if (isFilterContentStep) {
+        if (isTypeContentStep) {
+            isStepValid = false;
+        }
+        else if (isFilterContentStep) {
             isStepValid = filterSettings?.hasContent ? filterSettings.isConfigValid(config) : true;
         }
         else if (isPointsStep) {
             isStepValid = typeof config.points === "number" && !isNaN(config.points) && config.points >= 0;
         }
-        const canClickSaveButton = Boolean((isLastStep || (isFilterContentStep && filterSettings?.hasContent && filterSettings?.contentRequiresSubmit)) && isStepValid);
+        const requiresSubmit = Boolean(isFilterContentStep && filterSettings?.hasContent && filterSettings.contentRequiresSubmit);
+        const canClickSaveButton = Boolean((isLastStep || requiresSubmit) && isStepValid);
         return {
             canClickSaveButton,
+            hasTypeContent,
             hasFilterSelection,
             hasFilterContent,
             hasPointsStep,
@@ -1837,7 +1864,16 @@ function RuleWizard({ children, onSave, onCancel, selectedType: preselectedType,
             isStepValid,
             nSlides,
         };
-    }, [hasPreselectedType, config, filterSettings, index, selectedFilter, selectedType, filterIsAutomaticallySelected]);
+    }, [
+        hasPreselectedType,
+        config,
+        filterSettings,
+        typeSettings,
+        index,
+        selectedFilter,
+        selectedType,
+        filterIsAutomaticallySelected,
+    ]);
     const handleBack = (0,react.useCallback)(() => {
         setIndex((index) => Math.max(0, index - 1));
     }, []);
@@ -1849,6 +1885,7 @@ function RuleWizard({ children, onSave, onCancel, selectedType: preselectedType,
         setSelectedType(undefined);
         setSelectedFilter(undefined);
         setFilterSettings(undefined);
+        setTypeSettings(undefined);
         setConfig({ points: 10 });
         onCancel();
     };
@@ -1879,6 +1916,9 @@ function RuleWizard({ children, onSave, onCancel, selectedType: preselectedType,
         children: hasPreselectedType && !selectedType ? null : (react.createElement(Slider, { index: index },
             !hasPreselectedType ? (react.createElement(Slide, null,
                 react.createElement(PlainResourceList, { resources: typesAsResources, onSelect: handleSelectedType }))) : null,
+            selectedType && typeSettings?.hasContent ? (react.createElement(Slide, { header: react.createElement(SlideHeader, { hasBack: !hasPreselectedType, onBack: handleBack, title: types.get(selectedType)?.label }) }, typeSettings.getContent({
+                type: types.get(selectedType ?? ""),
+            }))) : null,
             !filterIsAutomaticallySelected ? (react.createElement(Slide, { header: !hasPreselectedType ? (react.createElement(SlideHeader, { hasBack: !hasPreselectedType, onBack: handleBack, title: react.createElement(components_Str, { id: "chooseacondition" }), subtitle: types.get(selectedType ?? "")?.label })) : undefined },
                 react.createElement(PlainResourceList, { resources: compatibleFilters, onSelect: handleSelectedFilter }))) : null,
             selectedFilter && filterSettings?.hasContent ? (react.createElement(Slide, { header: react.createElement(SlideHeader, { hasBack: !filterIsAutomaticallySelected || !hasPreselectedType, onBack: handleBack, title: filters.get(selectedFilter)?.label }) }, filterSettings.getContent({
@@ -2644,7 +2684,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(5399)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(8917)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ 	return __webpack_exports__;
