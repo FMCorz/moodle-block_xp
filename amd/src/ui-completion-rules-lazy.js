@@ -4,7 +4,7 @@ define(["block_xp/ui-commons-lazy"],() => { return /******/ (() => { // webpackB
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 84
+/***/ 5399
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -941,6 +941,10 @@ const UnavailabilityPills = ({ availabilityInfo }) => {
             badgeType = "badge-dark";
             desc = getStr("xpplusrequired");
         }
+        else if (ai.code === "xppremiumrequired") {
+            badgeType = "badge-dark";
+            desc = "XP+ Premium";
+        }
         else if (ai.code === "alreadyused") {
             badgeType = "badge-primary";
             desc = getStr("alreadyused");
@@ -1407,6 +1411,32 @@ const CmNameContent = ({ config, setConfig, type }) => {
         react.createElement(RulePointsLimitsForm, { config: config, setConfig: setConfig, ruleType: type, filterName: "cmname" })));
 };
 
+;// ./ui/src/components/rulefilter/cmtag.tsx
+
+
+
+
+const cmtagConfigSettings = {
+    hasContent: true,
+    getContent: (props) => react.createElement(CmtagContent, { ...props }),
+    isConfigValid: (config) => typeof config.filterchar1 === "string" &&
+        config.filterchar1.trim() !== "" &&
+        typeof config?.points === "number" &&
+        !isNaN(config.points),
+    contentIncludesPoints: true,
+    contentRequiresSubmit: true,
+};
+const CmtagContent = ({ config, setConfig, type }) => {
+    return (react.createElement(react.Fragment, null,
+        react.createElement("div", { className: "xp-mb-4" },
+            react.createElement("label", { htmlFor: "xp-rule-cmtag-name", className: "xp-m-0" },
+                react.createElement(components_Str, { id: "rulefiltercmtagfield" })),
+            react.createElement(components_Input, { id: "xp-rule-cmtag-name", value: config.filterchar1 || "", onChange: (e) => setConfig({ filterchar1: e.currentTarget.value }), maxLength: 255 }),
+            react.createElement(FieldHelp, null,
+                react.createElement(components_Str, { id: "rulefiltercmtaghelp" }))),
+        react.createElement(RulePointsLimitsForm, { config: config, setConfig: setConfig, ruleType: type, filterName: "cmtag" })));
+};
+
 ;// ./ui/src/components/SectionResourceList.tsx
 
 
@@ -1497,6 +1527,7 @@ const UnknownContent = ({ filter }) => {
 
 
 
+
 const noSettings = { hasContent: false };
 const specialTypes = ["consume_content", "produce_content"];
 function getFilterContentSettings(filter) {
@@ -1505,6 +1536,9 @@ function getFilterContentSettings(filter) {
     }
     if (filter.name === "cmname") {
         return cmNameConfigSettings;
+    }
+    else if (filter.name === "cmtag") {
+        return cmtagConfigSettings;
     }
     else if (filter.name === "cm") {
         return cmConfigSettings;
@@ -1720,9 +1754,10 @@ function RuleWizard({ children, onSave, onCancel, selectedType: preselectedType,
         const ruleFilters = Array.from(filters.values())
             .filter((filter) => types.get(type.name)?.filters.includes(filter.name))
             .filter((filter) => {
-            if (filter.availabilityinfo?.isavailable === false &&
-                filter.availabilityinfo?.reasons.some((r) => r.code === "xpplusrequired") &&
-                !enablepromo) {
+            const isUnavailable = filter.availabilityinfo?.isavailable === false;
+            const isXpPlusRequired = filter.availabilityinfo?.reasons.some((r) => r.code === "xpplusrequired");
+            const isXpPremiumRequired = filter.availabilityinfo?.reasons.some((r) => r.code === "xppremiumrequired");
+            if (isUnavailable && isXpPlusRequired && !enablepromo && !isXpPremiumRequired) {
                 return false;
             }
             return true;
@@ -2609,7 +2644,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(84)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(5399)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ 	return __webpack_exports__;
