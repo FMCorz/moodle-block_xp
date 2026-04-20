@@ -509,6 +509,7 @@ $string['previewpopupnotification'] = 'Preview notification';
 $string['privacy:path:addon'] = 'Add-on';
 $string['privacy:path:level'] = 'Level';
 $string['privacy:path:logs'] = 'Logs';
+$string['privacy:path:userflags'] = 'User flags';
 $string['privacy:metadata:log'] = 'Stores a log of events';
 $string['privacy:metadata:logs'] = 'Stores log of points';
 $string['privacy:metadata:log:eventname'] = 'The event name';
