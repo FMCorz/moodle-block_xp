@@ -76,7 +76,7 @@ class filter_mediator {
      * @return string[]
      */
     protected function get_cm_filter_names(profile $profile): array {
-        return ['cm', 'cmname', 'anycm'];
+        return ['cm', 'cmname', 'cmtag', 'anycm'];
     }
 
     /**

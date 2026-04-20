@@ -149,6 +149,7 @@ class default_handler implements handler {
             // Course modules.
             'cm' => 9000,
             'cmname' => 2000,
+            'cmtag' => 1000,
 
             // Sections.
             'section' => 1000,

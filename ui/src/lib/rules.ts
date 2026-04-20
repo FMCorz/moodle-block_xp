@@ -2,6 +2,7 @@ import { UseQueryResult } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { cmConfigSettings } from "../components/rulefilter/cm";
 import { cmNameConfigSettings } from "../components/rulefilter/cmname";
+import { cmtagConfigSettings } from "../components/rulefilter/cmtag";
 import { sectionConfigSettings } from "../components/rulefilter/section";
 import { getUnavailableConfigSettings } from "../components/rulefilter/unavailable";
 import { getUnknownConfigSettings } from "../components/rulefilter/unknown";
@@ -18,6 +19,8 @@ export function getFilterContentSettings(filter: RuleFilter): RuleFilterConfigSe
   }
   if (filter.name === "cmname") {
     return cmNameConfigSettings;
+  } else if (filter.name === "cmtag") {
+    return cmtagConfigSettings;
   } else if (filter.name === "cm") {
     return cmConfigSettings;
   } else if (filter.name === "section") {
