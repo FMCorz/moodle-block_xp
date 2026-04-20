@@ -2,11 +2,12 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from "re
 import { AddonContext, RulesSetupContext } from "../lib/contexts";
 import { useStrings } from "../lib/hooks";
 import { getFilterContentSettings, getTypeThemeColor } from "../lib/rules";
-import { RuleConfig, RuleFilter, RuleFilterConfigSettings, RuleType } from "../lib/types";
+import { RuleConfig, RuleFilter, RuleFilterConfigSettings, RuleType, RuleTypeConfigSettings } from "../lib/types";
 import { SaveCancelModal } from "./Modal";
 import { PlainResourceList } from "./ResourceList";
 import { Slide, SlideHeader, Slider } from "./Slider";
 import Str from "./Str";
+import { UnavailableContent } from "./UnavailableContent";
 import { RulePointsLimitsForm } from "./rulefilter/RulePointsLimitsForm";
 
 type RenderProps = {
@@ -16,6 +17,28 @@ type RenderProps = {
   onCancel: () => void;
   onNext: () => void;
   children: React.ReactNode;
+};
+
+const getUnavailableTypeSettings = (type: RuleType): RuleTypeConfigSettings => {
+  return {
+    hasContent: true,
+    getContent: () => <UnavailableContent availabilityInfo={type.availabilityinfo} />,
+  };
+};
+
+const shouldDisplayResource = (
+  availabilityInfo: RuleType["availabilityinfo"] | RuleFilter["availabilityinfo"],
+  enablepromo: boolean,
+) => {
+  const isUnavailable = availabilityInfo?.isavailable === false;
+  const isXpPlusRequired = availabilityInfo?.reasons.some((r) => r.code === "xpplusrequired");
+  const isXpPremiumRequired = availabilityInfo?.reasons.some((r) => r.code === "xppremiumrequired");
+
+  if (isUnavailable && isXpPlusRequired && !enablepromo && !isXpPremiumRequired) {
+    return false;
+  }
+
+  return true;
 };
 
 export const AddRuleModal = ({
@@ -94,31 +117,26 @@ function RuleWizard({
   const [selectedFilter, setSelectedFilter] = useState<string>();
   const [compatibleFilters, setCompatibleFilters] = useState<RuleFilter[]>([]);
   const [filterSettings, setFilterSettings] = useState<RuleFilterConfigSettings>();
+  const [typeSettings, setTypeSettings] = useState<RuleTypeConfigSettings>();
   const [config, setConfig] = useState<RuleConfig>({ points: 10 });
   const filterIsAutomaticallySelected = compatibleFilters.length === 1 && autoSelectFilter;
 
   const typesAsResources = useMemo(
     () =>
       Array.from(types.values())
+        .filter((type) => shouldDisplayResource(type.availabilityinfo, enablepromo))
         .sort((a, b) => a.label.localeCompare(b.label))
         .map((type) => ({ ...type, themecolor: getTypeThemeColor(type) })),
-    [types],
+    [types, enablepromo],
   );
   const hasPreselectedType = Boolean(preselectedType) && types.has(preselectedType!);
 
   const handleSelectedType = useCallback(
     (type: RuleType) => {
+      const typeIsAvailable = type.availabilityinfo?.isavailable ?? true;
       const ruleFilters = Array.from(filters.values())
         .filter((filter) => types.get(type.name)?.filters.includes(filter.name))
-        .filter((filter) => {
-          const isUnavailable = filter.availabilityinfo?.isavailable === false;
-          const isXpPlusRequired = filter.availabilityinfo?.reasons.some((r) => r.code === "xpplusrequired");
-          const isXpPremiumRequired = filter.availabilityinfo?.reasons.some((r) => r.code === "xppremiumrequired");
-          if (isUnavailable && isXpPlusRequired && !enablepromo && !isXpPremiumRequired) {
-            return false;
-          }
-          return true;
-        })
+        .filter((filter) => shouldDisplayResource(filter.availabilityinfo, enablepromo))
         .map((filter) => {
           if (!filter.ismultipleallowed && filtersUsageByType.get(type.name)?.includes(filter.name)) {
             return {
@@ -140,11 +158,12 @@ function RuleWizard({
 
       setCompatibleFilters(ruleFilters);
       setSelectedType(type.name);
+      setTypeSettings(!typeIsAvailable ? getUnavailableTypeSettings(type) : undefined);
       const filterToSelect = filterIsAutomaticallySelected ? ruleFilters[0] : null;
 
       // Code here is mostly a copy of handleSelectedFilter!
-      setSelectedFilter(filterToSelect ? filterToSelect.name : undefined);
-      setFilterSettings(filterToSelect ? getFilterContentSettings(filterToSelect) : undefined);
+      setSelectedFilter(typeIsAvailable && filterToSelect ? filterToSelect.name : undefined);
+      setFilterSettings(typeIsAvailable && filterToSelect ? getFilterContentSettings(filterToSelect) : undefined);
       setConfig({ points: 10 });
       setIndex(hasPreselectedType ? 0 : 1);
     },
@@ -159,13 +178,18 @@ function RuleWizard({
   }, []);
 
   const { canClickSaveButton, isStepContinue } = useMemo(() => {
-    const hasFilterSelection = !filterIsAutomaticallySelected;
-    const hasFilterContent = selectedFilter && filterSettings?.hasContent;
-    const hasPointsStep = !selectedFilter || !filterSettings?.hasContent || !filterSettings?.contentIncludesPoints;
+    const hasTypeContent = Boolean(selectedType && typeSettings?.hasContent);
+    const hasFilterSelection = !hasTypeContent && !filterIsAutomaticallySelected;
+    const hasFilterContent = Boolean(selectedFilter && filterSettings?.hasContent);
+    const hasPointsStep =
+      !hasTypeContent && (!selectedFilter || !filterSettings?.hasContent || !filterSettings?.contentIncludesPoints);
 
-    let steps = ["type", "filter", "filtercontent", "points"];
+    let steps = ["type", "typecontent", "filter", "filtercontent", "points"];
     if (hasPreselectedType) {
       steps = steps.filter((step) => step !== "type");
+    }
+    if (!hasTypeContent) {
+      steps = steps.filter((step) => step !== "typecontent");
     }
     if (!hasFilterSelection) {
       steps = steps.filter((step) => step !== "filter");
@@ -178,26 +202,30 @@ function RuleWizard({
     }
 
     const nSlides = steps.length;
-    const isLastStep = selectedType && selectedFilter && index === nSlides - 1;
+    const hasRequiredSelection = Boolean(selectedType && (selectedFilter || hasTypeContent));
+    const isLastStep = hasRequiredSelection && index === nSlides - 1;
     const isStepContinue = !isLastStep;
 
     const currentStep = steps[index];
+    const isTypeContentStep = currentStep === "typecontent";
     const isFilterContentStep = currentStep === "filtercontent";
     const isPointsStep = currentStep === "points";
 
     let isStepValid = true;
-    if (isFilterContentStep) {
+    if (isTypeContentStep) {
+      isStepValid = false;
+    } else if (isFilterContentStep) {
       isStepValid = filterSettings?.hasContent ? filterSettings.isConfigValid(config) : true;
     } else if (isPointsStep) {
       isStepValid = typeof config.points === "number" && !isNaN(config.points) && config.points >= 0;
     }
 
-    const canClickSaveButton = Boolean(
-      (isLastStep || (isFilterContentStep && filterSettings?.hasContent && filterSettings?.contentRequiresSubmit)) && isStepValid,
-    );
+    const requiresSubmit = Boolean(isFilterContentStep && filterSettings?.hasContent && filterSettings.contentRequiresSubmit);
+    const canClickSaveButton = Boolean((isLastStep || requiresSubmit) && isStepValid);
 
     return {
       canClickSaveButton,
+      hasTypeContent,
       hasFilterSelection,
       hasFilterContent,
       hasPointsStep,
@@ -207,7 +235,16 @@ function RuleWizard({
       isStepValid,
       nSlides,
     };
-  }, [hasPreselectedType, config, filterSettings, index, selectedFilter, selectedType, filterIsAutomaticallySelected]);
+  }, [
+    hasPreselectedType,
+    config,
+    filterSettings,
+    typeSettings,
+    index,
+    selectedFilter,
+    selectedType,
+    filterIsAutomaticallySelected,
+  ]);
 
   const handleBack = useCallback(() => {
     setIndex((index) => Math.max(0, index - 1));
@@ -222,6 +259,7 @@ function RuleWizard({
     setSelectedType(undefined);
     setSelectedFilter(undefined);
     setFilterSettings(undefined);
+    setTypeSettings(undefined);
     setConfig({ points: 10 });
     onCancel();
   };
@@ -259,6 +297,15 @@ function RuleWizard({
           {!hasPreselectedType ? (
             <Slide>
               <PlainResourceList resources={typesAsResources} onSelect={handleSelectedType} />
+            </Slide>
+          ) : null}
+          {selectedType && typeSettings?.hasContent ? (
+            <Slide
+              header={<SlideHeader hasBack={!hasPreselectedType} onBack={handleBack} title={types.get(selectedType)?.label} />}
+            >
+              {typeSettings.getContent({
+                type: types.get(selectedType ?? "")!,
+              })}
             </Slide>
           ) : null}
           {!filterIsAutomaticallySelected ? (

@@ -202,6 +202,19 @@ export type RuleFilterConfigSettings =
       hasContent: false;
     };
 
+export type RuleTypeConfigSettingsContentProps = {
+  type: RuleType;
+};
+
+export type RuleTypeConfigSettings =
+  | {
+      hasContent: true;
+      getContent: (props: RuleTypeConfigSettingsContentProps) => JSX.Element;
+    }
+  | {
+      hasContent: false;
+    };
+
 /**
  * Moodle modules.
  *
