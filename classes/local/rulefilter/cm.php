@@ -52,11 +52,22 @@ class cm implements rulefilter {
         if (!$context) {
             return get_string('unknownactivitya', 'block_xp', $cmid);
         }
+
         $coursecontext = $context->get_course_context(false);
-        $modinfo = get_fast_modinfo($coursecontext->instanceid);
-        $cminfo = $modinfo->get_cm($cmid);
-        $modname = $cminfo->get_module_type_name();
-        return "{$cminfo->name} ({$modname})";
+        if (!$coursecontext) {
+            return get_string('unknownactivitya', 'block_xp', $cmid);
+        }
+
+        try {
+            $modinfo = get_fast_modinfo($coursecontext->instanceid);
+            $cminfo = $modinfo->get_cm($cmid);
+            $modname = $cminfo->get_module_type_name();
+            return "{$cminfo->name} ({$modname})";
+        } catch (\Exception $e) {
+            unset($e);
+        }
+
+        return get_string('unknownactivitya', 'block_xp', $cmid);
     }
 
     public function is_compatible_with_admin(): bool {
