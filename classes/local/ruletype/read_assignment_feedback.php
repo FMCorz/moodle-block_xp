@@ -63,6 +63,10 @@ class read_assignment_feedback implements
     }
 
     public function get_icon(): ?icon {
+        global $CFG;
+        if ($CFG->branch <= 401) {
+            return new fa_icon('envelope-open');
+        }
         return new fa_icon('envelope-open-text');
     }
 
