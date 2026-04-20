@@ -6,6 +6,7 @@ xp-hidden
 xp-items-center
 xp-justify-center
 xp-m-0
+last:[&_p]:xp-m-0
 xp-mb-2
 xp-mb-4
 xp-mb-6
