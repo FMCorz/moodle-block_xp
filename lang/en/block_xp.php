@@ -493,6 +493,8 @@ $string['pluginavailabilityxpdesc'] = 'This plugin lets instructors restrict acc
 $string['pluginenrolxpdesc'] = 'This plugin enables automatic enrolment into courses based on a student\'s level in another course.';
 $string['pluginshortcodesdesc'] = 'This plugin lets instructors customise their material by including XP related elements (points, level, leaderboard, …) in the content, as well as hiding or showing content based on a student\'s level.';
 $string['pluginname'] = 'Level Up XP';
+$string['pluginnotenabled'] = 'The plugin \'{$a->name}\' ({$a->component}) is not enabled.';
+$string['pluginoutdated'] = 'The plugin \'{$a->name}\' ({$a->component}) is outdated, the version \'{$a->release}\' is required.';
 $string['pluginshortcodesrequiredtousefeature'] = 'The plugin [Shortcodes](https://docs.levelup.plus/xp/docs/getting-started/installation/recommended-plugins) must be installed and enabled to use this feature.';
 $string['pluginsoutofsync'] = '__XP plugins incompatibility!__
 
@@ -606,6 +608,7 @@ $string['repetitionlimitset'] = 'Repetition limit set';
 $string['repetitiontimeframe'] = 'Repetition time frame';
 $string['reportisempty'] = 'The report is empty, student have yet to earn points.';
 $string['reportisemptyenrolstudents'] = 'The report is empty, have students been enrolled in this course?';
+$string['requiresplugin'] = 'Requires the plugin \'{$a->name}\' ({$a->component}).';
 $string['resetcoursedata'] = 'Reset course data';
 $string['resetallcoursestodefaults'] = 'Reset all courses to defaults';
 $string['resetallcoursestodefaultsintro'] = 'Click the button below to reset all courses to the above defaults.';
