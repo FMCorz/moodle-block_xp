@@ -111,11 +111,10 @@ function RuleWizard({
       const ruleFilters = Array.from(filters.values())
         .filter((filter) => types.get(type.name)?.filters.includes(filter.name))
         .filter((filter) => {
-          if (
-            filter.availabilityinfo?.isavailable === false &&
-            filter.availabilityinfo?.reasons.some((r) => r.code === "xpplusrequired") &&
-            !enablepromo
-          ) {
+          const isUnavailable = filter.availabilityinfo?.isavailable === false;
+          const isXpPlusRequired = filter.availabilityinfo?.reasons.some((r) => r.code === "xpplusrequired");
+          const isXpPremiumRequired = filter.availabilityinfo?.reasons.some((r) => r.code === "xppremiumrequired");
+          if (isUnavailable && isXpPlusRequired && !enablepromo && !isXpPremiumRequired) {
             return false;
           }
           return true;

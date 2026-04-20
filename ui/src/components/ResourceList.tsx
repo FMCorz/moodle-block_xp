@@ -1,9 +1,9 @@
 import React, { ReactNode } from "react";
-import { useRoleButtonListeners, useString, useStrings, useUniqueId } from "../lib/hooks";
+import { useRoleButtonListeners, useStrings, useUniqueId } from "../lib/hooks";
 import { AvailabilityInfo, Icon, Resource } from "../lib/types";
 import { classNames } from "../lib/utils";
-import Str from "./Str";
 import { IconRenderer } from "./Icons";
+import Str from "./Str";
 
 type ResourceListProps<T extends Resource> = { resources: T[]; onSelect?: (r: T) => void };
 
@@ -17,6 +17,9 @@ const UnavailabilityPills = ({ availabilityInfo }: { availabilityInfo: Availabil
         if (ai.code === "xpplusrequired") {
           badgeType = "badge-dark";
           desc = getStr("xpplusrequired");
+        } else if (ai.code === "xppremiumrequired") {
+          badgeType = "badge-dark";
+          desc = "XP+ Premium";
         } else if (ai.code === "alreadyused") {
           badgeType = "badge-primary";
           desc = getStr("alreadyused");
@@ -82,7 +85,7 @@ const ListEntryItem = ({
             <div
               className={classNames(
                 description ? "xp-w-14 xp-h-14 xp-text-2xl" : "xp-w-8 xp-h-8 xp-text-base",
-                "xp-rounded-lg xp-flex xp-text-center xp-items-center xp-justify-center xp-text-white xp-bg-indigo-500"
+                "xp-rounded-lg xp-flex xp-text-center xp-items-center xp-justify-center xp-text-white xp-bg-indigo-500",
               )}
               style={{ color: themeFgColor, background: themeBgColor }}
             >
@@ -96,7 +99,7 @@ const ListEntryItem = ({
               className={classNames(
                 disabledOpacityClass,
                 "xp-text-medium",
-                description ? "xp-text-xl xp-leading-tight" : "xp-text-base"
+                description ? "xp-text-xl xp-leading-tight" : "xp-text-base",
               )}
             >
               {label}

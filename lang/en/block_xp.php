@@ -891,6 +891,7 @@ $string['xp:viewlogs'] = 'View the logs';
 $string['xp:viewreport'] = 'View the report';
 $string['xpplusrequired'] = 'XP+ required';
 $string['xpgaindisabled'] = 'Points gain disabled';
+$string['xppremiumrequired'] = 'XP+ Premium required';
 $string['youleveledupexcl'] = 'You levelled up!';
 $string['youreachedlevel'] = 'You have reached the level:';
 $string['youreachedlevela'] = 'You have reached level {$a}!';
