@@ -69,8 +69,7 @@ class read_assignment_feedback implements
     public function get_repeat_limit_options(): array {
         return [
             (new repeat_option(limit_spec::SCOPE_ENV))
-                ->set_once_label(new lang_string('onceperassignment', 'block_xp'))
-                ->set_incompatible_inside_cm(),
+                ->set_once_label(new lang_string('onceperassignment', 'block_xp')),
         ];
     }
 

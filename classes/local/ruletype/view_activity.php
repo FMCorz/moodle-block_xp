@@ -63,8 +63,7 @@ class view_activity implements ruletype, ruletype_with_goal, ruletype_with_limit
     public function get_repeat_limit_options(): array {
         return [
             (new repeat_option(limit_spec::SCOPE_ENV))
-                ->set_once_label(new lang_string('onceperactivity', 'block_xp'))
-                ->set_incompatible_inside_cm(),
+                ->set_once_label(new lang_string('onceperactivity', 'block_xp')),
         ];
     }
 
