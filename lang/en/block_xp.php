@@ -543,7 +543,7 @@ $string['promointro'] = 'Become the game master! Unlock additional features and 
 $string['promointroinstalled'] = 'The add-on _Level Up XP+_ is installed on your system and all of its features have been enabled.';
 $string['promorulesdidyouknow'] = 'Did you know that with <em>Level Up XP+</em> students can receive points for <em>completing courses</em> and <em>activities</em>, or even receive points according to their <em>grades</em>? <a href="{$a->url}">Discover more here</a>.';
 $string['provisionstates'] = 'Automatic user provisioning';
-$string['provisionstates_desc'] = 'By default, users only appear in the leaderboard (and the report in sitewide mode), after they have been detected by XP. User provisioning is an advanced feature that automatically creates entries for missing users loosely identified by their role. This is done periodically via a scheduled task that runs daily by default. [Learn mode](https://docs.levelup.plus/xp/docs/automatic-user-provisioning)';
+$string['provisionstates_desc'] = 'By default, users only appear in the leaderboard (and the report in sitewide mode), after they have been detected by XP. User provisioning is an advanced feature that automatically creates entries for missing users loosely identified by their role. This is done periodically via a scheduled task that runs daily by default. [Learn more](https://docs.levelup.plus/xp/docs/automatic-user-provisioning)';
 $string['questpromonotice'] = 'Take gamification to the next level, discover [Level Up Quest]({$a->questurl}).';
 $string['quickeditpoints'] = 'Quick edit points';
 $string['rank'] = 'Rank';
