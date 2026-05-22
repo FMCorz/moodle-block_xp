@@ -29,6 +29,7 @@ namespace block_xp\local\controller;
 
 use block_xp\di;
 use block_xp\local\routing\url;
+use block_xp\local\utils\user_utils;
 use block_xp\output\log_table_filterset;
 use core_table\local\filter\filterset;
 use core_table\local\filter\string_filter;
@@ -154,7 +155,9 @@ class log_controller extends page_controller {
     protected function get_user_id() {
         if ($this->userid === null) {
             $userid = $this->get_param('userid');
-            if (!$userid || $userid <= 0 || isguestuser($userid)) {
+            if (!$userid || $userid <= 0) {
+                $userid = 0;
+            } else if (!user_utils::is_valid_target($this->world->get_context(), $userid)) {
                 $userid = 0;
             }
             $this->userid = $userid;

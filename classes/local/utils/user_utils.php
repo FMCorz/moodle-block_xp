@@ -28,6 +28,7 @@
 namespace block_xp\local\utils;
 
 use block_xp\di;
+use block_xp\local\xp\state_store_with_presence;
 use context_course;
 use stdClass;
 
@@ -139,6 +140,43 @@ class user_utils {
         }
 
         return \core_date::get_user_timezone_object($user);
+    }
+
+    /**
+     * Whether a user is a valid target.
+     *
+     * This does not validate the world permissions of the acting user.
+     *
+     * @param \context $context The context.
+     * @param int $targetuserid The target user ID.
+     * @return bool
+     */
+    public static function is_valid_target(\context $context, $targetuserid) {
+        if (!$targetuserid) {
+            return false;
+        } else if (!\core_user::is_real_user($targetuserid)) {
+            return false;
+        } else if (isguestuser($targetuserid)) {
+            return false;
+        }
+
+        // Test whether the user can earn points, or already has a state entry.
+        if (!self::can_earn_points($context, $targetuserid)) {
+            $world = di::get('context_world_factory')->get_world_from_context($context);
+            $store = $world->get_store();
+            $stateexists = $store instanceof state_store_with_presence && $store->has($targetuserid);
+            if (!$stateexists) {
+                return false;
+            }
+        }
+
+        $coursecontext = $context->get_course_context(false);
+        if (!$coursecontext || $coursecontext->instanceid == SITEID) {
+            return true;
+        }
+
+        $course = get_fast_modinfo($coursecontext->instanceid)->get_course();
+        return groups_user_groups_visible($course, $targetuserid);
     }
 
     /**
