@@ -122,6 +122,76 @@ class user_utils {
     }
 
     /**
+     * Get SQL to filter users by a name search term.
+     *
+     * The identity fields argument is reserved for future support.
+     *
+     * @param string $term The term.
+     * @param array $allowedidentityfields The identity fields that are allowed to be used.
+     * @param string $tablealias The user table alias.
+     * @return array SQL where fragment and parameters.
+     */
+    public static function get_filter_user_by_term_sql(string $term, array $allowedidentityfields = [], string $tablealias = 'u') {
+        global $DB;
+
+        $term = trim($term);
+        if (empty($term)) {
+            return ['1=1', []];
+        }
+
+        static $paramn = 0;
+        $makeparam = static function (string $prefix) use (&$paramn) {
+            return $prefix . $paramn++;
+        };
+
+        $wheres = [];
+        $params = [];
+
+        $tableprefix = $tablealias ? $tablealias . '.' : '';
+        $nameoptions = [
+            ['firstname' => $term],
+            ['lastname' => $term],
+        ];
+        $nameparts = preg_split('/\s+/', $term);
+        if (count($nameparts) > 1) {
+            for ($i = 0; $i < count($nameparts) - 1; $i++) {
+                $nameoptions[] = [
+                    'firstname' => implode(' ', array_slice($nameparts, 0, $i + 1)),
+                    'lastname' => implode(' ', array_slice($nameparts, $i + 1)),
+                ];
+                $nameoptions[] = [
+                    'firstname' => implode(' ', array_slice($nameparts, $i + 1)),
+                    'lastname' => implode(' ', array_slice($nameparts, 0, $i + 1)),
+                ];
+            }
+        }
+        foreach ($nameoptions as $option) {
+            $subparams = [];
+            $subsql = [];
+            if (!empty($option['firstname'])) {
+                $paramname = $makeparam('usertermfn');
+                $subsql[] = $DB->sql_like("{$tableprefix}firstname", ':' . $paramname, false, false);
+                $subparams[$paramname] = $DB->sql_like_escape($option['firstname']) . '%';
+            }
+            if (!empty($option['lastname'])) {
+                $paramname = $makeparam('usertermln');
+                $subsql[] = $DB->sql_like("{$tableprefix}lastname", ':' . $paramname, false, false);
+                $subparams[$paramname] = $DB->sql_like_escape($option['lastname']) . '%';
+            }
+            if (!empty($subsql)) {
+                $wheres[] = '(' . implode(' AND ', $subsql) . ')';
+                $params = array_merge($params, $subparams);
+            }
+        }
+
+        if (empty($wheres)) {
+            return ['1=1', []];
+        }
+
+        return ['((' . implode(') OR (', $wheres) . '))', $params];
+    }
+
+    /**
      * Get a user's primary group ID.
      *
      * This is useful when attempting to determine the primary group of a user
