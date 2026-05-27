@@ -77,6 +77,7 @@ class search_courses extends external_api {
         ) {
 
             array_unshift($courses, array_merge((array) $SITE, [
+                'categoryid' => $SITE->category,
                 'fullname' => $sitehome,
                 'displayname' => $sitehome,
             ]));
