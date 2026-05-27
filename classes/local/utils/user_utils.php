@@ -30,6 +30,7 @@ namespace block_xp\local\utils;
 use block_xp\di;
 use block_xp\local\xp\state_store_with_presence;
 use context_course;
+use core_text;
 use stdClass;
 
 /**
@@ -122,9 +123,7 @@ class user_utils {
     }
 
     /**
-     * Get SQL to filter users by a name search term.
-     *
-     * The identity fields argument is reserved for future support.
+     * Get SQL to filter users by a search term.
      *
      * @param string $term The term.
      * @param array $allowedidentityfields The identity fields that are allowed to be used.
@@ -144,51 +143,85 @@ class user_utils {
             return $prefix . $paramn++;
         };
 
-        $wheres = [];
+        $parts = ['1=0'];
         $params = [];
 
         $tableprefix = $tablealias ? $tablealias . '.' : '';
-        $nameoptions = [
-            ['firstname' => $term],
-            ['lastname' => $term],
-        ];
-        $nameparts = preg_split('/\s+/', $term);
-        if (count($nameparts) > 1) {
-            for ($i = 0; $i < count($nameparts) - 1; $i++) {
-                $nameoptions[] = [
-                    'firstname' => implode(' ', array_slice($nameparts, 0, $i + 1)),
-                    'lastname' => implode(' ', array_slice($nameparts, $i + 1)),
-                ];
-                $nameoptions[] = [
-                    'firstname' => implode(' ', array_slice($nameparts, $i + 1)),
-                    'lastname' => implode(' ', array_slice($nameparts, 0, $i + 1)),
-                ];
+        $termlength = core_text::strlen($term);
+        $isemail = (bool) preg_match('#^[^\s@]+@[^\s@]+$#', $term);
+        $hasspace = (bool) preg_match('/\s/', $term);
+
+        // Filter by name.
+        if (!$isemail) {
+            $nameoptions = [
+                ['firstname' => $term],
+                ['lastname' => $term],
+            ];
+            $nameparts = preg_split('/\s+/', $term);
+            if (count($nameparts) > 1) {
+                for ($i = 0; $i < count($nameparts) - 1; $i++) {
+                    $nameoptions[] = [
+                        'firstname' => implode(' ', array_slice($nameparts, 0, $i + 1)),
+                        'lastname' => implode(' ', array_slice($nameparts, $i + 1)),
+                    ];
+                    $nameoptions[] = [
+                        'firstname' => implode(' ', array_slice($nameparts, $i + 1)),
+                        'lastname' => implode(' ', array_slice($nameparts, 0, $i + 1)),
+                    ];
+                }
             }
-        }
-        foreach ($nameoptions as $option) {
-            $subparams = [];
-            $subsql = [];
-            if (!empty($option['firstname'])) {
-                $paramname = $makeparam('usertermfn');
-                $subsql[] = $DB->sql_like("{$tableprefix}firstname", ':' . $paramname, false, false);
-                $subparams[$paramname] = $DB->sql_like_escape($option['firstname']) . '%';
-            }
-            if (!empty($option['lastname'])) {
-                $paramname = $makeparam('usertermln');
-                $subsql[] = $DB->sql_like("{$tableprefix}lastname", ':' . $paramname, false, false);
-                $subparams[$paramname] = $DB->sql_like_escape($option['lastname']) . '%';
-            }
-            if (!empty($subsql)) {
-                $wheres[] = '(' . implode(' AND ', $subsql) . ')';
-                $params = array_merge($params, $subparams);
+            foreach ($nameoptions as $option) {
+                $subparams = [];
+                $subsql = [];
+                if (!empty($option['firstname'])) {
+                    $paramname = $makeparam('usertermfn');
+                    $subsql[] = $DB->sql_like("{$tableprefix}firstname", ':' . $paramname, false, false);
+                    $subparams[$paramname] = $DB->sql_like_escape($option['firstname']) . '%';
+                }
+                if (!empty($option['lastname'])) {
+                    $paramname = $makeparam('usertermln');
+                    $subsql[] = $DB->sql_like("{$tableprefix}lastname", ':' . $paramname, false, false);
+                    $subparams[$paramname] = $DB->sql_like_escape($option['lastname']) . '%';
+                }
+                if (!empty($subsql)) {
+                    $parts[] = '(' . implode(' AND ', $subsql) . ')';
+                    $params = array_merge($params, $subparams);
+                }
             }
         }
 
-        if (empty($wheres)) {
-            return ['1=1', []];
+        // Filter email.
+        if (in_array('email', $allowedidentityfields, true) && $isemail) {
+            $paramname = $makeparam('usertermemail');
+            $parts[] = "{$tableprefix}email = :$paramname";
+            $params[$paramname] = $term;
         }
 
-        return ['((' . implode(') OR (', $wheres) . '))', $params];
+        // Filter ID number.
+        if (in_array('idnumber', $allowedidentityfields, true)) {
+            $paramname = $makeparam('usertermidnumber');
+            if ($termlength > 2) {
+                $parts[] = $DB->sql_like("{$tableprefix}idnumber", ':' . $paramname, false, false);
+                $params[$paramname] = $DB->sql_like_escape($term) . '%';
+            } else {
+                $parts[] = "{$tableprefix}idnumber = :$paramname";
+                $params[$paramname] = $term;
+            }
+        }
+
+        // Filter username.
+        if (in_array('username', $allowedidentityfields, true) && !$hasspace) {
+            $paramname = $makeparam('usertermusername');
+            if ($termlength > 2) {
+                $parts[] = $DB->sql_like("{$tableprefix}username", ':' . $paramname, false, false);
+                $params[$paramname] = $DB->sql_like_escape($term) . '%';
+            } else {
+                $parts[] = "{$tableprefix}username = :$paramname";
+                $params[$paramname] = $term;
+            }
+        }
+
+        return ['((' . implode(') OR (', $parts) . '))', $params];
     }
 
     /**
@@ -243,6 +276,20 @@ class user_utils {
         }
 
         return \core_date::get_user_timezone_object($user);
+    }
+
+    /**
+     * Get visible identity fields in the supplied context.
+     *
+     * @param \context $context The context.
+     * @return array Field names.
+     */
+    public static function get_visible_identity_fields(\context $context): array {
+        return array_values(array_intersect(\core_user\fields::get_identity_fields($context, false), [
+            'username',
+            'idnumber',
+            'email',
+        ]));
     }
 
     /**
