@@ -28,6 +28,7 @@
 namespace block_xp\local\utils;
 
 use block_xp\di;
+use block_xp\local\group\group_policy;
 use block_xp\local\xp\state_store_with_presence;
 use context_course;
 use core_text;
@@ -79,38 +80,6 @@ class user_utils {
         } catch (\moodle_exception $e) {
             return false;
         }
-    }
-
-    /**
-     * Whether a user can view another user.
-     *
-     * Applies the group visibility restriction in a context.
-     *
-     * @param \context $context The context.
-     * @param int $targetuserid The target user ID.
-     * @param int $actinguserid The acting user ID.
-     * @return bool
-     */
-    protected static function can_view_user_in_context(\context $context, $targetuserid, $actinguserid) {
-        $coursecontext = $context->get_course_context(false);
-        if (!$coursecontext || $coursecontext->instanceid == SITEID) {
-            return true;
-        }
-
-        $course = get_fast_modinfo($coursecontext->instanceid)->get_course();
-        $groupmode = groups_get_course_groupmode($course);
-        if ($groupmode == NOGROUPS || $groupmode == VISIBLEGROUPS) {
-            return true;
-        }
-
-        if (has_capability('moodle/site:accessallgroups', $coursecontext, $actinguserid)) {
-            return true;
-        }
-
-        $usergroups = groups_get_all_groups($course->id, $targetuserid);
-        $actingusergroups = groups_get_all_groups($course->id, $actinguserid);
-        $samegroups = array_intersect_key($actingusergroups, $usergroups);
-        return !empty($samegroups);
     }
 
     /**
@@ -295,7 +264,10 @@ class user_utils {
     /**
      * Whether a user is a valid target.
      *
-     * This does not validate the world permissions of the acting user.
+     * This does not validate the world permissions of the acting user. But we only expect
+     * managers and users to with staff-like access to "target" users.
+     *
+     * The result may be unexpected when using non-existant user IDs.
      *
      * @param \context $context The context.
      * @param int $targetuserid The target user ID.
@@ -303,8 +275,6 @@ class user_utils {
      * @return bool
      */
     public static function is_valid_target(\context $context, $targetuserid, ?int $actinguserid = null) {
-        global $USER;
-
         if (!$targetuserid) {
             return false;
         } else if (!\core_user::is_real_user($targetuserid)) {
@@ -313,7 +283,8 @@ class user_utils {
             return false;
         }
 
-        // Test whether the user can earn points, or already has a state entry.
+        // Test whether the user can earn points, or already has a state entry. A manager that can create rules can
+        // have users surface by giving them points. And if they cannot but have a state, they are surfaced.
         if (!self::can_earn_points($context, $targetuserid)) {
             $world = di::get('context_world_factory')->get_world_from_context($context);
             $store = $world->get_store();
@@ -324,9 +295,9 @@ class user_utils {
             }
         }
 
-        // Finally check that we're allowed to view the user.
-        $actinguserid = $actinguserid ?? $USER->id;
-        return self::can_view_user_in_context($context, $targetuserid, $actinguserid);
+        // Validate that the users can be seen through the group policy.
+        $grouppolicy = group_policy::from_context($context);
+        return $grouppolicy->can_see_user($targetuserid, $actinguserid);
     }
 
     /**

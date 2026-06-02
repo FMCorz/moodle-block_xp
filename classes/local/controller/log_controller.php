@@ -29,6 +29,7 @@ namespace block_xp\local\controller;
 
 use block_xp\di;
 use block_xp\local\routing\url;
+use block_xp\local\utils\user_utils;
 use block_xp\output\log_table_filterset;
 use core_table\local\filter\filterset;
 use core_table\local\filter\string_filter;
@@ -54,8 +55,6 @@ class log_controller extends page_controller {
     /** @var bool Whether supports groups. */
     protected $supportsgroups = true;
 
-    /** @var bool Whether we're using an old XP+. */
-    protected $isusingoldxpp = false;
     /** @var int|null The user ID to filter the logs for. Use {@see self::get_user_id} to obtain. */
     protected $userid = null;
 
@@ -72,13 +71,6 @@ class log_controller extends page_controller {
             ['userid', null, PARAM_INT],
             ['term', null, PARAM_NOTAGS],
         ];
-    }
-
-    protected function post_login() {
-        parent::post_login();
-
-        $addon = di::get('addon');
-        $this->isusingoldxpp = $addon->is_older_than(2024090500);
     }
 
     protected function get_table() {
@@ -125,7 +117,9 @@ class log_controller extends page_controller {
     protected function get_user_id() {
         if ($this->userid === null) {
             $userid = $this->get_param('userid');
-            if (!$userid || $userid <= 0 || isguestuser($userid)) {
+            if (!$userid || $userid <= 0) {
+                $userid = 0;
+            } else if (!user_utils::is_valid_target($this->world->get_context(), $userid)) {
                 $userid = 0;
             }
             $this->userid = $userid;
@@ -159,8 +153,6 @@ class log_controller extends page_controller {
     }
 
     protected function page_content() {
-        global $PAGE;
-
         $userid = $this->get_user_id();
         $singleuser = (bool) $userid;
 
@@ -178,7 +170,7 @@ class log_controller extends page_controller {
 
         // Displaying the report.
         echo html_writer::start_div('xp-cancel-overflow');
-        echo $this->get_table()->out(50, !$singleuser && $this->isusingoldxpp);
+        echo $this->get_table()->out(50, false);
         echo html_writer::end_div();
     }
 
@@ -197,7 +189,7 @@ class log_controller extends page_controller {
     }
 
     protected function page_user_filter() {
-        if ($this->isusingoldxpp || $this->get_user_id()) {
+        if ($this->get_user_id()) {
             return null;
         }
 

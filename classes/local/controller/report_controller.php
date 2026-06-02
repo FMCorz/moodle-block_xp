@@ -53,12 +53,9 @@ class report_controller extends page_controller {
     /** @var string The route name. */
     protected $routename = 'report';
 
-    /** @var bool Whether we're using an old XP+. */
-    protected $isusingoldxpp = false;
-
-    /** @var moodleform The form. */
+    /** @var \moodleform The form. */
     protected $form;
-    /** @var flexible_table The table. */
+    /** @var \flexible_table The table. */
     protected $table;
 
     protected function define_optional_params() {
@@ -81,13 +78,6 @@ class report_controller extends page_controller {
             throw new \coding_exception('Access permissions object requires report permissions.');
         }
         $accessperms->require_access_report();
-    }
-
-    protected function post_login() {
-        parent::post_login();
-
-        $addon = di::get('addon');
-        $this->isusingoldxpp = $addon->is_older_than(2024090500);
     }
 
     protected function pre_content() {
@@ -290,7 +280,7 @@ class report_controller extends page_controller {
 
         // Displaying the report.
         echo html_writer::start_div('xp-cancel-overflow'); // Else dropdown menu is cropped on some versions.
-        echo $this->get_table()->out(20, $this->isusingoldxpp);
+        echo $this->get_table()->out(20, false);
         echo html_writer::end_div();
 
         // Output the bottom actions.
@@ -303,10 +293,6 @@ class report_controller extends page_controller {
     }
 
     protected function page_user_filter() {
-        if ($this->isusingoldxpp) {
-            return null;
-        }
-
         $formfields = [];
         foreach ($this->pageurl->params() as $name => $value) {
             if ($name === 'term') {
