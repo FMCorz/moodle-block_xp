@@ -27,6 +27,7 @@
 
 namespace block_xp\local\controller;
 
+use block_xp\local\group\group_policy;
 use coding_exception;
 
 /**
@@ -52,8 +53,10 @@ abstract class course_route_controller extends route_controller {
     /** @var \block_xp\local\factory\course_world_navigation_factory The navigation factory. */
     protected $navfactory;
 
-    /** @var int The group ID. */
+    /** @var false|int The group ID. */
     private $groupid;
+    /** @var ?group_policy The group policy. */
+    private $grouppolicy;
 
     /**
      * Authentication.
@@ -61,8 +64,6 @@ abstract class course_route_controller extends route_controller {
      * @return void
      */
     protected function require_login() {
-        global $CFG;
-
         $courseid = intval($this->get_param('courseid'));
         if (!$courseid) {
             throw new coding_exception('Excepted a course ID parameter but got none.');
@@ -92,7 +93,7 @@ abstract class course_route_controller extends route_controller {
      * @return void
      */
     protected function page_setup() {
-        global $CFG, $PAGE;
+        global $PAGE;
 
         // Note that the context was set by require_login().
         $PAGE->set_url($this->pageurl->get_compatible_url());
@@ -124,9 +125,24 @@ abstract class course_route_controller extends route_controller {
             throw new coding_exception('This page is not marked as supporting groups.');
         }
         if ($this->groupid === null) {
-            $this->groupid = groups_get_course_group($this->get_course(), true);
+            $this->groupid = $this->get_group_policy()->get_current_group_id(true);
         }
         return $this->groupid;
+    }
+
+    /**
+     * Get the group policy.
+     *
+     * @return group_policy
+     */
+    final protected function get_group_policy(): group_policy {
+        if (!$this->is_supporting_groups()) {
+            throw new coding_exception('This page is not marked as supporting groups.');
+        }
+        if (!$this->grouppolicy) {
+            $this->grouppolicy = group_policy::from_course_id($this->courseid);
+        }
+        return $this->grouppolicy;
     }
 
     /**
@@ -179,7 +195,7 @@ abstract class course_route_controller extends route_controller {
         if (!$this->is_supporting_groups()) {
             throw new coding_exception('This page is not marked as supporting groups.');
         }
-        echo groups_print_course_menu($this->get_course(), $this->pageurl->get_compatible_url());
+        echo $this->get_group_policy()->get_group_menu($this->pageurl->get_compatible_url());
     }
 
 }
