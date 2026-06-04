@@ -258,6 +258,9 @@
 .block_xp .xp-mt-1 {
     margin-top: 0.25rem;
 }
+.block_xp .xp-mt-12 {
+    margin-top: 3rem;
+}
 .block_xp .xp-mt-2 {
     margin-top: 0.5rem;
 }
@@ -380,6 +383,9 @@
 }
 .block_xp .xp-min-w-px {
     min-width: 1px;
+}
+.block_xp .\!xp-max-w-none {
+    max-width: none !important;
 }
 .block_xp .xp-max-w-\[24ch\] {
     max-width: 24ch;
@@ -639,6 +645,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+.block_xp .\!xp-whitespace-nowrap {
+    white-space: nowrap !important;
 }
 .block_xp .xp-whitespace-nowrap {
     white-space: nowrap;

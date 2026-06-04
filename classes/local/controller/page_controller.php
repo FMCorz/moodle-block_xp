@@ -276,4 +276,20 @@ abstract class page_controller extends course_route_controller {
      */
     abstract protected function page_content();
 
+
+    /**
+     * Footer.
+     *
+     * @return void
+     */
+    final protected function footer() {
+        $world = $this->world;
+        $accessperms = $world->get_access_permissions();
+        $canmanageish = $accessperms->can_manage()
+            || ($accessperms instanceof \block_xp\local\permission\access_logs_permissions && $accessperms->can_access_logs())
+            || ($accessperms instanceof \block_xp\local\permission\access_report_permissions && $accessperms->can_access_report());
+        if ($canmanageish) {
+            echo $this->get_renderer()->render_from_template('block_xp/xp-footer', []);
+        }
+    }
 }

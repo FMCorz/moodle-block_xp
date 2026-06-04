@@ -99,4 +99,13 @@ abstract class admin_route_controller extends route_controller {
             '<a><em><strong>'
         ), \core\output\notification::NOTIFY_WARNING);
     }
+
+    /**
+     * Footer.
+     *
+     * @return void
+     */
+    final protected function footer() {
+        echo $this->get_renderer()->render_from_template('block_xp/xp-footer', []);
+    }
 }

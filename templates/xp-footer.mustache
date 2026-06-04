@@ -1,0 +1,509 @@
+{{!
+    This file is part of Level Up XP.
+
+    Level Up XP is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Level Up XP is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
+
+    https://levelup.plus
+}}
+{{!
+    @template block_xp/xp-footer
+
+    Level Up XP footer logo.
+
+    Example context (json):
+    {
+    }
+}}
+<div class="xp-flex xp-justify-center xp-mt-12">
+    <div>
+    <svg class="block_xp-footer-logo block_xp-footer-tooltip" xmlns="http://www.w3.org/2000/svg"
+        id="block_xp-tooltip-{{uniqid}}"
+        viewBox="0 0 205.73 50.95"
+        role="img"
+        aria-hidden="true"
+        tabindex="0"
+        data-toggle="tooltip"
+        data-bs-toggle="tooltip"
+        data-container="false"
+        data-bs-container="false"
+        data-placement="top"
+        data-bs-placement="top"
+        data-delay="700"
+        data-bs-delay="700"
+        data-offset="0,10"
+        data-bs-offset="0,10"
+        data-template='<div class="block_xp tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner !xp-whitespace-nowrap !xp-max-w-none"></div></div>'
+        data-bs-template='<div class="block_xp tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner !xp-whitespace-nowrap !xp-max-w-none"></div></div>'
+        title="Made with ♥ for educators"
+        aria-label="Made with ♥ for educators by Level Up"
+    >
+        <defs>
+            <clipPath id="block_xp-footer-wordmark-clip" clipPathUnits="objectBoundingBox">
+                <rect class="block_xp-footer-wordmark-clip-rect" x="0" y="0" width="1" height="1"/>
+            </clipPath>
+            <style>
+                .block_xp-footer-logo {
+                    --block-xp-footer-logo-ease: cubic-bezier(.2, .8, .2, 1);
+                    display: block;
+                    height: 40px;
+                    overflow: visible;
+                    pointer-events: none;
+                    width: 162px;
+                }
+
+                .block_xp-footer-logo:focus {
+                    outline: none;
+                }
+
+                .block_xp-footer-logo:focus-visible {
+                    outline: 2px solid #1a161b;
+                    outline-offset: 4px;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-ink {
+                    fill: #1a161b;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-white {
+                    fill: #fff;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-logo-mark {
+                    transform-box: view-box;
+                    transform-origin: 0 0;
+                    pointer-events: none;
+                    transform: translateX(40.09%);
+                    transition: transform .62s var(--block-xp-footer-logo-ease) .08s;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-wordmark {
+                    clip-path: url(#block_xp-footer-wordmark-clip);
+                    opacity: 0;
+                    transform: translateX(-10px);
+                    transition:
+                        opacity .22s linear .12s,
+                        transform .62s var(--block-xp-footer-logo-ease) .08s;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-wordmark-clip-rect {
+                    transform: scaleX(0);
+                    transform-origin: 0 0;
+                    transition: transform .62s var(--block-xp-footer-logo-ease) .08s;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-red,
+                .block_xp-footer-logo .block_xp-footer-spark {
+                    fill: #f43737;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-star,
+                .block_xp-footer-logo .block_xp-footer-spark {
+                    transform-box: fill-box;
+                    transform-origin: center;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-spark {
+                    opacity: 0;
+                    pointer-events: none;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-hitarea {
+                    fill: transparent;
+                    pointer-events: all;
+                    transition:
+                        width .62s var(--block-xp-footer-logo-ease) .08s,
+                        x .62s var(--block-xp-footer-logo-ease) .08s;
+                }
+
+                .block_xp-footer-logo:is(:hover, :focus-visible) .block_xp-footer-hitarea {
+                    width: 205.73px;
+                    x: 0;
+                }
+
+                .block_xp-footer-logo:is(:hover, :focus-visible) .block_xp-footer-logo-mark {
+                    transform: translateX(0);
+                }
+
+                .block_xp-footer-logo:is(:hover, :focus-visible) .block_xp-footer-wordmark {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+
+                .block_xp-footer-logo:is(:hover, :focus-visible) .block_xp-footer-wordmark-clip-rect {
+                    transform: scaleX(1);
+                }
+
+                .block_xp-footer-logo:is(:hover, :focus-visible) .block_xp-footer-star {
+                    animation: block_xp-footer-star .76s var(--block-xp-footer-logo-ease) both;
+                }
+
+                .block_xp-footer-logo:is(:hover, :focus-visible) .block_xp-footer-spark {
+                    animation: block_xp-footer-spark .72s var(--block-xp-footer-logo-ease) both;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-spark-a {
+                    --block-xp-footer-spark-x: -16px;
+                    --block-xp-footer-spark-y: -22px;
+                }
+
+                .block_xp-footer-logo .block_xp-footer-spark-b {
+                    --block-xp-footer-spark-x: -8px;
+                    --block-xp-footer-spark-y: 24px;
+                }
+
+                @keyframes block_xp-footer-star {
+                    0% {
+                        transform: translateX(0) rotate(0deg) scale(1);
+                    }
+
+                    45% {
+                        transform: translateX(10px) rotate(12deg) scale(1.08);
+                    }
+
+                    100% {
+                        transform: translateX(0) rotate(0deg) scale(1);
+                    }
+                }
+
+                @keyframes block_xp-footer-spark {
+                    0% {
+                        opacity: 0;
+                        transform: translate(0, 0) scale(.3);
+                    }
+
+                    35% {
+                        opacity: 1;
+                    }
+
+                    100% {
+                        opacity: 0;
+                        transform: translate(var(--block-xp-footer-spark-x), var(--block-xp-footer-spark-y)) scale(1);
+                    }
+                }
+
+                @media (prefers-reduced-motion: reduce) {
+                    .block_xp-footer-logo *,
+                    .block_xp-footer-logo *::before,
+                    .block_xp-footer-logo *::after {
+                        animation-duration: .001ms !important;
+                        animation-iteration-count: 1 !important;
+                        transition-duration: .001ms !important;
+                    }
+                }
+            </style>
+        </defs>
+        <rect class="block_xp-footer-hitarea" x="80" y="-6" width="48" height="56.95" aria-hidden="true"/>
+        <g class="block_xp-footer-logo-mark" aria-hidden="true">
+            <g class="block_xp-footer-wordmark" clip-path="url(#block_xp-footer-wordmark-clip)" aria-hidden="true">
+                <path class="block_xp-footer-ink" d="M61.15,0V38.78H56V0Zm28,28.8h-16a6.79,6.79,0,0,0,1.79,4.39A5.45,5.45,0,0,0,79,34.81a5.28,5.28,0,0,0,3.19-.91A13.08,13.08,0,0,0,85,30.5l4.36,2.43a17.12,17.12,0,0,1-2.13,3,11.3,11.3,0,0,1-2.41,2A9.74,9.74,0,0,1,82,39.06a13.7,13.7,0,0,1-3.23.37,10.51,10.51,0,0,1-8-3.22,12,12,0,0,1-3-8.58,12.38,12.38,0,0,1,2.94-8.58,10.13,10.13,0,0,1,7.85-3.24A10,10,0,0,1,86.3,19q2.85,3.12,2.85,8.65Zm-5.3-4.22a5,5,0,0,0-5.21-4.13,5.39,5.39,0,0,0-1.77.29,5,5,0,0,0-1.5.82,5.16,5.16,0,0,0-1.16,1.3,6.21,6.21,0,0,0-.74,1.72ZM97.6,16.43,103.39,29l5.76-12.55H115L103.34,40.32,91.82,16.43Zm41.53,12.39h-16a6.79,6.79,0,0,0,1.79,4.39,5.45,5.45,0,0,0,4.06,1.6,5.28,5.28,0,0,0,3.19-.91A13.08,13.08,0,0,0,135,30.5l4.36,2.43a17.12,17.12,0,0,1-2.13,3,11.3,11.3,0,0,1-2.41,2A9.74,9.74,0,0,1,132,39.06a13.7,13.7,0,0,1-3.23.37,10.51,10.51,0,0,1-8-3.22,12,12,0,0,1-3-8.58,12.38,12.38,0,0,1,2.94-8.58,10.13,10.13,0,0,1,7.85-3.24A10,10,0,0,1,136.3,19q2.85,3.12,2.85,8.65Zm-5.3-4.22a5,5,0,0,0-5.21-4.13,5.39,5.39,0,0,0-1.77.29,5,5,0,0,0-1.5.82,5.16,5.16,0,0,0-1.16,1.3,6.21,6.21,0,0,0-.74,1.72ZM150.86,0V38.78h-5.17V0Z"/>
+                <path class="block_xp-footer-red" d="M162.54,16.43V29.26q0,5.55,4.38,5.55t4.39-5.55V16.43h5.16v13a14.47,14.47,0,0,1-.66,4.63,7.85,7.85,0,0,1-2.23,3.14,10.82,10.82,0,0,1-13.29,0A7.87,7.87,0,0,1,158,34a12.72,12.72,0,0,1-.64-4.63V16.43ZM188.18,51H183V16.43h5.17v2.43a9.79,9.79,0,0,1,14.52.35,12.27,12.27,0,0,1,3,8.51,12.1,12.1,0,0,1-3,8.38,9.79,9.79,0,0,1-14.55.18Zm12.28-23.2a7.75,7.75,0,0,0-1.75-5.24,5.64,5.64,0,0,0-4.45-2,5.89,5.89,0,0,0-4.61,2,7.49,7.49,0,0,0-1.77,5.19,7.63,7.63,0,0,0,1.77,5.19,5.79,5.79,0,0,0,4.59,2,5.6,5.6,0,0,0,4.43-2A7.31,7.31,0,0,0,200.46,27.75Z"/>
+            </g>
+            <circle class="block_xp-footer-spark block_xp-footer-spark-a" cx="33" cy="18" r="2.4" aria-hidden="true"/>
+            <circle class="block_xp-footer-spark block_xp-footer-spark-b" cx="37" cy="24" r="2" aria-hidden="true"/>
+            <g class="block_xp-footer-star" aria-hidden="true" >
+                <polygon class="block_xp-footer-red" points="20.39 0 26.69 12.77 40.78 14.81 30.59 24.75 32.99 38.78 20.39 32.16 7.79 38.78 10.2 24.75 0 14.81 14.09 12.77 20.39 0"/>
+                <polygon class="block_xp-footer-white" points="20.39 14.41 22.4 18.47 26.88 19.13 23.64 22.29 24.4 26.76 20.39 24.65 16.38 26.76 17.14 22.29 13.9 19.13 18.38 18.47 20.39 14.41"/>
+            </g>
+        </g>
+    </svg>
+    </div>
+</div>
+{{#js}}
+require(['jquery'], function($) {
+    var PREFIX = 'Made with ♥ for ';
+    var AUDIENCE_OPTIONS = [
+        'course creators',
+        'educators',
+        'instructional designers',
+        'instructors',
+        'learning designers',
+        'learning teams',
+        'lifelong learners',
+        'Moodle champions',
+        'professors',
+        'teachers',
+        'trainers',
+    ];
+    var AFTER_OPTIONS = [
+        'And made with ♥ for you too!',
+        'And your curious mind.',
+        'Still here?',
+        'We like that.',
+        'Never change.',
+        '...',
+        'Okay, now you are making me blush.',
+        '😊👋'
+    ];
+    var CHANGE_DELAY = 1000;
+    var TYPING_DELAY = 55;
+
+    function shuffle(items) {
+        var i;
+        var j;
+        var tmp;
+
+        for (i = items.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            tmp = items[i];
+            items[i] = items[j];
+            items[j] = tmp;
+        }
+
+        return items;
+    }
+
+    function getTooltipElement(element) {
+        var tooltipId = element.getAttribute('aria-describedby');
+        return tooltipId ? document.getElementById(tooltipId) : null;
+    }
+
+    function getVisibleTooltip(element) {
+        var tooltip = getTooltipElement(element);
+
+        if (!tooltip) {
+            return null;
+        }
+
+        return tooltip.classList.contains('show') || tooltip.offsetParent ? tooltip : null;
+    }
+
+    function setTooltipText(element, text, updatePosition) {
+        var displayText = text || '\u00a0';
+        var tooltip = getTooltipElement(element);
+        var tooltipInner = tooltip ? tooltip.querySelector('.tooltip-inner') : null;
+
+        element.setAttribute('data-original-title', displayText);
+        element.setAttribute('data-bs-original-title', displayText);
+
+        if (tooltipInner) {
+            tooltipInner.textContent = displayText;
+        }
+
+        if (updatePosition) {
+            try {
+                $(element).tooltip('update');
+            } catch (e) {
+                // Some themes redeclare Bootstrap and do not support every tooltip method.
+            }
+        }
+    }
+
+    function createRotator(element) {
+        var STATUS_DISPLAYED = 'displayed';
+        var STATUS_ERASING = 'erasing';
+        var STATUS_DISPLAYING = 'displaying';
+
+        var steps = [];
+        var stepIndex = 0;
+        var firstAfterStepIndex = 0;
+        var stepStatus = STATUS_DISPLAYED;
+        var currentText = '';
+        var timeoutId = null;
+        var isRotating = false;
+        var isComplete = false;
+
+        function clearTimer() {
+            if (timeoutId) {
+                window.clearTimeout(timeoutId);
+                timeoutId = null;
+            }
+        }
+
+        function buildSteps() {
+            var audienceOptions = shuffle(AUDIENCE_OPTIONS.slice());
+            var newSteps = [];
+            var i;
+
+            if (!audienceOptions.length) {
+                audienceOptions.push('educators');
+            }
+
+            for (i = 0; i < audienceOptions.length; i++) {
+                newSteps.push({
+                    text: PREFIX + audienceOptions[i],
+                    updatePosition: false
+                });
+            }
+
+            firstAfterStepIndex = newSteps.length;
+
+            for (i = 0; i < AFTER_OPTIONS.length; i++) {
+                newSteps.push({
+                    text: AFTER_OPTIONS[i],
+                    updatePosition: true
+                });
+            }
+
+            return newSteps;
+        }
+
+        function resetAudience() {
+            steps = buildSteps();
+            stepIndex = 0;
+            stepStatus = STATUS_DISPLAYED;
+            currentText = steps[stepIndex].text;
+            setTooltipText(element, currentText, false);
+        }
+
+        function scheduleNext(delay, callback) {
+            clearTimer();
+
+            if (!isRotating || !getVisibleTooltip(element) || isComplete) {
+                return;
+            }
+
+            timeoutId = window.setTimeout(callback, delay);
+        }
+
+        function completeRotation() {
+            isComplete = true;
+            isRotating = false;
+            clearTimer();
+        }
+
+        function eraseStep() {
+            var previousStep = steps[stepIndex - 1];
+            var currentStep = steps[stepIndex];
+            var eraseLength = previousStep && currentStep && !previousStep.updatePosition && !currentStep.updatePosition
+                ? PREFIX.length
+                : 0;
+
+            if (!isRotating || !getVisibleTooltip(element)) {
+                return;
+            }
+
+            if (currentText.length <= eraseLength) {
+                stepStatus = STATUS_DISPLAYING;
+                displayStep();
+                return;
+            }
+
+            currentText = currentText.slice(0, -1);
+            setTooltipText(element, currentText, steps[stepIndex].updatePosition);
+            scheduleNext(TYPING_DELAY, eraseStep);
+        }
+
+        function displayStep() {
+            var step = steps[stepIndex];
+
+            if (!isRotating || !getVisibleTooltip(element)) {
+                return;
+            }
+
+            if (currentText.length >= step.text.length) {
+                currentText = step.text;
+                stepStatus = STATUS_DISPLAYED;
+                setTooltipText(element, currentText, step.updatePosition);
+                runStep();
+                return;
+            }
+
+            currentText = step.text.slice(0, currentText.length + 1);
+            setTooltipText(element, currentText, step.updatePosition);
+            scheduleNext(TYPING_DELAY, displayStep);
+        }
+
+        function runStep() {
+            if (!isRotating || !getVisibleTooltip(element) || isComplete) {
+                return;
+            }
+
+            if (stepStatus === STATUS_DISPLAYED) {
+                if (stepIndex >= firstAfterStepIndex && stepIndex >= steps.length - 1) {
+                    completeRotation();
+                    return;
+                }
+
+                scheduleNext(CHANGE_DELAY, function() {
+                    if (stepIndex >= steps.length - 1) {
+                        completeRotation();
+                        return;
+                    }
+
+                    stepIndex++;
+                    stepStatus = STATUS_ERASING;
+                    runStep();
+                });
+                return;
+            }
+
+            if (stepStatus === STATUS_ERASING) {
+                eraseStep();
+                return;
+            }
+
+            if (stepStatus === STATUS_DISPLAYING) {
+                displayStep();
+            }
+        }
+
+        function stopRotation() {
+            isRotating = false;
+            clearTimer();
+
+            if (!isComplete && stepIndex < firstAfterStepIndex) {
+                resetAudience();
+            }
+        }
+
+        function startRotation() {
+            if (isRotating || isComplete) {
+                return;
+            }
+
+            isRotating = true;
+            runStep();
+        }
+
+        resetAudience();
+
+        return {
+            start: startRotation,
+            stop: stopRotation
+        };
+    }
+
+    function init(attempt) {
+        var element = document.getElementById('block_xp-tooltip-{{uniqid}}');
+        if (!element) {
+            return;
+        }
+
+
+        if (element.getAttribute('data-block-xp-footer-tooltip-ready')) {
+            return;
+        }
+
+        // Is Tooltip initialised yet?
+        if (!$(element).tooltip) {
+            setTimeout(function() {
+                var n = attempt + 1;
+                if (n > 25) {
+                    return;
+                }
+                init(n);
+            }, 100);
+            return;
+        }
+
+        element.setAttribute('data-block-xp-footer-tooltip-ready', '1');
+
+        var rotator = createRotator(element);
+        $(element)
+            .on('shown.bs.tooltip', rotator.start)
+            .on('hidden.bs.tooltip', rotator.stop);
+    }
+    init(0);
+});
+{{/js}}

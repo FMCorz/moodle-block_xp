@@ -385,4 +385,12 @@ EOT;
         $value = $indicator->set_user_flag($USER->id, self::SEEN_FLAG, self::VERSION);
     }
 
+    /**
+     * Footer.
+     *
+     * @return void
+     */
+    final protected function footer() {
+        echo $this->get_renderer()->render_from_template('block_xp/xp-footer', []);
+    }
 }
