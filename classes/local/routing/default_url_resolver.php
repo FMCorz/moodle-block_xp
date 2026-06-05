@@ -140,6 +140,7 @@ class default_url_resolver implements url_resolver {
             return null;
         }
 
+        $matches ??= [];
         $params = [];
         $mapping = $route->get_mapping();
         if (count($matches) > 0 && !empty($mapping)) {
