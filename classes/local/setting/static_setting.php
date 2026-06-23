@@ -45,7 +45,7 @@ class static_setting extends \admin_setting {
 
     /** @var bool No save. */
     public $nosave = true;
-    /** @var string The content to display as value. */
+    /** @var string|\Closure The content to display as value. */
     private $content;
 
     /**
@@ -54,7 +54,7 @@ class static_setting extends \admin_setting {
      * @param string $name The setting's name.
      * @param string $label The setting's label.
      * @param string $description The setting's description.
-     * @param string $content The setting's content.
+     * @param string|\Closure $content The setting's content.
      */
     public function __construct($name, $label, $description, $content = '') {
         parent::__construct($name, $label, $description, '');
@@ -67,7 +67,7 @@ class static_setting extends \admin_setting {
      * @return string
      */
     protected function get_html_content() {
-        return $this->content;
+        return is_callable($this->content) ? call_user_func($this->content) : $this->content;
     }
 
     /**
