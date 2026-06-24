@@ -30,7 +30,7 @@ import * as Str from 'core/str';
 import Templates from 'core/templates';
 import * as Compat from 'block_xp/compat';
 import * as RoleButton from 'block_xp/role-button';
-import {extractNodeData, getDataFromJsonScript} from 'block_xp/utils';
+import { extractNodeData, getDataFromJsonScript } from 'block_xp/utils';
 
 let simpleOpenModalActionObserverRegistered = false;
 let simpleOpenModalActionObserverSelector = '[data-xp-action="open-modal"]';
@@ -44,6 +44,19 @@ let simpleOpenModalActionObserverSelector = '[data-xp-action="open-modal"]';
 export async function createConfirmModal(config) {
     const modal = await Compat.createModal(config, ModalSaveCancel);
     modal.setSaveButtonText(Str.get_string('yes', 'moodle'));
+    return modal;
+}
+
+/**
+ * Create an information modal.
+ *
+ * @param {Object} config
+ * @returns {Promise<Modal>}
+ */
+export async function createInfoModal(config) {
+    const modal = await Compat.createModal(config, ModalCancel);
+    modal.getRoot()[0].classList.add('block_xp');
+    modal.setButtonText('cancel', Str.get_string('closebuttontitle', 'core'));
     return modal;
 }
 
