@@ -10,7 +10,7 @@ last:[&_p]:xp-m-0
 xp-mb-2
 xp-mb-4
 xp-mb-6
-xp-ml-2
+xp-ms-2
 xp-mt-1
 xp-p-0
 xp-px-2

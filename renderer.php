@@ -738,7 +738,7 @@ class block_xp_renderer extends plugin_renderer_base {
                     'value' => $filter->get_points(),
                     'size' => 3,
                     'name' => $basename . '[points]',
-                    'class' => 'form-control block_xp-form-control-inline !xp-mr-1', ])
+                    'class' => 'form-control block_xp-form-control-inline !xp-me-1', ])
             );
             $content .= html_writer::end_div();
 

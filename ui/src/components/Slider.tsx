@@ -129,7 +129,7 @@ export const SlideHeader = ({
       <div className="xp-flex xp-flex-row xp-items-center xp-gap-4">
         {hasBack ? (
           <div className="shrink-0 xp-grow-0">
-            <CircleButton onClick={onBack} type="button" className="xp--mr-2">
+            <CircleButton onClick={onBack} type="button" className="xp--me-2">
               <ChevronLeftIconSolid className="xp-h-6 xp-w-6" />
               <span className="xp-sr-only">
                 <Str id="back" component="core" />

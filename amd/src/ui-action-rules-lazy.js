@@ -597,7 +597,7 @@ const Button = ({ onClick, disabled, children, primary, outline, className, type
     return (react.createElement("button", { className: classes, onClick: onClick, disabled: disabled, type: type }, children));
 };
 const ExpandCollapseButton = ({ expanded, onToggle, ariaControlsId, }) => {
-    return (react.createElement(AnchorButton, { "aria-expanded": expanded, "aria-controls": ariaControlsId, onClick: onToggle, className: "xp-p-2 xp-inline-block sm:xp-mr-1" },
+    return (react.createElement(AnchorButton, { "aria-expanded": expanded, "aria-controls": ariaControlsId, onClick: onToggle, className: "xp-p-2 xp-inline-block sm:xp-me-1" },
         react.createElement("span", { className: "xp-sr-only" }, expanded ? react.createElement(components_Str, { id: "collapse", component: "core" }) : react.createElement(components_Str, { id: "expand", component: "core" })),
         react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: classNames("xp-w-6 xp-h-6 xp-transition-transform xp-duration-300", expanded ? "xp-rotate-90" : null) },
             react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8.25 4.5l7.5 7.5-7.5 7.5" }))));
@@ -606,7 +606,7 @@ const SaveButton = ({ onClick, disabled, label, mutation = {}, statePosition = "
     const getStr = Button_useStrings(["changessaved", "error"], "core");
     const { isLoading, isSuccess, isError } = mutation;
     const isStateBefore = statePosition === "before";
-    const state = (Button_React.createElement("div", { className: `xp-w-8 xp-flex ${isStateBefore ? "xp-mr-4 xp-justify-end" : "xp-ml-4"}`, "aria-live": "assertive" },
+    const state = (Button_React.createElement("div", { className: `xp-w-8 xp-flex ${isStateBefore ? "xp-me-4 xp-justify-end" : "xp-ms-4"}`, "aria-live": "assertive" },
         isLoading ? Button_React.createElement(Button_Spinner, null) : null,
         isSuccess ? Button_React.createElement(Button_Pix, { id: "i/valid", component: "core", alt: getStr("changessaved") }) : null,
         isError ? Button_React.createElement(Button_Pix, { id: "i/invalid", component: "core", alt: getStr("error") }) : null));
@@ -1215,7 +1215,7 @@ const NumberInputWithButtons = ({ onChange, value, min, max, suffix, step = 1, i
     };
     const { className: inputClassName, ...remainingInputProps } = inputProps ?? {};
     const allInputProps = {
-        className: classNames("xp-h-auto xp-border-0 xp-text-center xp-rounded-none focus:xp-z-10", suffix ? "xp-pr-6" : null, inputClassName || "xp-w-16"),
+        className: classNames("xp-h-auto xp-border-0 xp-text-center xp-rounded-none focus:xp-z-10", suffix ? "xp-pe-6" : null, inputClassName || "xp-w-16"),
         ...remainingInputProps,
     };
     return (react.createElement("div", { className: "xp-inline-flex xp-rounded xp-border xp-border-solid xp-border-gray-300" },
@@ -1224,7 +1224,7 @@ const NumberInputWithButtons = ({ onChange, value, min, max, suffix, step = 1, i
                 react.createElement("path", { fillRule: "evenodd", d: "M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z", clipRule: "evenodd" }))),
         react.createElement("div", { className: "xp-flex-1 xp-relative" },
             react.createElement(NumInput, { onChange: handleChange, value: value, ...allInputProps }),
-            suffix ? (react.createElement("div", { className: "xp-pointer-events-none xp-absolute xp-inset-y-0 xp-right-0 xp-flex xp-items-center xp-pr-2" },
+            suffix ? (react.createElement("div", { className: "xp-pointer-events-none xp-absolute xp-inset-y-0 xp-right-0 xp-flex xp-items-center xp-pe-2" },
                 react.createElement("span", { className: "xp-text-gray-500" }, suffix))) : null),
         react.createElement("a", { ...plusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", maxDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") },
             react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5" },
@@ -1690,7 +1690,7 @@ const SlideHeader = ({ children, title, subtitle, hasBack, onBack, }) => {
     return (react.createElement("div", { className: "xp-mb-2" },
         react.createElement("div", { className: "xp-flex xp-flex-row xp-items-center xp-gap-4" },
             hasBack ? (react.createElement("div", { className: "shrink-0 xp-grow-0" },
-                react.createElement(CircleButton, { onClick: onBack, type: "button", className: "xp--mr-2" },
+                react.createElement(CircleButton, { onClick: onBack, type: "button", className: "xp--me-2" },
                     react.createElement(ChevronLeftIconSolid, { className: "xp-h-6 xp-w-6" }),
                     react.createElement("span", { className: "xp-sr-only" },
                         react.createElement(components_Str, { id: "back", component: "core" }))))) : null,
@@ -2111,7 +2111,7 @@ const RuleTypeGroup = ({ type, rules, filters, expanded, onExpanded, }) => {
                 })))) : null)));
 };
 const RulesSectionGroup = ({ children, enclosed }) => {
-    return (react.createElement("div", { className: classNames("xp-space-y-4", 
+    return (react.createElement("div", { className: classNames("xp-space-y-4",
         /* When the group is enclosed (it has borders around it) we remove the border of the very last entry. */
         enclosed ? "[&_.xp-rules-section:last-child_.xp-rule-entry:last-child]:xp-border-0" : null) }, children));
 };
@@ -2450,7 +2450,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -2464,17 +2464,17 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/chunk loaded */
 /******/ 	(() => {
@@ -2507,7 +2507,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 			return result;
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/create fake namespace object */
 /******/ 	(() => {
 /******/ 		var getProto = Object.getPrototypeOf ? (obj) => (Object.getPrototypeOf(obj)) : (obj) => (obj.__proto__);
@@ -2537,7 +2537,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 			return ns;
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -2549,12 +2549,12 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 			}
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -2565,35 +2565,35 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/runtimeId */
 /******/ 	(() => {
 /******/ 		__webpack_require__.j = 146;
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/jsonp chunk loading */
 /******/ 	(() => {
 /******/ 		// no baseURI
-/******/ 		
+/******/
 /******/ 		// object to store loaded and loading chunks
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			146: 0
 /******/ 		};
-/******/ 		
+/******/
 /******/ 		// no chunk on demand loading
-/******/ 		
+/******/
 /******/ 		// no prefetching
-/******/ 		
+/******/
 /******/ 		// no preloaded
-/******/ 		
+/******/
 /******/ 		// no HMR
-/******/ 		
+/******/
 /******/ 		// no HMR manifest
-/******/ 		
+/******/
 /******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
-/******/ 		
+/******/
 /******/ 		// install a JSONP callback for chunk loading
 /******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
 /******/ 			var [chunkIds, moreModules, runtime] = data;
@@ -2618,20 +2618,20 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 			}
 /******/ 			return __webpack_require__.O(result);
 /******/ 		}
-/******/ 		
+/******/
 /******/ 		var chunkLoadingGlobal = globalThis["webpackChunkblock_xp"] = globalThis["webpackChunkblock_xp"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
-/******/ 	
+/******/
 /************************************************************************/
-/******/ 	
+/******/
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
 /******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(2040)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
-/******/ 	
+/******/
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;

@@ -504,14 +504,14 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                       </div>
                       <div className="">
                         <div className="xp-relative xp-w-full x-h-full">
-                          <div className="xp-pointer-events-none xp-absolute xp-inset-y-0 xp-left-0 xp-flex xp-items-center xp-pl-2 xp-z-20">
+                          <div className="xp-pointer-events-none xp-absolute xp-inset-y-0 xp-left-0 xp-flex xp-items-center xp-ps-2 xp-z-20">
                             <span className="xp-text-gray-500">+</span>
                           </div>
                           <NumInput
                             value={pointsInLevel}
                             onChange={(xp) => handleXpChange(nextLevel, level.xprequired + xp)}
                             disabled={pointsInLevel <= 0}
-                            className="xp-h-full xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 xp-rounded-r xp-pl-6 xp-relative focus:xp-z-10"
+                            className="xp-h-full xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 xp-rounded-r xp-ps-6 xp-relative focus:xp-z-10"
                             id={`xp-level-${level.level}-length`}
                           />
                         </div>
@@ -535,7 +535,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                       );
                     })}
                   </div>
-                  <div className="xp-flex-0 sm:xp--mr-3">
+                  <div className="xp-flex-0 sm:xp--me-3">
                     <ExpandCollapseButton
                       expanded={isExpanded}
                       ariaControlsId={expandableId}
@@ -548,7 +548,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
 
                 {/** Expanded */}
                 <Expandable expanded={isExpanded} id={expandableId}>
-                  <div className={classNames("sm:xp-ml-[100px] sm:xp-pl-8 xp-space-y-4")}>
+                  <div className={classNames("sm:xp-ms-[100px] sm:xp-ps-8 xp-space-y-4")}>
                     <div className="xp-flex xp-items-end xp-gap-4">
                       <div className="xp-flex-1">
                         <OptionField label={<Str id="name" />}>

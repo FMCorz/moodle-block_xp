@@ -20,7 +20,7 @@ export const RadioGroup = ({ items, value, onChange }: { items: Items; value: an
               onChange={() => onChange(item.value)}
             />
           </div>
-          <div className="xp-ml-3">
+          <div className="xp-ms-3">
             <div className="xp-font-medium">{item.label}</div>
             {item.desc ? (
               <p id={`xp-radiogroup-${uniqid}-${idx}`} className="xp-text-gray-500 xp-m-0">

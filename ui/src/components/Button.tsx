@@ -63,7 +63,7 @@ export const ExpandCollapseButton = ({
       aria-expanded={expanded}
       aria-controls={ariaControlsId}
       onClick={onToggle}
-      className="xp-p-2 xp-inline-block sm:xp-mr-1"
+      className="xp-p-2 xp-inline-block sm:xp-me-1"
     >
       <span className="xp-sr-only">{expanded ? <Str id="collapse" component="core" /> : <Str id="expand" component="core" />}</span>
       <svg
@@ -98,7 +98,7 @@ export const SaveButton = ({
   const isStateBefore = statePosition === "before";
 
   const state = (
-    <div className={`xp-w-8 xp-flex ${isStateBefore ? "xp-mr-4 xp-justify-end" : "xp-ml-4"}`} aria-live="assertive">
+    <div className={`xp-w-8 xp-flex ${isStateBefore ? "xp-me-4 xp-justify-end" : "xp-ms-4"}`} aria-live="assertive">
       {isLoading ? <Spinner /> : null}
       {isSuccess ? <Pix id="i/valid" component="core" alt={getStr("changessaved")} /> : null}
       {isError ? <Pix id="i/invalid" component="core" alt={getStr("error")} /> : null}

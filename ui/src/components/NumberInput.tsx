@@ -90,7 +90,7 @@ export const NumberInputWithButtons = ({
   const allInputProps = {
     className: classNames(
       "xp-h-auto xp-border-0 xp-text-center xp-rounded-none focus:xp-z-10",
-      suffix ? "xp-pr-6" : null,
+      suffix ? "xp-pe-6" : null,
       inputClassName || "xp-w-16"
     ),
     ...remainingInputProps,
@@ -114,7 +114,7 @@ export const NumberInputWithButtons = ({
       <div className="xp-flex-1 xp-relative">
         <NumInput onChange={handleChange} value={value} {...allInputProps} />
         {suffix ? (
-          <div className="xp-pointer-events-none xp-absolute xp-inset-y-0 xp-right-0 xp-flex xp-items-center xp-pr-2">
+          <div className="xp-pointer-events-none xp-absolute xp-inset-y-0 xp-right-0 xp-flex xp-items-center xp-pe-2">
             <span className="xp-text-gray-500">{suffix}</span>
           </div>
         ) : null}
