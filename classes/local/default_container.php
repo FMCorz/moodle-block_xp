@@ -82,7 +82,9 @@ class default_container implements container {
         'levels_info_factory' => true,
         'levels_info_writer' => true,
         'log_migrators' => true,
+        'mcp_router' => true,
         'observer_rules_maker' => true,
+        'oauth_router' => true,
         'reason_from_log_entry_factory' => true,
         'reason_resolver' => true,
         'renderer' => true,
@@ -524,12 +526,40 @@ class default_container implements container {
     }
 
     /**
+     * Get the MCP router.
+     *
+     * @return routing\not_implemented_router
+     */
+    protected function get_mcp_router() {
+        return new routing\not_implemented_router([
+            'jsonrpc' => '2.0',
+            'error' => [
+                'code' => -32000,
+                'message' => get_string('xppremiumrequired', 'block_xp'),
+            ],
+            'id' => null,
+        ]);
+    }
+
+    /**
      * Get observer rules maker.
      *
      * @return observer_rules_maker
      */
     protected function get_observer_rules_maker() {
         return new \block_xp\local\observer\default_observer_rules_maker();
+    }
+
+    /**
+     * Get the OAuth router.
+     *
+     * @return routing\not_implemented_router
+     */
+    protected function get_oauth_router() {
+        return new routing\not_implemented_router([
+            'error' => 'server_error',
+            'error_description' => get_string('xppremiumrequired', 'block_xp'),
+        ]);
     }
 
     /**
