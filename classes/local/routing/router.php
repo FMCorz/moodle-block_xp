@@ -46,10 +46,8 @@ use moodle_exception;
  */
 class router {
 
-    /** @var url_resolver_interface The URL resolver. */
+    /** @var url_resolver The URL resolver. */
     protected $urlresolver;
-    /** @var controller_resolver The controller resolver. */
-    protected $ctrlresolver;
 
     /**
      * Constructor.
@@ -85,7 +83,7 @@ class router {
      * Find the controller from the request.
      *
      * @param routed_request $request The request.
-     * @return block_xp\local\controller\controller_interface
+     * @return \block_xp\local\controller\controller
      */
     protected function get_controller_from_request(routed_request $request) {
         $route = $request->get_route();
