@@ -26,8 +26,8 @@
  */
 
 $route = '/';
-if (!empty($_GET['_r']) && is_string($_GET['_r'])) {
-    $route = $_GET['_r'];
+if (!empty($_REQUEST['_r']) && is_string($_REQUEST['_r'])) {
+    $route = $_REQUEST['_r'];
 } else if (!empty($_SERVER['PATH_INFO']) && is_string($_SERVER['PATH_INFO'])) {
     $route = $_SERVER['PATH_INFO'];
 }
