@@ -29,6 +29,7 @@ namespace block_xp\form;
 
 use block_xp\di;
 use block_xp\local\config\course_world_config;
+use block_xp\local\utils\form_utils;
 use core_form\dynamic_form;
 
 /**
@@ -139,21 +140,13 @@ class leaderboard extends dynamic_form {
      */
     public function after_definition() {
         parent::after_definition();
-
-        $mform = $this->_form;
-        $configlocked = \block_xp\di::get('config_locked');
-        foreach ($configlocked->get_all() as $key => $islocked) {
-            if (!$islocked || !$mform->elementExists($key)) {
-                continue;
-            }
-            $mform->hardFreeze($key);
-        }
+        form_utils::freeze_config_locked_fields($this->_form);
     }
 
     /**
      * Get the data.
      *
-     * @return stdClass
+     * @return \stdClass
      */
     public function get_data() {
         $data = parent::get_data();
