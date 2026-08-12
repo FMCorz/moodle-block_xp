@@ -47,7 +47,55 @@ $string['addondeactivated'] = 'XP+ disabled';
 $string['addondeactivatedinfo'] = 'The XP plugins are incompatible with one another, which resulted in XP+ being disabled. The version {$a->localxpversion} of Level Up XP+ (local_xp) is expected.';
 $string['addonnotactivated'] = 'The addon is not activated.';
 $string['adminaisettings'] = 'AI settings';
-$string['adminaisettings_desc'] = 'AI-related settings to support connectivity between XP and AI agents. [Learn more](https://docs.levelup.plus/xp/ai)';
+$string['adminaisettings_desc'] = 'Configure how AI apps and assistants connect to Level Up XP through MCP. [Read documentation](https://docs.levelup.plus/xp/docs/ai-mcp)';
+$string['ai'] = 'AI';
+$string['aiaccessrevoked'] = 'Any existing AI access was revoked.';
+$string['aiactiveaccess'] = 'Your account has active AI access. This access can remain in Moodle after you disconnect an AI assistant.';
+$string['aichatgptinstructions'] = '1. In ChatGPT, open Plugins.
+2. Search for “Level Up XP” and select the plugin.
+3. When asked for your Moodle site address, enter the following value:
+
+    `{$a->wwwroot}`
+
+    For reference, the complete MCP server URL is:
+
+    `{$a->mcpurl}`
+
+4. Choose Connect.
+5. When prompted, sign in to Moodle and authorise the connection.
+6. Start a conversation and enable the Level Up XP plugin when you want ChatGPT to use it.
+
+For more information, read our [documentation](https://docs.levelup.plus/xp/docs/ai-mcp/connect).';
+$string['aiclaudeinstructions'] = '1. In Claude, open Customize, then Connectors.
+2. Select Add custom connector. If it is unavailable, ask your Claude workspace administrator to add it.
+3. Name the connector “Level Up XP” and enter this remote MCP server URL:
+
+   `{$a->mcpurl}`
+4. Add the connector, then sign in to Moodle and authorise the connection.
+5. Enable the Level Up XP connector in conversations where you want Claude to use it.
+
+For more information, read our [documentation](https://docs.levelup.plus/xp/docs/ai-mcp/connect).';
+$string['aiconnect'] = 'Connect an AI assistant';
+$string['aiconnectintro'] = 'Here are the connection options made available by your administrator.';
+$string['aicustomassistant'] = 'Custom assistant instructions';
+$string['aicurrentaccess'] = 'Current AI access';
+$string['ainoproviders'] = 'No AI connection options have been configured. Contact your administrator for instructions.';
+$string['ainoactiveaccess'] = 'Your account does not currently have active AI access.';
+$string['aipageintro'] = 'Connect an AI assistant to ask questions about Level Up XP, explore how your course is configured, understand learner progress, and get practical ideas for improving your gamification.';
+$string['aipagetitle'] = 'Use AI with Level Up XP';
+$string['aipagetitle_help'] = 'Once connected, AI assistants can use the Level Up XP tools made available by your administrator.
+
+You can ask it to explain how learners earn points and progress through levels, summarise relevant course and learner information, help you understand your current setup, and suggest improvements based on your goals.
+
+The information available to the assistant depends on your Moodle permissions and the tools enabled on your site.
+
+[Learn more](https://docs.levelup.plus/xp/docs/ai-mcp?ref=blockxp_help)';
+$string['airevokeallaccess'] = 'Revoke all AI access';
+$string['airevokeallaccessconfirm'] = 'Do you want to revoke all AI access? All AI assistants that have access to your account will lose access.';
+$string['aistartingprompt'] = 'Starting prompt';
+$string['aistartingpromptintro'] = 'Use the following prompt to learn what the AI assistant can do, and how it can help.';
+$string['aistartingpromptcourse'] = 'My course name is "{$a}".';
+$string['aistartingprompttext'] = 'Help me get started with Level Up XP. First, tell me what you can help me with based on the tools, information, and permissions available to you. Then give me a concise overview of the current Level Up XP setup and suggest three useful questions I could ask next.';
 $string['adminnoticeaddondeactivatedsubject'] = "XP+ plugin disabled!";
 $string['adminnoticeaddondeactivatedmessage'] = 'Level Up XP+ has been disabled!
 
@@ -170,6 +218,7 @@ $string['configblockrankingsnapshot_help'] = 'The leaderboard snapshot displays 
 $string['configrecentactivity'] = 'Display recent rewards';
 $string['configrecentactivity_help'] = 'When enabled, the block will display a short list of recent events which rewarded the student with points.';
 $string['congratulationsyouleveledup'] = 'Congratulations!';
+$string['contactadminforinstructions'] = 'Please contact your administrator for instructions.';
 $string['coolthanks'] = 'Cool, thanks!';
 $string['copiedexcl'] = 'Copied!';
 $string['coursea'] = 'Course "{$a}"';
@@ -238,17 +287,23 @@ $string['editlimits'] = 'Edit limits';
 $string['editingdefaultsettingsincoursemodenotice'] = '**Attention!** You are not modifying the currently active settings, instead you are editing the default values. To change a course\'s settings, follow the "Settings" link from the XP block itself.';
 $string['editingdefaultsettingsinwholesitemodenotice'] = '**Attention!** You are not modifying the currently active settings, instead you are editing the default values. As Level Up XP is used sitewide, your intention is most likely to change the sitewide settings. [Navigate here]({$a->url}) to change those settings, or follow the "Settings" link from the XP block itself.';
 $string['embedleaderboard'] = 'Embed leaderboard';
+$string['enablechatgpt'] = 'Allow ChatGPT connections';
+$string['enablechatgpt_desc'] = 'Allow users to connect ChatGPT to Level Up XP. Users will be shown setup instructions, and OAuth registration is handled automatically.';
 $string['enablecheatguard'] = 'Enable cheat guard';
 $string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive mechanism for preventing students to abuse the system using obvious techniques, such as refreshing the same page endlessly, or repeating the same action over and over again.
 
 [More info](https://docs.levelup.plus/xp/docs/getting-started/cheat-guard?ref=blockxp_help)
 ';
+$string['enableclaude'] = 'Allow Claude connections';
+$string['enableclaude_desc'] = 'Allow users to connect Claude to Level Up XP. Users will be shown setup instructions, and OAuth registration is handled automatically.';
 $string['enableinfos'] = 'Enable info page';
 $string['enableinfos_help'] = 'When set to \'No\', students will not be able to view the information page.';
 $string['enableladder'] = 'Enable the leaderboard';
 $string['enableladder_help'] = 'When set to \'No\', students will not be able to view the leaderboard.';
 $string['enablelevelupnotif'] = 'Enable level up notification';
 $string['enablelevelupnotif_help'] = 'When set to \'Yes\', students will be displayed a popup congratulating them for the new level reached.';
+$string['enablemcp'] = 'Enable MCP access';
+$string['enablemcp_desc'] = 'Allow authorised users to connect AI apps and assistants to Level Up XP through MCP. Users must have the `local/xp:usemcp` capability, and connections must use authorised OAuth clients.';
 $string['enablexpgain'] = 'Enable points gain';
 $string['enablexpgain_help'] = 'When set to \'No\', nobody will earn points in the course. This is useful to freeze the points gained, or to enable it at a certain point in time.
 
@@ -258,6 +313,7 @@ $string['envcheckaddonincompatibilitymessage'] = 'The plugin Level Up XP+ (local
 $string['erroraddondeactivated'] = 'Level Up XP+ has been disabled. Please consult the [documentation]({$a->docsurl}) for more information.';
 $string['errorcontextcoursemismatchforwholesite'] = 'The URL of this <em>Level Up XP</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up XP</em> to be used \'Sitewide\', however this page expected it to be used \'Per course\'. Please <a href="{$a->nexturl}">click here</a> to navigate to the right page. Search for the admin setting \'block_xp_context\' if you wish to change your configuration.';
 $string['errorcontextcoursemismatchpercourse'] = 'The URL of this <em>Level Up XP</em> page does not match the current plugin configuration. Your current configuration declares <em>Level Up XP</em> to be used \'Per course\', but this page expects it to be used \'Sitewide\'. It most likely originates from a <em>block</em> that was added to the dashboard or front page while in a different configuration. You should remove the block from the latter pages, and only use the block from within individual courses.';
+$string['errorfeaturenotenabled'] = 'This feature is not enabled.';
 $string['errorformvalues'] = 'There are some issues in the form values, please fix them.';
 $string['errorlevelsincorrect'] = 'The minimum number of levels is 2';
 $string['errornotalllevelsbadgesprovided'] = 'Not all the level badges have been provided. Missing: {$a}';
@@ -318,7 +374,7 @@ $string['hiderank'] = 'Hide rank';
 $string['importpoints'] = 'Import points';
 $string['importpoints_help'] = 'The import may be used to _increase_ students\' points, or to _override_ them with the provided value.
 
-Note that the import __does not__ use the same format as the exported report. The required format is described in the [documentation](https://docs.levelup.plus/xp/docs/how-to/import-points/importing-points-from-csv?ref=localxp_help), where a [sample file](https://docs.levelup.plus/xp/docs/how-to/import-points/importing-points-from-csv?ref=localxp_help#sample-file) is available.';
+Note that the import __does not__ use the same format as the exported report. The required format is described in the [documentation](https://docs.levelup.plus/xp/docs/how-to/import-points/importing-points-from-csv?ref=blockxp_help), where a [sample file](https://docs.levelup.plus/xp/docs/how-to/import-points/importing-points-from-csv?ref=blockxp_help#sample-file) is available.';
 $string['importpointsintro'] = 'Import points from a CSV file, and optionally send a message to the recipient.';
 $string['incourses'] = 'In courses';
 $string['ineffective'] = 'Ineffective';
@@ -405,10 +461,20 @@ $string['limitparticipants'] = 'Limit participants';
 $string['limitparticipants_help'] = 'This setting controls who is displayed in the leaderboard. Neighbours are the participants ranked above and below the current user. For instance, when choosing \'Display 2 neighbours\', only the two participants ranked directly higher and lower than the current user will be displayed.';
 $string['limits'] = 'Limits';
 $string['logging'] = 'Logging';
+$string['manageoauthclients'] = 'Manage OAuth clients';
 $string['manually'] = 'Manually';
 $string['maxactionspertime'] = 'Max. actions in time frame';
 $string['maxactionspertime_help'] = 'The maximum number of actions that will count for points during the time frame given. Any subsequent action will be ignored. When this value is empty, or equals to zero, it does not apply.';
 $string['maxlevelexcl'] = 'max level!';
+$string['mcpconnectinstructions'] = 'Connect instructions';
+$string['mcpconnectinstructions_desc'] = 'You can add information to help users access an AI assistant and connect it to Level Up XP. If ChatGPT or Claude is enabled, this information appears above the instructions for those assistants. You can also use this information to direct users to a custom agent.';
+$string['mcprisksallowed'] = 'MCP tool permissions';
+$string['mcprisksallowed_desc'] = 'Limit which MCP tools are available by selecting the allowed permissions. A tool will be unavailable if it requires a permission that is not selected. User permissions still apply. Please review the [full list of tools]({$a->toolslisturl}) and their risks.';
+$string['mcpriskpersonal'] = 'Access personal data';
+$string['mcpriskread'] = 'Read information';
+$string['mcpriskwrite'] = 'Make changes or trigger actions';
+$string['mcpurl'] = 'MCP server URL';
+$string['mcpurl_desc'] = 'The URL to connect AI apps and assistants to Level Up XP. OAuth authentication is required.';
 $string['menu'] = 'Menu';
 $string['messageprovider:adminnotice'] = 'Admin notice';
 $string['missing'] = 'Missing';
@@ -418,6 +484,7 @@ $string['name'] = 'Name';
 $string['namecontains'] = 'Contains "{$a}"';
 $string['nameequalsto'] = 'Is equal to "{$a}"';
 $string['navactionrules'] = 'Action rules';
+$string['navai'] = 'AI';
 $string['navbardisplay'] = 'Show in navbar';
 $string['navbardisplay_desc'] = 'When enabled, the level of the user will be displayed in the top navigation bar. If the plugin is used "Per courses", it will only appear in courses. Please note that this functionality is heavily dependent on the theme and may not work well, or not at all, with 3rd party themes. [Learn more](https://docs.levelup.plus/xp/docs/navbar-display)';
 $string['navcompletionrules'] = 'Completion';
@@ -459,6 +526,11 @@ $string['nperweeksmall'] = '{$a}/wk';
 $string['npermonthsmall'] = '{$a}/mth';
 $string['ntimes'] = '{$a} times';
 $string['numberoflevels'] = 'Number of levels';
+$string['oauthactivegrants'] = 'Current grants';
+$string['oauthactivegrantstitle'] = '{$a->users} user(s) with {$a->grants} current grant(s)';
+$string['oauthclients'] = 'OAuth clients';
+$string['oauthclients_help'] = 'OAuth clients';
+$string['oauthclients_desc'] = 'AI apps and assistants authenticate with Level Up XP using OAuth. OAuth clients can be created manually or registered automatically.';
 $string['occasionally'] = 'Occasionally';
 $string['once'] = 'Once';
 $string['onceperactivity'] = 'Once per activity';
@@ -841,6 +913,8 @@ $string['shortcode:xpprogressbar'] = 'The current user\'s progress bar towards t
 $string['shortcodeinactiveleaderboarddisabled'] = 'The leaderboard is currently disabled, the shortcode will be inactive. You can enable the leaderboard in its settings.';
 $string['shortcodexpteamladderembedintro'] = 'With the following shortcode, the leaderboard can be embedded anywhere on this site. More options and information can be found in the [documentation](https://docs.levelup.plus/xp/docs/leaderboard-embed).';
 $string['shortcodexpladderembedintro'] = 'With the following shortcode, the leaderboard can be embedded anywhere on this site. More options and information can be found in the [documentation](https://docs.levelup.plus/xp/docs/leaderboard-embed).';
+$string['showcustomassistant'] = 'Show custom assistant';
+$string['showcustomassistant_desc'] = 'Show users instructions for accessing a custom AI assistant configured and managed outside Level Up XP.';
 $string['signedinasxony'] = 'Signed in as {$a->user} on {$a->site}';
 $string['sitewide'] = 'Sitewide';
 $string['sitewideonly'] = 'Sitewide only';
@@ -926,6 +1000,7 @@ $string['xp:viewreport'] = 'View the report';
 $string['xpplusrequired'] = 'XP+ required';
 $string['xpgaindisabled'] = 'Points gain disabled';
 $string['xppremiumrequired'] = 'XP+ Premium required';
+$string['xppremiumrequiredforfeature'] = 'This feature requires XP+ Premium.';
 $string['youleveledupexcl'] = 'You levelled up!';
 $string['youreachedlevel'] = 'You have reached the level:';
 $string['youreachedlevela'] = 'You have reached level {$a}!';
@@ -1003,4 +1078,3 @@ $string['resetvisualstodefaults'] = 'Reset appearance to defaults';
 
 // Deprecated since XP 18
 $string['questreleasenotice'] = 'Take gamification to the next level, discover **Level Up Quest** 🥳. Turn your courses into **exciting adventures**, filled with **re-engagement strategies** and **celebrations** 🤯! Check out [Quest\'s website]({$a->questurl}) and our [launch post here]({$a->questblogurl}). 👈';
-
