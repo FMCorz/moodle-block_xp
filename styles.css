@@ -780,6 +780,9 @@
 .block_xp .xp-bg-gray-200 {
     background-color: #e5e7eb;
 }
+.block_xp .xp-bg-gray-50 {
+    background-color: #f9fafb;
+}
 .block_xp .xp-bg-green-400 {
     background-color: #4ade80;
 }
@@ -1933,6 +1936,15 @@ a .block_xp-level {
 }
 .block_xp :is(.\[\&_li\]\:xp-mb-1 li) {
     margin-bottom: 0.25rem;
+}
+.block_xp :is(.\[\&_li\]\:xp-mb-2 li) {
+    margin-bottom: 0.5rem;
+}
+.block_xp :is(.\[\&_li_p\]\:xp-mb-1 li p) {
+    margin-bottom: 0.25rem;
+}
+.block_xp :is(.\[\&_ol\]\:xp-pl-5 ol) {
+    padding-left: 1.25rem;
 }
 .block_xp :is(.last\:\[\&_p\]\:xp-m-0 p:last-child) {
     margin: 0px;
