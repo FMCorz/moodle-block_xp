@@ -297,7 +297,7 @@ const RuleLimit = ({ rule, type }: { rule: Rule | RuleV2; type: RuleType }) => {
 };
 
 const RuleLimitContent = ({ limit, repeatlimit }: { limit?: LimitSpec | null; repeatlimit?: LimitSpec | null }) => {
-  const getStr = useStrings(["repetitionlimitset"]);
+  const getStr = useStrings(["maxcolon", "repetitionlimitset"]);
   if (!limit?.max && !repeatlimit?.max) {
     return null;
   }
@@ -305,7 +305,7 @@ const RuleLimitContent = ({ limit, repeatlimit }: { limit?: LimitSpec | null; re
     <div className="xp-text-xs xp-text-gray-500 xp-leading-none xp-whitespace-nowrap xp-flex xp-items-center xp-gap-1">
       {limit?.max ? (
         <span>
-          Max: <LimitPerWindow max={limit.max} window={limit.timewindow} />
+          {getStr("maxcolon")} <LimitPerWindow max={limit.max} window={limit.timewindow} />
         </span>
       ) : null}
       {repeatlimit?.max ? (

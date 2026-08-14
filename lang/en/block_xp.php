@@ -473,6 +473,7 @@ $string['manual'] = 'Manual';
 $string['manually'] = 'Manually';
 $string['maxactionspertime'] = 'Max. actions in time frame';
 $string['maxactionspertime_help'] = 'The maximum number of actions that will count for points during the time frame given. Any subsequent action will be ignored. When this value is empty, or equals to zero, it does not apply.';
+$string['maxcolon'] = 'Max:';
 $string['maxlevelexcl'] = 'max level!';
 $string['mcpconnectinstructions'] = 'Connect instructions';
 $string['mcpconnectinstructions_desc'] = 'You can add information to help users access an AI assistant and connect it to Level Up XP. If ChatGPT or Claude is enabled, this information appears above the instructions for those assistants. You can also use this information to direct users to a custom agent.';
