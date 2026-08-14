@@ -49,6 +49,15 @@ class default_routes_config extends static_routes_config {
                 'index'
             ),
             new route_definition(
+                'ai',
+                '/ai/:courseid',
+                '~^/ai/(\d+)$~',
+                'ai',
+                [
+                    1 => 'courseid',
+                ]
+            ),
+            new route_definition(
                 'config',
                 '/config/:courseid',
                 '~^/config/(\d+)$~',

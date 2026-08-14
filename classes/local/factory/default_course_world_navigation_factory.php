@@ -227,6 +227,14 @@ class default_course_world_navigation_factory implements course_world_navigation
                 ]),
             ];
 
+            if ($showpromo || $hasaddon) {
+                $links[] = [
+                    'id' => 'ai',
+                    'url' => $urlresolver->reverse('ai', ['courseid' => $courseid]),
+                    'text' => get_string('navai', 'block_xp'),
+                ];
+            }
+
             $links[] = [
                 'id' => 'config',
                 'url' => $urlresolver->reverse('config', ['courseid' => $courseid]),
