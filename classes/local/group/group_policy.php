@@ -107,8 +107,8 @@ class group_policy {
             return true;
         }
 
-        $usergroups = groups_get_all_groups($this->courseid, $targetuserid);
-        $actingusergroups = groups_get_all_groups($this->courseid, $actinguserid);
+        $usergroups = $this->get_all_groups($targetuserid, $actinguserid);
+        $actingusergroups = $this->get_all_groups($actinguserid, $actinguserid);
         $samegroups = array_intersect_key($actingusergroups, $usergroups);
         return !empty($samegroups);
     }
@@ -137,9 +137,9 @@ class group_policy {
         $course = $this->get_course_light();
 
         if ($groupmode === VISIBLEGROUPS || $aag) {
-            $allowedgroups = groups_get_all_groups($course->id, 0, $course->defaultgroupingid);
+            $allowedgroups = $this->get_all_groups(null, $actinguserid, $course->defaultgroupingid);
         } else {
-            $allowedgroups = groups_get_all_groups($course->id, $actinguserid, $course->defaultgroupingid);
+            $allowedgroups = $this->get_all_groups($actinguserid, $actinguserid, $course->defaultgroupingid);
         }
 
         if (!$groupid) {
@@ -270,11 +270,11 @@ class group_policy {
         $usergroups = [];
         if ($groupmode === VISIBLEGROUPS || $aag) {
             $course = $this->get_course_light();
-            $allowedgroups = groups_get_all_groups($course->id, 0, $course->defaultgroupingid);
-            $usergroups = groups_get_all_groups($course->id, $actinguserid, $course->defaultgroupingid);
+            $allowedgroups = $this->get_all_groups(null, $actinguserid, $course->defaultgroupingid);
+            $usergroups = $this->get_all_groups($actinguserid, $actinguserid, $course->defaultgroupingid);
         } else {
             $course = $this->get_course_light();
-            $allowedgroups = groups_get_all_groups($course->id, $actinguserid, $course->defaultgroupingid);
+            $allowedgroups = $this->get_all_groups($actinguserid, $actinguserid, $course->defaultgroupingid);
             $usergroups = $allowedgroups;
         }
 
@@ -308,6 +308,93 @@ class group_policy {
         }
 
         return $groups;
+    }
+
+    /**
+     * Get course groups, optionally filtered by user and grouping.
+     *
+     * When a target user is supplied, only the groups containing that user are returned. Without
+     * one, every course group is considered. A grouping ID further limits the result to that grouping.
+     *
+     * This applies the same membership and visibility rules as groups_get_all_groups(), but evaluates
+     * checks normally tied to the global $USER for the acting user instead. The other core arguments
+     * are not needed here and remain at their defaults.
+     *
+     * @param int|null $targetuserid The target user ID, or null to consider all groups.
+     * @param int|null $actinguserid The acting user ID, or null for the current user.
+     * @param int $groupingid The grouping ID, or 0 for all groupings.
+     * @return \stdClass[]
+     */
+    protected function get_all_groups(?int $targetuserid, ?int $actinguserid = null, int $groupingid = 0): array {
+        global $USER;
+        $targetuserid = $targetuserid ?: null; // Continue to treat core's 0 value as no target user.
+        $actinguserid ??= $USER->id;
+
+        $canviewhidden = has_capability('moodle/course:viewhiddengroups', $this->context, $actinguserid);
+
+        // The cache is safe when no user filter is needed and every group is visible to the acting user.
+        if ($targetuserid === null && ($canviewhidden || !visibility::course_has_hidden_groups($this->courseid))) {
+            $data = groups_get_course_data($this->courseid);
+            if (!$groupingid) {
+                return $data->groups;
+            }
+
+            $groups = [];
+            foreach ($data->mappings as $mapping) {
+                if ($mapping->groupingid == $groupingid && isset($data->groups[$mapping->groupid])) {
+                    $groups[$mapping->groupid] = $data->groups[$mapping->groupid];
+                }
+            }
+            return $groups;
+        }
+
+        $params = ['courseid' => $this->courseid];
+        $targetfrom = '';
+        $targetwhere = '';
+        if ($targetuserid !== null) {
+            // Only return groups containing the target user.
+            $targetfrom = 'JOIN {groups_members} gm ON gm.groupid = g.id';
+            $targetwhere = 'AND gm.userid = :targetuserid';
+            $params['targetuserid'] = $targetuserid;
+        }
+
+        $groupingfrom = '';
+        $groupingwhere = '';
+        if ($groupingid) {
+            // Only return groups belonging to the requested grouping.
+            $groupingfrom = 'JOIN {groupings_groups} gg ON gg.groupid = g.id';
+            $groupingwhere = 'AND gg.groupingid = :groupingid';
+            $params['groupingid'] = $groupingid;
+        }
+
+        $visibilityfrom = '';
+        $visibilitywhere = '';
+        if (!$canviewhidden) {
+            // Core uses the target membership above, or the acting user's membership when there is no target.
+            if ($targetuserid === null) {
+                $visibilityfrom = 'LEFT JOIN {groups_members} gm ON gm.groupid = g.id AND gm.userid = :actinguserid';
+                $params['actinguserid'] = $actinguserid;
+            }
+
+            // Public groups are always visible. Member and own groups require the joined membership; hidden groups are omitted.
+            $visibilitywhere = 'AND (g.visibility = :visibilityall'
+                . ' OR (g.visibility IN (:visibilitymembers, :visibilityown) AND gm.id IS NOT NULL))';
+            $params['visibilityall'] = GROUPS_VISIBILITY_ALL;
+            $params['visibilitymembers'] = GROUPS_VISIBILITY_MEMBERS;
+            $params['visibilityown'] = GROUPS_VISIBILITY_OWN;
+        }
+
+        $db = di::get('db');
+        return $db->get_records_sql("SELECT g.*
+                                       FROM {groups} g
+                                       $targetfrom
+                                       $groupingfrom
+                                       $visibilityfrom
+                                      WHERE g.courseid = :courseid
+                                       $targetwhere
+                                       $groupingwhere
+                                       $visibilitywhere
+                                   ORDER BY g.name ASC", $params);
     }
 
     /**
