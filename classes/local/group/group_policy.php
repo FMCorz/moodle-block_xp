@@ -226,7 +226,7 @@ class group_policy {
         if (!isset($this->defaultgroupingid)) {
             $defaultgroupingid = 0;
             if ($this->courseid == $COURSE->id) {
-                $defaultgroupingid = $COURSE->id;
+                $defaultgroupingid = $COURSE->defaultgroupingid;
             } else if ($this->courseid != $SITE->id) {
                 $db = di::get('db');
                 $defaultgroupingid = $db->get_field('course', 'defaultgroupingid', ['id' => $this->courseid], IGNORE_MISSING);
