@@ -335,7 +335,7 @@ class handler {
         }
 
         $name = $level instanceof level_with_name ? $level->get_name() : null;
-        return empty($name) ? get_string('levelx', 'block_xp', $level->get_level()) : $name;
+        return empty($name) ? get_string('levelx', 'block_xp', $level->get_level()) : s($name);
     }
 
     /**

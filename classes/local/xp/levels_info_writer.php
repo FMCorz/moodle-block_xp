@@ -223,14 +223,16 @@ class levels_info_writer {
 
         // We can only deal with this type of world at the moment.
         $world = $world instanceof course_world ? $world : null;
-
         $finaldata = [];
-        if (!empty($metadata['name'])) {
-            $finaldata['name'] = core_text::substr($metadata['name'], 0, 40);
+
+        $name = clean_param($metadata['name'] ?? '', PARAM_NOTAGS);
+        if (!empty($name)) {
+            $finaldata['name'] = core_text::substr($name, 0, 40);
         }
 
-        if (!empty($metadata['description'])) {
-            $finaldata['desc'] = core_text::substr($metadata['description'], 0, 280);
+        $desc = clean_param($metadata['description'] ?? '', PARAM_NOTAGS);
+        if (!empty($desc)) {
+            $finaldata['desc'] = core_text::substr($desc, 0, 280);
         }
 
         return $finaldata;

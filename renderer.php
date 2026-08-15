@@ -285,7 +285,7 @@ class block_xp_renderer extends plugin_renderer_base {
         if (empty($name)) {
             return '';
         }
-        return html_writer::tag('div', $name, ['class' => 'level-name']);
+        return html_writer::tag('div', s($name), ['class' => 'level-name']);
     }
 
 
@@ -325,7 +325,7 @@ class block_xp_renderer extends plugin_renderer_base {
             $o .= $this->xp($level->get_xp_required());
             $o .= html_writer::end_div();
             $o .= html_writer::start_div('block_xp-level-desc');
-            $o .= $desc;
+            $o .= s($desc);
             $o .= html_writer::end_div();
             $o .= html_writer::end_div();
             $o .= html_writer::end_div();
