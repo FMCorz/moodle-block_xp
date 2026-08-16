@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Moodle locked config.
@@ -44,7 +44,6 @@ namespace block_xp\local\config;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mdl_locked_config extends mdl_config {
-
     /**
      * Constructor.
      *
@@ -99,5 +98,4 @@ class mdl_locked_config extends mdl_config {
     public function set($name, $value) {
         parent::set($name . '_locked', $value);
     }
-
 }

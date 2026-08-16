@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Block plugin file interface.
@@ -38,7 +38,6 @@ use context;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface block_file_server {
-
     /**
      * Serve a file.
      *
@@ -52,5 +51,4 @@ interface block_file_server {
      * @return void
      */
     public function serve_block_file($course, $bi, context $context, $filearea, $args, $forcedownload, array $options = []);
-
 }

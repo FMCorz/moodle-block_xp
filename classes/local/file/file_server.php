@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * File server.
@@ -39,7 +39,6 @@ use file_storage;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class file_server implements block_file_server {
-
     /** @var file_storage File storage. */
     protected $fs;
     /** @var bool For whole site? */
@@ -110,5 +109,4 @@ class file_server implements block_file_server {
 
         send_stored_file($file);
     }
-
 }

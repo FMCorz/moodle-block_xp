@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Block XP upgrade.
@@ -36,7 +36,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2014031500) {
-
         // Define field enabled to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('enabled', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'courseid');
@@ -51,7 +50,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2014072301) {
-
         // Define field enableladder to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('enableladder', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'lastlogpurge');
@@ -66,7 +64,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2014072401) {
-
         // Define field levelsdata to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('levelsdata', XMLDB_TYPE_TEXT, null, null, null, null, null, 'enableladder');
@@ -81,7 +78,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2014072402) {
-
         // Define field enableinfos to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('enableinfos', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'enableladder');
@@ -96,7 +92,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2014072403) {
-
         // Define index courseid (unique) to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $index = new xmldb_index('courseid', XMLDB_INDEX_UNIQUE, ['courseid']);
@@ -111,7 +106,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2014090800) {
-
         // Define field enablelevelupnotif to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('enablelevelupnotif', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'levelsdata');
@@ -126,7 +120,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2014090900) {
-
         // Define table block_xp_filters to be created.
         $table = new xmldb_table('block_xp_filters');
 
@@ -153,7 +146,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2014091200) {
-
         // Define field enablecustomlevelbadges to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('enablecustomlevelbadges', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'enablelevelupnotif'); // @codingStandardsIgnoreLine
@@ -168,7 +160,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2015030901) {
-
         // Define field maxactionspertime to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('maxactionspertime', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '10', 'enablecustomlevelbadges'); // @codingStandardsIgnoreLine
@@ -183,7 +174,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2015030902) {
-
         // Define field timeformaxactions to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('timeformaxactions', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '60', 'maxactionspertime'); // @codingStandardsIgnoreLine
@@ -198,7 +188,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2015030903) {
-
         // Define field timebetweensameactions to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('timebetweensameactions', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '180', 'timeformaxactions'); // @codingStandardsIgnoreLine
@@ -213,7 +202,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2016021500) {
-
         // We changed the way the "Level up" notifications are triggered, so we'll remove the old flags from the database.
         $DB->delete_records('user_preferences', ['name' => 'block_xp_notify_level_up']);
 
@@ -222,7 +210,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2016021501) {
-
         // Define field identitymode to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('identitymode', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '1', 'timebetweensameactions');
@@ -237,7 +224,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2016021502) {
-
         // Define field rankmode to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('rankmode', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '1', 'identitymode');
@@ -252,7 +238,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2016021503) {
-
         // Define field neighbours to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('neighbours', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0', 'rankmode');
@@ -267,7 +252,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2016022401) {
-
         // Define field identitymode to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('identitymode', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '1', 'timebetweensameactions');
@@ -282,7 +266,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2016022402) {
-
         // Define field rankmode to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('rankmode', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '1', 'identitymode');
@@ -297,7 +280,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2016022403) {
-
         // Define field neighbours to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('neighbours', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0', 'rankmode');
@@ -312,7 +294,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2017021401) {
-
         // Define field enablecheatguard to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('enablecheatguard', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'lastlogpurge');
@@ -327,7 +308,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2017062900) {
-
         // Define field defaultfilters to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('defaultfilters', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1', 'neighbours');
@@ -342,7 +322,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2017062901) {
-
         // Although this should have been done when adding the database field, here
         // we ensure that existing instances of the block will be set to the 'static'
         // flag for default filters. This ensures that they are properly marked as
@@ -355,7 +334,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2017070400) {
-
         // Define field laddercols to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('laddercols', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, 'xp,progress', 'defaultfilters');
@@ -370,7 +348,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2017071601) {
-
         // Find what courses were set to, and use that for our admin setting.
         $keeplogsforever = $DB->record_exists('block_xp_config', ['keeplogs' => 0]);
         $keeplogsmax = (int) $DB->get_field('block_xp_config', 'MAX(keeplogs)', []);
@@ -381,7 +358,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2017071602) {
-
         // Define field enablelog to be dropped from block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('enablelog');
@@ -396,7 +372,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2017071603) {
-
         // Define field keeplogs to be dropped from block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('keeplogs');
@@ -411,7 +386,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2017082000) {
-
         // Some webservices were broken because we introduced a format of user
         // preferences which was not supported. Any preference that was introduced
         // with the former name needs to be removed. See MDL-59876.
@@ -426,7 +400,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2019020301) {
-
         // Define field instructions to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('instructions', XMLDB_TYPE_TEXT, null, null, null, null, null, 'laddercols');
@@ -441,7 +414,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2019020302) {
-
         // Define field instructions_format to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('instructions_format', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '1', 'instructions');
@@ -456,7 +428,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2019120200) {
-
         // Define field category to be added to block_xp_filters.
         $table = new xmldb_table('block_xp_filters');
         $field = new xmldb_field('category', XMLDB_TYPE_INTEGER, '3', null, XMLDB_NOTNULL, null, '0', 'courseid');
@@ -471,7 +442,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2019120300) {
-
         // Define index courseidcat (not unique) to be added to block_xp_filters.
         $table = new xmldb_table('block_xp_filters');
         $index = new xmldb_index('courseidcat', XMLDB_INDEX_NOTUNIQUE, ['courseid', 'category']);
@@ -486,7 +456,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2020043001) {
-
         // For the first time since 2015, display previously dismissed notices.
         $DB->delete_records('user_preferences', ['name' => 'block_xp_notices']);
 
@@ -495,7 +464,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2022021121) {
-
         // Define field blocktitle to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('blocktitle', XMLDB_TYPE_TEXT, null, null, null, null, null, 'instructions_format');
@@ -510,7 +478,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2022021122) {
-
         // Define field blockdescription to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('blockdescription', XMLDB_TYPE_TEXT, null, null, null, null, null, 'blocktitle');
@@ -525,7 +492,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2022021123) {
-
         // Define field blockrecentactivity to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('blockrecentactivity', XMLDB_TYPE_INTEGER, '1', null, null, null, null, 'blockdescription');
@@ -540,7 +506,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2022090112) {
-
         // Define field blockrankingsnapshot to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('blockrankingsnapshot', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'blockrecentactivity'); // @codingStandardsIgnoreLine
@@ -555,7 +520,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2023080702) {
-
         // The lvl column is deprecated, but kept to avoid breaking external integrations.
         // Nevertheless, all values are set to the default of 1 to avoid confusion with mixed data.
         $DB->set_field('block_xp', 'lvl', 1, []);
@@ -565,7 +529,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2024040211) {
-
         // Define table block_xp_rule to be created.
         $table = new xmldb_table('block_xp_rule');
 
@@ -597,7 +560,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2025122200) {
-
         // Define table block_xp_logs to be created.
         $table = new xmldb_table('block_xp_logs');
 
@@ -635,7 +597,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2025122201) {
-
         // Remove setting value that are no longer recommended.
         $keeplogs = get_config('block_xp', 'keeplogs');
         if ($keeplogs > 0 && $keeplogs < 30) {
@@ -647,7 +608,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2026031800) {
-
         // Define field legacysource to be added to block_xp_logs.
         $table = new xmldb_table('block_xp_logs');
         $field = new xmldb_field('legacysource', XMLDB_TYPE_INTEGER, '2', null, null, null, null, 'timerecorded');
@@ -661,7 +621,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2026031801) {
-
         // Define field legacyid to be added to block_xp_logs.
         $table = new xmldb_table('block_xp_logs');
         $field = new xmldb_field('legacyid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'legacysource');
@@ -675,7 +634,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2026031802) {
-
         // Define index legacysource (unique) to be added to block_xp_logs.
         $table = new xmldb_table('block_xp_logs');
         $index = new xmldb_index('legacysource', XMLDB_INDEX_UNIQUE, ['legacysource', 'legacyid']);
@@ -689,7 +647,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2026031900) {
-
         // Schedule the logs migrator task.
         $task = new \block_xp\task\logs_migrator_adhoc();
         $task->set_component('block_xp');
@@ -700,7 +657,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2026041600) {
-
         // Define field defaultactionrules to be added to block_xp_config.
         $table = new xmldb_table('block_xp_config');
         $field = new xmldb_field('defaultactionrules', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'neighbours');
@@ -714,7 +670,6 @@ function xmldb_block_xp_upgrade($oldversion) {
     }
 
     if ($oldversion < 2026041700) {
-
         // Drop foreign key on contextid (if present) so admin default rules can use contextid 0.
         $table = new xmldb_table('block_xp_rule');
         $key = new xmldb_key('contextid');

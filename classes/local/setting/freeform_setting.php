@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Free form admin setting.
@@ -40,7 +40,6 @@ require_once($CFG->libdir . '/adminlib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class freeform_setting extends \admin_setting {
-
     /** @var bool No save. */
     public $nosave = true;
     /** @var string The content to display as value. */
@@ -94,5 +93,4 @@ class freeform_setting extends \admin_setting {
     public function output_html($data, $query = '') {
         return $this->get_html_content() ?? '';
     }
-
 }

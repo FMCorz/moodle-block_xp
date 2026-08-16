@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Default admin config.
@@ -53,7 +53,6 @@ namespace block_xp\local\config;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_admin_config extends immutable_config {
-
     /**
      * Constructor.
      */
@@ -103,5 +102,4 @@ class default_admin_config extends immutable_config {
             'logmigrationmaxruntime' => 10 * MINSECS,
         ]));
     }
-
 }

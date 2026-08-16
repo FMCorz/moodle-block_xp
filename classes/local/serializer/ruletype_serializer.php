@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\serializer;
 
@@ -36,7 +36,6 @@ use block_xp\local\ruletype\ruletype_with_profile;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class ruletype_serializer implements serializer {
-
     /** @var resolver The type resolver. */
     protected $typeresolver;
     /** @var serializer The serializer. */
@@ -88,7 +87,6 @@ class ruletype_serializer implements serializer {
     public function serialize($type) {
         $icondata = null;
 
-        // TODO Move to dedicated serializer?
         $icon = $type instanceof \block_xp\local\icon\with_iconography ? $type->get_icon() : null;
         $icon = $icon ?? new fa_icon('question-circle-o');
         $icondata = [

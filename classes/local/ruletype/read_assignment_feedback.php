@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\ruletype;
 
@@ -46,22 +46,47 @@ class read_assignment_feedback implements
     with_iconography {
     use ruletype_deprecation_filler_trait;
 
+    /**
+     * Get default limit.
+     *
+     * @return limit_spec
+     */
     public function get_default_limit(): limit_spec {
         return new limit_spec(0, limit_spec::WINDOW_HOURLY);
     }
 
+    /**
+     * Get default repeat limit.
+     *
+     * @return limit_spec
+     */
     public function get_default_repeat_limit(): limit_spec {
         return new limit_spec(1, limit_spec::WINDOW_HOURLY, limit_spec::SCOPE_ENV);
     }
 
+    /**
+     * Get display name.
+     *
+     * @return lang_string
+     */
     public function get_display_name(): lang_string {
         return new lang_string('ruletypereadassignfeedback', 'block_xp');
     }
 
+    /**
+     * Get education goal.
+     *
+     * @return string
+     */
     public function get_education_goal(): string {
         return self::GOAL_COMMS;
     }
 
+    /**
+     * Get icon.
+     *
+     * @return icon|null
+     */
     public function get_icon(): ?icon {
         global $CFG;
         if ($CFG->branch <= 401) {
@@ -70,6 +95,11 @@ class read_assignment_feedback implements
         return new fa_icon('envelope-open-text');
     }
 
+    /**
+     * Get repeat limit options.
+     *
+     * @return repeat_option[]
+     */
     public function get_repeat_limit_options(): array {
         return [
             (new repeat_option(limit_spec::SCOPE_ENV))
@@ -77,27 +107,54 @@ class read_assignment_feedback implements
         ];
     }
 
+    /**
+     * Get profile.
+     *
+     * @return profile
+     */
     public function get_profile(): profile {
         return new cm_profile('assign');
     }
 
+    /**
+     * Get short description.
+     *
+     * @return lang_string
+     */
     public function get_short_description(): lang_string {
         return new lang_string('ruletypereadassignfeedbackdesc', 'block_xp');
     }
 
+    /**
+     * Check action compatibility.
+     *
+     * @param action $action The action.
+     * @return bool
+     */
     public function is_action_compatible(action $action): bool {
         return $action->get_type() === 'assign_feedback_viewed';
     }
 
+    /**
+     * Check action requirements.
+     *
+     * @param action $action The action.
+     * @return bool
+     */
     public function is_action_satisfying_requirements(action $action): bool {
         return true;
     }
 
+    /**
+     * Make reason.
+     *
+     * @param action $action The action.
+     * @return reason
+     */
     public function make_reason(action $action): reason {
         $reason = new assign_feedback_read_reason();
         $reason->set_env_id((int) $action->get_context()->id);
         $reason->set_assign_grade_id($action->get_object_id());
         return $reason;
     }
-
 }

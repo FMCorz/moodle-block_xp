@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * User leveled up event.
@@ -34,7 +34,6 @@ namespace block_xp\event;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class user_leveledup extends \core\event\base {
-
     /**
      * Returns description of what happened.
      *
@@ -85,5 +84,4 @@ class user_leveledup extends \core\event\base {
             throw new \coding_exception('The level must be set in $other.');
         }
     }
-
 }

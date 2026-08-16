@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Controller.
@@ -40,30 +40,54 @@ use html_writer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class group_ladder_controller extends page_controller {
-
     /** @var string The nav name. */
     protected $navname = 'ladder';
     /** @var string The route name. */
     protected $routename = 'group_ladder';
 
+    /**
+     * Check viewer visibility.
+     *
+     * @return bool
+     */
     protected function is_visible_to_viewers() {
         return false;
     }
 
+    /**
+     * Prepare content.
+     *
+     * @return void
+     */
     protected function pre_content() {
         if (!di::get('config')->get('enablepromoincourses')) {
             return redirect($this->urlresolver->reverse('ladder', ['courseid' => $this->courseid]));
         }
     }
 
+    /**
+     * Get page title.
+     *
+     * @return string
+     */
     protected function get_page_html_head_title() {
         return get_string('teamleaderboard', 'block_xp');
     }
 
+    /**
+     * Get page heading.
+     *
+     * @return string
+     */
     protected function get_page_heading() {
         return get_string('teamleaderboard', 'block_xp');
     }
 
+    /**
+     * Output page content.
+     *
+     * @return void
+     */
     protected function page_content() {
         $renderer = $this->get_renderer();
         $promourl = $this->urlresolver->reverse('promo', ['courseid' => $this->courseid])->out(false);
@@ -78,5 +102,4 @@ class group_ladder_controller extends page_controller {
         echo $renderer->notification_without_close(get_string('unlockfeaturewithxpplus', 'block_xp', $promourl), 'info');
         echo html_writer::end_div();
     }
-
 }

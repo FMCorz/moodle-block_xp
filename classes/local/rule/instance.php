@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Instance.
@@ -36,7 +36,6 @@ namespace block_xp\local\rule;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface instance {
-
     /**
      * Get the ID.
      *
@@ -85,5 +84,4 @@ interface instance {
      * @return object
      */
     public function get_filter_config(): object;
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Leaderboard table.
@@ -51,7 +51,6 @@ use renderer_base;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class leaderboard_table extends flexible_table {
-
     /** @var \context The context. */
     protected $context;
     /** @var bool Whether the user can view profiles. */
@@ -201,7 +200,6 @@ class leaderboard_table extends flexible_table {
 
         if ($this->is_downloading()) {
             $limit = new limit(0);
-
         } else if (empty($this->fence)) {
             // Compute where to start from.
             $requestedpage = optional_param($this->request[TABLE_VAR_PAGE], null, PARAM_INT);
@@ -213,7 +211,6 @@ class leaderboard_table extends flexible_table {
             }
             $this->pagesize($pagesize, $this->leaderboard->get_count());
             $limit = new limit($pagesize, (int) $this->get_page_start());
-
         } else {
             $this->pagesize($this->fence->get_count(), $this->fence->get_count());
             $limit = $this->fence;
@@ -356,9 +353,7 @@ class leaderboard_table extends flexible_table {
     public function finish_html() {
         if (!$this->started_output) {
             $this->print_nothing_to_display();
-
         } else {
-
             // Copied from parent method.
             $emptyrow = array_fill(0, count($this->columns), '');
             while ($this->currentrow < $this->pagesize) {
@@ -383,7 +378,6 @@ class leaderboard_table extends flexible_table {
             $url100->param('pagesize', 100);
 
             if ($this->use_pages) {
-
                 // If there are more rows than the minimum selector, and enabled.
                 if ($this->showpagesizeselector && $this->totalrows > 20) {
                     echo $this->xpoutput->pagesize_selector([

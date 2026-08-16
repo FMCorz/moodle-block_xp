@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Prefs user indicator.
@@ -44,7 +44,6 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class prefs_user_indicator implements user_indicator {
-
     /** @var moodle_database The DB. */
     protected $db;
     /** @var string The preference prefix. */
@@ -130,5 +129,4 @@ class prefs_user_indicator implements user_indicator {
     public function user_has_flag($userid, $flag) {
         return $this->get_user_flag($userid, $flag) !== null;
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP+.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\ruletype;
 
@@ -41,38 +41,86 @@ use lang_string;
 class obtain_certificate implements has_availability_info, ruletype, ruletype_with_goal, with_iconography {
     use ruletype_deprecation_filler_trait;
 
+    /**
+     * Get availability info.
+     *
+     * @return availability_info
+     */
     public function get_availability_info(): availability_info {
         return new static_info(false, [new unavailability('xpplusrequired', new \lang_string('xpplusrequired', 'block_xp'))]);
     }
 
+    /**
+     * Get display name.
+     *
+     * @return lang_string
+     */
     public function get_display_name(): lang_string {
         return new lang_string('ruletypeobtaincertificate', 'block_xp');
     }
 
+    /**
+     * Get education goal.
+     *
+     * @return string
+     */
     public function get_education_goal(): string {
         return self::GOAL_ASSESS;
     }
 
+    /**
+     * Get icon.
+     *
+     * @return icon|null
+     */
     public function get_icon(): ?icon {
         return new fa_icon('certificate');
     }
 
+    /**
+     * Get short description.
+     *
+     * @return lang_string
+     */
     public function get_short_description(): lang_string {
         return new lang_string('ruletypeobtaincertificatedesc', 'block_xp');
     }
 
+    /**
+     * Check admin compatibility.
+     *
+     * @return bool
+     */
     public function is_compatible_with_admin(): bool {
         return true;
     }
 
+    /**
+     * Check action compatibility.
+     *
+     * @param action $action The action.
+     * @return bool
+     */
     public function is_action_compatible(action $action): bool {
         return false;
     }
 
+    /**
+     * Check action requirements.
+     *
+     * @param action $action The action.
+     * @return bool
+     */
     public function is_action_satisfying_requirements(action $action): bool {
         return false;
     }
 
+    /**
+     * Make reason.
+     *
+     * @param action $action The action.
+     * @return reason
+     */
     public function make_reason(action $action): reason {
         return new unknown_reason();
     }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Levels controller.
@@ -40,10 +40,14 @@ use block_xp\local\serializer\url_serializer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class levels_controller extends page_controller {
-
     /** @var string The route name. */
     protected $routename = 'levels';
 
+    /**
+     * Define optional parameters.
+     *
+     * @return array
+     */
     protected function define_optional_params() {
         return [
             ['reset', false, PARAM_BOOL, false],
@@ -51,6 +55,11 @@ class levels_controller extends page_controller {
         ];
     }
 
+    /**
+     * Prepare content.
+     *
+     * @return void
+     */
     protected function pre_content() {
         parent::pre_content();
 
@@ -63,14 +72,29 @@ class levels_controller extends page_controller {
         }
     }
 
+    /**
+     * Get page title.
+     *
+     * @return string
+     */
     protected function get_page_html_head_title() {
         return get_string('levels', 'block_xp');
     }
 
+    /**
+     * Get page heading.
+     *
+     * @return string
+     */
     protected function get_page_heading() {
         return get_string('levels', 'block_xp');
     }
 
+    /**
+     * Get React module.
+     *
+     * @return array
+     */
     protected function get_react_module() {
         global $USER;
 
@@ -99,10 +123,20 @@ class levels_controller extends page_controller {
         ];
     }
 
+    /**
+     * Get reset URL.
+     *
+     * @return url
+     */
     protected function get_reset_url() {
         return new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
     }
 
+    /**
+     * Output page content.
+     *
+     * @return void
+     */
     protected function page_content() {
         $output = $this->get_renderer();
 
@@ -122,7 +156,11 @@ class levels_controller extends page_controller {
         $this->page_danger_zone_content();
     }
 
+    /**
+     * Output danger zone.
+     *
+     * @return void
+     */
     protected function page_danger_zone_content() {
     }
-
 }

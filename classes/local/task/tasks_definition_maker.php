@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Tasks definition maker interface.
@@ -36,7 +36,6 @@ namespace block_xp\local\task;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface tasks_definition_maker {
-
     /**
      * Get the tasks.
      *
@@ -47,5 +46,4 @@ interface tasks_definition_maker {
      * @return array
      */
     public function get_tasks_definition();
-
 }

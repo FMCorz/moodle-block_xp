@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\form;
 
@@ -36,7 +36,6 @@ require_once($CFG->libdir . '/pear/HTML/QuickForm/html.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class html extends HTML_QuickForm_html {
-
     /** @var object|string|callable The lazy string. */
     protected $content;
 
@@ -59,7 +58,8 @@ class html extends HTML_QuickForm_html {
         if (is_callable($content)) {
             $content = $content();
         }
-        return \html_writer::div((string) ($content ?? ''),
+        return \html_writer::div(
+            (string) ($content ?? ''),
             '',
             ['class' => 'fitem form-control-static', 'data-name' => $this->getName()]
         );
@@ -72,5 +72,4 @@ class html extends HTML_QuickForm_html {
         \MoodleQuickForm::registerElementType('block_xp_html', __FILE__, html::class); // @codingStandardsIgnoreLine
         return 'block_xp_html';
     }
-
 }

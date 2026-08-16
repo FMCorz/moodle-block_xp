@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\ruletype;
 
@@ -27,7 +27,6 @@ namespace block_xp\local\ruletype;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface ruletype_with_limit extends ruletype {
-
     /**
      * Get the default limit.
      *
@@ -48,5 +47,4 @@ interface ruletype_with_limit extends ruletype {
      * @return repeat_option[]
      */
     public function get_repeat_limit_options(): array;
-
 }

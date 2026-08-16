@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * External function.
@@ -41,7 +41,6 @@ use core_text;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class search_courses extends external_api {
-
     /**
      * External function parameters.
      *
@@ -72,10 +71,10 @@ class search_courses extends external_api {
         $courses = \core_course_external::search_courses('search', $query, 0, 25)['courses'];
 
         $sitehome = get_string('frontpage', 'admin');
-        if (strpos(core_text::strtolower($SITE->shortname), $query) !== false
+        if (
+            strpos(core_text::strtolower($SITE->shortname), $query) !== false
                 || strpos(core_text::strtolower($sitehome), $query) !== false
         ) {
-
             array_unshift($courses, array_merge((array) $SITE, [
                 'categoryid' => $SITE->category,
                 'fullname' => $sitehome,
@@ -110,5 +109,4 @@ class search_courses extends external_api {
             'contextid' => new external_value(PARAM_INT),
         ]));
     }
-
 }

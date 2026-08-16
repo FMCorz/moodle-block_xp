@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Serializer.
@@ -42,7 +42,6 @@ use block_xp\local\xp\level_with_name;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class level_serializer implements serializer_with_read_structure {
-
     /** @var url_serializer URL serializer. */
     protected $urlserializer;
 
@@ -89,5 +88,4 @@ class level_serializer implements serializer_with_read_structure {
             'description' => new external_value(PARAM_NOTAGS),
         ], '', $required, $default);
     }
-
 }

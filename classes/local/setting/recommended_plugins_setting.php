@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Recommended plugins setting.
@@ -40,7 +40,6 @@ use moodle_url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class recommended_plugins_setting extends static_setting {
-
     /**
      * Constructor.
      */
@@ -86,5 +85,4 @@ class recommended_plugins_setting extends static_setting {
 
         return di::get('renderer')->render_from_template('block_xp/admin-recommended-plugins', ['plugins' => $plugins]);
     }
-
 }

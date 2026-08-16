@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Route definition.
@@ -36,7 +36,6 @@ namespace block_xp\local\routing;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class route_definition {
-
     /** @var string The route name. */
     protected $name;
     /** @var string The route URL. */
@@ -109,5 +108,4 @@ class route_definition {
     public function get_controller_name() {
         return $this->controllername;
     }
-
 }

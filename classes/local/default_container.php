@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Dependency container.
@@ -41,7 +41,6 @@ use moodle_url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_container implements container {
-
     /** @var array The objects supported by this container. */
     protected static $supports = [
         'action_maker' => true,
@@ -481,7 +480,8 @@ class default_container implements container {
      * @return factory\levels_info_factory
      */
     protected function get_levels_info_factory() {
-        return new factory\levels_factory($this->get('config'),
+        return new factory\levels_factory(
+            $this->get('config'),
             $this->get('badge_url_resolver'),
             $this->get('badge_url_resolver_course_world_factory')
         );
@@ -768,5 +768,4 @@ class default_container implements container {
     public function has($id) {
         return array_key_exists($id, static::$supports);
     }
-
 }

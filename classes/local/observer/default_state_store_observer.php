@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * State store observer.
@@ -42,7 +42,6 @@ use block_xp\local\xp\state_store;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_state_store_observer implements level_up_state_store_observer, points_increased_state_store_observer {
-
     /** @var context The context. */
     protected $context;
     /** @var config The world config. */
@@ -83,7 +82,6 @@ class default_state_store_observer implements level_up_state_store_observer, poi
 
         // Process for each level.
         for ($i = $lowestlevel; $i <= $highestlevel; $i++) {
-
             // Trigger the event.
             $params = [
                 'context' => $this->context,
@@ -135,5 +133,4 @@ class default_state_store_observer implements level_up_state_store_observer, poi
             $this->notificationservice->notify($id, $level);
         }
     }
-
 }

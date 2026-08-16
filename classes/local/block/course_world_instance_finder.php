@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Course world instance finder.
@@ -48,7 +48,6 @@ class course_world_instance_finder implements
     instances_finder_in_context,
     instance_checker,
     instance_finder {
-
     /** @var moodle_database The DB. */
     protected $db;
     /** @var default_instance_finder The default finder. */
@@ -230,5 +229,4 @@ class course_world_instance_finder implements
 
         return $this->dashboardpageid;
     }
-
 }

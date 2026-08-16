@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Levels info factory.
@@ -38,7 +38,6 @@ use block_xp\local\world;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface levels_info_factory {
-
     /**
      * Get the default levels info.
      *
@@ -53,5 +52,4 @@ interface levels_info_factory {
      * @return \block_xp\local\xp\levels_info
      */
     public function get_world_levels_info(world $world);
-
 }

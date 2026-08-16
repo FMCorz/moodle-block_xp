@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\utils;
 
@@ -27,7 +27,6 @@ namespace block_xp\local\utils;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class form_utils {
-
     /**
      * Freeze the form field locked by config.
      *
@@ -35,8 +34,8 @@ class form_utils {
      * @return bool
      */
     public static function freeze_config_locked_fields($mform) {
-        foreach (array_keys($mform->_elements) as $elementIndex){
-            $element =& $mform->_elements[$elementIndex] ?? null;
+        foreach (array_keys($mform->_elements) as $elementindex) {
+            $element =& $mform->_elements[$elementindex] ?? null;
             if (!$element || !method_exists($element, 'getName')) {
                 continue;
             }
@@ -62,5 +61,4 @@ class form_utils {
             && (bool) $configlocked->get($name)
             && $mform->elementExists($name);
     }
-
 }

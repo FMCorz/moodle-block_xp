@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Empty leaderboard.
@@ -38,7 +38,6 @@ use block_xp\local\sql\limit;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class empty_leaderboard implements leaderboard {
-
     /** @var array The columns. */
     protected $columns;
 

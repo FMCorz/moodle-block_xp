@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Levels factory.
@@ -45,7 +45,6 @@ use coding_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class levels_factory implements levels_info_factory, level_factory {
-
     /** @var config The admin config. */
     protected $config;
     /** @var badge_url_resolver The admin badge URL resolver. */
@@ -128,5 +127,4 @@ class levels_factory implements levels_info_factory, level_factory {
     public function make_level($level, $xp, array $metadata = [], ?badge_url_resolver $badgeurlresolver = null) {
         return new static_level($level, $xp, $badgeurlresolver, $metadata);
     }
-
 }

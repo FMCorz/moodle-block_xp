@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Block.
@@ -51,7 +51,6 @@ use block_xp\output\dismissable_notice;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_block extends block_base {
-
     /**
      * Applicable formats.
      *
@@ -126,7 +125,6 @@ class course_block extends block_base {
                 $instances = $bifinder->count_instances_in_context('xp', context_system::instance());
                 $shoulddisable = $instances <= 1;
             }
-
         }
 
         // If we got here that's because we are either removing the block from a course,
@@ -180,7 +178,6 @@ class course_block extends block_base {
         // but that's probably an overkill for now.
         $service = $world->get_level_up_notification_service();
         if ($service->should_be_notified($USER->id)) {
-
             // Get the levels, and remove 0 when the user's level is already in the list.
             $levels = array_unique(array_map(function ($level) use ($state) {
                 if (!$level) {
@@ -191,7 +188,6 @@ class course_block extends block_base {
 
             $levelsinfo = $world->get_levels_info();
             foreach ($levels as $levelnum) {
-
                 // Remove invalid level number.
                 if ($levelnum <= 1 || $levelnum > $levelsinfo->get_count()) {
                     $service->mark_as_notified($USER->id, $levelnum);
@@ -348,7 +344,6 @@ class course_block extends block_base {
         $rankon = $config->get('rankmode') == course_world_config::RANK_ON;
         $rankrel = $config->get('rankmode') == course_world_config::RANK_REL;
         if ($config->get('enableladder') && ($rankon || $rankrel)) {
-
             $leaderboard = $leaderboardfactory->get_leaderboard();
             $widget->set_rank_is_rel($rankrel);
             $widget->set_show_diffs_in_ranking_snapshot($rankrel || array_key_exists('xp', $leaderboard->get_columns()));
@@ -371,7 +366,6 @@ class course_block extends block_base {
                     $widget->set_show_ranking_snapshot(!empty($ranking) || $canedit);
                 }
             }
-
         }
 
         // Add information about the next level.
@@ -453,5 +447,4 @@ class course_block extends block_base {
         $config = $world->get_config();
         $this->title = format_string($config->get('blocktitle'), true, ['context' => $context]);
     }
-
 }

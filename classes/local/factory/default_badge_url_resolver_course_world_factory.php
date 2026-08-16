@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Main factory.
@@ -40,7 +40,6 @@ use block_xp\local\xp\badge_url_resolver;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_badge_url_resolver_course_world_factory implements badge_url_resolver_course_world_factory {
-
     /** @var badge_url_resolver Resolver. */
     protected $adminresolver;
 
@@ -67,14 +66,12 @@ class default_badge_url_resolver_course_world_factory implements badge_url_resol
         if ($custombadges == course_world_config::CUSTOM_BADGES_NOOP) {
             // We're all set, use the badges present.
             $resolver = new \block_xp\local\xp\file_storage_badge_url_resolver($world->get_context(), 'block_xp', 'badges', 0);
-
         } else if ($custombadges == course_world_config::CUSTOM_BADGES_MISSING) {
             // The scenario here is that we are in a new course (not a legacy one),
             // and the badges have not been customised, so we will use the admin
             // ones. We will exit the 'missing' state when the teacher will
             // effectively custommise the levels.
             $resolver = $this->adminresolver;
-
         } else {
             // Probably the legacy state of course_world_config::CUSTOM_BADGES_NONE.
             // We use the standard look of the levels.
@@ -83,5 +80,4 @@ class default_badge_url_resolver_course_world_factory implements badge_url_resol
 
         return $resolver;
     }
-
 }

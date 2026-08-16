@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Config controller.
@@ -38,7 +38,6 @@ use html_writer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class config_controller extends page_controller {
-
     /** @var string The route name. */
     protected $routename = 'config';
     /** @var moodleform The form. */
@@ -80,6 +79,11 @@ class config_controller extends page_controller {
         return $this->form;
     }
 
+    /**
+     * Prepare content.
+     *
+     * @return void
+     */
     protected function pre_content() {
         $config = $this->world->get_config();
         $form = $this->get_form();
@@ -90,25 +94,44 @@ class config_controller extends page_controller {
             // Save the config.
             $config->set_many($data);
 
-            // TODO Display a message.
             $this->redirect();
         }
     }
 
+    /**
+     * Get page title.
+     *
+     * @return string
+     */
     protected function get_page_html_head_title() {
         return get_string('coursesettings', 'block_xp');
     }
 
+    /**
+     * Get page heading.
+     *
+     * @return string
+     */
     protected function get_page_heading() {
         return get_string('coursesettings', 'block_xp');
     }
 
+    /**
+     * Output page content.
+     *
+     * @return void
+     */
     protected function page_content() {
         $form = $this->get_form();
         $form->display();
         $this->page_note();
     }
 
+    /**
+     * Output note.
+     *
+     * @return void
+     */
     protected function page_note() {
         $configlocked = \block_xp\di::get('config_locked');
         $thoselocked = array_filter($configlocked->get_all());
@@ -116,5 +139,4 @@ class config_controller extends page_controller {
             echo html_writer::tag('p', html_writer::tag('small', get_string('notesomesettingslocked', 'block_xp')));
         }
     }
-
 }

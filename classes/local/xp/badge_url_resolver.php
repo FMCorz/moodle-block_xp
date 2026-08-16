@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Badge URL resolver interface.
@@ -36,7 +36,6 @@ namespace block_xp\local\xp;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface badge_url_resolver {
-
     /**
      * Get badge URL for level.
      *
@@ -44,5 +43,4 @@ interface badge_url_resolver {
      * @return moodle_url|null
      */
     public function get_url_for_level($level);
-
 }

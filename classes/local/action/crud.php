@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Action.
@@ -36,7 +36,6 @@ namespace block_xp\local\action;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class crud extends static_action {
-
     /** @var string */
     protected $crud = 'r';
     /** @var string */
@@ -132,5 +131,4 @@ class crud extends static_action {
         $action->relateduserid = $event->relateduserid;
         return $action;
     }
-
 }

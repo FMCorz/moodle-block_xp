@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\external;
 
@@ -31,7 +31,6 @@ use context_system;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class delete_rule extends external_api {
-
     /**
      * External function parameters.
      *
@@ -95,5 +94,4 @@ class delete_rule extends external_api {
     public static function execute_returns() {
         return new external_value(PARAM_BOOL);
     }
-
 }

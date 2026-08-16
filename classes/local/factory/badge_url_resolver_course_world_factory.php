@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Badge URL resolver course world factory interface.
@@ -38,7 +38,6 @@ use block_xp\local\course_world;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface badge_url_resolver_course_world_factory {
-
     /**
      * Get the URL resolver.
      *
@@ -46,5 +45,4 @@ interface badge_url_resolver_course_world_factory {
      * @return \block_xp\local\xp\badge_url_resolver
      */
     public function get_url_resolver(course_world $world);
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\controller;
 
@@ -30,10 +30,14 @@ use block_xp\local\routing\url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class admin_settings_controller extends admin_route_controller {
-
     /** @var string The section name. */
     protected $sectionname = 'block_xp_default_settingspage';
 
+    /**
+     * Define optional parameters.
+     *
+     * @return array
+     */
     protected function define_optional_params() {
         return [
             ['action', false, PARAM_ALPHANUMEXT, false],
@@ -50,6 +54,11 @@ class admin_settings_controller extends admin_route_controller {
         return new url('/admin/settings.php', ['section' => 'block_xp_default_settings']);
     }
 
+    /**
+     * Prepare content.
+     *
+     * @return void
+     */
     protected function pre_content() {
         $action = $this->get_param('action');
 
@@ -86,5 +95,4 @@ class admin_settings_controller extends admin_route_controller {
             return;
         }
     }
-
 }

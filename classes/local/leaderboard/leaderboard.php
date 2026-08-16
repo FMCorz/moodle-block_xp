@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Leaderboard.
@@ -39,7 +39,6 @@ use block_xp\local\xp\rank;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface leaderboard {
-
     /**
      * Get the leaderboard columns.
      *
@@ -79,5 +78,4 @@ interface leaderboard {
      * @return rank[]
      */
     public function get_ranking(limit $limit);
-
 }

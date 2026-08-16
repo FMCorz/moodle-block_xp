@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Compatibility file for IDE support of aliased classes.
@@ -26,7 +26,6 @@
  */
 
 // No declared namespace, on purpose!
-defined('MOODLE_INTERNAL') || die();
 
 // This file will never be autoloaded, and should never be included either. Its content
 // will never be executed, even if it is loaded by accident. It is only here for compatibility

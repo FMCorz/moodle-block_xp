@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Page controller.
@@ -44,7 +44,6 @@ use html_writer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class page_controller extends course_route_controller {
-
     /** @var string The nav name. */
     protected $navname = null;
     /** @var string The route name. */
@@ -196,14 +195,15 @@ abstract class page_controller extends course_route_controller {
 
             if (!$isforwholesite && $requestedcourseid == SITEID) {
                 // In per-course, but requesting front page.
-                echo $output->notification_without_close(get_string('errorcontextcoursemismatchpercourse', 'block_xp'),
+                echo $output->notification_without_close(
+                    get_string('errorcontextcoursemismatchpercourse', 'block_xp'),
                     notification::NOTIFY_WARNING
                 );
-
             } else if ($isforwholesite && $requestedcourseid != SITEID) {
                 // In for whole site, but requesting individual course.
                 $nexturl = $this->urlresolver->reverse($this->get_route_name(), ['courseid' => $this->courseid]);
-                echo $output->notification_without_close(get_string('errorcontextcoursemismatchforwholesite',
+                echo $output->notification_without_close(get_string(
+                    'errorcontextcoursemismatchforwholesite',
                     'block_xp',
                     ['nexturl' => $nexturl->out(false)]
                 ), notification::NOTIFY_WARNING);
@@ -275,5 +275,4 @@ abstract class page_controller extends course_route_controller {
      * @return void
      */
     abstract protected function page_content();
-
 }

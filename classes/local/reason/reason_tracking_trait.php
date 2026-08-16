@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\reason;
 
@@ -27,7 +27,6 @@ namespace block_xp\local\reason;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 trait reason_tracking_trait {
-
     /** @var ?int The env ID. */
     protected $envid;
     /** @var ?int The object ID. */
@@ -88,5 +87,4 @@ trait reason_tracking_trait {
     public function set_parent_id(?int $parentid): void {
         $this->parentid = $parentid;
     }
-
 }

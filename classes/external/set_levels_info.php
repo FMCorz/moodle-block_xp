@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * External function.
@@ -40,7 +40,6 @@ use core_text;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class set_levels_info extends external_api {
-
     /**
      * External function parameters.
      *
@@ -137,7 +136,6 @@ class set_levels_info extends external_api {
         // Pseudo validation, we basically ignore errors.
         if (count($levels) < 2 || count($levels) > 99) {
             $levelsinfo = algo_levels_info::make_from_defaults();
-
         } else {
             $lastpts = null;
             $levelsdata = array_reduce(array_keys($levels), function ($carry, $key) use ($levels, &$lastpts) {
@@ -181,5 +179,4 @@ class set_levels_info extends external_api {
 
         return $levelsinfo;
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Items per time element.
@@ -56,7 +56,6 @@ require_once($CFG->libdir . '/form/group.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_xp_form_itemspertime extends \MoodleQuickForm_group {
-
     /** @var array The units. */
     protected $_units;
     /** @var array Options. */
@@ -218,7 +217,6 @@ class block_xp_form_itemspertime extends \MoodleQuickForm_group {
                 $finalval = null;
                 if (!is_array($value)) {
                     $finalval = ['enabled' => false];
-
                 } else {
                     $finalval = [
                         'points' => isset($value['points']) ? max(0, $value['points']) : 0,

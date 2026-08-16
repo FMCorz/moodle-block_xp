@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Config interface.
@@ -36,7 +36,6 @@ namespace block_xp\local\config;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface config {
-
     /**
      * Get a value.
      *
@@ -77,5 +76,4 @@ interface config {
      * @throws coding_exception When a value is not scalar.
      */
     public function set_many(array $values);
-
 }

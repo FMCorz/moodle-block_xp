@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Compatibility file for IDE support of aliased classes.
@@ -32,6 +32,7 @@ defined('MOODLE_INTERNAL') || die();
 // will never be executed, even if it is loaded by accident. It is only here for compatibility
 // reasons since Moodle has deprecated the top-level classes and Intelephense does not
 // understand the class_alias function (https://github.com/bmewburn/vscode-intelephense/issues/600).
+// phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 if (false) {
 
     /**

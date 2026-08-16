@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Default course world leaderboard factory.
@@ -53,7 +53,6 @@ use block_xp\local\xp\state_anonymiser;
  * @deprecated Since XP 3.17, use leaderboard_factory_maker instead.
  */
 class default_course_world_leaderboard_factory implements course_world_leaderboard_factory_with_config {
-
     /** @var moodle_database The DB. */
     protected $db;
 
@@ -277,7 +276,8 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
 
         // Do we only display the neighbours?
         if ($config->get('neighbours')) {
-            $leaderboard = new neighboured_leaderboard($leaderboard,
+            $leaderboard = new neighboured_leaderboard(
+                $leaderboard,
                 $USER->id,
                 $config->get('neighbours'),
                 $world->get_access_permissions()->can_manage()
@@ -286,5 +286,4 @@ class default_course_world_leaderboard_factory implements course_world_leaderboa
 
         return $leaderboard;
     }
-
 }

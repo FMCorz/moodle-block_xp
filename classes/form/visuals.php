@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Visuals form.
@@ -41,7 +41,6 @@ use moodleform;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class visuals extends moodleform {
-
     /**
      * The definition.
      */
@@ -56,7 +55,8 @@ class visuals extends moodleform {
             $addonrequired = $renderer->render_from_template('block_xp/addon-required', [
                 'promourl' => $this->_customdata['promourl'],
             ]);
-            $mform->addElement('select',
+            $mform->addElement(
+                'select',
                 'currencytheme',
                 get_string('currencysign', 'block_xp') . ' ' . $addonrequired,
                 ['' => get_string('currencysignxp', 'block_xp')],
@@ -67,5 +67,4 @@ class visuals extends moodleform {
 
         $this->add_action_buttons();
     }
-
 }

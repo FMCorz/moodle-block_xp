@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\serializer;
 
@@ -29,7 +29,6 @@ use block_xp\local\rulefilter\handler;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class rule_serializer implements serializer {
-
     /** @var handler The filter handler. */
     protected $filterhandler;
 
@@ -61,5 +60,4 @@ class rule_serializer implements serializer {
             'label' => $label ?? get_string('unknownconditiona', 'block_xp', $instance->get_filter_name()),
         ];
     }
-
 }

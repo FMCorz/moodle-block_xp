@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\reason;
 
@@ -31,6 +31,11 @@ class assign_submitted_reason implements reason, reason_with_rule, reason_with_s
     use reason_rule_trait;
     use reason_tracking_trait;
 
+    /**
+     * Get short description.
+     *
+     * @return string
+     */
     public function get_short_description() {
         return get_string('reasonassignsubmitted', 'block_xp');
     }
@@ -43,5 +48,4 @@ class assign_submitted_reason implements reason, reason_with_rule, reason_with_s
     public function set_submission_id($subid) {
         $this->set_object_id((int) $subid);
     }
-
 }

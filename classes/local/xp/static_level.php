@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Level.
@@ -36,7 +36,6 @@ namespace block_xp\local\xp;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class static_level implements level, level_with_badge, level_with_description, level_with_name {
-
     /** @var int The level. */
     protected $level;
     /** @var int The XP required. */
@@ -50,6 +49,14 @@ class static_level implements level, level_with_badge, level_with_description, l
     /** @var badge_url_resolver Badge URL resolver. */
     protected $badgeurlresolver;
 
+    /**
+     * Constructor.
+     *
+     * @param int $level The level.
+     * @param int $xprequired The required XP.
+     * @param badge_url_resolver|null $badgeurlresolver The badge URL resolver.
+     * @param array $metadata The metadata.
+     */
     public function __construct($level, $xprequired, $badgeurlresolver = null, $metadata = []) {
         $this->level = (int) $level;
         $this->xprequired = (int) $xprequired;
@@ -63,24 +70,48 @@ class static_level implements level, level_with_badge, level_with_description, l
         }
     }
 
+    /**
+     * Get level.
+     *
+     * @return int
+     */
     public function get_level() {
         return $this->level;
     }
 
+    /**
+     * Get required XP.
+     *
+     * @return int
+     */
     public function get_xp_required() {
         return $this->xprequired;
     }
 
+    /**
+     * Get badge URL.
+     *
+     * @return moodle_url|null
+     */
     public function get_badge_url() {
         return $this->badgeurlresolver ? $this->badgeurlresolver->get_url_for_level($this->level) : null;
     }
 
+    /**
+     * Get description.
+     *
+     * @return string
+     */
     public function get_description() {
         return $this->desc ?? '';
     }
 
+    /**
+     * Get name.
+     *
+     * @return string
+     */
     public function get_name() {
         return $this->name ?? '';
     }
-
 }

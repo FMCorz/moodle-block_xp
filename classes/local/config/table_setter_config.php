@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\config;
 
@@ -31,7 +31,6 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class table_setter_config implements config {
-
     /** @var array The columns. */
     protected $columns;
     /** @var moodle_database The DB. */
@@ -60,14 +59,30 @@ class table_setter_config implements config {
         $this->whereparams = $whereparams;
     }
 
+    /**
+     * Get value.
+     *
+     * @param string $name The name.
+     * @return mixed
+     */
     public function get($name) {
         return null;
     }
 
+    /**
+     * Get all values.
+     *
+     * @return array
+     */
     public function get_all() {
         return [];
     }
 
+    /**
+     * Get columns.
+     *
+     * @return array
+     */
     protected function get_columns() {
         if (!isset($this->columns)) {
             $this->columns = array_flip(array_map(function ($col) {
@@ -77,6 +92,12 @@ class table_setter_config implements config {
         return $this->columns;
     }
 
+    /**
+     * Check existence.
+     *
+     * @param string $name The name.
+     * @return bool
+     */
     public function has($name) {
         if (in_array($name, $this->reservedkeys)) {
             return false;
@@ -84,6 +105,12 @@ class table_setter_config implements config {
         return array_key_exists($name, $this->get_columns());
     }
 
+    /**
+     * Set value.
+     *
+     * @param string $name The name.
+     * @param mixed $value The value.
+     */
     public function set($name, $value) {
         if (!$this->has($name)) {
             throw new \coding_exception('Invalid config name: ' . $name);
@@ -91,10 +118,14 @@ class table_setter_config implements config {
         $this->db->set_field_select($this->tablename, $name, $value, $this->wheresql, $this->whereparams);
     }
 
+    /**
+     * Set values.
+     *
+     * @param array $values The values.
+     */
     public function set_many(array $values) {
         foreach ($values as $name => $value) {
             $this->set($name, $value);
         }
     }
-
 }

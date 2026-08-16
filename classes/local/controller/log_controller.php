@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Log controller.
@@ -44,7 +44,6 @@ use html_writer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class log_controller extends page_controller {
-
     /** @var string The nav name. */
     protected $navname = 'report';
     /** @var string The route name. */
@@ -59,6 +58,11 @@ class log_controller extends page_controller {
     /** @var int|null The user ID to filter the logs for. Use {@see self::get_user_id} to obtain. */
     protected $userid = null;
 
+    /**
+     * Check permissions.
+     *
+     * @return void
+     */
     protected function permissions_checks() {
         $accessperms = $this->world->get_access_permissions();
         if (!($accessperms instanceof \block_xp\local\permission\access_logs_permissions)) {
@@ -67,6 +71,11 @@ class log_controller extends page_controller {
         $accessperms->require_access_logs();
     }
 
+    /**
+     * Define optional parameters.
+     *
+     * @return array
+     */
     protected function define_optional_params() {
         return [
             ['userid', null, PARAM_INT],
@@ -74,6 +83,11 @@ class log_controller extends page_controller {
         ];
     }
 
+    /**
+     * Handle post-login.
+     *
+     * @return void
+     */
     protected function post_login() {
         parent::post_login();
 
@@ -81,6 +95,11 @@ class log_controller extends page_controller {
         $this->isusingoldxpp = $addon->is_older_than(2024090500);
     }
 
+    /**
+     * Get table.
+     *
+     * @return \block_xp\output\logs_table
+     */
     protected function get_table() {
         $table = new \block_xp\output\logs_table(
             $this->world,
@@ -109,10 +128,20 @@ class log_controller extends page_controller {
         return $filterset;
     }
 
+    /**
+     * Get page title.
+     *
+     * @return string
+     */
     protected function get_page_html_head_title() {
         return get_string('courselog', 'block_xp');
     }
 
+    /**
+     * Get page heading.
+     *
+     * @return string
+     */
     protected function get_page_heading() {
         return get_string('courselog', 'block_xp');
     }
@@ -133,6 +162,11 @@ class log_controller extends page_controller {
         return $this->userid;
     }
 
+    /**
+     * Get dismissable filters.
+     *
+     * @return array|null
+     */
     protected function get_dismissable_filters() {
         $userid = $this->get_user_id();
         if (!$userid) {
@@ -150,6 +184,11 @@ class log_controller extends page_controller {
         ];
     }
 
+    /**
+     * Output advanced heading.
+     *
+     * @return void
+     */
     protected function page_advanced_heading() {
         $output = $this->get_renderer();
         echo $output->advanced_heading(get_string('courselog', 'block_xp'), [
@@ -158,6 +197,11 @@ class log_controller extends page_controller {
         ]);
     }
 
+    /**
+     * Output page content.
+     *
+     * @return void
+     */
     protected function page_content() {
         global $PAGE;
 
@@ -182,6 +226,11 @@ class log_controller extends page_controller {
         echo html_writer::end_div();
     }
 
+    /**
+     * Output dismissable filters.
+     *
+     * @return void
+     */
     protected function page_dismissable_filters() {
         $dismissablefilters = $this->get_dismissable_filters();
         if (!$dismissablefilters) {
@@ -196,6 +245,11 @@ class log_controller extends page_controller {
         echo html_writer::end_tag('p');
     }
 
+    /**
+     * Output user filter.
+     *
+     * @return void
+     */
     protected function page_user_filter() {
         if ($this->isusingoldxpp || $this->get_user_id()) {
             return null;
@@ -233,5 +287,4 @@ class log_controller extends page_controller {
             ] : null,
         ]);
     }
-
 }

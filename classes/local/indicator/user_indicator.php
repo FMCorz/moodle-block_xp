@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * User indicator interface.
@@ -38,7 +38,6 @@ namespace block_xp\local\indicator;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface user_indicator {
-
     /**
      * Get a user's flag.
      *
@@ -80,5 +79,4 @@ interface user_indicator {
      * @return bool
      */
     public function user_has_flag($userid, $flag);
-
 }

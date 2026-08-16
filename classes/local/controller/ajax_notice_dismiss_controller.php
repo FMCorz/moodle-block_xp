@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Notice api controller.
@@ -39,7 +39,6 @@ use context_system;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class ajax_notice_dismiss_controller extends route_controller {
-
     /**
      * Moodle page specifics.
      *
@@ -87,5 +86,4 @@ class ajax_notice_dismiss_controller extends route_controller {
         }
         $indicator->set_user_flag($USER->id, $this->get_param('name'), 1);
     }
-
 }

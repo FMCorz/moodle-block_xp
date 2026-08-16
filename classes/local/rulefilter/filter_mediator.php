@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\rulefilter;
 
@@ -31,7 +31,6 @@ use block_xp\local\ruletype\ruletype_with_profile;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class filter_mediator {
-
     /** @var handler The filter handler. */
     protected $handler;
 
@@ -108,5 +107,4 @@ class filter_mediator {
     protected function get_unscoped_filter_names(profile $profile): array {
         return ['any'];
     }
-
 }

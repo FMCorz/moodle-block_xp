@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * State store.
@@ -36,7 +36,6 @@ namespace block_xp\local\xp;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface state_store {
-
     /**
      * Get a state.
      *
@@ -67,5 +66,4 @@ interface state_store {
      * @param int $amount The amount.
      */
     public function set($id, $amount);
-
 }

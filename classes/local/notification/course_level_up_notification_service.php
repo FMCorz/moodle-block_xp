@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Course level up notification service.
@@ -36,7 +36,6 @@ namespace block_xp\local\notification;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_level_up_notification_service {
-
     /** User preference prefix. */
     const USERPREF_NOTIFY = 'block_xp_notify_level_up_';
 
@@ -151,5 +150,4 @@ class course_level_up_notification_service {
         }
         set_user_preference($this->key, json_encode($data), $userid);
     }
-
 }

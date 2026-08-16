@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * File.
@@ -46,12 +46,20 @@ class leaderboard extends dynamic_form {
     /** @var string */
     protected $routename = 'ladder';
 
+    /**
+     * Process the form submission.
+     *
+     * @return mixed
+     */
     public function process_dynamic_submission() {
         $config = $this->get_world()->get_config();
         $data = $this->get_data();
         $config->set_many((array) $data);
     }
 
+    /**
+     * Set form data.
+     */
     public function set_data_for_dynamic_submission(): void {
         $config = $this->get_world()->get_config();
         $this->set_data([
@@ -183,5 +191,4 @@ class leaderboard extends dynamic_form {
         }
         parent::set_data($data);
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Dependency injection.
@@ -38,7 +38,6 @@ use coding_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class di {
-
     /** @var container Our container. */
     protected static $container;
 
@@ -54,7 +53,8 @@ class di {
         }
 
         // Get the clock from core if we can.
-        if ($id === 'clock'
+        if (
+            $id === 'clock'
                 && class_exists(\core\di::class)
                 && interface_exists(\core\clock::class)
                 && \core\di::get_container()->has(\core\clock::class)
@@ -99,5 +99,4 @@ class di {
         }
         self::$container = $container;
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * User indicator with acceptance interface.
@@ -36,7 +36,6 @@ namespace block_xp\local\indicator;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface user_indicator_with_acceptance extends user_indicator {
-
     /**
      * Specifies that we can accept a certain flag.
      *
@@ -52,5 +51,4 @@ interface user_indicator_with_acceptance extends user_indicator {
      * @return void
      */
     public function set_requires_acceptable_user_flag($value);
-
 }

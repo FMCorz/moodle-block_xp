@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\form;
 
@@ -37,7 +37,6 @@ use moodle_url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class rule extends dynamic_form {
-
     /** @var object The rule record. */
     protected $rule;
     /** @var ruletype The rule type. */
@@ -73,6 +72,11 @@ class rule extends dynamic_form {
         return $this->ruletype;
     }
 
+    /**
+     * Get context.
+     *
+     * @return context
+     */
     protected function get_context_for_dynamic_submission(): context {
         if ($this->is_default_rule()) {
             return context_system::instance();
@@ -122,6 +126,9 @@ class rule extends dynamic_form {
         return $this->world;
     }
 
+    /**
+     * Check access.
+     */
     final protected function check_access_for_dynamic_submission(): void {
         if ($this->is_default_rule()) {
             require_capability('moodle/site:config', \context_system::instance());
@@ -141,6 +148,11 @@ class rule extends dynamic_form {
         return empty($this->get_rule()->contextid);
     }
 
+    /**
+     * Process the form submission.
+     *
+     * @return mixed
+     */
     final public function process_dynamic_submission() {
         $data = $this->get_data();
         if (!$data) {
@@ -163,6 +175,9 @@ class rule extends dynamic_form {
         di::get('db')->update_record('block_xp_rule', $rule);
     }
 
+    /**
+     * Set form data.
+     */
     final public function set_data_for_dynamic_submission(): void {
         $this->set_data($this->get_default_data());
         if (!$this->is_default_rule()) {
@@ -170,6 +185,11 @@ class rule extends dynamic_form {
         }
     }
 
+    /**
+     * Get page URL.
+     *
+     * @return moodle_url
+     */
     protected function get_page_url_for_dynamic_submission(): moodle_url {
         $urlresolver = di::get('url_resolver');
         if ($this->is_default_rule()) {
@@ -361,6 +381,13 @@ class rule extends dynamic_form {
         return $this->get_ruletype() instanceof ruletype_with_limit;
     }
 
+    /**
+     * Validation.
+     *
+     * @param array $data The data.
+     * @param array $files The files.
+     * @return array
+     */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
 
@@ -370,5 +397,4 @@ class rule extends dynamic_form {
 
         return $errors;
     }
-
 }

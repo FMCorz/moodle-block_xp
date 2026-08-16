@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\rulefilter;
 
@@ -35,21 +35,43 @@ use context;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class xpplusrequired implements has_availability_info, rulefilter {
-
+    /**
+     * Get availability info.
+     *
+     * @return availability_info
+     */
     final public function get_availability_info(): availability_info {
         return new static_info(false, [new unavailability('xpplusrequired', new \lang_string('xpplusrequired', 'block_xp'))]);
     }
 
+    /**
+     * Get action tester.
+     *
+     * @param context $effectivecontext The context.
+     * @param object $config The config.
+     * @return action_tester
+     */
     final public function get_action_tester(context $effectivecontext, object $config): action_tester {
         return new bool_tester(false);
     }
 
+    /**
+     * Get config label.
+     *
+     * @param object $config The config.
+     * @param context|null $effectivecontext The context.
+     * @return string
+     */
     final public function get_label_for_config(object $config, ?context $effectivecontext = null): string {
         return '?';
     }
 
+    /**
+     * Check whether multiple are allowed.
+     *
+     * @return bool
+     */
     final public function is_multiple_allowed(): bool {
         return false;
     }
-
 }

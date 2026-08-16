@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * A repository for getting activity based on course logs.
@@ -43,7 +43,6 @@ use moodle_database;
  * @deprecated Since XP 20, use context_collection_logger instead.
  */
 class course_log_recent_activity_repository implements user_recent_activity_repository {
-
     /** @var string The table name */
     protected $table = 'block_xp_log';
     /** @var moodle_database The DB. */
@@ -92,5 +91,4 @@ class course_log_recent_activity_repository implements user_recent_activity_repo
             );
         }, $results);
     }
-
 }

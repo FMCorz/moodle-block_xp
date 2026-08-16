@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Data provider.
@@ -224,7 +224,6 @@ class provider implements
         $logs = [];
         $lastcourseid = null;
         foreach ($recordset as $record) {
-
             if ($lastcourseid && $lastcourseid != $record->courseid) {
                 $flushlogs($lastcourseid, $logs);
                 $logs = [];
@@ -271,7 +270,6 @@ class provider implements
         $logs = [];
         $lastcontextid = null;
         foreach ($recordset as $record) {
-
             if ($lastcontextid && $lastcontextid != $record->contextid) {
                 $flushlogs($lastcontextid, $logs);
                 $logs = [];
@@ -517,22 +515,17 @@ class provider implements
             if ($name === 'block_xp_notices') {
                 $desc = get_string('privacy:metadata:prefnotices', 'block_xp');
                 $value = transform::yesno($value);
-
             } else if ($name === 'block_xp-generic-promo-page-seen') {
                 $desc = get_string('privacy:metadata:prefseenpromo', 'block_xp');
                 $value = transform::datetime($value);
-
             } else if ($name === 'block_xp-generic-ladder-pagesize') {
                 $desc = get_string('privacy:metadata:prefladderpagesize', 'block_xp');
-
             } else if (strpos($name, 'block_xp-notice-block_intro_') === 0) {
                 $desc = get_string('privacy:metadata:prefintro', 'block_xp');
                 $value = transform::yesno($value);
-
             } else if (strpos($name, 'block_xp_notify_level_up_') === 0) {
                 $desc = get_string('privacy:metadata:preflevelup', 'block_xp');
                 $value = transform::yesno($value);
-
             } else {
                 continue;
             }

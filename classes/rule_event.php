@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Rule event.
@@ -34,7 +34,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_xp_rule_event extends block_xp_rule_property {
-
     /** @var event_lister The event lister. */
     protected $eventlister;
 
@@ -117,7 +116,8 @@ class block_xp_rule_event extends block_xp_rule_property {
             $eventslist[] = [get_string('other') => [$this->value => get_string('unknowneventa', 'block_xp', $this->value)]];
         }
 
-        $modules = html_writer::select($eventslist,
+        $modules = html_writer::select(
+            $eventslist,
             $basename . '[value]',
             $this->value,
             '',
@@ -152,5 +152,4 @@ class block_xp_rule_event extends block_xp_rule_property {
         }
         return false;
     }
-
 }

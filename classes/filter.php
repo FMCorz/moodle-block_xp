@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Filter.
@@ -34,7 +34,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_xp_filter implements renderable {
-
     /** The category for events filters. */
     const CATEGORY_EVENTS = 0;
     /** The category for grades filters. */
@@ -395,5 +394,4 @@ class block_xp_filter implements renderable {
         }
         return $valid;
     }
-
 }

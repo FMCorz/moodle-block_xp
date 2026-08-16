@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Dependency container interface.
@@ -39,7 +39,6 @@ namespace block_xp\local;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface container {
-
     /**
      * Get a thing.
      *
@@ -56,5 +55,4 @@ interface container {
      * @return bool
      */
     public function has($id);
-
 }

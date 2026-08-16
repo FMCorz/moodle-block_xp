@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Levels info writer.
@@ -48,7 +48,6 @@ use invalid_parameter_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class levels_info_writer {
-
     /** @var config The admin config. */
     protected $config;
 
@@ -383,5 +382,4 @@ class levels_info_writer {
 
         return $data;
     }
-
 }

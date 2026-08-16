@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Course world collection strategy.
@@ -46,7 +46,6 @@ use block_xp\local\xp\course_user_state_store;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_world_collection_strategy implements action_collection_strategy, event_collection_strategy {
-
     /** @var context The context. */
     protected $context;
     /** @var config The config. */
@@ -255,5 +254,4 @@ class course_world_collection_strategy implements action_collection_strategy, ev
     public function set_action_collection_strategy(action_collection_strategy $strategy) {
         $this->actioncollectionstrategy = $strategy;
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Rule cm.
@@ -37,7 +37,6 @@ require_once($CFG->dirroot . '/course/lib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_xp_rule_cm extends block_xp_rule_property {
-
     /** @var config The configuration. */
     protected $config;
 
@@ -251,5 +250,4 @@ class block_xp_rule_cm extends block_xp_rule_property {
         $PAGE->requires->strings_for_js(['cmselector', 'rulecmdescwithcourse'], 'block_xp');
         // @codingStandardsIgnoreEnd
     }
-
 }

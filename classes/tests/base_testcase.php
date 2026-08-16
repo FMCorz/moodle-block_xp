@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Base testcase.
@@ -41,7 +41,6 @@ use ReflectionClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class base_testcase extends \advanced_testcase {
-
     /** @var bool */
     private static $fixtureautoloadregistered = false;
 
@@ -262,6 +261,11 @@ abstract class base_testcase extends \advanced_testcase {
         self::$fixtureautoloadregistered = true;
     }
 
+    /**
+     * Get autoload prefixes.
+     *
+     * @return array
+     */
     protected static function get_autoload_prefixes() {
         return [
             'block_xp\\tests\\fixtures\\' => '/blocks/xp/tests/fixtures/',

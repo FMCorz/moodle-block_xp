@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * User notice indicator.
@@ -40,7 +40,6 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class user_notice_indicator extends proxy_user_indicator implements user_indicator_with_acceptance {
-
     /** @var bool Whether we require the flag to be accepted. */
     private $requiresflag = false;
 
@@ -92,5 +91,4 @@ class user_notice_indicator extends proxy_user_indicator implements user_indicat
         }
         return parent::set_user_flag($userid, $flag, $value);
     }
-
 }

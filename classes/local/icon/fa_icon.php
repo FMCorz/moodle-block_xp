@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\icon;
 
@@ -27,7 +27,6 @@ namespace block_xp\local\icon;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class fa_icon implements icon {
-
     /** @var string The name. */
     protected $name;
 
@@ -57,5 +56,4 @@ class fa_icon implements icon {
     public function get_value(): string {
         return $this->name;
     }
-
 }

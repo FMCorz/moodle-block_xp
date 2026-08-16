@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\rulefilter;
 
@@ -33,19 +33,42 @@ use lang_string;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class cm implements rulefilter {
-
+    /**
+     * Get action tester.
+     *
+     * @param context $effectivecontext The context.
+     * @param object $config The config.
+     * @return action_tester
+     */
     public function get_action_tester(context $effectivecontext, object $config): action_tester {
         return new cm_tester($config->cmid ?? 0);
     }
 
+    /**
+     * Get display name.
+     *
+     * @return lang_string
+     */
     public function get_display_name(): lang_string {
         return new lang_string('rulefiltercm', 'block_xp');
     }
 
+    /**
+     * Get short description.
+     *
+     * @return lang_string
+     */
     public function get_short_description(): lang_string {
         return new lang_string('rulefiltercmdesc', 'block_xp');
     }
 
+    /**
+     * Get config label.
+     *
+     * @param object $config The config.
+     * @param context|null $effectivecontext The context.
+     * @return string
+     */
     public function get_label_for_config(object $config, ?context $effectivecontext = null): string {
         $cmid = $config->cmid ?? 0;
         $context = \context_module::instance($cmid ?? 0, IGNORE_MISSING);
@@ -70,16 +93,30 @@ class cm implements rulefilter {
         return get_string('unknownactivitya', 'block_xp', $cmid);
     }
 
+    /**
+     * Check admin compatibility.
+     *
+     * @return bool
+     */
     public function is_compatible_with_admin(): bool {
         return false;
     }
 
+    /**
+     * Get compatible context levels.
+     *
+     * @return int[]
+     */
     public function get_compatible_context_levels(): array {
         return [CONTEXT_COURSE];
     }
 
+    /**
+     * Check whether multiple are allowed.
+     *
+     * @return bool
+     */
     public function is_multiple_allowed(): bool {
         return true;
     }
-
 }

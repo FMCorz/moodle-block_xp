@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * State rank.
@@ -36,7 +36,6 @@ namespace block_xp\local\xp;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class state_rank implements rank {
-
     /** @var int The rank. */
     protected $rank;
     /** @var state The state. */
@@ -70,5 +69,4 @@ class state_rank implements rank {
     public function get_state() {
         return $this->state;
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Static admin setting.
@@ -42,7 +42,6 @@ require_once($CFG->libdir . '/adminlib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class static_setting extends \admin_setting {
-
     /** @var bool No save. */
     public $nosave = true;
     /** @var string The content to display as value. */
@@ -96,7 +95,8 @@ class static_setting extends \admin_setting {
      * @return string
      */
     public function output_html($data, $query = '') {
-        return format_admin_setting($this,
+        return format_admin_setting(
+            $this,
             $this->visiblename,
             $this->get_html_content(),
             $this->description,
@@ -106,5 +106,4 @@ class static_setting extends \admin_setting {
             $query
         );
     }
-
 }

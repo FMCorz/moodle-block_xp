@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Setting.
@@ -39,7 +39,6 @@ use core_plugin_manager;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class compatibility_check_setting extends static_setting {
-
     /**
      * Constructor.
      */
@@ -78,7 +77,6 @@ class compatibility_check_setting extends static_setting {
                 ]),
                 'url' => 'https://docs.levelup.plus/xp/docs/addon-deactivated',
             ];
-
         } else if ($addon->is_out_of_sync()) {
             $messages[] = [
                 'title' => get_string('outofsync', 'block_xp'),
@@ -89,24 +87,28 @@ class compatibility_check_setting extends static_setting {
             ];
         }
 
-        if (!empty($blockxp->pluginsupported) && ($CFG->branch < $blockxp->pluginsupported[0]
+        if (
+            !empty($blockxp->pluginsupported) && ($CFG->branch < $blockxp->pluginsupported[0]
                 || $CFG->branch > $blockxp->pluginsupported[1])
         ) {
             $messages[] = [
                 'title' => get_string('potentialmoodleincompatibility', 'block_xp'),
-                'message' => get_string('pluginxmaybeincompatible',
+                'message' => get_string(
+                    'pluginxmaybeincompatible',
                     'block_xp',
                     ['name' => 'Level Up XP', 'component' => 'block_xp', 'version' => $humanbranch]
                 ),
                 'url' => 'https://docs.levelup.plus/xp/docs/requirements-compatibility#potential-moodle-incompatibility',
             ];
         }
-        if ($localxp && (empty($localxp->pluginsupported) || ($CFG->branch < $localxp->pluginsupported[0]
+        if (
+            $localxp && (empty($localxp->pluginsupported) || ($CFG->branch < $localxp->pluginsupported[0]
                 || $CFG->branch > $localxp->pluginsupported[1]))
         ) {
             $messages[] = [
                 'title' => get_string('potentialmoodleincompatibility', 'block_xp'),
-                'message' => get_string('pluginxmaybeincompatible',
+                'message' => get_string(
+                    'pluginxmaybeincompatible',
                     'block_xp',
                     ['name' => 'Level Up XP+', 'component' => 'local_xp', 'version' => $humanbranch]
                 ),
@@ -119,5 +121,4 @@ class compatibility_check_setting extends static_setting {
             'warnings' => $messages,
         ]);
     }
-
 }

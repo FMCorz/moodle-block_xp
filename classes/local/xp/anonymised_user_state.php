@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Anonymised user state.
@@ -39,7 +39,6 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class anonymised_user_state extends user_state {
-
     /** @var stdClass The anonymous user. */
     protected $anonuser;
     /** @var state The user state. */
@@ -56,44 +55,93 @@ class anonymised_user_state extends user_state {
         $this->state = $state;
     }
 
+    /**
+     * Get ID.
+     *
+     * @return int
+     */
     public function get_id() {
         return $this->anonuser->id;
     }
 
+    /**
+     * Get link.
+     *
+     * @return moodle_url|null
+     */
     public function get_link() {
         return null;
     }
 
+    /**
+     * Get name.
+     *
+     * @return string
+     */
     public function get_name() {
         return get_string('someoneelse', 'block_xp');
     }
 
+    /**
+     * Get picture.
+     *
+     * @return moodle_url|null
+     */
     public function get_picture() {
         return user_utils::default_picture();
     }
 
+    /**
+     * Get level.
+     *
+     * @return level
+     */
     public function get_level() {
         return $this->state->get_level();
     }
 
+    /**
+     * Get level ratio.
+     *
+     * @return float
+     */
     public function get_ratio_in_level() {
         return $this->state->get_ratio_in_level();
     }
 
+    /**
+     * Get level XP.
+     *
+     * @return int
+     */
     public function get_total_xp_in_level() {
         return $this->state->get_total_xp_in_level();
     }
 
+    /**
+     * Get user.
+     *
+     * @return \stdClass
+     */
     public function get_user() {
         return $this->anonuser;
     }
 
+    /**
+     * Get XP.
+     *
+     * @return int
+     */
     public function get_xp() {
         return $this->state->get_xp();
     }
 
+    /**
+     * Get XP in level.
+     *
+     * @return int
+     */
     public function get_xp_in_level() {
         return $this->state->get_xp_in_level();
     }
-
 }

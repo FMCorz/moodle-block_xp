@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Global collection logger.
@@ -45,7 +45,6 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class global_collection_logger implements collection_logger {
-
     /**
      * The table name.
      * @deprecated Since XP 20
@@ -96,5 +95,4 @@ class global_collection_logger implements collection_logger {
     public function reset() {
         // Unlikely that this was intentional, so we do nothing.
     }
-
 }

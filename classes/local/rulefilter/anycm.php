@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\rulefilter;
 
@@ -31,17 +31,32 @@ use lang_string;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class anycm extends any {
-
+    /**
+     * Get display name.
+     *
+     * @return lang_string
+     */
     public function get_display_name(): lang_string {
         return new lang_string('rulefilteranycm', 'block_xp');
     }
 
+    /**
+     * Get short description.
+     *
+     * @return lang_string
+     */
     public function get_short_description(): lang_string {
         return new lang_string('rulefilteranycmdesc', 'block_xp');
     }
 
+    /**
+     * Get config label.
+     *
+     * @param object $config The config.
+     * @param context|null $effectivecontext The context.
+     * @return string
+     */
     public function get_label_for_config(object $config, ?context $effectivecontext = null): string {
         return get_string('rulefilteranycm', 'block_xp');
     }
-
 }

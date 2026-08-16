@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\strategy;
 
@@ -49,7 +49,6 @@ use DateInterval;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class world_action_collection_strategy implements action_collection_strategy {
-
     /** @var world The world. */
     protected $world;
     /** @var collection_logger The logger. */
@@ -123,7 +122,6 @@ class world_action_collection_strategy implements action_collection_strategy {
 
             $typerules = $this->rulesorter->sort($typerules);
             foreach ($typerules as $candidate) {
-
                 // Get the filter.
                 $filter = $this->rulefilterhandler->get_filter($candidate->get_filter_name());
                 if (!$filter) {
@@ -283,5 +281,4 @@ class world_action_collection_strategy implements action_collection_strategy {
     public function set_world_rule_manager(world_rule_manager $worldrulemanager): void {
         $this->worldrulemanager = $worldrulemanager;
     }
-
 }

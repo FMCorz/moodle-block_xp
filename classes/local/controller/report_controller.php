@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Report controller.
@@ -45,7 +45,6 @@ use core_table\local\filter\string_filter;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class report_controller extends page_controller {
-
     /** @var bool Requires a wide view. */
     protected $iswideview = true;
     /** @var bool The page supports groups. */
@@ -61,6 +60,11 @@ class report_controller extends page_controller {
     /** @var flexible_table The table. */
     protected $table;
 
+    /**
+     * Define optional parameters.
+     *
+     * @return array
+     */
     protected function define_optional_params() {
         return [
             ['userid', null, PARAM_INT],
@@ -75,6 +79,11 @@ class report_controller extends page_controller {
         ];
     }
 
+    /**
+     * Check permissions.
+     *
+     * @return void
+     */
     protected function permissions_checks() {
         $accessperms = $this->world->get_access_permissions();
         if (!($accessperms instanceof \block_xp\local\permission\access_report_permissions)) {
@@ -83,6 +92,11 @@ class report_controller extends page_controller {
         $accessperms->require_access_report();
     }
 
+    /**
+     * Handle post-login.
+     *
+     * @return void
+     */
     protected function post_login() {
         parent::post_login();
 
@@ -90,6 +104,11 @@ class report_controller extends page_controller {
         $this->isusingoldxpp = $addon->is_older_than(2024090500);
     }
 
+    /**
+     * Prepare content.
+     *
+     * @return void
+     */
     protected function pre_content() {
         if (!$this->world->get_access_permissions()->can_manage()) {
             return;
@@ -133,10 +152,20 @@ class report_controller extends page_controller {
         $this->world->get_store()->delete($userid);
     }
 
+    /**
+     * Get page title.
+     *
+     * @return string
+     */
     protected function get_page_html_head_title() {
         return get_string('coursereport', 'block_xp');
     }
 
+    /**
+     * Get page heading.
+     *
+     * @return string
+     */
     protected function get_page_heading() {
         return get_string('coursereport', 'block_xp');
     }
@@ -157,6 +186,11 @@ class report_controller extends page_controller {
         return $this->form;
     }
 
+    /**
+     * Get table.
+     *
+     * @return \block_xp\output\report_table
+     */
     protected function get_table() {
         if (!$this->table) {
             $this->table = new \block_xp\output\report_table(
@@ -242,11 +276,21 @@ class report_controller extends page_controller {
         return $filterset;
     }
 
+    /**
+     * Output advanced heading.
+     *
+     * @return void
+     */
     protected function page_advanced_heading() {
         $output = $this->get_renderer();
         echo $output->advanced_heading(get_string('coursereport', 'block_xp'), $this->get_advanced_heading_options());
     }
 
+    /**
+     * Output page content.
+     *
+     * @return void
+     */
     protected function page_content() {
         global $PAGE;
 
@@ -302,6 +346,11 @@ class report_controller extends page_controller {
         }
     }
 
+    /**
+     * Output user filter.
+     *
+     * @return void
+     */
     protected function page_user_filter() {
         if ($this->isusingoldxpp) {
             return null;
@@ -321,5 +370,4 @@ class report_controller extends page_controller {
             'hiddenfields' => $formfields,
         ]);
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Filters widget.
@@ -41,7 +41,6 @@ use renderable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class filters_widget implements renderable {
-
     /** @var bool Whether we can add more filters to this widget. */
     public $canaddmore = true;
     /** @var bool Editable? */
@@ -92,5 +91,4 @@ class filters_widget implements renderable {
             }
         }
     }
-
 }

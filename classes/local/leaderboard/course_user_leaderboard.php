@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Course user state leaderboard.
@@ -50,7 +50,6 @@ use block_xp\local\xp\user_state;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_user_leaderboard implements leaderboard {
-
     /** @var string[] The columns. */
     protected $columns;
     /** @var moodle_database The database. */
@@ -388,5 +387,4 @@ class course_user_leaderboard implements leaderboard {
     public function set_user_filter(user_filter $filter) {
         $this->userfilter = $filter;
     }
-
 }

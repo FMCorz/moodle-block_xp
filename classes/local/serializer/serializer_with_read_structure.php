@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Serializer with read structure interface.
@@ -36,7 +36,6 @@ namespace block_xp\local\serializer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface serializer_with_read_structure extends serializer {
-
     /**
      * Return the structure for external services.
      *
@@ -46,5 +45,4 @@ interface serializer_with_read_structure extends serializer {
      * @return external_value
      */
     public function get_read_structure($required = VALUE_REQUIRED, $default = null, $null = NULL_ALLOWED);
-
 }

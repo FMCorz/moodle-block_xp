@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Filter manager.
@@ -37,7 +37,6 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_filter_manager {
-
     /** @var int The course ID. */
     protected $courseid;
     /** @var moodle_database The DB. */
@@ -90,8 +89,7 @@ class course_filter_manager {
     public function get_filters($category = \block_xp_filter::CATEGORY_EVENTS) {
         $key = $this->get_cache_key($category);
         if (false === ($filters = $this->cache->get($key))) {
-            // TODO Caching is unsafe, we should not be serializing the object when
-            // we have a mechanism for exporting them...
+            // Caching serialises filter objects, even though we could export them as they support exporting.
             $filters = $this->get_user_filters($category);
             $this->cache->set($key, $filters);
         }
@@ -218,7 +216,8 @@ class course_filter_manager {
      * @return void
      */
     protected function import_filters(array $filters) {
-        $sortorder = (int) $this->db->get_field('block_xp_filters',
+        $sortorder = (int) $this->db->get_field(
+            'block_xp_filters',
             'COALESCE(MAX(sortorder), -1) + 1',
             ['courseid' => $this->courseid]
         );
@@ -275,5 +274,4 @@ class course_filter_manager {
         $this->db->delete_records('block_xp_filters', ['courseid' => $this->courseid, 'category' => $category]);
         $this->invalidate_filters_cache($category);
     }
-
 }

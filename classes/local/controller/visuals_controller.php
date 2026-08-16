@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Visuals controller.
@@ -46,7 +46,6 @@ use block_xp\local\routing\url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class visuals_controller extends page_controller {
-
     /** @var string The nav name. */
     protected $navname = 'levels';
     /** @var string The route name. */
@@ -55,6 +54,11 @@ class visuals_controller extends page_controller {
     /** @var moodleform The form. */
     private $form;
 
+    /**
+     * Define optional parameters.
+     *
+     * @return array
+     */
     protected function define_optional_params() {
         return [
             ['reset', false, PARAM_BOOL, false],
@@ -105,6 +109,11 @@ class visuals_controller extends page_controller {
         return $this->form;
     }
 
+    /**
+     * Prepare content.
+     *
+     * @return void
+     */
     protected function pre_content() {
 
         // Reset to defaults.
@@ -119,9 +128,7 @@ class visuals_controller extends page_controller {
         $form->set_data((object) $this->get_initial_form_data());
         if ($data = $form->get_data()) {
             $this->save_form_data($data);
-            // TODO Add a confirmation message.
             $this->redirect();
-
         } else if ($form->is_cancelled()) {
             $this->redirect();
         }
@@ -138,7 +145,8 @@ class visuals_controller extends page_controller {
 
         // If the badges are missing, we copy them now.
         if ($config->get('enablecustomlevelbadges') == course_world_config::CUSTOM_BADGES_MISSING) {
-            file_prepare_draft_area($draftitemid,
+            file_prepare_draft_area(
+                $draftitemid,
                 context_system::instance()->id,
                 'block_xp',
                 'defaultbadges',
@@ -146,7 +154,8 @@ class visuals_controller extends page_controller {
                 $this->get_filemanager_options()
             );
         } else {
-            file_prepare_draft_area($draftitemid,
+            file_prepare_draft_area(
+                $draftitemid,
                 $this->get_filemanager_context()->id,
                 'block_xp',
                 'badges',
@@ -181,7 +190,8 @@ class visuals_controller extends page_controller {
         $config = $this->world->get_config();
 
         // Save the area.
-        file_save_draft_area_files($data->badges,
+        file_save_draft_area_files(
+            $data->badges,
             $this->get_filemanager_context()->id,
             'block_xp',
             'badges',
@@ -195,14 +205,29 @@ class visuals_controller extends page_controller {
         $config->set('enablecustomlevelbadges', course_world_config::CUSTOM_BADGES_NOOP);
     }
 
+    /**
+     * Get page title.
+     *
+     * @return string
+     */
     protected function get_page_html_head_title() {
         return get_string('levelsappearance', 'block_xp');
     }
 
+    /**
+     * Get page heading.
+     *
+     * @return string
+     */
     protected function get_page_heading() {
         return get_string('levelsappearance', 'block_xp');
     }
 
+    /**
+     * Output page content.
+     *
+     * @return void
+     */
     protected function page_content() {
         $output = $this->get_renderer();
 
@@ -246,6 +271,11 @@ class visuals_controller extends page_controller {
         echo $this->get_renderer()->levels_preview($levelsinfo->get_levels());
     }
 
+    /**
+     * Output danger zone.
+     *
+     * @return void
+     */
     protected function page_danger_zone_content() {
     }
 
@@ -257,5 +287,4 @@ class visuals_controller extends page_controller {
      */
     protected function intro() {
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Block XP backup task.
@@ -38,7 +38,6 @@ require_once($CFG->dirroot . '/blocks/xp/backup/moodle2/backup_xp_stepslib.php')
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_xp_block_task extends backup_block_task {
-
     /**
      * Define settings.
      */

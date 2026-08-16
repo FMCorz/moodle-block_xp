@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Block any instance finder.
@@ -38,7 +38,6 @@ use context;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface any_instance_finder_in_context {
-
     /**
      * Finds any instance in a context.
      *
@@ -47,5 +46,4 @@ interface any_instance_finder_in_context {
      * @return block_base Null when none found, else first match.
      */
     public function get_any_instance_in_context($name, context $context);
-
 }

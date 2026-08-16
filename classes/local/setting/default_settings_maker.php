@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Default settings maker.
@@ -53,7 +53,6 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_settings_maker implements settings_maker {
-
     /** @var config The config holding the defaults. */
     protected $defaults;
     /** @var url_resolver The URL resolver. */
@@ -111,7 +110,8 @@ class default_settings_maker implements settings_maker {
         $settings->add($catname, $settingspage);
 
         // Add the shadow settings page used for special actions.
-        $settingspage = new admin_externalpage('block_xp_default_settingspage',
+        $settingspage = new admin_externalpage(
+            'block_xp_default_settingspage',
             get_string('defaultsettings', 'block_xp'),
             $this->urlresolver->reverse('admin/settings')->get_compatible_url()
         );
@@ -119,28 +119,32 @@ class default_settings_maker implements settings_maker {
         $settings->add($catname, $settingspage);
 
         // Add the default action rules page.
-        $settingspage = new admin_externalpage('block_xp_default_action_rules',
+        $settingspage = new admin_externalpage(
+            'block_xp_default_action_rules',
             get_string('defaultactionrules', 'block_xp'),
             $this->urlresolver->reverse('admin/actionrules')->get_compatible_url()
         );
         $settings->add($catname, $settingspage);
 
         // Add the default levels page.
-        $settingspage = new admin_externalpage('block_xp_default_levels',
+        $settingspage = new admin_externalpage(
+            'block_xp_default_levels',
             get_string('defaultlevels', 'block_xp'),
             $this->urlresolver->reverse('admin/levels')->get_compatible_url()
         );
         $settings->add($catname, $settingspage);
 
         // Add the default rules page.
-        $settingspage = new admin_externalpage('block_xp_default_rules',
+        $settingspage = new admin_externalpage(
+            'block_xp_default_rules',
             get_string('defaultrules', 'block_xp'),
             $this->urlresolver->reverse('admin/rules')->get_compatible_url()
         );
         $settings->add($catname, $settingspage);
 
         // Add the default visuals page.
-        $settingspage = new admin_externalpage('block_xp_default_visuals',
+        $settingspage = new admin_externalpage(
+            'block_xp_default_visuals',
             get_string('defaultvisuals', 'block_xp'),
             $this->urlresolver->reverse('admin/visuals')->get_compatible_url()
         );
@@ -149,7 +153,8 @@ class default_settings_maker implements settings_maker {
         // Add the promo page.
         $pluginman = \core_plugin_manager::instance();
         $localxp = $pluginman->get_plugin_info('local_xp');
-        $settingspage = new admin_externalpage('block_xp_promo',
+        $settingspage = new admin_externalpage(
+            'block_xp_promo',
             ($localxp ? '' : '⭐ ') . get_string('navpromo', 'block_xp'),
             $this->urlresolver->reverse('admin/promo')->get_compatible_url()
         );
@@ -173,7 +178,8 @@ class default_settings_maker implements settings_maker {
         $settings[] = new recommended_plugins_setting();
 
         // Admin notices.
-        $setting = (new admin_setting_configselect('block_xp/adminnotices',
+        $setting = (new admin_setting_configselect(
+            'block_xp/adminnotices',
             get_string('adminnotices', 'block_xp'),
             get_string('adminnotices_desc', 'block_xp'),
             $this->defaults->get('adminnotices'),
@@ -201,7 +207,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Whether to show level in navbar.
-        $settings[] = (new admin_setting_configselect('block_xp/navbardisplay',
+        $settings[] = (new admin_setting_configselect(
+            'block_xp/navbardisplay',
             get_string('navbardisplay', 'block_xp'),
             get_string('navbardisplay_desc', 'block_xp'),
             $this->defaults->get('navbardisplay'),
@@ -212,7 +219,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Whether admins can earn points.
-        $settings[] = (new admin_setting_configselect('block_xp/adminscanearnxp',
+        $settings[] = (new admin_setting_configselect(
+            'block_xp/adminscanearnxp',
             get_string('adminscanearnxp', 'block_xp'),
             get_string('adminscanearnxp_desc', 'block_xp'),
             $this->defaults->get('adminscanearnxp'),
@@ -223,7 +231,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Whether to enable state provisioning.
-        $setting = (new admin_setting_configselect('block_xp/provisionstates',
+        $setting = (new admin_setting_configselect(
+            'block_xp/provisionstates',
             get_string('provisionstates', 'block_xp'),
             get_string('provisionstates_desc', 'block_xp'),
             $this->defaults->get('provisionstates'),
@@ -239,7 +248,8 @@ class default_settings_maker implements settings_maker {
         $settings[] = $setting;
 
         // Keeps logs for.
-        $settings[] = (new admin_setting_configselect('block_xp/keeplogs',
+        $settings[] = (new admin_setting_configselect(
+            'block_xp/keeplogs',
             get_string('keeplogs', 'block_xp'),
             get_string('keeplogsdesc', 'block_xp'),
             $this->defaults->get('keeplogs'),
@@ -308,14 +318,16 @@ class default_settings_maker implements settings_maker {
         $settings[] = (new admin_setting_heading('block_xp/hdrgeneral', get_string('general'), ''));
 
         // Enable the information page?
-        $settings[] = (new admin_setting_configcheckbox('block_xp/enableinfos',
+        $settings[] = (new admin_setting_configcheckbox(
+            'block_xp/enableinfos',
             get_string('enableinfos', 'block_xp'),
             get_string('enableinfos_help', 'block_xp'),
             $defaults['enableinfos']
         ));
 
         // Enable the level-up notification?
-        $settings[] = (new admin_setting_configcheckbox('block_xp/enablelevelupnotif',
+        $settings[] = (new admin_setting_configcheckbox(
+            'block_xp/enablelevelupnotif',
             get_string('enablelevelupnotif', 'block_xp'),
             get_string('enablelevelupnotif_help', 'block_xp'),
             $defaults['enablelevelupnotif']
@@ -325,14 +337,16 @@ class default_settings_maker implements settings_maker {
         $settings[] = (new admin_setting_heading('block_xp/hdrladder', get_string('ladder', 'block_xp'), ''));
 
         // Enable the ladder?
-        $settings[] = (new admin_setting_configcheckbox('block_xp/enableladder',
+        $settings[] = (new admin_setting_configcheckbox(
+            'block_xp/enableladder',
             get_string('enableladder', 'block_xp'),
             get_string('enableladder_help', 'block_xp'),
             $defaults['enableladder']
         ));
 
         // Anonymity.
-        $settings[] = (new admin_setting_configselect('block_xp/identitymode',
+        $settings[] = (new admin_setting_configselect(
+            'block_xp/identitymode',
             get_string('anonymity', 'block_xp'),
             get_string('anonymity_help', 'block_xp'),
             $defaults['identitymode'],
@@ -343,7 +357,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Neighbours.
-        $settings[] = (new admin_setting_configselect('block_xp/neighbours',
+        $settings[] = (new admin_setting_configselect(
+            'block_xp/neighbours',
             get_string('limitparticipants', 'block_xp'),
             get_string('limitparticipants_help', 'block_xp'),
             $defaults['neighbours'],
@@ -358,7 +373,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Ranking mode.
-        $settings[] = (new admin_setting_configselect('block_xp/rankmode',
+        $settings[] = (new admin_setting_configselect(
+            'block_xp/rankmode',
             get_string('ranking', 'block_xp'),
             get_string('ranking_help', 'block_xp'),
             $defaults['rankmode'],
@@ -370,7 +386,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Additional columns.
-        $settings[] = (new admin_setting_configmultiselect('block_xp/laddercols',
+        $settings[] = (new admin_setting_configmultiselect(
+            'block_xp/laddercols',
             get_string('ladderadditionalcols', 'block_xp'),
             get_string('ladderadditionalcols_help', 'block_xp'),
             explode(',', $defaults['laddercols']),
@@ -384,14 +401,16 @@ class default_settings_maker implements settings_maker {
         $settings[] = (new admin_setting_heading('block_xp/hdrcheatguard', get_string('cheatguard', 'block_xp'), ''));
 
         // Enable the cheat guard?
-        $settings[] = (new admin_setting_configcheckbox('block_xp/enablecheatguard',
+        $settings[] = (new admin_setting_configcheckbox(
+            'block_xp/enablecheatguard',
             get_string('enablecheatguard', 'block_xp'),
             '',
             $defaults['enablecheatguard']
         ));
 
         // Max actions per time.
-        $settings[] = (new admin_setting_configtext('block_xp/maxactionspertime',
+        $settings[] = (new admin_setting_configtext(
+            'block_xp/maxactionspertime',
             get_string('maxactionspertime', 'block_xp'),
             get_string('maxactionspertime_help', 'block_xp'),
             $defaults['maxactionspertime'],
@@ -399,7 +418,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Time for max actions.
-        $settings[] = (new admin_setting_configtext('block_xp/timeformaxactions',
+        $settings[] = (new admin_setting_configtext(
+            'block_xp/timeformaxactions',
             get_string('timeformaxactions', 'block_xp'),
             get_string('timeformaxactions_help', 'block_xp'),
             $defaults['timeformaxactions'],
@@ -407,7 +427,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Time between identical actions.
-        $settings[] = (new admin_setting_configtext('block_xp/timebetweensameactions',
+        $settings[] = (new admin_setting_configtext(
+            'block_xp/timebetweensameactions',
             get_string('timebetweensameactions', 'block_xp'),
             get_string('timebetweensameactions_help', 'block_xp'),
             $defaults['timebetweensameactions'],
@@ -415,13 +436,15 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Block appearance settings.
-        $settings[] = (new admin_setting_heading('block_xp/hdrblockappearance',
+        $settings[] = (new admin_setting_heading(
+            'block_xp/hdrblockappearance',
             get_string('blockappearance', 'block_xp'),
             ''
         ));
 
         // Block title.
-        $settings[] = (new admin_setting_configtext('block_xp/blocktitle',
+        $settings[] = (new admin_setting_configtext(
+            'block_xp/blocktitle',
             get_string('configtitle', 'block_xp'),
             get_string('configtitle_help', 'block_xp'),
             $defaults['blocktitle'],
@@ -429,7 +452,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Block description.
-        $settings[] = (new admin_setting_configtextarea('block_xp/blockdescription',
+        $settings[] = (new admin_setting_configtextarea(
+            'block_xp/blockdescription',
             get_string('configdescription', 'block_xp'),
             get_string('configdescription_help', 'block_xp'),
             $defaults['blockdescription'],
@@ -437,7 +461,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Block ranking snapshot.
-        $settings[] = (new admin_setting_configselect('block_xp/blockrankingsnapshot',
+        $settings[] = (new admin_setting_configselect(
+            'block_xp/blockrankingsnapshot',
             get_string('configblockrankingsnapshot', 'block_xp'),
             get_string('configblockrankingsnapshot_help', 'block_xp'),
             $defaults['blockrankingsnapshot'],
@@ -448,7 +473,8 @@ class default_settings_maker implements settings_maker {
         ));
 
         // Block recent activity.
-        $settings[] = (new admin_setting_configselect('block_xp/blockrecentactivity',
+        $settings[] = (new admin_setting_configselect(
+            'block_xp/blockrecentactivity',
             get_string('configrecentactivity', 'block_xp'),
             get_string('configrecentactivity_help', 'block_xp'),
             $defaults['blockrecentactivity'],
@@ -460,20 +486,23 @@ class default_settings_maker implements settings_maker {
 
         // Reset data.
         if (di::get('config')->get('context') != CONTEXT_SYSTEM) {
-            $settings[] = (new admin_setting_heading('block_xp/hdrresetdata',
+            $settings[] = (new admin_setting_heading(
+                'block_xp/hdrresetdata',
                 get_string('resetcourses', 'block_xp'),
                 ''
             ));
 
             $resultallurl = $this->urlresolver->reverse('admin/settings');
             $resultallurl->param('action', 'reset');
-            $settings[] = (new static_setting('block_xp/resetallcourses',
+            $settings[] = (new static_setting(
+                'block_xp/resetallcourses',
                 get_string('resettodefaults', 'block_xp'),
                 '',
                 \html_writer::div(
                     strip_tags(
                         markdown_to_html(
-                            get_string('resetallcoursessettingstodefaults',
+                            get_string(
+                                'resetallcoursessettingstodefaults',
                                 'block_xp',
                                 ['url' => $resultallurl->out(false)]
                             )

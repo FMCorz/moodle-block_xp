@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Described level.
@@ -36,7 +36,6 @@ namespace block_xp\local\xp;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class described_level implements level, level_with_description, level_with_name {
-
     /** @var int The level. */
     protected $level;
     /** @var int The XP required. */
@@ -95,5 +94,4 @@ class described_level implements level, level_with_description, level_with_name 
     public function get_xp_required() {
         return $this->xprequired;
     }
-
 }

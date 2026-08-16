@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Add-on provider interface.
@@ -41,7 +41,6 @@ use core_privacy\local\request\shared_data_provider;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface addon_provider extends shared_data_provider {
-
     /**
      * Add the list of contexts for user.
      *
@@ -78,5 +77,4 @@ interface addon_provider extends shared_data_provider {
      * @param approved_contextlist $contextlist The approved contexts and user information to delete information for.
      */
     public static function delete_addon_data_for_user(approved_contextlist $contextlist);
-
 }
