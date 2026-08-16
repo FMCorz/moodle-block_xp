@@ -139,6 +139,7 @@
     position: relative;
 }
 .block_xp .xp-sticky {
+    position: -webkit-sticky;
     position: sticky;
 }
 .block_xp .xp-inset-0 {
@@ -603,7 +604,6 @@
 }
 .block_xp .xp-select-none {
     -webkit-user-select: none;
-       -moz-user-select: none;
             user-select: none;
 }
 .block_xp .xp-grid-cols-2 {
@@ -652,12 +652,10 @@
     gap: 1.5rem;
 }
 .block_xp .xp-gap-x-1 {
-    -moz-column-gap: 0.25rem;
-         column-gap: 0.25rem;
+    column-gap: 0.25rem;
 }
 .block_xp .xp-gap-x-2 {
-    -moz-column-gap: 0.5rem;
-         column-gap: 0.5rem;
+    column-gap: 0.5rem;
 }
 .block_xp .xp-gap-y-1 {
     row-gap: 0.25rem;
@@ -1156,8 +1154,6 @@
 
     -webkit-user-select: none;
 
-       -moz-user-select: none;
-
             user-select: none;
 }
 a .block_xp-level {
@@ -1215,7 +1211,6 @@ a .block_xp-level {
     height: auto;
     width: auto;
     -webkit-user-select: none;
-       -moz-user-select: none;
             user-select: none;
 }
 .block_xp-level.level-badge {

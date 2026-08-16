@@ -2176,13 +2176,14 @@ const RuleLimit = ({ rule, type }) => {
     return react.createElement(RuleLimitContent, { limit: limit, repeatlimit: repeatlimit });
 };
 const RuleLimitContent = ({ limit, repeatlimit }) => {
-    const getStr = useStrings(["repetitionlimitset"]);
+    const getStr = useStrings(["maxcolon", "repetitionlimitset"]);
     if (!limit?.max && !repeatlimit?.max) {
         return null;
     }
     return (react.createElement("div", { className: "xp-text-xs xp-text-gray-500 xp-leading-none xp-whitespace-nowrap xp-flex xp-items-center xp-gap-1" },
         limit?.max ? (react.createElement("span", null,
-            "Max: ",
+            getStr("maxcolon"),
+            " ",
             react.createElement(LimitPerWindow, { max: limit.max, window: limit.timewindow }))) : null,
         repeatlimit?.max ? (react.createElement(Tooltip, { content: getStr("repetitionlimitset") },
             react.createElement("span", null,
