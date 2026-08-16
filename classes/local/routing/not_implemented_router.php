@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\routing;
 
@@ -27,7 +27,6 @@ namespace block_xp\local\routing;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class not_implemented_router {
-
     /** @var array The JSON response. */
     protected $response;
 
@@ -52,5 +51,4 @@ class not_implemented_router {
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($this->response);
     }
-
 }

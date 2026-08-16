@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\group;
 
@@ -43,7 +43,6 @@ use core_group\visibility;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class group_policy {
-
     /** @var int The course ID. */
     protected $courseid;
     /** @var context The course context. */
@@ -455,5 +454,4 @@ class group_policy {
     public static function from_world(world $world) {
         return static::from_context($world->get_context());
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * State store with presence.
@@ -36,7 +36,6 @@ namespace block_xp\local\xp;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface state_store_with_presence extends state_store {
-
     /**
      * Whether a state exists.
      *
@@ -44,5 +43,4 @@ interface state_store_with_presence extends state_store {
      * @return bool
      */
     public function has($id);
-
 }

@@ -287,9 +287,8 @@ class user_utils {
         if (!self::can_earn_points($context, $targetuserid)) {
             $world = di::get('context_world_factory')->get_world_from_context($context);
             $store = $world->get_store();
-            if ($store instanceof state_store_with_presence && $store->has($targetuserid)) {
-                // Ok, we're good.
-            } else {
+            $stateexists = $store instanceof state_store_with_presence && $store->has($targetuserid);
+            if (!$stateexists) {
                 return false;
             }
         }
