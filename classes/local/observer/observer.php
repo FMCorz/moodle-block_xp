@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Block XP observer.
@@ -34,7 +34,6 @@ namespace block_xp\local\observer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class observer {
-
     /**
      * Act when a course is deleted.
      *
@@ -82,5 +81,4 @@ class observer {
             $cs->collect_event($event);
         }
     }
-
 }

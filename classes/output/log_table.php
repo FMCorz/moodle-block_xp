@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Block XP log table.
@@ -45,7 +45,6 @@ use pix_icon;
  * @deprecated Since XP 20, use logs_table instead.
  */
 class log_table extends table_sql {
-
     /** @var string The key of the user ID column. */
     public $useridfield = 'userid';
     /** @var \moodle_database DB. */

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * World interface.
@@ -41,7 +41,6 @@ use block_xp\local\xp\state_store;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface world {
-
     /**
      * Get the access permissions.
      *
@@ -83,5 +82,4 @@ interface world {
      * @return state_store
      */
     public function get_store();
-
 }

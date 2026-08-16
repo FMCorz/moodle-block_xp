@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\config;
 
@@ -29,7 +29,6 @@ use block_xp\di;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class bulk_world_config_setter {
-
     /** @var config */
     protected $defaults;
     /** @var config */
@@ -127,5 +126,4 @@ class bulk_world_config_setter {
     public function set_from_admin_defaults(config $config) {
         $this->set_from(new filtered_config($config, null, $this->get_excluded_keys_from_admin_defaults()));
     }
-
 }

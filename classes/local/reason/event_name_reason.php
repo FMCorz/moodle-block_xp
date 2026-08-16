@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\reason;
 
@@ -28,7 +28,6 @@ namespace block_xp\local\reason;
  * @deprecated Since XP 20, use event_reason instead.
  */
 class event_name_reason implements reason {
-
     /** @var string The event name. */
     protected $eventname;
 
@@ -68,5 +67,4 @@ class event_name_reason implements reason {
     public static function from_signature($signature) {
         return new static($signature);
     }
-
 }

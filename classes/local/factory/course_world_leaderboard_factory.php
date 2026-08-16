@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Course world leaderboard factory interface.
@@ -39,7 +39,6 @@ use block_xp\local\course_world;
  * @deprecated Since XP 3.17, use leaderboard_factory_maker instead.
  */
 interface course_world_leaderboard_factory {
-
     /**
      * Get the leaderboard.
      *
@@ -48,5 +47,4 @@ interface course_world_leaderboard_factory {
      * @return \block_xp\local\leaderboard\leaderboard
      */
     public function get_course_leaderboard(course_world $world, $groupid = 0);
-
 }

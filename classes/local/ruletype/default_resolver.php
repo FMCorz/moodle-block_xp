@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Resolver.
@@ -38,7 +38,6 @@ use core_component;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_resolver implements resolver {
-
     /** @var (ruletype|false)[] The types. */
     protected $types = [];
 
@@ -108,5 +107,4 @@ class default_resolver implements resolver {
 
         return true;
     }
-
 }

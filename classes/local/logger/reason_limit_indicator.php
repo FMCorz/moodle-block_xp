@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\logger;
 
@@ -30,7 +30,6 @@ use block_xp\local\ruletype\limit_spec;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface reason_limit_indicator {
-
     /**
      * Is the rule's reason limit reached.
      *
@@ -41,5 +40,4 @@ interface reason_limit_indicator {
      * @return bool
      */
     public function is_rule_reason_limit_reached(int $id, int $ruleid, reason $reason, limit_spec $limit): bool;
-
 }

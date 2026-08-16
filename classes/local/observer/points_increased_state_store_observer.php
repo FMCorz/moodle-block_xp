@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Points increase state store observer.
@@ -38,7 +38,6 @@ use block_xp\local\xp\state_store;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface points_increased_state_store_observer {
-
     /**
      * The recipient points increased.
      *
@@ -48,5 +47,4 @@ interface points_increased_state_store_observer {
      * @return void
      */
     public function points_increased(state_store $store, $id, $pointsamount);
-
 }

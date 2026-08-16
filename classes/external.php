@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * External.
@@ -44,7 +44,6 @@ use block_xp\external\external_value;
  * @deprecated Since Level Up XP 3.15, use block_xp\external classes instead.
  */
 class external extends external_api {
-
     /**
      * External function parameters.
      *
@@ -178,5 +177,4 @@ class external extends external_api {
     public static function set_levels_info_returns() {
         return new external_value(PARAM_BOOL);
     }
-
 }

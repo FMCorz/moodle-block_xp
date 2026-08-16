@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Routed request.
@@ -36,7 +36,6 @@ namespace block_xp\local\routing;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class routed_request implements request {
-
     /** @var url The URL. */
     protected $url;
     /** @var route The route. */
@@ -83,5 +82,4 @@ class routed_request implements request {
     public function get_url() {
         return $this->url;
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Admin filter manager.
@@ -41,7 +41,6 @@ use coding_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class admin_filter_manager {
-
     /** Key under which we check if the filters were customised. */
     const CUSTOMISED_CONFIG_KEY = 'admin_filter_manager:customised';
 
@@ -100,7 +99,8 @@ class admin_filter_manager {
             return $this->get_default_filters($category);
         }
 
-        $results = $this->db->get_recordset('block_xp_filters',
+        $results = $this->db->get_recordset(
+            'block_xp_filters',
             ['courseid' => 0, 'category' => $category],
             'sortorder ASC, id ASC'
         );
@@ -153,7 +153,8 @@ class admin_filter_manager {
      * @return bool
      */
     protected function is_only_using_legacy_default_event_filters() {
-        $results = $this->db->get_recordset('block_xp_filters',
+        $results = $this->db->get_recordset(
+            'block_xp_filters',
             ['courseid' => 0, 'category' => \block_xp_filter::CATEGORY_EVENTS],
             'sortorder ASC, id ASC'
         );

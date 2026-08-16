@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Factory.
@@ -42,7 +42,6 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_context_collection_logger_factory implements context_collection_logger_factory {
-
     /** @var moodle_database The database. */
     protected $db;
     /** @var reason_from_log_entry_factory The reason factory. */
@@ -117,5 +116,4 @@ class default_context_collection_logger_factory implements context_collection_lo
     public function set_rule_type_resolver(ruletype_resolver $ruletyperesolver) {
         $this->ruletyperesolver = $ruletyperesolver;
     }
-
 }

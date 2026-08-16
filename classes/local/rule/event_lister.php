@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Event lister.
@@ -45,7 +45,6 @@ use block_xp\local\config\config;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class event_lister {
-
     /** @var cache The cache store. */
     protected $cache;
     /** @var bool Whether is used site site. */
@@ -279,5 +278,4 @@ class event_lister {
 
         return $list;
     }
-
 }

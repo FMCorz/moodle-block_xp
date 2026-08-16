@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Information page form.
@@ -43,6 +43,11 @@ class info extends dynamic_form {
     /** @var string */
     protected $routename = 'infos';
 
+    /**
+     * Process the form submission.
+     *
+     * @return mixed
+     */
     public function process_dynamic_submission() {
         $config = $this->get_world()->get_config();
         $data = $this->get_data();
@@ -51,6 +56,9 @@ class info extends dynamic_form {
         $config->set('instructions_format', $data->instructions['format']);
     }
 
+    /**
+     * Set form data.
+     */
     public function set_data_for_dynamic_submission(): void {
         $config = $this->get_world()->get_config();
         $this->set_data([
@@ -79,5 +87,4 @@ class info extends dynamic_form {
         $mform->addElement('editor', 'instructions', get_string('instructions', 'block_xp'), ['rows' => 10]);
         $mform->addHelpButton('instructions', 'instructions', 'block_xp');
     }
-
 }

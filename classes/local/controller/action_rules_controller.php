@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\controller;
 
@@ -39,6 +39,11 @@ class action_rules_controller extends page_controller {
     /** @var string The route name. */
     protected $routename = 'actionrules';
 
+    /**
+     * Define optional parameters.
+     *
+     * @return array
+     */
     protected function define_optional_params() {
         return [
             ['childcontextid', null, PARAM_INT],
@@ -47,6 +52,11 @@ class action_rules_controller extends page_controller {
         ];
     }
 
+    /**
+     * Prepare content.
+     *
+     * @return void
+     */
     protected function pre_content() {
         if ($this->get_param('reset') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
@@ -59,14 +69,29 @@ class action_rules_controller extends page_controller {
         $manager->seed_for_editing();
     }
 
+    /**
+     * Get page title.
+     *
+     * @return string
+     */
     protected function get_page_html_head_title() {
         return get_string('actionrules', 'block_xp');
     }
 
+    /**
+     * Get page heading.
+     *
+     * @return string
+     */
     protected function get_page_heading() {
         return get_string('actionrules', 'block_xp');
     }
 
+    /**
+     * Output page content.
+     *
+     * @return void
+     */
     protected function page_content() {
         $output = $this->get_renderer();
 

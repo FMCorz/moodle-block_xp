@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Dictator.
@@ -41,7 +41,6 @@ use moodle_database;
  * @deprecated Since XP 20, use world_rule_manager instead.
  */
 class the_dictator implements dictator {
-
     /** @var moodle_database The database. */
     protected $db;
     /** @var handler The filter provider. */
@@ -262,5 +261,4 @@ class the_dictator implements dictator {
 
         return $rules;
     }
-
 }

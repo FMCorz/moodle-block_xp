@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Settings environment.
@@ -40,7 +40,6 @@ use part_of_admin_tree;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class environment {
-
     /** @var part_of_admin_tree The root. */
     protected $adminroot;
     /** @var string The parent node name. */
@@ -143,5 +142,4 @@ class environment {
     public function is_full_tree() {
         return $this->adminroot->fulltree;
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\utils;
 
@@ -30,7 +30,6 @@ use block_xp\local\reason\reason_with_tracking;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class reason_utils {
-
     /**
      * Get backfilled tracking values for a reason that does not implement tracking.
      *
@@ -57,5 +56,4 @@ class reason_utils {
 
         return $result;
     }
-
 }

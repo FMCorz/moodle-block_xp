@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Block XP edit form.
@@ -41,7 +41,6 @@ require_once($CFG->dirroot . '/blocks/edit_form.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class edit_form extends block_edit_form {
-
     /**
      * Form definition.
      *
@@ -55,5 +54,4 @@ class edit_form extends block_edit_form {
             'info'
         ));
     }
-
 }

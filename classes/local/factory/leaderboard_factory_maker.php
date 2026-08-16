@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Leaderboard factory maker.
@@ -39,7 +39,6 @@ use block_xp\local\world;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface leaderboard_factory_maker {
-
     /**
      * Get the leaderboard factory.
      *
@@ -48,5 +47,4 @@ interface leaderboard_factory_maker {
      * @return leaderboard_factory
      */
     public function get_leaderboard_factory(world $world, ?config $configoverride = null): leaderboard_factory;
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Promo controller.
@@ -45,7 +45,6 @@ use moodle_url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class promo_controller extends route_controller {
-
     /** Seen flag. */
     const SEEN_FLAG = 'promo-page-seen';
     /** Page version. */
@@ -60,6 +59,11 @@ class promo_controller extends route_controller {
     /** @var world The world. */
     protected $world;
 
+    /**
+     * Define optional parameters.
+     *
+     * @return array
+     */
     protected function define_optional_params() {
         return [
             ['sent', 0, PARAM_INT, false],
@@ -76,6 +80,11 @@ class promo_controller extends route_controller {
         return empty($params['courseid']);
     }
 
+    /**
+     * Require login.
+     *
+     * @return void
+     */
     protected function require_login() {
         global $CFG, $PAGE, $USER, $SITE, $OUTPUT;
         if ($this->is_admin_page()) {
@@ -100,6 +109,11 @@ class promo_controller extends route_controller {
         return '';
     }
 
+    /**
+     * Handle post-login.
+     *
+     * @return void
+     */
     protected function post_login() {
         $this->urlresolver = \block_xp\di::get('url_resolver');
         if (!$this->is_admin_page()) {
@@ -136,6 +150,11 @@ class promo_controller extends route_controller {
         }
     }
 
+    /**
+     * Get content.
+     *
+     * @return void
+     */
     protected function content() {
         global $USER;
 
@@ -291,6 +310,12 @@ EOT;
 EOT;
     }
 
+    /**
+     * Output installed content.
+     *
+     * @param bool $hasnewcontent Whether there is new content.
+     * @return void
+     */
     protected function content_installed(bool $hasnewcontent = false) {
         $output = \block_xp\di::get('renderer');
         $addon = \block_xp\di::get('addon');

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\reason;
 
@@ -31,8 +31,12 @@ class activity_viewed_reason implements reason, reason_with_rule, reason_with_sh
     use reason_rule_trait;
     use reason_tracking_trait;
 
+    /**
+     * Get short description.
+     *
+     * @return string
+     */
     public function get_short_description() {
         return get_string('reasonactivityviewed', 'block_xp');
     }
-
 }

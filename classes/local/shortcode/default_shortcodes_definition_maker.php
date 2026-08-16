@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Default shortcodes definition maker.
@@ -36,7 +36,6 @@ namespace block_xp\local\shortcode;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_shortcodes_definition_maker implements shortcodes_definition_maker {
-
     /**
      * Get the shortcodes definition.
      *
@@ -71,5 +70,4 @@ class default_shortcodes_definition_maker implements shortcodes_definition_maker
             ],
         ];
     }
-
 }

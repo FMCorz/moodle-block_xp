@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * State with subject interface.
@@ -40,7 +40,6 @@ use moodle_url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface state_with_subject extends state {
-
     /**
      * Get the link to the subject.
      *
@@ -61,5 +60,4 @@ interface state_with_subject extends state {
      * @return moodle_url|null
      */
     public function get_picture();
-
 }

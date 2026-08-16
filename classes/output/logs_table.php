@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Logs table.
@@ -48,7 +48,6 @@ use pix_icon;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class logs_table extends table_sql {
-
     /** @var ?array The columns definition. */
     protected $columnsdefinition;
     /** @var string The key of the user ID column. */

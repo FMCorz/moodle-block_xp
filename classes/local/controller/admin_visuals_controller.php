@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Admin visuals controller.
@@ -34,8 +34,12 @@ use block_xp\di;
 use block_xp\local\config\course_world_config;
 use block_xp\local\routing\url;
 use block_xp\local\world;
+use block_xp\local\xp\levels_info;
+use context;
 use context_system;
 use html_writer;
+use moodleform;
+use stdClass;
 
 /**
  * Admin visuals controller class.
@@ -46,12 +50,16 @@ use html_writer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class admin_visuals_controller extends admin_route_controller {
-
     /** @var string The section name. */
     protected $sectionname = 'block_xp_default_visuals';
     /** @var moodleform The form. */
     private $form;
 
+    /**
+     * Define optional parameters.
+     *
+     * @return array
+     */
     protected function define_optional_params() {
         return [
             ['reset', false, PARAM_BOOL, false],
@@ -111,7 +119,8 @@ class admin_visuals_controller extends admin_route_controller {
      */
     protected function get_initial_form_data() {
         $draftitemid = file_get_submitted_draft_itemid('badges');
-        file_prepare_draft_area($draftitemid,
+        file_prepare_draft_area(
+            $draftitemid,
             $this->get_filemanager_context()->id,
             'block_xp',
             'defaultbadges',
@@ -124,6 +133,11 @@ class admin_visuals_controller extends admin_route_controller {
         ];
     }
 
+    /**
+     * Prepare content.
+     *
+     * @return void
+     */
     protected function pre_content() {
         // Capture form submission.
         $form = $this->get_form();
@@ -176,7 +190,8 @@ class admin_visuals_controller extends admin_route_controller {
      * @return void
      */
     protected function save_form_data($data) {
-        file_save_draft_area_files($data->badges,
+        file_save_draft_area_files(
+            $data->badges,
             $this->get_filemanager_context()->id,
             'block_xp',
             'defaultbadges',
@@ -222,7 +237,8 @@ class admin_visuals_controller extends admin_route_controller {
             echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
             echo html_writer::tag('p', markdown_to_html(get_string('resetallcoursestodefaultsintro', 'block_xp')));
             $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
-            echo html_writer::tag('p',
+            echo html_writer::tag(
+                'p',
                 $output->render($output->make_single_button(
                     $url->get_compatible_url(),
                     get_string('resetallcoursestodefaults', 'block_xp'),
@@ -257,7 +273,6 @@ class admin_visuals_controller extends admin_route_controller {
      * @return levels_info
      */
     final protected function get_levels_info() {
-        // TODO We should get the levels info from somewhere else.
         $config = \block_xp\di::get('config');
         $resolver = \block_xp\di::get('badge_url_resolver');
         $data = json_decode($config->get('levelsdata'), true);
@@ -268,5 +283,4 @@ class admin_visuals_controller extends admin_route_controller {
         }
         return $levelsinfo;
     }
-
 }

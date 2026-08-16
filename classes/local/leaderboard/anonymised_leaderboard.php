@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Anonymised leaderboard.
@@ -49,7 +49,6 @@ use block_xp\local\xp\user_state;
  * @deprecated Since v3.12.0, use anonymisable_leaderboard instead.
  */
 class anonymised_leaderboard implements leaderboard {
-
     /** @var leaderboard The leaderboard to anonymise. */
     protected $leaderboard;
     /** @var levels_info The levels info. */
@@ -100,7 +99,6 @@ class anonymised_leaderboard implements leaderboard {
                 $rank->get_rank(),
                 new anonymised_user_state($state, $this->anonymous)
             );
-
         } else if ($state instanceof state_with_subject) {
             $rank = new state_rank(
                 $rank->get_rank(),
@@ -164,5 +162,4 @@ class anonymised_leaderboard implements leaderboard {
             return $this->anonymise_rank($state);
         });
     }
-
 }

@@ -38,7 +38,6 @@ use csv_import_reader;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class csv_reader_iterator implements \Iterator {
-
     /** @var csv_import_reader The CSV import reader. */
     protected $cir;
     /** @var mixed Current value. */

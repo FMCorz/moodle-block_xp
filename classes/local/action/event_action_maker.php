@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Maker.
@@ -36,7 +36,6 @@ namespace block_xp\local\action;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class event_action_maker implements maker_from_event {
-
     /**
      * Make actions from event.
      *
@@ -74,10 +73,10 @@ class event_action_maker implements maker_from_event {
             $actions[] = new discussion_viewed($context, $event->userid, $event->objectid);
         } else if ($event instanceof \mod_forum\event\post_created) {
             $actions[] = new discussion_replied_to($context, $event->userid, $event->other['discussionid'], $event->objectid);
-        } else if ($event instanceof \mod_glossary\event\entry_created
+        } else if (
+            $event instanceof \mod_glossary\event\entry_created
                 || $event instanceof \mod_glossary\event\entry_approved
         ) {
-
             $entry = $event->get_record_snapshot('glossary_entries', $event->objectid);
             $userid = $entry->userid;
             if ($entry->approved) {
@@ -137,5 +136,4 @@ class event_action_maker implements maker_from_event {
             return new static_action('assign_submission_submitted', $context, $userid, $submissionid);
         }, $userids));
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Setup trait.
@@ -43,14 +43,12 @@ defined('MOODLE_INTERNAL') || die();
  * @deprecated Since XP 19, no longer needed.
  */
 trait setup_trait_310_onwards {
-
     /**
      * PHP Unit setup method.
      */
     public function setUp(): void {
         $this->setup_test();
     }
-
 }
 
 /**
@@ -63,14 +61,12 @@ trait setup_trait_310_onwards {
  * @deprecated Since XP 19, no longer needed.
  */
 trait setup_trait_pre_310 {
-
     /**
      * PHP Unit setup method.
      */
     public function setup() {
         $this->setup_test();
     }
-
 }
 
 /**
@@ -90,5 +86,4 @@ trait setup_trait {
      */
     protected function setup_test() {
     }
-
 }

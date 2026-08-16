@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\rule;
 
@@ -30,7 +30,6 @@ use block_xp\local\rule\instance;
  * @deprecated Since XP 20, the dictatorship was overthrown.
  */
 interface dictator {
-
     /**
      * Count rules in context.
      *
@@ -85,5 +84,4 @@ interface dictator {
      * @return instance[] The most important rules first.
      */
     public function sort_rules_by_priority($rules): array;
-
 }

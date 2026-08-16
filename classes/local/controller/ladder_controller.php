@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Ladder controller.
@@ -43,7 +43,6 @@ use html_writer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class ladder_controller extends page_controller {
-
     /** Page size flag. */
     const PAGE_SIZE_FLAG = 'ladder-pagesize';
 
@@ -54,6 +53,11 @@ class ladder_controller extends page_controller {
     /** @var string */
     protected $routename = 'ladder';
 
+    /**
+     * Set up page.
+     *
+     * @return void
+     */
     protected function page_setup() {
         global $PAGE;
         parent::page_setup();
@@ -128,10 +132,20 @@ class ladder_controller extends page_controller {
         return $table;
     }
 
+    /**
+     * Get page title.
+     *
+     * @return string
+     */
     protected function get_page_html_head_title() {
         return get_string('ladder', 'block_xp');
     }
 
+    /**
+     * Get page heading.
+     *
+     * @return string
+     */
     protected function get_page_heading() {
         return get_string('ladder', 'block_xp');
     }
@@ -166,7 +180,6 @@ class ladder_controller extends page_controller {
             if (!empty($pagesizepref)) {
                 $indicator->unset_user_flag($USER->id, self::PAGE_SIZE_FLAG);
             }
-
         } else if ($pagesize != $pagesizepref) {
             // It's not the default, and it's not our flag, save the flag.
             $indicator->set_user_flag($USER->id, self::PAGE_SIZE_FLAG, $pagesize);
@@ -175,6 +188,11 @@ class ladder_controller extends page_controller {
         return (int) $pagesize;
     }
 
+    /**
+     * Output page content.
+     *
+     * @return void
+     */
     protected function page_content() {
         global $PAGE;
         $output = $this->get_renderer();
@@ -250,5 +268,4 @@ class ladder_controller extends page_controller {
             ] : null,
         ]);
     }
-
 }

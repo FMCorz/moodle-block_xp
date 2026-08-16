@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\serializer;
 
@@ -27,7 +27,6 @@ namespace block_xp\local\serializer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class availability_info_serializer implements serializer {
-
     /**
      * Serialize.
      *
@@ -42,5 +41,4 @@ class availability_info_serializer implements serializer {
             }, $info->get_reasons()),
         ];
     }
-
 }

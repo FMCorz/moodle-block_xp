@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Event collection strategy.
@@ -42,7 +42,6 @@ use block_xp\local\utils\user_utils;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class global_collection_strategy implements event_collection_strategy {
-
     /** @var maker|null The action maker. */
     protected $actionmaker;
     /** @var array Contexts allowed. */
@@ -176,5 +175,4 @@ class global_collection_strategy implements event_collection_strategy {
     public function set_context_world_factory(context_world_factory $factory) {
         $this->contextworldfactory = $factory;
     }
-
 }

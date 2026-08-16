@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\reason;
 
@@ -27,7 +27,6 @@ namespace block_xp\local\reason;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 trait reason_rule_trait {
-
     /** @var int The rule ID. */
     protected $ruleid;
 
@@ -48,5 +47,4 @@ trait reason_rule_trait {
     public function set_rule_id(?int $id) {
         $this->ruleid = $id;
     }
-
 }

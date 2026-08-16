@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Immutable config.
@@ -39,7 +39,6 @@ namespace block_xp\local\config;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class immutable_config extends proxy_config {
-
     /**
      * Set a value.
      *
@@ -58,5 +57,4 @@ class immutable_config extends proxy_config {
     final public function set_many(array $values) {
         // Do nothing, it's still immutable.
     }
-
 }

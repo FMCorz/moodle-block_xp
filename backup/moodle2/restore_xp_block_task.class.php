@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Block XP restore task.
@@ -38,7 +38,6 @@ require_once($CFG->dirroot . '/blocks/xp/backup/moodle2/restore_xp_stepslib.php'
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_xp_block_task extends restore_block_task {
-
     /**
      * Return the course context.
      *
@@ -112,5 +111,4 @@ class restore_xp_block_task extends restore_block_task {
         $manager = di::get('backup_content_manager');
         return $manager->get_decode_rules();
     }
-
 }

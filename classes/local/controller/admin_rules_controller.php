@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Admin rules controller.
@@ -42,7 +42,6 @@ use core\output\notification;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class admin_rules_controller extends admin_route_controller {
-
     /** @var string The section name. */
     protected $sectionname = 'block_xp_default_rules';
     /** @var array Existing filters. */
@@ -50,6 +49,11 @@ class admin_rules_controller extends admin_route_controller {
     /** @var admin_filter_manager The manager. */
     protected $filtermanager;
 
+    /**
+     * Define optional parameters.
+     *
+     * @return array
+     */
     protected function define_optional_params() {
         return [
             ['revert', false, PARAM_BOOL, false],
@@ -58,6 +62,11 @@ class admin_rules_controller extends admin_route_controller {
         ];
     }
 
+    /**
+     * Prepare content.
+     *
+     * @return void
+     */
     protected function pre_content() {
         $this->filtermanager = new \block_xp\local\xp\admin_filter_manager(\block_xp\di::get('db'));
 
@@ -82,7 +91,6 @@ class admin_rules_controller extends admin_route_controller {
             require_sesskey();
             $this->handle_save();
             $this->redirect(null, get_string('changessaved'));
-
         } else if (!empty($_POST['cancel'])) {
             $this->redirect();
         }
@@ -230,6 +238,11 @@ class admin_rules_controller extends admin_route_controller {
         ]);
     }
 
+    /**
+     * Output XP+ promotion.
+     *
+     * @return void
+     */
     protected function page_plus_promo_content() {
         $promourl = $this->urlresolver->reverse('admin/promo');
         echo $this->get_renderer()->notification_without_close(
@@ -238,6 +251,11 @@ class admin_rules_controller extends admin_route_controller {
         );
     }
 
+    /**
+     * Output rules.
+     *
+     * @return void
+     */
     protected function page_rules_content() {
         $output = $this->get_renderer();
         echo $output->render($this->get_widget_group());
@@ -262,7 +280,6 @@ class admin_rules_controller extends admin_route_controller {
                 ['confirmlabel' => get_string('revert', 'core')]
             );
             return;
-
         } else if ($this->get_param('reset')) {
             echo $output->confirm_reset(
                 get_string('resetallcoursestodefaults', 'block_xp'),
@@ -283,7 +300,8 @@ class admin_rules_controller extends admin_route_controller {
             echo $output->heading_with_divider(get_string('dangerzone', 'block_xp'));
             echo html_writer::tag('p', markdown_to_html(get_string('resetallcoursestodefaultsintro', 'block_xp')));
             $url = new url($this->pageurl, ['reset' => 1, 'sesskey' => sesskey()]);
-            echo html_writer::tag('p',
+            echo html_writer::tag(
+                'p',
                 $output->render($output->make_single_button(
                     $url->get_compatible_url(),
                     get_string('resetallcoursestodefaults', 'block_xp'),
@@ -292,5 +310,4 @@ class admin_rules_controller extends admin_route_controller {
             );
         }
     }
-
 }

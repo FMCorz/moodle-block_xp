@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Course user event collection logger.
@@ -46,7 +46,6 @@ class course_user_event_collection_logger implements
     collection_logger_with_group_reset,
     collection_logger_with_id_reset,
     reason_collection_logger {
-
     /** The table name. */
     const TABLE = 'block_xp_log';
 
@@ -175,5 +174,4 @@ class course_user_event_collection_logger implements
             ]
         );
     }
-
 }

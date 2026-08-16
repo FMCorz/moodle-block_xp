@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Rules scope trait.
@@ -43,7 +43,6 @@ use moodle_url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 trait rules_scope_trait {
-
     /**
      * Whether having a child context is allowed.
      *
@@ -72,7 +71,8 @@ trait rules_scope_trait {
         // Confirm is a valid context.
         $context = context::instance_by_id($childcontextid, IGNORE_MISSING);
         $worldcontext = $this->world->get_context();
-        if (!$context || $context->contextlevel != CONTEXT_COURSE ||
+        if (
+            !$context || $context->contextlevel != CONTEXT_COURSE ||
                 !$worldcontext->is_parent_of($context, false)
         ) {
             return null;
@@ -136,5 +136,4 @@ trait rules_scope_trait {
             'helpicon' => $childctxhelp->export_for_template($output),
         ]);
     }
-
 }

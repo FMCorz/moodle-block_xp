@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Collection logger.
@@ -63,7 +63,6 @@ class context_collection_logger implements
     reason_occurrence_indicator,
     ruletype_occurrence_indicator,
     user_recent_activity_repository {
-
     /** @var int The context ID. */
     protected $contextid;
     /** @var moodle_database The DB. */
@@ -478,5 +477,4 @@ class context_collection_logger implements
     public function set_rule_type_resolver(ruletype_resolver $ruletyperesolver) {
         $this->ruletyperesolver = $ruletyperesolver;
     }
-
 }

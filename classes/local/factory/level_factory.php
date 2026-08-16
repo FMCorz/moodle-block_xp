@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Level factory.
@@ -38,7 +38,6 @@ use block_xp\local\xp\badge_url_resolver;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface level_factory {
-
     /**
      * Make a level.
      *
@@ -49,5 +48,4 @@ interface level_factory {
      * @return \block_xp\local\xp\level
      */
     public function make_level($level, $xp, array $metadata = [], ?badge_url_resolver $badgeurlresolver = null);
-
 }

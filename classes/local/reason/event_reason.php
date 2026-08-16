@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\reason;
 
@@ -34,6 +34,11 @@ class event_reason implements reason, reason_with_rule, reason_with_short_descri
     use reason_subtype_trait;
     use reason_tracking_trait;
 
+    /**
+     * Get short description.
+     *
+     * @return string
+     */
     public function get_short_description() {
         $class = $this->get_subtype() ?? '';
         if (class_exists($class) && is_subclass_of($class, 'core\event\base')) {
@@ -71,5 +76,4 @@ class event_reason implements reason, reason_with_rule, reason_with_short_descri
         $reason->set_parent_id($action->get_related_user_id());
         return $reason;
     }
-
 }

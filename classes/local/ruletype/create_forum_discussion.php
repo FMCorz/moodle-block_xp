@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Type.
@@ -55,26 +55,56 @@ class create_forum_discussion implements
     with_iconography {
     use ruletype_deprecation_filler_trait;
 
+    /**
+     * Get default limit.
+     *
+     * @return limit_spec
+     */
     public function get_default_limit(): limit_spec {
         return new limit_spec(5, limit_spec::WINDOW_HOURLY);
     }
 
+    /**
+     * Get default repeat limit.
+     *
+     * @return limit_spec
+     */
     public function get_default_repeat_limit(): limit_spec {
         return new limit_spec(0);
     }
 
+    /**
+     * Get display name.
+     *
+     * @return lang_string
+     */
     public function get_display_name(): lang_string {
         return new lang_string('ruletypecreateforumdiscussion', 'block_xp');
     }
 
+    /**
+     * Get education goal.
+     *
+     * @return string
+     */
     public function get_education_goal(): string {
         return self::GOAL_CONTRIB;
     }
 
+    /**
+     * Get icon.
+     *
+     * @return icon|null
+     */
     public function get_icon(): ?icon {
         return new fa_icon('comments-o');
     }
 
+    /**
+     * Get repeat limit options.
+     *
+     * @return repeat_option[]
+     */
     public function get_repeat_limit_options(): array {
         return [
             (new repeat_option(limit_spec::SCOPE_ENV))
@@ -83,22 +113,50 @@ class create_forum_discussion implements
         ];
     }
 
+    /**
+     * Get profile.
+     *
+     * @return profile
+     */
     public function get_profile(): profile {
         return new cm_profile('forum');
     }
 
+    /**
+     * Get short description.
+     *
+     * @return lang_string
+     */
     public function get_short_description(): lang_string {
         return new lang_string('ruletypecreateforumdiscussiondesc', 'block_xp');
     }
 
+    /**
+     * Check action compatibility.
+     *
+     * @param action $action The action.
+     * @return bool
+     */
     public function is_action_compatible(action $action): bool {
         return $action instanceof discussion_created;
     }
 
+    /**
+     * Check action requirements.
+     *
+     * @param action $action The action.
+     * @return bool
+     */
     public function is_action_satisfying_requirements(action $action): bool {
         return true;
     }
 
+    /**
+     * Make reason.
+     *
+     * @param action $action The action.
+     * @return reason
+     */
     public function make_reason(action $action): reason {
         if (!$action instanceof discussion_created) {
             throw new \coding_exception('unexpectedaction');
@@ -108,5 +166,4 @@ class create_forum_discussion implements
         $reason->set_object_id($action->get_discussion_id());
         return $reason;
     }
-
 }

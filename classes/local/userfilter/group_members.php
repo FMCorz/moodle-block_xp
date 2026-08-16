@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\userfilter;
 
@@ -27,7 +27,6 @@ namespace block_xp\local\userfilter;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class group_members implements user_filter {
-
     /** @var int */
     protected $groupid;
 
@@ -61,5 +60,4 @@ class group_members implements user_filter {
         static $i = 0;
         return 'xpufgm' . $i++;
     }
-
 }

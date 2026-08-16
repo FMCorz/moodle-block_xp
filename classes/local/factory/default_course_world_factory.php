@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Course world factory.
@@ -43,7 +43,6 @@ use block_xp\local\config\immutable_config;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_course_world_factory implements course_world_factory {
-
     /** @var config The admin config. */
     protected $adminconfig;
     /** @var config The config overrides. */
@@ -107,7 +106,8 @@ class default_course_world_factory implements course_world_factory {
             $courseconfig = new course_world_config($this->adminconfig, $this->db, $courseid);
             $config = new config_stack([$this->configoverrides, $courseconfig]);
 
-            $world = new \block_xp\local\course_world($config,
+            $world = new \block_xp\local\course_world(
+                $config,
                 $this->db,
                 $courseid,
                 $this->urlresolverfactory,
@@ -132,5 +132,4 @@ class default_course_world_factory implements course_world_factory {
     public function set_context_collection_logger_factory(context_collection_logger_factory $factory) {
         $this->collectionloggerfactory = $factory;
     }
-
 }

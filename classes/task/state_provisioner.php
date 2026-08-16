@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\task;
 
@@ -33,7 +33,6 @@ use text_progress_trace;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class state_provisioner extends \core\task\scheduled_task {
-
     /** @var progress_trace */
     private $logger;
 
@@ -61,10 +60,10 @@ class state_provisioner extends \core\task\scheduled_task {
             $world = di::get('context_world_factory')->get_world_from_context(context_system::instance());
             $provisioner = new course_user_state_provisioner($world->get_context(), $world->get_store(), $logger);
             $provisioner->provision_states();
-
         } else {
             $logger->output('Identifying courses where XP is enabled...');
-            $courseids = di::get('db')->get_fieldset_select('block_xp_config',
+            $courseids = di::get('db')->get_fieldset_select(
+                'block_xp_config',
                 'courseid',
                 'enabled = ? AND courseid != ?',
                 [1, SITEID]
@@ -106,5 +105,4 @@ class state_provisioner extends \core\task\scheduled_task {
             return;
         }
     }
-
 }

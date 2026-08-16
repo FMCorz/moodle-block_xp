@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Levels.
@@ -40,7 +40,6 @@ use context;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class algo_levels_info implements levels_info, levels_info_with_algo {
-
     /** Default number of levels. */
     const DEFAULT_COUNT = 10;
     /** Default base for XP algo. */
@@ -252,7 +251,6 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
                     $this->get_level_metadata($level),
                     $resolver
                 );
-
             } else {
                 // Legacy implementation.
                 $desc = isset($data['desc'][$key]) ? $data['desc'][$key] : null;
@@ -289,7 +287,8 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
                 'incr' => self::DEFAULT_INCR,
             ],
             // Version 2 does not index points by level, version 1 used to.
-            'xp' => array_values(self::get_xp_with_algo(self::DEFAULT_COUNT,
+            'xp' => array_values(self::get_xp_with_algo(
+                self::DEFAULT_COUNT,
                 self::DEFAULT_BASE,
                 self::DEFAULT_COEF,
                 self::DEFAULT_METHOD,
@@ -348,7 +347,6 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
             } else if ($i == 2) {
                 $list[$i] = $base;
             } else {
-
                 // Before XP 3.15, the calculation used to be base + round(prevLevel * coef),
                 // but in the UI we had switched to the values below (since XP 3.11). So for consistency
                 // we're now using the same method here. This change will only affect default levels in
@@ -363,5 +361,4 @@ class algo_levels_info implements levels_info, levels_info_with_algo {
         }
         return $list;
     }
-
 }

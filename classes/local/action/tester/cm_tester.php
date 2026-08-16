@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Tester.
@@ -38,7 +38,6 @@ use block_xp\local\action\action;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class cm_tester implements action_tester {
-
     /** @var int The CM ID. */
     protected $cmid;
 
@@ -51,9 +50,14 @@ class cm_tester implements action_tester {
         $this->cmid = (int) $cmid;
     }
 
+    /**
+     * Check action constraints.
+     *
+     * @param action $action The action.
+     * @return bool
+     */
     public function is_action_passing_constraints(action $action): bool {
         $context = $action->get_context();
         return $context instanceof \context_module && (int) $context->instanceid === $this->cmid;
     }
-
 }

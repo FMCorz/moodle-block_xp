@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Action.
@@ -36,7 +36,6 @@ namespace block_xp\local\action;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class discussion_created extends static_action {
-
     /** @var \context The context. */
     protected $context;
     /** @var int The user ID. */
@@ -66,5 +65,4 @@ class discussion_created extends static_action {
     public function get_discussion_id(): int {
         return $this->objectid;
     }
-
 }

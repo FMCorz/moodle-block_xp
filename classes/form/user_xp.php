@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\form;
 
@@ -75,12 +75,20 @@ class user_xp extends dynamic_form {
         }
     }
 
+    /**
+     * Process the form submission.
+     *
+     * @return mixed
+     */
     public function process_dynamic_submission() {
         $state = $this->get_state();
         $data = $this->get_data();
         $this->get_world()->get_store()->set($state->get_id(), $data->xp);
     }
 
+    /**
+     * Set form data.
+     */
     public function set_data_for_dynamic_submission(): void {
         $state = $this->get_state();
         $this->set_data([
@@ -137,5 +145,4 @@ class user_xp extends dynamic_form {
 
         return $errors;
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Ranker.
@@ -41,7 +41,6 @@ use block_xp\local\xp\state_rank;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class relative_ranker implements ranker {
-
     /** @var state The relative state. */
     protected $relativestate;
 
@@ -80,5 +79,4 @@ class relative_ranker implements ranker {
             return new state_rank($state->get_xp() - $base, $state);
         });
     }
-
 }

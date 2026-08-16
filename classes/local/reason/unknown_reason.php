@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 namespace block_xp\local\reason;
 
@@ -27,17 +27,5 @@ namespace block_xp\local\reason;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class unknown_reason implements reason {
-
-    public function get_signature() {
-        return '';
-    }
-
-    public static function get_type() {
-        return '?';
-    }
-
-    public static function from_signature($signature) {
-        return new static();
-    }
-
+    use reason_deprecation_filler_trait;
 }

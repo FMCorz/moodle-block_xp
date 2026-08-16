@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Action.
@@ -38,7 +38,6 @@ use DateTimeImmutable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class static_action implements action {
-
     /** @var string The type. */
     protected $type;
     /** @var \context The context. */
@@ -110,5 +109,4 @@ class static_action implements action {
     public function get_user_id(): int {
         return $this->userid;
     }
-
 }

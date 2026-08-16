@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Anonymise a state.
@@ -38,7 +38,6 @@ use moodle_url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class anonymised_state implements state_with_subject {
-
     /** @var string The name. */
     protected $name;
     /** @var moodle_url|null The pic. */
@@ -139,5 +138,4 @@ class anonymised_state implements state_with_subject {
     public function get_xp_in_level() {
         return $this->state->get_xp_in_level();
     }
-
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Usage report maker.
@@ -43,7 +43,6 @@ use moodle_database;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class usage_report_maker {
-
     /** @var config The global config. */
     protected $config;
     /** @var moodle_database The database. */
@@ -187,7 +186,8 @@ class usage_report_maker {
             }
 
             // Skip what seems to be the default 0-point rules for assessable, etc.
-            if ($record->points == 0
+            if (
+                $record->points == 0
                 && !empty($recordrules['ruleset']) && $recordrules['ruleset'] === 1
                 && !empty($recordrules['event']) && $recordrules['event'] === 3
                 && !empty($recordrules['property']) && $recordrules['property'] === 2

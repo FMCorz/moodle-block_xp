@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Course world factory interface.
@@ -36,7 +36,6 @@ namespace block_xp\local\factory;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface course_world_factory {
-
     /**
      * Get the world.
      *
@@ -44,5 +43,4 @@ interface course_world_factory {
      * @return \block_xp\local\course_world
      */
     public function get_world($courseid);
-
 }

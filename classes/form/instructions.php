@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Instructions forms.
@@ -43,7 +43,6 @@ use moodleform;
  * @deprecated Since XP 3.17
  */
 class instructions extends moodleform {
-
     /**
      * Form definition.
      *

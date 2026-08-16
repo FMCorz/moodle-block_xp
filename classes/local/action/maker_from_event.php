@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Action.
@@ -36,7 +36,6 @@ namespace block_xp\local\action;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface maker_from_event extends maker {
-
     /**
      * Make actions from event.
      *
@@ -44,5 +43,4 @@ interface maker_from_event extends maker {
      * @return action[]
      */
     public function make_from_event(\core\event\base $event): iterable;
-
 }

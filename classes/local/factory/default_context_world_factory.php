@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Context world factory.
@@ -39,7 +39,6 @@ use block_xp\local\world;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class default_context_world_factory implements context_world_factory {
-
     /** @var config The admin config. */
     protected $adminconfig;
     /** @var course_world_factory The course world factory. */
@@ -101,5 +100,4 @@ class default_context_world_factory implements context_world_factory {
     public function set_course_world_factory(course_world_factory $factory) {
         $this->courseworldfactory = $factory;
     }
-
 }

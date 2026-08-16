@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Filter.
@@ -38,7 +38,6 @@ use block_xp\local\action\action;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class bool_tester implements action_tester {
-
     /** @var bool The result to return. */
     protected $result;
 
@@ -60,5 +59,4 @@ class bool_tester implements action_tester {
     public function is_action_passing_constraints(action $action): bool {
         return $this->result;
     }
-
 }

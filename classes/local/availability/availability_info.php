@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Availability info.
@@ -36,7 +36,6 @@ namespace block_xp\local\availability;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface availability_info {
-
     /**
      * Whether available.
      *
@@ -52,5 +51,4 @@ interface availability_info {
      * @return unavailability_reason[]
      */
     public function get_reasons(): array;
-
 }
