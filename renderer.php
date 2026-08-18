@@ -1152,7 +1152,7 @@ EOT
             'world' => $worldprops,
             'addon' => [
                 'activated' => di::get('addon')->is_activated(),
-                'enablepromo' => $world ? (bool) di::get('config')->get('enablepromoincourses') : true,
+                'enablepromo' => di::get('addon')->is_promo_allowed(),
                 'promourl' => $addonpromourl->out(false),
             ],
         ]);

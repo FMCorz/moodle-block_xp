@@ -27,6 +27,8 @@
 
 namespace block_xp\form;
 
+use block_xp\di;
+use block_xp\local\utils\text_utils;
 use core_form\dynamic_form;
 
 defined('MOODLE_INTERNAL') || die();
@@ -101,19 +103,6 @@ class cheatguard extends dynamic_form {
         ]);
         $mform->addHelpButton('timebetweensameactions', 'timebetweensameactions', 'block_xp');
         $mform->disabledIf('timebetweensameactions', 'enablecheatguard', 'eq', 0);
-
-        if ($world->get_config()->get('enablecheatguard') && $config->get('enablepromoincourses')) {
-            $worldconfig = $world->get_config();
-            $timeframe = max(0, $worldconfig->get('timebetweensameactions'), $worldconfig->get('timeformaxactions'));
-
-            $promourl = $urlresolver->reverse('promo', ['courseid' => $world->get_courseid()]);
-            if ($timeframe > HOURSECS * 6) {
-                $mform->addElement('static', '', '', $renderer->notification_without_close(
-                    get_string('promocheatguard', 'block_xp', ['url' => $promourl->out()]),
-                    'warning'
-                ));
-            }
-        }
     }
 
     /**
@@ -165,5 +154,35 @@ class cheatguard extends dynamic_form {
         }
 
         parent::set_data($data);
+    }
+
+    /**
+     * Validation.
+     *
+     * @param array $data
+     * @param array $files
+     * @return array
+     */
+    public function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+
+        // Prevent setting high values, they are ineffective and not supported.
+        if (!empty($data['enablecheatguard']) && !di::get('addon')->is_activated()) {
+            $checks = [
+                'timebetweensameactions' => (int) ($data['timebetweensameactions'] ?? 0),
+                'maxactionspertime' => (int) ($data['maxactionspertime']['time'] ?? 0),
+            ];
+            foreach ($checks as $field => $value) {
+                if ($value < HOURSECS * 6) {
+                    continue;
+                }
+                $errors[$field] = get_string('cheatguardrequiresshorttimelimit', 'block_xp');
+                if (di::get('addon')->is_promo_allowed()) {
+                    $errors[$field] .= di::get('renderer')->render_from_template('block_xp/addon-tag', []);
+                }
+            }
+        }
+
+        return $errors;
     }
 }

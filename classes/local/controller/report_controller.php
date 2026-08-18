@@ -236,7 +236,7 @@ class report_controller extends page_controller {
         return [
             'intro' => new \lang_string('coursereportintro', 'block_xp'),
             'menu' => array_filter([
-                $config->get('enablepromoincourses') && !$hasaddon ? [
+                di::get('addon')->is_promo_allowed() && !$hasaddon ? [
                     'label' => get_string('exportdata', 'block_xp'),
                     'href' => '#',
                     'disabled' => true,

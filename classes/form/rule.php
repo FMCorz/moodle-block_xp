@@ -241,7 +241,7 @@ class rule extends dynamic_form {
         }
 
         $labelsuffix = '';
-        if (!di::get('addon')->is_activated() && di::get('config')->get('enablepromoincourses')) {
+        if (!di::get('addon')->is_activated() && di::get('addon')->is_promo_allowed()) {
             $labelsuffix = ' ' . di::get('renderer')->render_from_template('block_xp/addon-tag', []);
         }
 
@@ -288,7 +288,7 @@ class rule extends dynamic_form {
         }
 
         if (!di::get('addon')->is_activated()) {
-            if (!di::get('config')->get('enablepromoincourses')) {
+            if (!di::get('addon')->is_promo_allowed()) {
                 $mform->removeElement('limitgroup');
                 $mform->removeElement('repeatgroup');
             } else {

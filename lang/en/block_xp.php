@@ -126,6 +126,7 @@ $string['changecourse'] = 'Change course';
 $string['changetocourse'] = 'Change to course';
 $string['changetositewide'] = 'Back to sitewide';
 $string['cheatguard'] = 'Cheat guard';
+$string['cheatguardrequiresshorttimelimit'] = 'Time frames above several hours are not supported.';
 $string['cheatguardsettingsmovednotice'] = 'The cheat guard settings were moved to the [event rules page]({$a->url}).';
 $string['checkaddoncompatibility'] = 'Level Up XP addon compatibility';
 $string['chooseacondition'] = 'Choose a condition';
@@ -538,7 +539,6 @@ $string['property:component'] = 'Event component';
 $string['property:crud'] = 'Event CRUD';
 $string['property:eventname'] = 'Event name';
 $string['property:target'] = 'Event target';
-$string['promocheatguard'] = 'This cheat guard is not designed to cover long time frames. Please consider upgrading to <em>Level Up XP+</em> to unlock greater time frames and other features. <a href="{$a->url}">Read more here</a>.';
 $string['promogetnow'] = 'Get XP+ now!';
 $string['promointro'] = 'Become the game master! Unlock additional features and take gamification to a whole new level with Level Up XP+!';
 $string['promointroinstalled'] = 'The add-on _Level Up XP+_ is installed on your system and all of its features have been enabled.';
@@ -855,7 +855,7 @@ $string['tryme'] = 'Try me';
 $string['unavailablebecause'] = 'This is not available due to the following:';
 $string['unknown'] = 'Unknown';
 $string['unlimitedrepeats'] = 'Unlimited repeats';
-$string['unlockfeaturewithxpplus'] = 'Unlock this feature with XP+. <a href="{$a}">Learn more</a>';
+$string['unlockfeaturewithxpplus'] = 'This feature requires XP+. <a href="{$a}">Learn more</a>';
 $string['unavailable'] = 'Unavailable';
 $string['unstableversioninstalledinfo'] = 'This version of Level Up XP (block_xp) is still in development and considered unstable, please use an official release.';
 $string['upgradingplugins'] = 'Upgrading the plugins';
@@ -976,3 +976,6 @@ $string['resetvisualstodefaults'] = 'Reset appearance to defaults';
 
 // Deprecated since XP 18
 $string['questreleasenotice'] = 'Take gamification to the next level, discover **Level Up Quest** 🥳. Turn your courses into **exciting adventures**, filled with **re-engagement strategies** and **celebrations** 🤯! Check out [Quest\'s website]({$a->questurl}) and our [launch post here]({$a->questblogurl}). 👈';
+
+// Deprecated since XP 20
+$string['promocheatguard'] = 'This cheat guard is not designed to cover long time frames. Please consider upgrading to <em>Level Up XP+</em> to unlock greater time frames and other features. <a href="{$a->url}">Read more here</a>.';

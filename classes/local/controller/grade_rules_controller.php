@@ -50,7 +50,7 @@ class grade_rules_controller extends page_controller {
      * @return void
      */
     protected function pre_content() {
-        if (!di::get('config')->get('enablepromoincourses')) {
+        if (!di::get('addon')->is_promo_allowed()) {
             return redirect($this->urlresolver->reverse('rules', ['courseid' => $this->courseid]));
         }
     }

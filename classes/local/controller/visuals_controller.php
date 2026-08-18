@@ -91,7 +91,6 @@ class visuals_controller extends page_controller {
      */
     protected function define_form() {
         return new \block_xp\form\visuals($this->pageurl->out(false), [
-            'showpromo' => di::get('config')->get('enablepromoincourses'),
             'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $this->courseid]),
             'fmoptions' => $this->get_filemanager_options(),
         ]);

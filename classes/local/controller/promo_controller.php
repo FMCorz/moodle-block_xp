@@ -33,6 +33,7 @@ require_once($CFG->libdir . '/adminlib.php');
 use block_xp\di;
 use html_writer;
 use block_xp\local\routing\url;
+use block_xp\local\utils\text_utils;
 use core\output\notification;
 use moodle_url;
 
@@ -86,7 +87,6 @@ class promo_controller extends route_controller {
      * @return void
      */
     protected function require_login() {
-        global $CFG, $PAGE, $USER, $SITE, $OUTPUT;
         if ($this->is_admin_page()) {
             admin_externalpage_setup($this->sectionname, '', null, $this->pageurl->get_compatible_url());
         } else {
@@ -124,10 +124,11 @@ class promo_controller extends route_controller {
     /**
      * Permission checks.
      *
-     * @throws moodle_exception When the conditions are not met.
+     * @throws \moodle_exception When the conditions are not met.
      * @return void
      */
     protected function permissions_checks() {
+
         if (!$this->is_admin_page()) {
             $this->world->get_access_permissions()->require_manage();
         }
@@ -165,11 +166,11 @@ class promo_controller extends route_controller {
 
         // Warn users if the addon was deactivated.
         if (di::get('addon')->is_deactivated()) {
-            echo di::get('renderer')->notification_without_close(strip_tags(markdown_to_html(
+            echo di::get('renderer')->notification_without_close(text_utils::markdown_light(
                 get_string('erroraddondeactivated', 'block_xp', [
                     'docsurl' => (new \moodle_url('https://docs.levelup.plus/xp/docs/addon-deactivated'))->out(false),
                 ])
-            ), '<a><em><strong>'), notification::NOTIFY_ERROR);
+            ), notification::NOTIFY_ERROR);
         }
 
         $addon = \block_xp\di::get('addon');
@@ -393,6 +394,21 @@ EOT;
         $value = $indicator->get_user_flag($USER->id, self::SEEN_FLAG);
 
         return $value < self::VERSION || $addon->is_out_of_sync();
+    }
+
+    /**
+     * Whether the page should be visible.
+     *
+     * It should be visible when:
+     * - Promo is enabled, or
+     * - The addon is activated, or
+     * - The addon should be activated but isn't.
+     *
+     * @return bool
+     */
+    public static function is_visible() {
+        $addon = di::get('addon');
+        return $addon->is_activated() || $addon->is_deactivated() || $addon->is_promo_allowed();
     }
 
     /**

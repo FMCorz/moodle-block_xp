@@ -140,6 +140,15 @@ class addon {
     }
 
     /**
+     * Whether any promo is allowed.
+     *
+     * @return bool
+     */
+    public function is_promo_allowed(): bool {
+        return (bool) \block_xp\di::get('config')->get('enablepromoincourses');
+    }
+
+    /**
      * Require the plugin to be activated.
      */
     public function require_activated() {

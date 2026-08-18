@@ -92,7 +92,7 @@ class default_course_world_navigation_factory implements course_world_navigation
         $renderer = \block_xp\di::get('renderer');
         $accessperms = $world->get_access_permissions();
         $hasaddon = di::get('addon')->is_activated();
-        $showpromo = $this->adminconfig->get('enablepromoincourses');
+        $showpromo = di::get('addon')->is_promo_allowed();
         $config = $world->get_config();
         $canmanage = $accessperms->can_manage();
 
@@ -231,15 +231,7 @@ class default_course_world_navigation_factory implements course_world_navigation
                 'text' => get_string('navsettings', 'block_xp'),
             ];
 
-            // @codingStandardsIgnoreStart
-            //
-            // If you got here and you want to disable the promo page, there is no need
-            // to hack the code my friend. You can add the following line to your config.php:
-            //
-            //   $CFG->forced_plugin_settings = ['block_xp' => ['enablepromoincourses' => 0]];
-            //
-            // @codingStandardsIgnoreEnd
-            if ($showpromo || $hasaddon) {
+            if (\block_xp\local\controller\promo_controller::is_visible()) {
                 $star = $renderer->pix_icon('star', '', 'block_xp', ['class' => 'icon']);
                 if ($hasaddon) {
                     $star = '';
