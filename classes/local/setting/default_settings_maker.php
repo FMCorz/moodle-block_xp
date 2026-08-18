@@ -151,13 +151,12 @@ class default_settings_maker implements settings_maker {
         $settings->add($catname, $settingspage);
 
         // Add the promo page.
-        $pluginman = \core_plugin_manager::instance();
-        $localxp = $pluginman->get_plugin_info('local_xp');
         $settingspage = new admin_externalpage(
             'block_xp_promo',
-            ($localxp ? '' : '⭐ ') . get_string('navpromo', 'block_xp'),
+            (di::get('addon')->is_activated() ? '' : '⭐ ') . get_string('navpromo', 'block_xp'),
             $this->urlresolver->reverse('admin/promo')->get_compatible_url()
         );
+        $settingspage->hidden = !\block_xp\local\controller\promo_controller::is_visible();
         $settings->add($catname, $settingspage);
 
         return $settings;

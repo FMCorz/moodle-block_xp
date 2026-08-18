@@ -34,7 +34,6 @@ require_once(__DIR__ . '/duration.php');
 use block_xp\local\config\course_world_config;
 use html_writer;
 use moodleform;
-use moodle_url;
 
 /**
  * Block XP config form class.
@@ -328,28 +327,6 @@ class config extends moodleform {
         ]);
         $mform->addHelpButton('timebetweensameactions', 'timebetweensameactions', 'block_xp');
         $mform->disabledIf('timebetweensameactions', 'enablecheatguard', 'eq', 0);
-
-        if ($world && $world->get_config()->get('enablecheatguard') && $config->get('enablepromoincourses')) {
-            $worldconfig = $world->get_config();
-            $timeframe = max(0, $worldconfig->get('timebetweensameactions'), $worldconfig->get('timeformaxactions'));
-
-            $promourl = new moodle_url('https://www.levelup.plus');
-            if (!empty($this->_customdata['promourl'])) {
-                $promourl = $this->_customdata['promourl'];
-            }
-
-            if ($timeframe > HOURSECS * 6) {
-                $mform->addElement(
-                    'static',
-                    '',
-                    '',
-                    $renderer->notification_without_close(
-                        get_string('promocheatguard', 'block_xp', ['url' => $promourl->out()]),
-                        'warning'
-                    )
-                );
-            }
-        }
     }
 
     /**

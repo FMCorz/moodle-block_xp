@@ -260,7 +260,7 @@ class ladder_controller extends page_controller {
                 'data-modal-title' => get_string('embedleaderboard', 'block_xp'),
                 'href' => '#',
             ],
-            $config->get('enablepromoincourses') && !$hasaddon ? [
+            di::get('addon')->is_promo_allowed() && !$hasaddon ? [
                 'label' => get_string('export', 'block_xp'),
                 'href' => '#',
                 'disabled' => true,
