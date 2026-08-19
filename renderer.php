@@ -27,6 +27,7 @@
 use block_xp\di;
 use block_xp\local\course_world;
 use block_xp\local\activity\activity;
+use block_xp\local\utils\text_utils;
 use block_xp\local\utils\user_utils;
 use block_xp\local\world;
 use block_xp\local\xp\level;
@@ -368,6 +369,8 @@ class block_xp_renderer extends plugin_renderer_base {
 
         if (!$world->get_access_permissions()->can_manage()) {
             return $o;
+        } else if (!di::get('addon')->is_promo_allowed()) {
+            return $o;
         }
 
         $notice = null;
@@ -376,17 +379,9 @@ class block_xp_renderer extends plugin_renderer_base {
                 static::NOTICE_FLAG_QUEST,
                 function () {
                     $questurl = new moodle_url('https://www.levelup.plus/quest?ref=xp_notice');
-                    return strip_tags(markdown_to_html(get_string('questpromonotice', 'block_xp', (object) [
+                    return text_utils::markdown_light(get_string('questpromonotice', 'block_xp', (object) [
                         'questurl' => $questurl->out(false),
-                    ])), '<a><em><strong>');
-                },
-            ], [
-                $this->noticesflag,
-                function () {
-                    $moodleorgurl = new moodle_url('https://moodle.org/plugins/block_xp');
-                    return get_string('likenotice', 'block_xp', (object) [
-                        'moodleorg' => $moodleorgurl->out(),
-                    ]);
+                    ]));
                 },
             ],
         ];
