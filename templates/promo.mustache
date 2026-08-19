@@ -1,0 +1,118 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_xp/promo
+
+    Level Up XP+ promotion.
+
+    Intentionally not translated for the most part.
+
+    Example context (json):
+    {
+        "title": "Do more with Level Up XP+",
+        "intro": "Level Up XP+ includes more features.",
+        "hascta": true,
+        "hasfooter": true,
+        "ctaurl": "https://example.com",
+        "ctalabel": "Get XP+",
+        "ctamessage": null
+    }
+}}
+<div class="xp-overflow-hidden xp-rounded-xl xp-border xp-border-solid xp-border-gray-200 xp-bg-white xp-shadow-sm">
+    <section class="xp-relative xp-overflow-hidden xp-p-4 xp-text-white"
+            style="background: linear-gradient(110deg, #3f5efb 0%, #fc466b 58%, #f43737 100%);">
+        <div class="xp-absolute xp-font-bold xp-leading-none xp-text-white"
+                style="right: 1rem; bottom: -2rem; font-size: 9rem; opacity: 0.08;" aria-hidden="true">XP+</div>
+        <div class="xp-relative xp-p-4" style="z-index: 1;">
+            <h3 class="xp-m-0 xp-text-3xl xp-text-white">{{title}}</h3>
+            <p class="xp-mt-4 xp-mb-0 xp-text-lg xp-text-white" style="max-width: 42rem;">{{intro}}</p>
+            {{#hascta}}
+            <a class="btn btn-light xp-mt-6" href="{{ctaurl}}">{{ctalabel}}</a>
+            {{/hascta}}
+        </div>
+    </section>
+
+    <div class="xp-px-4">
+        <section class="xp-px-4 xp-py-6 xp-border-0 xp-border-b xp-border-solid xp-border-gray-200">
+            <div class="xp-text-xs xp-uppercase xp-tracking-wide xp-font-bold" style="color: #3f5efb;">Points and rules</div>
+            <h4 class="xp-mt-1 xp-mb-4">Award points for more types of learning</h4>
+            <ul class="xp-mb-0">
+                <li class="xp-mb-2"><strong>Completion and grades.</strong> Award points when learners complete activities, sections, or courses. Convert grades into points.</li>
+                <li class="xp-mb-2"><strong>Manual awards and imports.</strong> Award points to one learner or many learners, or import points from a CSV file.</li>
+                <li class="xp-mb-2"><strong>Drops.</strong> Award points from Moodle content.</li>
+                <li><strong>Flexible action rules.</strong> Create unlimited rules. Select courses and activities by name or tag. Set limits for repeated actions.</li>
+            </ul>
+        </section>
+
+        <section class="xp-px-4 xp-py-6 xp-border-0 xp-border-b xp-border-solid xp-border-gray-200">
+            <div class="xp-text-xs xp-uppercase xp-tracking-wide xp-font-bold" style="color: #9b51d0;">Leaderboards</div>
+            <h4 class="xp-mt-1 xp-mb-4">Create leaderboards that fit your learners</h4>
+            <ul class="xp-mb-0">
+                <li class="xp-mb-2"><strong>Teams.</strong> Let learners compete together on team leaderboards.</li>
+                <li class="xp-mb-2"><strong>Opt-in and out.</strong> Let learners choose whether they join an individual leaderboard.</li>
+                <li class="xp-mb-2"><strong>Participant isolation.</strong> Control who each learner sees on individual leaderboards.</li>
+                <li><strong>Partial anonymity.</strong> Show first names and initials instead of full names.</li>
+            </ul>
+        </section>
+
+        <section class="xp-px-4 xp-py-6 xp-border-0 xp-border-b xp-border-solid xp-border-gray-200">
+            <div class="xp-text-xs xp-uppercase xp-tracking-wide xp-font-bold" style="color: #d0006f;">Levels and rewards</div>
+            <h4 class="xp-mt-1 xp-mb-4">Make progress more personal</h4>
+            <ul class="xp-mb-0">
+                <li class="xp-mb-2"><strong>Level rewards.</strong> Award Moodle badges and add a custom message to each level-up notification.</li>
+                <li class="xp-mb-2"><strong>Badge library.</strong> Choose from a wider range of ready-made level badge designs.</li>
+                <li><strong>Point symbols.</strong> Replace the XP symbol with a built-in symbol or your own image.</li>
+            </ul>
+        </section>
+
+        <section class="xp-px-4 xp-py-6 xp-border-0 xp-border-b xp-border-solid xp-border-gray-200">
+            <div class="xp-text-xs xp-uppercase xp-tracking-wide xp-font-bold" style="color: #3f5efb;">Integrations</div>
+            <h4 class="xp-mt-1 xp-mb-4">Connect XP+ with other tools</h4>
+            <ul class="xp-mb-0">
+                <li class="xp-mb-2"><strong>Mobile app.</strong> Let learners view their level, points, progress, and leaderboards in the Moodle app.</li>
+                <li class="xp-mb-2"><strong>Public API.</strong> Use external systems to award points and retrieve learners' points and levels.</li>
+                <li><strong>AI assistants.</strong> Let trusted staff review learner progress, investigate point awards, and award points with AI.</li>
+            </ul>
+        </section>
+
+        <section class="xp-px-4 xp-py-6">
+            <div class="xp-text-xs xp-uppercase xp-tracking-wide xp-font-bold" style="color: #c62828;">Reports and support</div>
+            <h4 class="xp-mt-1 xp-mb-4">Understand learner progress</h4>
+            <ul class="xp-mb-0">
+                <li class="xp-mb-2"><strong>Exports.</strong> Export leaderboards, reports, and logs to CSV files.</li>
+                <li class="xp-mb-2"><strong>Custom reports.</strong> Use Moodle Report Builder and schedule reports for email delivery.</li>
+                <li class="xp-mb-2"><strong>Activity logs.</strong> Get more details about point awards. Keep logs for longer when needed.</li>
+                <li><strong>Support.</strong> Get support from the Level Up team.</li>
+            </ul>
+        </section>
+
+        <p class="xp-px-4 xp-pb-6 xp-mb-6 xp-text-lg xp-font-bold">And more…</p>
+    </div>
+
+    {{#hasfooter}}
+    <section class="xp-p-4 xp-border-0 xp-border-t xp-border-solid xp-border-gray-200">
+        <div class="xp-p-4">
+            {{#hascta}}
+            <a class="btn btn-primary" href="{{ctaurl}}">{{ctalabel}}</a>
+            {{/hascta}}
+            {{#ctamessage}}
+            <p class="xp-m-0 xp-text-lg xp-font-bold">{{ctamessage}}</p>
+            {{/ctamessage}}
+        </div>
+    </section>
+    {{/hasfooter}}
+</div>

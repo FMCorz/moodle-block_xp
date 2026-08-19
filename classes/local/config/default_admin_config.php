@@ -61,7 +61,6 @@ class default_admin_config extends immutable_config {
             'actionrulesstate' => course_world_config::DEFAULT_ACTION_RULES_MISSING,
             'context' => CONTEXT_COURSE,
             'adminscanearnxp' => 0,
-            'enablepromoincourses' => 1,
             'keeplogs' => 90,
             'navbardisplay' => 0,
 
@@ -88,6 +87,8 @@ class default_admin_config extends immutable_config {
             'lastoutofsyncnoticekey' => '',
             'provisionstates' => 0,
             'shortcodesecret' => '',
+            'enablepromoincourses' => 1,
+            'promoctamode' => '',
 
             'apiroot' => 'https://backend.levelup.plus/api',
             'usagereport' => 1,
