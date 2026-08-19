@@ -977,7 +977,7 @@ $string['unlockfeaturewithxpplus'] = 'This feature requires XP+. <a href="{$a}">
 $string['unavailable'] = 'Unavailable';
 $string['unstableversioninstalledinfo'] = 'This version of Level Up XP (block_xp) is still in development and considered unstable, please use an official release.';
 $string['upgradingplugins'] = 'Upgrading the plugins';
-$string['upgradetoaddmore'] = 'Upgrade to add more.';
+$string['upgradetoaddmore'] = 'Limit reached.';
 $string['unstableversioninstalled'] = 'Unstable version installed';
 $string['userladderparticipation'] = 'Leaderboard participation';
 $string['userladderparticipation_help'] = 'Determines whether the user is currently participating in the leaderboard. This does not affect the team leaderboard.';
