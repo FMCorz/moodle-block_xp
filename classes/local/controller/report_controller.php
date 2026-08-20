@@ -28,6 +28,7 @@
 namespace block_xp\local\controller;
 
 use block_xp\di;
+use block_xp\local\utils\user_utils;
 use core_user;
 use html_writer;
 use single_button;
@@ -119,6 +120,9 @@ class report_controller extends page_controller {
 
         // Delete user.
         if ($this->get_param('delete')) {
+            if (!user_utils::is_valid_target($this->world->get_context(), $userid)) {
+                throw new \moodle_exception('invaliduser', 'core_error');
+            }
             if ($this->get_param('confirm') && confirm_sesskey()) {
                 $nexturl = new url($this->pageurl, ['userid' => null]);
                 $this->perform_user_deletion($userid);
