@@ -85,6 +85,7 @@ class default_admin_config extends immutable_config {
             'adminnotices' => 1,
             'lastdeactivationnoticekey' => '',
             'lastoutofsyncnoticekey' => '',
+            'lastupdatesnoticekeys' => '',
             'provisionstates' => 0,
             'shortcodesecret' => '',
             'enablepromoincourses' => 1,

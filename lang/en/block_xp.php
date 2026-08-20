@@ -110,13 +110,10 @@ This mismatch can lead to loss of functionality, bugs, and other unexpected cons
 
 Additional resources:
 
-- [Upgrading documentation](https://docs.levelup.plus/xp/docs/upgrade)
+- [Upgrade documentation](https://docs.levelup.plus/xp/docs/upgrade)
 - [XP+ deactivated documentation](https://docs.levelup.plus/xp/docs/addon-deactivated)
-- [Compatibility documentation](https://docs.levelup.plus/xp/docs/requirements-compatibility)
-
---
-
-This notice was sent to all administrators. To disable all admin notices, please visit Level Up XP\'s admin settings.';
+- [Compatibility documentation](https://docs.levelup.plus/xp/docs/requirements-compatibility)';
+$string['adminnoticefooter'] = 'This notice was sent to all administrators. To disable all admin notices, please visit Level Up XP\'s admin settings.';
 $string['adminnoticeoutofsyncmessage'] = 'Level Up XP and Level Up XP+ incompatibility notice!
 
 You are receiving this notice as a warning because the two plugins Level Up XP (block_xp) and Level Up XP+ (local_xp) are currently "out of sync" and incompatible with each other. This issue occurs when XP has been upgraded to a new major version while XP+ remains outdated.
@@ -131,15 +128,19 @@ This mismatch can lead to loss of functionality, bugs, and other unexpected cons
 
 Additional resources:
 
-- [Upgrading documentation](https://docs.levelup.plus/xp/docs/upgrade)
-- [Compatibility documentation](https://docs.levelup.plus/xp/docs/requirements-compatibility)
-
---
-
-This notice was sent to all administrators. To disable all admin notices, please visit Level Up XP\'s admin settings.';
+- [Upgrade documentation](https://docs.levelup.plus/xp/docs/upgrade)
+- [Compatibility documentation](https://docs.levelup.plus/xp/docs/requirements-compatibility)';
 $string['adminnoticeoutofsyncsubject'] = "XP plugins incompatibility notice!";
+$string['adminnoticeupdatesmessage'] = 'The following Level Up XP updates are available:
+
+{$a}
+
+Additional resources:
+
+- [Upgrade documentation](https://docs.levelup.plus/xp/docs/upgrade)';
+$string['adminnoticeupdatessubject'] = 'Level Up XP updates are available';
 $string['adminnotices'] = 'Admin notices';
-$string['adminnotices_desc'] = 'When enabled, site administrators may occasionally receive important notifications regarding compatibility, security, and the availability of newer versions of Level Up XP+.';
+$string['adminnotices_desc'] = 'When enabled, site administrators may occasionally receive important notifications regarding compatibility, security, and the availability of newer versions of Level Up XP and XP+.';
 $string['adminscanearnxp'] = 'Admins can earn points';
 $string['adminscanearnxp_desc'] = 'By default, administrators are not included in the group of users who can earn points. This is because administrators always have the permission _block/xp:earnxp_, allowing them to continuously collect points everywhere. You can use this setting to let administrators also earn points.';
 $string['admindefaultactionrulesintro'] = 'The following action rules will be used as defaults.';

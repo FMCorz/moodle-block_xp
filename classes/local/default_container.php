@@ -101,6 +101,7 @@ class default_container implements container {
         'shortcodes_definition_maker' => true,
         'tasks_definition_maker' => true,
         'url_resolver' => true,
+        'update_checker' => true,
         'usage_reporter' => true,
         'user_generic_indicator' => true,
         'user_notice_indicator' => true,
@@ -736,6 +737,15 @@ class default_container implements container {
      */
     protected function get_tasks_definition_maker() {
         return new \block_xp\local\task\default_tasks_definition_maker();
+    }
+
+    /**
+     * Get update checker.
+     *
+     * @return plugin\update_checker
+     */
+    protected function get_update_checker() {
+        return new plugin\update_checker($this->get('config'));
     }
 
     /**
