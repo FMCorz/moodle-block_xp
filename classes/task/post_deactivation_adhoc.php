@@ -65,11 +65,12 @@ class post_deactivation_adhoc extends adhoc_task {
             return;
         }
 
-        $contenthtml = markdown_to_html(get_string('adminnoticeaddondeactivatedmessage', 'block_xp', [
+        $contentmd = get_string('adminnoticeaddondeactivatedmessage', 'block_xp', [
             'blockxpversion' => $blockxp->release . ' (' . $blockxp->versiondb . ')',
             'localxpversion' => $localxp->release . ' (' . $localxp->versiondb . ')',
             'localxpversionexpected' => $addon->get_expected_release(),
-        ]));
+        ]) . "\n\n----\n\n" . get_string('adminnoticefooter', 'block_xp');
+        $contenthtml = markdown_to_html($contentmd);
         $contentplain = html_to_text($contenthtml);
         $userfrom = \core_user::get_noreply_user();
 
