@@ -27,12 +27,10 @@
 
 namespace block_xp\local\plugin;
 
+use block_xp\di;
 use block_xp\local\config\config;
-use curl;
-
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->libdir . '/filelib.php');
+use block_xp\local\http\api_client;
+use block_xp\local\http\client_exception;
 
 /**
  * Usage reporter class.
@@ -43,6 +41,8 @@ require_once($CFG->libdir . '/filelib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class usage_reporter {
+    /** @var api_client The API client. */
+    protected $client;
     /** @var config The config. */
     protected $config;
     /** @var usage_report_maker The maker. */
@@ -53,10 +53,12 @@ class usage_reporter {
      *
      * @param config $config The config.
      * @param usage_report_maker $maker The usage report maker.
+     * @param api_client|null $client The API client.
      */
-    public function __construct(config $config, usage_report_maker $maker) {
+    public function __construct(config $config, usage_report_maker $maker, ?api_client $client = null) {
         $this->config = $config;
         $this->maker = $maker;
+        $this->client = $client ?? di::get('api_client');
     }
 
     /**
@@ -66,7 +68,6 @@ class usage_reporter {
      * @return bool Whether successful or not.
      */
     public function report() {
-        $apiroot = rtrim($this->config->get('apiroot'), '/');
         $usage = $this->maker->make();
 
         $localsiteid = $this->config->get('usagereportid');
@@ -74,15 +75,14 @@ class usage_reporter {
             $usage->local_site_id = $localsiteid;
         }
 
-        $curl = new curl();
-        $curl->setHeader(['Content-Type: application/json']);
-        $resp = $curl->post($apiroot . '/v1/xp/usage', json_encode($usage));
-        if ($curl->get_errno()) {
+        try {
+            $response = $this->client->post('/v1/xp/usage', $usage);
+        } catch (client_exception $e) {
             return false;
         }
 
-        $this->config->set('lastusagereport', time());
-        $respdata = json_decode($resp);
+        $this->config->set('lastusagereport', di::get('clock')->time());
+        $respdata = $response->data;
         if ($respdata && !empty($respdata->local_site_id) && $respdata->local_site_id !== $localsiteid) {
             $this->config->set('usagereportid', $respdata->local_site_id);
         }

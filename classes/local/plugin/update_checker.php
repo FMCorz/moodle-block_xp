@@ -20,12 +20,9 @@ namespace block_xp\local\plugin;
 
 use block_xp\di;
 use block_xp\local\config\config;
+use block_xp\local\http\api_client;
+use block_xp\local\http\client_exception;
 use core_plugin_manager;
-use curl;
-
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->libdir . '/filelib.php');
 
 /**
  * Update checker.
@@ -36,6 +33,8 @@ require_once($CFG->libdir . '/filelib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class update_checker {
+    /** @var api_client The API client. */
+    protected $client;
     /** @var config The config. */
     protected $config;
 
@@ -43,9 +42,11 @@ class update_checker {
      * Constructor.
      *
      * @param config $config The config.
+     * @param api_client|null $client The API client.
      */
-    public function __construct(config $config) {
+    public function __construct(config $config, ?api_client $client = null) {
         $this->config = $config;
+        $this->client = $client ?? di::get('api_client');
     }
 
     /**
@@ -108,17 +109,11 @@ class update_checker {
             'local_xp_release' => $localxp ? (string) $localxp->release : null,
         ];
 
-        $apiroot = rtrim($this->config->get('apiroot'), '/');
-        $curl = new curl();
-        $curl->setHeader(['Content-Type: application/json']);
-        $response = $curl->post($apiroot . '/v1/xp/updates', json_encode($data));
-        $info = $curl->get_info();
-        if ($curl->get_errno() || empty($info['http_code']) || (int) $info['http_code'] !== 200) {
+        try {
+            return $this->client->post('/v1/xp/updates', $data)->data;
+        } catch (client_exception $e) {
             return null;
         }
-
-        $response = json_decode($response);
-        return is_object($response) ? $response : null;
     }
 
     /**

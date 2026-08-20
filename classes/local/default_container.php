@@ -49,6 +49,7 @@ class default_container implements container {
         'ajax_base_url' => true,
         'ajax_router' => true,
         'ajax_url_resolver' => true,
+        'api_client' => true,
         'backup_content_manager' => true,
         'badge_manager' => true,
         'badge_url_resolver' => true,
@@ -102,6 +103,7 @@ class default_container implements container {
         'tasks_definition_maker' => true,
         'url_resolver' => true,
         'update_checker' => true,
+        'usage_report_maker' => true,
         'usage_reporter' => true,
         'user_generic_indicator' => true,
         'user_notice_indicator' => true,
@@ -194,6 +196,15 @@ class default_container implements container {
             $this->get('ajax_base_url'),
             $this->get_ajax_routes_config()
         );
+    }
+
+    /**
+     * Get API client.
+     *
+     * @return http\api_client
+     */
+    protected function get_api_client() {
+        return new http\api_client(di::get('config')->get('apiroot'));
     }
 
     /**
@@ -745,7 +756,16 @@ class default_container implements container {
      * @return plugin\update_checker
      */
     protected function get_update_checker() {
-        return new plugin\update_checker($this->get('config'));
+        return new plugin\update_checker(di::get('config'), di::get('api_client'));
+    }
+
+    /**
+     * Get usage report maker.
+     *
+     * @return plugin\usage_report_maker
+     */
+    protected function get_usage_report_maker() {
+        return new plugin\usage_report_maker($this->get('db'), di::get('config'));
     }
 
     /**
@@ -754,8 +774,11 @@ class default_container implements container {
      * @return plugin\usage_reporter
      */
     protected function get_usage_reporter() {
-        $config = $this->get('config');
-        return new \block_xp\local\plugin\usage_reporter($config, new plugin\usage_report_maker($this->get('db'), $config));
+        return new \block_xp\local\plugin\usage_reporter(
+            di::get('config'),
+            di::get('usage_report_maker'),
+            di::get('api_client')
+        );
     }
 
     /**
