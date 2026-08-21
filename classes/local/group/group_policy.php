@@ -115,7 +115,8 @@ class group_policy {
     /**
      * Whether can select a group.
      *
-     * This emulates whether the user can select a group from the course group menu.
+     * This emulates course group selection while enforcing the separate-groups
+     * access check that core expects callers to perform when the active group is 0.
      *
      * @param int $groupid Or 0 for all participants.
      * @param int|null $actinguserid The acting user ID.
@@ -142,7 +143,9 @@ class group_policy {
         }
 
         if (!$groupid) {
-            return !$allowedgroups || $groupmode === VISIBLEGROUPS || $aag;
+            // This is different from the group menu because in separate groups, for us the user
+            // must have AAG to be able to select "All participants". Otherwise, they always can.
+            return $aag || $groupmode === VISIBLEGROUPS;
         }
 
         return array_key_exists($groupid, $allowedgroups);
