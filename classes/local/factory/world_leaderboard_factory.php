@@ -35,6 +35,7 @@ use block_xp\local\config\static_config;
 use block_xp\local\course_world;
 use block_xp\local\division\all_division;
 use block_xp\local\division\division;
+use block_xp\local\division\empty_division;
 use block_xp\local\division\group_division;
 use block_xp\local\leaderboard\anonymisable_leaderboard;
 use block_xp\local\leaderboard\course_user_leaderboard;
@@ -202,7 +203,9 @@ class world_leaderboard_factory implements leaderboard_factory {
     protected function get_default_division(int $targetuserid): division {
         if ($this->world instanceof course_world) {
             $groupid = user_utils::get_primary_group_id($this->world->get_courseid(), $targetuserid);
-            if ($groupid) {
+            if ($groupid < 0) {
+                return new empty_division();
+            } else if ($groupid) {
                 return new group_division($groupid);
             }
         }
