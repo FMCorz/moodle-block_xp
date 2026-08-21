@@ -1,3 +1,15 @@
+{{!
+    @template block_xp/level-badge
+
+    Level badge.
+
+    Example context (json):
+    {
+        "badgeurl": "https://example.com/badge.png",
+        "level": 3,
+        "size": "medium"
+    }
+}}
 {{#badgeurl}}
 <div class="block_xp-level level-{{level}} {{$size}}{{size}}{{/size}} level-badge" aria-label="{{#str}} levelx, block_xp, {{ level }} {{/str}}">
     <img src={{ badgeurl }} alt="{{#str}} levelx, block_xp, {{ level }} {{/str}}">
