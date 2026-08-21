@@ -33,7 +33,7 @@
     }
 }}
 <div class="xp-overflow-hidden xp-rounded-xl xp-border xp-border-solid xp-border-gray-200 xp-bg-white xp-shadow-sm">
-    <section class="xp-relative xp-overflow-hidden xp-p-4 xp-text-white"
+    <div class="xp-relative xp-overflow-hidden xp-p-4 xp-text-white"
             style="background: linear-gradient(110deg, #3f5efb 0%, #fc466b 58%, #f43737 100%);">
         <div class="xp-absolute xp-font-bold xp-leading-none xp-text-white"
                 style="right: 1rem; bottom: -2rem; font-size: 9rem; opacity: 0.08;" aria-hidden="true">XP+</div>
@@ -44,7 +44,7 @@
             <a class="btn btn-light xp-mt-6" href="{{ctaurl}}">{{ctalabel}}</a>
             {{/hascta}}
         </div>
-    </section>
+    </div>
 
     <div class="xp-px-4">
         <section class="xp-px-4 xp-py-6 xp-border-0 xp-border-b xp-border-solid xp-border-gray-200">
@@ -104,7 +104,7 @@
     </div>
 
     {{#hasfooter}}
-    <section class="xp-p-4 xp-border-0 xp-border-t xp-border-solid xp-border-gray-200">
+    <div class="xp-p-4 xp-border-0 xp-border-t xp-border-solid xp-border-gray-200">
         <div class="xp-p-4">
             {{#hascta}}
             <a class="btn btn-primary" href="{{ctaurl}}">{{ctalabel}}</a>
@@ -113,6 +113,6 @@
             <p class="xp-m-0 xp-text-lg xp-font-bold">{{ctamessage}}</p>
             {{/ctamessage}}
         </div>
-    </section>
+    </div>
     {{/hasfooter}}
 </div>
