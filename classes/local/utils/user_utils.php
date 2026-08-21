@@ -203,6 +203,13 @@ class user_utils {
      * @return int Negative value means none found.
      */
     public static function get_primary_group_id($courseid, $userid) {
+        global $USER;
+
+        if ($USER->id != $userid) {
+            // The function groups_get_all_groups has reliance on the current user.
+            debugging('Mismatch between target and current user may yield incorrect results.', DEBUG_DEVELOPER);
+        }
+
         $course = get_fast_modinfo($courseid)->get_course();
         $groupmode = groups_get_course_groupmode($course);
         $context = context_course::instance($courseid);
