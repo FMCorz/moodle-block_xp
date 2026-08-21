@@ -15,7 +15,7 @@ YUI.add('moodle-block_xp-filters', function (Y, NAME) {
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Filters constants.
@@ -74,7 +74,7 @@ var SELECTORS = {
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Filters of level up.
@@ -627,7 +627,7 @@ Y.namespace('M.block_xp.Filters').init = function(config) {
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Filters Drag and Drop.

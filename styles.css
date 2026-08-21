@@ -681,9 +681,6 @@
 .block_xp .xp-border-b {
     border-bottom-width: 1px;
 }
-.block_xp .xp-border-b-2 {
-    border-bottom-width: 2px;
-}
 .block_xp .xp-border-l {
     border-left-width: 1px;
 }
@@ -714,9 +711,6 @@
 .block_xp .xp-border-sky-400 {
     border-color: #38bdf8;
 }
-.block_xp .xp-border-b-white {
-    border-bottom-color: #fff;
-}
 .block_xp .xp-bg-black {
     background-color: #000;
 }
@@ -737,9 +731,6 @@
 }
 .block_xp .xp-bg-red-100 {
     background-color: #fee2e2;
-}
-.block_xp .xp-bg-slate-50 {
-    background-color: #f8fafc;
 }
 .block_xp .xp-bg-transparent {
     background-color: transparent;
@@ -823,6 +814,9 @@
 }
 .block_xp .xp-pb-4 {
     padding-bottom: 1rem;
+}
+.block_xp .xp-pb-6 {
+    padding-bottom: 1.5rem;
 }
 .block_xp .xp-pl-0 {
     padding-left: 0px;
@@ -1752,10 +1746,6 @@ a .block_xp-level {
         grid-template-columns: repeat(10, minmax(0, 1fr));
     }
 
-    .block_xp .sm\:xp-grid-cols-2 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .block_xp .sm\:xp-flex-row {
         flex-direction: row;
     }
@@ -1847,9 +1837,6 @@ a .block_xp-level {
 .block_xp :is(.\[\&_a\]\:xp-underline a) {
     text-decoration-line: underline;
 }
-.block_xp :is(.\[\&_li\]\:xp-mb-1 li) {
-    margin-bottom: 0.25rem;
-}
 .block_xp :is(.last\:\[\&_p\]\:xp-m-0 p:last-child) {
     margin: 0px;
 }
@@ -1858,7 +1845,4 @@ a .block_xp-level {
 }
 .block_xp :is(.last-of-type\:\[\&_p\]\:xp-mb-0 p:last-of-type) {
     margin-bottom: 0px;
-}
-.block_xp :is(.\[\&_ul\]\:xp-pl-4 ul) {
-    padding-left: 1rem;
 }

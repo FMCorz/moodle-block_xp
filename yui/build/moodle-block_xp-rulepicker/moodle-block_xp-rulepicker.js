@@ -15,7 +15,7 @@ YUI.add('moodle-block_xp-rulepicker', function (Y, NAME) {
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Rule picker of level up.

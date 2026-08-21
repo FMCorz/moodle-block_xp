@@ -4,7 +4,7 @@ define(["block_xp/ui-commons-lazy"],() => { return /******/ (() => { // webpackB
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 8917
+/***/ 1337
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -1118,6 +1118,60 @@ function ruleTypeSupportsLimits(ruleType) {
         ruleType.defaultrepeatlimit !== undefined);
 }
 
+;// ./ui/src/components/Popover.tsx
+
+
+const Popover = ({ children, content }) => {
+    const ref = react.useRef(null);
+    (0,react.useEffect)(() => {
+        const $ = getModule("jquery");
+        if (!$ || !ref.current || !$(ref.current).popover) {
+            return;
+        }
+        const element = ref.current;
+        element.setAttribute("data-container", "body");
+        element.setAttribute("data-bs-container", "body");
+        element.setAttribute("data-content", content);
+        element.setAttribute("data-bs-content", content);
+        element.setAttribute("data-html", "true");
+        element.setAttribute("data-bs-html", "true");
+        element.setAttribute("data-placement", "top");
+        element.setAttribute("data-bs-placement", "top");
+        const handleBodyClick = (e) => {
+            const target = e.target;
+            if (target.closest(".popover") || element.contains(target)) {
+                return;
+            }
+            try {
+                $(element).popover("hide");
+            }
+            catch (err) { }
+        };
+        $(element).popover("enable");
+        document.body.addEventListener("click", handleBodyClick);
+        return () => {
+            document.body.removeEventListener("click", handleBodyClick);
+            if (!$(element).popover) {
+                return;
+            }
+            try {
+                $(element).popover("dispose");
+            }
+            catch (e) {
+                try {
+                    $(element).popover("destroy");
+                }
+                catch (e) { }
+            }
+        };
+    }, [content]);
+    return (0,react.cloneElement)(children, { ref });
+};
+const AnchorPopover = ({ children, className, content, }) => {
+    return (react.createElement(Popover, { content: content },
+        react.createElement("a", { href: "#", role: "button", onClick: (e) => e.preventDefault(), className: className }, children)));
+};
+
 ;// ./ui/src/components/Addon.tsx
 
 
@@ -1141,30 +1195,7 @@ const IfAddonPromoEnabled = ({ children }) => {
 const AddonRequired = (props) => {
     const { promourl } = (0,react.useContext)(AddonContext);
     const getStr = useStrings(["xpplusrequired", "unlockfeaturewithxpplus"]);
-    const handleClick = (e) => e.preventDefault();
-    const ref = (0,react.useRef)(null);
-    (0,react.useEffect)(() => {
-        const handleClick = (e) => {
-            const $ = getModule("jquery");
-            if (!$ || !ref.current || !$(ref.current).popover) {
-                return;
-            }
-            const target = e.target;
-            if (target.closest(".popover")) {
-                return;
-            }
-            else if (ref.current.contains(target)) {
-                return;
-            }
-            try {
-                $(ref.current).popover("hide");
-            }
-            catch (err) { }
-        };
-        document.body.addEventListener("click", handleClick);
-        return () => document.body.removeEventListener("click", handleClick);
-    });
-    return (react.createElement("a", { ref: ref, href: "#", role: "button", onClick: handleClick, "data-bs-toggle": "popover", "data-toggle": "popover", "data-placement": "top", "data-container": "body", "data-content": getStr("unlockfeaturewithxpplus", promourl), "data-bs-content": getStr("unlockfeaturewithxpplus", promourl), "data-html": "true", "data-bs-html": "true", className: "xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline" }, props.children ? props.children : getStr("xpplusrequired")));
+    return (react.createElement(AnchorPopover, { content: getStr("unlockfeaturewithxpplus", promourl), className: classNames("xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white", "xp-rounded xp-no-underline") }, props.children ? props.children : getStr("xpplusrequired")));
 };
 const AddonRequiredShort = () => {
     return react.createElement(AddonRequired, null, "XP+");
@@ -2206,13 +2237,14 @@ const RuleLimit = ({ rule, type }) => {
     return react.createElement(RuleLimitContent, { limit: limit, repeatlimit: repeatlimit });
 };
 const RuleLimitContent = ({ limit, repeatlimit }) => {
-    const getStr = useStrings(["repetitionlimitset"]);
+    const getStr = useStrings(["maxcolon", "repetitionlimitset"]);
     if (!limit?.max && !repeatlimit?.max) {
         return null;
     }
     return (react.createElement("div", { className: "xp-text-xs xp-text-gray-500 xp-leading-none xp-whitespace-nowrap xp-flex xp-items-center xp-gap-1" },
         limit?.max ? (react.createElement("span", null,
-            "Max: ",
+            getStr("maxcolon"),
+            " ",
             react.createElement(LimitPerWindow, { max: limit.max, window: limit.timewindow }))) : null,
         repeatlimit?.max ? (react.createElement(Tooltip, { content: getStr("repetitionlimitset") },
             react.createElement("span", null,
@@ -2684,7 +2716,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(8917)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(1337)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ 	return __webpack_exports__;
