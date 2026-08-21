@@ -1,6 +1,32 @@
 Changelog
 =========
 
+v20.1
+-----
+
+New features
+
+- Administrators can receive notifications when XP or XP+ updates are available
+
+Quality of life
+
+- The XP+ information page has been redesigned
+- XP+ is mentioned more selectively throughout the plugin
+
+Bug fixes
+
+- In separate-groups mode, users without access to all groups could default to all participants
+- User targets are validated when adding points, filtering logs and deleting report data
+- Level names, descriptions and popup messages are consistently treated as plain text
+- Searching for the site home could display a developer notice
+- Some legacy Level Up Quest log entries could omit their related item
+- Information popovers for action rule limits display correctly
+- Minor interface text and translation fixes
+
+Technical changes
+
+- Various internal and code style improvements
+
 v20.0
 -----
 
