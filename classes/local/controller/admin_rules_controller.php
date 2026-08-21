@@ -244,11 +244,6 @@ class admin_rules_controller extends admin_route_controller {
      * @return void
      */
     protected function page_plus_promo_content() {
-        $promourl = $this->urlresolver->reverse('admin/promo');
-        echo $this->get_renderer()->notification_without_close(
-            get_string('promorulesdidyouknow', 'block_xp', ['url' => $promourl->out(false)]),
-            \core\output\notification::NOTIFY_INFO
-        );
     }
 
     /**
@@ -291,7 +286,6 @@ class admin_rules_controller extends admin_route_controller {
         }
 
         $this->page_warning_editing_defaults('rules');
-        $this->page_plus_promo_content();
         echo html_writer::tag('p', get_string('admindefaultrulesintro', 'block_xp'));
         $this->page_rules_content();
 
