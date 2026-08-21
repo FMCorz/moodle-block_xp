@@ -143,8 +143,8 @@ class group_policy {
         }
 
         if (!$groupid) {
-            // This is different from the group menu because in separate groups, for us the user
-            // must have AAG to be able to select "All participants". Otherwise, they always can.
+            // This is different from the group menu because in separate groups we want the user
+            // to have AAG to be able to select "All participants". Otherwise, they always can.
             return $aag || $groupmode === VISIBLEGROUPS;
         }
 
@@ -254,7 +254,8 @@ class group_policy {
     /**
      * Get selectable groups.
      *
-     * This emulates the groups that can be picked from the course group menu.
+     * This emulates course group selection while enforcing the separate-groups
+     * access check that core expects callers to perform when the active group is 0.
      *
      * @param int|null $actinguserid The acting user ID.
      * @return \stdClass[] With keys id, name, ismember.
@@ -281,7 +282,9 @@ class group_policy {
         }
 
         $groups = [];
-        if (!$allowedgroups || $groupmode === VISIBLEGROUPS || $aag) {
+        if ($groupmode === VISIBLEGROUPS || $aag) {
+            // This is different from the group menu because in separate groups we want the user
+            // to have AAG to be able to select "All participants". Otherwise, they always can.
             $groups[] = (object) [
                 'id' => 0,
                 'name' => get_string('allparticipants', 'core'),
