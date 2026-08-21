@@ -41,6 +41,9 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class user_utils {
+    /** Group ID resolved when none allowed, including all participants. */
+    const GROUP_ID_WHEN_NONE_RESOLVED = -116;
+
     /**
      * Whether a user can earn points.
      *
@@ -96,7 +99,7 @@ class user_utils {
      *
      * @param int $courseid The course ID.
      * @param int $userid The user ID.
-     * @return int
+     * @return int Negative value means none found.
      */
     public static function get_primary_group_id($courseid, $userid) {
         $course = get_fast_modinfo($courseid)->get_course();
@@ -115,9 +118,12 @@ class user_utils {
             $usergroups = $allowedgroups;
         }
 
-        // If we don't have at least a group, then we can see everybody.
+        // If we don't have at least a group, then we can see everybody, except without AAG in separate groups.
         if (empty($usergroups)) {
-            return 0;
+            if ($aag || $groupmode != SEPARATEGROUPS) {
+                return 0;
+            }
+            return static::GROUP_ID_WHEN_NONE_RESOLVED; // Any negative value is good, except -1 which has usage in grouplib.
         }
         return reset($usergroups)->id;
     }
