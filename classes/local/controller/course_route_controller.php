@@ -29,6 +29,7 @@ namespace block_xp\local\controller;
 
 use block_xp\local\utils\user_utils;
 use coding_exception;
+use core\notification;
 
 /**
  * Course route controller class.
@@ -185,6 +186,13 @@ abstract class course_route_controller extends route_controller {
         if (!$this->is_supporting_groups()) {
             throw new coding_exception('This page is not marked as supporting groups.');
         }
-        echo groups_print_course_menu($this->get_course(), $this->pageurl->get_compatible_url());
+        if ($this->get_groupid() < 0) {
+            echo $this->get_renderer()->notification_without_close(
+                get_string('notingroupcontactsomeone', 'block_xp'),
+                notification::ERROR
+            );
+        } else {
+            echo groups_print_course_menu($this->get_course(), $this->pageurl->get_compatible_url());
+        }
     }
 }

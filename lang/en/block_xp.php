@@ -437,6 +437,7 @@ $string['noneareavailable'] = 'None are available.';
 $string['notecompatibilityissues'] = 'Please note the compatibility issues identified below:';
 $string['notesomesettingslocked'] = 'Note that some settings may not be editable when they have been locked by an administrator.';
 $string['nothingmatchesfilter'] = 'Nothing matches the filter.';
+$string['notingroupcontactsomeone'] = 'This page expects you to belong to a group, but you don\'t currently belong to one. Please contact someone responsible for the course.';
 $string['notparticipating'] = 'Not participating';
 $string['notranked'] = 'Not ranked';
 $string['notyetused'] = 'Not yet used';
