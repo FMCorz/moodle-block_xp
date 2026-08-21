@@ -639,7 +639,6 @@ $string['promoaskadmin'] = 'Ask your administrator about Level Up XP+.';
 $string['promogetnow'] = 'Get XP+';
 $string['promointro'] = 'Level Up XP+ adds more ways to award points, more control over leaderboards and rewards, custom reports, and integrations with other systems.';
 $string['promointroinstalled'] = 'The add-on Level Up XP+ is installed on your system and all of its features have been enabled.';
-$string['promorulesdidyouknow'] = 'Did you know that with <em>Level Up XP+</em> students can receive points for <em>completing courses</em> and <em>activities</em>, or even receive points according to their <em>grades</em>? <a href="{$a->url}">Discover more here</a>.';
 $string['property:action'] = 'Event action';
 $string['property:component'] = 'Event component';
 $string['property:crud'] = 'Event CRUD';
@@ -1102,3 +1101,4 @@ $string['questreleasenotice'] = 'Take gamification to the next level, discover *
 // Deprecated since XP 20
 $string['likenotice'] = 'Are you enjoying Level Up XP? Please take a moment to <a href="{$a->moodleorg}" target="_blank">add it to your favourite</a> plugins on Moodle.org.';
 $string['promocheatguard'] = 'This cheat guard is not designed to cover long time frames. Please consider upgrading to <em>Level Up XP+</em> to unlock greater time frames and other features. <a href="{$a->url}">Read more here</a>.';
+$string['promorulesdidyouknow'] = 'Did you know that with <em>Level Up XP+</em> students can receive points for <em>completing courses</em> and <em>activities</em>, or even receive points according to their <em>grades</em>? <a href="{$a->url}">Discover more here</a>.';
