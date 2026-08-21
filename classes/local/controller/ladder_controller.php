@@ -29,6 +29,7 @@ namespace block_xp\local\controller;
 
 use block_xp\di;
 use block_xp\local\division\division;
+use block_xp\local\division\empty_division;
 use block_xp\local\division\group_division;
 use block_xp\local\shortcode\handler;
 use block_xp\local\utils\text_utils;
@@ -91,8 +92,8 @@ class ladder_controller extends page_controller {
      */
     protected function get_division(): ?division {
         $groupid = $this->get_groupid();
-        if ($groupid || $groupid === 0) {
-            return new group_division($this->get_groupid());
+        if ($groupid !== false) {
+            return $groupid >= 0 ? new group_division($groupid) : new empty_division();
         }
         return null;
     }

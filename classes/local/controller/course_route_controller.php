@@ -27,6 +27,7 @@
 
 namespace block_xp\local\controller;
 
+use block_xp\local\utils\user_utils;
 use coding_exception;
 
 /**
@@ -123,7 +124,13 @@ abstract class course_route_controller extends route_controller {
             throw new coding_exception('This page is not marked as supporting groups.');
         }
         if ($this->groupid === null) {
-            $this->groupid = groups_get_course_group($this->get_course(), true);
+            $course = $this->get_course();
+            $groupid = groups_get_course_group($course, true);
+            $aag = has_capability('moodle/site:accessallgroups', \context_course::instance($course->id));
+            if ($groupid === 0 && groups_get_course_groupmode($course) == SEPARATEGROUPS && !$aag) {
+                $groupid = user_utils::GROUP_ID_WHEN_NONE_RESOLVED;
+            }
+            $this->groupid = $groupid;
         }
         return $this->groupid;
     }
