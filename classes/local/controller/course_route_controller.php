@@ -28,6 +28,7 @@
 namespace block_xp\local\controller;
 
 use block_xp\local\group\group_policy;
+use block_xp\local\utils\user_utils;
 use coding_exception;
 
 /**
@@ -124,7 +125,11 @@ abstract class course_route_controller extends route_controller {
             throw new coding_exception('This page is not marked as supporting groups.');
         }
         if ($this->groupid === null) {
-            $this->groupid = $this->get_group_policy()->get_current_group_id(true);
+            $groupid = $this->get_group_policy()->get_current_group_id(true);
+            if ($groupid === 0) {
+                $groupid = $this->get_group_policy()->can_select_group($groupid) ? 0 : user_utils::GROUP_ID_WHEN_NONE_RESOLVED;
+            }
+            $this->groupid = $groupid;
         }
         return $this->groupid;
     }

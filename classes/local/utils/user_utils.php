@@ -43,6 +43,9 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class user_utils {
+    /** Group ID resolved when none allowed, including all participants. */
+    const GROUP_ID_WHEN_NONE_RESOLVED = -116;
+
     /**
      * Whether a user can earn points.
      *
@@ -231,7 +234,7 @@ class user_utils {
             if ($aag || $groupmode != SEPARATEGROUPS) {
                 return 0;
             }
-            return -116; // Any negative value is good, except -1 which has usage in grouplib.
+            return static::GROUP_ID_WHEN_NONE_RESOLVED; // Any negative value is good, except -1 which has usage in grouplib.
         }
         return reset($usergroups)->id;
     }
