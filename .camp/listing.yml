@@ -1,0 +1,80 @@
+# Schema: https://camp-registry.org/schema/listing.schema.json
+name: Level Up XP
+summary: Bring gamification to your Moodle courses. Engage learners. Increase course completion.
+
+description: |
+  ## Bring gamification to your Moodle courses. Engage learners. Increase course completion.
+
+  Level Up XP adds gamification to Moodle. Learners receive points for their actions, move through levels, see their progress, compete on a leaderboard and unlock content as they advance. Give learners more reasons to participate, return and complete their training.
+
+  **More than 32,000 websites and 12 million learners use Level Up XP.** It has been actively maintained since 2014.
+
+  ## Why Level Up XP?
+
+  Level Up XP is the most popular gamification plugin for Moodle. Whether you lead workplace training, teach at a university or want to make your classroom more engaging, XP gives you the tools to create a learning experience people want to return to.
+
+  You stay in control. Decide which actions earn points, how quickly learners level up, what each level looks like and whether XP runs inside individual courses or across the whole site.
+
+  Add the block and learners can start earning points from ready-made rules straight away. Fine-tune the experience whenever you are ready.
+
+  ## Built-in features
+
+  ### Motivate learners with points, levels and leaderboards
+
+  - Award points automatically for learner actions.
+  - Show each learner their current level and progress towards the next one.
+  - Create up to 99 levels with your own thresholds, names, descriptions and appearance.
+  - Add friendly competition with an individual leaderboard.
+  - Celebrate every level up with a notification.
+  - Remind learners what recently earned them points.
+
+  ### Keep track and shape the experience
+
+  - Use action and event rules to decide what earns points.
+  - See every learner's level, points and progress in the instructor report.
+  - Adjust or reset points when needed.
+  - Run XP per course or as one sitewide experience.
+  - Use free companion plugins to unlock content by level, enrol learners into the next course and embed XP elements throughout Moodle.
+
+  Level Up XP is free, open source and available to unlimited learners.
+
+  ## Create a seriously fun learning environment with XP+
+
+  XP+ expands Level Up XP with more personalisation, more ways to award points and more insight into learner activity. Depending on your plan, XP+ lets you:
+
+  - create team leaderboards using Moodle groups or cohorts;
+  - reward activity, section and course completion;
+  - award points for grades, individual achievements and offline activities;
+  - place Drops anywhere in your content to award points;
+  - target rules more precisely and limit repeated rewards;
+  - award Moodle badges and personalise level-up messages;
+  - import points and export reports, leaderboards and detailed logs;
+  - customise point symbols and choose from additional level designs; and
+  - use Report Builder, Moodle Mobile, the public API and commercial support.
+
+  **More than 92% of surveyed instructors say our products improved their learners' experience.**
+
+  Join thousands of educators and gamify your courses today.
+
+  [Try the live demo](https://demo.levelup.plus), [discover Level Up XP+](https://www.levelup.plus/xp/) or [read the documentation](https://docs.levelup.plus/xp/docs).
+
+labels:
+  - freemium
+  - commercial-support-available
+
+screenshots:
+  - path: .camp/screenshots/track.png
+    caption: Give learners clear goals, immediate feedback and a reason to keep going.
+  - path: .camp/screenshots/award-points.png
+    caption: Use flexible rules to reward the behaviours that matter to you.
+  - path: .camp/screenshots/levels.png
+    caption: Create a progression that fits your experience, from the first level to the last.
+  - path: .camp/screenshots/leaderboard.png
+    caption: Let learners see how they compare and encourage friendly competition.
+  - path: .camp/screenshots/unlock-content.png
+    caption: Use levels to reveal new activities and resources at the right time.
+
+links:
+  docs: https://docs.levelup.plus/xp/docs
+  issues: https://github.com/FMCorz/moodle-block_xp/issues
+  changelog: https://docs.levelup.plus/xp/release-notes

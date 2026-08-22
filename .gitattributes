@@ -1,3 +1,11 @@
 amd/build/* -diff
 amd/src/ui-*-lazy.js -diff
 yui/build/**/* -diff
+
+# Keep development files out of git archives (CAMP).
+.github export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+.camp export-ignore
+tests export-ignore
+node_modules export-ignore
