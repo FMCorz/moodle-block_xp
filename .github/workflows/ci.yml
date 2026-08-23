@@ -7,7 +7,7 @@ on:
 
 env:
   FILTER_SHORTCODES_TAG: 'v1.1.3'
-  TESTS_REPO_TAG: '20'
+  TESTS_REPO_TAG: 'v20.1'
 
 jobs:
   test:
