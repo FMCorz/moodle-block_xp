@@ -373,18 +373,22 @@ class block_xp_renderer extends plugin_renderer_base {
             return $o;
         }
 
+        $mode = (int) di::get('config')->get('promoctamode');
         $notice = null;
-        $candidates = [
-            [
+        $candidates = array_values(array_filter([
+            $mode >= 8 ? [
                 static::NOTICE_FLAG_QUEST,
-                function () {
-                    $questurl = new moodle_url('https://www.levelup.plus/quest?ref=xp_notice');
+                function () use ($mode) {
+                    $questurl = new moodle_url('https://docs.levelup.plus/quest/docs', ['ref' => 'xp_notice']);
+                    if ($mode >= 16) {
+                        $questurl = new moodle_url('https://www.levelup.plus/quest', ['ref' => 'xp_notice']);
+                    }
                     return text_utils::markdown_light(get_string('questpromonotice', 'block_xp', (object) [
                         'questurl' => $questurl->out(false),
                     ]));
                 },
-            ],
-        ];
+            ] : null,
+        ]));
         foreach ($candidates as $candidate) {
             if (!get_user_preferences($candidate[0], false)) {
                 $notice = $candidate;

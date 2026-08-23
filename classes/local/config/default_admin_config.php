@@ -89,7 +89,7 @@ class default_admin_config extends immutable_config {
             'provisionstates' => 0,
             'shortcodesecret' => '',
             'enablepromoincourses' => 1,
-            'promoctamode' => '',
+            'promoctamode' => 0b111111,
 
             'apiroot' => 'https://backend.levelup.plus/api',
             'usagereport' => 1,

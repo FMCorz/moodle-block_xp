@@ -42,8 +42,6 @@ class promo_controller extends route_controller {
     /** Page version. */
     const VERSION = 20260818;
 
-    /** @var string The CTA mode: default, docs, admin or none. */
-    protected $ctamode = 'default';
     /** @var string The normal route name. */
     protected $routename = 'promo';
     /** @var string The admin section name. */
@@ -180,12 +178,10 @@ class promo_controller extends route_controller {
      * @return moodle_url|null
      */
     protected function get_cta_url(): ?moodle_url {
-        switch ($this->get_cta_mode()) {
-            case 'docs':
-                return new moodle_url('https://docs.levelup.plus/xp/docs#xp-plus');
-            case 'admin':
-            case 'none':
-                return null;
+        if ($this->get_cta_mode() < 8) {
+            return null;
+        } else if ($this->get_cta_mode() < 16) {
+            return new moodle_url('https://docs.levelup.plus/xp/docs#xp-plus', ['ref' => 'plugin_promopage']);
         }
         return new moodle_url('https://www.levelup.plus/xp/', ['ref' => 'plugin_promopage']);
     }
@@ -196,12 +192,10 @@ class promo_controller extends route_controller {
      * @return string|null
      */
     protected function get_cta_label(): ?string {
-        switch ($this->get_cta_mode()) {
-            case 'docs':
-                return get_string('learnmore', 'block_xp');
-            case 'admin':
-            case 'none':
-                return null;
+        if ($this->get_cta_mode() < 8) {
+            return null;
+        } else if ($this->get_cta_mode() < 16) {
+            return get_string('learnmore', 'block_xp');
         }
         return get_string('promogetnow', 'block_xp');
     }
@@ -212,16 +206,21 @@ class promo_controller extends route_controller {
      * @return string|null
      */
     protected function get_cta_message(): ?string {
-        return $this->get_cta_mode() === 'admin' ? get_string('promoaskadmin', 'block_xp') : null;
+        if ($this->get_cta_mode() < 4) {
+            return null;
+        } else if ($this->get_cta_mode() < 8) {
+            return get_string('promoaskadmin', 'block_xp');
+        }
+        return null;
     }
 
     /**
      * Get the call-to-action mode.
      *
-     * @return string
+     * @return int
      */
-    protected function get_cta_mode(): ?string {
-        return di::get('config')->get('promoctamode') ?: 'default';
+    protected function get_cta_mode(): int {
+        return (int) di::get('config')->get('promoctamode');
     }
 
     /**
