@@ -58,7 +58,9 @@ class update_checker {
         }
 
         $response = $this->get_updates();
-        if (empty($response->notification_advised)) {
+        if (!$response) {
+            return;
+        } else if (empty($response->notification_advised)) {
             return;
         }
 
