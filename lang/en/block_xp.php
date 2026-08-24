@@ -53,18 +53,13 @@ $string['ai'] = 'AI';
 $string['aiaccessrevoked'] = 'Any existing AI access was revoked.';
 $string['aiactiveaccess'] = 'Your account has active AI access. This access can remain in Moodle after you disconnect an AI assistant.';
 $string['aichatgptinstructions'] = '1. In ChatGPT, open Plugins.
-2. Search for “Level Up XP” and select the plugin.
-3. When asked for your Moodle site address, enter the following value:
-
-    `{$a->wwwroot}`
-
-    For reference, the complete MCP server URL is:
+2. Select the plus (+) button. If it is not visible, open Settings, then Security and login, turn on Developer mode, and return to Plugins.
+3. Name the plugin “Level Up XP” and enter this MCP server URL under Connection:
 
     `{$a->mcpurl}`
 
-4. Choose Connect.
-5. When prompted, sign in to Moodle and authorise the connection.
-6. Start a conversation and enable the Level Up XP plugin when you want ChatGPT to use it.
+4. Select Create, then sign in to Moodle and authorise the connection.
+5. Enable the Level Up XP plugin in conversations where you want ChatGPT to use it.
 
 For more information, read our [documentation](https://docs.levelup.plus/xp/docs/ai-mcp/connect).';
 $string['aiclaudeinstructions'] = '1. In Claude, open Customize, then Connectors.
@@ -72,6 +67,7 @@ $string['aiclaudeinstructions'] = '1. In Claude, open Customize, then Connectors
 3. Name the connector “Level Up XP” and enter this remote MCP server URL:
 
    `{$a->mcpurl}`
+
 4. Add the connector, then sign in to Moodle and authorise the connection.
 5. Enable the Level Up XP connector in conversations where you want Claude to use it.
 
