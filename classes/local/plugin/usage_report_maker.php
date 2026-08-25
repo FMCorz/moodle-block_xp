@@ -97,7 +97,7 @@ class usage_report_maker {
         $data->xp_ladders = $this->db->count_records_select('block_xp_config', 'enableladder != ?', [0]);
 
         $identitymodekey = $this->db->sql_concat("'v'", 'identitymode');
-        $identitymode = $this->db->get_records_sql_menu("SELECT {$identitymodekey}, COUNT(1)
+        $identitymode = $this->db->get_records_sql_menu("SELECT {$identitymodekey} AS mode, COUNT(1) AS n
                                                            FROM {block_xp_config}
                                                        GROUP BY identitymode");
         $data->xp_ladders_anonymity = $identitymode;
