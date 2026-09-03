@@ -85,6 +85,7 @@ class world_rule_manager {
         $storecontext = $this->world->get_context();
         $this->db->delete_records('block_xp_rule', ['id' => $ruleid, 'contextid' => $storecontext->id]);
         $this->rulesinctxcache = [];
+        $this->detach();
     }
 
     /**
@@ -179,6 +180,18 @@ class world_rule_manager {
     }
 
     /**
+     * Whether all rules are matching the defaults.
+     *
+     * @return bool
+     */
+    protected function is_matching_defaults(): bool {
+        $storecontext = $this->world->get_context();
+        $adminrecords = $this->adminrulemanager->get_records_for_world();
+        $worldrecords = $this->fetch_records_in_context($storecontext, null);
+        return $this->are_records_matching($worldrecords, $adminrecords);
+    }
+
+    /**
      * Reset to the defaults.
      *
      * @return void
@@ -197,19 +210,33 @@ class world_rule_manager {
     public function seed_for_editing(): void {
         if ($this->is_detached()) {
             return;
-        }
-
-        $storecontext = $this->world->get_context();
-        $adminrecords = $this->adminrulemanager->get_records_for_world();
-        $worldrecords = $this->fetch_records_in_context($storecontext, null);
-
-        if ($this->are_records_matching($worldrecords, $adminrecords)) {
+        } else if ($this->is_matching_defaults()) {
             return;
         }
 
         $this->delete_all_rules();
-        $this->insert_rule_records($adminrecords);
+        $this->insert_rule_records($this->adminrulemanager->get_records_for_world());
         $this->rulesinctxcache = [];
+    }
+
+    /**
+     * Update a rule.
+     *
+     * @param int $ruleid
+     * @param \stdClass $data
+     */
+    public function update_rule(int $ruleid, \stdClass $data): void {
+        $record = $this->fetch_record($ruleid);
+        if (!$record) {
+            return;
+        }
+
+        $this->process_rule_update($record, $data);
+        $this->rulesinctxcache = [];
+
+        if (!$this->is_detached() && !$this->is_matching_defaults()) {
+            $this->detach();
+        }
     }
 
     /**
@@ -387,5 +414,19 @@ class world_rule_manager {
             return $childcontext->id;
         }
         return 0;
+    }
+
+    /**
+     * Process a rule update.
+     *
+     * @param \stdClass $rulerecord
+     * @param \stdClass $data
+     */
+    protected function process_rule_update(\stdClass $rulerecord, \stdClass $data): void {
+        $rule = (object) (array) $rulerecord;
+        if (isset($data->points)) {
+            $rule->points = $data->points;
+        }
+        $this->db->update_record('block_xp_rule', $rule);
     }
 }

@@ -172,7 +172,14 @@ class rule extends dynamic_form {
     protected function save_data(\stdClass $data): void {
         $rule = $this->get_rule();
         $rule->points = $data->points;
-        di::get('db')->update_record('block_xp_rule', $rule);
+
+        if (!$this->is_default_rule()) {
+            $manager = di::get('world_rule_manager_factory')->get_rule_manager($this->get_world());
+            $manager->update_rule($rule->id, $data);
+            return;
+        }
+
+        di::get('admin_rule_manager')->update_rule($rule->id, $data);
     }
 
     /**
@@ -180,9 +187,6 @@ class rule extends dynamic_form {
      */
     final public function set_data_for_dynamic_submission(): void {
         $this->set_data($this->get_default_data());
-        if (!$this->is_default_rule()) {
-            di::get('world_rule_manager_factory')->get_rule_manager($this->get_world())->detach();
-        }
     }
 
     /**

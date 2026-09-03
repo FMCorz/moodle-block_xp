@@ -212,6 +212,34 @@ class admin_rule_manager {
     }
 
     /**
+     * Process a rule update.
+     *
+     * @param \stdClass $rulerecord
+     * @param \stdClass $data
+     */
+    protected function process_rule_update(\stdClass $rulerecord, \stdClass $data): void {
+        $rule = (object) (array) $rulerecord;
+        if (isset($data->points)) {
+            $rule->points = $data->points;
+        }
+        $this->db->update_record('block_xp_rule', $rule);
+    }
+
+    /**
+     * Update a rule.
+     *
+     * @param int $ruleid
+     * @param \stdClass $data
+     */
+    public function update_rule(int $ruleid, \stdClass $data): void {
+        $record = $this->fetch_record($ruleid);
+        if (!$record) {
+            return;
+        }
+        $this->process_rule_update($record, $data);
+    }
+
+    /**
      * Translate a filter for a world.
      *
      * @param string $filter The filter name.

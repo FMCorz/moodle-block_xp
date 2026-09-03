@@ -33,6 +33,7 @@ use block_xp\local\config\config_stack;
 use block_xp\local\config\course_world_config;
 use block_xp\local\config\filtered_config;
 use block_xp\local\config\immutable_config;
+use block_xp\local\course_world;
 
 /**
  * Course world factory.
@@ -91,7 +92,7 @@ class default_course_world_factory implements course_world_factory {
      * Get the world.
      *
      * @param int $courseid Course ID.
-     * @return block_xp\local\course_world
+     * @return course_world
      */
     public function get_world($courseid) {
 

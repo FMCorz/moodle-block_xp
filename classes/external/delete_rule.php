@@ -57,7 +57,6 @@ class delete_rule extends external_api {
         $world = self::require_manage_permissions_and_get_world((int) $rule->contextid);
         if ($world) {
             $manager = di::get('world_rule_manager_factory')->get_rule_manager($world);
-            $manager->detach();
             $manager->delete_rule($id);
         } else {
             di::get('admin_rule_manager')->delete_rule($id);
