@@ -399,36 +399,18 @@ class block_xp_renderer extends plugin_renderer_base {
         if ($notice) {
             [$flag, $textfn] = $notice;
 
-            if ($CFG->branch >= 403) {
-                $this->page->requires->js_amd_inline("require(['core_user/repository'], function(UserRepo) {
-                    const flag = '$flag';
-                    const n = document.querySelector('.block-xp-rocks');
-                    if (!n) return;
-                    n.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        UserRepo.setUserPreference(flag, true);
-                        const notice = document.querySelector('.block-xp-notices');
-                        if (!notice) return;
-                        notice.style.display = 'none';
-                    });
-                });");
-            } else {
-                require_once($CFG->libdir . '/ajax/ajaxlib.php');
-                user_preference_allow_ajax_update($flag, PARAM_BOOL);
-
-                $this->page->requires->js_amd_inline("require([], function() {
-                    const flag = '$flag';
-                    const n = document.querySelector('.block-xp-rocks');
-                    if (!n) return;
-                    n.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        M.util.set_user_preference(flag, 1);
-                        const notice = document.querySelector('.block-xp-notices');
-                        if (!notice) return;
-                        notice.style.display = 'none';
-                    });
-                });");
-            }
+            $this->page->requires->js_amd_inline("require(['core_user/repository'], function(UserRepo) {
+                const flag = '$flag';
+                const n = document.querySelector('.block-xp-rocks');
+                if (!n) return;
+                n.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    UserRepo.setUserPreference(flag, true);
+                    const notice = document.querySelector('.block-xp-notices');
+                    if (!notice) return;
+                    notice.style.display = 'none';
+                });
+            });");
 
             $icon = new pix_icon('t/close', get_string('dismissnotice', 'block_xp'), 'block_xp');
             $actionicon = $this->action_icon(new moodle_url($this->page->url), $icon, null, ['class' => 'block-xp-rocks']);
@@ -894,43 +876,29 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Render a dismissable notice.
      *
-     * Yes, we cannot use CSS IDs in there because they are stripped out... turns out they
-     * are considered dangerous. Oh well, we use a class instead. Not pretty, but it works...
-     *
      * @param renderable $notice The notice.
      * @return string
      */
     public function render_dismissable_notice(renderable $notice) {
-        $id = html_writer::random_id();
-
-        // Tell the indicator that it should be expecing this notice.
-        $indicator = \block_xp\di::get('user_notice_indicator');
-        if ($indicator instanceof \block_xp\local\indicator\user_indicator_with_acceptance) {
-            $indicator->set_acceptable_user_flag($notice->name);
+        if (!$notice instanceof \block_xp\output\dismissable_notice) {
+            return '';
         }
 
-        $url = \block_xp\di::get('ajax_url_resolver')->reverse('notice/dismiss', ['name' => $notice->name]);
-        $this->page->requires->js_init_call(<<<EOT
-            Y.one('.$id .dismiss-action a').on('click', function(e) {
-                e.preventDefault();
-                Y.one('.$id').hide();
-                var url = '$url';
-                var cfg = {
-                    method: 'POST'
-                };
-                Y.io(url, cfg);
+        $id = html_writer::random_id();
+        $prefname = json_encode($notice->name);
+        $notification = new \core\output\notification($notice->message, $notice->type);
+        $notification->set_extra_classes([$id]);
+        $notification->set_announce(false);
+
+        $this->page->requires->js_amd_inline("
+            require(['jquery', 'core_user/repository'], function(jQuery, UserRepo) {
+                jQuery('.$id').one('close.bs.alert', function() {
+                    UserRepo.setUserPreference($prefname, '1');
+                });
             });
-EOT
-        );
+        ");
 
-        $icon = new pix_icon('t/close', get_string('dismissnotice', 'block_xp'), 'block_xp');
-        $actionicon = $this->action_icon('#', $icon, null);
-        $text = html_writer::div($actionicon, 'dismiss-action') . $notice->message;
-
-        return html_writer::div(
-            $this->notification_without_close($text, $notice->type),
-            'block_xp-dismissable-notice ' . $id
-        );
+        return $this->render($notification);
     }
 
     /**

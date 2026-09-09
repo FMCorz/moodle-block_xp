@@ -119,6 +119,9 @@ class restore_xp_block_structure_step extends restore_structure_step {
                 'name' => 'block_xp-notice-block_intro_' . $courseid,
             ]);
             $DB->delete_records_select('user_preferences', $sql, [
+                'name' => 'block_xp_block_intro_' . $coursecontextid,
+            ]);
+            $DB->delete_records_select('user_preferences', $sql, [
                 'name' => 'block_xp_notify_level_up_' . $courseid,
             ]);
         }

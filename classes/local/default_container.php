@@ -161,6 +161,7 @@ class default_container implements container {
      * Get the router.
      *
      * @return routing\router
+     * @deprecated Since XP 21, use external functions instead.
      */
     protected function get_ajax_base_url() {
         return new moodle_url('/blocks/xp/ajax.php');
@@ -170,6 +171,7 @@ class default_container implements container {
      * Get the router.
      *
      * @return routing\router
+     * @deprecated Since XP 21, use external functions instead.
      */
     protected function get_ajax_router() {
         return new \block_xp\local\routing\router(
@@ -181,6 +183,7 @@ class default_container implements container {
      * Get the routes config.
      *
      * @return routing\routes_config
+     * @deprecated Since XP 21, use external functions instead.
      */
     protected function get_ajax_routes_config() {
         return new \block_xp\local\routing\ajax_routes_config();
@@ -190,6 +193,7 @@ class default_container implements container {
      * Get URL resolver.
      *
      * @return routing\url_resolver
+     * @deprecated Since XP 21, use external functions instead.
      */
     protected function get_ajax_url_resolver() {
         return new \block_xp\local\routing\default_url_resolver(
@@ -808,6 +812,7 @@ class default_container implements container {
      * Get the user notice indicator.
      *
      * @return indicator\user_indicator
+     * @deprecated Since XP 21, use something else instead.
      */
     protected function get_user_notice_indicator() {
         return new \block_xp\local\indicator\user_notice_indicator($this->get('db'));

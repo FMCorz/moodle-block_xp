@@ -295,7 +295,6 @@ class course_block extends block_base {
 
         $context = $world->get_context();
         $canedit = $world->get_access_permissions()->can_manage();
-        $indicator = \block_xp\di::get('user_notice_indicator');
         $courseid = $world->get_courseid();
         $config = $world->get_config();
         $leaderboardfactory = \block_xp\di::get('leaderboard_factory_maker')->get_leaderboard_factory($world);
@@ -317,16 +316,16 @@ class course_block extends block_base {
 
         // Introduction.
         $introduction = format_string($config->get('blockdescription'), true, ['context' => $context]);
-        $introname = 'block_intro_' . $courseid;
+        $prefname = 'block_xp_block_intro_' . $context->id;
         if (empty($introduction)) {
             // The intro is empty, no need for further checks then...
             $introduction = null;
         } else if ($canedit) {
             // Always show the notification to teachers.
             $introduction = $introduction ? new notice($introduction, notice::INFO) : null;
-        } else if (!$indicator->user_has_flag($USER->id, $introname)) {
+        } else if (!get_user_preferences($prefname, false)) {
             // Allow students to dismiss the message.
-            $introduction = $introduction ? new dismissable_notice($introduction, $introname, notice::INFO) : null;
+            $introduction = $introduction ? new dismissable_notice($introduction, $prefname, notice::INFO) : null;
         } else {
             $introduction = null;
         }

@@ -119,6 +119,14 @@ function block_xp_render_navbar_output($output) {
  */
 function block_xp_user_preferences() {
     return [
+        '/^block_xp_block_intro_\d+$/' => [
+            'isregex' => true,
+            'type' => PARAM_BOOL,
+            'permissioncallback' => function ($user) {
+                global $USER;
+                return $user->id == $USER->id;
+            },
+        ],
         'block_xp_notices' => [
             'type' => PARAM_BOOL,
             'permissioncallback' => function ($user) {

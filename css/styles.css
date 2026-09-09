@@ -118,9 +118,6 @@ a .block_xp-level {
     margin-left: auto;
     margin-right: auto;
 }
-.block.block_xp .alert.alert-block {
-    @apply xp-p-2 xp-py-1.5;
-}
 .block.block_xp .block_xp-level-progress [role='progressbar'] {
     @apply xp-h-4;
 }

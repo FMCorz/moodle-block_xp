@@ -16,15 +16,6 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * Ajax routes config.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\routing;
 
 /**
@@ -34,6 +25,7 @@ namespace block_xp\local\routing;
  * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 21, use external functions instead.
  */
 class ajax_routes_config extends static_routes_config {
     /**

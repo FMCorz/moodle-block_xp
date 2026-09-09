@@ -683,5 +683,15 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2026041700, 'xp');
     }
 
+    if ($oldversion < 2026082301) {
+        // Delete old-style preferences used in user flags.
+        $DB->delete_records_select('user_preferences', $DB->sql_like('name', ':prefname'), [
+            'prefname' => $DB->sql_like_escape('block_xp-notice-block_intro_') . '%',
+        ]);
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2026082301, 'xp');
+    }
+
     return true;
 }

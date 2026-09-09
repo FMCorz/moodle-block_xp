@@ -16,15 +16,6 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * Notice api controller.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\controller;
 
 use coding_exception;
@@ -37,6 +28,7 @@ use context_system;
  * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 21, use external functions instead.
  */
 class ajax_notice_dismiss_controller extends route_controller {
     /**
@@ -63,9 +55,7 @@ class ajax_notice_dismiss_controller extends route_controller {
     /**
      * Permission checks.
      *
-     * None to do, this is handled by admin_externalpage_setup().
-     *
-     * @throws moodle_exception When the conditions are not met.
+     * @throws \moodle_exception When the conditions are not met.
      * @return void
      */
     protected function permissions_checks() {
