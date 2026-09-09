@@ -66,17 +66,12 @@ class url extends \moodle_url {
      * @return url
      */
     public function get_compatible_url() {
-        global $CFG;
         $url = new url($this);
         if (!empty($this->slashargument) && $this->slasharg) {
             // From Moodle 4.5, we can no longer explicitly request a URL without slasharguments. However as there
             // are still issues with single_select, etc. we translate the slashargument to a parameter manually.
-            if ($CFG->branch >= 405) {
-                $url->param($this->slasharg, $this->slashargument);
-                $url->slashargument = '';
-            } else {
-                $url->set_slashargument($this->slashargument, $this->slasharg, false);
-            }
+            $url->param($this->slasharg, $this->slashargument);
+            $url->slashargument = '';
         }
         return $url;
     }
@@ -91,9 +86,6 @@ class url extends \moodle_url {
      * @param bool $supported Whether slash argument is supported.
      */
     public function set_slashargument($path, $parameter = 'file', $supported = null) {
-        global $CFG;
-        // We can't always trust that $CFG->slasharguments is set in older versions. From Moodle 4.5, the parameter is deprecated.
-        $supported = $supported === null && $CFG->branch < 405 ? !empty($CFG->slasharguments) : $supported;
         $this->slasharg = $parameter;
         parent::set_slashargument($path, $parameter, $supported);
     }

@@ -82,10 +82,6 @@ class finish_quiz_attempt implements ruletype, ruletype_with_goal, ruletype_with
      * @return icon|null
      */
     public function get_icon(): ?icon {
-        global $CFG;
-        if ($CFG->branch <= 401) {
-            return new fa_icon('check');
-        }
         return new fa_icon('clipboard-check');
     }
 

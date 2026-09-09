@@ -16,15 +16,6 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * External utils.
- *
- * @package    block_xp
- * @copyright  2023 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\utils;
 
 use context;
@@ -61,15 +52,8 @@ class external_utils {
         $itemid = null,
         $options = null
     ) {
-
-        global $CFG;
-        if ($CFG->branch >= 402) {
-            $context = $contextorid instanceof context ? $contextorid : context::instance_by_id($contextorid);
-            return \core_external\util::format_text($text, $format, $context, $component, $filearea, $itemid, $options);
-        }
-
-        static::load_libs();
-        return external_format_text($text, $format, $contextorid, $component, $filearea, $itemid, $options);
+        $context = $contextorid instanceof context ? $contextorid : context::instance_by_id($contextorid);
+        return \core_external\util::format_text($text, $format, $context, $component, $filearea, $itemid, $options);
     }
 
     /**
@@ -86,15 +70,7 @@ class external_utils {
      * @return string
      */
     public static function format_string($str, $context, $striplinks = true, $options = []) {
-        global $CFG;
-        if ($CFG->branch >= 402) {
-            return \core_external\util::format_string($str, $context, $striplinks, $options);
-        }
-        static::load_libs();
-
-        // Older implementations of external_format_string expected an ID.
-        $contextid = $context instanceof context ? $context->id : $context;
-        return external_format_string($str, $contextid, $striplinks, $options);
+        return \core_external\util::format_string($str, $context, $striplinks, $options);
     }
 
     /**

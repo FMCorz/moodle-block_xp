@@ -98,12 +98,6 @@ abstract class base_testcase extends \advanced_testcase {
         $blockmanager->set_default_region('xptest');
         $instance = $blockmanager->add_block($name, 'xptest', 0, false, $pagetypepattern, $subpagepattern);
 
-        // Older versions did not return the instance.
-        if ($instance === null && $CFG->branch <= 401) {
-            $records = $DB->get_records('block_instances', ['blockname' => $name], 'id DESC', '*', 0, 1);
-            $instance = block_instance('xp', reset($records));
-        }
-
         return $instance;
     }
 
