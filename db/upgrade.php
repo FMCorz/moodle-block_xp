@@ -693,5 +693,16 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2026082301, 'xp');
     }
 
+    if ($oldversion < 2026082302) {
+        // Delete plugin config used in removed block setting migration.
+        $DB->delete_records_select('config_plugins', 'plugin = :plugin AND ' . $DB->sql_like('name', ':configname'), [
+            'plugin' => 'block_xp',
+            'configname' => $DB->sql_like_escape('block_configdata_migrated_') . '%',
+        ]);
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2026082302, 'xp');
+    }
+
     return true;
 }
