@@ -55,7 +55,7 @@ class user_leveledup extends \core\event\base {
     /**
      * Get URL related to the action.
      *
-     * @return block_xp\local\routing\url
+     * @return \block_xp\local\routing\url
      */
     public function get_url() {
         return \block_xp\di::get('url_resolver')->reverse('report', ['courseid' => $this->courseid]);

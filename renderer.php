@@ -470,17 +470,17 @@ class block_xp_renderer extends plugin_renderer_base {
      * @return array
      */
     protected function get_navbar_widget_context(course_world $world, state $state) {
-        $urlresolver = \block_xp\di::get('url_resolver');
+        $urlresolver = di::get('world_url_resolver_factory')->get_url_resolver($world);
         $worldconfig = $world->get_config();
 
         $infopageurl = null;
         if ($worldconfig->get('enableinfos')) {
-            $infopageurl = $urlresolver->reverse('infos', ['courseid' => $world->get_courseid()]);
+            $infopageurl = $urlresolver->reverse('infos');
         }
 
         $leaderboardurl = null;
         if ($worldconfig->get('enableladder')) {
-            $leaderboardurl = $urlresolver->reverse('ladder', ['courseid' => $world->get_courseid()]);
+            $leaderboardurl = $urlresolver->reverse('ladder');
         }
 
         $validurls = array_filter([$infopageurl, $leaderboardurl]);
@@ -1105,8 +1105,9 @@ class block_xp_renderer extends plugin_renderer_base {
         $worldprops = $props['world'] ?? null;
 
         if ($world) {
+            $worldurlresolver = di::get('world_url_resolver_factory')->get_url_resolver($world);
             $courseid = (int) ($world instanceof course_world ? $world->get_courseid() : $this->page->course->id);
-            $addonpromourl = $urlresolver->reverse('promo', ['courseid' => $courseid]);
+            $addonpromourl = $worldurlresolver->reverse('promo');
             $worldprops = [
                 'contextid' => (int) $world->get_context()->id,
                 'contextlevel' => (int) $world->get_context()->contextlevel,

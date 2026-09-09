@@ -231,14 +231,13 @@ class course_block extends block_base {
         $accessperms = $world->get_access_permissions();
         $canedit = $accessperms->can_manage();
         $canaccessreport = $accessperms instanceof access_report_permissions && $accessperms->can_access_report();
-        $courseid = method_exists($world, 'get_courseid') ? $world->get_courseid() : 0;
-        $urlresolver = \block_xp\di::get('url_resolver');
+        $urlresolver = \block_xp\di::get('world_url_resolver_factory')->get_url_resolver($world);
         $config = $world->get_config();
         $actions = [];
 
         if ($config->get('enableinfos')) {
             $actions[] = new action_link(
-                $urlresolver->reverse('infos', ['courseid' => $courseid]),
+                $urlresolver->reverse('infos'),
                 get_string('navinfos', 'block_xp'),
                 null,
                 null,
@@ -247,7 +246,7 @@ class course_block extends block_base {
         }
         if ($config->get('enableladder')) {
             $actions[] = new action_link(
-                $urlresolver->reverse('ladder', ['courseid' => $courseid]),
+                $urlresolver->reverse('ladder'),
                 get_string('navladder', 'block_xp'),
                 null,
                 null,
@@ -256,7 +255,7 @@ class course_block extends block_base {
         }
         if ($canaccessreport) {
             $actions[] = new action_link(
-                $urlresolver->reverse('report', ['courseid' => $courseid]),
+                $urlresolver->reverse('report'),
                 get_string('navreport', 'block_xp'),
                 null,
                 null,
@@ -265,7 +264,7 @@ class course_block extends block_base {
         }
         if ($canedit) {
             $actions[] = new action_link(
-                $urlresolver->reverse('config', ['courseid' => $courseid]),
+                $urlresolver->reverse('config'),
                 get_string('navsettings', 'block_xp'),
                 null,
                 null,

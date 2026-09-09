@@ -28,7 +28,6 @@
 namespace block_xp\form;
 
 use block_xp\di;
-use block_xp\local\utils\text_utils;
 use core_form\dynamic_form;
 
 defined('MOODLE_INTERNAL') || die();
@@ -78,11 +77,6 @@ class cheatguard extends dynamic_form {
      * @return void
      */
     public function definition() {
-        $world = $this->get_world();
-        $renderer = \block_xp\di::get('renderer');
-        $config = \block_xp\di::get('config');
-        $urlresolver = \block_xp\di::get('url_resolver');
-
         $mform = $this->_form;
         $mform->addElement('hidden', 'contextid', $this->get_world()->get_context()->id);
         $mform->setType('contextid', PARAM_INT);
@@ -108,7 +102,7 @@ class cheatguard extends dynamic_form {
     /**
      * Get the data.
      *
-     * @return stdClass
+     * @return \stdClass
      */
     public function get_data() {
         $data = parent::get_data();

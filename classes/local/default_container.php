@@ -108,6 +108,7 @@ class default_container implements container {
         'user_generic_indicator' => true,
         'user_notice_indicator' => true,
         'world_rule_manager_factory' => true,
+        'world_url_resolver_factory' => true,
     ];
 
     /** @var array Object instances. */
@@ -825,6 +826,15 @@ class default_container implements container {
      */
     protected function get_world_rule_manager_factory() {
         return new factory\world_rule_manager_factory($this->get('db'), $this->get('admin_rule_manager'));
+    }
+
+    /**
+     * Get the world URL resolver factory.
+     *
+     * @return factory\world_url_resolver_factory
+     */
+    protected function get_world_url_resolver_factory() {
+        return new factory\world_url_resolver_factory(di::get('url_resolver'));
     }
 
     /**

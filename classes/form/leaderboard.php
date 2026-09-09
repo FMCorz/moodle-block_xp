@@ -73,6 +73,7 @@ class leaderboard extends dynamic_form {
      * @return void
      */
     public function definition() {
+        $urlresolver = di::get('world_url_resolver_factory')->get_url_resolver($this->get_world());
         $mform = $this->_form;
 
         $mform->addElement('hidden', 'contextid', $this->get_world()->get_context()->id);
@@ -86,10 +87,10 @@ class leaderboard extends dynamic_form {
             get_string('ladderisodefault', 'block_xp'),
             get_string('ladderisocohorts', 'block_xp'),
         ], ['disabled' => 'disabled']);
-        $els[] = $mform->createElement(staticfield::name(), 'addonrequired', '', function () {
+        $els[] = $mform->createElement(staticfield::name(), 'addonrequired', '', function () use ($urlresolver) {
             $renderer = di::get('renderer');
             return $renderer->render_from_template('block_xp/addon-required', [
-                'promourl' => di::get('url_resolver')->reverse('promo', ['courseid' => $this->world->get_courseid()])->out(false),
+                'promourl' => $urlresolver->reverse('promo')->out(false),
             ]);
         });
         $mform->addElement('group', 'ladderiso', get_string('ladderiso', 'block_xp'), $els);
@@ -101,10 +102,10 @@ class leaderboard extends dynamic_form {
             get_string('ladderparticipationoptout', 'block_xp'),
             get_string('ladderparticipationoptin', 'block_xp'),
         ], ['disabled' => 'disabled']);
-        $els[] = $mform->createElement(staticfield::name(), 'addonrequired', '', function () {
+        $els[] = $mform->createElement(staticfield::name(), 'addonrequired', '', function () use ($urlresolver) {
             $renderer = di::get('renderer');
             return $renderer->render_from_template('block_xp/addon-required', [
-                'promourl' => di::get('url_resolver')->reverse('promo', ['courseid' => $this->world->get_courseid()])->out(false),
+                'promourl' => $urlresolver->reverse('promo')->out(false),
             ]);
         });
         $mform->addElement('group', 'ladderparticipation', get_string('ladderparticipation', 'block_xp'), $els);

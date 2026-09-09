@@ -95,7 +95,7 @@ class report_table extends table_sql {
         $this->world = $world;
         $this->renderer = $renderer;
         $this->store = $store;
-        $this->urlresolver = di::get('url_resolver');
+        $this->urlresolver = di::get('world_url_resolver_factory')->get_url_resolver($world);
 
         $accessperms = $this->world->get_access_permissions();
         if ($accessperms instanceof access_logs_permissions) {
@@ -289,7 +289,7 @@ class report_table extends table_sql {
         );
 
         if ($this->logaccessperms && $this->logaccessperms->can_access_logs()) {
-            $url = $this->urlresolver->reverse('log', ['courseid' => $this->world->get_courseid()]);
+            $url = $this->urlresolver->reverse('log']);
             $url->param('userid', $row->id);
             $actions[] = new action_menu_link(
                 $url,

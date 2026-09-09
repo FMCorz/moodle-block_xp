@@ -84,6 +84,7 @@ abstract class course_route_controller extends route_controller {
     protected function post_login() {
         parent::post_login();
         $this->world = \block_xp\di::get('course_world_factory')->get_world($this->courseid);
+        $this->urlresolver = \block_xp\di::get('world_url_resolver_factory')->get_url_resolver($this->world);
         $this->courseid = $this->world->get_courseid();
         $this->navfactory = \block_xp\di::get('course_world_navigation_factory');
     }

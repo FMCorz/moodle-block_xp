@@ -24,7 +24,9 @@ require_once($CFG->libdir . '/adminlib.php');
 use block_xp\di;
 use html_writer;
 use block_xp\local\routing\url;
+use block_xp\local\routing\url_resolver;
 use block_xp\local\utils\text_utils;
+use block_xp\local\world;
 use core\output\notification;
 use moodle_url;
 

@@ -210,7 +210,7 @@ class rule extends dynamic_form {
             $anchorname = $rule->type;
         }
 
-        $url = $urlresolver->reverse($urlname, ['courseid' => $world->get_courseid()]);
+        $url = di::get('world_url_resolver_factory')->get_url_resolver($world)->reverse($urlname);
         $url->set_anchor($anchorname);
 
         return $url;
