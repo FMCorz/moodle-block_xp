@@ -29,14 +29,13 @@ namespace block_xp\local\block;
 use action_link;
 use block_base;
 use block_xp\local\config\course_world_config;
+use block_xp\local\navigation\nav_item;
 use context;
 use context_system;
 use html_writer;
 use lang_string;
-use pix_icon;
 use stdClass;
 use block_xp\local\course_world;
-use block_xp\local\permission\access_report_permissions;
 use block_xp\local\sql\limit;
 use block_xp\local\world;
 use block_xp\local\xp\level_with_name;
@@ -228,51 +227,10 @@ class course_block extends block_base {
      * @return action_link[]
      */
     protected function get_block_navigation_for_world(world $world) {
-        $accessperms = $world->get_access_permissions();
-        $canedit = $accessperms->can_manage();
-        $canaccessreport = $accessperms instanceof access_report_permissions && $accessperms->can_access_report();
-        $urlresolver = \block_xp\di::get('world_url_resolver_factory')->get_url_resolver($world);
-        $config = $world->get_config();
-        $actions = [];
-
-        if ($config->get('enableinfos')) {
-            $actions[] = new action_link(
-                $urlresolver->reverse('infos'),
-                get_string('navinfos', 'block_xp'),
-                null,
-                null,
-                new pix_icon('i/info', '', 'block_xp')
-            );
-        }
-        if ($config->get('enableladder')) {
-            $actions[] = new action_link(
-                $urlresolver->reverse('ladder'),
-                get_string('navladder', 'block_xp'),
-                null,
-                null,
-                new pix_icon('i/ladder', '', 'block_xp')
-            );
-        }
-        if ($canaccessreport) {
-            $actions[] = new action_link(
-                $urlresolver->reverse('report'),
-                get_string('navreport', 'block_xp'),
-                null,
-                null,
-                new pix_icon('i/report', '', 'block_xp')
-            );
-        }
-        if ($canedit) {
-            $actions[] = new action_link(
-                $urlresolver->reverse('config'),
-                get_string('navsettings', 'block_xp'),
-                null,
-                null,
-                new pix_icon('i/settings', '', 'block_xp')
-            );
-        }
-
-        return $actions;
+        $navigator = \block_xp\di::get('world_navigator_factory')->get_navigator_for_world($world);
+        return array_map(static function (nav_item $item) {
+            return $item->as_action_link();
+        }, $navigator->get_block_navigation());
     }
 
     /**

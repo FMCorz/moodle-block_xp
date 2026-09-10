@@ -58,7 +58,7 @@ class logs_table extends table_sql {
     protected $world;
     /** @var reason_from_log_entry_factory The reason factory. */
     protected $reasonfactory;
-    /** @var renderer_base The renderer. */
+    /** @var \renderer_base The renderer. */
     protected $renderer;
     /** @var int Filter by user ID, falsy means not filtering. */
     protected $filterbyuserid;

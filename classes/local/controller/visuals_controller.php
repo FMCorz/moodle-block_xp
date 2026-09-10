@@ -16,23 +16,12 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * Visuals controller.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\controller;
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/filelib.php');
 
-use block_xp\di;
 use context_system;
-use html_writer;
 use stdClass;
 use block_xp\local\config\course_world_config;
 use block_xp\local\routing\url;
@@ -51,7 +40,7 @@ class visuals_controller extends page_controller {
     /** @var string The route name. */
     protected $routename = 'visuals';
 
-    /** @var moodleform The form. */
+    /** @var \moodleform The form. */
     private $form;
 
     /**
@@ -69,7 +58,7 @@ class visuals_controller extends page_controller {
     /**
      * Get manager context.
      *
-     * @return context
+     * @return \context
      */
     final protected function get_filemanager_context() {
         return $this->world->get_context();
@@ -87,11 +76,11 @@ class visuals_controller extends page_controller {
     /**
      * Define the form.
      *
-     * @return moodleform
+     * @return \moodleform
      */
     protected function define_form() {
         return new \block_xp\form\visuals($this->pageurl->out(false), [
-            'promourl' => $this->urlresolver->reverse('promo', ['courseid' => $this->courseid]),
+            'promourl' => $this->navigator->get_url('promo'),
             'fmoptions' => $this->get_filemanager_options(),
         ]);
     }
@@ -99,7 +88,7 @@ class visuals_controller extends page_controller {
     /**
      * Get the form.
      *
-     * @return moodleform
+     * @return \moodleform
      */
     final protected function get_form() {
         if (!$this->form) {

@@ -127,7 +127,7 @@ class infos_controller extends page_controller {
                     ],
                     [
                         'label' => get_string('customizelevels', 'block_xp'),
-                        'href' => $this->urlresolver->reverse('levels', ['courseid' => $this->world->get_courseid()]),
+                        'href' => $this->navigator->get_url('levels'),
                     ],
                 ],
             ]);

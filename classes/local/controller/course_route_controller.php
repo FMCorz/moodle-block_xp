@@ -16,15 +16,6 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * Course route controller.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\controller;
 
 use block_xp\local\group\group_policy;
@@ -51,13 +42,19 @@ abstract class course_route_controller extends route_controller {
     protected $supportsgroups = false;
     /** @var \block_xp\local\course_world */
     protected $world;
-    /** @var \block_xp\local\factory\course_world_navigation_factory The navigation factory. */
-    protected $navfactory;
+    /** @var \block_xp\local\navigation\navigator The navigator. */
+    protected $navigator;
 
     /** @var false|int The group ID. */
     private $groupid;
     /** @var ?group_policy The group policy. */
     private $grouppolicy;
+
+    /**
+     * @var \block_xp\local\factory\course_world_navigation_factory The navigation factory.
+     * @deprecated Since XP 21, use self::$navigator instead.
+     */
+    protected $navfactory;
 
     /**
      * Authentication.
@@ -84,9 +81,10 @@ abstract class course_route_controller extends route_controller {
     protected function post_login() {
         parent::post_login();
         $this->world = \block_xp\di::get('course_world_factory')->get_world($this->courseid);
-        $this->urlresolver = \block_xp\di::get('world_url_resolver_factory')->get_url_resolver($this->world);
+        $this->urlresolver = \block_xp\di::get('url_resolver');
         $this->courseid = $this->world->get_courseid();
         $this->navfactory = \block_xp\di::get('course_world_navigation_factory');
+        $this->navigator = \block_xp\di::get('world_navigator_factory')->get_navigator_for_world($this->world);
     }
 
     /**
@@ -180,7 +178,7 @@ abstract class course_route_controller extends route_controller {
     /**
      * Get the course.
      *
-     * @return stdClass
+     * @return \stdClass
      */
     final protected function get_course() {
         if (!$this->course) {

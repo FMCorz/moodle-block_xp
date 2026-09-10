@@ -440,14 +440,7 @@ class block_xp_renderer extends plugin_renderer_base {
      * @deprecated Since Level Up XP 3.12, use tab_navigation instead.
      */
     public function course_world_navigation(course_world $world, $page) {
-        debugging('The method course_world_navigation is deprecated, please use tab_navigation instead.', DEBUG_DEVELOPER);
-        $factory = \block_xp\di::get('course_world_navigation_factory');
-        $links = $factory->get_course_navigation($world);
-        // If there is only one page, then that is the page we are on.
-        if (count($links) <= 1) {
-            return '';
-        }
-        return $this->tab_navigation($links, $page);
+        return '';
     }
 
     /**
@@ -470,17 +463,17 @@ class block_xp_renderer extends plugin_renderer_base {
      * @return array
      */
     protected function get_navbar_widget_context(course_world $world, state $state) {
-        $urlresolver = di::get('world_url_resolver_factory')->get_url_resolver($world);
+        $navigator = di::get('world_navigator_factory')->get_navigator_for_world($world);
         $worldconfig = $world->get_config();
 
         $infopageurl = null;
         if ($worldconfig->get('enableinfos')) {
-            $infopageurl = $urlresolver->reverse('infos');
+            $infopageurl = $navigator->get_url('infos');
         }
 
         $leaderboardurl = null;
         if ($worldconfig->get('enableladder')) {
-            $leaderboardurl = $urlresolver->reverse('ladder');
+            $leaderboardurl = $navigator->get_url('ladder');
         }
 
         $validurls = array_filter([$infopageurl, $leaderboardurl]);
@@ -1105,9 +1098,9 @@ class block_xp_renderer extends plugin_renderer_base {
         $worldprops = $props['world'] ?? null;
 
         if ($world) {
-            $worldurlresolver = di::get('world_url_resolver_factory')->get_url_resolver($world);
+            $navigator = di::get('world_navigator_factory')->get_navigator_for_world($world);
             $courseid = (int) ($world instanceof course_world ? $world->get_courseid() : $this->page->course->id);
-            $addonpromourl = $worldurlresolver->reverse('promo');
+            $addonpromourl = $navigator->get_url('promo');
             $worldprops = [
                 'contextid' => (int) $world->get_context()->id,
                 'contextlevel' => (int) $world->get_context()->contextlevel,
@@ -1161,7 +1154,7 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Rules page loading check init.
      *
-     * @return html
+     * @return string HTML
      */
     public function rules_page_loading_check_init() {
         return $this->render_from_template('block_xp/rules-page-loading-error', []);
@@ -1170,7 +1163,7 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Rules page loading check success.
      *
-     * @return html
+     * @return string HTML
      */
     public function rules_page_loading_check_success() {
         return $this->render_from_template('block_xp/rules-page-loading-success', []);
@@ -1213,10 +1206,17 @@ class block_xp_renderer extends plugin_renderer_base {
                 $url = $firstchild['url'];
                 $link = array_merge($link, ['url' => $url]);
             }
-            return new tabobject($link['id'], $link['url'], $link['text'], clean_param($link['text'], PARAM_NOTAGS));
+            $text = $link['text'];
+            if (!empty($link['icon'])) {
+                $text = $this->render($link['icon']) . $text;
+            }
+            if (!empty($link['needsattention'])) {
+                $text .= $this->new_dot();
+            }
+            return new tabobject($link['id'], $link['url'], $text, clean_param($link['text'], PARAM_NOTAGS));
         }, array_filter($items, function ($item) {
-            // Remove the items that define children but do not have any.
-            return !isset($item['children']) || !empty($item['children']);
+            // Remove the items without a URL that define children but do not have any.
+            return !empty($item['url']) || !isset($item['children']) || !empty($item['children']);
         }));
         return html_writer::div($this->tabtree($tabs, $activenode), 'block_xp-page-nav');
     }

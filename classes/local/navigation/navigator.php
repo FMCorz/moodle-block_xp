@@ -16,43 +16,39 @@
 //
 // See <https://levelup.plus>.
 
+namespace block_xp\local\navigation;
+
+use block_xp\local\routing\url;
+
 /**
- * Course world navigation factory interface.
+ * Navigator.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart
+ * @copyright  2026 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+abstract class navigator {
+    /**
+     * Get the block navigation.
+     *
+     * @return nav_item[];
+     */
+    abstract public function get_block_navigation();
 
-namespace block_xp\local\factory;
-
-use block_xp\local\course_world;
-
-/**
- * Course world navigation factory interface.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since XP 21, use navigator instead.
- */
-interface course_world_navigation_factory {
     /**
      * Get the navigation.
      *
-     * Returns an array containing:
-     * - id
-     * - text
-     * - url
-     * - children (optional):
-     *   - id
-     *   - text
-     *   - url
-     *
-     * @param course_world $world The world.
-     * @return array
+     * @return nav_item[];
      */
-    public function get_course_navigation(course_world $world);
+    abstract public function get_navigation();
+
+    /**
+     * Get a URL.
+     *
+     * @param string $routename The route name.
+     * @param array $params The route params, if any.
+     * @return url
+     */
+    abstract public function get_url(string $routename, array $params = []): url;
 }

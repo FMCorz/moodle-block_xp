@@ -216,7 +216,7 @@ class handler {
             return;
         }
 
-        $urlresolver = di::get('world_url_resolver_factory')->get_url_resolver($world);
+        $navigator = di::get('world_navigator_factory')->get_navigator_for_world($world);
 
         // Override the config to disable the neighbours when the top argument is set.
         $configoverride = null;
@@ -256,7 +256,7 @@ class handler {
 
         // Prepare the page.
         if (!$PAGE->has_set_url() && defined('WS_SERVER') && WS_SERVER) {
-            $PAGE->set_url($urlresolver->reverse('ladder'));
+            $PAGE->set_url($navigator->get_url('ladder'));
         }
 
         // Output the table.
@@ -281,7 +281,7 @@ class handler {
         if ($withlink) {
             $link = \html_writer::div(
                 \html_writer::link(
-                    $urlresolver->reverse('ladder'),
+                    $navigator->get_url('ladder'),
                     get_string('gotofullladder', 'block_xp')
                 ),
                 'xp-link-to-full-ladder'

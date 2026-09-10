@@ -16,15 +16,6 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * Default course world navigation factory.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\factory;
 
 use block_xp\di;
@@ -41,6 +32,7 @@ use block_xp\local\routing\url_resolver;
  * @copyright  2017 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @deprecated Since XP 21, use navigator instead.
  */
 class default_course_world_navigation_factory implements course_world_navigation_factory {
     /** @var config The admin config. */

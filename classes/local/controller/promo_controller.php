@@ -95,9 +95,12 @@ class promo_controller extends route_controller {
      */
     protected function page_course_navigation() {
         $output = $this->get_renderer();
-        $items = di::get('course_world_navigation_factory')->get_course_navigation($this->world);
+        $navigator = di::get('world_navigator_factory')->get_navigator_for_world($this->world);
+        $items = $navigator->get_navigation();
         if (count($items) > 1) {
-            return $output->tab_navigation($items, $this->routename);
+            return $output->tab_navigation(array_map(static function($item) {
+                return $item->as_array();
+            }, $items), $this->routename);
         }
         return '';
     }

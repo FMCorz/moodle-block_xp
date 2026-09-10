@@ -55,6 +55,9 @@ abstract class page_controller extends course_route_controller {
     /** @var bool Whether the page is public. */
     protected $ispublic = false;
 
+    /** @var ?array The nav items. */
+    protected $navitems;
+
     /**
      * Permissions checks.
      *
@@ -115,7 +118,12 @@ abstract class page_controller extends course_route_controller {
      * @return array
      */
     protected function get_navigation_items() {
-        return $this->navfactory->get_course_navigation($this->world);
+        if (!isset($this->navitems)) {
+            $this->navitems = array_map(static function($item) {
+                return $item->as_array();
+            }, $this->navigator->get_navigation());
+        }
+        return $this->navitems;
     }
 
     /**
@@ -125,20 +133,10 @@ abstract class page_controller extends course_route_controller {
      */
     protected function get_sub_navigation_items() {
         $routename = $this->get_navigation_route_name();
-        $links = $this->navfactory->get_course_navigation($this->world);
+        $links = $this->get_navigation_items();
         foreach ($links as $link) {
             if ($link['id'] === $routename) {
-                $children = !empty($link['children']) ? $link['children'] : [];
-
-                // Remove potential duplicates.
-                $seen = [];
-                return array_values(array_filter($children, function ($child) use (&$seen) {
-                    if (in_array($child['id'], $seen)) {
-                        return false;
-                    }
-                    $seen[] = $child['id'];
-                    return true;
-                }));
+                return $link['children'] ?? [];
             }
         }
         return [];

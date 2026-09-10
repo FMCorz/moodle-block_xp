@@ -40,7 +40,7 @@ class ai_controller extends page_controller {
      */
     protected function pre_content() {
         if (!di::get('addon')->is_promo_allowed()) {
-            return redirect($this->urlresolver->reverse('infos', ['courseid' => $this->courseid]));
+            return redirect($this->navigator->get_url('infos'));
         }
     }
 
@@ -69,7 +69,7 @@ class ai_controller extends page_controller {
      */
     protected function page_content() {
         $renderer = $this->get_renderer();
-        $promourl = $this->urlresolver->reverse('promo', ['courseid' => $this->courseid])->out(false);
+        $promourl = $this->navigator->get_url('promo')->out(false);
 
         $output = $this->get_renderer();
         echo $output->advanced_heading(get_string('aipagetitle', 'block_xp'), [

@@ -75,7 +75,7 @@ trait dynamic_world_trait {
         if (!$this->routename) {
             throw new \coding_exception('routenamenotdefined');
         }
-        $urlresolver = di::get('world_url_resolver_factory')->get_url_resolver($this->get_world());
-        return $urlresolver->reverse($this->routename);
+        $navigator = di::get('world_navigator_factory')->get_navigator_for_world($this->get_world());
+        return $navigator->get_url($this->routename);
     }
 }

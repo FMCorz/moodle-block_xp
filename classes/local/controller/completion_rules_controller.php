@@ -52,7 +52,7 @@ class completion_rules_controller extends page_controller {
      */
     protected function pre_content() {
         if (!di::get('addon')->is_promo_allowed()) {
-            return redirect($this->urlresolver->reverse('rules', ['courseid' => $this->courseid]));
+            return redirect($this->navigator->get_url('rules'));
         }
     }
 
@@ -81,7 +81,7 @@ class completion_rules_controller extends page_controller {
      */
     protected function page_content() {
         $renderer = $this->get_renderer();
-        $promourl = $this->urlresolver->reverse('promo', ['courseid' => $this->courseid])->out(false);
+        $promourl = $this->navigator->get_url('promo')->out(false);
 
         echo $renderer->advanced_heading(get_string('completionrules', 'block_xp'), [
             'intro' => new \lang_string('completionrulesintro', 'block_xp'),

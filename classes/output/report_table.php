@@ -40,11 +40,13 @@ use stdClass;
 use table_sql;
 use block_xp\di;
 use block_xp\local\course_world;
+use block_xp\local\navigation\navigator;
 use block_xp\local\permission\access_logs_permissions;
 use block_xp\local\routing\url_resolver;
 use block_xp\local\utils\user_utils;
 use block_xp\local\xp\course_user_state_store;
 use block_xp\local\xp\state_with_subject;
+use block_xp\local\xp\user_state;
 
 /**
  * Block XP report table class.
@@ -62,6 +64,8 @@ class report_table extends table_sql {
     protected $store = null;
     /** @var access_logs_permissions|null The log access permissions. */
     protected $logaccessperms = null;
+    /** @var navigator The navigator. */
+    protected $navigator;
     /** @var renderer_base The renderer. */
     protected $renderer = null;
     /** @var url_resolver The URL resolver. */
@@ -95,7 +99,8 @@ class report_table extends table_sql {
         $this->world = $world;
         $this->renderer = $renderer;
         $this->store = $store;
-        $this->urlresolver = di::get('world_url_resolver_factory')->get_url_resolver($world);
+        $this->urlresolver = di::get('url_resolver');
+        $this->navigator = di::get('world_navigator_factory')->get_navigator_for_world($world);
 
         $accessperms = $this->world->get_access_permissions();
         if ($accessperms instanceof access_logs_permissions) {
@@ -289,7 +294,7 @@ class report_table extends table_sql {
         );
 
         if ($this->logaccessperms && $this->logaccessperms->can_access_logs()) {
-            $url = $this->urlresolver->reverse('log']);
+            $url = $this->navigator->get_url('log');
             $url->param('userid', $row->id);
             $actions[] = new action_menu_link(
                 $url,

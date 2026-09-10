@@ -107,8 +107,8 @@ class default_container implements container {
         'usage_reporter' => true,
         'user_generic_indicator' => true,
         'user_notice_indicator' => true,
+        'world_navigator_factory' => true,
         'world_rule_manager_factory' => true,
-        'world_url_resolver_factory' => true,
     ];
 
     /** @var array Object instances. */
@@ -466,6 +466,7 @@ class default_container implements container {
      * Get the course world navigation factory.
      *
      * @return factory\course_world_navigation_factory
+     * @deprecated Since XP 21, use navigator instead.
      */
     protected function get_course_world_navigation_factory() {
         return new \block_xp\local\factory\default_course_world_navigation_factory(
@@ -820,21 +821,21 @@ class default_container implements container {
     }
 
     /**
+     * Get the world navigator factory.
+     *
+     * @return factory\world_navigator_factory
+     */
+    protected function get_world_navigator_factory() {
+        return new factory\world_navigator_factory(di::get('url_resolver'));
+    }
+
+    /**
      * Get the world rule manager factory.
      *
      * @return factory\world_rule_manager_factory
      */
     protected function get_world_rule_manager_factory() {
         return new factory\world_rule_manager_factory($this->get('db'), $this->get('admin_rule_manager'));
-    }
-
-    /**
-     * Get the world URL resolver factory.
-     *
-     * @return factory\world_url_resolver_factory
-     */
-    protected function get_world_url_resolver_factory() {
-        return new factory\world_url_resolver_factory(di::get('url_resolver'));
     }
 
     /**

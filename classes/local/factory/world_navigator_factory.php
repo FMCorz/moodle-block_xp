@@ -16,43 +16,44 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * Course world navigation factory interface.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\factory;
 
 use block_xp\local\course_world;
+use block_xp\local\navigation\course_world_navigator;
+use block_xp\local\navigation\navigator;
+use block_xp\local\routing\url_resolver;
+use block_xp\local\world;
 
 /**
- * Course world navigation factory interface.
+ * World navigator factory.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart
+ * @copyright  2026 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @deprecated Since XP 21, use navigator instead.
  */
-interface course_world_navigation_factory {
+class world_navigator_factory {
+    /** @var url_resolver The URL resolver. */
+    protected $urlresolver;
+
     /**
-     * Get the navigation.
-     *
-     * Returns an array containing:
-     * - id
-     * - text
-     * - url
-     * - children (optional):
-     *   - id
-     *   - text
-     *   - url
-     *
-     * @param course_world $world The world.
-     * @return array
+     * Constructor.
      */
-    public function get_course_navigation(course_world $world);
+    public function __construct(url_resolver $urlresolver) {
+        $this->urlresolver = $urlresolver;
+    }
+
+    /**
+     * Get the navigator for a world.
+     *
+     * @param world $world The world.
+     * @return navigator
+     */
+    public function get_navigator_for_world(world $world) {
+        if (!$world instanceof course_world) {
+            throw new \coding_exception('Navigation for this world is not implemented.');
+        }
+
+        return new course_world_navigator($world, $this->urlresolver);
+    }
 }
