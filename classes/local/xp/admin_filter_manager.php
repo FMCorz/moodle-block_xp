@@ -30,6 +30,7 @@ namespace block_xp\local\xp;
 use moodle_database;
 use block_xp\di;
 use block_xp\local\config\course_world_config;
+use block_xp\local\course_world;
 use coding_exception;
 
 /**
@@ -224,6 +225,9 @@ class admin_filter_manager {
         // This is slow, but that's sort of the cleanest way.
         foreach ($courseids as $courseid) {
             $world = $courseworldfactory->get_world($courseid);
+            if (!$world instanceof course_world) {
+                continue;
+            }
             $world->reset_filters_to_defaults();
         }
     }
