@@ -230,7 +230,7 @@ const showLevelUpNotificationPreview = async (level: LevelType, prevLevel: Level
   });
 };
 
-export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badges = [] }: AppProps) => {
+export const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badges = [] }: AppProps) => {
   const hasXpPlus = useAddonActivated();
   const [state, dispatch] = useReducer(reducer, { levelsInfo }, getInitialState);
   const levels = state.levels.slice(0, state.nblevels);
@@ -239,21 +239,25 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
   const getStr = useStrings(optionsStatesStringIds.concat(["levelssaved", "unknownbadgea", "levelx", "previewpopupnotification"]));
   const getBadgeStr = useStrings(["coursebadges", "sitebadges"], "core_badges");
   const getCoreStr = useStrings(["other", "none"], "core");
+  const isEditingWorld = Boolean(contextId);
 
   useUnloadCheck(state.pendingSave);
 
   // Prepare the save mutation.
   const mutation = useMutation(() => {
     // An falsy course ID means admin config.
-    const method = courseId ? "block_xp_set_levels_info" : "block_xp_set_default_levels_info";
+    const method = isEditingWorld ? "block_xp_set_levels_info" : "block_xp_set_default_levels_info";
     return ajaxRequest(method, {
-      courseid: courseId ? courseId : undefined,
+      contextid: isEditingWorld ? contextId : undefined,
       levels: levels.map((level) => {
         const { level: levelnum, xprequired, ...metadata } = level;
         return {
           level: levelnum,
           xprequired: xprequired,
-          metadata: Object.entries(metadata).reduce<{}[]>((carry, [name, value]) => carry.concat([{ name, value }]), []),
+          metadata: Object.entries(metadata).reduce<{ name: string; value: any }[]>(
+            (carry, [name, value]) => carry.concat([{ name, value }]),
+            []
+          ),
         };
       }),
       algo: state.algo,
@@ -443,9 +447,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
           const expandableId = `xp-level-${level.level}-options`;
 
           let optionStates: ((typeof optionsStates)[0] | null)[] =
-            level.level <= 1
-              ? optionsStates.filter((o) => ["name", "description", courseId ? null : "badgeawardid"].includes(o.id))
-              : optionsStates;
+            level.level <= 1 ? optionsStates.filter((o) => ["name", "description"].includes(o.id)) : optionsStates;
           optionStates = optionStates.concat(
             Array.from({ length: Math.max(0, optionsStates.length - optionStates.length) }).map((_) => null)
           );
@@ -620,7 +622,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
                             note={<Str id="badgeawarddesc" />}
                             xpPlusRequired={!hasXpPlus}
                           >
-                            {courseId ? (
+                            {isEditingWorld ? (
                               <Select
                                 disabled={!hasXpPlus}
                                 className="xp-max-w-full xp-w-auto"
@@ -695,7 +697,7 @@ export const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls
 };
 
 type AppProps = {
-  courseId: number;
+  contextId: number;
   levelsInfo: LevelsInfo;
   resetToDefaultsUrl?: string;
   defaultBadgeUrls: { [index: number]: null | string };

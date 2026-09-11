@@ -114,7 +114,7 @@ class levels_controller extends page_controller {
         return [
             'block_xp/ui-levels-lazy',
             [
-                'courseId' => $courseid,
+                'contextId' => $world->get_context()->id,
                 'levelsInfo' => $serializer->serialize($levelsinfo),
                 'resetToDefaultsUrl' => $this->get_reset_url()->out(false),
                 'defaultBadgeUrls' => $defaultbadges,

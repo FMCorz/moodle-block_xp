@@ -4,7 +4,7 @@ define(["block_xp/ui-commons-lazy"],() => { return /******/ (() => { // webpackB
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 1791
+/***/ 972
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -496,6 +496,60 @@ const useStrings = (ids, component = "block_xp") => {
     return (0,react.useCallback)((id, a) => (hasString(id, component) ? getString(id, component, a) : "​"), [component]);
 };
 
+;// ./ui/src/components/Popover.tsx
+
+
+const Popover = ({ children, content }) => {
+    const ref = react.useRef(null);
+    (0,react.useEffect)(() => {
+        const $ = getModule("jquery");
+        if (!$ || !ref.current || !$(ref.current).popover) {
+            return;
+        }
+        const element = ref.current;
+        element.setAttribute("data-container", "body");
+        element.setAttribute("data-bs-container", "body");
+        element.setAttribute("data-content", content);
+        element.setAttribute("data-bs-content", content);
+        element.setAttribute("data-html", "true");
+        element.setAttribute("data-bs-html", "true");
+        element.setAttribute("data-placement", "top");
+        element.setAttribute("data-bs-placement", "top");
+        const handleBodyClick = (e) => {
+            const target = e.target;
+            if (target.closest(".popover") || element.contains(target)) {
+                return;
+            }
+            try {
+                $(element).popover("hide");
+            }
+            catch (err) { }
+        };
+        $(element).popover("enable");
+        document.body.addEventListener("click", handleBodyClick);
+        return () => {
+            document.body.removeEventListener("click", handleBodyClick);
+            if (!$(element).popover) {
+                return;
+            }
+            try {
+                $(element).popover("dispose");
+            }
+            catch (e) {
+                try {
+                    $(element).popover("destroy");
+                }
+                catch (e) { }
+            }
+        };
+    }, [content]);
+    return (0,react.cloneElement)(children, { ref });
+};
+const AnchorPopover = ({ children, className, content, }) => {
+    return (react.createElement(Popover, { content: content },
+        react.createElement("a", { href: "#", role: "button", onClick: (e) => e.preventDefault(), className: className }, children)));
+};
+
 ;// ./ui/src/components/Addon.tsx
 /* unused harmony import specifier */ var Addon_useContext;
 /* unused harmony import specifier */ var React;
@@ -523,30 +577,7 @@ const IfAddonPromoEnabled = ({ children }) => {
 const AddonRequired = (props) => {
     const { promourl } = (0,react.useContext)(AddonContext);
     const getStr = useStrings(["xpplusrequired", "unlockfeaturewithxpplus"]);
-    const handleClick = (e) => e.preventDefault();
-    const ref = (0,react.useRef)(null);
-    (0,react.useEffect)(() => {
-        const handleClick = (e) => {
-            const $ = getModule("jquery");
-            if (!$ || !ref.current || !$(ref.current).popover) {
-                return;
-            }
-            const target = e.target;
-            if (target.closest(".popover")) {
-                return;
-            }
-            else if (ref.current.contains(target)) {
-                return;
-            }
-            try {
-                $(ref.current).popover("hide");
-            }
-            catch (err) { }
-        };
-        document.body.addEventListener("click", handleClick);
-        return () => document.body.removeEventListener("click", handleClick);
-    });
-    return (react.createElement("a", { ref: ref, href: "#", role: "button", onClick: handleClick, "data-bs-toggle": "popover", "data-toggle": "popover", "data-placement": "top", "data-container": "body", "data-content": getStr("unlockfeaturewithxpplus", promourl), "data-bs-content": getStr("unlockfeaturewithxpplus", promourl), "data-html": "true", "data-bs-html": "true", className: "xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white xp-rounded xp-no-underline" }, props.children ? props.children : getStr("xpplusrequired")));
+    return (react.createElement(AnchorPopover, { content: getStr("unlockfeaturewithxpplus", promourl), className: classNames("xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white", "xp-rounded xp-no-underline") }, props.children ? props.children : getStr("xpplusrequired")));
 };
 const AddonRequiredShort = () => {
     return React.createElement(AddonRequired, null, "XP+");
@@ -1668,7 +1699,7 @@ const showLevelUpNotificationPreview = async (level, prevLevel) => {
         message: level.popupmessage,
     });
 };
-const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badges = [] }) => {
+const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badges = [] }) => {
     const hasXpPlus = useAddonActivated();
     const [state, dispatch] = (0,react.useReducer)(reducer, { levelsInfo }, getInitialState);
     const levels = state.levels.slice(0, state.nblevels);
@@ -1677,13 +1708,14 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
     const getStr = useStrings(optionsStatesStringIds.concat(["levelssaved", "unknownbadgea", "levelx", "previewpopupnotification"]));
     const getBadgeStr = useStrings(["coursebadges", "sitebadges"], "core_badges");
     const getCoreStr = useStrings(["other", "none"], "core");
+    const isEditingWorld = Boolean(contextId);
     useUnloadCheck(state.pendingSave);
     // Prepare the save mutation.
     const mutation = (0,useMutation/* useMutation */.n)(() => {
         // An falsy course ID means admin config.
-        const method = courseId ? "block_xp_set_levels_info" : "block_xp_set_default_levels_info";
+        const method = isEditingWorld ? "block_xp_set_levels_info" : "block_xp_set_default_levels_info";
         return ajaxRequest(method, {
-            courseid: courseId ? courseId : undefined,
+            contextid: isEditingWorld ? contextId : undefined,
             levels: levels.map((level) => {
                 const { level: levelnum, xprequired, ...metadata } = level;
                 return {
@@ -1780,9 +1812,7 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
             const pointsInLevel = nextLevel ? nextLevel.xprequired - level.xprequired : 0;
             const isExpanded = expanded.includes(level.level);
             const expandableId = `xp-level-${level.level}-options`;
-            let optionStates = level.level <= 1
-                ? optionsStates.filter((o) => ["name", "description", courseId ? null : "badgeawardid"].includes(o.id))
-                : optionsStates;
+            let optionStates = level.level <= 1 ? optionsStates.filter((o) => ["name", "description"].includes(o.id)) : optionsStates;
             optionStates = optionStates.concat(Array.from({ length: Math.max(0, optionsStates.length - optionStates.length) }).map((_) => null));
             const isBadgeValueMissing = levelsInfo.levels[idx]?.badgeawardid && !badges.find((b) => b.id === levelsInfo.levels[idx].badgeawardid);
             const handleBadgeAwardIdChange = (e) => {
@@ -1847,7 +1877,7 @@ const App = ({ courseId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badge
                             react.createElement(IfAddonActivatedOrPromoEnabled, null, level.level > 1 ? (react.createElement(react.Fragment, null,
                                 react.createElement(OptionField, { label: react.createElement(components_Str, { id: "popupnotificationmessage" }), note: react.createElement(components_Str, { id: "popupnotificationmessagedesc" }), xpPlusRequired: !hasXpPlus },
                                     react.createElement(Textarea, { className: "xp-w-full", onBlur: handlePopupMessageChange, defaultValue: level.popupmessage || "", maxLength: 280, rows: 2, disabled: !hasXpPlus })),
-                                react.createElement(OptionField, { label: react.createElement(components_Str, { id: "badgeaward" }), note: react.createElement(components_Str, { id: "badgeawarddesc" }), xpPlusRequired: !hasXpPlus }, courseId ? (react.createElement(Select, { disabled: !hasXpPlus, className: "xp-max-w-full xp-w-auto", value: level.badgeawardid ?? "", onChange: handleBadgeAwardIdChange },
+                                react.createElement(OptionField, { label: react.createElement(components_Str, { id: "badgeaward" }), note: react.createElement(components_Str, { id: "badgeawarddesc" }), xpPlusRequired: !hasXpPlus }, isEditingWorld ? (react.createElement(Select, { disabled: !hasXpPlus, className: "xp-max-w-full xp-w-auto", value: level.badgeawardid ?? "", onChange: handleBadgeAwardIdChange },
                                     react.createElement("option", null, getCoreStr("none")),
                                     courseBadges.length ? (react.createElement("optgroup", { label: getBadgeStr("coursebadges") }, courseBadges.map((b) => (react.createElement("option", { value: b.id, key: b.id }, b.name))))) : null,
                                     siteBadges.length ? (react.createElement("optgroup", { label: getBadgeStr("sitebadges") }, siteBadges.map((b) => (react.createElement("option", { value: b.id, key: b.id }, b.name))))) : null,
@@ -2059,7 +2089,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(1791)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(972)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ 	return __webpack_exports__;

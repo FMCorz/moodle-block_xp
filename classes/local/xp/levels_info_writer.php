@@ -219,9 +219,6 @@ class levels_info_writer {
      * @param world|null $world The world, if any.
      */
     protected function get_metadata_for_level($level, $metadata, ?world $world = null) {
-
-        // We can only deal with this type of world at the moment.
-        $world = $world instanceof course_world ? $world : null;
         $finaldata = [];
 
         $name = clean_param($metadata['name'] ?? '', PARAM_NOTAGS);
