@@ -97,7 +97,7 @@ function block_xp_render_navbar_output($output) {
     }
 
     // Check if enabled.
-    $world = di::get('course_world_factory')->get_world($COURSE->id);
+    $world = di::get('context_world_factory')->get_world_from_context($PAGE->context);
     if (!$world->get_config()->get('enabled')) {
         return;
     }
