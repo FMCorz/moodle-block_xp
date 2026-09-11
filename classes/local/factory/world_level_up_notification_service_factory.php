@@ -16,26 +16,33 @@
 //
 // See <https://levelup.plus>.
 
-namespace block_xp\local\notification;
+namespace block_xp\local\factory;
+
+use block_xp\local\course_world;
+use block_xp\local\notification\course_level_up_notification_service;
+use block_xp\local\notification\level_up_notification_service;
+use block_xp\local\notification\prefs_level_up_notification_service;
+use block_xp\local\world;
 
 /**
- * Course level up notification service.
+ * World level up notification service factory.
  *
  * @package    block_xp
- * @copyright  2017 Frédéric Massart
+ * @copyright  2026 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_level_up_notification_service extends prefs_level_up_notification_service {
-    /** User preference prefix. */
-    const USERPREF_NOTIFY = 'block_xp_notify_level_up_';
-
+class world_level_up_notification_service_factory {
     /**
-     * Constructor.
+     * Get for a world.
      *
-     * @param int $courseid The course ID.
+     * @param world $world The world.
+     * @return level_up_notification_service
      */
-    public function __construct($courseid) {
-        parent::__construct(static::USERPREF_NOTIFY . $courseid);
+    public function get_for_world(world $world): level_up_notification_service {
+        if ($world instanceof course_world) {
+            return new course_level_up_notification_service($world->get_courseid());
+        }
+        return new prefs_level_up_notification_service('block_xp_notify_ctx_level_up_' . $world->get_context()->id);
     }
 }

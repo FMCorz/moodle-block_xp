@@ -175,8 +175,8 @@ class course_block extends block_base {
         // Also resets the flag. We could potentially do that from JS so that if the user does not
         // stay on the page long enough they'd be notified the next time they access the course page,
         // but that's probably an overkill for now.
-        $service = method_exists($world, 'get_level_up_notification_service') ? $world->get_level_up_notification_service() : null;
-        if ($service && $service->should_be_notified($USER->id)) {
+        $service = \block_xp\di::get('world_level_up_notification_service_factory')->get_for_world($world);
+        if ($service->should_be_notified($USER->id)) {
             // Get the levels, and remove 0 when the user's level is already in the list.
             $levels = array_unique(array_map(function ($level) use ($state) {
                 if (!$level) {
@@ -243,7 +243,7 @@ class course_block extends block_base {
      */
     protected function get_popup_notification_props($renderer, $world, $level, $prevlevel) {
         return [
-            'courseid' => method_exists($world, 'get_courseid') ? $world->get_courseid() : 0,
+            'contextid' => $world->get_context()->id,
             'levelnum' => $level->get_level(),
             'levelname' => $level instanceof level_with_name ? $level->get_name() : null,
             'levelbadge' => $renderer->level_badge($level),

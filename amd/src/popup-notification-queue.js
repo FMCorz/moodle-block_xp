@@ -50,7 +50,7 @@ define(['block_xp/popup-notification', 'core/ajax'], function(PopupNotification,
                 Ajax.call([{
                     methodname: 'block_xp_mark_popup_notification_seen',
                     args: {
-                        courseid: instance.courseid,
+                        contextid: instance.contextid,
                         level: instance.levelnum
                     }
                 }])[0].fail(function() {

@@ -38,6 +38,8 @@ use block_xp\local\config\course_world_config;
 use block_xp\local\factory\badge_url_resolver_course_world_factory;
 use block_xp\local\factory\levels_info_factory;
 use block_xp\local\logger\collection_logger;
+use block_xp\local\notification\level_up_notification_service;
+use block_xp\local\xp\levels_info;
 
 /**
  * Course World.
@@ -68,6 +70,8 @@ class course_world implements world {
     protected $strategy;
     /** @var course_filter_manager The filter manager. */
     protected $filtermanager;
+    /** @var level_up_notification_service The filter manager. */
+    protected $levelupnotifservice;
     /** @var badge_url_resolver_course_world_factory The badge URL resolver factory. */
     protected $urlresolverfactory;
     /** @var object Observer object cache. */
@@ -225,10 +229,13 @@ class course_world implements world {
     /**
      * Get level up notification service.
      *
-     * @return notification\course_level_up_notification_service
+     * @return notification\level_up_notification_service
      */
     public function get_level_up_notification_service() {
-        return new \block_xp\local\notification\course_level_up_notification_service($this->courseid);
+        if (!$this->levelupnotifservice) {
+            $this->levelupnotifservice = di::get('world_level_up_notification_service_factory')->get_for_world($this);
+        }
+        return $this->levelupnotifservice;
     }
 
     /**
@@ -268,7 +275,7 @@ class course_world implements world {
     /**
      * Get store.
      *
-     * @return state_store
+     * @return \block_xp\local\xp\course_user_state_store
      */
     public function get_store() {
         if (!$this->store) {

@@ -29,7 +29,7 @@ namespace block_xp\local\observer;
 
 use context;
 use block_xp\local\config\config;
-use block_xp\local\notification\course_level_up_notification_service;
+use block_xp\local\notification\level_up_notification_service;
 use block_xp\local\xp\level;
 use block_xp\local\xp\state_store;
 
@@ -46,7 +46,7 @@ class default_state_store_observer implements level_up_state_store_observer, poi
     protected $context;
     /** @var config The world config. */
     protected $config;
-    /** @var course_level_up_notification_service The notification service. */
+    /** @var level_up_notification_service The notification service. */
     protected $notificationservice;
 
     /**
@@ -54,9 +54,9 @@ class default_state_store_observer implements level_up_state_store_observer, poi
      *
      * @param context $context The context.
      * @param config $config The world config.
-     * @param course_level_up_notification_service $notificationservice The notification service.
+     * @param level_up_notification_service $notificationservice The notification service.
      */
-    public function __construct(context $context, config $config, course_level_up_notification_service $notificationservice) {
+    public function __construct(context $context, config $config, level_up_notification_service $notificationservice) {
         $this->context = $context;
         $this->config = $config;
         $this->notificationservice = $notificationservice;

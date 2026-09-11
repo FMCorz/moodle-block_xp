@@ -107,6 +107,7 @@ class default_container implements container {
         'usage_reporter' => true,
         'user_generic_indicator' => true,
         'user_notice_indicator' => true,
+        'world_level_up_notification_service_factory' => true,
         'world_navigator_factory' => true,
         'world_rule_manager_factory' => true,
     ];
@@ -818,6 +819,15 @@ class default_container implements container {
      */
     protected function get_user_notice_indicator() {
         return new \block_xp\local\indicator\user_notice_indicator($this->get('db'));
+    }
+
+    /**
+     * Get the world navigator factory.
+     *
+     * @return factory\world_level_up_notification_service_factory
+     */
+    protected function get_world_level_up_notification_service_factory() {
+        return new factory\world_level_up_notification_service_factory();
     }
 
     /**

@@ -32,7 +32,7 @@ use context;
 use block_xp\local\config\config;
 use block_xp\local\logger\collection_logger;
 use block_xp\local\logger\reason_collection_logger;
-use block_xp\local\notification\course_level_up_notification_service;
+use block_xp\local\notification\level_up_notification_service;
 use block_xp\local\reason\event_reason;
 use block_xp\local\xp\course_filter_manager;
 use block_xp\local\xp\course_user_state_store;
@@ -56,7 +56,7 @@ class course_world_collection_strategy implements action_collection_strategy, ev
     protected $filtermanager;
     /** @var collection_logger The logger. */
     protected $logger;
-    /** @var course_level_up_notification_service The notification service. */
+    /** @var level_up_notification_service The notification service. */
     protected $levelupnotifificationservice;
     /** @var action_collection_strategy The action collection strategy. */
     protected $actioncollectionstrategy;
@@ -69,7 +69,7 @@ class course_world_collection_strategy implements action_collection_strategy, ev
      * @param course_user_state_store $store The store.
      * @param course_filter_manager $filtermanager The filter manager.
      * @param collection_logger $logger The logger.
-     * @param course_level_up_notification_service $levelupnotifificationservice The notification service.
+     * @param level_up_notification_service $levelupnotifificationservice The notification service.
      */
     public function __construct(
         context $context,
@@ -77,7 +77,7 @@ class course_world_collection_strategy implements action_collection_strategy, ev
         course_user_state_store $store,
         course_filter_manager $filtermanager,
         collection_logger $logger,
-        course_level_up_notification_service $levelupnotifificationservice
+        level_up_notification_service $levelupnotifificationservice
     ) {
         $this->context = $context;
         $this->config = $config;
