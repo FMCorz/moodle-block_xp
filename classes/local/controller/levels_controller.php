@@ -66,7 +66,7 @@ class levels_controller extends page_controller {
         // Reset levels to defaults.
         if ($this->get_param('reset') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
-                $this->world->get_config()->set('levelsdata', '');
+                di::get('levels_info_writer')->reset_world($this->world);
                 $this->redirect(new url($this->pageurl));
             }
         }
@@ -99,7 +99,6 @@ class levels_controller extends page_controller {
         global $USER;
 
         $world = $this->world;
-        $courseid = $world->get_courseid();
 
         $urlserializer = new url_serializer();
         $badgeurlresolver = di::get('badge_url_resolver_course_world_factory')->get_url_resolver($world);

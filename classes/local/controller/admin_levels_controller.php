@@ -82,8 +82,7 @@ class admin_levels_controller extends admin_route_controller {
         // Reset levels to defaults.
         if ($this->get_param('reset') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
-                // We should probably move this to the levels_info_writer, although it only knows about config.
-                di::get('db')->set_field_select('block_xp_config', 'levelsdata', '', 'courseid > 0', []);
+                di::get('levels_info_writer')->reset_all_courses();
                 $this->redirect(new url($this->pageurl), get_string('allcoursesreset', 'block_xp'));
             }
         }

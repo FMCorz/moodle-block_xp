@@ -27,6 +27,7 @@
 
 namespace block_xp\local\xp;
 
+use block_xp\di;
 use block_xp\external\external_api;
 use block_xp\external\external_multiple_structure;
 use block_xp\external\external_single_structure;
@@ -58,6 +59,22 @@ class levels_info_writer {
      */
     public function __construct(config $config) {
         $this->config = $config;
+    }
+
+    /**
+     * Reset the world.
+     */
+    public function reset_all_courses() {
+        di::get('db')->set_field_select('block_xp_config', 'levelsdata', '', 'courseid > 0', []);
+    }
+
+    /**
+     * Reset the world.
+     *
+     * @param world $world
+     */
+    public function reset_world(world $world) {
+        $world->get_config()->set('levelsdata', '');
     }
 
     /**
