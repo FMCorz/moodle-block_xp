@@ -58,13 +58,13 @@ class mark_popup_notification_seen extends external_api {
         $courseid = $params['courseid'];
         $level = $params['level'];
 
-        // Pre-checks.
         if (!empty($contextid)) {
             $world = di::get('context_world_factory')->get_world_from_context(\context::instance_by_id($contextid));
-        } else {
+        } else if (!empty($courseid)) {
             $world = di::get('course_world_factory')->get_world($courseid);
+        } else {
+            throw new \moodle_exception('invaliddata', 'core_error');
         }
-
         self::validate_context($world->get_context());
 
         // Permission checks.
