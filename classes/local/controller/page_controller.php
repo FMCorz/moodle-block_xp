@@ -29,6 +29,7 @@ namespace block_xp\local\controller;
 
 use coding_exception;
 use block_xp\di;
+use block_xp\local\course_world;
 use core\output\notification;
 use html_writer;
 
@@ -262,7 +263,9 @@ abstract class page_controller extends course_route_controller {
      */
     protected function page_notices() {
         $output = $this->get_renderer();
-        echo $output->notices($this->world);
+        if ($this->world instanceof course_world) {
+            echo $output->notices($this->world);
+        }
     }
 
     /**
