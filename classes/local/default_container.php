@@ -54,6 +54,7 @@ class default_container implements container {
         'badge_manager' => true,
         'badge_url_resolver' => true,
         'badge_url_resolver_course_world_factory' => true,
+        'badge_url_resolver_world_factory' => true,
         'base_url' => true,
         'block_class' => true,
         'block_count_cache' => true,
@@ -252,6 +253,16 @@ class default_container implements container {
     }
 
     /**
+     * Get the badge URL resolver factory.
+     *
+     * @return factory\badge_url_resolver_world_factory
+     */
+    protected function get_badge_url_resolver_world_factory() {
+        // We know the following implementation satisfies badge_url_resolver_world_factory.
+        return di::get('badge_url_resolver_course_world_factory');
+    }
+
+    /**
      * Get the base URL.
      *
      * @return moodle_url
@@ -435,7 +446,7 @@ class default_container implements container {
         $factory = new \block_xp\local\factory\default_course_world_factory(
             di::get('config'),
             di::get('db'),
-            di::get('badge_url_resolver_course_world_factory'),
+            null, // We used to pass the badge_url_resolver_course_world_factory.
             di::get('config_locked'),
             di::get('levels_info_factory')
         );
@@ -504,7 +515,7 @@ class default_container implements container {
         return new factory\levels_factory(
             $this->get('config'),
             $this->get('badge_url_resolver'),
-            $this->get('badge_url_resolver_course_world_factory')
+            di::get('badge_url_resolver_world_factory')
         );
     }
 

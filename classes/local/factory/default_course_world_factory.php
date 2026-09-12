@@ -64,14 +64,14 @@ class default_course_world_factory implements course_world_factory {
      *
      * @param config $adminconfig The admin config.
      * @param moodle_database $db The DB.
-     * @param badge_url_resolver_course_world_factory $urlresolverfactory The badge URL resolver factory.
+     * @param ?badge_url_resolver_course_world_factory $urlresolverfactory The badge URL resolver factory.
      * @param config $adminconfiglocked The locked config.
      * @param levels_info_factory $levelsinfofactory The levels info factory.
      */
     public function __construct(
         config $adminconfig,
         moodle_database $db,
-        badge_url_resolver_course_world_factory $urlresolverfactory,
+        ?badge_url_resolver_course_world_factory $urlresolverfactory,
         config $adminconfiglocked,
         levels_info_factory $levelsinfofactory
     ) {
@@ -111,7 +111,7 @@ class default_course_world_factory implements course_world_factory {
                 $config,
                 $this->db,
                 $courseid,
-                $this->urlresolverfactory,
+                null,
                 $this->levelsinfofactory
             );
 

@@ -28,13 +28,11 @@
 namespace block_xp\local\factory;
 
 use block_xp\local\config\config;
-use block_xp\local\course_world;
 use block_xp\local\world;
 use block_xp\local\xp\algo_levels_info;
 use block_xp\local\xp\badge_url_resolver;
 use block_xp\local\xp\levels_info;
 use block_xp\local\xp\static_level;
-use coding_exception;
 
 /**
  * Levels factory.
@@ -49,7 +47,7 @@ class levels_factory implements levels_info_factory, level_factory {
     protected $config;
     /** @var badge_url_resolver The admin badge URL resolver. */
     protected $badgeurlresolver;
-    /** @var badge_url_resolver_course_world_factory */
+    /** @var badge_url_resolver_world_factory */
     protected $badgeurlresolverfactory;
 
     /**
@@ -57,12 +55,12 @@ class levels_factory implements levels_info_factory, level_factory {
      *
      * @param config $config The admin config.
      * @param badge_url_resolver $badgeurlresolver The admin badge URL resolver.
-     * @param badge_url_resolver_course_world_factory $badgeurlresolverfactory The badge URL resolver factory.
+     * @param badge_url_resolver_world_factory $badgeurlresolverfactory The badge URL resolver factory.
      */
     public function __construct(
         config $config,
         badge_url_resolver $badgeurlresolver,
-        badge_url_resolver_course_world_factory $badgeurlresolverfactory
+        badge_url_resolver_world_factory $badgeurlresolverfactory
     ) {
         $this->config = $config;
         $this->badgeurlresolver = $badgeurlresolver;
@@ -85,11 +83,7 @@ class levels_factory implements levels_info_factory, level_factory {
      * @return levels_info
      */
     public function get_world_levels_info(world $world) {
-        if (!$world instanceof course_world) {
-            throw new coding_exception('World not supported.');
-        }
-
-        $badgeurlresolver = $this->badgeurlresolverfactory->get_url_resolver($world);
+        $badgeurlresolver = $this->badgeurlresolverfactory->get_url_resolver_for_world($world);
         $data = json_decode($world->get_config()->get('levelsdata'), true);
         if (!$data) {
             return $this->make_default_levels_info($badgeurlresolver);

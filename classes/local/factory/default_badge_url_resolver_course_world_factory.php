@@ -16,19 +16,11 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * Main factory.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\factory;
 
 use block_xp\local\course_world;
 use block_xp\local\config\course_world_config;
+use block_xp\local\world;
 use block_xp\local\xp\badge_url_resolver;
 
 /**
@@ -39,7 +31,9 @@ use block_xp\local\xp\badge_url_resolver;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class default_badge_url_resolver_course_world_factory implements badge_url_resolver_course_world_factory {
+class default_badge_url_resolver_course_world_factory implements
+    badge_url_resolver_course_world_factory,
+    badge_url_resolver_world_factory {
     /** @var badge_url_resolver Resolver. */
     protected $adminresolver;
 
@@ -55,10 +49,10 @@ class default_badge_url_resolver_course_world_factory implements badge_url_resol
     /**
      * Get the URL resolver.
      *
-     * @param course_world $world The world.
-     * @return block_xp\local\xp\badge_url_resolver
+     * @param world $world The world.
+     * @return badge_url_resolver
      */
-    public function get_url_resolver(course_world $world) {
+    public function get_url_resolver_for_world(world $world) {
         $resolver = null;
         $config = $world->get_config();
         $custombadges = $config->get('enablecustomlevelbadges');
@@ -79,5 +73,15 @@ class default_badge_url_resolver_course_world_factory implements badge_url_resol
         }
 
         return $resolver;
+    }
+
+    /**
+     * Get the URL resolver.
+     *
+     * @param course_world $world The world.
+     * @return badge_url_resolver
+     */
+    public function get_url_resolver(course_world $world) {
+        return $this->get_url_resolver_for_world($world);
     }
 }
