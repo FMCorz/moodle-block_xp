@@ -77,7 +77,6 @@ class config extends moodleform {
             $level1 = $world->get_levels_info()->get_level(1);
             $level2 = $world->get_levels_info()->get_level(2);
             $trymedatascript = $renderer->json_script([
-                'courseid' => $world->get_courseid(),
                 'levelnum' => $level2->get_level(),
                 'levelbadge' => $renderer->level_badge($level2),
                 'prevlevelbadge' => $renderer->level_badge($level1),
