@@ -270,7 +270,7 @@ class course_block extends block_base {
         $activity = [];
         $forcerecentactivity = false;
         $recentactivity = $config->get('blockrecentactivity');
-        if ($recentactivity && method_exists($world, 'get_user_recent_activity_repository')) {
+        if ($recentactivity && $world instanceof course_world) {
             $repo = $world->get_user_recent_activity_repository();
             $activity = $repo->get_user_recent_activity($USER->id, $recentactivity);
 
