@@ -45,6 +45,7 @@ use block_xp\local\permission\access_logs_permissions;
 use block_xp\local\routing\url_resolver;
 use block_xp\local\utils\user_utils;
 use block_xp\local\xp\course_user_state_store;
+use block_xp\local\xp\state_store_with_delete;
 use block_xp\local\xp\state_with_subject;
 use block_xp\local\xp\user_state;
 
@@ -303,7 +304,7 @@ class report_table extends table_sql {
             );
         }
 
-        if (isset($row->xp)) {
+        if (isset($row->xp) && $this->store instanceof state_store_with_delete) {
             $url = new moodle_url($this->baseurl, ['action' => '', 'delete' => 1, 'userid' => $row->id]);
             $action = new action_menu_link(
                 $url,

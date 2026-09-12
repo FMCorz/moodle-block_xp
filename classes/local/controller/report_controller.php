@@ -33,6 +33,7 @@ use core_user;
 use html_writer;
 use single_button;
 use block_xp\local\routing\url;
+use block_xp\local\xp\state_store_with_delete;
 use block_xp\output\report_table_filterset;
 use core_table\local\filter\filterset;
 use core_table\local\filter\string_filter;
@@ -138,7 +139,10 @@ class report_controller extends page_controller {
      * @return void
      */
     protected function perform_user_deletion(int $userid): void {
-        $this->world->get_store()->delete($userid);
+        $store = $this->world->get_store();
+        if ($store instanceof state_store_with_delete) {
+            $store->delete($userid);
+        }
     }
 
     /**
