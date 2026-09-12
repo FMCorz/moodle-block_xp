@@ -34,7 +34,6 @@ use block_xp\external\external_single_structure;
 use block_xp\external\external_value;
 use block_xp\local\backup\restore_context;
 use block_xp\local\config\config;
-use block_xp\local\course_world;
 use block_xp\local\world;
 use core_collator;
 use core_text;
@@ -105,10 +104,6 @@ class levels_info_writer {
      * @param array $rawdata The raw data.
      */
     public function save_for_world(world $world, $rawdata) {
-        if (!$world instanceof course_world) {
-            throw new \coding_exception('Type of world not handled.');
-        }
-
         $data = $this->validate_raw_data($rawdata);
 
         $finalpoints = $this->process_points($data);
