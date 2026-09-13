@@ -16,19 +16,33 @@
 //
 // See <https://levelup.plus>.
 
+namespace block_xp\local\xp;
+
+use block_xp\local\sql\limit;
+
 /**
- * Version file.
+ * State store with query.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2026 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+interface state_store_with_query extends state_store {
+    /**
+     * List matching states.
+     *
+     * @param state_store_query $query The query.
+     * @param limit $limit The limit.
+     * @return iterable<state>
+     */
+    public function list(state_store_query $query, limit $limit);
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version    = 2026082306;
-$plugin->requires   = 2024100700;   // Moodle 4.5.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '21.0-dev';
-$plugin->supported  = [405, 502];
+    /**
+     * Count matching states.
+     *
+     * @param state_store_query $query The query.
+     * @return int
+     */
+    public function count(state_store_query $query): int;
+}

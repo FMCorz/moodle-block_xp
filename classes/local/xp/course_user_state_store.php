@@ -27,9 +27,11 @@
 
 namespace block_xp\local\xp;
 
+use context_course;
 use context_helper;
 use moodle_database;
 use stdClass;
+use block_xp\local\iterator\map_recordset;
 use block_xp\local\logger\collection_logger_with_group_reset;
 use block_xp\local\logger\collection_logger_with_id_reset;
 use block_xp\local\logger\collection_logger;
@@ -37,6 +39,7 @@ use block_xp\local\logger\reason_collection_logger;
 use block_xp\local\observer\level_up_state_store_observer;
 use block_xp\local\observer\points_increased_state_store_observer;
 use block_xp\local\reason\reason;
+use block_xp\local\sql\limit;
 use block_xp\local\utils\user_utils;
 
 /**
@@ -56,6 +59,7 @@ class course_user_state_store implements
     course_state_store,
     state_store_with_delete,
     state_store_with_presence,
+    state_store_with_query,
     state_store_with_reason {
     /** @var moodle_database The database. */
     protected $db;
@@ -99,6 +103,17 @@ class course_user_state_store implements
     }
 
     /**
+     * Count matching states.
+     *
+     * @param state_store_query $query The query.
+     * @return int
+     */
+    public function count(state_store_query $query): int {
+        $sql = $this->prepare_query($query);
+        return (int) $this->db->count_records_sql("SELECT COUNT(1) FROM {$sql->from} WHERE {$sql->where}", $sql->params);
+    }
+
+    /**
      * Get a state.
      *
      * @param int $id The object ID.
@@ -125,6 +140,104 @@ class course_user_state_store implements
         ];
 
         return $this->make_state_from_record($this->db->get_record_sql($sql, $params, MUST_EXIST));
+    }
+
+    /**
+     * Get supported sort fields and their SQL expressions.
+     *
+     * @return string[] SQL expressions keyed by query field name.
+     */
+    protected function get_supported_query_sort_fields(): array {
+        return [
+            'xp' => 'COALESCE(x.xp, 0)',
+            'id' => 'u.id',
+            'firstname' => 'u.firstname',
+            'lastname' => 'u.lastname',
+            'firstnamephonetic' => 'u.firstnamephonetic',
+            'lastnamephonetic' => 'u.lastnamephonetic',
+            'middlename' => 'u.middlename',
+            'alternatename' => 'u.alternatename',
+        ];
+    }
+
+    /**
+     * List matching states.
+     *
+     * @param state_store_query $query The query.
+     * @param limit $limit The limit.
+     * @return iterable<state>
+     */
+    public function list(state_store_query $query, limit $limit) {
+        $sql = $this->prepare_query($query);
+        $recordset = $this->db->get_recordset_sql(
+            "SELECT {$sql->fields} FROM {$sql->from} WHERE {$sql->where} ORDER BY {$sql->orderby}",
+            $sql->params,
+            $limit->get_offset(),
+            $limit->get_count()
+        );
+        return new map_recordset($recordset, function ($record) {
+            return $this->make_state_from_record($record, 'id');
+        });
+    }
+
+    /**
+     * Prepare the SQL parts shared by listing and counting states.
+     *
+     * Includes users enrolled with permission to earn XP, and users with stored XP.
+     * Query conditions further restrict that population. Missing stored XP is represented
+     * by a zero-point state, as it is in get_state().
+     *
+     * @param state_store_query $query The query.
+     * @return stdClass SQL fields, from, where, params and orderby.
+     */
+    protected function prepare_query(state_store_query $query): stdClass {
+        $context = context_course::instance($this->courseid);
+        [$enrolledsql, $enrolledparams] = get_enrolled_sql($context, 'block/xp:earnxp');
+
+        $sql = new stdClass();
+        $sql->fields = user_utils::picture_fields('u') . ', u.idnumber, u.email, u.username, u.suspended, x.xp, ' .
+            context_helper::get_preload_record_columns_sql('ctx');
+        $sql->from = "{user} u
+                       JOIN {context} ctx
+                         ON ctx.instanceid = u.id
+                        AND ctx.contextlevel = :contextlevel
+                  LEFT JOIN {{$this->table}} x
+                         ON x.userid = u.id
+                        AND x.courseid = :courseid";
+        $sql->where = "u.deleted = 0 AND (x.userid IS NOT NULL OR u.id IN ($enrolledsql))";
+        $sql->params = array_merge($enrolledparams, [
+            'contextlevel' => CONTEXT_USER,
+            'courseid' => $this->courseid,
+        ]);
+
+        if ($query->has_condition('userfilter')) {
+            [$filtersql, $filterparams] = $query->get_condition('userfilter')->get_sql('u.id');
+            $sql->where .= " AND ($filtersql)";
+            $sql->params = array_merge($sql->params, $filterparams);
+        }
+        if ($query->has_condition('term')) {
+            [$termsql, $termparams] = user_utils::get_filter_user_by_term_sql($query->get_condition('term'));
+            $sql->where .= " AND ($termsql)";
+            $sql->params = array_merge($sql->params, $termparams);
+        }
+
+        $orderbyaliases = $this->get_supported_query_sort_fields();
+        $orderby = [];
+        foreach ($query->get_order_by() ?: [['xp', SORT_DESC]] as [$field, $direction]) {
+            if (!isset($orderbyaliases[$field])) {
+                continue;
+            }
+            $orderby[$field] = $this->db->sql_order_by_null(
+                $orderbyaliases[$field],
+                $direction === SORT_ASC ? SORT_ASC : SORT_DESC
+            );
+        }
+        if (!isset($orderby['id'])) {
+            $orderby['id'] = 'u.id ASC';
+        }
+        $sql->orderby = implode(', ', $orderby);
+
+        return $sql;
     }
 
     /**
@@ -234,10 +347,27 @@ class course_user_state_store implements
      * @return user_state
      */
     public function make_state_from_record(stdClass $record, $useridfield = 'userid') {
-        $user = user_utils::unalias_picture_fields($record, $useridfield);
+        $user = $this->make_user_from_record($record, $useridfield);
         context_helper::preload_from_record($record);
         $xp = !empty($record->xp) ? $record->xp : 0;
         return new user_state($user, $xp, $this->levelsinfo, $this->courseid);
+    }
+
+    /**
+     * Make a user from a state record.
+     *
+     * @param stdClass $record The row.
+     * @param string $useridfield The user ID field.
+     * @return stdClass
+     */
+    protected function make_user_from_record(stdClass $record, $useridfield = 'userid'): stdClass {
+        $user = user_utils::unalias_picture_fields($record, $useridfield);
+        foreach (['idnumber', 'username', 'suspended'] as $field) {
+            if (property_exists($record, $field)) {
+                $user->{$field} = $record->{$field};
+            }
+        }
+        return $user;
     }
 
     /**
