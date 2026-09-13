@@ -350,7 +350,9 @@ class course_user_state_store implements
         $user = $this->make_user_from_record($record, $useridfield);
         context_helper::preload_from_record($record);
         $xp = !empty($record->xp) ? $record->xp : 0;
-        return new user_state($user, $xp, $this->levelsinfo, $this->courseid);
+        $state = new user_state($user, $xp, $this->levelsinfo, $this->courseid);
+        $state->set_present(isset($record->xp));
+        return $state;
     }
 
     /**

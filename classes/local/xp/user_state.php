@@ -40,13 +40,15 @@ use stdClass;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class user_state implements renderable, state, state_with_subject, state_with_user {
+class user_state implements renderable, state, state_with_presence, state_with_subject, state_with_user {
     /** @var int The course ID. */
     protected $courseid;
     /** @var stdClass The user object. */
     protected $user;
     /** @var int The user's XP. */
     protected $xp;
+    /** @var bool Whether the state has a stored record. */
+    protected $present = true;
     /** @var levels_info The levels info. */
     protected $levelsinfo;
     /** @var level The level. */
@@ -174,6 +176,24 @@ class user_state implements renderable, state, state_with_subject, state_with_us
      */
     public function get_xp_in_level() {
         return $this->xp - $this->get_level()->get_xp_required();
+    }
+
+    /**
+     * Whether the state has a stored record.
+     *
+     * @return bool False when the state is implied.
+     */
+    public function is_present(): bool {
+        return $this->present;
+    }
+
+    /**
+     * Set whether the state has a stored record.
+     *
+     * @param bool $present Whether the state is present.
+     */
+    public function set_present(bool $present): void {
+        $this->present = $present;
     }
 
     /**

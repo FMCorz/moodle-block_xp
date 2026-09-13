@@ -16,19 +16,21 @@
 //
 // See <https://levelup.plus>.
 
+namespace block_xp\local\xp;
+
 /**
- * Version file.
+ * State with presence.
  *
  * @package    block_xp
- * @copyright  2014 Frédéric Massart
+ * @copyright  2026 Frédéric Massart
+ * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version    = 2026082307;
-$plugin->requires   = 2024100700;   // Moodle 4.5.0.
-$plugin->component  = 'block_xp';
-$plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '21.0-dev';
-$plugin->supported  = [405, 502];
+interface state_with_presence extends state {
+    /**
+     * Whether the state has a stored record.
+     *
+     * @return bool False when the state is implied.
+     */
+    public function is_present(): bool;
+}
