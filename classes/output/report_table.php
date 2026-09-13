@@ -317,6 +317,23 @@ class report_table extends table_sql {
     }
 
     /**
+     * Escape a string.
+     *
+     * @param ?string $value
+     * @param bool $preventdoubleencoding.
+     * @return string Safe for HTML.
+     */
+    protected function escape($value, bool $preventdoubleencoding = false) {
+        $value ??= '';
+        if (!$this->is_downloading() || $this->export_class_instance()->supports_html()) {
+            if ($preventdoubleencoding) {
+                $value = html_entity_decode($value, ENT_COMPAT);
+            }
+            return s($value);
+        }
+        return $value;
+    }
+    /**
      * Get the columns to sort by.
      *
      * @return array column name => SORT_... constant.
