@@ -36,7 +36,7 @@ use pix_icon;
 use renderer_base;
 use table_sql;
 use block_xp\di;
-use block_xp\local\course_world;
+use block_xp\local\world;
 use block_xp\local\navigation\navigator;
 use block_xp\local\permission\access_logs_permissions;
 use block_xp\local\routing\url_resolver;
@@ -61,7 +61,7 @@ use block_xp\local\xp\state_with_user;
 class report_table extends table_sql {
     /** @var moodle_database The DB. */
     protected $db;
-    /** @var \block_xp\local\course_world The world. */
+    /** @var \block_xp\local\world The world. */
     protected $world = null;
     /** @var state_store_with_query The store. */
     protected $store = null;
@@ -82,14 +82,14 @@ class report_table extends table_sql {
      * Constructor.
      *
      * @param moodle_database $db The DB.
-     * @param course_world $world The world.
+     * @param world $world The world.
      * @param renderer_base $renderer The renderer.
      * @param state_store_with_query $store The store.
      * @param int $groupid The group ID.
      */
     public function __construct(
         moodle_database $db,
-        course_world $world,
+        world $world,
         renderer_base $renderer,
         state_store_with_query $store,
         $groupid
@@ -405,7 +405,7 @@ class report_table extends table_sql {
      * @return void
      */
     public function print_nothing_to_display() {
-        $issite = di::get('config')->get('context') == CONTEXT_SYSTEM && $this->world->get_courseid() == SITEID;
+        $issite = di::get('config')->get('context') == CONTEXT_SYSTEM;
         $hasfilters = false;
         $showfilters = false;
 
