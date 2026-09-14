@@ -31,20 +31,25 @@ use block_xp\di;
 use block_xp\local\activity\user_recent_activity_repository;
 use block_xp\local\activity\xp_activity;
 use block_xp\local\factory\reason_from_log_entry_factory;
+use block_xp\local\iterator\map_recordset;
 use block_xp\local\reason\reason;
 use block_xp\local\reason\reason_with_rule;
 use block_xp\local\reason\reason_with_short_description;
 use block_xp\local\reason\reason_with_subtype;
 use block_xp\local\reason\reason_with_tracking;
 use block_xp\local\reason\resolver;
+use block_xp\local\reason\unknown_reason;
 use block_xp\local\ruletype\limit_spec;
 use block_xp\local\ruletype\ruletype;
 use block_xp\local\ruletype\resolver as ruletype_resolver;
+use block_xp\local\sql\limit;
 use block_xp\local\utils\reason_utils;
+use block_xp\local\utils\user_utils;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use moodle_database;
+use stdClass;
 
 /**
  * Collection logger.
@@ -58,6 +63,7 @@ class context_collection_logger implements
     collection_logger,
     collection_logger_with_group_reset,
     collection_logger_with_id_reset,
+    collection_logger_with_query,
     reason_collection_logger,
     reason_limit_indicator,
     reason_occurrence_indicator,
@@ -85,6 +91,17 @@ class context_collection_logger implements
     public function __construct(moodle_database $db, int $contextid) {
         $this->db = $db;
         $this->contextid = $contextid;
+    }
+
+    /**
+     * Count matching logs.
+     *
+     * @param collection_logger_query $query The query.
+     * @return int
+     */
+    public function count(collection_logger_query $query): int {
+        $sql = $this->prepare_query($query);
+        return (int) $this->db->count_records_sql("SELECT COUNT(1) FROM {$sql->from} WHERE {$sql->where}", $sql->params);
     }
 
     /**
@@ -180,6 +197,24 @@ class context_collection_logger implements
     }
 
     /**
+     * Get supported ordering keys and their SQL expressions.
+     *
+     * @return string[] SQL expressions indexed by ordering key.
+     */
+    protected function get_supported_query_sort_keys(): array {
+        return [
+            'timerecorded' => 'x.timerecorded',
+            'points' => 'x.points',
+            'firstname' => 'u.firstname',
+            'lastname' => 'u.lastname',
+            'firstnamephonetic' => 'u.firstnamephonetic',
+            'lastnamephonetic' => 'u.lastnamephonetic',
+            'middlename' => 'u.middlename',
+            'alternatename' => 'u.alternatename',
+        ];
+    }
+
+    /**
      * Has the reason ever happened.
      *
      * @param int $id The ID.
@@ -228,7 +263,8 @@ class context_collection_logger implements
             'ruletype' => $this->ruletyperesolver->get_type_name($ruletype),
         ];
 
-        $sql = "SELECT [[SELECT]]
+        $fieldsplaceholder = "[[SELECT]]";
+        $sql = "SELECT {$fieldsplaceholder}
                   FROM {{$this->table}} l
                   JOIN {block_xp_rule} r ON l.ruleid = r.id
                  WHERE l.contextid = :contextid
@@ -238,9 +274,9 @@ class context_collection_logger implements
                    AND r.type = :ruletype";
 
         if ($maxcount === 1) {
-            return $this->db->record_exists_sql(str_replace('[[SELECT]]', 1, $sql), $params);
+            return $this->db->record_exists_sql(str_replace($fieldsplaceholder, 1, $sql), $params);
         }
-        return $this->db->count_records_sql(str_replace('[[SELECT]]', 'COUNT(*)', $sql), $params) >= $maxcount;
+        return $this->db->count_records_sql(str_replace($fieldsplaceholder, 'COUNT(*)', $sql), $params) >= $maxcount;
     }
 
     /**
@@ -270,7 +306,8 @@ class context_collection_logger implements
             'ruletype' => $this->ruletyperesolver->get_type_name($ruletype),
         ] + $timeparams + $reasonparams;
 
-        $sql = "SELECT [[SELECT]]
+        $fieldsplaceholder = "[[SELECT]]";
+        $sql = "SELECT {$fieldsplaceholder}
                   FROM {{$this->table}} l
                   JOIN {block_xp_rule} r ON l.ruleid = r.id
                  WHERE l.contextid = :contextid
@@ -281,9 +318,9 @@ class context_collection_logger implements
                    AND $reasonsql";
 
         if ($maxcount === 1) {
-            return $this->db->record_exists_sql(str_replace('[[SELECT]]', 1, $sql), $params);
+            return $this->db->record_exists_sql(str_replace($fieldsplaceholder, 1, $sql), $params);
         }
-        return $this->db->count_records_sql(str_replace('[[SELECT]]', 'COUNT(*)', $sql), $params) >= $maxcount;
+        return $this->db->count_records_sql(str_replace($fieldsplaceholder, 'COUNT(*)', $sql), $params) >= $maxcount;
     }
 
     /**
@@ -312,7 +349,8 @@ class context_collection_logger implements
         [$limittimewindowsql, $limittimewindowparams] = $this->get_limit_time_window_filter_sql($limit->get_time_window());
         $params += $limittimewindowparams;
 
-        $sql = "SELECT [[SELECT]]
+        $fieldsplaceholder = "[[SELECT]]";
+        $sql = "SELECT {$fieldsplaceholder}
                   FROM {{$this->table}}
                  WHERE contextid = :contextid
                    AND userid = :userid
@@ -321,9 +359,29 @@ class context_collection_logger implements
                    AND $limittimewindowsql";
 
         if ($limit->get_max() === 1) {
-            return $this->db->record_exists_sql(str_replace('[[SELECT]]', 1, $sql), $params);
+            return $this->db->record_exists_sql(str_replace($fieldsplaceholder, 1, $sql), $params);
         }
-        return $this->db->count_records_sql(str_replace('[[SELECT]]', 'COUNT(*)', $sql), $params) >= $limit->get_max();
+        return $this->db->count_records_sql(str_replace($fieldsplaceholder, 'COUNT(*)', $sql), $params) >= $limit->get_max();
+    }
+
+    /**
+     * List matching logs.
+     *
+     * @param collection_logger_query $query The query.
+     * @param limit $limit The limit.
+     * @return iterable<log>
+     */
+    public function list(collection_logger_query $query, limit $limit) {
+        $sql = $this->prepare_query($query);
+        $recordset = $this->db->get_recordset_sql(
+            "SELECT {$sql->fields} FROM {$sql->from} WHERE {$sql->where} ORDER BY {$sql->orderby}",
+            $sql->params,
+            $limit->get_offset(),
+            $limit->get_count()
+        );
+        return new map_recordset($recordset, function ($record) {
+            return $this->make_log_from_record($record);
+        });
     }
 
     /**
@@ -382,6 +440,102 @@ class context_collection_logger implements
             'timerecorded' => $time ? $time->getTimestamp() : di::get('clock')->time(),
         ];
         $this->db->insert_record($this->table, $record);
+    }
+
+    /**
+     * Make a log from a record.
+     *
+     * @param stdClass $record The row.
+     * @return log
+     */
+    protected function make_log_from_record(stdClass $record): log {
+        if ($this->reasonfactory) {
+            $reason = $this->reasonfactory->get_reason_from_log_entry($record->reason, $record);
+        } else {
+            $reason = new unknown_reason();
+        }
+
+        $user = $this->make_user_from_record($record, 'userid');
+        return new static_log($record, $user, $reason);
+    }
+
+    /**
+     * Make a user from a state record.
+     *
+     * @param stdClass $record The row.
+     * @param string $useridfield The user ID field.
+     * @return stdClass
+     */
+    protected function make_user_from_record(stdClass $record, $useridfield = 'userid'): stdClass {
+        $user = user_utils::unalias_picture_fields($record, $useridfield);
+        foreach (['idnumber', 'username', 'suspended'] as $field) {
+            if (property_exists($record, $field)) {
+                $user->{$field} = $record->{$field};
+            }
+        }
+        return $user;
+    }
+
+    /**
+     * Prepare the SQL parts shared by listing and counting logs.
+     *
+     * Includes logs for existing, non-deleted users in this context. Query conditions
+     * further restrict that population.
+     *
+     * @param collection_logger_query $query The query.
+     * @return stdClass SQL fields, from, where, params and orderby.
+     */
+    protected function prepare_query(collection_logger_query $query): stdClass {
+        $sql = new stdClass();
+        $sql->fields = 'x.*, ' . user_utils::picture_fields('u', 'userid') . ', u.suspended';
+        $sql->from = "{{$this->table}} x
+                       JOIN {user} u ON u.id = x.userid";
+        $sql->where = 'x.contextid = :contextid AND u.deleted = 0';
+        $sql->params = ['contextid' => $this->contextid];
+
+        if ($query->has_condition('userid')) {
+            $sql->where .= ' AND x.userid = :userid';
+            $sql->params['userid'] = (int) $query->get_condition('userid');
+        }
+        if ($query->has_condition('ruleid')) {
+            $sql->where .= ' AND x.ruleid = :ruleid';
+            $sql->params['ruleid'] = (int) $query->get_condition('ruleid');
+        }
+        if ($query->has_condition('timefrom')) {
+            $sql->where .= ' AND x.timerecorded >= :timefrom';
+            $sql->params['timefrom'] = $query->get_condition('timefrom')->getTimestamp();
+        }
+        if ($query->has_condition('timeto')) {
+            $sql->where .= ' AND x.timerecorded <= :timeto';
+            $sql->params['timeto'] = $query->get_condition('timeto')->getTimestamp();
+        }
+        if ($query->has_condition('userfilter')) {
+            [$filtersql, $filterparams] = $query->get_condition('userfilter')->get_sql('u.id');
+            $sql->where .= " AND ($filtersql)";
+            $sql->params = array_merge($sql->params, $filterparams);
+        }
+        if ($query->has_condition('term')) {
+            [$termsql, $termparams] = user_utils::get_filter_user_by_term_sql($query->get_condition('term'));
+            $sql->where .= " AND ($termsql)";
+            $sql->params = array_merge($sql->params, $termparams);
+        }
+
+        $orderbyaliases = $this->get_supported_query_sort_keys();
+        $orderby = [];
+        foreach ($query->get_order_by() ?: [['timerecorded', SORT_DESC]] as [$key, $direction]) {
+            if (!isset($orderbyaliases[$key])) {
+                continue;
+            }
+            $orderby[$key] = $this->db->sql_order_by_null(
+                $orderbyaliases[$key],
+                $direction === SORT_ASC ? SORT_ASC : SORT_DESC
+            );
+        }
+        // Keep pagination stable when logs have the same sort values.
+        $orderby[] = 'x.id DESC';
+        $sql->orderby = implode(', ', $orderby);
+
+        return $sql;
     }
 
     /**

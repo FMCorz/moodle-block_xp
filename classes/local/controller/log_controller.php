@@ -90,12 +90,14 @@ class log_controller extends page_controller {
     protected function get_table() {
         $table = new \block_xp\output\logs_table(
             $this->world,
-            di::get('reason_from_log_entry_factory'),
+            null,
             $this->get_groupid(),
             $this->get_user_id()
         );
         $table->define_baseurl($this->pageurl);
         $table->set_filterset($this->get_filterset());
+        $logger = di::get('context_collection_logger_factory')->get_logger_from_context($this->world->get_context());
+        $table->set_collection_logger($logger);
         return $table;
     }
 

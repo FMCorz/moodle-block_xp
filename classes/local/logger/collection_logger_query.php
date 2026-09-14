@@ -16,21 +16,22 @@
 //
 // See <https://levelup.plus>.
 
-namespace block_xp\local\xp;
+namespace block_xp\local\logger;
 
 use block_xp\local\sql\query;
 use block_xp\local\userfilter\user_filter;
 use coding_exception;
+use DateTimeImmutable;
 
 /**
- * State store query.
+ * Collection logger query.
  *
  * @package    block_xp
  * @copyright  2026 Frédéric Massart
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class state_store_query extends query {
+class collection_logger_query extends query {
     /**
      * Add ordering, from most to least significant.
      *
@@ -39,14 +40,30 @@ class state_store_query extends query {
      * @return self
      */
     public function add_order_by(string $key, int $direction = SORT_ASC): self {
-        $keys = ['xp', 'id', 'firstname', 'lastname', 'firstnamephonetic', 'lastnamephonetic', 'middlename', 'alternatename'];
+        $keys = ['timerecorded', 'points', 'firstname', 'lastname', 'firstnamephonetic', 'lastnamephonetic',
+            'middlename', 'alternatename'];
         if (!in_array($key, $keys, true)) {
-            throw new coding_exception('Unsupported state sort key.');
+            throw new coding_exception('Unsupported log sort key.');
         }
         if ($direction !== SORT_ASC && $direction !== SORT_DESC) {
-            throw new coding_exception('Unsupported state sort direction.');
+            throw new coding_exception('Unsupported log sort direction.');
         }
         $this->append_order_by($key, $direction);
+        return $this;
+    }
+
+    /**
+     * Set the rule ID.
+     *
+     * @param int|null $ruleid The rule ID, or null to remove the condition.
+     * @return self
+     */
+    public function set_rule_id(?int $ruleid): self {
+        if ($ruleid === null) {
+            $this->unset_condition('ruleid');
+        } else {
+            $this->set_condition('ruleid', $ruleid);
+        }
         return $this;
     }
 
@@ -66,6 +83,36 @@ class state_store_query extends query {
     }
 
     /**
+     * Set the inclusive lower bound for the recorded time.
+     *
+     * @param DateTimeImmutable|null $time The time, or null to remove the condition.
+     * @return self
+     */
+    public function set_time_from(?DateTimeImmutable $time): self {
+        if ($time === null) {
+            $this->unset_condition('timefrom');
+        } else {
+            $this->set_condition('timefrom', $time);
+        }
+        return $this;
+    }
+
+    /**
+     * Set the inclusive upper bound for the recorded time.
+     *
+     * @param DateTimeImmutable|null $time The time, or null to remove the condition.
+     * @return self
+     */
+    public function set_time_to(?DateTimeImmutable $time): self {
+        if ($time === null) {
+            $this->unset_condition('timeto');
+        } else {
+            $this->set_condition('timeto', $time);
+        }
+        return $this;
+    }
+
+    /**
      * Set the user filter.
      *
      * @param user_filter|null $filter The filter, or null to remove the condition.
@@ -76,6 +123,21 @@ class state_store_query extends query {
             $this->unset_condition('userfilter');
         } else {
             $this->set_condition('userfilter', $filter);
+        }
+        return $this;
+    }
+
+    /**
+     * Set the user ID.
+     *
+     * @param int|null $userid The user ID, or null to remove the condition.
+     * @return self
+     */
+    public function set_user_id(?int $userid): self {
+        if ($userid === null) {
+            $this->unset_condition('userid');
+        } else {
+            $this->set_condition('userid', $userid);
         }
         return $this;
     }

@@ -30,12 +30,17 @@ namespace block_xp\output;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
 
-use stdClass;
 use table_sql;
 use block_xp\local\course_world;
 use block_xp\local\factory\reason_from_log_entry_factory;
+use block_xp\local\logger\collection_logger;
+use block_xp\local\logger\collection_logger_query;
+use block_xp\local\logger\collection_logger_with_query;
+use block_xp\local\logger\log;
 use block_xp\local\reason\reason_with_short_description;
-use block_xp\local\utils\user_utils;
+use block_xp\local\sql\limit;
+use block_xp\local\userfilter\group_members;
+use block_xp\local\userfilter\nobody;
 use moodle_url;
 use pix_icon;
 
@@ -50,13 +55,11 @@ use pix_icon;
 class logs_table extends table_sql {
     /** @var ?array The columns definition. */
     protected $columnsdefinition;
-    /** @var string The key of the user ID column. */
-    public $useridfield = 'userid';
-    /** @var \moodle_database DB. */
-    protected $db;
+    /** @var ?collection_logger The collection logger. */
+    protected $collectionlogger = null;
     /** @var course_world The world. */
     protected $world;
-    /** @var reason_from_log_entry_factory The reason factory. */
+    /** @var ?reason_from_log_entry_factory The reason factory. */
     protected $reasonfactory;
     /** @var \renderer_base The renderer. */
     protected $renderer;
@@ -69,10 +72,11 @@ class logs_table extends table_sql {
      * Constructor.
      *
      * @param course_world $world The world.
+     * @param ?reason_from_log_entry_factory $reasonfactory Reason factory, no longer used.
      * @param int $groupid The group ID.
      * @param int|null $userid The user ID.
      */
-    public function __construct(course_world $world, reason_from_log_entry_factory $reasonfactory, $groupid, $userid = null) {
+    public function __construct(course_world $world, ?reason_from_log_entry_factory $reasonfactory, $groupid, $userid = null) {
         $userid = max(0, (int) $userid);
         $this->groupid = $groupid;
         parent::__construct('block_xp_logs_' . $userid);
@@ -80,7 +84,6 @@ class logs_table extends table_sql {
         $this->world = $world;
         $this->reasonfactory = $reasonfactory;
         $this->renderer = \block_xp\di::get('renderer');
-        $this->db = \block_xp\di::get('db');
         $this->filterbyuserid = $userid;
 
         // Init the stuff.
@@ -104,61 +107,20 @@ class logs_table extends table_sql {
     }
 
     /**
-     * Init SQL.
-     */
-    protected function init_sql() {
-        $groupid = $this->groupid;
-        $world = $this->world;
-
-        // Define SQL.
-        $sqlfrom = '';
-        $sqlparams = [];
-        if ($groupid) {
-            $sqlfrom = '{block_xp_logs} x
-                     JOIN {groups_members} gm
-                       ON gm.groupid = :groupid
-                      AND gm.userid = x.userid
-                LEFT JOIN {user} u
-                       ON x.userid = u.id';
-            $sqlparams = ['groupid' => $groupid];
-        } else {
-            $sqlfrom = '{block_xp_logs} x LEFT JOIN {user} u ON x.userid = u.id';
-        }
-
-        // User filter.
-        [$usersql, $userparams] = $this->generate_user_filter_sql();
-
-        // Define SQL.
-        $this->sql = new stdClass();
-        $this->sql->fields = 'x.*, ' . user_utils::name_fields('u') . ', u.suspended';
-        $this->sql->from = $sqlfrom;
-        $this->sql->where = "u.deleted = 0 AND x.contextid = :contextid AND $usersql";
-        $this->sql->params = array_merge(['contextid' => $world->get_context()->id], $userparams, $sqlparams);
-        if ($this->filterbyuserid) {
-            $this->sql->where .= ' AND x.userid = :userid';
-            $this->sql->params = array_merge($this->sql->params, ['userid' => $this->filterbyuserid]);
-        }
-
-        // Define various table settings.
-        $this->no_sorting('reason');
-        $this->sortable(true, 'timerecorded', SORT_DESC);
-        $this->collapsible(false);
-    }
-
-    /**
      * Column.
      *
-     * @param stdClass $row The row.
+     * @param log $log The log.
      * @return string
      */
-    public function col_fullname($row) {
-        $fullname = parent::col_fullname($row);
-        if ($row->suspended) {
+    public function col_fullname($log) {
+        $user = $log->get_user();
+        $fullname = parent::col_fullname($user);
+        if (!empty($user->suspended)) {
             $fullname .= ' (' . get_string('suspended', 'core') . ')';
         }
-        if (!$this->filterbyuserid) {
+        if (!$this->is_downloading() && !$this->filterbyuserid) {
             $fullname .= ' ' . $this->renderer->action_icon(
-                new moodle_url($this->baseurl, ['userid' => $row->userid]),
+                new moodle_url($this->baseurl, ['userid' => $log->get_user_id()]),
                 new pix_icon('i/search', get_string('filterbyuser', 'block_xp'))
             );
         }
@@ -168,23 +130,26 @@ class logs_table extends table_sql {
     /**
      * Column.
      *
-     * @param stdClass $row The row.
-     * @return string
+     * @param log $log The log.
+     * @return string|int
      */
-    protected function col_points($row) {
-        return $this->renderer->xp($row->points);
+    protected function col_points($log) {
+        if ($this->is_downloading()) {
+            return $log->get_points();
+        }
+        return $this->renderer->xp($log->get_points());
     }
 
     /**
      * Column.
      *
-     * @param stdClass $row The row.
+     * @param log $log The log.
      * @return string
      */
-    protected function col_reason($row) {
-        $reason = $this->reasonfactory->get_reason_from_log_entry($row->reason, $row);
+    protected function col_reason($log) {
+        $reason = $log->get_reason();
         if ($reason instanceof reason_with_short_description) {
-            return s($reason->get_short_description());
+            return $this->escape($reason->get_short_description());
         }
         return '';
     }
@@ -192,11 +157,29 @@ class logs_table extends table_sql {
     /**
      * Column.
      *
-     * @param stdClass $row The row.
+     * @param log $log The log.
      * @return string
      */
-    protected function col_timerecorded($row) {
-        return userdate($row->timerecorded);
+    protected function col_timerecorded($log) {
+        return userdate($log->get_time_recorded()->getTimestamp());
+    }
+
+    /**
+     * Escape a string for HTML output and exports that support HTML.
+     *
+     * @param string|null $value The value.
+     * @param bool $preventdoubleencoding Whether to decode existing entities first.
+     * @return string
+     */
+    protected function escape($value, bool $preventdoubleencoding = false) {
+        $value ??= '';
+        if (!$this->is_downloading() || $this->export_class_instance()->supports_html()) {
+            if ($preventdoubleencoding) {
+                $value = html_entity_decode($value, ENT_COMPAT);
+            }
+            return s($value);
+        }
+        return $value;
     }
 
     /**
@@ -226,29 +209,62 @@ class logs_table extends table_sql {
     }
 
     /**
-     * Generate the user filter SQL.
+     * Instantiate the query.
      *
-     * @return array
+     * @return collection_logger_query
      */
-    protected function generate_user_filter_sql() {
-        $filterset = $this->get_filterset();
-        if (!$filterset || !$filterset->has_filter('term')) {
-            return ['1=1', []];
-        }
-
-        return user_utils::get_filter_user_by_term_sql($filterset->get_filter('term')->current());
+    protected function instantiate_query(): collection_logger_query {
+        return new collection_logger_query();
     }
 
     /**
-     * Out.
+     * Make the query from the table filters and sorting preferences.
+     *
+     * @return collection_logger_query
+     */
+    protected function make_query(): collection_logger_query {
+        $query = $this->instantiate_query();
+        $filterset = $this->get_filterset();
+        if ($filterset && $filterset->has_filter('term')) {
+            $query->set_term($filterset->get_filter('term')->current());
+        }
+
+        if ($this->filterbyuserid) {
+            $query->set_user_id($this->filterbyuserid);
+        }
+
+        if ($this->groupid < 0) {
+            $query->set_user_filter(new nobody());
+        } else if ($this->groupid > 0) {
+            $query->set_user_filter(new group_members($this->groupid));
+        }
+
+        foreach ($this->get_sort_columns() as $key => $direction) {
+            $query->add_order_by($key, $direction === SORT_ASC ? SORT_ASC : SORT_DESC);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Load logs for the table.
      *
      * @param int $pagesize The page size.
-     * @param bool $initialbars Whether to use initial bars.
-     * @param string $downloadhelpbutton What is this?
+     * @param bool $useinitialsbar Whether to use initial bars (unused).
      */
-    public function out($pagesize, $initialbars, $downloadhelpbutton = '') {
-        $this->init_sql();
-        return parent::out($pagesize, $initialbars, $downloadhelpbutton);
+    public function query_db($pagesize, $useinitialsbar = true) {
+        if (!$this->collectionlogger instanceof collection_logger_with_query) {
+            $this->rawdata = [];
+            return;
+        }
+
+        $query = $this->make_query();
+        $limit = new limit(0);
+        if (!$this->is_downloading()) {
+            $this->pagesize($pagesize, $this->collectionlogger->count($query));
+            $limit = new limit($this->get_page_size(), $this->get_page_start());
+        }
+        $this->rawdata = $this->collectionlogger->list($query, $limit);
     }
 
     /**
@@ -283,5 +299,14 @@ class logs_table extends table_sql {
             '',
             ['style' => 'margin: 1em 0']
         );
+    }
+
+    /**
+     * Set the collection logger.
+     *
+     * @param collection_logger $logger The logger.
+     */
+    public function set_collection_logger(collection_logger $logger): void {
+        $this->collectionlogger = $logger;
     }
 }
