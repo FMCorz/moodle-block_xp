@@ -41,6 +41,7 @@ use block_xp\local\reason\reason_with_short_description;
 use block_xp\local\sql\limit;
 use block_xp\local\userfilter\group_members;
 use block_xp\local\userfilter\nobody;
+use block_xp\local\world;
 use moodle_url;
 use pix_icon;
 
@@ -57,7 +58,7 @@ class logs_table extends table_sql {
     protected $columnsdefinition;
     /** @var ?collection_logger The collection logger. */
     protected $collectionlogger = null;
-    /** @var course_world The world. */
+    /** @var world The world. */
     protected $world;
     /** @var ?reason_from_log_entry_factory The reason factory. */
     protected $reasonfactory;
@@ -71,12 +72,12 @@ class logs_table extends table_sql {
     /**
      * Constructor.
      *
-     * @param course_world $world The world.
+     * @param world $world The world.
      * @param ?reason_from_log_entry_factory $reasonfactory Reason factory, no longer used.
      * @param int $groupid The group ID.
      * @param int|null $userid The user ID.
      */
-    public function __construct(course_world $world, ?reason_from_log_entry_factory $reasonfactory, $groupid, $userid = null) {
+    public function __construct(world $world, ?reason_from_log_entry_factory $reasonfactory, $groupid, $userid = null) {
         $userid = max(0, (int) $userid);
         $this->groupid = $groupid;
         parent::__construct('block_xp_logs_' . $userid);
