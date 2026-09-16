@@ -718,6 +718,7 @@ $string['resetgroupdata'] = 'Reset group data';
 $string['resetladderparticiptionofeveryone'] = 'Reset the participation status of everyone';
 $string['resettodefaults'] = 'Reset to defaults';
 $string['resultsfilteredforn'] = 'Results filtered for {$a}.';
+$string['resultsfilteredforarule'] = 'Results filtered for a rule.';
 $string['resultsfilteredforrulen'] = 'Results filtered for rule "{$a}".';
 $string['reward'] = 'Reward';
 $string['requires'] = 'Requires';

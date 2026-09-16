@@ -30,7 +30,7 @@ use moodle_database;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class world_rule_manager {
+class world_rule_manager implements rule_manager {
     /** @var admin_rule_manager The admin rule manager. */
     protected $adminrulemanager;
     /** @var moodle_database The database. */
