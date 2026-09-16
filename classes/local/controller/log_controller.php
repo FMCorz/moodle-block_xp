@@ -96,7 +96,7 @@ class log_controller extends page_controller {
         );
         $table->define_baseurl($this->pageurl);
         $table->set_filterset($this->get_filterset());
-        $logger = di::get('context_collection_logger_factory')->get_logger_from_context($this->world->get_context());
+        $logger = di::get('world_logger_factory')->get_logger_for_world($this->world);
         $table->set_collection_logger($logger);
         return $table;
     }

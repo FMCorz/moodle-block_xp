@@ -109,6 +109,7 @@ class default_container implements container {
         'user_generic_indicator' => true,
         'user_notice_indicator' => true,
         'world_level_up_notification_service_factory' => true,
+        'world_logger_factory' => true,
         'world_navigator_factory' => true,
         'world_rule_manager_factory' => true,
     ];
@@ -378,6 +379,7 @@ class default_container implements container {
      * Context collection logger factory.
      *
      * @return factory\context_collection_logger_factory
+     * @deprecated Since XP+ 21, use world_logger_factory instead.
      */
     protected function get_context_collection_logger_factory() {
         $factory = new factory\default_context_collection_logger_factory($this->get('db'));
@@ -450,7 +452,7 @@ class default_container implements container {
             di::get('config_locked'),
             di::get('levels_info_factory')
         );
-        $factory->set_context_collection_logger_factory(di::get('context_collection_logger_factory'));
+        $factory->set_logger_factory(di::get('world_logger_factory'));
         return $factory;
     }
 
@@ -833,12 +835,21 @@ class default_container implements container {
     }
 
     /**
-     * Get the world navigator factory.
+     * Get the factory.
      *
      * @return factory\world_level_up_notification_service_factory
      */
     protected function get_world_level_up_notification_service_factory() {
         return new factory\world_level_up_notification_service_factory();
+    }
+
+    /**
+     * Get the world logger factory.
+     *
+     * @return factory\world_logger_factory
+     */
+    protected function get_world_logger_factory() {
+        return new factory\world_logger_factory($this->get('config'));
     }
 
     /**
