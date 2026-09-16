@@ -458,11 +458,11 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Get the context of the navbar widget.
      *
-     * @param course_world $world The world.
+     * @param world $world The world.
      * @param state $state The user's state.
      * @return array
      */
-    protected function get_navbar_widget_context(course_world $world, state $state) {
+    protected function get_navbar_widget_context(world $world, state $state) {
         $navigator = di::get('world_navigator_factory')->get_navigator_for_world($world);
         $worldconfig = $world->get_config();
 
@@ -519,11 +519,11 @@ class block_xp_renderer extends plugin_renderer_base {
     /**
      * Navbar widget.
      *
-     * @param course_world $world The world.
+     * @param world $world The world.
      * @param state $state The user's state.
      * @return string
      */
-    public function navbar_widget(course_world $world, state $state) {
+    public function navbar_widget(world $world, state $state) {
         return $this->render_from_template('block_xp/navbar-widget', $this->get_navbar_widget_context($world, $state));
     }
 

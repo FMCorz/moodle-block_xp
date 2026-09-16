@@ -25,6 +25,7 @@
  */
 
 use block_xp\di;
+use block_xp\local\factory\navbar_world_factory;
 use block_xp\local\plugin\addon;
 
 /**
@@ -90,16 +91,19 @@ function block_xp_render_navbar_output($output) {
         return '';
     }
 
-    // If we display per course, we require to be in a course, but not the frontpage.
-    $sitewide = $config->get('context') == CONTEXT_SYSTEM;
-    if (!$sitewide && (!$PAGE->context->get_course_context(false) || $COURSE->id == SITEID)) {
+
+    // Gracefully retrieve this, just in case...
+    $factory = di::get('navbar_world_factory');
+    if (!$factory instanceof navbar_world_factory) {
         return '';
     }
 
-    // Check if enabled.
-    $world = di::get('context_world_factory')->get_world_from_context($PAGE->context);
-    if (!$world->get_config()->get('enabled')) {
-        return;
+    // Resolver world and check status.
+    $world = $factory->get_world_for_navbar($PAGE->context);
+    if (!$world) {
+        return '';
+    } else if (!$world->get_config()->get('enabled')) {
+        return '';
     }
 
     // Check that the user can see the content.

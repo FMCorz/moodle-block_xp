@@ -29,6 +29,8 @@ namespace block_xp\local\factory;
 
 use block_xp\local\config\config;
 use block_xp\local\world;
+use context_course;
+use context_system;
 
 /**
  * Context world factory.
@@ -38,7 +40,7 @@ use block_xp\local\world;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class default_context_world_factory implements context_world_factory {
+class default_context_world_factory implements context_world_factory, navbar_world_factory {
     /** @var config The admin config. */
     protected $adminconfig;
     /** @var course_world_factory The course world factory. */
@@ -51,6 +53,33 @@ class default_context_world_factory implements context_world_factory {
      */
     public function __construct(config $adminconfig) {
         $this->adminconfig = $adminconfig;
+    }
+
+    /**
+     * Get the world.
+     *
+     * @param \context $context
+     * @return world|null
+     */
+    public function get_world_for_navbar(\context $context): ?world {
+        $config = $this->adminconfig;
+        $issitewide = $config->get('context') == CONTEXT_SYSTEM;
+        $navbardisplay = (int) $config->get('navbardisplay');
+
+        if (!$navbardisplay) {
+            return null;
+        }
+
+        if ($issitewide)  {
+            return $this->get_world_from_context(context_system::instance());
+        }
+
+        $context = $this->normalise_context($context);
+        if (!$context instanceof context_course) {
+            return null;
+        }
+
+        return $this->get_world_from_context($context);
     }
 
     /**

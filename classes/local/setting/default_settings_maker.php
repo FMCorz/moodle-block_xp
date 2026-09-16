@@ -16,15 +16,6 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * Default settings maker.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\setting;
 
 use admin_category;
@@ -42,7 +33,6 @@ use block_xp\di;
 use block_xp\local\config\config;
 use block_xp\local\config\course_world_config;
 use block_xp\local\routing\url_resolver;
-use moodle_database;
 
 /**
  * Default settings maker.

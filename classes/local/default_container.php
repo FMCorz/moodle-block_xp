@@ -84,6 +84,7 @@ class default_container implements container {
         'levels_info_writer' => true,
         'log_migrators' => true,
         'mcp_router' => true,
+        'navbar_world_factory' => true,
         'observer_rules_maker' => true,
         'oauth_router' => true,
         'reason_from_log_entry_factory' => true,
@@ -571,6 +572,15 @@ class default_container implements container {
             ],
             'id' => null,
         ]);
+    }
+
+    /**
+     * Get factory.
+     *
+     * @return factory\navbar_world_factory
+     */
+    protected function get_navbar_world_factory() {
+        return di::get('context_world_factory');
     }
 
     /**
