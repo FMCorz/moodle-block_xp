@@ -16,22 +16,15 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * Admin rules controller.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\controller;
 
 use coding_exception;
 use html_writer;
 use block_xp\local\routing\url;
 use block_xp\local\utils\text_utils;
+use block_xp\local\xp\admin_filter_manager;
 use core\output\notification;
+use renderable;
 
 /**
  * Admin rules controller class.
@@ -68,7 +61,7 @@ class admin_rules_controller extends admin_route_controller {
      * @return void
      */
     protected function pre_content() {
-        $this->filtermanager = new \block_xp\local\xp\admin_filter_manager(\block_xp\di::get('db'));
+        $this->filtermanager = new admin_filter_manager(\block_xp\di::get('db'));
 
         // Revert to defaults.
         if ($this->get_param('revert') && confirm_sesskey()) {

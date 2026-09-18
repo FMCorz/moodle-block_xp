@@ -160,8 +160,16 @@ class admin_visuals_controller extends admin_route_controller {
      * Reset all worlds to defaults.
      */
     final protected function reset_all_worlds_to_defaults() {
+        $issitewide = di::get('config')->get('context') == CONTEXT_SYSTEM;
+
         // This is not really the way we should obtain all worlds, but it works.
-        $courseids = di::get('db')->get_fieldset_select('block_xp_config', 'courseid', 'courseid > 0', []);
+        $sql = 'courseid > 0';
+        $params = [];
+        if (!$issitewide) {
+            $sql = 'courseid > 0 AND courseid != :siteid';
+            $params = ['siteid' => SITEID];
+        }
+        $courseids = di::get('db')->get_fieldset_select('block_xp_config', 'courseid', $sql, $params);
         $courseworldfactory = di::get('course_world_factory');
 
         // This is slow, but that's safer than trying to write to the database directly.

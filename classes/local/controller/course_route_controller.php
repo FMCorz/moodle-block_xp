@@ -21,6 +21,7 @@ namespace block_xp\local\controller;
 use block_xp\local\group\group_policy;
 use block_xp\local\utils\user_utils;
 use coding_exception;
+use context_system;
 use core\notification;
 
 /**
@@ -80,9 +81,14 @@ abstract class course_route_controller extends route_controller {
      */
     protected function post_login() {
         parent::post_login();
-        $this->world = \block_xp\di::get('course_world_factory')->get_world($this->courseid);
+        if ($this->courseid == SITEID) {
+            $this->world = \block_xp\di::get('context_world_factory')->get_world_from_context(context_system::instance());
+            $this->courseid = SITEID;
+        } else {
+            $this->world = \block_xp\di::get('course_world_factory')->get_world($this->get_param('courseid'));
+            $this->courseid = $this->world->get_courseid();
+        }
         $this->urlresolver = \block_xp\di::get('url_resolver');
-        $this->courseid = $this->world->get_courseid();
         $this->navfactory = \block_xp\di::get('course_world_navigation_factory');
         $this->navigator = \block_xp\di::get('world_navigator_factory')->get_navigator_for_world($this->world);
     }

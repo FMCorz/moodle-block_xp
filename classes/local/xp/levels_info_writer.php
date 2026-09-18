@@ -50,6 +50,8 @@ use invalid_parameter_exception;
 class levels_info_writer {
     /** @var config The admin config. */
     protected $config;
+    /** @var bool Whether is used sitewide. */
+    protected $issitewide;
 
     /**
      * Constructor.
@@ -58,13 +60,20 @@ class levels_info_writer {
      */
     public function __construct(config $config) {
         $this->config = $config;
+        $this->issitewide = $config->get('context') == CONTEXT_SYSTEM;
     }
 
     /**
      * Reset the world.
      */
     public function reset_all_courses() {
-        di::get('db')->set_field_select('block_xp_config', 'levelsdata', '', 'courseid > 0', []);
+        $sql = 'courseid > 0';
+        $params = [];
+        if (!$this->issitewide) {
+            $sql = 'courseid > 0 AND courseid != :siteid';
+            $params = ['siteid' => SITEID];
+        }
+        di::get('db')->set_field_select('block_xp_config', 'levelsdata', '', $sql, $params);
     }
 
     /**

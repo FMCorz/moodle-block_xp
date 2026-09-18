@@ -260,7 +260,13 @@ class admin_rule_manager {
      * @return void
      */
     public function reset_all_worlds_to_defaults(): void {
-        $this->db->delete_records_select('block_xp_rule', 'contextid > 0', []);
+        $sql = 'contextid > 0';
+        $params = [];
+        if (!$this->issitewide) {
+            $sql = 'contextid IN (SELECT id FROM {context} WHERE contextlevel = ?)';
+            $params = [CONTEXT_COURSE];
+        }
+        $this->db->delete_records_select('block_xp_rule', $sql, $params);
         di::get('bulk_world_config_setter')->set_from(new static_config([
             'defaultactionrules' => course_world_config::DEFAULT_ACTION_RULES_MISSING,
         ]));

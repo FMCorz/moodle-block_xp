@@ -52,7 +52,15 @@ class bulk_world_config_setter {
      * @return config
      */
     protected function create_target() {
-        return new table_setter_config(di::get('db'), 'block_xp_config', 'courseid > 0', []);
+        $issitewide = di::get('config')->get('context') == CONTEXT_SYSTEM;
+        $sql = 'courseid > 0';
+        $params = [];
+        if (!$issitewide) {
+            $sql = 'courseid > 0 AND courseid != :siteid';
+            $params = ['siteid' => SITEID];
+        }
+
+        return new table_setter_config(di::get('db'), 'block_xp_config', $sql, $params);
     }
 
     /**

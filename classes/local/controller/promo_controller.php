@@ -27,6 +27,7 @@ use block_xp\local\routing\url;
 use block_xp\local\routing\url_resolver;
 use block_xp\local\utils\text_utils;
 use block_xp\local\world;
+use context_system;
 use core\output\notification;
 use moodle_url;
 
@@ -113,7 +114,12 @@ class promo_controller extends route_controller {
     protected function post_login() {
         $this->urlresolver = \block_xp\di::get('url_resolver');
         if (!$this->is_admin_page()) {
-            $this->world = \block_xp\di::get('course_world_factory')->get_world($this->get_param('courseid'));
+            $courseid = $this->get_param('courseid');
+            if ($courseid == SITEID) {
+                $this->world = \block_xp\di::get('context_world_factory')->get_world_from_context(context_system::instance());
+            } else {
+                $this->world = \block_xp\di::get('course_world_factory')->get_world($courseid);
+            }
         }
     }
 

@@ -216,9 +216,10 @@ class admin_filter_manager {
         }
         $courseworldfactory = di::get('course_world_factory');
 
-        // This is dangerously hardcoded, byt let's use this for now to detect all instances to work on.
-        $sql = 'courseid > 0 AND defaultfilters != :defaultfilters';
+        // This is dangerously hardcoded, but let's use this for now to detect all instances to work on.
+        $sql = 'courseid > 0 AND courseid != :siteid AND defaultfilters != :defaultfilters';
         $courseids = $this->db->get_fieldset_select('block_xp_config', 'courseid', $sql, [
+            'siteid' => SITEID,
             'defaultfilters' => course_world_config::DEFAULT_FILTERS_MISSING,
         ]);
 
