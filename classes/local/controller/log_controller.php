@@ -45,6 +45,8 @@ use html_writer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class log_controller extends page_controller {
+    /** @var bool Whether manage permissions are required. */
+    protected $requiremanage = false;
     /** @var string The nav name. */
     protected $navname = 'report';
     /** @var string The route name. */
@@ -63,6 +65,8 @@ class log_controller extends page_controller {
      * @return void
      */
     protected function permissions_checks() {
+        parent::permissions_checks();
+
         $accessperms = $this->world->get_access_permissions();
         if (!($accessperms instanceof \block_xp\local\permission\access_logs_permissions)) {
             throw new \coding_exception('Access permissions object requires logs permissions.');

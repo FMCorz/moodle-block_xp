@@ -157,9 +157,15 @@ class course_block extends block_base {
         $this->content->footer = '';
 
         $world = $this->get_world_for_page();
-        $canview = $world->get_access_permissions()->can_access();
+
+        // Hide blocks on old pages when points are tracked per course.
+        if ($world instanceof course_world && $world->get_courseid() == SITEID
+                && \block_xp\di::get('config')->get('context') == CONTEXT_COURSE) {
+            return $this->content;
+        }
 
         // Hide the block to non-logged in users, guests and those who cannot view the block.
+        $canview = $world->get_access_permissions()->can_access();
         if (!$USER->id || isguestuser() || !$canview) {
             return $this->content;
         }

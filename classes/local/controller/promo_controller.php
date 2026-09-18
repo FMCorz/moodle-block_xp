@@ -22,6 +22,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/adminlib.php');
 
 use block_xp\di;
+use block_xp\local\course_world;
 use html_writer;
 use block_xp\local\routing\url;
 use block_xp\local\routing\url_resolver;
@@ -131,6 +132,21 @@ class promo_controller extends route_controller {
      */
     protected function permissions_checks() {
         if (!$this->is_admin_page()) {
+            if ($this->world instanceof course_world) {
+                $contextmode = di::get('config')->get('context');
+                $issiteid = $this->get_param('courseid') == SITEID;
+
+                if ($contextmode == CONTEXT_COURSE && $issiteid) {
+                    throw new \moodle_exception('errorcontextcoursemismatchpercourse', 'block_xp', (new moodle_url('/'))->out(false));
+                } else if ($contextmode == CONTEXT_SYSTEM && !$issiteid) {
+                    $nexturl = $this->urlresolver->reverse($this->routename, ['courseid' => SITEID]);
+                    throw new \moodle_exception(
+                        'errorcontextcoursemismatchforwholesite',
+                        'block_xp',
+                        $nexturl->get_compatible_url()->out(false)
+                    );
+                }
+            }
             $this->world->get_access_permissions()->require_manage();
         }
     }
