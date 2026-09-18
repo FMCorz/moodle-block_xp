@@ -31,9 +31,8 @@ require_once($CFG->libdir . '/formslib.php');
 require_once(__DIR__ . '/itemspertime.php');
 require_once(__DIR__ . '/duration.php');
 
-use block_xp\di;
-use block_xp\local\config\course_world_config;
 use block_xp\local\world;
+use block_xp\local\world\world_with_features;
 use html_writer;
 use moodleform;
 
@@ -52,8 +51,7 @@ class config extends moodleform {
      */
     public function definition() {
         global $PAGE;
-        // Conditional check (on world) for compatibility with older versions of local_xp.
-        $world = !empty($this->_customdata['world']) ? $this->_customdata['world'] : null;
+        $world = $this->_customdata['world'];
         $renderer = \block_xp\di::get('renderer');
 
         $mform = $this->_form;
@@ -72,31 +70,29 @@ class config extends moodleform {
             'enablelevelupnotif',
             get_string('enablelevelupnotif', 'block_xp')
         )];
-        if ($world) {
-            $randomtrymeid = html_writer::random_id();
-            $level1 = $world->get_levels_info()->get_level(1);
-            $level2 = $world->get_levels_info()->get_level(2);
-            $trymedatascript = $renderer->json_script([
-                'levelnum' => $level2->get_level(),
-                'levelbadge' => $renderer->level_badge($level2),
-                'prevlevelbadge' => $renderer->level_badge($level1),
-            ], $randomtrymeid . 'data');
-            $levelupnotifelements[] = $mform->createElement('static', 'levelupnotifunit', '', html_writer::div(
-                html_writer::tag('a', get_string('tryme', 'block_xp'), [
-                    'href' => '#',
-                    'id' => $randomtrymeid,
-                    'role' => 'button',
-                    'class' => 'xp-text-xs',
-                ]) . $trymedatascript
-            ));
-            $PAGE->requires->js_amd_inline(<<<EOT
-                require(['block_xp/popup-notification', 'block_xp/role-button'], (PopupModule, RoleButton) => {
-                    RoleButton.registerClick('#$randomtrymeid', () => {
-                        PopupModule.show(JSON.parse(document.getElementById('{$randomtrymeid}data').textContent));
-                    });
+        $randomtrymeid = html_writer::random_id();
+        $level1 = $world->get_levels_info()->get_level(1);
+        $level2 = $world->get_levels_info()->get_level(2);
+        $trymedatascript = $renderer->json_script([
+            'levelnum' => $level2->get_level(),
+            'levelbadge' => $renderer->level_badge($level2),
+            'prevlevelbadge' => $renderer->level_badge($level1),
+        ], $randomtrymeid . 'data');
+        $levelupnotifelements[] = $mform->createElement('static', 'levelupnotifunit', '', html_writer::div(
+            html_writer::tag('a', get_string('tryme', 'block_xp'), [
+                'href' => '#',
+                'id' => $randomtrymeid,
+                'role' => 'button',
+                'class' => 'xp-text-xs',
+            ]) . $trymedatascript
+        ));
+        $PAGE->requires->js_amd_inline(<<<EOT
+            require(['block_xp/popup-notification', 'block_xp/role-button'], (PopupModule, RoleButton) => {
+                RoleButton.registerClick('#$randomtrymeid', () => {
+                    PopupModule.show(JSON.parse(document.getElementById('{$randomtrymeid}data').textContent));
                 });
-            EOT);
-        }
+            });
+        EOT);
         $mform->addGroup($levelupnotifelements, 'enablelevelupnotifgrp', get_string('enablelevelupnotif', 'block_xp'), null, false);
         $mform->addHelpButton('enablelevelupnotifgrp', 'enablelevelupnotif', 'block_xp');
 
@@ -124,12 +120,14 @@ class config extends moodleform {
         $mform->setType('blockrankingsnapshot', PARAM_INT);
         $mform->disabledIf('blockrankingsnapshot', 'enableladder', 'eq', '0');
 
-        $mform->addElement('select', 'blockrecentactivity', get_string('configrecentactivity', 'block_xp'), [
-            0 => get_string('no'),
-            3 => get_string('yes'),
-        ]);
-        $mform->addHelpButton('blockrecentactivity', 'configrecentactivity', 'block_xp');
-        $mform->setType('blockrecentactivity', PARAM_INT);
+        if (!$world instanceof world_with_features || $world->supports($world::FEAT_BLOCK_RECENT_ACTIVITY) !== false) {
+            $mform->addElement('select', 'blockrecentactivity', get_string('configrecentactivity', 'block_xp'), [
+                0 => get_string('no'),
+                3 => get_string('yes'),
+            ]);
+            $mform->addHelpButton('blockrecentactivity', 'configrecentactivity', 'block_xp');
+            $mform->setType('blockrecentactivity', PARAM_INT);
+        }
 
         $mform->addElement('hidden', '__blockappearanceend');
         $mform->setType('__blockappearanceend', PARAM_BOOL);

@@ -29,6 +29,7 @@ namespace block_xp\local\controller;
 
 use block_xp\di;
 use block_xp\local\utils\user_utils;
+use block_xp\local\world\world_with_features;
 use core_user;
 use html_writer;
 use single_button;
@@ -96,12 +97,22 @@ class report_controller extends page_controller {
     }
 
     /**
+     * Whether the world supports changing points.
+     *
+     * @return bool
+     */
+    protected function supports_points_change(): bool {
+        return !$this->world instanceof world_with_features
+            || $this->world->supports($this->world::FEAT_USER_POINTS_CHANGE) !== false;
+    }
+
+    /**
      * Prepare content.
      *
      * @return void
      */
     protected function pre_content() {
-        if (!$this->world->get_access_permissions()->can_manage()) {
+        if (!$this->world->get_access_permissions()->can_manage() || !$this->supports_points_change()) {
             return;
         }
 
@@ -240,7 +251,7 @@ class report_controller extends page_controller {
                     'addonrequired' => true,
                 ] : null,
                 [], // Divider.
-                $strreset ? [
+                $this->supports_points_change() && $strreset ? [
                     'label' => $strreset,
                     'danger' => true,
                     'href' => $reseturl,
@@ -292,11 +303,12 @@ class report_controller extends page_controller {
         global $PAGE;
 
         $canmanage = $this->world->get_access_permissions()->can_manage();
+        $supportspointchanges = $this->supports_points_change();
         $output = $this->get_renderer();
         $groupid = $this->get_groupid();
 
         // Confirming reset data.
-        if ($canmanage && $this->get_param('resetdata')) {
+        if ($canmanage && $supportspointchanges && $this->get_param('resetdata')) {
             echo $this->get_renderer()->confirm_reset(
                 empty($groupid) ? get_string('resetcoursedata', 'block_xp') : get_string('resetgroupdata', 'block_xp'),
                 empty($groupid) ? get_string('reallyresetdata', 'block_xp') : get_string('reallyresetgroupdata', 'block_xp'),
@@ -308,7 +320,7 @@ class report_controller extends page_controller {
         }
 
         // Confirming delete data.
-        if ($canmanage && $this->get_param('delete')) {
+        if ($canmanage && $supportspointchanges && $this->get_param('delete')) {
             $user = core_user::get_user($this->get_param('userid'));
             echo $this->get_renderer()->confirm_step(
                 $user ? fullname($user) : get_string('delete', 'core'),

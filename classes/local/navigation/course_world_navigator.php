@@ -25,6 +25,7 @@ use block_xp\local\permission\access_logs_permissions;
 use block_xp\local\permission\access_report_permissions;
 use block_xp\local\routing\url;
 use block_xp\local\routing\url_resolver;
+use block_xp\local\world\world_with_features;
 use pix_icon;
 
 /**
@@ -96,6 +97,10 @@ class course_world_navigator extends navigator {
         $showpromo = di::get('addon')->is_promo_allowed();
         $config = $this->world->get_config();
         $canmanage = $accessperms->can_manage();
+        $supportspointchanges = !$this->world instanceof world_with_features
+            || $this->world->supports($this->world::FEAT_USER_POINTS_CHANGE) !== false;
+        $supportsteamladder = !$this->world instanceof world_with_features
+            || $this->world->supports($this->world::FEAT_TEAM_LEADERBOARD) !== false;
 
         if ($config->get('enableinfos') || $canmanage) {
             $links[] = new nav_item(get_string('navinfos', 'block_xp'), $this->get_url('infos'), 'infos');
@@ -103,7 +108,7 @@ class course_world_navigator extends navigator {
 
         $canviewladder = $config->get('enableladder') || $canmanage;
         $isteamladderenabled = $config->has('enablegroupladder') && (bool) $config->get('enablegroupladder');
-        $canviewteamladder = $isteamladderenabled || ($canmanage && ($showpromo || $hasaddon));
+        $canviewteamladder = $supportsteamladder && ($isteamladderenabled || ($canmanage && ($showpromo || $hasaddon)));
         if ($canviewladder || $canviewteamladder) {
             $mainurl = $this->get_url($canviewladder ? 'ladder' : 'group_ladder');
             $laddernav = new nav_item(get_string('navladder', 'block_xp'), $mainurl, 'ladder');
@@ -174,7 +179,7 @@ class course_world_navigator extends navigator {
                     $this->get_url('drops'),
                     'drops'
                 ))->set_addon_required(!$hasaddon) : null,
-                $showpromo || $hasaddon ? (new nav_item(
+                $supportspointchanges && ($showpromo || $hasaddon) ? (new nav_item(
                     get_string('navimport', 'block_xp'),
                     $this->get_url('import'),
                     'import'

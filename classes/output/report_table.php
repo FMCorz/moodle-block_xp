@@ -37,6 +37,7 @@ use renderer_base;
 use table_sql;
 use block_xp\di;
 use block_xp\local\world;
+use block_xp\local\world\world_with_features;
 use block_xp\local\navigation\navigator;
 use block_xp\local\permission\access_logs_permissions;
 use block_xp\local\routing\url_resolver;
@@ -196,20 +197,24 @@ class report_table extends table_sql {
      */
     protected function get_row_actions($state) {
         $actions = [];
+        $supportspointchanges = !$this->world instanceof world_with_features
+            || $this->world->supports($this->world::FEAT_USER_POINTS_CHANGE) !== false;
 
-        $actions[] = new action_menu_link(
-            $this->baseurl,
-            new pix_icon('t/edit', get_string('edit', 'core')),
-            get_string('edit', 'core'),
-            false,
-            [
-                'data-xp-action' => 'open-form',
-                'data-form-class' => 'block_xp\form\user_xp',
-                'data-form-args__contextid' => $this->world->get_context()->id,
-                'data-form-args__userid' => $state->get_id(),
-                'data-modal-title' => get_string('edita', 'core', fullname($state->get_user())),
-            ]
-        );
+        if ($supportspointchanges) {
+            $actions[] = new action_menu_link(
+                $this->baseurl,
+                new pix_icon('t/edit', get_string('edit', 'core')),
+                get_string('edit', 'core'),
+                false,
+                [
+                    'data-xp-action' => 'open-form',
+                    'data-form-class' => 'block_xp\form\user_xp',
+                    'data-form-args__contextid' => $this->world->get_context()->id,
+                    'data-form-args__userid' => $state->get_id(),
+                    'data-modal-title' => get_string('edita', 'core', fullname($state->get_user())),
+                ]
+            );
+        }
 
         if ($this->logaccessperms && $this->logaccessperms->can_access_logs()) {
             $url = $this->navigator->get_url('log');
@@ -221,7 +226,8 @@ class report_table extends table_sql {
             );
         }
 
-        if ($this->store instanceof state_store_with_delete && $state instanceof state_with_presence && $state->is_present()) {
+        if ($supportspointchanges && $this->store instanceof state_store_with_delete
+                && $state instanceof state_with_presence && $state->is_present()) {
             $url = new moodle_url($this->baseurl, ['action' => '', 'delete' => 1, 'userid' => $state->get_id()]);
             $action = new action_menu_link(
                 $url,
