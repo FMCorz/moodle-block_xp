@@ -52,8 +52,6 @@ class rules_controller extends page_controller {
     protected $filtermanager;
     /** @var array User filters. */
     protected $userfilters;
-    /** @var array Whether to show legacy headings. */
-    protected $legacyheadings;
 
     /**
      * Define optional parameters.
@@ -79,7 +77,6 @@ class rules_controller extends page_controller {
         }
         $this->filtermanager = $this->world->get_filter_manager();
         $this->userfilters = $this->filtermanager->get_user_filters();
-        $this->legacyheadings = di::get('addon')->is_activated() && di::get('addon')->is_older_than(2023100402);
     }
 
     /**
@@ -197,10 +194,7 @@ class rules_controller extends page_controller {
                 $this->get_default_filter(),
                 $this->get_available_rules(),
                 $this->userfilters
-            ),
-            $this->legacyheadings ? get_string('eventsrules', 'block_xp') : null,
-            null,
-            $this->legacyheadings ? new \help_icon('eventsrules', 'block_xp') : null
+            )
         );
     }
 
@@ -285,11 +279,7 @@ class rules_controller extends page_controller {
      */
     protected function page_rules_content() {
         $output = $this->get_renderer();
-
-        if (!$this->legacyheadings) {
-            $this->page_advanced_heading();
-        }
-
+        $this->page_advanced_heading();
         echo $output->render($this->get_widget_group());
     }
 
