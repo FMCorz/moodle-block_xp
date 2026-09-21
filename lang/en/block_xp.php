@@ -352,6 +352,7 @@ $string['filtermodules'] = 'Filter modules';
 $string['filterparticipants'] = 'Filter participants';
 $string['forever'] = 'Forever';
 $string['give'] = 'give';
+$string['globalpointsintro'] = 'Each user\'s points in this context are the sum of their points from the contributing Level Up XP instances. Users earn points in those instances. The total changes when their points in a contributing instance change.';
 $string['gotofullladder'] = 'Go to full leaderboard';
 $string['graderules'] = 'Grade rules';
 $string['graderules_help'] = '
