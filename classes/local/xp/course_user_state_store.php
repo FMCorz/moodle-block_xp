@@ -37,6 +37,7 @@ use block_xp\local\logger\collection_logger_with_id_reset;
 use block_xp\local\logger\collection_logger;
 use block_xp\local\logger\reason_collection_logger;
 use block_xp\local\observer\level_up_state_store_observer;
+use block_xp\local\observer\points_changed_state_store_observer;
 use block_xp\local\observer\points_increased_state_store_observer;
 use block_xp\local\reason\reason;
 use block_xp\local\sql\limit;
@@ -387,6 +388,10 @@ class course_user_state_store implements
             $this->pointsobserver->points_increased($this, $id, $xpgained);
         }
 
+        if ($this->pointsobserver instanceof points_changed_state_store_observer && $beforexp != $afterxp) {
+            $this->pointsobserver->points_changed($this, $id, $beforexp, $afterxp);
+        }
+
         if ($this->observer) {
             $beforelevel = $this->levelsinfo->get_level_from_xp($beforexp);
             $afterlevel = $this->levelsinfo->get_level_from_xp($afterxp);
@@ -405,14 +410,16 @@ class course_user_state_store implements
      * @return void
      */
     protected function observe_set($id, $beforexp, $afterxp) {
-        if (!$this->observer) {
-            return;
+        if ($this->pointsobserver instanceof points_changed_state_store_observer && $beforexp != $afterxp) {
+            $this->pointsobserver->points_changed($this, $id, $beforexp, $afterxp);
         }
 
-        $beforelevel = $this->levelsinfo->get_level_from_xp($beforexp);
-        $afterlevel = $this->levelsinfo->get_level_from_xp($afterxp);
-        if ($beforelevel->get_level() < $afterlevel->get_level()) {
-            $this->observer->leveled_up($this, $id, $beforelevel, $afterlevel);
+        if (!$this->observer instanceof level_up_state_store_observer) {
+            $beforelevel = $this->levelsinfo->get_level_from_xp($beforexp);
+            $afterlevel = $this->levelsinfo->get_level_from_xp($afterxp);
+            if ($beforelevel->get_level() < $afterlevel->get_level()) {
+                $this->observer->leveled_up($this, $id, $beforelevel, $afterlevel);
+            }
         }
     }
 
