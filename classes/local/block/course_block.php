@@ -194,7 +194,7 @@ class course_block extends block_base {
             $levelsinfo = $world->get_levels_info();
             foreach ($levels as $levelnum) {
                 // Remove invalid level number.
-                if ($levelnum <= 1 || $levelnum > $levelsinfo->get_count()) {
+                if ($levelnum <= 1 || $levelnum > $levelsinfo->get_count() || $levelnum > $state->get_level()->get_level()) {
                     $service->mark_as_notified($USER->id, $levelnum);
                     continue;
                 }
