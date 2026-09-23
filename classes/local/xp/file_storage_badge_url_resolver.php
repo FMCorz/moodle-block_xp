@@ -16,19 +16,11 @@
 //
 // See <https://levelup.plus>.
 
-/**
- * File storage badge URL resolver.
- *
- * @package    block_xp
- * @copyright  2017 Frédéric Massart
- * @author     Frédéric Massart <fred@branchup.tech>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_xp\local\xp;
 
 use context;
 use moodle_url;
+use stored_file;
 
 /**
  * File storage badge URL resolver.

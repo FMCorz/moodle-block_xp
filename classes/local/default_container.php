@@ -54,6 +54,7 @@ class default_container implements container {
         'badge_manager' => true,
         'badge_url_resolver' => true,
         'badge_url_resolver_course_world_factory' => true,
+        'badge_url_resolver_stock' => true,
         'badge_url_resolver_world_factory' => true,
         'base_url' => true,
         'block_class' => true,
@@ -240,7 +241,10 @@ class default_container implements container {
      * @return xp\badge_url_resolver
      */
     protected function get_badge_url_resolver() {
-        return new \block_xp\local\xp\file_storage_badge_url_resolver(\context_system::instance(), 'block_xp', 'defaultbadges', 0);
+        return new xp\badge_url_resolver_stack([
+            new xp\file_storage_badge_url_resolver(\context_system::instance(), 'block_xp', 'defaultbadges', 0),
+            $this->get('badge_url_resolver_stock'),
+        ]);
     }
 
     /**
@@ -249,9 +253,18 @@ class default_container implements container {
      * @return factory\badge_url_resolver_course_world_factory
      */
     protected function get_badge_url_resolver_course_world_factory() {
-        return new \block_xp\local\factory\default_badge_url_resolver_course_world_factory(
-            $this->get('badge_url_resolver')
-        );
+        $resolver = new factory\default_badge_url_resolver_course_world_factory($this->get('badge_url_resolver'));
+        $resolver->set_stock_resolver($this->get('badge_url_resolver_stock'));
+        return $resolver;
+    }
+
+    /**
+     * Get the badge URL resolver for stock badges.
+     *
+     * @return xp\badge_url_resolver
+     */
+    protected function get_badge_url_resolver_stock() {
+        return new xp\stock_badge_url_resolver($this->get('config'));
     }
 
     /**

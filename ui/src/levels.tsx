@@ -337,7 +337,7 @@ export const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrl
               onChange={handleNumLevelsChange}
               min={2}
               max={MAX_LEVEL}
-              inputProps={{ id: "label-x", maxLength: 2 }}
+              inputProps={{ id: "label-x", maxLength: 3 }}
             />
           </div>
           <div className="">

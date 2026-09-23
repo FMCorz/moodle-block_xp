@@ -63,6 +63,7 @@ class default_admin_config extends immutable_config {
             'adminscanearnxp' => 0,
             'keeplogs' => 90,
             'navbardisplay' => 0,
+            'uselegacylevelbadges' => 0,
 
             'enablecheatguard' => 1,
             'enableinfos' => 1,

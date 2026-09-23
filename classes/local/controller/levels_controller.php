@@ -30,6 +30,7 @@ namespace block_xp\local\controller;
 use block_xp\di;
 use block_xp\local\routing\url;
 use block_xp\local\serializer\url_serializer;
+use block_xp\local\xp\levels_info_writer;
 
 /**
  * Levels controller class.
@@ -102,11 +103,15 @@ class levels_controller extends page_controller {
 
         $urlserializer = new url_serializer();
         $badgeurlresolver = di::get('badge_url_resolver_world_factory')->get_url_resolver_for_world($world);
-        $defaultbadges = array_reduce(range(1, 20), function ($carry, $level) use ($badgeurlresolver, $urlserializer) {
-            $url = $badgeurlresolver->get_url_for_level($level);
-            $carry[$level] = $urlserializer->serialize($url);
-            return $carry;
-        }, []);
+        $defaultbadges = array_reduce(
+            range(1, levels_info_writer::MAX_LEVEL),
+            function ($carry, $level) use ($badgeurlresolver, $urlserializer) {
+                $url = $badgeurlresolver->get_url_for_level($level);
+                $carry[$level] = $urlserializer->serialize($url);
+                return $carry;
+            },
+            []
+        );
 
         $levelsinfo = di::get('levels_info_factory')->get_world_levels_info($this->world);
         $serializer = di::get('serializer_factory')->get_levels_info_serializer();
