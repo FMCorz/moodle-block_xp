@@ -21,6 +21,8 @@ import { queryClient } from "./lib/query";
 import { Level as LevelType, LevelsInfo, PointCalculationMethod } from "./lib/types";
 import { classNames, stripTags } from "./lib/utils";
 
+const MAX_LEVEL = 100;
+
 type State = {
   algo: PointCalculationMethod;
   levels: LevelType[];
@@ -165,7 +167,7 @@ const reducer = (state: State, [action, payload]: [string, any]): State => {
         })
       );
     case "nbLevelsChange":
-      if (typeof payload?.n === "undefined" || isNaN(payload.n) || payload.n < 2 || payload.n > 99) {
+      if (typeof payload?.n === "undefined" || isNaN(payload.n) || payload.n < 2 || payload.n > MAX_LEVEL) {
         return state;
       }
       return markPendingSave({
@@ -334,7 +336,7 @@ export const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrl
               value={state.nblevels}
               onChange={handleNumLevelsChange}
               min={2}
-              max={99}
+              max={MAX_LEVEL}
               inputProps={{ id: "label-x", maxLength: 2 }}
             />
           </div>

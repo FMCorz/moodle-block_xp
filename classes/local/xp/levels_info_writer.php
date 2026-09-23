@@ -48,6 +48,8 @@ use invalid_parameter_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class levels_info_writer {
+    /** Max level. */
+    const MAX_LEVEL = 100;
     /** @var config The admin config. */
     protected $config;
     /** @var bool Whether is used sitewide. */
@@ -307,7 +309,7 @@ class levels_info_writer {
         // Construct all the metadata.
         $finalmetadata = [];
         foreach ($rawmetadata as $level => $metadata) {
-            if ($level < 1  || $level > 99) {
+            if ($level < 1  || $level > static::MAX_LEVEL) {
                 continue;
             }
             $tmp = $this->get_metadata_for_level($level, $metadata, $world);
@@ -394,7 +396,7 @@ class levels_info_writer {
         ]);
 
         $data = external_api::validate_parameters($structure, $rawdata);
-        if (count($data['levels']) < 2 || count($data['levels']) > 99) {
+        if (count($data['levels']) < 2 || count($data['levels']) > static::MAX_LEVEL) {
             throw new invalid_parameter_exception('Invalid number of levels');
         }
 
