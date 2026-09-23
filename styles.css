@@ -1663,6 +1663,7 @@ a .block_xp-level {
 
 /** Hide accepted file types from level badges filemanager. **/
 .block_xp #fitem_id_badges fieldset [name=badges] + p,
+.block_xp #fitem_id_badges fieldset .filetypes-descriptions-intro,
 .block_xp #fitem_id_badges fieldset .form-filetypes-descriptions {
     display: none;
 }

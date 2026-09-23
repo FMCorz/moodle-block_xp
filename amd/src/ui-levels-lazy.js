@@ -1523,6 +1523,7 @@ const invalidateRuleTypeLimitsQuery = (contextid, childcontextid) => {
 
 
 
+const MAX_LEVEL = 100;
 var BADGE_TYPE;
 (function (BADGE_TYPE) {
     BADGE_TYPE[BADGE_TYPE["Site"] = 1] = "Site";
@@ -1654,7 +1655,7 @@ const reducer = (state, [action, payload]) => {
                 }),
             }));
         case "nbLevelsChange":
-            if (typeof payload?.n === "undefined" || isNaN(payload.n) || payload.n < 2 || payload.n > 99) {
+            if (typeof payload?.n === "undefined" || isNaN(payload.n) || payload.n < 2 || payload.n > MAX_LEVEL) {
                 return state;
             }
             return markPendingSave({
@@ -1779,7 +1780,7 @@ const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badg
                 react.createElement("div", { className: "" },
                     react.createElement("label", { htmlFor: "label-x", className: "xp-block xp-m-0" },
                         react.createElement(components_Str, { id: "numberoflevels" })),
-                    react.createElement(NumberInputWithButtons, { value: state.nblevels, onChange: handleNumLevelsChange, min: 2, max: 99, inputProps: { id: "label-x", maxLength: 2 } })),
+                    react.createElement(NumberInputWithButtons, { value: state.nblevels, onChange: handleNumLevelsChange, min: 2, max: MAX_LEVEL, inputProps: { id: "label-x", maxLength: 3 } })),
                 react.createElement("div", { className: "" },
                     react.createElement(Button, { onClick: () => setBulkEdit(true) },
                         react.createElement(components_Str, { id: "quickeditpoints" })),
