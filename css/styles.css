@@ -536,6 +536,14 @@ a .block_xp-level {
     @apply !xp-mb-0;
 }
 
+/** Section summary and activity desccrition sets border-radius on all images. */
+.course-section .summarytext .block_xp-level img,
+.course-section .summarytext .block_xp-xp img,
+.activity-item .activity-altcontent .block_xp-level img,
+.activity-item .activity-altcontent .block_xp-xp img {
+    @apply xp-rounded-none;
+}
+
 /**
  * CM rule.
  */
