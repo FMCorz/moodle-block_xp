@@ -947,6 +947,7 @@ $string['somefeaturesrequireotherplugins'] = 'Some features require additional p
 $string['someoneelse'] = 'Someone else';
 $string['somethinghappened'] = 'Something happened';
 $string['source'] = 'Source';
+$string['sources'] = 'Sources';
 $string['sourceurl'] = 'Source URL';
 $string['sourceremoveconfirm'] = 'Remove this course from the selection? Points from this course will no longer count towards participant totals here.';
 $string['sourceremoveallconfirm'] = 'Remove all courses from the selection? This will reduce all participants\' points here to zero.';
