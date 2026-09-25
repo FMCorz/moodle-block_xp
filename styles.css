@@ -337,6 +337,9 @@
 .block_xp .xp-h-6 {
     height: 1.5rem;
 }
+.block_xp .xp-h-7 {
+    height: 1.75rem;
+}
 .block_xp .xp-h-8 {
     height: 2rem;
 }
@@ -364,6 +367,9 @@
 .block_xp .xp-min-h-full {
     min-height: 100%;
 }
+.block_xp .xp-w-10 {
+    width: 2.5rem;
+}
 .block_xp .xp-w-14 {
     width: 3.5rem;
 }
@@ -387,6 +393,9 @@
 }
 .block_xp .xp-w-6 {
     width: 1.5rem;
+}
+.block_xp .xp-w-7 {
+    width: 1.75rem;
 }
 .block_xp .xp-w-8 {
     width: 2rem;
@@ -1673,7 +1682,7 @@ a .block_xp-level {
     margin-bottom: 0px !important;
 }
 
-/** Section summary sets border-radius on all images. */
+/** Section summary and activity desccrition sets border-radius on all images. */
 .course-section .summarytext .block_xp-level img,
 .course-section .summarytext .block_xp-xp img,
 .activity-item .activity-altcontent .block_xp-level img,
