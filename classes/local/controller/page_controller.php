@@ -161,6 +161,15 @@ abstract class page_controller extends course_route_controller {
     }
 
     /**
+     * The route name for the purpose of the sub navigation.
+     *
+     * @return string
+     */
+    protected function get_sub_navigation_route_name() {
+        return $this->get_route_name();
+    }
+
+    /**
      * Whether the page has a sub navigation.
      *
      * @return bool
@@ -246,7 +255,7 @@ abstract class page_controller extends course_route_controller {
     protected function page_sub_navigation() {
         $output = $this->get_renderer();
         echo html_writer::start_div('xp-w-full lg:xp-w-36 xp-max-w-full');
-        echo $output->sub_navigation($this->get_sub_navigation_items(), $this->get_route_name());
+        echo $output->sub_navigation($this->get_sub_navigation_items(), $this->get_sub_navigation_route_name());
         echo html_writer::end_div();
     }
 
