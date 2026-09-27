@@ -301,8 +301,8 @@ $string['enablecheatguard_help'] = 'The cheat guard offers a simple inexpensive 
 ';
 $string['enableclaude'] = 'Allow Claude connections';
 $string['enableclaude_desc'] = 'Allow users to connect Claude to Level Up XP. Users will be shown setup instructions, and OAuth registration is handled automatically.';
-$string['enableglobalworld'] = 'Overall level and leaderboard';
-$string['enableglobalworlddesc'] = 'When Level Up XP is used "In courses", this setting also allows the block to be added sitewide. When added sitewide, it shows an overall level and leaderboard based on points earned in courses. Users earn points only in courses.';
+$string['enableglobalworld'] = 'Overall level';
+$string['enableglobalworlddesc'] = 'When Level Up XP is used "In courses", this setting also allows the block to be added to the dashboard or site home. There, it combines points from selected courses to show an overall level and leaderboard. [Learn more](https://docs.levelup.plus/xp/docs/global-level)';
 $string['enableinfos'] = 'Enable info page';
 $string['enableinfos_help'] = 'When set to \'No\', students will not be able to view the information page.';
 $string['enableladder'] = 'Enable the leaderboard';
