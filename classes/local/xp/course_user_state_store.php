@@ -414,7 +414,7 @@ class course_user_state_store implements
             $this->pointsobserver->points_changed($this, $id, $beforexp, $afterxp);
         }
 
-        if (!$this->observer instanceof level_up_state_store_observer) {
+        if ($this->observer instanceof level_up_state_store_observer) {
             $beforelevel = $this->levelsinfo->get_level_from_xp($beforexp);
             $afterlevel = $this->levelsinfo->get_level_from_xp($afterxp);
             if ($beforelevel->get_level() < $afterlevel->get_level()) {
