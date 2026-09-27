@@ -1131,7 +1131,7 @@ const Content = (props) => {
     const { context } = (0,react.useContext)(RulesSetupContext);
     return (react.createElement(CmResourceList, { courseId: context.contextlevel === ContextLevel.Course ? context.instanceid : 0, options: {
             completionenabled: props.type.profile?.requirescompletionenabled,
-            type: props.type.profile?.cmtype ?? undefined,
+            types: props.type.profile?.cmtypes,
         }, onSelect: (cmid) => {
             props.setConfig({ filtercmid: cmid });
             props.onContinue();

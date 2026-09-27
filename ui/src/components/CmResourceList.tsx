@@ -11,7 +11,7 @@ export type CmResourceListProps = {
   filterTerm?: string;
   onSelect: (cmid: number) => void;
   resetFilterTerm?: () => void;
-  options?: { completionenabled?: boolean; type?: string };
+  options?: { completionenabled?: boolean; type?: string; types?: string[] };
 };
 
 export const CmResourceList = ({ courseId, filterTerm, onSelect, resetFilterTerm, options = {} }: CmResourceListProps) => {

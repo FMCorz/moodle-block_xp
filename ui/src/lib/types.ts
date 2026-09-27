@@ -171,6 +171,7 @@ export enum RuleTypeProfileSubject {
 export type RuleTypeProfile = {
   subject: RuleTypeProfileSubject | null;
   cmtype: string | null;
+  cmtypes: string[];
   requirescompletionenabled: boolean;
 };
 

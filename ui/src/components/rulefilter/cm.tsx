@@ -10,7 +10,7 @@ const Content = (props: RuleFilterConfigSettingsContentProps) => {
       courseId={context.contextlevel === ContextLevel.Course ? context.instanceid : 0}
       options={{
         completionenabled: props.type.profile?.requirescompletionenabled,
-        type: props.type.profile?.cmtype ?? undefined,
+        types: props.type.profile?.cmtypes,
       }}
       onSelect={(cmid: number) => {
         props.setConfig({ filtercmid: cmid });

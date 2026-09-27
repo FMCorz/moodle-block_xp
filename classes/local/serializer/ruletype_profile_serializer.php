@@ -39,6 +39,7 @@ class ruletype_profile_serializer implements serializer {
         return [
             'subject' => $profile->get_subject(),
             'cmtype' => $profile->get_cm_type(),
+            'cmtypes' => $profile->get_cm_types(),
             'requirescompletionenabled' => $profile->get_requires_completion_enabled(),
         ];
     }

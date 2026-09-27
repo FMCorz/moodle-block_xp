@@ -52,6 +52,7 @@ class search_modules extends external_api {
             'options' => new external_single_structure([
                 'completionenabled' => new external_value(PARAM_BOOL, '', VALUE_OPTIONAL),
                 'type' => new external_value(PARAM_ALPHANUMEXT, '', VALUE_OPTIONAL),
+                'types' => new external_multiple_structure(new external_value(PARAM_ALPHANUMEXT), '', VALUE_OPTIONAL),
             ], '', VALUE_DEFAULT, []),
         ]);
     }
@@ -90,7 +91,7 @@ class search_modules extends external_api {
         $sections = [];
 
         $completionenabled = $options['completionenabled'] ?? null;
-        $moduletype = $options['type'] ?? null;
+        $moduletypes = $options['types'] ?? (isset($options['type']) ? [$options['type']] : []);
 
         foreach ($modinfo->get_sections() as $sectionnum => $cmids) {
             $modules = [];
@@ -105,7 +106,7 @@ class search_modules extends external_api {
                 }
 
                 // Filter out modules by type.
-                if ($moduletype !== null && $moduletype !== $cm->modname) {
+                if ($moduletypes && !in_array($cm->modname, $moduletypes, true)) {
                     continue;
                 }
 
