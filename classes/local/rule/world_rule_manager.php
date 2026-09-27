@@ -264,11 +264,19 @@ class world_rule_manager implements rule_manager {
         usort($worldrecords, $sorter);
         usort($adminrecords, $sorter);
 
+        // Missing or stale source IDs must trigger reseeding.
+        foreach ($worldrecords as $i => $record) {
+            if (($record->sourceruleid ?? null) != $adminrecords[$i]->id) {
+                return false;
+            }
+        }
+
         $normaliser = function ($record) {
             $record = (array) $record; // Make sure we don't change the original.
             unset($record['id']);
             unset($record['contextid']);
             unset($record['childcontextid']);
+            unset($record['sourceruleid']);
             return $record;
         };
         $worldrecords = array_map($normaliser, $worldrecords);
@@ -368,7 +376,7 @@ class world_rule_manager implements rule_manager {
     /**
      * Insert rule records.
      *
-     * @param \stdClass[] $records The admin rule records to copy.
+     * @param \stdClass[] $rulerecords The admin rule records to copy.
      */
     protected function insert_rule_records(array $rulerecords): void {
         foreach ($rulerecords as $record) {
@@ -385,6 +393,7 @@ class world_rule_manager implements rule_manager {
     protected function insert_record(\stdClass $record): int {
         $storecontext = $this->world->get_context();
         $record = (object) (array) $record;
+        $record->sourceruleid = $record->id; // Track the admin rule ID.
         unset($record->id);
         unset($record->contextid);
         unset($record->childcontextid);

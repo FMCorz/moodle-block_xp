@@ -704,5 +704,19 @@ function xmldb_block_xp_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2026082302, 'xp');
     }
 
+    if ($oldversion < 2026082312) {
+        // Define field sourceruleid to be added to block_xp_rule.
+        $table = new xmldb_table('block_xp_rule');
+        $field = new xmldb_field('sourceruleid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'childcontextid');
+
+        // Conditionally launch add field sourceruleid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Xp savepoint reached.
+        upgrade_block_savepoint(true, 2026082312, 'xp');
+    }
+
     return true;
 }

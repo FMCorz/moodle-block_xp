@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/xp/db" VERSION="20260417" COMMENT="XMLDB file for Moodle blocks/xp"
+<XMLDB PATH="blocks/xp/db" VERSION="20260927" COMMENT="XMLDB file for Moodle blocks/xp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -123,6 +123,7 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="contextid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="childcontextid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="sourceruleid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="points" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="type" TYPE="char" LENGTH="32" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="filter" TYPE="char" LENGTH="32" NOTNULL="true" SEQUENCE="false"/>

@@ -501,6 +501,11 @@ class context_collection_logger implements
             $sql->where .= ' AND x.ruleid = :ruleid';
             $sql->params['ruleid'] = (int) $query->get_condition('ruleid');
         }
+        if ($query->has_condition('ruleids')) {
+            [$rulesql, $ruleparams] = $this->db->get_in_or_equal($query->get_condition('ruleids'), SQL_PARAMS_NAMED, 'ruleid');
+            $sql->where .= " AND x.ruleid $rulesql";
+            $sql->params = array_merge($sql->params, $ruleparams);
+        }
         if ($query->has_condition('timefrom')) {
             $sql->where .= ' AND x.timerecorded >= :timefrom';
             $sql->params['timefrom'] = $query->get_condition('timefrom')->getTimestamp();

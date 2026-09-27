@@ -26,7 +26,7 @@ namespace block_xp\local\rule;
  * @author     Frédéric Massart <fred@branchup.tech>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class static_instance implements instance {
+class static_instance implements instance_with_source {
     /** @var object The record. */
     protected $record;
     /** @var \context The context. */
@@ -50,6 +50,15 @@ class static_instance implements instance {
      */
     public function get_id(): int {
         return $this->record->id;
+    }
+
+    /**
+     * Get the source rule ID.
+     *
+     * @return int|null
+     */
+    public function get_source_rule_id(): ?int {
+        return isset($this->record->sourceruleid) ? (int) $this->record->sourceruleid : null;
     }
 
     /**

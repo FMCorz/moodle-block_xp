@@ -68,6 +68,21 @@ class collection_logger_query extends query {
     }
 
     /**
+     * Set the rule IDs.
+     *
+     * @param int[]|null $ruleids The rule IDs, or null or an empty array to remove the condition.
+     * @return self
+     */
+    public function set_rule_ids(?array $ruleids = null): self {
+        if (empty($ruleids)) {
+            $this->unset_condition('ruleids');
+            return $this;
+        }
+        $this->set_condition('ruleids', array_map('intval', $ruleids));
+        return $this;
+    }
+
+    /**
      * Set the user name search term.
      *
      * @param string|null $term The term, or null to remove the condition.
