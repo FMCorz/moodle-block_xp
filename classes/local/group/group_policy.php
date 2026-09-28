@@ -19,9 +19,9 @@
 namespace block_xp\local\group;
 
 use block_xp\di;
-use block_xp\local\course_world;
 use block_xp\local\userfilter\everyone;
 use block_xp\local\userfilter\group_members;
+use block_xp\local\userfilter\groups_members;
 use block_xp\local\userfilter\nobody;
 use block_xp\local\userfilter\user_filter;
 use block_xp\local\world;
@@ -415,8 +415,11 @@ class group_policy {
     /**
      * Get a user filter for a group.
      *
-     * Handles falsy value for all participants, but does not apply any validation, this
-     * is the responsiblity of the calling code.
+     * The caller must validate that the acting user can select the requested group.
+     *
+     * This filter only applies group membership rules, it does not restrict users
+     * to the course. The caller must apply that restriction separately, because
+     * passing 0 for "All participants" returns an unrestricted filter.
      *
      * @param int $groupid The group ID, or 0.
      * @return user_filter
@@ -428,6 +431,27 @@ class group_policy {
             throw new \coding_exception('Invalid group_id');
         }
         return new group_members($groupid);
+    }
+
+    /**
+     * Get a user filter for any group the acting user can select.
+     *
+     * This filter only applies group visibility rules, it does not restrict users
+     * to the course. The caller must apply that restriction separately, because
+     * the filter is unrestricted when the acting user can select "All participants".
+     *
+     * @param int|null $actinguserid The acting user ID.
+     * @return user_filter
+     */
+    public function get_user_filter_for_any_group(?int $actinguserid = null): user_filter {
+        // If we can select all participants, return everyone.
+        if ($this->can_select_group(0, $actinguserid)) {
+            return new everyone();
+        }
+
+        // Otherwise, create a filter bound to valid groups.
+        $groups = $this->get_selectable_groups($actinguserid);
+        return empty($groups) ? new nobody() : new groups_members(array_column($groups, 'id'));
     }
 
     /**
