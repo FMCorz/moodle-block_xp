@@ -27,6 +27,8 @@
 
 namespace block_xp\local\factory;
 
+use block_xp\local\reason\reason;
+
 /**
  * Reason factory.
  *
