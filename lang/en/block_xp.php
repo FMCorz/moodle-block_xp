@@ -93,6 +93,7 @@ $string['airevokeallaccessconfirm'] = 'Do you want to revoke all AI access? All 
 $string['aistartingprompt'] = 'Starting prompt';
 $string['aistartingpromptintro'] = 'Use the following prompt to learn what the AI assistant can do, and how it can help.';
 $string['aistartingpromptcourse'] = 'My course name is "{$a}".';
+$string['aistartingpromptoverall'] = 'I am working on the overall context.';
 $string['aistartingprompttext'] = 'Help me get started with Level Up XP. First, tell me what you can help me with based on the tools, information, and permissions available to you. Then give me a concise overview of the current Level Up XP setup and suggest three useful questions I could ask next.';
 $string['adminnoticeaddondeactivatedsubject'] = "XP+ plugin disabled!";
 $string['adminnoticeaddondeactivatedmessage'] = 'Level Up XP+ has been disabled!
