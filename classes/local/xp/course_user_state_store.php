@@ -217,7 +217,10 @@ class course_user_state_store implements
             $sql->params = array_merge($sql->params, $filterparams);
         }
         if ($query->has_condition('term')) {
-            [$termsql, $termparams] = user_utils::get_filter_user_by_term_sql($query->get_condition('term'));
+            [$termsql, $termparams] = user_utils::get_filter_user_by_term_sql(
+                $query->get_condition('term'),
+                $query->get_allowed_identity_fields()
+            );
             $sql->where .= " AND ($termsql)";
             $sql->params = array_merge($sql->params, $termparams);
         }

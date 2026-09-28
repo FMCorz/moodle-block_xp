@@ -31,6 +31,9 @@ use coding_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class state_store_query extends query {
+    /** @var string[] Identity fields allowed when matching the term. */
+    protected $allowedidentityfields = [];
+
     /**
      * Add ordering, from most to least significant.
      *
@@ -51,7 +54,29 @@ class state_store_query extends query {
     }
 
     /**
-     * Set the user name search term.
+     * Get the identity fields allowed when matching the term.
+     *
+     * @return string[]
+     */
+    public function get_allowed_identity_fields(): array {
+        return $this->allowedidentityfields;
+    }
+
+    /**
+     * Set the identity fields allowed when matching the term.
+     *
+     * The caller is responsible for checking field visibility.
+     *
+     * @param string[] $fields Allowed identity fields, or an empty array for names only.
+     * @return self
+     */
+    public function set_allowed_identity_fields(array $fields): self {
+        $this->allowedidentityfields = $fields;
+        return $this;
+    }
+
+    /**
+     * Set the user search term.
      *
      * @param string|null $term The term, or null to remove the condition.
      * @return self
