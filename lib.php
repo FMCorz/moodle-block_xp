@@ -91,7 +91,6 @@ function block_xp_render_navbar_output($output) {
         return '';
     }
 
-
     // Gracefully retrieve this, just in case...
     $factory = di::get('navbar_world_factory');
     if (!$factory instanceof navbar_world_factory) {

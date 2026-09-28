@@ -137,7 +137,7 @@ abstract class page_controller extends course_route_controller {
      */
     protected function get_navigation_items() {
         if (!isset($this->navitems)) {
-            $this->navitems = array_map(static function($item) {
+            $this->navitems = array_map(static function ($item) {
                 return $item->as_array();
             }, $this->navigator->get_navigation());
         }

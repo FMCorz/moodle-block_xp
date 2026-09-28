@@ -70,7 +70,7 @@ class default_context_world_factory implements context_world_factory, navbar_wor
             return null;
         }
 
-        if ($issitewide)  {
+        if ($issitewide) {
             return $this->get_world_from_context(context_system::instance());
         }
 

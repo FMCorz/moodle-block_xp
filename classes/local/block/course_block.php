@@ -159,8 +159,10 @@ class course_block extends block_base {
         $world = $this->get_world_for_page();
 
         // Hide blocks on old pages when points are tracked per course.
-        if ($world instanceof course_world && $world->get_courseid() == SITEID
-                && \block_xp\di::get('config')->get('context') == CONTEXT_COURSE) {
+        if (
+            $world instanceof course_world && $world->get_courseid() == SITEID
+                && \block_xp\di::get('config')->get('context') == CONTEXT_COURSE
+        ) {
             return $this->content;
         }
 

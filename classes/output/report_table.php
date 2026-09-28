@@ -226,8 +226,10 @@ class report_table extends table_sql {
             );
         }
 
-        if ($supportspointchanges && $this->store instanceof state_store_with_delete
-                && $state instanceof state_with_presence && $state->is_present()) {
+        if (
+            $supportspointchanges && $this->store instanceof state_store_with_delete
+                && $state instanceof state_with_presence && $state->is_present()
+        ) {
             $url = new moodle_url($this->baseurl, ['action' => '', 'delete' => 1, 'userid' => $state->get_id()]);
             $action = new action_menu_link(
                 $url,

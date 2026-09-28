@@ -100,7 +100,7 @@ class promo_controller extends route_controller {
         $navigator = di::get('world_navigator_factory')->get_navigator_for_world($this->world);
         $items = $navigator->get_navigation();
         if (count($items) > 1) {
-            return $output->tab_navigation(array_map(static function($item) {
+            return $output->tab_navigation(array_map(static function ($item) {
                 return $item->as_array();
             }, $items), $this->routename);
         }
@@ -137,7 +137,11 @@ class promo_controller extends route_controller {
                 $issiteid = $this->get_param('courseid') == SITEID;
 
                 if ($contextmode == CONTEXT_COURSE && $issiteid) {
-                    throw new \moodle_exception('errorcontextcoursemismatchpercourse', 'block_xp', (new moodle_url('/'))->out(false));
+                    throw new \moodle_exception(
+                        'errorcontextcoursemismatchpercourse',
+                        'block_xp',
+                        (new moodle_url('/'))->out(false)
+                    );
                 } else if ($contextmode == CONTEXT_SYSTEM && !$issiteid) {
                     $nexturl = $this->urlresolver->reverse($this->routename, ['courseid' => SITEID]);
                     throw new \moodle_exception(
