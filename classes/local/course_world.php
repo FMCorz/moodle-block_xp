@@ -39,6 +39,7 @@ use block_xp\local\factory\badge_url_resolver_course_world_factory;
 use block_xp\local\factory\levels_info_factory;
 use block_xp\local\logger\collection_logger;
 use block_xp\local\notification\level_up_notification_service;
+use block_xp\local\xp\algo_levels_info;
 use block_xp\local\xp\levels_info;
 
 /**
@@ -209,7 +210,12 @@ class course_world implements world {
      */
     public function get_levels_info() {
         if (!$this->levelsinfo) {
-            $this->levelsinfo = $this->levelsinfofactory->get_world_levels_info($this);
+            if ($this->levelsinfofactory) {
+                $this->levelsinfo = $this->levelsinfofactory->get_world_levels_info($this);
+            } else {
+                // Fallback to avoid breaking API, but no longer supported.
+                $this->levelsinfo = algo_levels_info::make_from_defaults();
+            }
         }
         return $this->levelsinfo;
     }
