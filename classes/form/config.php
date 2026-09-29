@@ -31,6 +31,7 @@ require_once($CFG->libdir . '/formslib.php');
 require_once(__DIR__ . '/itemspertime.php');
 require_once(__DIR__ . '/duration.php');
 
+use block_xp\local\utils\world_utils;
 use block_xp\local\world;
 use block_xp\local\world\world_with_features;
 use html_writer;
@@ -120,7 +121,7 @@ class config extends moodleform {
         $mform->setType('blockrankingsnapshot', PARAM_INT);
         $mform->disabledIf('blockrankingsnapshot', 'enableladder', 'eq', '0');
 
-        if (!$world instanceof world_with_features || $world->supports($world::FEAT_BLOCK_RECENT_ACTIVITY) !== false) {
+        if (world_utils::supports_recent_activity($world)) {
             $mform->addElement('select', 'blockrecentactivity', get_string('configrecentactivity', 'block_xp'), [
                 0 => get_string('no'),
                 3 => get_string('yes'),

@@ -20,7 +20,7 @@ namespace block_xp\form;
 
 use block_xp\local\permission\access_report_permissions;
 use block_xp\local\utils\user_utils;
-use block_xp\local\world\world_with_features;
+use block_xp\local\utils\world_utils;
 use core_form\dynamic_form;
 use required_capability_exception;
 
@@ -65,8 +65,8 @@ class user_xp extends dynamic_form {
         $perms = $world->get_access_permissions();
         $perms->require_manage();
 
-        if ($world instanceof world_with_features && $world->supports($world::FEAT_USER_POINTS_CHANGE) === false) {
-            throw new \moodle_exception('notavailable', 'core_error');
+        if (!world_utils::supports_local_points_management($world)) {
+            throw new \moodle_exception('errorfeaturenotenabled', 'block_xp');
         }
 
         // Editing points is only available through the report, so we also require the report permissions.

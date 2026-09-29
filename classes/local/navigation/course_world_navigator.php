@@ -25,7 +25,7 @@ use block_xp\local\permission\access_logs_permissions;
 use block_xp\local\permission\access_report_permissions;
 use block_xp\local\routing\url;
 use block_xp\local\routing\url_resolver;
-use block_xp\local\world\world_with_features;
+use block_xp\local\utils\world_utils;
 use pix_icon;
 
 /**
@@ -97,10 +97,8 @@ class course_world_navigator extends navigator {
         $showpromo = di::get('addon')->is_promo_allowed();
         $config = $this->world->get_config();
         $canmanage = $accessperms->can_manage();
-        $supportspointchanges = !$this->world instanceof world_with_features
-            || $this->world->supports($this->world::FEAT_USER_POINTS_CHANGE) !== false;
-        $supportsteamladder = !$this->world instanceof world_with_features
-            || $this->world->supports($this->world::FEAT_TEAM_LEADERBOARD) !== false;
+        $supportspointchanges = world_utils::supports_local_points_management($this->world);
+        $supportsteamladder = world_utils::supports_team_leaderboard($this->world);
 
         if ($config->get('enableinfos') || $canmanage) {
             $links[] = new nav_item(get_string('navinfos', 'block_xp'), $this->get_url('infos'), 'infos');
@@ -157,34 +155,37 @@ class course_world_navigator extends navigator {
                 new nav_item(get_string('navlevelssetup', 'block_xp'), $this->get_url('levels'), 'levels'),
                 new nav_item(get_string('navvisuals', 'block_xp'), $this->get_url('visuals'), 'visuals'),
             ]);
-            $links[] = (new nav_item(
-                get_string('navpoints', 'block_xp'),
-                $this->get_url('actionrules'),
-                'rules'
-            ))->set_children(array_filter([
-                new nav_item(get_string('navactionrules', 'block_xp'), $this->get_url('actionrules'), 'actionrules'),
-                $showpromo || $hasaddon ? (new nav_item(
-                    get_string('navcompletionrules', 'block_xp'),
-                    $this->get_url('completionrules'),
-                    'completionrules'
-                ))->set_addon_required(!$hasaddon) : null,
-                new nav_item(get_string('naveventrules', 'block_xp'), $this->get_url('rules'), 'rules'),
-                $showpromo || $hasaddon ? (new nav_item(
-                    get_string('navgraderules', 'block_xp'),
-                    $this->get_url('graderules'),
-                    'graderules'
-                ))->set_addon_required(!$hasaddon) : null,
-                $showpromo || $hasaddon ? (new nav_item(
-                    get_string('navdrops', 'block_xp'),
-                    $this->get_url('drops'),
-                    'drops'
-                ))->set_addon_required(!$hasaddon) : null,
-                $supportspointchanges && ($showpromo || $hasaddon) ? (new nav_item(
-                    get_string('navimport', 'block_xp'),
-                    $this->get_url('import'),
-                    'import'
-                ))->set_addon_required(!$hasaddon) : null,
-            ]));
+
+            if ($supportspointchanges) {
+                $links[] = (new nav_item(
+                    get_string('navpoints', 'block_xp'),
+                    $this->get_url('actionrules'),
+                    'rules'
+                ))->set_children(array_filter([
+                    new nav_item(get_string('navactionrules', 'block_xp'), $this->get_url('actionrules'), 'actionrules'),
+                    $showpromo || $hasaddon ? (new nav_item(
+                        get_string('navcompletionrules', 'block_xp'),
+                        $this->get_url('completionrules'),
+                        'completionrules'
+                    ))->set_addon_required(!$hasaddon) : null,
+                    new nav_item(get_string('naveventrules', 'block_xp'), $this->get_url('rules'), 'rules'),
+                    $showpromo || $hasaddon ? (new nav_item(
+                        get_string('navgraderules', 'block_xp'),
+                        $this->get_url('graderules'),
+                        'graderules'
+                    ))->set_addon_required(!$hasaddon) : null,
+                    $showpromo || $hasaddon ? (new nav_item(
+                        get_string('navdrops', 'block_xp'),
+                        $this->get_url('drops'),
+                        'drops'
+                    ))->set_addon_required(!$hasaddon) : null,
+                    $showpromo || $hasaddon ? (new nav_item(
+                        get_string('navimport', 'block_xp'),
+                        $this->get_url('import'),
+                        'import'
+                    ))->set_addon_required(!$hasaddon) : null,
+                ]));
+            }
 
             if ($showpromo || $hasaddon) {
                 $links[] = new nav_item(get_string('navai', 'block_xp'), $this->get_url('ai'), 'ai');

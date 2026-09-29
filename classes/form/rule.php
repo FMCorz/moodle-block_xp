@@ -22,6 +22,7 @@ use block_xp\di;
 use block_xp\local\ruletype\limit_spec;
 use block_xp\local\ruletype\ruletype;
 use block_xp\local\ruletype\ruletype_with_limit;
+use block_xp\local\utils\world_utils;
 use block_xp\local\world;
 use context;
 use context_system;
@@ -137,6 +138,10 @@ class rule extends dynamic_form {
 
         $perms = $this->get_world()->get_access_permissions();
         $perms->require_manage();
+
+        if (!world_utils::supports_local_points_management($this->get_world())) {
+            throw new \moodle_exception('errorfeaturenotenabled', 'block_xp');
+        }
     }
 
     /**

@@ -37,6 +37,7 @@ use lang_string;
 use stdClass;
 use block_xp\local\course_world;
 use block_xp\local\sql\limit;
+use block_xp\local\utils\world_utils;
 use block_xp\local\world;
 use block_xp\local\xp\level_with_name;
 use block_xp\output\notice;
@@ -278,7 +279,7 @@ class course_block extends block_base {
         $activity = [];
         $forcerecentactivity = false;
         $recentactivity = $config->get('blockrecentactivity');
-        if ($recentactivity && $world instanceof course_world) {
+        if ($recentactivity && world_utils::supports_recent_activity($world) && $world instanceof course_world) {
             $repo = $world->get_user_recent_activity_repository();
             $activity = $repo->get_user_recent_activity($USER->id, $recentactivity);
 

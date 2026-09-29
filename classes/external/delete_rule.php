@@ -19,6 +19,7 @@
 namespace block_xp\external;
 
 use block_xp\di;
+use block_xp\local\utils\world_utils;
 use context;
 use context_system;
 
@@ -82,6 +83,11 @@ class delete_rule extends external_api {
         $world = $worldfactory->get_world_from_context(context::instance_by_id($contextid));
         self::validate_context($world->get_context());
         $world->get_access_permissions()->require_manage();
+
+        if (!world_utils::supports_local_points_management($world)) {
+            throw new \moodle_exception('errorfeaturenotenabled', 'block_xp');
+        }
+
         return $world;
     }
 

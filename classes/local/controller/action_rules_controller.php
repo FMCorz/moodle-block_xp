@@ -21,6 +21,7 @@ namespace block_xp\local\controller;
 use block_xp\di;
 use block_xp\local\routing\url;
 use block_xp\local\rulefilter\rulefilter;
+use block_xp\local\utils\world_utils;
 use help_icon;
 
 /**
@@ -58,6 +59,10 @@ class action_rules_controller extends page_controller {
      * @return void
      */
     protected function pre_content() {
+        if (!world_utils::supports_local_points_management($this->world)) {
+            $this->redirect($this->navigator->get_url('infos'));
+        }
+
         if ($this->get_param('reset') && confirm_sesskey()) {
             if ($this->get_param('confirm')) {
                 di::get('world_rule_manager_factory')->get_rule_manager($this->world)->reset_to_defaults();

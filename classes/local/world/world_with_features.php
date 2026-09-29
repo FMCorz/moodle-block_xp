@@ -30,11 +30,11 @@ use block_xp\local\world;
  */
 interface world_with_features extends world {
     /** Team leaderboard. */
-    const FEAT_TEAM_LEADERBOARD = 'team-leaderboard';
-    /** Adding, setting, deleting, resetting, or importing user points. */
-    const FEAT_USER_POINTS_CHANGE = 'user-points-change';
+    const FEATURE_TEAM_LEADERBOARD = 'team-leaderboard';
+    /** Adding, setting, deleting, resetting, importing local user points, or local reward mechanisms. */
+    const FEATURE_LOCAL_POINTS_MANAGEMENT = 'local-points-management';
     /** Recent activity in block. */
-    const FEAT_BLOCK_RECENT_ACTIVITY = 'block-recent-activity';
+    const FEATURE_RECENT_ACTIVITY = 'recent-activity';
 
     /**
      * Whether a feature is supported by the world.

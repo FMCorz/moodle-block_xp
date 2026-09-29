@@ -40,7 +40,7 @@ class ai_controller extends page_controller {
      */
     protected function pre_content() {
         if (!di::get('addon')->is_promo_allowed()) {
-            return redirect($this->navigator->get_url('infos'));
+            return $this->redirect($this->navigator->get_url('infos'));
         }
     }
 

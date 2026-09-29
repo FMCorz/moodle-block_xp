@@ -37,13 +37,13 @@ use renderer_base;
 use table_sql;
 use block_xp\di;
 use block_xp\local\world;
-use block_xp\local\world\world_with_features;
 use block_xp\local\navigation\navigator;
 use block_xp\local\permission\access_logs_permissions;
 use block_xp\local\routing\url_resolver;
 use block_xp\local\sql\limit;
 use block_xp\local\userfilter\group_members;
 use block_xp\local\userfilter\nobody;
+use block_xp\local\utils\world_utils;
 use block_xp\local\xp\state;
 use block_xp\local\xp\state_store_query;
 use block_xp\local\xp\state_store_with_delete;
@@ -197,8 +197,7 @@ class report_table extends table_sql {
      */
     protected function get_row_actions($state) {
         $actions = [];
-        $supportspointchanges = !$this->world instanceof world_with_features
-            || $this->world->supports($this->world::FEAT_USER_POINTS_CHANGE) !== false;
+        $supportspointchanges = world_utils::supports_local_points_management($this->world);
 
         if ($supportspointchanges) {
             $actions[] = new action_menu_link(

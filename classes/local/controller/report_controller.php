@@ -29,11 +29,11 @@ namespace block_xp\local\controller;
 
 use block_xp\di;
 use block_xp\local\utils\user_utils;
-use block_xp\local\world\world_with_features;
 use core_user;
 use html_writer;
 use single_button;
 use block_xp\local\routing\url;
+use block_xp\local\utils\world_utils;
 use block_xp\local\xp\state_store_with_delete;
 use block_xp\output\report_table_filterset;
 use core_table\local\filter\filterset;
@@ -102,8 +102,7 @@ class report_controller extends page_controller {
      * @return bool
      */
     protected function supports_points_change(): bool {
-        return !$this->world instanceof world_with_features
-            || $this->world->supports($this->world::FEAT_USER_POINTS_CHANGE) !== false;
+        return world_utils::supports_local_points_management($this->world);
     }
 
     /**

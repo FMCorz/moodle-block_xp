@@ -29,9 +29,9 @@ namespace block_xp\local\controller;
 
 use block_xp\di;
 use block_xp\local\course_world;
-use html_writer;
 use moodle_exception;
 use block_xp\local\routing\url;
+use block_xp\local\utils\world_utils;
 use block_xp_filter;
 use renderable;
 
@@ -72,7 +72,9 @@ class rules_controller extends page_controller {
      */
     protected function post_login() {
         parent::post_login();
-        if (!$this->world instanceof course_world) {
+        if (!world_utils::supports_local_points_management($this->world)) {
+            $this->redirect($this->navigator->get_url('infos'));
+        } else if (!$this->world instanceof course_world) {
             $this->redirect($this->navigator->get_url('infos'));
         }
         $this->filtermanager = $this->world->get_filter_manager();
