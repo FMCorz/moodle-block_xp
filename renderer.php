@@ -202,7 +202,7 @@ class block_xp_renderer extends plugin_renderer_base {
         return html_writer::tag(
             'div',
             $this->heading($text, $options['level'], 'xp-m-0'),
-            ['class' => 'xp-mb-6 xp-mt-8 xp-border-0 xp-border-solid xp-border-t xp-border-gray-100 xp-pt-8']
+            ['class' => 'xp-mb-6 xp-mt-8 xp-border-0 xp-border-solid xp-border-t dark:xp-border-gray-800 xp-pt-8']
         );
     }
 
@@ -346,9 +346,9 @@ class block_xp_renderer extends plugin_renderer_base {
 
         $o .= html_writer::start_div('xp-grid xp-gap-2 xp-grid-cols-6 sm:xp-grid-cols-10');
         foreach ($levels as $level) {
-            $o .= html_writer::start_div('xp-relative xp-bg-gray-100 xp-rounded xp-p-1');
+            $o .= html_writer::start_div('xp-relative xp-bg-gray-100 dark:xp-bg-gray-800 xp-rounded xp-p-1');
             $o .= html_writer::div('' . $level->get_level(), 'xp-whitespace-nowrap xp-text-center xp-mb-1 xp-absolute'
-                . ' xp-top-0.5 xp-left-0.5 xp-text-2xs xp-text-gray-500');
+                . ' xp-top-0.5 xp-left-0.5 xp-text-2xs xp-text-gray-500 dark:xp-text-gray-400');
             $o .= $this->small_level_badge($level);
             $o .= html_writer::end_div();
         }
@@ -1068,9 +1068,9 @@ class block_xp_renderer extends plugin_renderer_base {
         $o .= html_writer::start_div('block_xp-react', ['id' => $id]);
         $o .= html_writer::start_div('block_xp-react-loading');
         $o .= html_writer::start_div('xp-grid xp-grid-cols-2 xp-gap-4 xp-animate-pulse');
-        $o .= html_writeR::div('', 'xp-col-span-2 xp-bg-gray-100 xp-rounded xp-h-4');
-        $o .= html_writeR::div('', 'xp-bg-gray-100 xp-rounded xp-h-4');
-        $o .= html_writeR::div('', 'xp-bg-gray-100 xp-rounded xp-h-4');
+        $o .= html_writeR::div('', 'xp-col-span-2 xp-bg-gray-100 dark:xp-bg-gray-600 xp-rounded xp-h-4');
+        $o .= html_writeR::div('', 'xp-bg-gray-100 dark:xp-bg-gray-600 xp-rounded xp-h-4');
+        $o .= html_writeR::div('', 'xp-bg-gray-100 dark:xp-bg-gray-600 xp-rounded xp-h-4');
         $o .= html_writer::end_div();
         $o .= html_writer::end_div();
         $o .= html_writer::end_div();
@@ -1314,7 +1314,7 @@ class block_xp_renderer extends plugin_renderer_base {
      * @param bool $bright Whether the highlight should be "bright".
      */
     public function xp_highlight($amount, $bright = true) {
-        $colourclass = $bright ? 'xp-bg-yellow-200' : 'xp-bg-gray-200';
+        $colourclass = $bright ? 'xp-bg-yellow-200 dark:xp-text-gray-900' : 'xp-bg-gray-200 dark:xp-bg-gray-600';
         return html_writer::tag(
             'span',
             html_writer::tag('span', $this->xp($amount), [

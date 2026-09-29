@@ -15,7 +15,7 @@ YUI.add('moodle-block_xp-notification', function (Y, NAME) {
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// https://levelup.plus
+// See <https://levelup.plus>.
 
 /**
  * Notification of level up.
@@ -111,7 +111,7 @@ Y.namespace('M.block_xp').Notification = Y.extend(NOTIFICATION, M.core.dialogue,
         this.setStdModContent(Y.WidgetStdMod.BODY, content, Y.WidgetStdMod.REPLACE);
 
         // Set the footer.
-        footerTpl = Y.Handlebars.compile('<button class="btn btn-default">{{close}}</button>');
+        footerTpl = Y.Handlebars.compile('<button class="btn btn-default btn-secondary">{{close}}</button>');
         content = Y.Node.create(
             footerTpl({
                 close: M.util.get_string('coolthanks', COMPONENT)

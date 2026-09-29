@@ -16,7 +16,7 @@ export const Textarea = ({ className = "", ...props }: TextareaHTMLAttributes<HT
 };
 
 export const FieldHelp = ({ children }: { children: React.ReactNode }) => {
-  return <p className="xp-text-gray-500 xp-m-0 xp-mt-1">{children}</p>;
+  return <p className="xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1">{children}</p>;
 };
 
 export default Input;

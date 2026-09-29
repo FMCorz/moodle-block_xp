@@ -123,6 +123,7 @@ a .block_xp-level {
 }
 .block.block_xp .block_xp-heading {
     @apply xp-uppercase xp-text-gray-600 xp-text-xs xp-tracking-normal xp-mb-4 xp-border-0 xp-border-b xp-border-solid xp-border-gray-200;
+    @apply dark:xp-text-gray-400 dark:xp-border-gray-700;
 }
 
 .block.block_xp nav {
@@ -130,6 +131,7 @@ a .block_xp-level {
     align-content: stretch;
     @apply xp-flex xp-flex-wrap xp-items-stretch;
     @apply xp-border-0 xp-border-solid xp-border-t xp-border-gray-200;
+    @apply dark:xp-border-gray-700;
 }
 .block.block_xp nav .nav-button {
     @apply xp-flex-1 xp-self-auto;
@@ -137,6 +139,7 @@ a .block_xp-level {
     color: #333;
     font-size: 80%;
     padding: 5px 5px 0;
+    @apply dark:xp-text-gray-300 dark:!xp-no-underline;
 }
 .block.block_xp nav .nav-button .icon {
     margin: 0;
@@ -144,6 +147,7 @@ a .block_xp-level {
 }
 .block.block_xp nav .nav-button:hover {
     background: #eee;
+    @apply dark:xp-bg-gray-800;
 }
 
 /** Use over defined class name to re-use it through the block pages. */
@@ -165,7 +169,8 @@ a .block_xp-level {
 /** Use our own highlight because of discrepencies between various themes. Sorry themers,
     it's a nightmare to maintain a plugin for multiple themes... */
 .block_xp-table tr.highlight-row > td {
-    @apply !xp-bg-yellow-100;
+    @apply !xp-bg-blue-100;
+    @apply dark:!xp-bg-blue-950;
 }
 
 /**
@@ -297,6 +302,7 @@ a .block_xp-level {
     cursor: pointer;
     padding: 0.5rem;
     border-bottom: 1px solid #efefef;
+    @apply dark:xp-border-gray-700;
 }
 .block_xp-rulepicker-content .rule:last-child {
     border-bottom-width: 0;
@@ -304,6 +310,7 @@ a .block_xp-level {
 .block_xp-rulepicker-content .rule:focus,
 .block_xp-rulepicker-content .rule:hover {
     background-color: #efefef;
+    @apply dark:xp-bg-gray-800;
 }
 .block_xp-rulepicker-content .rule h3 {
     font-size: 1.125rem;
@@ -351,6 +358,7 @@ a .block_xp-level {
 }
 .block-xp-filters-wrapper .filter {
     border: 1px solid #ddd;
+    @apply dark:xp-border-gray-700;
     margin: 10px 0;
     padding: 8px 4px;
 }
@@ -379,16 +387,19 @@ a .block_xp-level {
 }
 .block-xp-filters-wrapper .rule-type-ruleset > .rule-definition {
     background-color: #f1f1f1;
+    @apply dark:xp-bg-gray-800;
     padding-bottom: 2px;
 }
 .block-xp-filters-wrapper .rule-rules .rule {
     border-left: 1px dotted #ccc;
+    @apply dark:xp-border-gray-600;
     min-height: 40px;
     padding-left: 15px;
     position: relative;
 }
 .block-xp-filters-wrapper .rule-rules .rule::before {
     border-top: 1px dotted #ccc;
+    @apply dark:xp-border-gray-600;
     content: '';
     display: block;
     left: 0;
@@ -409,6 +420,7 @@ a .block_xp-level {
 .block-xp-filters-wrapper .rule-rules .rule:last-child::before {
     border-bottom: 1px dotted #ccc;
     border-left: 1px dotted #ccc;
+    @apply dark:xp-border-gray-600;
     border-top: 0;
     content: '';
     display: block;
@@ -472,7 +484,8 @@ a .block_xp-level {
     top: 10px;
     font-size: 20px;
     font-weight: bold;
-    color: #fff;
+    @apply xp-text-white;
+    @apply dark:xp-text-gray-900;
 }
 .block_xp-level-grid .block_xp-level-boxed {
     flex: 1 1 25%;
@@ -492,10 +505,11 @@ a .block_xp-level {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    background-color: #efefef;
     border-radius: 5px;
     padding: 1em;
     display: flex;
+    @apply xp-bg-gray-100;
+    @apply dark:xp-bg-gray-800;
 }
 
 .block_xp-level-grid .level-name {
@@ -577,6 +591,7 @@ a .block_xp-level {
 .dir-rtl .block-xp-filters-wrapper .rule-rules .rule {
     border-left: 0;
     border-right: 1px dotted #ccc;
+    @apply dark:xp-border-gray-600;
     padding-left: 0;
     padding-right: 15px;
 }
@@ -587,5 +602,6 @@ a .block_xp-level {
 .dir-rtl .block-xp-filters-wrapper .rule-rules .rule:last-child::before {
     border-left: 0;
     border-right: 1px dotted #ccc;
+    @apply dark:xp-border-gray-600;
     right: 0;
 }

@@ -131,7 +131,7 @@ export const App = (props: AppProps) => {
             <IfAddonPromoEnabled>
               {hasReachedRuleLimit ? (
                 <>
-                  <div className="xp-text-sm xp-text-gray-700 xp-leading-none">
+                  <div className="xp-text-sm xp-text-gray-700 dark:xp-text-gray-300 xp-leading-none">
                     <Str id="upgradetoaddmore" />
                   </div>
                   <div className="xp-leading-none">

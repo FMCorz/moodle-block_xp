@@ -1,10 +1,10 @@
-import { Menu } from "@headlessui/react";
 import React, { useEffect, useMemo, useReducer } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClientProvider, useMutation } from "@tanstack/react-query";
 import { AddonRequired, IfAddonActivatedOrPromoEnabled } from "./components/Addon";
 import { BulkEditPointsModal, BulkEditPointsState } from "./components/BulkEditPoints";
 import { AnchorButton, Button, ExpandCollapseButton, SaveButton } from "./components/Button";
+import { Dropdown } from "./components/Dropdown";
 import Expandable from "./components/Expandable";
 import { Bars3BottomLeftIcon, CheckBadgeIconSolid, LanguageIcon, PaperAirplaneIconSolid } from "./components/Icons";
 import Input, { Select, Textarea } from "./components/Input";
@@ -215,7 +215,7 @@ const OptionField = ({
         </div>
         <div className="xp-mt-1">{children}</div>
       </label>
-      {note ? <div className="xp-text-gray-500 xp-mt-1">{note}</div> : null}
+      {note ? <div className="xp-text-gray-500 dark:xp-text-gray-400 xp-mt-1">{note}</div> : null}
     </div>
   );
 };
@@ -362,80 +362,45 @@ export const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrl
             mutation={mutation}
             disabled={!state.pendingSave || mutation.isLoading}
           />
-          <Menu as="div" className="xp-relative xp-inline-block xp-text-left">
-            <div>
-              <Menu.Button className="xp-text-inherit xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full hover:xp-bg-gray-100">
-                <span className="xp-sr-only">
-                  <Str id="options" component="core" />
-                </span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="xp-w-5 xp-h-5"
-                  aria-hidden="true"
-                >
-                  <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" />
-                </svg>
-              </Menu.Button>
-            </div>
-
-            <Menu.Items className="xp-absolute xp-right-0 xp-z-10 xp-mt-2 xp-w-56 xp-origin-top-right xp-rounded-md xp-bg-white xp-border xp-border-solid xp-border-gray-300 xp-shadow-sm xp-divide-y xp-divide-gray-100">
-              <div className="xp-py-1">
-                <Menu.Item>
-                  {({ active, close }) => (
-                    <a
-                      href="#"
-                      role="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleCollapseExpandAll();
-                        close();
-                      }}
-                      className={classNames(
-                        active ? "xp-bg-gray-100" : null,
-                        "xp-text-inherit xp-block xp-px-6 xp-py-1 xp-no-underline"
-                      )}
-                    >
-                      {allExpanded ? <Str id="collapseall" component="core" /> : <Str id="expandall" component="core" />}
-                    </a>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active, close }) => (
-                    <a
-                      href={HELP_URL_LEVELS}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={classNames(
-                        active ? "xp-bg-gray-100" : null,
-                        "xp-text-inherit xp-block xp-px-6 xp-py-1 xp-no-underline"
-                      )}
-                    >
-                      <Str id="documentation" />
-                    </a>
-                  )}
-                </Menu.Item>
-              </div>
-              {resetToDefaultsUrl ? (
-                <div className="xp-py-1">
-                  <Menu.Item>
-                    {({ active, close }) => (
-                      <a
-                        href={resetToDefaultsUrl}
-                        className={classNames(
-                          active ? "xp-bg-gray-100" : null,
-                          "xp-text-red-600 xp-block xp-px-6 xp-py-1 xp-no-underline"
-                        )}
-                      >
-                        <Str id="resettodefaults" />
-                      </a>
-                    )}
-                  </Menu.Item>
-                </div>
-              ) : null}
-            </Menu.Items>
-          </Menu>
+          <Dropdown
+            buttonLabel={<Str id="options" component="core" />}
+            items={[
+              {
+                id: "collapseexpandall",
+                label: allExpanded ? <Str id="collapseall" component="core" /> : <Str id="expandall" component="core" />,
+                props: {
+                  href: "#",
+                  role: "button",
+                  onClick: (e) => {
+                    e.preventDefault();
+                    handleCollapseExpandAll();
+                  },
+                  onKeyDown: (e) => {
+                    if (e.key === " ") {
+                      e.preventDefault();
+                      e.currentTarget.click();
+                    }
+                  },
+                },
+              },
+              {
+                id: "documentation",
+                label: <Str id="documentation" />,
+                props: { href: HELP_URL_LEVELS, target: "_blank", rel: "noopener noreferrer" },
+              },
+              ...(resetToDefaultsUrl
+                ? [
+                    { id: "divider", divider: true as const },
+                    {
+                      id: "resettodefaults",
+                      label: <Str id="resettodefaults" />,
+                      props: { href: resetToDefaultsUrl },
+                      danger: true,
+                    },
+                  ]
+                : []),
+            ]}
+          />
         </div>
       </div>
 
@@ -466,11 +431,11 @@ export const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrl
 
           return (
             <React.Fragment key={`l${level.level}`}>
-              <fieldset className="xp-relative xp-min-h-28 xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 xp-p-3 xp-overflow-hidden">
+              <fieldset className="xp-relative xp-min-h-28 xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 dark:xp-border-gray-700 xp-p-3 xp-overflow-hidden">
                 <legend className="xp-sr-only">
                   <Str id="levelx" a={level.level} />
                 </legend>
-                <div className="xp-absolute xp--top-4 xp--left-8 xp-text-[10rem] xp-text-gray-50 xp-leading-none xp-pointer-events-none">
+                <div className="xp-absolute xp--top-4 xp--left-8 xp-text-[10rem] xp-text-gray-50 dark:xp-text-gray-800 xp-leading-none xp-pointer-events-none">
                   {level.level}
                 </div>
 
@@ -496,7 +461,7 @@ export const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrl
                         <Str id="levelpointslength" />
                       </label>
                     </div>
-                    <div className="xp-grid xp-grid-cols-2 xp-border xp-border-solid xp-border-gray-300 xp-rounded">
+                    <div className="xp-grid xp-grid-cols-2 xp-border xp-border-solid xp-border-gray-300 dark:xp-border-gray-600 xp-rounded">
                       <div>
                         <NumInput
                           value={level.xprequired}
@@ -509,13 +474,13 @@ export const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrl
                       <div className="">
                         <div className="xp-relative xp-w-full x-h-full">
                           <div className="xp-pointer-events-none xp-absolute xp-inset-y-0 xp-left-0 xp-flex xp-items-center xp-pl-2 xp-z-20">
-                            <span className="xp-text-gray-500">+</span>
+                            <span className="xp-text-gray-500 dark:xp-text-gray-400">+</span>
                           </div>
                           <NumInput
                             value={pointsInLevel}
                             onChange={(xp) => handleXpChange(nextLevel, level.xprequired + xp)}
                             disabled={pointsInLevel <= 0}
-                            className="xp-h-full xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 xp-rounded-r xp-pl-6 xp-relative focus:xp-z-10"
+                            className="xp-h-full xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 dark:xp-border-gray-600 xp-rounded-r xp-pl-6 xp-relative focus:xp-z-10"
                             id={`xp-level-${level.level}-length`}
                           />
                         </div>
@@ -531,7 +496,7 @@ export const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrl
                       const label = getStr(state ? o.yes : o.no);
                       return (
                         <Tooltip content={label} key={idx}>
-                          <div className={classNames("xp-w-6 xp-h-6", !state ? "xp-text-gray-300" : null)}>
+                          <div className={classNames("xp-w-6 xp-h-6", !state ? "xp-text-gray-300 dark:xp-text-gray-600" : null)}>
                             <span className="xp-sr-only">{label}</span>
                             <o.Icon className="xp-w-full xp-h-full" />
                           </div>
@@ -665,7 +630,7 @@ export const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrl
                         </>
                       ) : (
                         <div>
-                          <div className="xp-text-sm xp-text-gray-500 xp-italic">
+                          <div className="xp-text-sm xp-text-gray-500 dark:xp-text-gray-400 xp-italic">
                             <Str id="levelupoptionsunavailableforlevelone" />
                           </div>
                         </div>

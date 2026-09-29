@@ -4,7 +4,7 @@ define(["block_xp/ui-commons-lazy"],() => { return /******/ (() => { // webpackB
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 1337
+/***/ 337
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -17,22 +17,22 @@ __webpack_require__.d(__webpack_exports__, {
   startApp: () => (/* binding */ startApp)
 });
 
-// EXTERNAL MODULE: ./node_modules/@headlessui/react/dist/components/tabs/tabs.js + 2 modules
-var tabs = __webpack_require__(1848);
+// EXTERNAL MODULE: ./node_modules/@headlessui/react/dist/components/tabs/tabs.js + 10 modules
+var tabs = __webpack_require__(289);
 // EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(6540);
+var react = __webpack_require__(540);
 // EXTERNAL MODULE: ./node_modules/react-dom/client.js
-var client = __webpack_require__(5338);
+var client = __webpack_require__(338);
 // EXTERNAL MODULE: ./node_modules/@tanstack/react-query/build/lib/QueryClientProvider.mjs
-var QueryClientProvider = __webpack_require__(3064);
+var QueryClientProvider = __webpack_require__(64);
 ;// ./ui/src/components/Loading.tsx
 
 const AppLoading = () => {
     return (react.createElement("div", { className: "block_xp-react-loading" },
         react.createElement("div", { className: "xp-grid xp-grid-cols-2 xp-gap-4 xp-animate-pulse" },
-            react.createElement("div", { className: "xp-col-span-2 xp-bg-gray-100 xp-rounded xp-h-4" }),
-            react.createElement("div", { className: "xp-bg-gray-100 xp-rounded xp-h-4" }),
-            react.createElement("div", { className: "xp-bg-gray-100 xp-rounded xp-h-4" }))));
+            react.createElement("div", { className: "xp-col-span-2 xp-bg-gray-100 dark:xp-bg-gray-600 xp-rounded xp-h-4" }),
+            react.createElement("div", { className: "xp-bg-gray-100 dark:xp-bg-gray-600 xp-rounded xp-h-4" }),
+            react.createElement("div", { className: "xp-bg-gray-100 dark:xp-bg-gray-600 xp-rounded xp-h-4" }))));
 };
 
 // EXTERNAL MODULE: ./node_modules/react-dom/index.js
@@ -827,7 +827,7 @@ const NotificationError = ({ children }) => {
 };
 
 // EXTERNAL MODULE: ./node_modules/@tanstack/react-query/build/lib/useQuery.mjs
-var useQuery = __webpack_require__(9421);
+var useQuery = __webpack_require__(421);
 ;// ./ui/src/components/Pix.tsx
 /* unused harmony import specifier */ var React;
 /* unused harmony import specifier */ var Pix_imageUrl;
@@ -875,7 +875,7 @@ const Str = ({ id, component = "block_xp", a }) => {
 
 
 const CircleButton = ({ className, ...props }) => {
-    return (react.createElement("button", { className: classNames("xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full xp-duration-150 xp-transition-colors", "hover:xp-bg-gray-200", className), type: "button", ...props }));
+    return (react.createElement("button", { className: classNames("xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full xp-duration-150 xp-transition-colors", "hover:xp-bg-gray-200 dark:hover:xp-bg-gray-700 dark:xp-text-inherit", className), type: "button", ...props }));
 };
 const Button = ({ onClick, disabled, children, primary, outline, className, type = "button", }) => {
     const classes = classNames("btn", primary ? `btn-${outline ? "outline-" : ""}primary` : `btn-default btn-${outline ? "outline-" : ""}secondary`, className);
@@ -938,11 +938,11 @@ const UnavailabilityPills = ({ availabilityInfo }) => {
         let desc = getStr("unavailable");
         let badgeType = "badge-warning";
         if (ai.code === "xpplusrequired") {
-            badgeType = "badge-dark";
+            badgeType = "badge-dark dark:xp-bg-gray-700";
             desc = getStr("xpplusrequired");
         }
         else if (ai.code === "xppremiumrequired") {
-            badgeType = "badge-dark";
+            badgeType = "badge-dark dark:xp-bg-gray-700";
             desc = "XP+ Premium";
         }
         else if (ai.code === "alreadyused") {
@@ -964,7 +964,7 @@ const ListEntryItem = ({ label, description, availabilityInfo, onSelect, icon, t
     const buttonListeners = useRoleButtonListeners(onSelect);
     const isAvailable = availabilityInfo?.isavailable ?? true;
     const disabledOpacityClass = `${!isAvailable ? "xp-opacity-60 group-focus:xp-opacity-100 group-hover:xp-opacity-100" : ""}`;
-    return (react.createElement("div", { className: "xp-p-[0.2rem] xp-relative xp-group focus:xp-z-10 hover:xp-bg-gray-100" },
+    return (react.createElement("div", { className: "xp-p-[0.2rem] xp-relative xp-group focus:xp-z-10 hover:xp-bg-gray-100 dark:hover:xp-bg-gray-800" },
         react.createElement("div", { tabIndex: 0, role: "button", "aria-describedby": headingId, className: "xp-px-1.5 xp-py-0.5 xp-flex xp-gap-3", ...buttonListeners },
             icon ? (react.createElement("div", { className: "xp-grow-0 xp-shrink-0" },
                 react.createElement("div", { className: classNames(description ? "xp-w-14 xp-h-14 xp-text-2xl" : "xp-w-8 xp-h-8 xp-text-base", "xp-rounded-lg xp-flex xp-text-center xp-items-center xp-justify-center xp-text-white xp-bg-indigo-500"), style: { color: themeFgColor, background: themeBgColor } },
@@ -973,27 +973,27 @@ const ListEntryItem = ({ label, description, availabilityInfo, onSelect, icon, t
                 react.createElement("div", { id: headingId, className: `xp-flex xp-gap-x-2 xp-items-center xp-flex-wrap` },
                     react.createElement("div", { className: classNames(disabledOpacityClass, "xp-text-medium", description ? "xp-text-xl xp-leading-tight" : "xp-text-base") }, label),
                     !isAvailable && availabilityInfo ? react.createElement(UnavailabilityPills, { availabilityInfo: availabilityInfo }) : null),
-                description ? (react.createElement("div", { className: classNames(disabledOpacityClass, "xp-text-gray-500"), dangerouslySetInnerHTML: { __html: description } })) : null))));
+                description ? (react.createElement("div", { className: classNames(disabledOpacityClass, "xp-text-gray-500 dark:xp-text-gray-400"), dangerouslySetInnerHTML: { __html: description } })) : null))));
 };
 const ListEntryHeader = ({ label }) => {
-    return (react.createElement("div", { className: "xp-px-[0.2rem] xp-bg-gray-200 xp-mt-2 first:xp-mt-0 xp-sticky xp-top-0 xp-z-10" },
+    return (react.createElement("div", { className: "xp-px-[0.2rem] xp-bg-gray-200 dark:xp-bg-gray-700 dark:xp-text-gray-100 xp-mt-2 first:xp-mt-0 xp-sticky xp-top-0 xp-z-10" },
         react.createElement("div", { className: "xp-px-1.5 xp-py-1 xp-text-sm xp-leading-tight xp-font-bold" }, label)));
 };
 const PlainResourceList = ({ resources, onSelect, emptyContent, }) => {
     if (!resources.length) {
         return react.createElement(react.Fragment, null, emptyContent || react.createElement(EmptyResult, null));
     }
-    return (react.createElement("div", { className: "xp-flex-1 xp-divide-y xp-divide-gray-200" }, resources.map((o) => {
+    return (react.createElement("div", { className: "xp-flex-1 xp-divide-y xp-divide-gray-200 dark:xp-divide-gray-700" }, resources.map((o) => {
         return react.createElement(ListEntry, { key: `${o.type || ""}${o.name}`, resource: o, onSelect: () => onSelect && onSelect(o) });
     })));
 };
 const LoadingResourceList = () => {
     return (react.createElement("div", { className: "xp-flex-1" },
-        react.createElement("div", { className: "xp-h-8 xp-w-full xp-bg-gray-100 xp-mb-2" }),
-        react.createElement("div", { className: "xp-h-8 xp-w-full xp-bg-gray-100 xp-mb-2" }),
-        react.createElement("div", { className: "xp-h-8 xp-w-full xp-bg-gray-100 xp-mb-2" }),
-        react.createElement("div", { className: "xp-h-8 xp-w-full xp-bg-gray-100 xp-mb-2" }),
-        react.createElement("div", { className: "xp-h-8 xp-w-full xp-bg-gray-100 xp-mb-2" })));
+        react.createElement("div", { className: "xp-h-8 xp-w-full xp-bg-gray-100 dark:xp-bg-gray-800 xp-mb-2" }),
+        react.createElement("div", { className: "xp-h-8 xp-w-full xp-bg-gray-100 dark:xp-bg-gray-800 xp-mb-2" }),
+        react.createElement("div", { className: "xp-h-8 xp-w-full xp-bg-gray-100 dark:xp-bg-gray-800 xp-mb-2" }),
+        react.createElement("div", { className: "xp-h-8 xp-w-full xp-bg-gray-100 dark:xp-bg-gray-800 xp-mb-2" }),
+        react.createElement("div", { className: "xp-h-8 xp-w-full xp-bg-gray-100 dark:xp-bg-gray-800 xp-mb-2" })));
 };
 const EmptyResult = ({ message, content }) => {
     return (react.createElement("div", { className: "xp-flex-1 xp-flex xp-flex-col xp-items-center xp-justify-center xp-text-center" },
@@ -1085,7 +1085,7 @@ const Textarea = ({ className = "", ...props }) => {
     return Input_React.createElement("textarea", { ...props, className: `xp-m-0 form-control ${className}` });
 };
 const FieldHelp = ({ children }) => {
-    return react.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, children);
+    return react.createElement("p", { className: "xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1" }, children);
 };
 /* harmony default export */ const components_Input = (Input);
 
@@ -1195,13 +1195,13 @@ const IfAddonPromoEnabled = ({ children }) => {
 const AddonRequired = (props) => {
     const { promourl } = (0,react.useContext)(AddonContext);
     const getStr = useStrings(["xpplusrequired", "unlockfeaturewithxpplus"]);
-    return (react.createElement(AnchorPopover, { content: getStr("unlockfeaturewithxpplus", promourl), className: classNames("xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white", "xp-rounded xp-no-underline") }, props.children ? props.children : getStr("xpplusrequired")));
+    return (react.createElement(AnchorPopover, { content: getStr("unlockfeaturewithxpplus", promourl), className: classNames("xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black dark:xp-bg-gray-700 xp-text-white", "xp-rounded !xp-no-underline") }, props.children ? props.children : getStr("xpplusrequired")));
 };
 const AddonRequiredShort = () => {
     return react.createElement(AddonRequired, null, "XP+");
 };
 const AddonTag = () => {
-    return (react.createElement("span", { className: classNames("xp-py-0.5 xp-px-1 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white", "xp-rounded xp-no-underline xp-font-normal xp-align-middle xp-select-none") }, "XP+"));
+    return (react.createElement("span", { className: classNames("xp-py-0.5 xp-px-1 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black dark:xp-bg-gray-700 xp-text-white", "xp-rounded xp-no-underline xp-font-normal xp-align-middle xp-select-none") }, "XP+"));
 };
 
 ;// ./ui/src/components/NumberInput.tsx
@@ -1259,15 +1259,19 @@ const NumberInputWithButtons = ({ onChange, value, min, max, suffix, step = 1, i
         className: classNames("xp-h-auto xp-border-0 xp-text-center xp-rounded-none focus:xp-z-10", suffix ? "xp-pr-6" : null, inputClassName || "xp-w-16"),
         ...remainingInputProps,
     };
-    return (react.createElement("div", { className: "xp-inline-flex xp-rounded xp-border xp-border-solid xp-border-gray-300" },
-        react.createElement("a", { ...minusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", minDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") },
+    return (react.createElement("div", { className: "xp-inline-flex xp-rounded xp-border xp-border-solid xp-border-gray-300 dark:xp-border-gray-600" },
+        react.createElement("a", { ...minusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 dark:xp-border-gray-600 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", minDisabled
+                ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500 dark:xp-bg-gray-800 dark:xp-text-gray-400"
+                : "xp-bg-white xp-text-inherit dark:xp-bg-gray-900 dark:xp-text-gray-100") },
             react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5" },
                 react.createElement("path", { fillRule: "evenodd", d: "M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z", clipRule: "evenodd" }))),
         react.createElement("div", { className: "xp-flex-1 xp-relative" },
             react.createElement(NumInput, { onChange: handleChange, value: value, ...allInputProps }),
             suffix ? (react.createElement("div", { className: "xp-pointer-events-none xp-absolute xp-inset-y-0 xp-right-0 xp-flex xp-items-center xp-pr-2" },
-                react.createElement("span", { className: "xp-text-gray-500" }, suffix))) : null),
-        react.createElement("a", { ...plusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", maxDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") },
+                react.createElement("span", { className: "xp-text-gray-500 dark:xp-text-gray-400" }, suffix))) : null),
+        react.createElement("a", { ...plusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 dark:xp-border-gray-600 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", maxDisabled
+                ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500 dark:xp-bg-gray-800 dark:xp-text-gray-400"
+                : "xp-bg-white xp-text-inherit dark:xp-bg-gray-900 dark:xp-text-gray-100") },
             react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5" },
                 react.createElement("path", { d: "M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" })))));
 };
@@ -1437,7 +1441,7 @@ const CmNameContent = ({ config, setConfig, type }) => {
                     react.createElement("option", { value: "1" }, getStr("rule:contains")),
                     react.createElement("option", { value: "0" }, getStr("rule:eq"))),
                 react.createElement(components_Input, { id: "xp-rule-cmname-name", value: config.filterchar1 || "", onChange: (e) => setConfig({ filterchar1: e.currentTarget.value, filterint1: config.filterint1 ?? defaultValue }), maxLength: 255 })),
-            react.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" },
+            react.createElement(FieldHelp, null,
                 react.createElement(components_Str, { id: "activityname_help" }))),
         react.createElement(RulePointsLimitsForm, { config: config, setConfig: setConfig, ruleType: type, filterName: "cmname" })));
 };
@@ -1982,9 +1986,9 @@ const Dropdown = ({ buttonLabel, items }) => {
     if (filteredItems.length === 0) {
         return null;
     }
-    return (react.createElement("div", { className: "dropdown" },
-        react.createElement("button", { type: "button", className: "btn btn-link btn-icon icon-size-3 rounded-circle xp-no-underline hover:xp-no-underline", "data-bs-toggle": "dropdown", "data-toggle": "dropdown", "aria-expanded": "false" },
-            react.createElement("i", { className: "fa fa-ellipsis-v text-dark py-2", "aria-hidden": "true" }),
+    return (react.createElement("div", { className: "dropdown action-menu" },
+        react.createElement("button", { type: "button", className: "btn btn-icon d-flex align-items-center justify-content-center dropdown-toggle icon-no-margin no-caret xp-min-h-full", "data-bs-toggle": "dropdown", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" },
+            react.createElement("i", { className: "icon fa fa-ellipsis-v fa-fw", "aria-hidden": "true" }),
             react.createElement("span", { className: "xp-sr-only" }, buttonLabel)),
         react.createElement("div", { className: "dropdown-menu dropdown-menu-right dropdown-menu-end" }, filteredItems.map((item) => {
             if ("divider" in item) {
@@ -2000,7 +2004,7 @@ const Dropdown = ({ buttonLabel, items }) => {
 };
 
 // EXTERNAL MODULE: ./node_modules/react-animate-height/dist/esm/index.js
-var esm = __webpack_require__(6968);
+var esm = __webpack_require__(968);
 ;// ./ui/src/components/Expandable.tsx
 /* unused harmony import specifier */ var useRef;
 /* unused harmony import specifier */ var Expandable_React;
@@ -2107,7 +2111,7 @@ const RuleTypeStatsList = ({ children }) => {
 };
 const RuleTypeStat = ({ label, value }) => {
     return (Rules_React.createElement("div", { className: "xp-flex-1 xp-shrink-0" },
-        Rules_React.createElement("dt", { className: "xp-m-0 xp-font-normal xp-uppercase xp-text-2xs xp-text-gray-500" }, label),
+        Rules_React.createElement("dt", { className: "xp-m-0 xp-font-normal xp-uppercase xp-text-2xs xp-text-gray-500 dark:xp-text-gray-400" }, label),
         Rules_React.createElement("dd", { className: "xp-m-0 xp-font-normal xp-text xp-text-sm xp-whitespace-nowrap xp-truncate" }, value)));
 };
 const RuleTypeGroup = ({ type, rules, filters, expanded, onExpanded, }) => {
@@ -2129,7 +2133,7 @@ const RuleTypeGroup = ({ type, rules, filters, expanded, onExpanded, }) => {
     const hasReachedFilterLimit = useMemo(() => {
         return filterLimit > 0 && rules.length >= filterLimit;
     }, [filterLimit, rules]);
-    return (Rules_React.createElement("div", { className: "xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 xp-p-3", id: `xp-ruletype-${type.name}` },
+    return (Rules_React.createElement("div", { className: "xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 dark:xp-border-gray-700 xp-p-3", id: `xp-ruletype-${type.name}` },
         Rules_React.createElement("div", { className: "xp-flex xp-items-center xp-gap-2" },
             Rules_React.createElement("div", { className: "xp-grow xp-flex xp-gap-3" },
                 type.icon ? (Rules_React.createElement("div", { className: "xp-shrink-0 xp-grow-0" },
@@ -2144,7 +2148,7 @@ const RuleTypeGroup = ({ type, rules, filters, expanded, onExpanded, }) => {
                 Rules_React.createElement(Rules_ExpandCollapseButton, { ariaControlsId: expandableId, expanded: expanded, onToggle: onExpanded }))),
         Rules_React.createElement(Rules_Expandable, { expanded: expanded, id: expandableId },
             isEmpty ? (Rules_React.createElement("div", { className: "xp-pt-3" },
-                Rules_React.createElement("div", { className: "xp-rounded xp-border-dashed xp-border-2 xp-p-4 xp-py-6 xp-text-center xp-border-gray-200" },
+                Rules_React.createElement("div", { className: "xp-rounded xp-border-dashed xp-border-2 xp-p-4 xp-py-6 xp-text-center xp-border-gray-200 dark:xp-border-gray-700" },
                     Rules_React.createElement("div", { className: "xp-text-xl xp-font-bold xp-mb-4" },
                         Rules_React.createElement(Rules_Str, { id: "noconditionsyet" })),
                     Rules_React.createElement("div", null,
@@ -2157,7 +2161,7 @@ const RuleTypeGroup = ({ type, rules, filters, expanded, onExpanded, }) => {
                     Rules_React.createElement("div", { className: "xp-grow" }),
                     Rules_React.createElement("div", { className: "xp-shrink-0 xp-flex xp-gap-2 xp-items-center" },
                         Rules_React.createElement(Rules_IfAddonPromoEnabled, null, hasReachedFilterLimit ? (Rules_React.createElement(Rules_React.Fragment, null,
-                            Rules_React.createElement("div", { className: "xp-text-sm xp-text-gray-700 xp-leading-none" },
+                            Rules_React.createElement("div", { className: "xp-text-sm xp-text-gray-700 dark:xp-text-gray-300 xp-leading-none" },
                                 Rules_React.createElement(Rules_Str, { id: "upgradetoaddmore" })),
                             Rules_React.createElement(Rules_AddonRequiredShort, null))) : null),
                         Rules_React.createElement(Rules_Button, { className: "btn-sm", primary: true, outline: true, onClick: () => addRule(type.name), disabled: hasReachedFilterLimit },
@@ -2179,15 +2183,15 @@ const RulesSectionGroup = ({ children, enclosed }) => {
 const RulesSection = ({ children, title, description, }) => {
     return (react.createElement("div", { className: "xp-rules-section" },
         react.createElement("h5", { className: "xp-font-bold xp-m-0 xp-mb-1 xp-text-base" }, title),
-        react.createElement("p", { className: "xp-mb-2 xp-text-sm xp-text-gray-500 xp-m-0" }, description),
-        react.createElement("div", { className: "[&>div]:xp-border-0 [&>div]:xp-border-b [&>div]:xp-border-solid [&>div]:xp-border-gray-200" }, children)));
+        react.createElement("p", { className: "xp-mb-2 xp-text-sm xp-text-gray-500 dark:xp-text-gray-400 xp-m-0" }, description),
+        react.createElement("div", { className: "[&>div]:xp-border-0 [&>div]:xp-border-b [&>div]:xp-border-solid [&>div]:xp-border-gray-200 dark:[&>div]:xp-border-gray-700" }, children)));
 };
 const RuleEntry = ({ rule, type, onDelete, onEdit, onViewLogs, extra, }) => {
     const { points, label } = rule;
     return (react.createElement("div", { className: "xp-rule-entry" },
         react.createElement("div", { className: "xp-flex xp-gap-2 xp-py-1" },
             react.createElement("div", { className: "xp-shrink-0" },
-                react.createElement("div", { className: classNames("xp-min-w-[86px] xp-min-h-7 xp-flex xp-items-center xp-text-center xp-justify-center xp-rounded", "xp-px-2 xp-py-0.5 xp-font-bold xp-tracking-wide", !points ? "xp-bg-gray-200" : "xp-bg-blue-100") }, points !== null ? `${points != 0 ? "+" : ""}${points}` : "-")),
+                react.createElement("div", { className: classNames("xp-min-w-[86px] xp-min-h-7 xp-flex xp-items-center xp-text-center xp-justify-center xp-rounded", "xp-px-2 xp-py-0.5 xp-font-bold xp-tracking-wide", !points ? "xp-bg-gray-200 dark:xp-bg-gray-700 dark:xp-text-gray-100" : "xp-bg-blue-100 dark:xp-bg-blue-900 dark:xp-text-blue-100") }, points !== null ? `${points != 0 ? "+" : ""}${points}` : "-")),
             react.createElement("div", { className: "xp-flex xp-grow xp-items-center" },
                 react.createElement("div", { className: "xp-grow xp-flex xp-justify-end xp-items-center xp-flex-wrap" },
                     react.createElement("div", { className: "xp-grow" }, label),
@@ -2241,7 +2245,7 @@ const RuleLimitContent = ({ limit, repeatlimit }) => {
     if (!limit?.max && !repeatlimit?.max) {
         return null;
     }
-    return (react.createElement("div", { className: "xp-text-xs xp-text-gray-500 xp-leading-none xp-whitespace-nowrap xp-flex xp-items-center xp-gap-1" },
+    return (react.createElement("div", { className: "xp-text-xs xp-text-gray-500 dark:xp-text-gray-400 xp-leading-none xp-whitespace-nowrap xp-flex xp-items-center xp-gap-1" },
         limit?.max ? (react.createElement("span", null,
             getStr("maxcolon"),
             " ",
@@ -2277,16 +2281,16 @@ const RuleDropdown = ({ onEdit, onDelete, onViewLogs, }) => {
 ;// ./ui/src/components/ZeroStates.tsx
 
 const ZeroState = ({ title, intro, children, }) => {
-    return (react.createElement("div", { className: "xp-rounded xp-border-dashed xp-border-2 xp-p-4 xp-py-6 xp-text-center xp-border-gray-200" },
+    return (react.createElement("div", { className: "xp-rounded xp-border-dashed xp-border-2 xp-p-4 xp-py-6 xp-text-center xp-border-gray-200 dark:xp-border-gray-700" },
         react.createElement("div", { className: "xp-text-xl xp-font-bold xp-mb-4" }, title),
         react.createElement("div", null, intro),
         children ? react.createElement("div", { className: "xp-mt-4" }, children) : null));
 };
 
 // EXTERNAL MODULE: ./node_modules/@tanstack/query-core/build/lib/queryClient.mjs + 4 modules
-var queryClient = __webpack_require__(4968);
+var queryClient = __webpack_require__(587);
 // EXTERNAL MODULE: ./node_modules/@tanstack/react-query/build/lib/useMutation.mjs + 1 modules
-var useMutation = __webpack_require__(1154);
+var useMutation = __webpack_require__(154);
 ;// ./ui/src/lib/query.ts
 
 
@@ -2716,7 +2720,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(1337)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(337)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ 	return __webpack_exports__;

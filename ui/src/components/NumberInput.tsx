@@ -97,14 +97,16 @@ export const NumberInputWithButtons = ({
   };
 
   return (
-    <div className="xp-inline-flex xp-rounded xp-border xp-border-solid xp-border-gray-300">
+    <div className="xp-inline-flex xp-rounded xp-border xp-border-solid xp-border-gray-300 dark:xp-border-gray-600">
       <a
         {...minusProps}
         className={classNames(
-          "xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1",
+          "xp-flex-0 xp-border-0 xp-border-gray-300 dark:xp-border-gray-600 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1",
           "xp-flex xp-items-center xp-justify-center",
           "focus:xp-z-10",
-          minDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit"
+          minDisabled
+            ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500 dark:xp-bg-gray-800 dark:xp-text-gray-400"
+            : "xp-bg-white xp-text-inherit dark:xp-bg-gray-900 dark:xp-text-gray-100"
         )}
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="xp-w-5 xp-h-5">
@@ -115,17 +117,19 @@ export const NumberInputWithButtons = ({
         <NumInput onChange={handleChange} value={value} {...allInputProps} />
         {suffix ? (
           <div className="xp-pointer-events-none xp-absolute xp-inset-y-0 xp-right-0 xp-flex xp-items-center xp-pr-2">
-            <span className="xp-text-gray-500">{suffix}</span>
+            <span className="xp-text-gray-500 dark:xp-text-gray-400">{suffix}</span>
           </div>
         ) : null}
       </div>
       <a
         {...plusProps}
         className={classNames(
-          "xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1",
+          "xp-flex-0 xp-border-0 xp-border-gray-300 dark:xp-border-gray-600 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1",
           "xp-flex xp-items-center xp-justify-center",
           "focus:xp-z-10",
-          maxDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit"
+          maxDisabled
+            ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500 dark:xp-bg-gray-800 dark:xp-text-gray-400"
+            : "xp-bg-white xp-text-inherit dark:xp-bg-gray-900 dark:xp-text-gray-100"
         )}
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="xp-w-5 xp-h-5">

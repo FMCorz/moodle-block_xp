@@ -1,7 +1,7 @@
 import React from "react";
 import { useStrings } from "../../lib/hooks";
 import { RuleFilterConfigSettings, RuleFilterConfigSettingsContentProps } from "../../lib/types";
-import Input, { Select } from "../Input";
+import Input, { FieldHelp, Select } from "../Input";
 import Str from "../Str";
 import { RulePointsLimitsForm } from "./RulePointsLimitsForm";
 
@@ -48,9 +48,9 @@ const CmNameContent = ({ config, setConfig, type }: RuleFilterConfigSettingsCont
             maxLength={255}
           />
         </div>
-        <p className="xp-text-gray-500 xp-m-0 xp-mt-1">
+        <FieldHelp>
           <Str id="activityname_help" />
-        </p>
+        </FieldHelp>
       </div>
       <RulePointsLimitsForm config={config} setConfig={setConfig} ruleType={type} filterName="cmname" />
     </>

@@ -4,7 +4,7 @@ define(["block_xp/ui-commons-lazy"],() => { return /******/ (() => { // webpackB
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 972
+/***/ 844
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 // ESM COMPAT FLAG
@@ -17,16 +17,14 @@ __webpack_require__.d(__webpack_exports__, {
   startApp: () => (/* binding */ startApp)
 });
 
-// EXTERNAL MODULE: ./node_modules/@headlessui/react/dist/components/menu/menu.js + 9 modules
-var menu = __webpack_require__(9909);
 // EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(6540);
+var react = __webpack_require__(540);
 // EXTERNAL MODULE: ./node_modules/react-dom/client.js
-var client = __webpack_require__(5338);
+var client = __webpack_require__(338);
 // EXTERNAL MODULE: ./node_modules/@tanstack/react-query/build/lib/useMutation.mjs + 1 modules
-var useMutation = __webpack_require__(1154);
+var useMutation = __webpack_require__(154);
 // EXTERNAL MODULE: ./node_modules/@tanstack/react-query/build/lib/QueryClientProvider.mjs
-var QueryClientProvider = __webpack_require__(3064);
+var QueryClientProvider = __webpack_require__(64);
 ;// ./ui/src/lib/utils.ts
 const classNames = (...args) => args.filter(Boolean).join(" ");
 const escapeCharMap = {
@@ -551,10 +549,7 @@ const AnchorPopover = ({ children, className, content, }) => {
 };
 
 ;// ./ui/src/components/Addon.tsx
-/* unused harmony import specifier */ var Addon_useContext;
 /* unused harmony import specifier */ var React;
-/* unused harmony import specifier */ var Addon_AddonContext;
-/* unused harmony import specifier */ var Addon_classNames;
 
 
 
@@ -568,22 +563,22 @@ const IfAddonActivatedOrPromoEnabled = ({ children }) => {
     return react.createElement(react.Fragment, null, children);
 };
 const IfAddonPromoEnabled = ({ children }) => {
-    const { activated, enablepromo } = Addon_useContext(Addon_AddonContext);
+    const { activated, enablepromo } = (0,react.useContext)(AddonContext);
     if (activated || !enablepromo) {
         return null;
     }
-    return React.createElement(React.Fragment, null, children);
+    return react.createElement(react.Fragment, null, children);
 };
 const AddonRequired = (props) => {
     const { promourl } = (0,react.useContext)(AddonContext);
     const getStr = useStrings(["xpplusrequired", "unlockfeaturewithxpplus"]);
-    return (react.createElement(AnchorPopover, { content: getStr("unlockfeaturewithxpplus", promourl), className: classNames("xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white", "xp-rounded xp-no-underline") }, props.children ? props.children : getStr("xpplusrequired")));
+    return (react.createElement(AnchorPopover, { content: getStr("unlockfeaturewithxpplus", promourl), className: classNames("xp-py-1 xp-px-1.5 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black dark:xp-bg-gray-700 xp-text-white", "xp-rounded !xp-no-underline") }, props.children ? props.children : getStr("xpplusrequired")));
 };
 const AddonRequiredShort = () => {
     return React.createElement(AddonRequired, null, "XP+");
 };
 const AddonTag = () => {
-    return (React.createElement("span", { className: Addon_classNames("xp-py-0.5 xp-px-1 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black xp-text-white", "xp-rounded xp-no-underline xp-font-normal xp-align-middle xp-select-none") }, "XP+"));
+    return (react.createElement("span", { className: classNames("xp-py-0.5 xp-px-1 xp-normal-case xp-text-2xs xp-inline-block xp-bg-black dark:xp-bg-gray-700 xp-text-white", "xp-rounded xp-no-underline xp-font-normal xp-align-middle xp-select-none") }, "XP+"));
 };
 
 // EXTERNAL MODULE: ./node_modules/react-dom/index.js
@@ -937,7 +932,7 @@ const Textarea = ({ className = "", ...props }) => {
     return react.createElement("textarea", { ...props, className: `xp-m-0 form-control ${className}` });
 };
 const FieldHelp = ({ children }) => {
-    return Input_React.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, children);
+    return Input_React.createElement("p", { className: "xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1" }, children);
 };
 /* harmony default export */ const components_Input = (Input);
 
@@ -996,15 +991,19 @@ const NumberInputWithButtons = ({ onChange, value, min, max, suffix, step = 1, i
         className: classNames("xp-h-auto xp-border-0 xp-text-center xp-rounded-none focus:xp-z-10", suffix ? "xp-pr-6" : null, inputClassName || "xp-w-16"),
         ...remainingInputProps,
     };
-    return (react.createElement("div", { className: "xp-inline-flex xp-rounded xp-border xp-border-solid xp-border-gray-300" },
-        react.createElement("a", { ...minusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", minDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") },
+    return (react.createElement("div", { className: "xp-inline-flex xp-rounded xp-border xp-border-solid xp-border-gray-300 dark:xp-border-gray-600" },
+        react.createElement("a", { ...minusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 dark:xp-border-gray-600 xp-border-solid xp-border-r xp-rounded-l xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", minDisabled
+                ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500 dark:xp-bg-gray-800 dark:xp-text-gray-400"
+                : "xp-bg-white xp-text-inherit dark:xp-bg-gray-900 dark:xp-text-gray-100") },
             react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5" },
                 react.createElement("path", { fillRule: "evenodd", d: "M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z", clipRule: "evenodd" }))),
         react.createElement("div", { className: "xp-flex-1 xp-relative" },
             react.createElement(NumInput, { onChange: handleChange, value: value, ...allInputProps }),
             suffix ? (react.createElement("div", { className: "xp-pointer-events-none xp-absolute xp-inset-y-0 xp-right-0 xp-flex xp-items-center xp-pr-2" },
-                react.createElement("span", { className: "xp-text-gray-500" }, suffix))) : null),
-        react.createElement("a", { ...plusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", maxDisabled ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500" : "xp-bg-white xp-text-inherit") },
+                react.createElement("span", { className: "xp-text-gray-500 dark:xp-text-gray-400" }, suffix))) : null),
+        react.createElement("a", { ...plusProps, className: classNames("xp-flex-0 xp-border-0 xp-border-gray-300 dark:xp-border-gray-600 xp-border-solid xp-border-l xp-rounded-r xp-py-0.5 xp-px-1", "xp-flex xp-items-center xp-justify-center", "focus:xp-z-10", maxDisabled
+                ? "xp-bg-gray-100 xp-cursor-pointer xp-text-gray-500 dark:xp-bg-gray-800 dark:xp-text-gray-400"
+                : "xp-bg-white xp-text-inherit dark:xp-bg-gray-900 dark:xp-text-gray-100") },
             react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5" },
                 react.createElement("path", { d: "M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" })))));
 };
@@ -1018,7 +1017,7 @@ const RadioGroup = ({ items, value, onChange }) => {
             react.createElement("input", { type: "radio", "aria-describedby": `xp-radiogroup-${uniqid}-${idx}`, checked: value === item.value, onChange: () => onChange(item.value) })),
         react.createElement("div", { className: "xp-ml-3" },
             react.createElement("div", { className: "xp-font-medium" }, item.label),
-            item.desc ? (react.createElement("p", { id: `xp-radiogroup-${uniqid}-${idx}`, className: "xp-text-gray-500 xp-m-0" }, item.desc)) : null))))));
+            item.desc ? (react.createElement("p", { id: `xp-radiogroup-${uniqid}-${idx}`, className: "xp-text-gray-500 dark:xp-text-gray-400 xp-m-0" }, item.desc)) : null))))));
 };
 
 ;// ./ui/src/lib/constants.ts
@@ -1109,12 +1108,12 @@ const BulkEditPoints = ({ method, base, incr, coef, onBaseChange, onCoefChange, 
                             react.createElement(components_Str, { id: "basepoints" })),
                         react.createElement("div", null,
                             react.createElement(NumberInputWithButtons, { value: base, onChange: onBaseChange, min: 1, step: 10, inputProps: { id: "xp-calc-bp", className: "xp-w-24" } })),
-                        react.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, getStr("basepointslineardesc"))),
+                        react.createElement("p", { className: "xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1" }, getStr("basepointslineardesc"))),
                     react.createElement("div", { className: "" },
                         react.createElement("label", { htmlFor: "xp-calc-pi", className: "xp-m-0" }, getStr("difficultypointincrease")),
                         react.createElement("div", null,
                             react.createElement(NumberInputWithButtons, { value: incr, onChange: onIncrementChange, min: 0, inputProps: { id: "xp-calc-pi", className: "xp-w-24" } })),
-                        react.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, getStr("difficultylinearincrdesc")))))) : null,
+                        react.createElement("p", { className: "xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1" }, getStr("difficultylinearincrdesc")))))) : null,
             method === "relative" ? (react.createElement(react.Fragment, null,
                 react.createElement("div", { className: "xp-space-y-2" },
                     react.createElement("div", { className: "" },
@@ -1122,12 +1121,12 @@ const BulkEditPoints = ({ method, base, incr, coef, onBaseChange, onCoefChange, 
                             react.createElement(components_Str, { id: "basepoints" })),
                         react.createElement("div", null,
                             react.createElement(NumberInputWithButtons, { value: base, onChange: onBaseChange, min: 1, step: 10, inputProps: { id: "xp-calc-bp", className: "xp-w-24" } })),
-                        react.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, getStr("basepointsrelativedesc"))),
+                        react.createElement("p", { className: "xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1" }, getStr("basepointsrelativedesc"))),
                     react.createElement("div", { className: "" },
                         react.createElement("label", { htmlFor: "xp-calc-pi", className: "xp-m-0" }, getStr("difficultypointincrease")),
                         react.createElement("div", null,
                             react.createElement(NumberInputWithButtons, { value: Math.floor(coef * 100 - 100), onChange: (p) => onCoefChange(1 + p / 100), min: 0, max: 400, inputProps: { id: "xp-calc-pi", className: "xp-w-24", maxLength: 3 }, suffix: "%" })),
-                        react.createElement("p", { className: "xp-text-gray-500 xp-m-0 xp-mt-1" }, getStr("difficultyrelativeincrdesc")))))) : null)));
+                        react.createElement("p", { className: "xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1" }, getStr("difficultyrelativeincrdesc")))))) : null)));
 };
 const BulkEditPointsModal = (props) => {
     const [state, dispatch] = (0,react.useReducer)(calculationMethodReducer, props, getDefaultBulkEditPointsState);
@@ -1175,7 +1174,7 @@ const Spinner = ({ className }) => {
 
 
 const CircleButton = ({ className, ...props }) => {
-    return (Button_React.createElement("button", { className: Button_classNames("xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full xp-duration-150 xp-transition-colors", "hover:xp-bg-gray-200", className), type: "button", ...props }));
+    return (Button_React.createElement("button", { className: Button_classNames("xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full xp-duration-150 xp-transition-colors", "hover:xp-bg-gray-200 dark:hover:xp-bg-gray-700 dark:xp-text-inherit", className), type: "button", ...props }));
 };
 const Button = ({ onClick, disabled, children, primary, outline, className, type = "button", }) => {
     const classes = classNames("btn", primary ? `btn-${outline ? "outline-" : ""}primary` : `btn-default btn-${outline ? "outline-" : ""}secondary`, className);
@@ -1206,8 +1205,43 @@ const AnchorButton = ({ children, onClick, className, ...props }) => {
     return (react.createElement("a", { className: classNames("xp-text-inherit xp-no-underline", className), ...props, ...anchorButtonProps }, children));
 };
 
+;// ./ui/src/components/Dropdown.tsx
+
+
+
+
+const Dropdown = ({ buttonLabel, items }) => {
+    const { activated, enablepromo } = (0,react.useContext)(AddonContext);
+    const filteredItems = (0,react.useMemo)(() => {
+        return items.filter((item) => {
+            if ("addonRequired" in item && item.addonRequired && !activated && !enablepromo) {
+                return false;
+            }
+            return true;
+        });
+    }, [items, activated, enablepromo]);
+    if (filteredItems.length === 0) {
+        return null;
+    }
+    return (react.createElement("div", { className: "dropdown action-menu" },
+        react.createElement("button", { type: "button", className: "btn btn-icon d-flex align-items-center justify-content-center dropdown-toggle icon-no-margin no-caret xp-min-h-full", "data-bs-toggle": "dropdown", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false" },
+            react.createElement("i", { className: "icon fa fa-ellipsis-v fa-fw", "aria-hidden": "true" }),
+            react.createElement("span", { className: "xp-sr-only" }, buttonLabel)),
+        react.createElement("div", { className: "dropdown-menu dropdown-menu-right dropdown-menu-end" }, filteredItems.map((item) => {
+            if ("divider" in item) {
+                return react.createElement("div", { key: item.id, className: "dropdown-divider" });
+            }
+            return (react.createElement("a", { key: item.id, ...item.props, "aria-disabled": item.disabled ? true : undefined, tabIndex: item.disabled ? -1 : undefined, className: classNames("dropdown-item", item.disabled && "disabled xp-not-italic", item.danger ? "text-danger" : null) },
+                react.createElement("div", { className: "xp-flex xp-w-full xp-gap-2" },
+                    react.createElement("div", { className: "xp-grow" }, item.label),
+                    item.addonRequired ? (react.createElement(IfAddonPromoEnabled, null,
+                        react.createElement("div", { className: "xp-flex-0 xp-self-center" },
+                            react.createElement(AddonTag, null)))) : null)));
+        }))));
+};
+
 // EXTERNAL MODULE: ./node_modules/react-animate-height/dist/esm/index.js
-var esm = __webpack_require__(6968);
+var esm = __webpack_require__(968);
 ;// ./ui/src/components/Expandable.tsx
 
 
@@ -1376,7 +1410,7 @@ const getPreviousLevel = (levels, level) => {
 };
 
 // EXTERNAL MODULE: ./node_modules/@tanstack/query-core/build/lib/queryClient.mjs + 4 modules
-var queryClient = __webpack_require__(4968);
+var queryClient = __webpack_require__(587);
 ;// ./ui/src/lib/rulelimits.ts
 /* unused harmony import specifier */ var rulelimits_LimitSpecTimeWindow;
 /* unused harmony import specifier */ var rulelimits_LimitSpecScope;
@@ -1687,7 +1721,7 @@ const OptionField = ({ label, children, note, xpPlusRequired, }) => {
                 react.createElement("div", { className: "xp-grow xp-uppercase xp-text-xs" }, label),
                 react.createElement("div", null, xpPlusRequired ? react.createElement(AddonRequired, null) : null)),
             react.createElement("div", { className: "xp-mt-1" }, children)),
-        note ? react.createElement("div", { className: "xp-text-gray-500 xp-mt-1" }, note) : null));
+        note ? react.createElement("div", { className: "xp-text-gray-500 dark:xp-text-gray-400 xp-mt-1" }, note) : null));
 };
 const showLevelUpNotificationPreview = async (level, prevLevel) => {
     const PopupModule = await getModuleAsync("block_xp/popup-notification");
@@ -1787,25 +1821,42 @@ const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badg
                     react.createElement(BulkEditPointsModal, { show: bulkEdit, onClose: () => setBulkEdit(false), onSave: handleBulkEdit, method: state.algo.method, coef: state.algo.coef, base: state.algo.base, incr: state.algo.incr }))),
             react.createElement("div", { className: "xp-flex xp-gap-1" },
                 react.createElement(SaveButton, { statePosition: "before", onClick: handleSave, mutation: mutation, disabled: !state.pendingSave || mutation.isLoading }),
-                react.createElement(menu/* Menu */.W, { as: "div", className: "xp-relative xp-inline-block xp-text-left" },
-                    react.createElement("div", null,
-                        react.createElement(menu/* Menu */.W.Button, { className: "xp-text-inherit xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full hover:xp-bg-gray-100" },
-                            react.createElement("span", { className: "xp-sr-only" },
-                                react.createElement(components_Str, { id: "options", component: "core" })),
-                            react.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 20 20", fill: "currentColor", className: "xp-w-5 xp-h-5", "aria-hidden": "true" },
-                                react.createElement("path", { d: "M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" })))),
-                    react.createElement(menu/* Menu */.W.Items, { className: "xp-absolute xp-right-0 xp-z-10 xp-mt-2 xp-w-56 xp-origin-top-right xp-rounded-md xp-bg-white xp-border xp-border-solid xp-border-gray-300 xp-shadow-sm xp-divide-y xp-divide-gray-100" },
-                        react.createElement("div", { className: "xp-py-1" },
-                            react.createElement(menu/* Menu */.W.Item, null, ({ active, close }) => (react.createElement("a", { href: "#", role: "button", onClick: (e) => {
+                react.createElement(Dropdown, { buttonLabel: react.createElement(components_Str, { id: "options", component: "core" }), items: [
+                        {
+                            id: "collapseexpandall",
+                            label: allExpanded ? react.createElement(components_Str, { id: "collapseall", component: "core" }) : react.createElement(components_Str, { id: "expandall", component: "core" }),
+                            props: {
+                                href: "#",
+                                role: "button",
+                                onClick: (e) => {
                                     e.preventDefault();
                                     handleCollapseExpandAll();
-                                    close();
-                                }, className: classNames(active ? "xp-bg-gray-100" : null, "xp-text-inherit xp-block xp-px-6 xp-py-1 xp-no-underline") }, allExpanded ? react.createElement(components_Str, { id: "collapseall", component: "core" }) : react.createElement(components_Str, { id: "expandall", component: "core" })))),
-                            react.createElement(menu/* Menu */.W.Item, null, ({ active, close }) => (react.createElement("a", { href: HELP_URL_LEVELS, target: "_blank", rel: "noopener noreferrer", className: classNames(active ? "xp-bg-gray-100" : null, "xp-text-inherit xp-block xp-px-6 xp-py-1 xp-no-underline") },
-                                react.createElement(components_Str, { id: "documentation" }))))),
-                        resetToDefaultsUrl ? (react.createElement("div", { className: "xp-py-1" },
-                            react.createElement(menu/* Menu */.W.Item, null, ({ active, close }) => (react.createElement("a", { href: resetToDefaultsUrl, className: classNames(active ? "xp-bg-gray-100" : null, "xp-text-red-600 xp-block xp-px-6 xp-py-1 xp-no-underline") },
-                                react.createElement(components_Str, { id: "resettodefaults" })))))) : null)))),
+                                },
+                                onKeyDown: (e) => {
+                                    if (e.key === " ") {
+                                        e.preventDefault();
+                                        e.currentTarget.click();
+                                    }
+                                },
+                            },
+                        },
+                        {
+                            id: "documentation",
+                            label: react.createElement(components_Str, { id: "documentation" }),
+                            props: { href: HELP_URL_LEVELS, target: "_blank", rel: "noopener noreferrer" },
+                        },
+                        ...(resetToDefaultsUrl
+                            ? [
+                                { id: "divider", divider: true },
+                                {
+                                    id: "resettodefaults",
+                                    label: react.createElement(components_Str, { id: "resettodefaults" }),
+                                    props: { href: resetToDefaultsUrl },
+                                    danger: true,
+                                },
+                            ]
+                            : []),
+                    ] }))),
         react.createElement("div", { className: "xp-flex xp-flex-col xp-flex-1 xp-gap-4" }, Array.from({ length: state.nblevels }).map((_, idx) => {
             const level = levels[idx] || { level: idx + 1, xprequired: 0 };
             const prevLevel = levels[idx - 1];
@@ -1823,10 +1874,10 @@ const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badg
                 dispatch(["levelPopupMessageChange", { level, popupmessage: e.target.value }]);
             };
             return (react.createElement(react.Fragment, { key: `l${level.level}` },
-                react.createElement("fieldset", { className: "xp-relative xp-min-h-28 xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 xp-p-3 xp-overflow-hidden" },
+                react.createElement("fieldset", { className: "xp-relative xp-min-h-28 xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 dark:xp-border-gray-700 xp-p-3 xp-overflow-hidden" },
                     react.createElement("legend", { className: "xp-sr-only" },
                         react.createElement(components_Str, { id: "levelx", a: level.level })),
-                    react.createElement("div", { className: "xp-absolute xp--top-4 xp--left-8 xp-text-[10rem] xp-text-gray-50 xp-leading-none xp-pointer-events-none" }, level.level),
+                    react.createElement("div", { className: "xp-absolute xp--top-4 xp--left-8 xp-text-[10rem] xp-text-gray-50 dark:xp-text-gray-800 xp-leading-none xp-pointer-events-none" }, level.level),
                     react.createElement("div", { className: "xp-flex xp-items-center xp-flex-grow xp-gap-4 sm:xp-gap-8 xp-flex-col sm:xp-flex-row xp-relative" },
                         react.createElement("div", { className: "xp-flex-0" },
                             react.createElement(Tooltip, { content: getStr("levelx", level.level) },
@@ -1837,14 +1888,14 @@ const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badg
                                     react.createElement(components_Str, { id: "levelpointsstart" })),
                                 react.createElement("label", { className: "xp-m-0 xp-flex xp-items-end xp-text-xs xp-font-normal xp-uppercase", htmlFor: `xp-level-${level.level}-length` },
                                     react.createElement(components_Str, { id: "levelpointslength" }))),
-                            react.createElement("div", { className: "xp-grid xp-grid-cols-2 xp-border xp-border-solid xp-border-gray-300 xp-rounded" },
+                            react.createElement("div", { className: "xp-grid xp-grid-cols-2 xp-border xp-border-solid xp-border-gray-300 dark:xp-border-gray-600 xp-rounded" },
                                 react.createElement("div", null,
                                     react.createElement(NumInput, { value: level.xprequired, onChange: (xp) => handleXpChange(level, xp), disabled: level.level <= 1, className: "xp-h-full xp-min-w-[4ch] xp-w-full xp-rounded-none xp-rounded-l xp-border-0 xp-relative focus:xp-z-10", id: `xp-level-${level.level}-start` })),
                                 react.createElement("div", { className: "" },
                                     react.createElement("div", { className: "xp-relative xp-w-full x-h-full" },
                                         react.createElement("div", { className: "xp-pointer-events-none xp-absolute xp-inset-y-0 xp-left-0 xp-flex xp-items-center xp-pl-2 xp-z-20" },
-                                            react.createElement("span", { className: "xp-text-gray-500" }, "+")),
-                                        react.createElement(NumInput, { value: pointsInLevel, onChange: (xp) => handleXpChange(nextLevel, level.xprequired + xp), disabled: pointsInLevel <= 0, className: "xp-h-full xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 xp-rounded-r xp-pl-6 xp-relative focus:xp-z-10", id: `xp-level-${level.level}-length` }))))),
+                                            react.createElement("span", { className: "xp-text-gray-500 dark:xp-text-gray-400" }, "+")),
+                                        react.createElement(NumInput, { value: pointsInLevel, onChange: (xp) => handleXpChange(nextLevel, level.xprequired + xp), disabled: pointsInLevel <= 0, className: "xp-h-full xp-min-w-[4ch] xp-w-full xp-border-0 xp-rounded-none xp-border-l xp-border-gray-300 dark:xp-border-gray-600 xp-rounded-r xp-pl-6 xp-relative focus:xp-z-10", id: `xp-level-${level.level}-length` }))))),
                         react.createElement("div", { className: "xp-flex xp-grow xp-items-center xp-justify-center  xp-gap-4" }, optionStates.map((o, idx) => {
                             if (!o) {
                                 return react.createElement("div", { key: idx, className: "xp-w-6 xp-h-6 xp-hidden sm:xp-block" });
@@ -1852,7 +1903,7 @@ const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badg
                             const state = o.checker(level);
                             const label = getStr(state ? o.yes : o.no);
                             return (react.createElement(Tooltip, { content: label, key: idx },
-                                react.createElement("div", { className: classNames("xp-w-6 xp-h-6", !state ? "xp-text-gray-300" : null) },
+                                react.createElement("div", { className: classNames("xp-w-6 xp-h-6", !state ? "xp-text-gray-300 dark:xp-text-gray-600" : null) },
                                     react.createElement("span", { className: "xp-sr-only" }, label),
                                     react.createElement(o.Icon, { className: "xp-w-full xp-h-full" }))));
                         })),
@@ -1885,7 +1936,7 @@ const App = ({ contextId, levelsInfo, resetToDefaultsUrl, defaultBadgeUrls, badg
                                     isBadgeValueMissing ? (react.createElement("optgroup", { label: getCoreStr("other") },
                                         react.createElement("option", { value: level.badgeawardid || "" }, getStr("unknownbadgea", level.badgeawardid)))) : null)) : (react.createElement("div", { className: "alert alert-info xp-m-0" },
                                     react.createElement(components_Str, { id: "cannotbesetindefaults" })))))) : (react.createElement("div", null,
-                                react.createElement("div", { className: "xp-text-sm xp-text-gray-500 xp-italic" },
+                                react.createElement("div", { className: "xp-text-sm xp-text-gray-500 dark:xp-text-gray-400 xp-italic" },
                                     react.createElement(components_Str, { id: "levelupoptionsunavailableforlevelone" }))))))))));
         })),
         react.createElement("div", { className: "xp-flex xp-flex-1 xp-gap-4 xp-items-start xp-flex-wrap xp-mt-4" },
@@ -2090,7 +2141,7 @@ const dependencies = makeDependenciesDefinition(commonStaticModulesToDependOn);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(972)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [224], () => (__webpack_require__(844)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ 	return __webpack_exports__;

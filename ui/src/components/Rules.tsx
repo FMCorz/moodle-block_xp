@@ -35,7 +35,7 @@ export const RuleTypeStatsList = ({ children }: { children: React.ReactNode[] })
 export const RuleTypeStat = ({ label, value }: { label: React.ReactNode; value: React.ReactNode }) => {
   return (
     <div className="xp-flex-1 xp-shrink-0">
-      <dt className="xp-m-0 xp-font-normal xp-uppercase xp-text-2xs xp-text-gray-500">{label}</dt>
+      <dt className="xp-m-0 xp-font-normal xp-uppercase xp-text-2xs xp-text-gray-500 dark:xp-text-gray-400">{label}</dt>
       <dd className="xp-m-0 xp-font-normal xp-text xp-text-sm xp-whitespace-nowrap xp-truncate">{value}</dd>
     </div>
   );
@@ -76,7 +76,7 @@ export const RuleTypeGroup = ({
   }, [filterLimit, rules]);
 
   return (
-    <div className="xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 xp-p-3" id={`xp-ruletype-${type.name}`}>
+    <div className="xp-rounded-lg xp-border xp-border-solid xp-border-gray-200 dark:xp-border-gray-700 xp-p-3" id={`xp-ruletype-${type.name}`}>
       <div className="xp-flex xp-items-center xp-gap-2">
         <div className="xp-grow xp-flex xp-gap-3">
           {type.icon ? (
@@ -104,7 +104,7 @@ export const RuleTypeGroup = ({
       <Expandable expanded={expanded} id={expandableId}>
         {isEmpty ? (
           <div className="xp-pt-3">
-            <div className="xp-rounded xp-border-dashed xp-border-2 xp-p-4 xp-py-6 xp-text-center xp-border-gray-200">
+            <div className="xp-rounded xp-border-dashed xp-border-2 xp-p-4 xp-py-6 xp-text-center xp-border-gray-200 dark:xp-border-gray-700">
               <div className="xp-text-xl xp-font-bold xp-mb-4">
                 <Str id="noconditionsyet" />
               </div>
@@ -127,7 +127,7 @@ export const RuleTypeGroup = ({
                 <IfAddonPromoEnabled>
                   {hasReachedFilterLimit ? (
                     <>
-                      <div className="xp-text-sm xp-text-gray-700 xp-leading-none">
+                      <div className="xp-text-sm xp-text-gray-700 dark:xp-text-gray-300 xp-leading-none">
                         <Str id="upgradetoaddmore" />
                       </div>
                       <AddonRequiredShort />
@@ -194,8 +194,8 @@ export const RulesSection = ({
   return (
     <div className="xp-rules-section">
       <h5 className="xp-font-bold xp-m-0 xp-mb-1 xp-text-base">{title}</h5>
-      <p className="xp-mb-2 xp-text-sm xp-text-gray-500 xp-m-0">{description}</p>
-      <div className="[&>div]:xp-border-0 [&>div]:xp-border-b [&>div]:xp-border-solid [&>div]:xp-border-gray-200">{children}</div>
+      <p className="xp-mb-2 xp-text-sm xp-text-gray-500 dark:xp-text-gray-400 xp-m-0">{description}</p>
+      <div className="[&>div]:xp-border-0 [&>div]:xp-border-b [&>div]:xp-border-solid [&>div]:xp-border-gray-200 dark:[&>div]:xp-border-gray-700">{children}</div>
     </div>
   );
 };
@@ -224,7 +224,7 @@ export const RuleEntry = ({
             className={classNames(
               "xp-min-w-[86px] xp-min-h-7 xp-flex xp-items-center xp-text-center xp-justify-center xp-rounded",
               "xp-px-2 xp-py-0.5 xp-font-bold xp-tracking-wide",
-              !points ? "xp-bg-gray-200" : "xp-bg-blue-100",
+              !points ? "xp-bg-gray-200 dark:xp-bg-gray-700 dark:xp-text-gray-100" : "xp-bg-blue-100 dark:xp-bg-blue-900 dark:xp-text-blue-100",
             )}
           >
             {points !== null ? `${points != 0 ? "+" : ""}${points}` : "-"}
@@ -302,7 +302,7 @@ const RuleLimitContent = ({ limit, repeatlimit }: { limit?: LimitSpec | null; re
     return null;
   }
   return (
-    <div className="xp-text-xs xp-text-gray-500 xp-leading-none xp-whitespace-nowrap xp-flex xp-items-center xp-gap-1">
+    <div className="xp-text-xs xp-text-gray-500 dark:xp-text-gray-400 xp-leading-none xp-whitespace-nowrap xp-flex xp-items-center xp-gap-1">
       {limit?.max ? (
         <span>
           {getStr("maxcolon")} <LimitPerWindow max={limit.max} window={limit.timewindow} />

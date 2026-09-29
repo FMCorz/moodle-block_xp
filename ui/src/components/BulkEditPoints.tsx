@@ -150,7 +150,7 @@ const BulkEditPoints = ({
                     inputProps={{ id: "xp-calc-bp", className: "xp-w-24" }}
                   />
                 </div>
-                <p className="xp-text-gray-500 xp-m-0 xp-mt-1">{getStr("basepointslineardesc")}</p>
+                <p className="xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1">{getStr("basepointslineardesc")}</p>
               </div>
               <div className="">
                 <label htmlFor="xp-calc-pi" className="xp-m-0">
@@ -164,7 +164,7 @@ const BulkEditPoints = ({
                     inputProps={{ id: "xp-calc-pi", className: "xp-w-24" }}
                   />
                 </div>
-                <p className="xp-text-gray-500 xp-m-0 xp-mt-1">{getStr("difficultylinearincrdesc")}</p>
+                <p className="xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1">{getStr("difficultylinearincrdesc")}</p>
               </div>
             </div>
           </>
@@ -185,7 +185,7 @@ const BulkEditPoints = ({
                     inputProps={{ id: "xp-calc-bp", className: "xp-w-24" }}
                   />
                 </div>
-                <p className="xp-text-gray-500 xp-m-0 xp-mt-1">{getStr("basepointsrelativedesc")}</p>
+                <p className="xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1">{getStr("basepointsrelativedesc")}</p>
               </div>
               <div className="">
                 <label htmlFor="xp-calc-pi" className="xp-m-0">
@@ -201,7 +201,7 @@ const BulkEditPoints = ({
                     suffix="%"
                   />
                 </div>
-                <p className="xp-text-gray-500 xp-m-0 xp-mt-1">{getStr("difficultyrelativeincrdesc")}</p>
+                <p className="xp-text-gray-500 dark:xp-text-gray-400 xp-m-0 xp-mt-1">{getStr("difficultyrelativeincrdesc")}</p>
               </div>
             </div>
           </>

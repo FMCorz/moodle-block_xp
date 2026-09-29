@@ -3,6 +3,7 @@ const plugin = require('tailwindcss/plugin');
 module.exports = {
     prefix: 'xp-',
     important: '.block_xp',
+    darkMode: ['selector', '[data-bs-theme="dark"]'],
     content: [
         './renderer.php',
         './templates/**/*.mustache',

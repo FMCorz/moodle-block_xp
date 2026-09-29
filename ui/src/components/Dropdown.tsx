@@ -37,15 +37,16 @@ export const Dropdown = ({ buttonLabel, items }: DropdownProps) => {
   }
 
   return (
-    <div className="dropdown">
+    <div className="dropdown action-menu">
       <button
         type="button"
-        className="btn btn-link btn-icon icon-size-3 rounded-circle xp-no-underline hover:xp-no-underline"
+        className="btn btn-icon d-flex align-items-center justify-content-center dropdown-toggle icon-no-margin no-caret xp-min-h-full"
         data-bs-toggle="dropdown"
         data-toggle="dropdown"
+        aria-haspopup="true"
         aria-expanded="false"
       >
-        <i className="fa fa-ellipsis-v text-dark py-2" aria-hidden="true"></i>
+        <i className="icon fa fa-ellipsis-v fa-fw" aria-hidden="true"></i>
         <span className="xp-sr-only">{buttonLabel}</span>
       </button>
       <div className="dropdown-menu dropdown-menu-right dropdown-menu-end">

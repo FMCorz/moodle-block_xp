@@ -27,20 +27,20 @@
 }}
 <div class="block_xp-level-progress xp-flex xp-flex-col">
     <div>
-        <div class="xp-bg-gray-200 xp-rounded-full xp-h-3 xp-relative xp-overflow-hidden" role="progressbar" aria-valuenow="{{percentagehuman}}" aria-valuemin="0" aria-valuemax="100">
-            <div style="width: {{percentage}}%;" class="xp-h-full xp-bg-green-400 {{#nonzero}}xp-min-w-[0.25rem]{{/nonzero}} {{#nonfull}} xp-max-w-[99%] {{/nonfull}}"></div>
+        <div class="xp-bg-gray-200 dark:xp-bg-gray-600 xp-rounded-full xp-h-3 xp-relative xp-overflow-hidden" role="progressbar" aria-valuenow="{{percentagehuman}}" aria-valuemin="0" aria-valuemax="100">
+            <div style="width: {{percentage}}%;" class="xp-h-full xp-bg-green-400 dark:xp-bg-green-600 {{#nonzero}}xp-min-w-[0.25rem]{{/nonzero}} {{#nonfull}} xp-max-w-[99%] {{/nonfull}}"></div>
         </div>
     </div>
     <div class="xp-flex xp-justify-end xp-self-end xp-text-right xp-text-sm xp-leading-none xp-mt-1">
         {{^atmaxlevel}}
-        <div class="xp-text-gray-500 xp-text-xs">
+        <div class="xp-text-gray-500 dark:xp-text-gray-400 xp-text-xs">
             {{^islevelless}}{{#str}}nextlevelin, block_xp{{/str}}{{/islevelless}}
             {{#islevelless}}{{#str}}remaining, block_xp{{/str}}{{/islevelless}}
         </div>
         <div class="xp-ml-1">{{{nextinvaluehtml}}}</div>
         {{/atmaxlevel}}
         {{#atmaxlevel}}
-        <div class="xp-text-gray-500 xp-text-xs">
+        <div class="xp-text-gray-500 dark:xp-text-gray-400 xp-text-xs">
             {{#str}}maxlevelexcl, block_xp{{/str}}
         </div>
         {{/atmaxlevel}}

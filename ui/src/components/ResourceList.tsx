@@ -15,10 +15,10 @@ const UnavailabilityPills = ({ availabilityInfo }: { availabilityInfo: Availabil
         let desc = getStr("unavailable");
         let badgeType = "badge-warning";
         if (ai.code === "xpplusrequired") {
-          badgeType = "badge-dark";
+          badgeType = "badge-dark dark:xp-bg-gray-700";
           desc = getStr("xpplusrequired");
         } else if (ai.code === "xppremiumrequired") {
-          badgeType = "badge-dark";
+          badgeType = "badge-dark dark:xp-bg-gray-700";
           desc = "XP+ Premium";
         } else if (ai.code === "alreadyused") {
           badgeType = "badge-primary";
@@ -72,7 +72,7 @@ const ListEntryItem = ({
   const disabledOpacityClass = `${!isAvailable ? "xp-opacity-60 group-focus:xp-opacity-100 group-hover:xp-opacity-100" : ""}`;
 
   return (
-    <div className="xp-p-[0.2rem] xp-relative xp-group focus:xp-z-10 hover:xp-bg-gray-100">
+    <div className="xp-p-[0.2rem] xp-relative xp-group focus:xp-z-10 hover:xp-bg-gray-100 dark:hover:xp-bg-gray-800">
       <div
         tabIndex={0}
         role="button"
@@ -108,7 +108,7 @@ const ListEntryItem = ({
           </div>
           {description ? (
             <div
-              className={classNames(disabledOpacityClass, "xp-text-gray-500")}
+              className={classNames(disabledOpacityClass, "xp-text-gray-500 dark:xp-text-gray-400")}
               dangerouslySetInnerHTML={{ __html: description }}
             />
           ) : null}
@@ -120,7 +120,7 @@ const ListEntryItem = ({
 
 const ListEntryHeader = ({ label }: { label: string }) => {
   return (
-    <div className="xp-px-[0.2rem] xp-bg-gray-200 xp-mt-2 first:xp-mt-0 xp-sticky xp-top-0 xp-z-10">
+    <div className="xp-px-[0.2rem] xp-bg-gray-200 dark:xp-bg-gray-700 dark:xp-text-gray-100 xp-mt-2 first:xp-mt-0 xp-sticky xp-top-0 xp-z-10">
       <div className="xp-px-1.5 xp-py-1 xp-text-sm xp-leading-tight xp-font-bold">{label}</div>
     </div>
   );
@@ -135,7 +135,7 @@ export const PlainResourceList = <T extends Resource>({
     return <>{emptyContent || <EmptyResult />}</>;
   }
   return (
-    <div className="xp-flex-1 xp-divide-y xp-divide-gray-200">
+    <div className="xp-flex-1 xp-divide-y xp-divide-gray-200 dark:xp-divide-gray-700">
       {resources.map((o) => {
         return <ListEntry<T> key={`${o.type || ""}${o.name}`} resource={o} onSelect={() => onSelect && onSelect(o)} />;
       })}
@@ -146,11 +146,11 @@ export const PlainResourceList = <T extends Resource>({
 export const LoadingResourceList = () => {
   return (
     <div className="xp-flex-1">
-      <div className="xp-h-8 xp-w-full xp-bg-gray-100 xp-mb-2"></div>
-      <div className="xp-h-8 xp-w-full xp-bg-gray-100 xp-mb-2"></div>
-      <div className="xp-h-8 xp-w-full xp-bg-gray-100 xp-mb-2"></div>
-      <div className="xp-h-8 xp-w-full xp-bg-gray-100 xp-mb-2"></div>
-      <div className="xp-h-8 xp-w-full xp-bg-gray-100 xp-mb-2"></div>
+      <div className="xp-h-8 xp-w-full xp-bg-gray-100 dark:xp-bg-gray-800 xp-mb-2"></div>
+      <div className="xp-h-8 xp-w-full xp-bg-gray-100 dark:xp-bg-gray-800 xp-mb-2"></div>
+      <div className="xp-h-8 xp-w-full xp-bg-gray-100 dark:xp-bg-gray-800 xp-mb-2"></div>
+      <div className="xp-h-8 xp-w-full xp-bg-gray-100 dark:xp-bg-gray-800 xp-mb-2"></div>
+      <div className="xp-h-8 xp-w-full xp-bg-gray-100 dark:xp-bg-gray-800 xp-mb-2"></div>
     </div>
   );
 };

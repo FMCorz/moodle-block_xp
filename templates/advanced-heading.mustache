@@ -46,7 +46,7 @@
                 {{/hasvisibility}}
             </{{#islevel2}}h2{{/islevel2}}{{^islevel2}}h3{{/islevel2}}>
             {{#hasintro}}
-            <div class="xp-text-sm xp-text-gray-500 xp-mt-2">
+            <div class="xp-text-sm xp-text-gray-500 dark:xp-text-gray-400 xp-mt-2">
                 {{ intro }}
                 {{#helpicon}}
                     {{> core/help_icon }}
@@ -60,9 +60,10 @@
             {{{.}}}
         {{/ actions }}
         {{# hasmenu }}
-        <div class="dropdown">
-            <button class="btn btn-link btn-icon icon-size-3 rounded-circle xp-no-underline hover:xp-no-underline" data-bs-toggle="dropdown" data-toggle="dropdown" type="button" aria-expanded="false">
-                <i class="fa fa-ellipsis-v text-dark py-2" aria-hidden="true"></i>
+        <div class="dropdown action-menu">
+            <button class="btn btn-icon d-flex align-items-center justify-content-center dropdown-toggle icon-no-margin no-caret"
+                    data-bs-toggle="dropdown" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                {{#pix}} i/menu, core {{/pix}}
                 <span class="xp-sr-only">{{#str}}menu, block_xp{{/str}}</span>
             </button>
             <div class="dropdown-menu dropdown-menu-right dropdown-menu-end">

@@ -10,7 +10,7 @@ export const CircleButton = ({ className, ...props }: ButtonHTMLAttributes<HTMLB
     <button
       className={classNames(
         "xp-bg-transparent xp-border-0 xp-p-2 xp-flex xp-items-center xp-rounded-full xp-duration-150 xp-transition-colors",
-        "hover:xp-bg-gray-200",
+        "hover:xp-bg-gray-200 dark:hover:xp-bg-gray-700 dark:xp-text-inherit",
         className
       )}
       type="button"
