@@ -76,7 +76,7 @@ export function extractNodeData(node, prefix) {
             return setAtDepth(carry, key.split('__'), value);
         }
 
-        return { ...carry, [key]: value };
+        return {...carry, [key]: value};
     }, {});
 }
 
@@ -129,5 +129,5 @@ function setAtDepth(obj, keys, value) {
  * @returns {Promise}
  */
 export function ws(method, args) {
-    return Ajax.call([{ methodname: method, args: args }])[0];
+    return Ajax.call([{methodname: method, args: args}])[0];
 }

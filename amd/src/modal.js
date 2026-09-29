@@ -30,7 +30,7 @@ import * as Str from 'core/str';
 import Templates from 'core/templates';
 import * as Compat from 'block_xp/compat';
 import * as RoleButton from 'block_xp/role-button';
-import { extractNodeData, getDataFromJsonScript } from 'block_xp/utils';
+import {extractNodeData, getDataFromJsonScript} from 'block_xp/utils';
 
 let simpleOpenModalActionObserverRegistered = false;
 let simpleOpenModalActionObserverSelector = '[data-xp-action="open-modal"]';
