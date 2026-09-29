@@ -88,6 +88,8 @@ You can ask it to explain how learners earn points and progress through levels, 
 The information available to the assistant depends on your Moodle permissions and the tools enabled on your site.
 
 [Learn more](https://docs.levelup.plus/xp/docs/ai-mcp?ref=blockxp_help)';
+$string['aipermissions'] = 'AI permissions';
+$string['aipermissionsintro'] = 'Your administrator set these permissions for AI assistants. Your Moodle permissions also apply.';
 $string['airevokeallaccess'] = 'Revoke all AI access';
 $string['airevokeallaccessconfirm'] = 'Do you want to revoke all AI access? All AI assistants that have access to your account will lose access.';
 $string['aistartingprompt'] = 'Starting prompt';
@@ -221,7 +223,7 @@ $string['configblockrankingsnapshot_help'] = 'The leaderboard snapshot displays 
 $string['configrecentactivity'] = 'Display recent rewards';
 $string['configrecentactivity_help'] = 'When enabled, the block will display a short list of recent events which rewarded the student with points.';
 $string['congratulationsyouleveledup'] = 'Congratulations!';
-$string['contactadminforinstructions'] = 'Please contact your administrator for instructions.';
+$string['contactadminforinstructions'] = 'Your administrator has not provided instructions to connect an AI assistant. Ask them how to connect.';
 $string['coolthanks'] = 'Cool, thanks!';
 $string['copiedexcl'] = 'Copied!';
 $string['coursea'] = 'Course "{$a}"';
@@ -533,6 +535,7 @@ $string['nolimit'] = 'No limit';
 $string['nologsrecordedyet'] = 'Logs have not been recorded yet.';
 $string['noname'] = 'No name';
 $string['noneareavailable'] = 'None are available.';
+$string['notallowed'] = 'Not allowed';
 $string['notecompatibilityissues'] = 'Please note the compatibility issues identified below:';
 $string['notesomesettingslocked'] = 'Note that some settings may not be editable when they have been locked by an administrator.';
 $string['nothingmatchesfilter'] = 'Nothing matches the filter.';
