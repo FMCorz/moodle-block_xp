@@ -1,6 +1,39 @@
 Changelog
 =========
 
+v21.0
+-----
+
+New features
+
+- Support for dark mode
+
+Quality of life
+
+- Increased the maximum number of levels from 99 to 100
+- The colours of the default badges for levels 1-100 are yummier
+- Participant searches accept first and last names in either order and tolerate extra spaces
+
+Bug fixes
+
+- The block is no longer displayed in invalid locations after settings change
+- The site home can no longer be used as an XP instance in per-course mode
+- Prevented incorrect level-up notifications after points were reset or reduced
+- Navigating to the logs from a default action rule showed empty results
+- The rule filter in the logs sometimes omitted entries associated with default rules
+- Opening an action rule without making changes no longer disconnects the course from admin defaults
+- The cheat guard no longer accepts ineffective or unsupported values
+
+Technical changes
+
+- Compatibility with Moodle 5.3
+- Raised minimum required version to Moodle 4.5
+- Accessing the report and logs now also requires either the `view` or `manage` permission
+- Default level badges now use SVG images with embedded numbers
+- Technical changes to support AI MCP and overall level in XP+
+
+Read the [upgrade notes](https://docs.levelup.plus/xp/docs/upgrade-notes/upgrading-to-v21) and our [release blog post](https://www.levelup.plus/blog/xp-release-21/) to learn more.
+
 v20.1
 -----
 
