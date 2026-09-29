@@ -157,7 +157,8 @@ class update_checker {
     protected function make_notification($updates) {
         $items = [];
         foreach ($updates as $update) {
-            $pluginname = get_string('pluginname', $update->component);
+            $strexists = get_string_manager()->string_exists('pluginname', $update->component);
+            $pluginname = $strexists ? get_string('pluginname', $update->component) : $update->component;
             $items[] = '- **' . $pluginname . '** (' . $update->component . ') ' . $update->version;
         }
         $content = get_string('adminnoticeupdatesmessage', 'block_xp', implode(PHP_EOL, $items))
