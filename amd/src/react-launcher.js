@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Level Up XP.  If not, see <https://www.gnu.org/licenses/>.
 //
-// See <https://levelup.plus>.lup.plus
+// See <https://levelup.plus>.
 
 /**
  * React app launcher.
