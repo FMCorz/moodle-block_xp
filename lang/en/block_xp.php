@@ -53,9 +53,9 @@ $string['adminaisettings_desc'] = 'Configure how AI apps and assistants connect 
 $string['ai'] = 'AI';
 $string['aiaccessrevoked'] = 'Any existing AI access was revoked.';
 $string['aiactiveaccess'] = 'Your account has active AI access. This access can remain in Moodle after you disconnect an AI assistant.';
-$string['aichatgptinstructions'] = '1. In ChatGPT, open Plugins.
-2. Select the plus (+) button. If it is not visible, open Settings, then Security and login, turn on Developer mode, and return to Plugins.
-3. Name the plugin “Level Up XP” and enter this MCP server URL under Connection:
+$string['aichatgptinstructions'] = '1. In ChatGPT, open Customize, then Plugins.
+2. Select Create MCP app.
+3. Name the app “Level Up XP” and enter this MCP server URL under Connection:
 
     `{$a->mcpurl}`
 
