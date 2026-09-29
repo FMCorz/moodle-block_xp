@@ -63,7 +63,7 @@ labels:
   - commercial-support-available
 
 screenshots:
-  - path: .camp/screenshots/track.png
+  - path: .camp/screenshots/engage.png
     caption: Give learners clear goals, immediate feedback and a reason to keep going.
   - path: .camp/screenshots/award-points.png
     caption: Use flexible rules to reward the behaviours that matter to you.
