@@ -158,6 +158,15 @@ class addon {
     }
 
     /**
+     * Whether AI is supported by the add-on.
+     *
+     * @return bool
+     */
+    public function supports_ai(): bool {
+        return false;
+    }
+
+    /**
      * Get the plugin info.
      *
      * @return \core\plugininfo\base|null

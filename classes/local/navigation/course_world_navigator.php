@@ -187,7 +187,7 @@ class course_world_navigator extends navigator {
                 ]));
             }
 
-            if ($showpromo || $hasaddon) {
+            if ($showpromo || ($hasaddon && di::get('addon')->supports_ai())) {
                 $links[] = new nav_item(get_string('navai', 'block_xp'), $this->get_url('ai'), 'ai');
             }
 
