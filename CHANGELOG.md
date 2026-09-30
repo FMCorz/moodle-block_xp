@@ -19,8 +19,6 @@ Bug fixes
 - The block is no longer displayed in invalid locations after settings change
 - The site home can no longer be used as an XP instance in per-course mode
 - Prevented incorrect level-up notifications after points were reset or reduced
-- Navigating to the logs from a default action rule showed empty results
-- The rule filter in the logs sometimes omitted entries associated with default rules
 - Opening an action rule without making changes no longer disconnects the course from admin defaults
 - The cheat guard no longer accepts ineffective or unsupported values
 
