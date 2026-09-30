@@ -51,6 +51,7 @@ use block_xp\local\xp\state_store_with_query;
 use block_xp\local\xp\state_with_presence;
 use block_xp\local\xp\state_with_subject;
 use block_xp\local\xp\state_with_user;
+use context_course;
 
 /**
  * Block XP report table class.
@@ -412,7 +413,7 @@ class report_table extends table_sql {
      * @return void
      */
     public function print_nothing_to_display() {
-        $issite = di::get('config')->get('context') == CONTEXT_SYSTEM;
+        $issite = $this->world->get_context()->contextlevel != CONTEXT_COURSE;
         $hasfilters = false;
         $showfilters = false;
 
